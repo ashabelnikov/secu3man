@@ -325,6 +325,10 @@ BOOL CFunSetPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_load_src_combo, MLL::GetString(IDS_PD_FUNSET_LOAD_SRC_COMBO_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_benzin_uni_combo, MLL::GetString(IDS_PD_FUNSET_BENZIN_UNI_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gas_uni_combo, MLL::GetString(IDS_PD_FUNSET_GAS_UNI_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_barocorr_type_combo, MLL::GetString(IDS_PD_FUNSET_BAROCORRTYPE_COMBO_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

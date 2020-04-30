@@ -236,8 +236,11 @@ BOOL CUniOutPageDlg::OnInitDialog()
   VERIFY(mp_ttc->AddWindow(&m_out[i].off_thrd_1_spin, MLL::GetString(IDS_PD_UNIOUT_COND_OFF_EDIT_DEF_TT)));
   VERIFY(mp_ttc->AddWindow(&m_out[i].on_thrd_2_spin, MLL::GetString(IDS_PD_UNIOUT_COND_ON_EDIT_DEF_TT)));
   VERIFY(mp_ttc->AddWindow(&m_out[i].off_thrd_2_spin, MLL::GetString(IDS_PD_UNIOUT_COND_OFF_EDIT_DEF_TT)));
-
   VERIFY(mp_ttc->AddWindow(&m_out[i].lf_combo, MLL::GetString(IDS_PD_UNIOUT_LOGFUN_COMBO_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_out[i].cond1_combo, MLL::GetString(IDS_PD_UNIOUT_1_COND1_COMBO_TT)));  
+  VERIFY(mp_ttc->AddWindow(&m_out[i].cond2_combo, MLL::GetString(IDS_PD_UNIOUT_1_COND2_COMBO_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_out[i].inv1_check, MLL::GetString(IDS_PD_UNIOUT_1_COND1_INV_CHECK_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_out[i].inv2_check, MLL::GetString(IDS_PD_UNIOUT_1_COND2_INV_CHECK_TT)));
 
   //finally, set condition format
   _SetCondInputFormat(i, false), _SetCondInputFormat(i, true);

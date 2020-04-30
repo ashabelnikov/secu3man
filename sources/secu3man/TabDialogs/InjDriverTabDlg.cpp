@@ -555,7 +555,15 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_pwmul_tabsel_check, MLL::GetString(IDS_PWMUL_TABSEL_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_pwadd_tabsel_check, MLL::GetString(IDS_PWADD_TABSEL_CHECK_TT)));
 
- mp_ttc->SetMaxTipWidth(120); //Enable text wrapping
+ VERIFY(mp_ttc->AddWindow(&m_injdrv_combo, MLL::GetString(IDS_INJDRV_COMBO_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_peak_on_tabsel_check, MLL::GetString(IDS_PEAK_ON_TABSEL_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_duty_tabsel_check, MLL::GetString(IDS_PEAK_DUTY_TABSEL_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hold_duty_tabsel_check, MLL::GetString(IDS_HOLD_DUTY_TABSEL_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_full_tabsel_check, MLL::GetString(IDS_PEAK_FULL_TABSEL_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_pth_pause_tabsel_check, MLL::GetString(IDS_PTH_PAUSE_TABSEL_CHECK_TT)));
+
+ mp_ttc->SetMaxTipWidth(150); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  m_initialized = true;

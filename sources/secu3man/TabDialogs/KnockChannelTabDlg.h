@@ -36,6 +36,7 @@ class CKnockContextMenuManager;
 class CKnockFrqCalcDlg;
 class CKnockPageDlg;
 class COscillCtrl;
+class CToolTipCtrlEx;
 
 class CKnockChannelTabDlg : public CTabDialog
 {
@@ -124,6 +125,7 @@ class CKnockChannelTabDlg : public CTabDialog
   std::auto_ptr<COscillCtrl> mp_OScopeCtrl;
   std::auto_ptr<CKnockFrqCalcDlg> mp_knock_frq_calc_dlg;
   std::auto_ptr<CKnockContextMenuManager> mp_ContextMenuManager;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CButton m_copy_to_attenuator_table_button;
   CButton m_clear_function_button;
   CButton m_dlsm_checkbox;

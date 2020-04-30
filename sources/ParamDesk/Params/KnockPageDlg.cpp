@@ -209,9 +209,10 @@ BOOL CKnockPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_integrator_const_combo, MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONST_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_bpf_frequency_combo, MLL::GetString(IDS_PD_KNOCK_BPF_FREQ_COMBO_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_use_knock_channel_combo, MLL::GetString(IDS_PD_KNOCK_ENABLE_KC_COMBO_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
-
 
  //-----------------------------------------------------------------
  m_use_knock_channel_combo.AddString(MLL::LoadString(IDS_PD_NO));

@@ -34,6 +34,7 @@
 #include "DiagnostContextMenuManager.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/OScillCtrl.h"
+#include "ui-core/ToolTipCtrlEx.h"
 #include "DevDiagInpsDlg.h"
 #include "DevDiagOutsDlg.h"
 
@@ -139,6 +140,17 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
  { GetParent()->DestroyWindow(); }
  //=================================================================
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_enter_button, MLL::GetString(IDS_DEV_DIAG_ENTER_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(mp_OScopeCtrl1.get(), MLL::GetString(IDS_DEV_DIAG_OSCILLOSCOPE_KS1_TT)));
+ VERIFY(mp_ttc->AddWindow(mp_OScopeCtrl2.get(), MLL::GetString(IDS_DEV_DIAG_OSCILLOSCOPE_KS2_TT)));  
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_KS_1_CAPTION), MLL::GetString(IDS_DEV_DIAG_OSCILLOSCOPE_KS1_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_KS_2_CAPTION), MLL::GetString(IDS_DEV_DIAG_OSCILLOSCOPE_KS2_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  m_initialized = true;
  return TRUE;

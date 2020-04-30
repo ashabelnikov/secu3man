@@ -402,7 +402,36 @@ BOOL CLambdaPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_rpmthrd_spin, MLL::GetString(IDS_PD_LAMBDA_RPMTHRD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tempthrd_edit, MLL::GetString(IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tempthrd_spin, MLL::GetString(IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT)));
-
+ VERIFY(mp_ttc->AddWindow(&m_stepsize_p_edit, MLL::GetString(IDS_PD_LAMBDA_STEPSIZE_P_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_stepsize_p_spin, MLL::GetString(IDS_PD_LAMBDA_STEPSIZE_P_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_stepsize_m_edit, MLL::GetString(IDS_PD_LAMBDA_STEPSIZE_M_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_stepsize_m_spin, MLL::GetString(IDS_PD_LAMBDA_STEPSIZE_M_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_p_edit, MLL::GetString(IDS_PD_LAMBDA_CORRLIMIT_P_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_p_spin, MLL::GetString(IDS_PD_LAMBDA_CORRLIMIT_P_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_m_edit, MLL::GetString(IDS_PD_LAMBDA_CORRLIMIT_M_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_m_spin, MLL::GetString(IDS_PD_LAMBDA_CORRLIMIT_M_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_swtpoint_edit, MLL::GetString(IDS_PD_LAMBDA_SWTPOINT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_swtpoint_spin, MLL::GetString(IDS_PD_LAMBDA_SWTPOINT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_activdelay_edit, MLL::GetString(IDS_PD_LAMBDA_ACTIVDELAY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_activdelay_spin, MLL::GetString(IDS_PD_LAMBDA_ACTIVDELAY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_deadband_edit, MLL::GetString(IDS_PD_LAMBDA_DEADBAND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_deadband_spin, MLL::GetString(IDS_PD_LAMBDA_DEADBAND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_htgdet_check, MLL::GetString(IDS_PD_LAMBDA_HTGDET_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_idlcorr_check, MLL::GetString(IDS_PD_LAMBDA_IDLCORR_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2stoichval_edit, MLL::GetString(IDS_PD_LAMBDA_2STOICHAFR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2stoichval_spin, MLL::GetString(IDS_PD_LAMBDA_2STOICHAFR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_ht_cold_edit, MLL::GetString(IDS_PD_LAMBDA_EH_TIME_COLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_ht_cold_spin, MLL::GetString(IDS_PD_LAMBDA_EH_TIME_COLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_ht_hot_edit, MLL::GetString(IDS_PD_LAMBDA_EH_TIME_HOT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_ht_hot_spin, MLL::GetString(IDS_PD_LAMBDA_EH_TIME_HOT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_temper_thrd_edit, MLL::GetString(IDS_PD_LAMBDA_EH_TEMPER_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_temper_thrd_spin, MLL::GetString(IDS_PD_LAMBDA_EH_TEMPER_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_heating_act_edit, MLL::GetString(IDS_PD_LAMBDA_EH_HEATING_ACT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_heating_act_spin, MLL::GetString(IDS_PD_LAMBDA_EH_HEATING_ACT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_aflow_thrd_edit, MLL::GetString(IDS_PD_LAMBDA_EH_AFLOW_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_eh_aflow_thrd_spin, MLL::GetString(IDS_PD_LAMBDA_EH_AFLOW_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_crkheat_check, MLL::GetString(IDS_PD_LAMBDA_CRKHEAT_CHECK_TT)));
+ 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

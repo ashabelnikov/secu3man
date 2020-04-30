@@ -165,6 +165,8 @@ void MainFrameController::OnAppSettings()
   CToolTipCtrlEx::ActivateAllTooltips(settings->GetShowToolTips());
   DLL::ShowHints(settings->GetShowToolTips());  
 
+  CToolTipCtrlEx::SetVisibleTime(settings->GetToolTipTime());
+
   //Start logging if user selected always to write log  
   if (settings->GetAlwaysWriteLog() && IsBeginLoggingAllowed())
    OnAppBeginLog();
@@ -389,6 +391,8 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldLogMarks);
  m_pLogWriter->SetFieldName(i++, lff.m_fldCECodes);
  m_pLogWriter->SetWriteFields(settings->GetWriteLogFields());
+
+ CToolTipCtrlEx::SetVisibleTime(settings->GetToolTipTime());
 }
 
 bool MainFrameController::OnClose(void)

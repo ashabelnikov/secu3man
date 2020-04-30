@@ -28,6 +28,9 @@
 #include "common/UnicodeSupport.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
+#include <memory>
+
+class CToolTipCtrlEx;
 
 class CDwellCalcDlg : public CDialog
 {
@@ -66,4 +69,6 @@ class CDwellCalcDlg : public CDialog
   float* mp_v_values;
   size_t m_size;
   float m_t_lo_limit, m_t_hi_limit;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

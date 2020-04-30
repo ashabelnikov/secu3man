@@ -35,6 +35,7 @@
 #include "ui-core/WndScroller.h"
 #include "AutoTuneController.h"
 #include "ui-core/MapEditorCtrl.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 #define TIMER_ID 0
 
@@ -1569,6 +1570,14 @@ BOOL CButtonsPanel::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_grid_mode_editing_ign_check, MLL::GetString(IDS_TD_GME_IGN_CHECK_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_grid_mode_editing_inj_check, MLL::GetString(IDS_TD_GME_INJ_CHECK_TT))); 
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control

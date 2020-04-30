@@ -343,19 +343,31 @@ BOOL CInjectorPageDlg::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_cyldisp_edit, MLL::GetString(IDS_PD_INJECTOR_CYLDISP_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_cyldisp_spin, MLL::GetString(IDS_PD_INJECTOR_CYLDISP_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo[0], MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
- VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo[1], MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_edit[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_spin[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_edit[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_spin[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_inj_secinjrowswt_check, MLL::GetString(IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_useaddcorrs_check, MLL::GetString(IDS_PD_INJECTOR_USEADDCORRS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_useairden_check, MLL::GetString(IDS_PD_INJECTOR_USEAIRDEN_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_usediffpress_check, MLL::GetString(IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fff_const_edit, MLL::GetString(IDS_PD_INJECTOR_FFFCONST_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fff_const_spin, MLL::GetString(IDS_PD_INJECTOR_FFFCONST_EDIT_TT)));
 
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ for(int i = 0; i < 2; ++i)
+ {
+  VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo[i], MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_injcfg_combo[i], MLL::GetString(IDS_PD_INJECTOR_INJCONFIG_COMBO_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_injas_combo[i], MLL::GetString(IDS_PD_INJECTOR_ANGLESPEC_COMBO_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit[i], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin[i], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_edit[i], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_spin[i], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+  //injector's flow rate
+  VERIFY(mp_ttc->AddWindow(&m_flowrate_edit[i], MLL::GetString(IDS_PD_INJECTOR_FLOWRATE_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_flowrate_spin[i], MLL::GetString(IDS_PD_INJECTOR_FLOWRATE_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_min_pw_edit[i], MLL::GetString(IDS_PD_INJECTOR_MINPW_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_min_pw_spin[i], MLL::GetString(IDS_PD_INJECTOR_MINPW_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_inj_usetimingmap_check[i], MLL::GetString(IDS_PD_INJECTOR_USETIMINGMAP_CHECK_TT)));
+ }
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  for(int i = 0; i < 2; ++i)

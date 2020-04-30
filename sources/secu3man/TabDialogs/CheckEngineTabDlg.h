@@ -33,6 +33,7 @@
 #include "ui-core/ListCtrlEx.h"
 
 class CHeaderCtrlEx;
+class CToolTipCtrlEx;
 
 class CCheckEngineTabDlg : public CTabDialog
 {
@@ -112,4 +113,5 @@ class CCheckEngineTabDlg : public CTabDialog
   COLORREF m_normal_text_color;
 
   std::auto_ptr<CHeaderCtrlEx> m_header_ctrl;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

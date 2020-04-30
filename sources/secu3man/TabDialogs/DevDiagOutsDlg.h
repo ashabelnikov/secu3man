@@ -30,6 +30,7 @@
 #include "io-core/SECU3IO.h"
 
 class CWndScroller;
+class CToolTipCtrlEx;
 
 class CDevDiagOutsDlg : public CDialog
 {
@@ -78,4 +79,5 @@ class CDevDiagOutsDlg : public CDialog
   bool m_enable_blde_testing;
   bool m_enable_tacho_testing;
   std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

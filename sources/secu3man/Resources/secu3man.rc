@@ -101,7 +101,7 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_FW_FW_NAME,14,10,162,14,ES_READONLY | NOT WS_BORDER | ES_AUTOHSCROLL, WS_EX_STATICEDGE
-    LTEXT           "CRC16: 16EF/16EF",IDC_FW_CRC,183,10,72,14,0,WS_EX_STATICEDGE
+    LTEXT           "CRC16: 0000/0000",IDC_FW_CRC,183,10,72,14,SS_NOTIFY,WS_EX_STATICEDGE
     EDITTEXT        IDC_FW_FW_INFORMATION,72,29,156,16,ES_AUTOHSCROLL
     PUSHBUTTON      "Опц.",IDC_FW_VIEW_FWOPT,234,29,22,17
     CONTROL         "Прошивать только код (без данных)",IDC_FW_PROG_ONLY_CODE,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,209,86,17
@@ -246,8 +246,8 @@ BEGIN
     PUSHBUTTON      ">|",IDC_LOG_PLAYER_NEXT_BUTTON,108,78,28,22
     CONTROL         "Slider1",IDC_LOG_PLAYER_POSITION_SLIDER,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,4,112,152,19
     LTEXT           "Фактор времени:",IDC_LOG_PLAYER_TIME_FACTOR_CAPTION,94,30,71,8
-    CTEXT           "",IDC_LOG_PLAYER_POSITION_INDICATOR,21,138,122,10
-    CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,5,6,146,19
+    CTEXT           "",IDC_LOG_PLAYER_POSITION_INDICATOR,21,138,122,10,SS_NOTIFY
+    CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,5,6,146,19,SS_NOTIFY
 END
 
 
@@ -300,7 +300,7 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "",IDC_DEV_DIAG_VOLTAGE,6,0,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_VOLTAGE,6,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "Voltage",IDC_DEV_DIAG_VOLTAGE_CAPTION,42,0,40,12
     LTEXT           "",IDC_DEV_DIAG_MAP_S,6,25,30,12,0,WS_EX_STATICEDGE
     LTEXT           "MAP_S",IDC_DEV_DIAG_MAP_S_CAPTION,42,25,40,12
@@ -319,7 +319,7 @@ BEGIN
     LTEXT           "",IDC_DEV_DIAG_ADD_I4,6,200,30,12,0,WS_EX_STATICEDGE
     LTEXT           "ADD_I4",IDC_DEV_DIAG_ADD_I4_CAPTION,42,200,40,12
 
-    LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "GAS_V",IDC_DEV_DIAG_GAS_V_CAPTION,122,0,40,12
     LTEXT           "",IDC_DEV_DIAG_CKPS,85,25,30,12,0,WS_EX_STATICEDGE
     LTEXT           "CKPS",IDC_DEV_DIAG_CKPS_CAPTION,122,25,40,12
@@ -346,8 +346,8 @@ BEGIN
     CONTROL         "",IDC_DEV_DIAG_OUTPUTS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,10,12,214,128
     CONTROL         "",IDC_DEV_DIAG_OSCILLOSCOPE_KS1_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,292,24,171,60
     CONTROL         "",IDC_DEV_DIAG_OSCILLOSCOPE_KS2_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,292,104,171,60
-    RTEXT           "KS_1",IDC_DEV_DIAG_KS_1_CAPTION,269,44,18,12
-    RTEXT           "KS_2",IDC_DEV_DIAG_KS_2_CAPTION,269,126,18,12
+    RTEXT           "KS_1",IDC_DEV_DIAG_KS_1_CAPTION,269,44,18,12, SS_NOTIFY
+    RTEXT           "KS_2",IDC_DEV_DIAG_KS_2_CAPTION,269,126,18,12, SS_NOTIFY
     GROUPBOX        "Выходы",IDC_DEV_DIAG_OUTPUTS_GROUP,2,2,89,223
     GROUPBOX        "Входы",IDC_DEV_DIAG_INPUTS_GROUP,100,2,371,183
     CONTROL         "",IDC_DEV_DIAG_INPUTS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,102,12,214,128
@@ -752,6 +752,67 @@ BEGIN
     IDS_INJDRV_PWADD_TITLE          "Добавка к длительности впрыска по каналам (мкс)"
     IDS_PWMUL_TABSEL_CHECK_TT       "Таблица, в которой задано сколько % добавить к длительности впрыска для каждого канала. Вначале происходит умножение на %, а потом прибавляется добавка в мкс."
     IDS_PWADD_TABSEL_CHECK_TT       "Таблица, в которой задано сколько мкс добавить к длительности впрыска для каждого канала. Добавка в мкс применяется после умножения на %."
+    IDS_FW_CRC_TT                   "Сохраненная контрольная сумма / Посчитанная контрольная сумма. Если значения не совпадают, то прошивка повреждена."
+    IDS_FW_FW_INFORMATION_TT        "Заметки о прошивке. Хранится в области данных. По умолчанию хранит версию и дату сборки прошивки, но вы можете вписать сюда свои собственные заметки."
+    IDS_FW_FW_NAME_TT               "Имя файла прошивки. Если прошивка считана из блока SECU-3, то имя для нее генерируется автоматически."
+    IDS_FW_PROG_ONLY_CODE_TT        "Установите эту галочку если обновляетесь в пределах одного релиза и хотите обновить только код с сохранением старых данных прошивки. Рекомендуется использовать только опытным пользователям."
+    IDS_FW_PARAM_SEL_TAB_TT         "Переключение между редактированием резервных параметров и переназначением функций входов/выходов."
+    IDS_FW_BL_STARTED_EMERGENCY_TT  "Используйте для восстановления прошивки, если она перестала работать (не отвечает на команды). Последовательность действий: установить галочку, установить перемычку 'Boot loader', включить питание блока. После завершения манипуляций не забудьте убрать перемычку и перезапустить блок."
+    IDS_EE_EE_NAME_TT               "Имя файла EEPROM. При чтении EEPROM из блока SECU-3 имя генерируется автоматически."
+    IDS_EE_MAPSET_NAME_TT           "Редактирование имени набора таблиц хранимого в EEPROM. В EEPROM хранится один набор таблиц."
+    IDS_EE_CE_ERRORS_BTN_TT         "Просмотр кодов ошибок Check Engine, которые были зафиксированы блоком и хранятся в EEPROM. Если в появившемся окне нажать Yes(Да), то ошибки будут сброшены."
+    IDS_CE_LIST_SETALL_BUTTON_TT    "Установить все флаги ошибок в списке. Установить отдельный флаг можно клацнув левой кнопкой мышки в соответствующей строке в столбце 'Состояние'."
+    IDS_CE_LIST_CLEARALL_BUTTON_TT  "Сбросить все флаги ошибок в списке. Сбросить отдельный флаг можно клацнув левой кнопкой мышки в соответствующей строке в столбце 'Состояние'."
+    IDS_CE_READ_INERTNESS_CHECKBOX_TT "Включает режим фиксирования отображения ошибок на небольшое время, чтобы можно было успеть их заметить (например, ошибка появляется на очень непродолжительное время и ее трудно заметить). Данная галочка активна только если установлена галочка 'Считывать ошибки в реальном времени'."
+    IDS_CE_READ_ERRORS_BUTTON_TT    "Прочитать состояние флагов ошибок из блока SECU-3."
+    IDS_CE_WRITE_ERRORS_BUTTON_TT   "Записать состояние флагов ошибок в блок SECU-3."
+    IDS_CE_READ_REALTIME_CHECKBOX_TT "Коды ошибок будут непрерывно считываться из блока и отображаться в таблице. Вы будете видеть возникающие и исчезающие ошибки в реальном времени."
+    IDS_KC_SAVE_PARAM_BUTTON_TT     "Сохранить параметры контроля детонации в EEPROM."
+    IDS_LOG_PLAYER_OPEN_FILE_BUTTON_TT "Открыть/закрыть файл лога. Можно открыть только тот файл, в который на данный момент не производится запись."
+    IDS_LOG_PLAYER_STOPONMARKS_CHECKBOX_TT "Автоматически останавливаться на метках, которые пользователь добавил в лог при его записи (см. главное меню, раздел 'Запись лога')."
+    IDS_LOG_PLAYER_FILE_NAME_INDICATOR_TT "Имя лог файла и кол-во записей в нем"
+    IDS_LOG_PLAYER_POSITION_INDICATOR_TT "Номер текущей записи и ее время"
+    IDS_KC_CLEAR_FUNCTION_TT        "Обнуляет все точки на графике (сбрасывает статистику)."
+    IDS_KC_COPY_TO_ATTENUATOR_TABLE_TT "Предназначена для расчета таблицы аттенюатора (коэффициентов усиления), которая используется прошивкой для нормализации сигнала с ДД. Для работы этой кнопки необходимо, чтобы была открыта прошивка на вкладке 'Данные прошивки', а также собрана статистика шума двигателя по оборотам."
+    IDS_KC_DLSM_CHECKBOX_TT         "Если галочка установлена, то программа автоматически будет рассчитывать целевое значение фоного шума (горизонтальная линия на графике). Если галочка не установлена, то положение линии на графике нужно установить вручную, используя вертикальный ползунок."
+    IDS_KC_LIST_CHECKBOX_TT         "Вместо графика появится таблица. В таблице показаны значения всех 128 точек, которые отображаются на графике. Если нажать правой кнопкой мыши на таблицу, то появится меню с некоторыми функциями редактирования списка."
+    IDS_KC_DESIRED_LEVEL_SLIDER_TT  "Установка целевого значения фоного шума, которое обозначается на графике горизонтальной линией. Линия может быть зеленого и красного цвета. Красный цвет означает, что система не может обеспечить поддержание фонового шума на уровне установленного целевого значения." 
+    IDS_KC_KNOCK_FRQ_CALC_BTN_TT    "Нажмите эту кнопку чтобы программа рассчитала частоту детонации на основе введенного вами диаметра цилиндра."
+    IDS_DEV_DIAG_ENTER_CHECK_TT     "Нажмите для входа/выхода в диагностический режим. Это специальный режим работы прошивки, который предназначен для проверки работы входов и выходов блока SECU-3."
+    IDS_DEV_DIAG_OSCILLOSCOPE_KS1_TT "Сигнал детонации со входа KS_1 обработанный микросхемой HIP9011/TPIC8101"
+    IDS_DEV_DIAG_OSCILLOSCOPE_KS2_TT "Сигнал детонации со входа KS_2 обработанный микросхемой HIP9011/TPIC8101"
+    IDS_DEV_DIAG_VOLTAGE_TT         "Напряжение бортовой сети на выводе процессора PA1 (после делителя напряжения)"
+    IDS_DEV_DIAG_GAS_V_TT           "Логическое состояние входа GAS_V (0 - нет напряжения, 1 - есть напряжение). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на индикацию значений на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_IGN_OUT1_CHECK_TT  "Управление выходом зажигания 1. Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Если ваш блок со встроенными силовыми ключами, то данная галочка работает наоборот. Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_IGN_OUT2_CHECK_TT  "Управление выходом зажигания 2. Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Если ваш блок со встроенными силовыми ключами, то данная галочка работает наоборот. Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_IE_CHECK_TT        "Управление выходом IE. Установите галочку и выход включится (транзистор начнет пропускать ток с 12В на выход). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_FE_CHECK_TT        "Управление выходом FE. Установите галочку и выход включится (транзистор начнет пропускать ток с 12В на выход). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_ST_BLOCK_CHECK_TT  "Управление выходом блокировки стартера (реле стартера). Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_INJDRV_COMBO_TT             "Выбор половинки драйвера (SECU-LZID8), параметры которой вы хотите редактировать."
+    IDS_APP_SETTINGS_PRESPORTS_TT   "Если галочка установлена, то в списке отображаются только те порты, которые реально существуют и показываются в диспетчере устройств."
+    IDS_APP_SETTINGS_LOGFOLDER_EDITBOX_TT "Введите путь для сохранения файлов содержащих логи работы блока (лог файлы) или нажмите кнопку справа для выбора пути. Это текстовые файлы с расширением .csv"
+    IDS_APP_SETTINGS_LOGFOLDER_BUTTON_TT "Нажмите для выбора пути куда сохранять лог файлы."
+    IDS_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER_TT "Установите галочку, если хотите чтобы лог файлы сохранялись в папку откуда запущена программа (в папку с secu3man.exe)."
+    IDS_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO_TT "Выбор символа, который будет использоваться для разделения полей в строках лог файла."
+    IDS_APP_SETTINGS_ALWAYS_WRITE_LOG_TT "Включить постоянную запись логов (установлено по умолчанию, помогает при первичной настройке)."
+    IDS_APP_SETTINGS_WRITE_LOG_TITLE_TT "Разрешить запись заголовка в первую строку лог файла. Отредактировать тексты полей заголовка можно в ini-файле"
+    IDS_APP_SETTINGS_PLATFORM_SEL_COMBO_TT "Выберите тип процессора вашего блока. Это скорее всего ATMega644 или ATMega1284."
+    IDS_APP_SETTINGS_LANG_SEL_COMBO_TT "Выбор языка интерфейса программы и языка комментариев в ini-файле. Чтобы комментарии в ini-файле были на выбранном языке, необходимо закрыть программу, удалить ini-файл и снова запустить программу."
+    IDS_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT_TT "Период обновления данных в отладочной панели. Отладочная панель должна быть разрешена галочкой 'Использовать средства отладки'"
+    IDS_APP_SETTINGS_SHOW_TOOLTIPS_TT "Отображать всплывающие подсказки при наведении курсора на элементы управления (кнопки, галочки, поля ввода и т.д.). Включено по умолчанию, так как помогает новичкам быстрее освоить программу."
+    IDS_APP_SETTINGS_INJDRV_TAB_TT "Разрешить вкладку 'Драйвер форсунок'. Установите галочку если вы используете блок SECU-3i TBZ или отдельный драйвер форсунок SECU-LZIDx"
+    IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT "Максимальное значение на шкале виртуального прибора 'Обороты' и по вертикальной оси на соответствующем графике"
+    IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT "Максимальное значение на шкале виртуального прибора 'Абсолютное давление' и по вертикальной оси на соответствующем графике"
+    IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT "Период обновления панели приборов. Чем меньше значение, тем чаще прорисовываются приборы, но тем больше процессорного времени компьютера для этого необходимо"
+    IDS_APP_SETTINGS_EXFIXTURES_TT "Установите для выбора 2-го профиля настроек панели приборов и индикаторов. Продублировано галочкой 'Переключить панели приборов' в разделе 'Вид' главного меню программы."
+    IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT "Если подключен датчик скорости, установите количество импульсов с датчика скорости, приходящееся на 1 км пути"
+    IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT "Включить отладочную панель для отображения переменных из прошивки. Прошивка должна быть скомпилирована с опцией DEBUG_VARIABLES, см. заголовочный файл dbgvar.h"
+    IDS_APP_SETTINGS_HEXMODE_TT "Включает режим кодирования данных в hex. Устанавливать галочку только если прошивка НЕ собрана с опцией UART_BINARY (прошивки из официальных релизов собраны с этой опцией)."
+    IDS_PEAK_ON_TABSEL_CHECK_TT   "Время полного включ.(мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
+    IDS_PEAK_DUTY_TABSEL_CHECK_TT "Скважн. ШИМ на включ.(%). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
+    IDS_HOLD_DUTY_TABSEL_CHECK_TT "Скважность ШИМ удерж.(%). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
+    IDS_PEAK_FULL_TABSEL_CHECK_TT "Время Вкл.+время ШИМ (мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
+    IDS_PTH_PAUSE_TABSEL_CHECK_TT "Пауза включ.-удерж.(мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -850,7 +911,7 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_FW_FW_NAME,14,10,162,14,ES_READONLY | NOT WS_BORDER | ES_AUTOHSCROLL, WS_EX_STATICEDGE
-    LTEXT           "CRC16: 16EF/16EF",IDC_FW_CRC,183,10,72,14,0,WS_EX_STATICEDGE
+    LTEXT           "CRC16: 0000/0000",IDC_FW_CRC,183,10,72,14,SS_NOTIFY,WS_EX_STATICEDGE
     EDITTEXT        IDC_FW_FW_INFORMATION,72,29,156,16,ES_AUTOHSCROLL
     PUSHBUTTON      "Opt.",IDC_FW_VIEW_FWOPT,234,29,22,17
     CONTROL         "Program only code (without data)",IDC_FW_PROG_ONLY_CODE,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,209,86,17
@@ -997,8 +1058,8 @@ BEGIN
     PUSHBUTTON      ">|",IDC_LOG_PLAYER_NEXT_BUTTON,108,78,28,22
     CONTROL         "Slider1",IDC_LOG_PLAYER_POSITION_SLIDER,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,4,112,152,19
     LTEXT           "Time factor:",IDC_LOG_PLAYER_TIME_FACTOR_CAPTION,94,30,71,8
-    CTEXT           "",IDC_LOG_PLAYER_POSITION_INDICATOR,21,138,122,10
-    CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,5,6,146,19
+    CTEXT           "",IDC_LOG_PLAYER_POSITION_INDICATOR,21,138,122,10,SS_NOTIFY
+    CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,5,6,146,19,SS_NOTIFY
 END
 
 
@@ -1051,7 +1112,7 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "",IDC_DEV_DIAG_VOLTAGE,6,0,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_VOLTAGE,6,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "Voltage",IDC_DEV_DIAG_VOLTAGE_CAPTION,42,0,40,12
     LTEXT           "",IDC_DEV_DIAG_MAP_S,6,25,30,12,0,WS_EX_STATICEDGE
     LTEXT           "MAP_S",IDC_DEV_DIAG_MAP_S_CAPTION,42,25,40,12
@@ -1070,7 +1131,7 @@ BEGIN
     LTEXT           "",IDC_DEV_DIAG_ADD_I4,6,200,30,12,0,WS_EX_STATICEDGE
     LTEXT           "ADD_I4",IDC_DEV_DIAG_ADD_I4_CAPTION,42,200,40,12
 
-    LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "GAS_V",IDC_DEV_DIAG_GAS_V_CAPTION,122,0,40,12
     LTEXT           "",IDC_DEV_DIAG_CKPS,85,25,30,12,0,WS_EX_STATICEDGE
     LTEXT           "CKPS",IDC_DEV_DIAG_CKPS_CAPTION,122,25,40,12
@@ -1096,8 +1157,8 @@ BEGIN
     CONTROL         "",IDC_DEV_DIAG_OUTPUTS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,10,12,214,128
     CONTROL         "",IDC_DEV_DIAG_OSCILLOSCOPE_KS1_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,292,24,171,60
     CONTROL         "",IDC_DEV_DIAG_OSCILLOSCOPE_KS2_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,292,104,171,60
-    RTEXT           "KS_1",IDC_DEV_DIAG_KS_1_CAPTION,269,44,18,12
-    RTEXT           "KS_2",IDC_DEV_DIAG_KS_2_CAPTION,269,126,18,12
+    RTEXT           "KS_1",IDC_DEV_DIAG_KS_1_CAPTION,269,44,18,12, SS_NOTIFY
+    RTEXT           "KS_2",IDC_DEV_DIAG_KS_2_CAPTION,269,126,18,12, SS_NOTIFY
     GROUPBOX        "Outputs",IDC_DEV_DIAG_OUTPUTS_GROUP,2,2,89,223
     GROUPBOX        "Inputs",IDC_DEV_DIAG_INPUTS_GROUP,100,2,371,183
     CONTROL         "",IDC_DEV_DIAG_INPUTS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,102,12,214,128
@@ -1501,6 +1562,67 @@ BEGIN
     IDS_INJDRV_PWADD_TITLE          "PW addition per channel (us)"
     IDS_PWMUL_TABSEL_CHECK_TT       "Table which specify how many % should be added to injection PW for each channel. At the beginning, multiplication by % occurs, and then the additive value in us is added."
     IDS_PWADD_TABSEL_CHECK_TT       "Table which specify how many us should be added to injection PW for each channel. Addition is applied after multiplication by %."
+    IDS_FW_CRC_TT                   "Stored Checksum value / Calculated Checksum value. If the values do not match, then firmware is corrupted."
+    IDS_FW_FW_INFORMATION_TT        "Notes about the firmware. Stored in the data area. By default, it stores the version and build date of the firmware, but you can enter your own notes here."
+    IDS_FW_FW_NAME_TT               "The name of the firmware file. If the firmware is read from the SECU-3 unit, then the name for it is generated automatically."
+    IDS_FW_PROG_ONLY_CODE_TT        "Check this box if you are updating within the same release and want to update only code while maintaining the old firmware data. Recommended for experienced users only."
+    IDS_FW_PARAM_SEL_TAB_TT         "Switching between editing of reserve parameters and remapping functions of inputs/outputs."
+    IDS_FW_BL_STARTED_EMERGENCY_TT  "Use this to restore the firmware, if it has stopped working (does not respond to commands). Sequence of actions: set the check box, set the jumper 'Boot loader', turn on the power of unit. After completing the manipulations, do not forget to remove the jumper and restart the unit."
+    IDS_EE_EE_NAME_TT               "EEPROM file name. When reading the EEPROM from the SECU-3 unit, the name is generated automatically."
+    IDS_EE_MAPSET_NAME_TT           "Editing the name of a set of tables stored in the EEPROM. EEPROM stores one set of tables."
+    IDS_EE_CE_ERRORS_BTN_TT         "View Check Engine error codes that were recorded by the ECU and stored in the EEPROM. If you click Yes in the window that appears, then errors will be reset."
+    IDS_CE_LIST_SETALL_BUTTON_TT    "Set all error flags in the list. You can set a separate flag by left-clicking on the corresponding line in the 'State' column."
+    IDS_CE_LIST_CLEARALL_BUTTON_TT  "Clear all error flags in the list. You can clear a separate flag by left-clicking on the corresponding line in the 'State' column."
+    IDS_CE_READ_INERTNESS_CHECKBOX_TT "Turns on the mode of fixing the display of errors for a short time, so that you can have time to notice them (for example, an error appears for a very short time and is difficult to notice). This checkbox is active only if the checkbox 'Read errors in realtime' is checked."
+    IDS_CE_READ_ERRORS_BUTTON_TT    "Read the state of error flags from the SECU-3 unit."
+    IDS_CE_WRITE_ERRORS_BUTTON_TT   "Write the state of error flags into the SECU-3 unit."
+    IDS_CE_READ_REALTIME_CHECKBOX_TT "Error codes will be continuously read from the SECU-3 unit and displayed in the table. You will see appearing and disappearing errors in real time."
+    IDS_KC_SAVE_PARAM_BUTTON_TT     "Save parameters of knock control into the EEPROM."
+    IDS_LOG_PLAYER_OPEN_FILE_BUTTON_TT "Open / close the log file. You can open only the file that is not currently being recorded."
+    IDS_LOG_PLAYER_STOPONMARKS_CHECKBOX_TT "Automatically stop at markers that the user added to the log when recording it (see the main menu, section 'Log writing')."
+    IDS_LOG_PLAYER_FILE_NAME_INDICATOR_TT "Тame of the log file and number of records in it"
+    IDS_LOG_PLAYER_POSITION_INDICATOR_TT "Number of current record and its time"
+    IDS_KC_CLEAR_FUNCTION_TT        "Resets all the points on the graph (resets statistics)."
+    IDS_KC_COPY_TO_ATTENUATOR_TABLE_TT "Use to calculate the attenuator table (gain), which is used by the firmware to normalize the knock signal. For this button to work, it is necessary that the firmware is opened on the 'Firmware Data' tab, as well as engine noise statistics vs rpm is collected."
+    IDS_KC_DLSM_CHECKBOX_TT         "If checked, the program will automatically calculate the target value of the background noise (marked as horizontal line on the graph). If check mark is not set, then the position of the line on the chart must be set manually using the vertical slider."
+    IDS_KC_LIST_CHECKBOX_TT         "Instead of a graph, a table appears. The table shows the values of all 128 points that are displayed on the graph. If you right-click on a table, a popup menu appears with some list editing functions."
+    IDS_KC_DESIRED_LEVEL_SLIDER_TT  "Setting the target value of the background noise, which is indicated on the graph by a horizontal line. The line can be green or red. Red color means that the system cannot ensure that background noise is maintained at the set target value."
+    IDS_KC_KNOCK_FRQ_CALC_BTN_TT    "Press this button and program will calculate the frequency of detonation basing on the cylinder diameter you entered."
+    IDS_DEV_DIAG_ENTER_CHECK_TT     "Press to enter / exit the diagnostic mode. This is a special operating mode of the firmware, which is designed to check the operation of the inputs and outputs of the SECU-3 unit."
+    IDS_DEV_DIAG_OSCILLOSCOPE_KS1_TT "Knock signal from KS_1 input processed by HIP9011 / TPIC8101 chip"
+    IDS_DEV_DIAG_OSCILLOSCOPE_KS2_TT "Knock signal from KS_2 input processed by HIP9011 / TPIC8101 chip"
+    IDS_DEV_DIAG_VOLTAGE_TT         "The board voltage at the PA1 pin of processor (after the voltage divider)"
+    IDS_DEV_DIAG_GAS_V_TT           "Logical state of GAS_V input (0 - no voltage, 1 - voltage). Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the indication of values on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_IGN_OUT1_CHECK_TT  "Control of the ignition output 1. Check the box and the output will turn on (transistor will begin to pass current to ground). If your unit with embedded coil drivers this check will work vice versa. Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_IGN_OUT2_CHECK_TT  "Control of the ignition output 2. Check the box and the output will turn on (transistor will begin to pass current to ground). If your unit with embedded coil drivers this check will work vice versa. Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_IE_CHECK_TT        "Сontrol of IE output. Check the box and the output will turn on (transistor will begin to pass current from 12V to the output). Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_FE_CHECK_TT        "Control of FE output. Check the box and the output will turn on (transistor will begin to pass current from 12V to the output). Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_ST_BLOCK_CHECK_TT  "Control of starter blocking output (starter relay). Check the box and the output will turn on (transistor will begin to pass current from the output to ground). Drop-down lists and checkboxes of inversions in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_INJDRV_COMBO_TT             "Select a half of driver (SECU-LZID8) whose parameters you want to edit."
+    IDS_APP_SETTINGS_PRESPORTS_TT   "If check mark is set, then only those ports that really exist (displayed in the device manager) are shown in the list."
+    IDS_APP_SETTINGS_LOGFOLDER_EDITBOX_TT "Enter the path to save the files containing the logs from the unit (log files) or click the button on the right to select the path. These are text files with .csv extension"
+    IDS_APP_SETTINGS_LOGFOLDER_BUTTON_TT "Click to select the path where to save the log files."
+    IDS_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER_TT "Check the box if you want log files to be saved in the folder from where the program is running (in the folder with secu3man.exe)."
+    IDS_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO_TT "Select the character that will be used to separate the fields in the lines of the log file."
+    IDS_APP_SETTINGS_ALWAYS_WRITE_LOG_TT "Enable permanent logging (set by default, helps with the initial setup)."
+    IDS_APP_SETTINGS_WRITE_LOG_TITLE_TT "Allow the header to be written to the first line of the log file. You can edit texts of header's fields in the ini-file"
+    IDS_APP_SETTINGS_PLATFORM_SEL_COMBO_TT "Select processor type of your unit. This is most likely ATMega644 or ATMega1284."
+    IDS_APP_SETTINGS_LANG_SEL_COMBO_TT "Choose the program's interface language and the language of comments in the ini-file. For the comments in the ini-file to be in the selected language, you need close the program, delete the ini-file and run the program again."
+    IDS_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT_TT "Data refresh period of the debug panel. The debug panel must be enabled by the checkbox 'Use debug features'"
+    IDS_APP_SETTINGS_SHOW_TOOLTIPS_TT "Display tooltips when hovering over controls (buttons, checkmarks, input fields etc.). It is enabled by default, as it helps beginners to learn the program faster."
+    IDS_APP_SETTINGS_INJDRV_TAB_TT "Enable the 'Injector's Driver' tab. Check the box if you are using the SECU-3i TBZ unit or a separate SECU-LZIDx injector driver"
+    IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT "Maximum value on the scale of the virtual gauge 'Speed' and along the vertical axis in the corresponding graph"
+    IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT "Maximum value on the scale of the virtual gauge 'Absolute pressure' and along the vertical axis in the corresponding graph"
+    IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT "Update period of dashboard. The smaller the value, more often gauges are redrawn, but more computer processor's time is needed for this"
+    IDS_APP_SETTINGS_EXFIXTURES_TT "Set checkbox to select the 2nd profile of settings of the panel of gauges and indicators. Duplicated by a check mark 'Switch dash boards' in the 'View' section of the main menu of the program."
+    IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT "If a speed sensor is connected, set the number of pulses from the vehicle speed sensor per 1 km of traveled distance"
+    IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT "Turn on debug panel for displaying of variables from the firmware. Firmware must be compiled with DEBUG_VARIABLES option, see dbgvar.h header file."
+    IDS_APP_SETTINGS_HEXMODE_TT "Enables hex data encoding mode. Check only if firmware is NOT compiled with the UART_BINARY option (firmwares from official releases are compiled with this option)."
+    IDS_PEAK_ON_TABSEL_CHECK_TT   "Peak full ON time (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
+    IDS_PEAK_DUTY_TABSEL_CHECK_TT "Peak PWM duty (%). This table is used by the firmware only if corresponding 'Table' checkbox is set"
+    IDS_HOLD_DUTY_TABSEL_CHECK_TT "Hold PWM duty (%). This table is used by the firmware only if corresponding 'Table' checkbox is set"
+    IDS_PEAK_FULL_TABSEL_CHECK_TT "Peak ON + PWM time (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
+    IDS_PTH_PAUSE_TABSEL_CHECK_TT "Peak-to-hold pause (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
 END
 
 /////////////////////////////////////////////////////////////////////////////

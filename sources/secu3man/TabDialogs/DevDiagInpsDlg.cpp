@@ -32,6 +32,7 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 #define TIMER_ID 0
 
@@ -118,6 +119,14 @@ BOOL CDevDiagInpsDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  _UpdateScrlViewSize();
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_VOLTAGE), MLL::GetString(IDS_DEV_DIAG_VOLTAGE_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_GAS_V), MLL::GetString(IDS_DEV_DIAG_GAS_V_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  return TRUE;
 }

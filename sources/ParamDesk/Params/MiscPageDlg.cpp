@@ -336,6 +336,13 @@ BOOL CMiscPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fp_timeout_strt_edit, MLL::GetString(IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fp_timeout_strt_spin, MLL::GetString(IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_uart_speed_combo, MLL::GetString(IDS_PD_MISC_UART_SPEED_COMBO_TT)));
+ 
+ VERIFY(mp_ttc->AddWindow(&m_packet_period_edit, MLL::GetString(IDS_PD_MISC_PACKET_PERIOD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_packet_period_spin, MLL::GetString(IDS_PD_MISC_PACKET_PERIOD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_inj_offonpet_check, MLL::GetString(IDS_PD_MISC_INJ_OFFONPET_CHECK_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
 

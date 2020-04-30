@@ -28,6 +28,7 @@
 
 std::list<CToolTipCtrlEx*> CToolTipCtrlEx::m_insts;
 bool CToolTipCtrlEx::m_activated_all = true;
+int CToolTipCtrlEx::m_visibilityTime = 5000; //5000 ms
 
 CToolTipCtrlEx::CToolTipCtrlEx()
 : m_activated(false)
@@ -40,14 +41,22 @@ CToolTipCtrlEx::~CToolTipCtrlEx()
  m_insts.remove(this);
 }
 
+BOOL CToolTipCtrlEx::Create(CWnd* pParentWnd, DWORD dwStyle /*= 0*/)
+{
+ BOOL result = Super::Create(pParentWnd, dwStyle);
+ if (result)
+  SetDelayTime(TTDT_AUTOPOP, m_visibilityTime);
+ return result;
+}
+
 bool CToolTipCtrlEx::AddWindow(CWnd* pWnd, const _TSTRING& text)
 {
  TOOLINFO ti;
  ti.cbSize = sizeof (TOOLINFO);
  ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
- ti.hwnd = pWnd->GetParent ()->GetSafeHwnd ();
- ti.uId = (UINT) pWnd->GetSafeHwnd ();
- ti.hinst = AfxGetInstanceHandle ();
+ ti.hwnd = pWnd->GetParent()->GetSafeHwnd();
+ ti.uId = (UINT) pWnd->GetSafeHwnd();
+ ti.hinst = AfxGetInstanceHandle();
  ti.lpszText = const_cast<TCHAR*>(text.c_str());
 
  return (bool)SendMessage(TTM_ADDTOOL, 0, (LPARAM) &ti);
@@ -58,9 +67,9 @@ bool CToolTipCtrlEx::AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRec
  TOOLINFO ti;
  ti.cbSize = sizeof (TOOLINFO);
  ti.uFlags = TTF_SUBCLASS;
- ti.hwnd = pWnd->GetSafeHwnd ();
+ ti.hwnd = pWnd->GetSafeHwnd();
  ti.uId = nIDTool;
- ti.hinst = AfxGetInstanceHandle ();
+ ti.hinst = AfxGetInstanceHandle();
  ti.lpszText = const_cast<TCHAR*>(text.c_str());
  ::CopyRect (&ti.rect, pRect);
 
@@ -72,9 +81,9 @@ bool CToolTipCtrlEx::UpdateText(CWnd* pWnd, const _TSTRING& text)
  TOOLINFO ti;
  ti.cbSize = sizeof (TOOLINFO);
  ti.uFlags = TTF_IDISHWND;
- ti.hwnd = pWnd->GetParent ()->GetSafeHwnd ();
- ti.uId = (UINT) pWnd->GetSafeHwnd ();
- ti.hinst = AfxGetInstanceHandle ();
+ ti.hwnd = pWnd->GetParent()->GetSafeHwnd();
+ ti.uId = (UINT) pWnd->GetSafeHwnd();
+ ti.hinst = AfxGetInstanceHandle();
  ti.lpszText = const_cast<TCHAR*>(text.c_str()); 
 
  return (bool)SendMessage(TTM_UPDATETIPTEXT, 0, (LPARAM) &ti);
@@ -88,6 +97,17 @@ bool CToolTipCtrlEx::UpdateText(CWnd* pWnd, const _TSTRING& text)
  {
   if (IsWindow((*it)->m_hWnd))
    (*it)->Activate((*it)->m_activated && m_activated_all);
+ }
+}
+
+/*static*/ void CToolTipCtrlEx::SetVisibleTime(int timems)
+{
+ m_visibilityTime = timems;
+ std::list<CToolTipCtrlEx*>::iterator it;
+ for(it = m_insts.begin(); it != m_insts.end(); ++it)
+ {
+  if (IsWindow((*it)->m_hWnd))
+   (*it)->SetDelayTime(TTDT_AUTOPOP, timems);
  }
 }
 

@@ -30,6 +30,7 @@
 
 class AFX_EXT_CLASS COscillCtrl : public CWnd
 {
+ typedef CWnd Super;
  public:
   COscillCtrl();
   virtual ~COscillCtrl();

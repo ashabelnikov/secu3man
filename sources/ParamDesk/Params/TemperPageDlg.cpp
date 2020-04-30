@@ -241,17 +241,29 @@ BOOL CTemperPageDlg::OnInitDialog()
  //Set tooltips for widgets
  //Turn on threshold
  VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_edit, MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_spin,  MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_spin, MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
  //turn off threshold
- VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_edit,MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_spin,MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_edit, MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_spin, MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_use_curve_map,  MLL::GetString(IDS_PD_TEMPER_USE_CURVE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_curve_map, MLL::GetString(IDS_PD_TEMPER_USE_CURVE_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_use_vent_pwm, MLL::GetString(IDS_PD_TEMPER_USE_VENT_PWM_TT)));
- VERIFY(mp_ttc->AddWindow(&m_use_temp_sensor,MLL::GetString(IDS_PD_TEMPER_USE_TEMP_SENSOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_temp_sensor, MLL::GetString(IDS_PD_TEMPER_USE_TEMP_SENSOR_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_vent_timer_edit,MLL::GetString(IDS_PD_TEMPER_VENTTIMER_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_vent_timer_spin,MLL::GetString(IDS_PD_TEMPER_VENTTIMER_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_timer_edit, MLL::GetString(IDS_PD_TEMPER_VENTTIMER_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_timer_spin, MLL::GetString(IDS_PD_TEMPER_VENTTIMER_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_cond_min_rpm_edit, MLL::GetString(IDS_PD_TEMPER_CONDMINRPM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cond_min_rpm_spin, MLL::GetString(IDS_PD_TEMPER_CONDMINRPM_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_cond_pvt_on_edit, MLL::GetString(IDS_PD_TEMPER_CONDPVTON_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cond_pvt_on_spin, MLL::GetString(IDS_PD_TEMPER_CONDPVTON_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_cond_pvt_off_edit, MLL::GetString(IDS_PD_TEMPER_CONDPVTOFF_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cond_pvt_off_spin, MLL::GetString(IDS_PD_TEMPER_CONDPVTOFF_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_vent_pwmfrq_edit, MLL::GetString(IDS_PD_TEMPER_PWM_FRQ_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_pwmfrq_spin, MLL::GetString(IDS_PD_TEMPER_PWM_FRQ_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);

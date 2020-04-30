@@ -31,7 +31,7 @@
 #undef min
 #undef max
 
-BEGIN_MESSAGE_MAP(COscillCtrl, CWnd)
+BEGIN_MESSAGE_MAP(COscillCtrl, Super)
  ON_WM_ENABLE()
  ON_WM_PAINT()
  ON_WM_NCHITTEST()
@@ -82,7 +82,7 @@ BOOL COscillCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT
  BOOL result;
  static CString className = AfxRegisterWndClass(CS_VREDRAW | CS_HREDRAW);
 
- result = CWnd::CreateEx(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE, className, NULL, dwStyle,
+ result = Super::CreateEx(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE, className, NULL, dwStyle,
                          rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top, pParentWnd->GetSafeHwnd(), (HMENU)nID);
  if (result != 0)
  {
@@ -123,7 +123,7 @@ void COscillCtrl::OnPaint()
 
 void COscillCtrl::OnSize(UINT nType, int cx, int cy)
 {
- CWnd::OnSize(nType, cx, cy);
+ Super::OnSize(nType, cx, cy);
 
  GetClientRect(m_rcClient);
 

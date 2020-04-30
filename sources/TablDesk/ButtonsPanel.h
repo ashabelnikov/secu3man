@@ -33,6 +33,7 @@
 
 class CWndScroller;
 class CAutoTuneController;
+class CToolTipCtrlEx;
 
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
@@ -229,6 +230,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void _GetITModeRange(float& y1, float& y2);
 
   std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
   CButton m_view_work_map_btn;
   CButton m_view_temp_map_btn;

@@ -31,6 +31,7 @@
 #include "common/FastDelegate.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 #define TIMER_ID 0
 
@@ -85,6 +86,20 @@ BOOL CDevDiagOutsDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  _UpdateScrlViewSize();
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_IGN_OUT1_CHECK), MLL::GetString(IDS_DEV_DIAG_IGN_OUT1_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_IGN_O1_CHECK), MLL::GetString(IDS_DEV_DIAG_IGN_OUT1_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_IGN_OUT2_CHECK), MLL::GetString(IDS_DEV_DIAG_IGN_OUT2_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_IGN_O2_CHECK), MLL::GetString(IDS_DEV_DIAG_IGN_OUT2_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_IE_CHECK), MLL::GetString(IDS_DEV_DIAG_IE_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_FE_CHECK), MLL::GetString(IDS_DEV_DIAG_FE_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_ST_BLOCK_CHECK), MLL::GetString(IDS_DEV_DIAG_ST_BLOCK_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_STBL_O_CHECK), MLL::GetString(IDS_DEV_DIAG_ST_BLOCK_CHECK_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  return TRUE;
 }
