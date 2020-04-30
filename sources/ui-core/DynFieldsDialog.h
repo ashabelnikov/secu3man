@@ -31,6 +31,7 @@
 #include "ui-core/UpdatableDialog.h"
 
 class CWndScroller;
+class CToolTipCtrlEx;
 
 //This class is used indirectly through CDynFieldsContainer class
 class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
@@ -44,8 +45,9 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
  protected:
   friend class CDynFieldsContainer;
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
-  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value);
-  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value);
+  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip);
+  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip);
+  void AllowToolTips(bool allowToolTips);
   void Apply(void);
   int GetContentHeight(void);
 
@@ -171,6 +173,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
    CString caption;
    CString unit;
+   CString tooltip;
    int*   intVal;
    float* fltVal;
    int   intValm;
@@ -187,9 +190,11 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
   std::list<ItemData> m_fl;
   std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
   int m_contentHeight;
   bool m_initialized;
+  bool m_allowToolTips;
 };
 
 //Modal dialog container
@@ -198,11 +203,11 @@ class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
  typedef CDialog Super;
 
  public:
-  CDynFieldsContainer(CWnd* pParentWnd, const _TSTRING& caption, int height);
+  CDynFieldsContainer(CWnd* pParentWnd, const _TSTRING& caption, int height, bool allowToolTips);
  ~CDynFieldsContainer();
 
-  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value);
-  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value);
+  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip = _TSTRING());
+  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip = _TSTRING());
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

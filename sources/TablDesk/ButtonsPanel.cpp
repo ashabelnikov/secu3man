@@ -1576,6 +1576,10 @@ BOOL CButtonsPanel::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_grid_mode_editing_ign_check, MLL::GetString(IDS_TD_GME_IGN_CHECK_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_grid_mode_editing_inj_check, MLL::GetString(IDS_TD_GME_INJ_CHECK_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_start_map_btn, MLL::GetString(IDS_TD_VIEW_START_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_idle_map_btn, MLL::GetString(IDS_TD_VIEW_IDLE_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_work_map_btn, MLL::GetString(IDS_TD_VIEW_WORK_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_temp_map_btn, MLL::GetString(IDS_TD_VIEW_TEMP_MAP_TT))); 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
