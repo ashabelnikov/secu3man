@@ -252,7 +252,12 @@ BOOL CChokePageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_offrpmreg_ongas_check, MLL::GetString(IDS_PD_CHOKE_OFFRPMREGONGAS_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_usethrottle_pos_check, MLL::GetString(IDS_PD_CHOKE_USETHROTTLEPOS_CHECK_TT)));
 
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ VERIFY(mp_ttc->AddWindow(&m_sm_maxfreqinit_check, MLL::GetString(IDS_PD_CHOKE_MAXFREQINIT_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_sm_freq_combo, MLL::GetString(IDS_PD_CHOKE_SM_FREQ_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cranktoruntime_edit, MLL::GetString(IDS_PD_STARTER_CRANKTORUNTIME1_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cranktoruntime_spin, MLL::GetString(IDS_PD_STARTER_CRANKTORUNTIME1_EDIT_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  UpdateData(FALSE);

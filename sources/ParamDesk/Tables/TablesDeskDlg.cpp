@@ -33,6 +33,7 @@
 #include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/MapIds.h"
 #include "TDContextMenuManager.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 using namespace std;
 using namespace fastdelegate;
@@ -137,6 +138,14 @@ BOOL CTablesDeskDlg::OnInitDialog()
  m_bpLRMargin.cx = wndRectDlg.right - wndRectBP.right;
  m_bpLRMargin.cy = wndRectDlg.bottom - wndRectBP.bottom;
  ///////////////////////////////////////////////
+
+ //Create tooltip control and set tooltips for widgets
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_save_button, MLL::GetString(IDS_TD_SAVE_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_names_edit, MLL::GetString(IDS_TD_TABLESSET_NAME_EDIT_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }

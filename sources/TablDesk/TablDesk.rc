@@ -115,14 +115,11 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,25,95,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,90,95,50,14
     EDITTEXT        IDC_DWELL_CALC_R_EDIT,26,17,35,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_DWELL_CALC_R_SPIN,"msctls_updown32",UDS_ARROWKEYS,
-                    63,17,12,16
+    CONTROL         "",IDC_DWELL_CALC_R_SPIN,"msctls_updown32",UDS_ARROWKEYS,63,17,12,16
     EDITTEXT        IDC_DWELL_CALC_L_EDIT,26,40,35,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_DWELL_CALC_L_SPIN,"msctls_updown32",UDS_ARROWKEYS,
-                    62,40,12,16
+    CONTROL         "",IDC_DWELL_CALC_L_SPIN,"msctls_updown32",UDS_ARROWKEYS,62,40,12,16
     EDITTEXT        IDC_DWELL_CALC_I_EDIT,26,63,35,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,
-                    62,63,12,16
+    CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,62,63,12,16
     LTEXT           "Индуктивность катушки (мГн)",IDC_STATIC,83,39,64,18
     LTEXT           "Максимальный ток (Ампер)",IDC_STATIC,83,63,64,18
     LTEXT           "Сопротивление катушки (Ом)",IDC_STATIC,82,16,63,16
@@ -561,6 +558,15 @@ BEGIN
     IDS_CRANKING_THRD_MAP    "Обороты блокировки стартера"
     IDS_CRANKING_TIME_MAP    "Время работы стартера после достиж. обор. блокир."
     IDS_SMAPABAN_THRD_MAP    "Обороты перехода с пусковой карты"
+    IDS_TD_FW_CONSTS_BUTTON_TT "Открыть окно редактирования констант прошивки"
+    IDS_TD_FUNSET_LIST_TT    "Выбор набора таблиц для редактирования. В памяти flash хранится 4 набора таблиц."
+    IDS_TD_GME_IGN_CHECK_TT  "Редактирование всех таблиц зажигания в одном окне (табличный режим)."
+    IDS_TD_GME_INJ_CHECK_TT  "Редактирование всех таблиц впрыска в одном окне (табличный режим)."
+    IDS_DWELL_CALC_R_EDIT_TT "Активное сопротивление первичной обмотки катушки зажигания. Обычно это значение составляет десятые доли Ома. Чем больше сопротивление, тем больше времени требуется чтобы ток через первичную обмотку катушки достиг указанного значения. Значение сопротивления смотрите в паспорте на вашу катушку."
+    IDS_DWELL_CALC_L_EDIT_TT "Индуктивность первичной обмотки катушки зажигания. Обычно это значение составляет единицы миллигенри. Чем больше индуктивность, тем больше энергии накапливает катушка, но при этом требуется больше времени. Значение индуктивности должно быть указано в паспорте на вашу катушку."
+    IDS_DWELL_CALC_I_EDIT_TT "Ток в конце времени накопления (на момент разрыва тока в первичной обмотке и начала искры). Чем больше ток, тем мощнее искра. Мы не советуем превышать рекомендуемое значение указанное в паспорте на вашу катушку."
+    IDS_RGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки оборотов, которые используются по умолчанию"
+    IDS_CGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки температуры, которые используются по умолчанию"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -680,14 +686,11 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,25,95,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,90,95,50,14
     EDITTEXT        IDC_DWELL_CALC_R_EDIT,26,17,35,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_DWELL_CALC_R_SPIN,"msctls_updown32",UDS_ARROWKEYS,
-                    63,17,12,16
+    CONTROL         "",IDC_DWELL_CALC_R_SPIN,"msctls_updown32",UDS_ARROWKEYS,63,17,12,16
     EDITTEXT        IDC_DWELL_CALC_L_EDIT,26,40,35,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_DWELL_CALC_L_SPIN,"msctls_updown32",UDS_ARROWKEYS,
-                    62,40,12,16
+    CONTROL         "",IDC_DWELL_CALC_L_SPIN,"msctls_updown32",UDS_ARROWKEYS,62,40,12,16
     EDITTEXT        IDC_DWELL_CALC_I_EDIT,26,63,35,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,
-                    62,63,12,16
+    CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,62,63,12,16
     LTEXT           "Coil inductance (milliHenry)",IDC_STATIC,83,39,64,18
     LTEXT           "Maximum current (Ampere)",IDC_STATIC,83,63,64,18
     LTEXT           "Coil resistance (Ohm)",IDC_STATIC,82,16,63,16
@@ -1146,6 +1149,15 @@ BEGIN
     IDS_CRANKING_THRD_MAP    "RPM threshold for blocking of starter"
     IDS_CRANKING_TIME_MAP    "Time of working of starter after reaching threshold"
     IDS_SMAPABAN_THRD_MAP    "RPM of switching from start map"
+    IDS_TD_FW_CONSTS_BUTTON_TT "Open window of firmware constants' editor"
+    IDS_TD_FUNSET_LIST_TT    "Select a set of tables for editing. 4 sets of tables are stored in flash memory."
+    IDS_TD_GME_IGN_CHECK_TT  "Edit all ignition maps in a single window (grid mode)."
+    IDS_TD_GME_INJ_CHECK_TT  "Edit all injection maps in a single window (grid mode)."
+    IDS_DWELL_CALC_R_EDIT_TT "Active resistance of primary winding of the ignition coil. Usually this value is tenths of Ohm. The greater the resistance, the longer it takes for the current through the primary winding of the coil to reach the specified value. See resistance value in the datasheet for your coil."
+    IDS_DWELL_CALC_L_EDIT_TT "Inductance of primary winding of the ignition coil. Usually this value is units of millihenry. The larger the inductance, the more energy the coil accumulates, but it takes more time. The inductance value should be indicated in the datasheet on your coil."
+    IDS_DWELL_CALC_I_EDIT_TT "The current at the end of accumulation time (at the time of current disruption in the primary winding and the beginning of the spark). The greater the current, the more powerful the spark. We do not recommend exceeding the recommended value indicated in the datasheet for your coil."
+    IDS_RGE_LOAD_DEF_VAL_TT  "Return standard RPM grid values which are used by default"
+    IDS_CGE_LOAD_DEF_VAL_TT  "Return standard temperature grid values which are used by default"
 END
 
 STRINGTABLE DISCARDABLE 

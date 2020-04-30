@@ -64,6 +64,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPortAutoReopen(_T("PortAutoReopen"))
 , m_optToggleMapWnd(_T("ToggleMapWnd"))
 , m_optExistingPorts(_T("ExistingPorts"))
+, m_optToolTipTime(_T("ToolTipTime"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -534,6 +535,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optPortAutoReopen, _T("1"), 0, 1);
  os.ReadInt(m_optToggleMapWnd, _T("0"), 0, 1);
  os.ReadInt(m_optExistingPorts, _T("1"), 0, 1);
+ os.ReadInt(m_optToolTipTime, _T("5000"), 1000, 60000);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -1057,6 +1059,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Когда установлено в 1, только одно окно 2D или 3D графиков таблиц будет отображаться одновременно (кнопки будут переключаться). По умолчанию установленов в 0 (отключено)."));
  os.WriteInt(m_optToggleMapWnd); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("The time that the tooltips are displayed. Increase if you do not have time to read the tips"));
+ else
+  os.WriteComment(_T("Время, на протяжении которого отображаются всплывающие подсказки. Увеличьте, если не успеваете читать подсказки"));
+ os.WriteInt(m_optToolTipTime); 
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section); 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -3762,4 +3770,9 @@ bool CAppSettingsModel::GetShowGraphsCursor(void)
 int CAppSettingsModel::GetGraphShtPixels(void)
 {
  return m_optGraphShtPixels.value;
+}
+
+int CAppSettingsModel::GetToolTipTime(void) const
+{
+ return m_optToolTipTime.value;
 }

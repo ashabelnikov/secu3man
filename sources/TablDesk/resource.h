@@ -345,3 +345,12 @@
 #define IDC_CGE_EDIT_15                 5699
 #define IDC_CGE_LOAD_DEF_VAL            5700
 #define IDC_CGE_ERROR_MSG_TEXT          5701
+#define IDS_TD_FW_CONSTS_BUTTON_TT      5702
+#define IDS_TD_FUNSET_LIST_TT           5703
+#define IDS_TD_GME_IGN_CHECK_TT         5704
+#define IDS_TD_GME_INJ_CHECK_TT         5705
+#define IDS_DWELL_CALC_R_EDIT_TT        5706
+#define IDS_DWELL_CALC_L_EDIT_TT        5707
+#define IDS_DWELL_CALC_I_EDIT_TT        5708
+#define IDS_RGE_LOAD_DEF_VAL_TT         5709
+#define IDS_CGE_LOAD_DEF_VAL_TT         5710

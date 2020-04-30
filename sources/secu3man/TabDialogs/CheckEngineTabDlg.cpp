@@ -31,6 +31,7 @@
 #include "common/GDIHelpers.h"
 #include "common/unicodesupport.h"
 #include "ui-core/HeaderCtrlEx.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 #define TIMER_ID 0
 
@@ -124,6 +125,18 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
  { GetParent()->DestroyWindow(); }
  //=================================================================
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_list_set_all_button, MLL::GetString(IDS_CE_LIST_SETALL_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_list_clear_all_button, MLL::GetString(IDS_CE_LIST_CLEARALL_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_show_with_inertness, MLL::GetString(IDS_CE_READ_INERTNESS_CHECKBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_read_saved_button, MLL::GetString(IDS_CE_READ_ERRORS_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_write_saved_button, MLL::GetString(IDS_CE_WRITE_ERRORS_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_realtime_checkbox, MLL::GetString(IDS_CE_READ_REALTIME_CHECKBOX_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control

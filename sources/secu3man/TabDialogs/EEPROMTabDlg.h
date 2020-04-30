@@ -34,6 +34,7 @@
 class CEEPROMContextMenuManager;
 class CParamDeskDlg;
 class CButtonsPanel;
+class CToolTipCtrlEx;
 
 class CEEPROMTabDlg : public CTabDialog
 {
@@ -99,10 +100,12 @@ class CEEPROMTabDlg : public CTabDialog
   bool IsEEPROMOpened(void);
 
  private:
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CEdit     m_ee_name;
   CEdit     m_ee_mapset_name;
   CStatic   m_modification_flag;
   CButton   m_ee_popup_menu_button;
+  CButton   m_ee_ce_errors_btn;
 
   bool m_is_bl_items_available;
   bool m_initialized;

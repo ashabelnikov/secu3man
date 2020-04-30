@@ -34,6 +34,7 @@ class CDiagnostContextMenuManager;
 class COscillCtrl;
 class CDevDiagInpsDlg;
 class CDevDiagOutsDlg;
+class CToolTipCtrlEx;
 
 class CDevDiagnostTabDlg : public CTabDialog
 {
@@ -165,6 +166,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   std::auto_ptr<CDiagnostContextMenuManager> mp_ContextMenuManager;
   std::auto_ptr<CDevDiagInpsDlg> mp_inpsDlg;
   std::auto_ptr<CDevDiagOutsDlg> mp_outsDlg;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
   CButton m_enter_button;
   CStatic m_outputs_group;

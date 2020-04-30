@@ -433,6 +433,33 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_intrpmlim_edit, MLL::GetString(IDS_PD_IDLREG_INTRPMLIM_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_intrpmlim_spin, MLL::GetString(IDS_PD_IDLREG_INTRPMLIM_EDIT_TT)));
  
+ VERIFY(mp_ttc->AddWindow(&m_preg_mode_check, MLL::GetString(IDS_PD_IDLREG_PMODE_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_closedloop, MLL::GetString(IDS_PD_IDLREG_USECLOSEDLOOP_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_idltorunadd_edit, MLL::GetString(IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_idltorunadd_spin, MLL::GetString(IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_rpmonrunadd_edit, MLL::GetString(IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rpmonrunadd_spin, MLL::GetString(IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_idlregp_edit, MLL::GetString(IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_idlregp_spin, MLL::GetString(IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_idlregi_edit, MLL::GetString(IDS_PD_IDLREG_INTEGRAL_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_idlregi_spin, MLL::GetString(IDS_PD_IDLREG_INTEGRAL_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_coeffthrd1_edit, MLL::GetString(IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_coeffthrd1_spin, MLL::GetString(IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_coeffthrd2_edit, MLL::GetString(IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_coeffthrd2_spin, MLL::GetString(IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT)));
+ 
+ VERIFY(mp_ttc->AddWindow(&m_iacminpos_edit, MLL::GetString(IDS_PD_IDLREG_IACMINPOS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_iacminpos_spin, MLL::GetString(IDS_PD_IDLREG_IACMINPOS_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_iacmaxpos_edit, MLL::GetString(IDS_PD_IDLREG_IACMAXPOS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_iacmaxpos_spin, MLL::GetString(IDS_PD_IDLREG_IACMAXPOS_EDIT_TT)));
+      
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);
 

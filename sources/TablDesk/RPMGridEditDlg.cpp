@@ -30,6 +30,7 @@
 #include "resource.h"
 #include "RPMGridEditDlg.h"
 #include "ui-core/EditEx.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CRPMGridEditDlg::IDD = IDD_RPM_GRID_EDITOR;
 
@@ -130,6 +131,14 @@ BOOL CRPMGridEditDlg::OnInitDialog()
 
  for(size_t i = 0; i < m_edits[1].size(); ++i)
   m_edits[1][i]->SetLimitText(5);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_RGE_LOAD_DEF_VAL), MLL::GetString(IDS_RGE_LOAD_DEF_VAL_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_CGE_LOAD_DEF_VAL), MLL::GetString(IDS_CGE_LOAD_DEF_VAL_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control

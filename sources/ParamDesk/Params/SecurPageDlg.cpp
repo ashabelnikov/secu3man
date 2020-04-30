@@ -159,8 +159,19 @@ BOOL CSecurPageDlg::OnInitDialog()
  //check boxes
  VERIFY(mp_ttc->AddWindow(&m_bt_use_check, MLL::GetString(IDS_PD_SECUR_BT_USE_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_imm_use_check, MLL::GetString(IDS_PD_SECUR_IMM_USE_CHECK_TT)));
+ //bluetooth type
+ VERIFY(mp_ttc->AddWindow(&m_bt_type_combo, MLL::GetString(IDS_PD_SECUR_BT_TYPE_COMBO_TT)));
+ //name and password
+ VERIFY(mp_ttc->AddWindow(&m_bt_name_edit, MLL::GetString(IDS_PD_SECUR_BT_NAME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_bt_pass_edit, MLL::GetString(IDS_PD_SECUR_BT_PASS_EDIT_TT)));
+ //iButton keys
+ VERIFY(mp_ttc->AddWindow(&m_ibtn_key1_edit, MLL::GetString(IDS_PD_SECUR_IBTN_KEY1_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ibtn_key2_edit, MLL::GetString(IDS_PD_SECUR_IBTN_KEY1_EDIT_TT)));
 
- mp_ttc->SetMaxTipWidth(150); //Enable text wrapping
+ VERIFY(mp_ttc->AddWindow(&m_use_respar_check, MLL::GetString(IDS_PD_SECUR_USE_RESPAR_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_chk_fwcrc_check, MLL::GetString(IDS_PD_SECUR_CHK_FWCRC_CHECK_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  m_bt_type_combo.AddString(_T("BC417"));

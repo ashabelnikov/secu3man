@@ -207,6 +207,22 @@ BOOL CMAPCalcDlg::OnInitDialog()
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_known_grad_check, MLL::GetString(IDS_MAP_CALC_KNOW_GRAD_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_1stpt_press_edit, MLL::GetString(IDS_MAP_CALC_1STPT_PRESS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_1stpt_press_spin, MLL::GetString(IDS_MAP_CALC_1STPT_PRESS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_1stpt_press_unit, MLL::GetString(IDS_MAP_CALC_1STPT_PRESS_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_1stpt_volt_edit, MLL::GetString(IDS_MAP_CALC_1STPT_VOLT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_1stpt_volt_spin, MLL::GetString(IDS_MAP_CALC_1STPT_VOLT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_1stpt_volt_unit, MLL::GetString(IDS_MAP_CALC_1STPT_VOLT_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2ndpt_press_edit, MLL::GetString(IDS_MAP_CALC_1STPT_PRESS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2ndpt_press_spin, MLL::GetString(IDS_MAP_CALC_1STPT_PRESS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2ndpt_press_unit, MLL::GetString(IDS_MAP_CALC_1STPT_PRESS_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2ndpt_volt_edit, MLL::GetString(IDS_MAP_CALC_1STPT_VOLT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2ndpt_volt_spin, MLL::GetString(IDS_MAP_CALC_1STPT_VOLT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_2ndpt_volt_unit, MLL::GetString(IDS_MAP_CALC_1STPT_VOLT_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gradient_edit, MLL::GetString(IDS_MAP_CALC_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gradient_spin, MLL::GetString(IDS_MAP_CALC_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gradient_n_unit, MLL::GetString(IDS_MAP_CALC_GRADIENT_N_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gradient_d_unit, MLL::GetString(IDS_MAP_CALC_GRADIENT_D_COMBO_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

@@ -53,6 +53,7 @@
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
 #include "ui-core/HotKeysToCmdRouter.h"
+#include "ui-core/ToolTipCtrlEx.h"
 #include "common/MathHelpers.h"
 
 #define TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
@@ -300,6 +301,13 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tabLRMargin.cx = wndRectDlg.right - wndRectTab.right;
  m_tabLRMargin.cy = wndRectDlg.bottom - wndRectTab.bottom;
  ///////////////////////////////////////////////
+
+ //Create tooltip control and set tooltips for widgets
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_save_button, MLL::GetString(IDS_PD_SAVE_BUTTON_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }

@@ -111,6 +111,7 @@ BOOL CKnockFrqCalcDlg::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(this, MLL::GetString(IDS_KC_KNOCK_FRQ_CALC_TT)));
  VERIFY(mp_ttc->AddWindow(mp_cyl_d_edit.get(), MLL::GetString(IDS_KC_KNOCK_FRQ_CALC_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_frq_btn, MLL::GetString(IDS_KC_KNOCK_FRQ_CALC_BTN_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

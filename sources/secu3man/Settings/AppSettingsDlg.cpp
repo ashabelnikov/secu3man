@@ -289,6 +289,30 @@ BOOL CAppSettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_port_selection2_combo, MLL::GetString(IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_app_baudrate_selection_combo, MLL::GetString(IDS_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_bl_baudrate_selection_combo, MLL::GetString(IDS_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_presports_button, MLL::GetString(IDS_APP_SETTINGS_PRESPORTS_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_log_files_folder_edit, MLL::GetString(IDS_APP_SETTINGS_LOGFOLDER_EDITBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_log_files_folder_button, MLL::GetString(IDS_APP_SETTINGS_LOGFOLDER_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_app_folder_button, MLL::GetString(IDS_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_log_csv_sepsymbol_combo, MLL::GetString(IDS_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_always_write_log_button, MLL::GetString(IDS_APP_SETTINGS_ALWAYS_WRITE_LOG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_write_log_fields_button, MLL::GetString(IDS_APP_SETTINGS_WRITE_LOG_TITLE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ecu_platform_selection_combo, MLL::GetString(IDS_APP_SETTINGS_PLATFORM_SEL_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_iface_lang_selection_combo, MLL::GetString(IDS_APP_SETTINGS_LANG_SEL_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_dv_update_period_edit, MLL::GetString(IDS_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_dv_update_period_spin, MLL::GetString(IDS_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_show_tooltips_button, MLL::GetString(IDS_APP_SETTINGS_SHOW_TOOLTIPS_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_injdrvtab_button, MLL::GetString(IDS_APP_SETTINGS_INJDRV_TAB_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tachometer_max_edit, MLL::GetString(IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tachometer_max_spin, MLL::GetString(IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_pressure_max_edit, MLL::GetString(IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_pressure_max_spin, MLL::GetString(IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_midesk_update_period_edit, MLL::GetString(IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_midesk_update_period_spin, MLL::GetString(IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_exfixtures_button, MLL::GetString(IDS_APP_SETTINGS_EXFIXTURES_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_wheel_pulses_edit, MLL::GetString(IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_wheel_pulses_spin, MLL::GetString(IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_dv_features_button, MLL::GetString(IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hexdatamode_button, MLL::GetString(IDS_APP_SETTINGS_HEXMODE_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

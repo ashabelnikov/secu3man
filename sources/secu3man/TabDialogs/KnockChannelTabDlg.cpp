@@ -39,6 +39,7 @@
 #include "ParamDesk/Params/KnockPageDlg.h"
 #include "ui-core/Chart2D.h"
 #include "ui-core/OScillCtrl.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 using namespace std;
 using namespace fastdelegate;
@@ -168,6 +169,18 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  _InitializeRPMKnockSignalList();
 
  mp_ContextMenuManager->Attach(this);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_param_save_button, MLL::GetString(IDS_KC_SAVE_PARAM_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_clear_function_button, MLL::GetString(IDS_KC_CLEAR_FUNCTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_copy_to_attenuator_table_button, MLL::GetString(IDS_KC_COPY_TO_ATTENUATOR_TABLE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_level_slider, MLL::GetString(IDS_KC_DESIRED_LEVEL_SLIDER_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_dlsm_checkbox, MLL::GetString(IDS_KC_DLSM_CHECKBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_list_checkbox, MLL::GetString(IDS_KC_LIST_CHECKBOX_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control

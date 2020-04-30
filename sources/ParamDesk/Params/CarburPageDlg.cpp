@@ -325,6 +325,12 @@ BOOL CCarburPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_inverse_throttle_switch, MLL::GetString(IDS_PD_CARBUR_INVERSE_SWITCH_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_revlim_lo_threshold_edit, MLL::GetString(IDS_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_revlim_lo_threshold_spin, MLL::GetString(IDS_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_revlim_hi_threshold_edit, MLL::GetString(IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_revlim_hi_threshold_spin, MLL::GetString(IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

@@ -213,11 +213,17 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  mp_TablesPanel->SetPosition(rect.TopLeft().x,rect.TopLeft().y, GetDlgItem(IDC_FW_VIEW_FWOPT));
  mp_TablesPanel->ShowWindow(SW_SHOWNORMAL);
 
-//create a tooltip control and assign tooltips
+ //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_fw_options_btn, MLL::GetString(IDS_FW_VIEW_FWOPT_TT)));
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ VERIFY(mp_ttc->AddWindow(&m_fw_crc, MLL::GetString(IDS_FW_CRC_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fw_information_edit, MLL::GetString(IDS_FW_FW_INFORMATION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fw_name, MLL::GetString(IDS_FW_FW_NAME_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_prog_only_code_checkbox, MLL::GetString(IDS_FW_PROG_ONLY_CODE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_param_sel_tab, MLL::GetString(IDS_FW_PARAM_SEL_TAB_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_bl_started_emergency, MLL::GetString(IDS_FW_BL_STARTED_EMERGENCY_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  mp_ContextMenuManager->Attach(this);

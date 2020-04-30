@@ -30,6 +30,7 @@
 #include "common/UnicodeSupport.h"
 
 class CEditEx;
+class CToolTipCtrlEx;
 
 class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
 {
@@ -68,6 +69,7 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   DECLARE_MESSAGE_MAP()
 
  private:
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CStatic m_errMsg[2];
   std::vector<CEditEx*> m_edits[2];
   std::vector<float> m_values[2];

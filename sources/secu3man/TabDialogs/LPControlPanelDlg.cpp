@@ -92,6 +92,10 @@ BOOL CLPControlPanelDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_next_button, MLL::GetString(IDS_LOG_PLAYER_NEXT_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_time_factor_combo, MLL::GetString(IDS_LOG_PLAYER_TIME_FACTOR_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_slider, MLL::GetString(IDS_LOG_PLAYER_POSITION_SLIDER_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_open_file_button, MLL::GetString(IDS_LOG_PLAYER_OPEN_FILE_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_stoponmarks_check, MLL::GetString(IDS_LOG_PLAYER_STOPONMARKS_CHECKBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_file_indicator, MLL::GetString(IDS_LOG_PLAYER_FILE_NAME_INDICATOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_position_indicator, MLL::GetString(IDS_LOG_PLAYER_POSITION_INDICATOR_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

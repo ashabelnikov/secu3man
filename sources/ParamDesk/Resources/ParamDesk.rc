@@ -1207,42 +1207,29 @@ BEGIN
 END
 
 IDD_MAP_CALC DIALOGEX 0, 0, 211, 140
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
-    WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Расчет параметров ДАД"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,43,115,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,108,115,50,14
     EDITTEXT        IDC_MAP_CALC_1STPT_PRESS_EDIT,10,15,30,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_MAP_CALC_1STPT_PRESS_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,40,15,12,14
-    COMBOBOX        IDC_MAP_CALC_1STPT_PRESS_COMBO,53,15,48,80,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_MAP_CALC_1STPT_PRESS_SPIN,"msctls_updown32",UDS_ARROWKEYS,40,15,12,14
+    COMBOBOX        IDC_MAP_CALC_1STPT_PRESS_COMBO,53,15,48,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_MAP_CALC_1STPT_VOLT_EDIT,110,15,30,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_MAP_CALC_1STPT_VOLT_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,140,15,12,14
-    COMBOBOX        IDC_MAP_CALC_1STPT_VOLT_COMBO,153,15,48,50,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_MAP_CALC_1STPT_VOLT_SPIN,"msctls_updown32",UDS_ARROWKEYS,140,15,12,14
+    COMBOBOX        IDC_MAP_CALC_1STPT_VOLT_COMBO,153,15,48,50,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_MAP_CALC_GRADIENT_EDIT,10,50,30,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_MAP_CALC_GRADIENT_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,40,50,12,14
-    COMBOBOX        IDC_MAP_CALC_GRADIENT_N_COMBO,53,50,48,100,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_MAP_CALC_GRADIENT_D_COMBO,110,50,48,100,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Наклон известен",IDC_MAP_CALC_KNOW_GRAD_CHECK,
-                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,165,47,60,20
+    CONTROL         "",IDC_MAP_CALC_GRADIENT_SPIN,"msctls_updown32",UDS_ARROWKEYS,40,50,12,14
+    COMBOBOX        IDC_MAP_CALC_GRADIENT_N_COMBO,53,50,48,100,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_MAP_CALC_GRADIENT_D_COMBO,110,50,48,100,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Наклон известен",IDC_MAP_CALC_KNOW_GRAD_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,165,47,60,20
     EDITTEXT        IDC_MAP_CALC_2NDPT_PRESS_EDIT,10,85,30,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_MAP_CALC_2NDPT_PRESS_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,40,85,12,14
-    COMBOBOX        IDC_MAP_CALC_2NDPT_PRESS_COMBO,53,85,48,80,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_MAP_CALC_2NDPT_PRESS_SPIN,"msctls_updown32",UDS_ARROWKEYS,40,85,12,14
+    COMBOBOX        IDC_MAP_CALC_2NDPT_PRESS_COMBO,53,85,48,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_MAP_CALC_2NDPT_VOLT_EDIT,110,85,30,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_MAP_CALC_2NDPT_VOLT_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,140,85,12,14
-    COMBOBOX        IDC_MAP_CALC_2NDPT_VOLT_COMBO,153,85,48,50,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_MAP_CALC_2NDPT_VOLT_SPIN,"msctls_updown32",UDS_ARROWKEYS,140,85,12,14
+    COMBOBOX        IDC_MAP_CALC_2NDPT_VOLT_COMBO,153,85,48,50,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     CTEXT           "/",IDC_MAP_CALC_GRADIENT_SLASH,102,52,8,10
     CTEXT           "1-я точка на графике",IDC_STATIC,50,4,100,10
     CTEXT           "2-я точка на графике",IDC_MAP_CALC_2NDPT_CAPTION,50,74,100,10
@@ -1257,6 +1244,9 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_PD_KNOCK_RECOVERY_DELAY_UNIT "тактов"
+    IDS_PD_SAVE_BUTTON_TT     "Сохранить параметры в EEPROM."
+    IDS_TD_SAVE_BUTTON_TT     "Сохранить набор таблиц в EEPROM"
+    IDS_TD_TABLESSET_NAME_EDIT_TT "Отредактировать имя набора таблиц"
     IDS_PD_TABNAME_STARTR_PAR "1:Запуск"
     IDS_PD_TABNAME_ANGLES_PAR "2:УОЗ"
     IDS_PD_TABNAME_IDLREG_PAR "3:ХХ"
@@ -1294,8 +1284,8 @@ BEGIN
     IDS_PD_CHOKE_MANUAL_POS_SPIN_TT "Изменение положения ВЗ вручную. После первого нажатия на кнопку система входит в ручной режим управл. ВЗ, который будет действовать до выкл. зажигания."
     IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В."
     IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В. Поставьте 0, если используется концевик."
-    IDS_PD_CHOKE_STRT_ADD_TM1_EDIT_TT "Первая точка, задающая зависимость времени действия пусковой карты от температуры."
-    IDS_PD_CHOKE_STRT_ADD_TM2_EDIT_TT "Вторая точка, задающая зависимость времени действия пусковой карты от температуры."
+    IDS_PD_CHOKE_STRT_ADD_TM1_EDIT_TT "Первая точка, задающая зависимость времени действия пусковой карты от температуры двигателя."
+    IDS_PD_CHOKE_STRT_ADD_TM2_EDIT_TT "Вторая точка, задающая зависимость времени действия пусковой карты от температуры двигателя."
     IDS_PD_CHOKE_RPMREG_IF_EDIT_TT "Коэффициент И-регулятора используемого для регулирования оборотов при прогреве."
     IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Максимальное положительное значение лямбда коррекции на прогреве, используемое для газового дозатора"
     IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Максимальное отрицательное значение лямбда коррекции на прогреве, используемое для газового дозатора"
@@ -1342,12 +1332,12 @@ BEGIN
     IDS_V_UNIT      "В"
     IDS_PD_MAP_CALC_BUTTON_TT "Калькулятор позволяет легко рассчитать параметры ДАД"
     IDS_MAP_CALC_1V_ABOVE_2V "Напряжение в 1-й точке не может быть равно или больше напряжения во 2-й точке!"
-    IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Поставьте эту галочку если вам известно соотношение изменения  давления к напряжению (или напряжения к давлению)"
+    IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Поставьте эту галочку если вам известно соотношение изменения  давления к изменению напряжения (или напряжения к давлению)"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_SECUR_BT_APPLY_BUTTON_TT "Запись нового имени и пароля в блютуз. Изменение имени и пароля не будет работать если блютуз в состоянии online"
+    IDS_PD_SECUR_BT_APPLY_BUTTON_TT "Запись нового имени и пароля в блютуз. Изменение имени и пароля не будет работать если блютуз в состоянии online (изменять имя и пароль Bluetooth модуля нужно только используя USB кабель)"
     IDS_PD_YES "Да"
     IDS_PD_NO  "Нет"
 END
@@ -1374,7 +1364,7 @@ BEGIN
     IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Если в качестве нагрузки выбран ДАД, то это значение давления на впуске, соответствующее максимальной нагрузке (16-я кривая в рабочей таблице УОЗ или впрыска). Определить можно следующим образом. Трогаемся на высокой передаче, резко нажимаем педаль газа и смотрим давление."
     IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "Если в качестве нагрузки выбран ДАД, то это значение давления на впуске, соответствующее минимальной нагрузке (1-я кривая в рабочей таблице УОЗ или впрыска). Определить можно на ПХХ. Разгоняемся, бросаем газ и смотрим значение давления."
     IDS_PD_TEMPER_USE_TEMP_SENSOR_TT                "Включение ДТОЖ. Установите эту галочку если Вы используете ДТОЖ и он подключен. Если галочка не установлена, то работа некоторых функций, связанных с температурой двигателя будет ограничена."
-    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Установите эту галочку если Вы собираетесь управлять оборотами вентилятора при помощи ШИМ (с использованием блока SECU-FAN-PWM). Когда температура двигателя приблизится к порогу включения вентилятора ближе чем на 7.5°С, вентилятор включится на минимальные обороты. По мере увеличения температуры обороты будут возрастать, пока не будет достигнута точка равновесия."
+    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Установите эту галочку если Вы собираетесь управлять оборотами вентилятора при помощи ШИМ (с использованием блока SECU-FAN-PWM). Когда температура двигателя приблизится к порогу включения вентилятора ближе чем на несколько °С, вентилятор включится на минимальные обороты. По мере увеличения температуры обороты будут возрастать, пока не будет достигнута точка равновесия."
     IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "Если установить эту галочку, то импульсы зажигания будут выдаваться только на выход IGN_OUT1. Используется при распределении искры трамблером"
     IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT                 "Нижний порог ограничения УОЗ формируемого системой. Данное ограничение накладывается в самом конце, после всех вычислений."
     IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT                 "Верхний порог ограничения УОЗ формируемого системой. Данное ограничение накладывается в самом конце, после всех вычислений."
@@ -1398,7 +1388,7 @@ BEGIN
     IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Скорость уменьшения УОЗ в градусах за один такт двигателя."
     IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Скорость увеличения УОЗ в градусах за один такт двигателя."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Разрешить работу регулятора если на входе GAS_V высокий уровень"
-    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Выберите метод определения нагрузки двигателя: ДАД (Speed-density), ДПДЗ (Alpha-N), ДАД+ДПДЗ (смешанный). В смешанном режиме используется таблица переключения ДАД/ДПДЗ."
+    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Выберите метод определения нагрузки двигателя: ДАД или ДАД(баро) (Speed-density), ДПДЗ (Alpha-N), ДАД+ДПДЗ (смешанный Speed-density + Alpha-N). В смешанном режиме используется таблица переключения ДАД/ДПДЗ. Если выбран режим ДАД(баро), то в качестве верхнего значения по оси нагрузки в таблицах будет использоваться не константа, а барометрическое давление."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Выключать бензонасос при переходе на газ (высокий уровень на входе GAS_V)"
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Выключать форсунки при переходе на газ (высокий уровень на входе GAS_V)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Начало импульса относительно ВМТ (значение больше 0 соответствует началу импульса до ВМТ)"
@@ -1407,7 +1397,7 @@ BEGIN
     IDS_PD_CHOKE_OFFRPMREGONGAS_CHECK_TT            "Не использовать регулятор оборотов на газу (когда на входе GAS_V высокий уровень)"
     IDS_PD_CHOKE_USETHROTTLEPOS_CHECK_TT            "Использовать положение дроссельной заслонки (открыта/закрыта) при инициализации положения ВЗ"
     IDS_PD_SECUR_BT_USE_CHECK_TT                    "Установите галочку чтобы в блютуз записались настройки или можно было изменить его имя и пароль. Также, настройки будут загружаться в блютуз каждый раз при сбросе EEPROM." 
-    IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Установите галочку для использования иммобилайзера (iButton)"
+    IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Установите галочку для использования иммобилайзера (iButton). При установленной галочке блок заработает только при подсоединенном ключе iButton!"
     IDS_PD_IDLREG_PMODE_CHECK_TT                    "УОЗ РХХ будет работать в режиме пропорционального регулятора. Данная опция актуальна только при совместном использовании с closed-loop РДВ."
     IDS_PD_IDLREG_USECLIACONGAS_CHECK_TT            "Использовать closed loop для РДВ если на GAS_V высокий уровень. Снимите галочку, если не хотите чтобы на газу РДВ двигался"
 END
@@ -1475,14 +1465,14 @@ BEGIN
     IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Количество тактов двигателя на один шаг коррекции. Поставьте 0, если хотите задать задержку в миллисекундах."
     IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "Сколько раз впрыскивается топливо (число событий впрыска за цикл), не зависит от числа каналов и форсунок."
     IDS_PD_LAMBDA_SENSTYPE_COMBO_TT "Тип используемого датчика кислорода (узкополосный или широкополосный). Если выбран УДК, то смесь будет корректироваться только в тех режимах, для которых в таблице AFR установлено значение соответствующее точке переключения (14.7 для бензина). Под ШДК понимается его эмуляция при помощи узкополосного ДК и таблицы или использование ШДК с контроллером, который выдает напряжение линейно зависящие от соотношения воздух/топливо."
-    IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Задержка в миллисекундах после каждого обновления коррекции."
+    IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Задержка в миллисекундах после каждого обновления коррекции. Данный параметр используется только если значение 'Кол-во тактов на шаг' установлено в 0."
     IDS_PD_LAMBDA_RPMTHRD_EDIT_TT   "Лямбда коррекция будет работать только если обороты выше этого значения."
     IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT  "Лямбда коррекция будет работать только если температура двигателя выше этого значения."
 END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Объем двигателя (Литры)"
+    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Объем двигателя (Литры). Не влияет на время впрыска при пуске двигателя. Может также рассматриваться как коэффициент топливоподачи."
     IDS_INJ_CFG_THROTTLEBODY        "Моновпрыск"
     IDS_INJ_CFG_SIMULTANEOUSLY      "Одновременный"
     IDS_INJ_CFG_2BANK_ALTERN        "2 банка попер."
@@ -1566,8 +1556,81 @@ BEGIN
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "Если разрешено, то когда GAS_V=0 будут работать выходы впрыска 1-4, а когда GAS_V=1 будут работать выходы впрыска 5-8"
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Коэффициент коррекции обогащения при ускорении по температуре двигателя. Полное значение при температуре -30°С, плавно убывает до температуры 70°С. 100% соответствует коэффициенту 1.0."
     IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Время затухания в тактах. Затухание начинается когда скорость ДЗ опускается до порога (стартует от значения обогащения соответствующего порогу и заканчивается 0)."
+    IDS_PD_STARTER_FLDCLRTPS_EDIT_TT "Если перед запуском двигателя нажать педаль газа чтобы дроссель открылся больше этого порога, то система войдет в режим продувки двигателя. Выход из режима произойдет автоматически после запуска двигателя. Укажите 0, если хотите запретить режим продувки."
+    IDS_PD_IDLREG_USECLOSEDLOOP_CHECK_TT "Включить для клапана РДВ режим управления с замкнутой петлёй обратной связи. Система будет стараться поддерживать обороты ХХ, которые заданы в таблице открывая и закрывая клапан РХХ."
+    IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "Это значение будет добавлено к положению РДВ при нажатии на педаль газа когда произойдет переход из режима ХХ в режим нагрузок."
+    IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT "Значение, которое будет добавлено к целевым оборотам в случае поступления импульсов от датчика скорости при начале движения автомобиля (если датчик используется)"
+    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Коэффициент пропорциональной составляющей ПИ-регулятора"
+    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Коэффициент интегральной составляющей ПИ-регулятора"
+    IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT "Коэффициент, на который умножаются целевые обороты ХХ для получения порога входа в режим РХХ (например, целевые обороты ХХ = 850, коэфф = 1.41, значит обороты 1-го перех. режима = 850 * 1.41 = 1200 мин-1)."
+    IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT "коэффициент, на который умножаются целевые обороты ХХ для получения порога выхода из режима РХХ (например, целевые обороты ХХ = 850, коэфф = 1.88, значит обороты 2-го перех. режима = 850 * 1.88 = 1600 мин-1)."
+    IDS_PD_IDLREG_IACMINPOS_EDIT_TT "Ограничение минимального положения РДВ (РДВ не будет закрываться ниже этого значения). Ограничение необходимо для исключения попадания клапана в зону нелинейности, которая находится в крайнем положении. При включении кондиционера это значение увеличивается на значение 'Добавка к РДВ при вкл. кондиционера'"
+    IDS_PD_IDLREG_IACMAXPOS_EDIT_TT "Ограничение максимального положения РДВ (РДВ не будет открываться выше этого значения). Ограничение необходимо для исключения попадания клапана в зону нелинейности, которая находится в крайнем положении."
+    IDS_PD_FUNSET_BENZIN_UNI_COMBO_TT "Определяют какой универсальный выход используется как MAPSEL0 для бензина. Если выбрано --no--, то универсальные выходы никак не влияют на переключение таблиц. Если выбран 1,2 или 3, то соответствующий универсальный выход будет работать как MAPSEL0. Если вы используете дополнительное условие (вкладка Универ.Выходы) для объединения 1 и 2-го универсального выхода, то нужно выбрать 1-й выход (2-й не выбирать!)."
+    IDS_PD_FUNSET_GAS_UNI_COMBO_TT "Определяют какой универсальный выход используется как MAPSEL0 для газа. Если выбрано --no--, то универсальные выходы никак не влияют на переключение таблиц. Если выбран 1,2 или 3, то соответствующий универсальный выход будет работать как MAPSEL0. Если вы используете дополнительное условие (вкладка Универ.Выходы) для объединения 1 и 2-го универсального выхода, то нужно выбрать 1-й выход (2-й не выбирать!)."
+    IDS_PD_FUNSET_BAROCORRTYPE_COMBO_TT "Выбор типа барокоррекции. Варианты: Коррекция отключена, статическая барокоррекция, динамическая с использованием основного ДАД, динамическая с использованием дополнительного ДАД."
+    IDS_PD_TEMPER_CONDMINRPM_EDIT_TT "При поступлении запроса включения кондиционера РХХ будет поднимать обороты двигателя до этого значения если они были ниже."
+    IDS_PD_TEMPER_CONDPVTON_EDIT_TT  "Порог включения кондиционера по датчику давления хладагента (ADD_I3)"
+    IDS_PD_TEMPER_CONDPVTOFF_EDIT_TT "Порог выключения кондиционера по датчику давления хладагента (ADD_I3)"
+    IDS_PD_TEMPER_PWM_FRQ_EDIT_TT "Частота ШИМ вентилятора/РДВ/ГД."
+    IDS_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT_TT "Нижний порог отсечки топлива. Подача топлива включается когда обороты падают ниже этого порога."
+    IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT "Верхний порог отсечки топлива. Подача топлива выключается когда обороты поднимаются выше этого порога."
+    IDS_PD_CKPS_RISING_SPARK_TT "Если установить эту галочку, то прошивка будет генерировать импульсы для CDI. Импульс начинается в момент искры и заканчивается по истечении времени указанном в таблице времени накопления."
+    IDS_PD_CKPS_USE_CAM_REF_TT "Возможность синхронизации от ДУИ+ДФ (например датчик на зубьях маховика и датчик фаз в трамблере)."
+    IDS_PD_CKPS_ENGINE_CYL_COMBO_TT "Количество цилиндров в вашем двигателе. Вы должны знать это число, с него и нужно начинать настройку блока SECU-3."
+    IDS_PD_MISC_UART_SPEED_COMBO_TT "Скорость (бит/сек), с которой блок SECU-3 принимает и передает данные. Для блока с процессором ATmega644 установите 57600, для блока с процессором ATmega1284 установите 115200."
+    IDS_PD_MISC_PACKET_PERIOD_EDIT_TT "Определяет с какой частотой SECU-3 передает пакеты с данными. Чем меньше период передачи пакетов, тем больше вычислительных ресурсов прошивка и программа SECU-3 Manager будут затрачивать на их обработку."
+    IDS_PD_MISC_INJ_OFFONPET_CHECK_TT "Выключать форсунки при переходе на бензин (низкий уровень на входе GAS_V)."
+    IDS_PD_CHOKE_MAXFREQINIT_CHECK_TT "Если галочка установлена, то независимо от того, какая частота выбрана для ШД, инициализация и первый вывод шагового двигателя в положение по таблице будут происходить на частоте 300Гц."
+    IDS_PD_CHOKE_SM_FREQ_COMBO_TT "Частота импульсов для сигнала SM_STP"
+    IDS_PD_STARTER_CRANKTORUNTIME1_EDIT_TT "После запуска в течение времени 'Завис.врем.действия пуск.табл. от темп.' будет использоваться пусковая таблица положения ВЗ. Затем начнется плавный переход в положение из рабочей таблицы, который будет длиться в течение времени указанном в этом параметре."
+    IDS_PD_SECUR_BT_TYPE_COMBO_TT "Выберите тип вашего блютуза (название чипа на котором он построен). Это необходимо для корректной загрузки настроек в блютуз."
+    IDS_PD_SECUR_BT_NAME_EDIT_TT "Имя устройства. Отображается в списке найденных устройств. Для изменения имени и пароля введите новые значения и нажмите кнопку «Применить»"
+    IDS_PD_SECUR_BT_PASS_EDIT_TT "Пароль для подключения, 4 цифры. Запрашивается при подключении (спаривании). Для изменения имени и пароля введите новые значения и нажмите кнопку «Применить»"
+    IDS_PD_SECUR_IBTN_KEY1_EDIT_TT "Введите 48 битный серийный номер ключа (без байта CRC и байта family code). Значение обычно указывается на лицевой стороне iButton (см.DS1990A). Рекомендуется использовать два ключа, один из ключей обычно запасной."
+    IDS_PD_SECUR_USE_RESPAR_CHECK_TT "Если галочка установлена, то всегда будут использоваться резервные параметры из прошивки и если параметры в EEPROM повреждены, то соответствующая ошибка CE не будет устанавливаться."
+    IDS_PD_SECUR_CHK_FWCRC_CHECK_TT "Снимите галочку если не хотите чтобы при старте прошивки проверялась ее контрольная сумма и устанавливалась соответствующая ошибка."
+    IDS_PD_UNIOUT_1_COND1_COMBO_TT "Выберите аргумент для 1-го условия"
+    IDS_PD_UNIOUT_1_COND2_COMBO_TT "Выберите аргумент для 2-го условия"
+    IDS_PD_UNIOUT_1_COND1_INV_CHECK_TT "Инвертировать результат сравнения с порогами для 1-го условия"
+    IDS_PD_UNIOUT_1_COND2_INV_CHECK_TT "Инвертировать результат сравнения с порогами для 2-го условия"
+    IDS_PD_GASDOSE_SM_FREQ_COMBO_TT "Частота импульсов для сигнала GD_STP"
+    IDS_PD_GASDOSE_STOICHAFR_EDIT_TT "Значение стехиометрии используемого топлива. Это значение используется в расчетах смеси и обратной связи по ДК. Дублировано на вкладке параметров 'Лямбда контроль'."
+    IDS_PD_GASDOSE_FC_CLOSING_EDIT_TT "Указывает на сколько % прикрывать газовый дозатор в режиме принудительного холостого хода. В режиме ПХХ это значение вычитается из текущего положения дозатора."
+    IDS_PD_INJECTOR_FLOWRATE_EDIT_TT "Производительность форсунки. Не влияет на время впрыска при пуске двигателя. Может рассматриваться как коэффициент топливоподачи."
+    IDS_PD_INJECTOR_INJCONFIG_COMBO_TT "Указывает прошивке сколько форсунок и как они будут работать."
+    IDS_PD_INJECTOR_USETIMINGMAP_CHECK_TT "Использовать таблицу фазы впрыска вместо простой константы. Данная галочка не распространяется на режим пуска, в котором фаза впрыска определяется только простой константой."
+    IDS_PD_INJECTOR_ANGLESPEC_COMBO_TT "Определяет как импульс впрыска привязан к фазе впрыска. Расчетный момент впрыска может быть привызан к началу исмпульса, к середине или его концу. Например, можно настроить чтобы впрыск заканчивался до закрытия впускного клапана (выбрать 'Конец впр.' и настроить таблицу фазы впрыска)."
+    IDS_PD_INJECTOR_MINPW_EDIT_TT "Ограничение минимальной длительности впрыска. Длительность импульсов впрыска не может быть ниже этого значения."
+    IDS_PD_INJECTOR_FFFCONST_EDIT_TT "Используется прошивкой при вычислении мгновенного расхода топлива для получения значения в виде частоты импульсов (Гц) из расчета N импульсов на 1 литр сгоревшего топлива. SECU-3 Manager, используя аналогичный параметр (заданный в ini-файле) и значение скорости автомобиля, вычисляет расход топлива в Л/100км."
+    IDS_PD_INJECTOR_USEADDCORRS_CHECK_TT "Эта галочка разрешает использование коррекции впрыска по температуре (TMP2) и давлению газа (MAP2). Используйте когда SECU-3 управляет впрыском газа напрямую."
+    IDS_PD_INJECTOR_USEAIRDEN_CHECK_TT "Если галочка установлена, то для всех режимов расчета топливоподачи используется коррекция плотности воздуха только по таблице, при этом для режимов Speed-Density (ДАД, ДАД+ДПДЗ) вместо температуры воздуха в формулу подставляется константа равная 20°С. (нужно чтобы в таблице плотности воздуха при этой температуре стояли 1.0)."
+    IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT "Установите данную галочку если хотите использовать дифференциальное давление (MAP2-MAP) вместо абсолютного давления газа (MAP2) для коррекции впрыска по датчику давления газа."
+    IDS_PD_LAMBDA_STEPSIZE_P_EDIT_TT "Значение, на которое увеличивается лямбда коррекция если напряжение с ДК меньше порога переключения (с учетом параметра 'Мертвая зона перекл. +/-'). Обновление значения коррекции происходит через установленное число тактов или мс (см. параметр 'Кол-во тактов на шаг')."
+    IDS_PD_LAMBDA_STEPSIZE_M_EDIT_TT "Значение, на которое уменьшается лямбда коррекция если напряжение с ДК больше порога переключения (с учетом параметра 'Мертвая зона перекл. +/-'). Обновление значения коррекции происходит через установленное число тактов или мс (см. параметр 'Кол-во тактов на шаг')."
+    IDS_PD_LAMBDA_CORRLIMIT_P_EDIT_TT "Ограничение положительного значения лямбда коррекции."
+    IDS_PD_LAMBDA_CORRLIMIT_M_EDIT_TT "Ограничение отрицательного значения лямбда коррекции."
+    IDS_PD_LAMBDA_SWTPOINT_EDIT_TT "Порог переключения между бедной и богатой смесью для УДК. Этот параметр не используется если выбран ШДК, для последнего используется таблица, в которой задана зависимость AFR от напряжения на выходе ДК. Cм.также параметр 'Мертвая зона перекл.'"
+    IDS_PD_LAMBDA_ACTIVDELAY_EDIT_TT "Задержка активации обратной связи по ДК. Отсчет времени начинается после запуска двигателя."
+    IDS_PD_LAMBDA_DEADBAND_EDIT_TT "Только для УДК. Зона нечувствительности для лямбда регулирования. Обновление коррекции происходит только при условии, если напряжение с ДК выходит за пределы 'Порог переключения' +/- 'Мертвая зона перекл.'. Данный параметр также учавствует в определении прогрева датчика (если разрешено, см. галочку 'Определять прогрев по напряж.')."
+    IDS_PD_LAMBDA_HTGDET_CHECK_TT    "Если стоит эта галочка и напряжение вошло в пределы 'Порог переключения' +/- 'Мертвая зона перекл.', то ШИМ подогрева включится не дожидаясь окончания времени прогрева без ШИМ."
+    IDS_PD_LAMBDA_IDLCORR_CHECK_TT   "Регулирование смеси по лямбде на ХХ будет работать только если установлена эта галочка."
+    IDS_PD_LAMBDA_2STOICHAFR_EDIT_TT "Стехиометрическое число для 2-го вида топлива (GAS_V=1), используется в расчетах для обратной связи по ДК. Значение для 1-го вида топлива (GAS_V=0) жестко зашито в код прошивки и равно 14.7. Данный параметр продублирован на вкладке параметров 'Доз.газа'."
+    IDS_PD_LAMBDA_EH_TIME_COLD_EDIT_TT "Указывает сколько времени подогрев датчика будет включен непрерывно (без ШИМ) после запуска холодного двигателя. Смотрите параметр 'Температурный порог (холодный/горячий)'."
+    IDS_PD_LAMBDA_EH_TIME_HOT_EDIT_TT "Указывает сколько времени подогрев датчика будет включен непрерывно (без ШИМ) после запуска горячего двигателя. Смотрите параметр 'Температурный порог (холодный/горячий)'."
+    IDS_PD_LAMBDA_EH_TEMPER_THRD_EDIT_TT "Если температура двигателя ниже этого порога, то считается, что двигатель холодный. Если температура двигателя выше этого порога, то считается, что двигатель горячий."
+    IDS_PD_LAMBDA_EH_HEATING_ACT_EDIT_TT "Длительность подачи тока на нагреватель датчика при ШИМ (длительность активной полуволны). Смотрите также таблицу 'Пауза прогрева ДК', в которой задана зависимость полуволны паузы от напряжения."
+    IDS_PD_LAMBDA_EH_AFLOW_THRD_EDIT_TT "Если расход воздуха превышает указанное значение, то подогрев датчика выключается. Рахсод воздуха задан как бороты * нагрузка."
+    IDS_PD_LAMBDA_CRKHEAT_CHECK_TT "Подогрев датчика будет включен на полную мощность сразу после включения зажигания на неограниченное время до запуска двигателя. Используйте для прогрева датчика если вам нужно посмотреть смесь во время запуска."
+    IDS_PD_KNOCK_ENABLE_KC_COMBO_TT "Разрешение/запрещение контроля детонации."
+    IDS_MAP_CALC_1STPT_PRESS_EDIT_TT "Введите значение давления соответствующее точке на графике"
+    IDS_MAP_CALC_1STPT_PRESS_COMBO_TT "Выберите единицу измерения давления"
+    IDS_MAP_CALC_1STPT_VOLT_EDIT_TT "Введите значение напряжения соответствующее точке на графике"
+    IDS_MAP_CALC_1STPT_VOLT_COMBO_TT "Выберите единицу измерения напряжения"
+    IDS_MAP_CALC_GRADIENT_EDIT_TT    "Введите значение изменения давления, которое приводит к изменению напряжения на выходе датчика на 1В или наоборот (значение изменения напряжения к значению изменения давления)."
+    IDS_MAP_CALC_GRADIENT_N_COMBO_TT "Введите единицу измерения (единица давления или единица напряжения)"
+    IDS_MAP_CALC_GRADIENT_D_COMBO_TT "Введите единицу измерения (единица давления или единица напряжения)"
 END
-
 
 STRINGTABLE
 BEGIN
@@ -2864,6 +2927,9 @@ IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_PD_KNOCK_RECOVERY_DELAY_UNIT "strokes"
+    IDS_PD_SAVE_BUTTON_TT "Save parameters into EEPROM."
+    IDS_TD_SAVE_BUTTON_TT     "Save set of maps into EEPROM"
+    IDS_TD_TABLESSET_NAME_EDIT_TT "Edit name of set of maps"
     IDS_PD_TABNAME_STARTR_PAR "1:Start"
     IDS_PD_TABNAME_ANGLES_PAR "2:Angle"
     IDS_PD_TABNAME_IDLREG_PAR "3:Idling"
@@ -2949,7 +3015,7 @@ BEGIN
     IDS_V_UNIT      "V"
     IDS_PD_MAP_CALC_BUTTON_TT "Calculator allows to calculate MAP sensor parameters easily"
     IDS_MAP_CALC_1V_ABOVE_2V  "Voltage of the 1st point can not be equal to or greater than 2nd point voltage!"
-    IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Set this check if you know pressure to voltage (or voltage to pressure) ratio"
+    IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Set this check if you know change of pressure to change of voltage (or voltage to pressure) ratio"
 END
 
 STRINGTABLE
@@ -2983,7 +3049,7 @@ BEGIN
     IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"
     IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "If MAP is selected as load source, then this value set the pressure in the intake manifold at maximum load (trying to move on the 4th gear etc. - see the pressure value)"
     IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "If MAP is selected as load source, then this value set the pressure in the intake manifold when PQQ (accelerate, throwing gas pedal - see pressure)"
-    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Check the box when using a fan speed control unit. Minimum speed will be turned on before 7.5 degrees to the temperature set value."
+    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Check the box when using a fan speed control unit. Minimum speed will be turned on before several degrees to the set value of temperature."
     IDS_PD_TEMPER_USE_TEMP_SENSOR_TT                "With set check, CLT correction of ignition timing and other functions will be turned on"
     IDS_PD_TEMPER_USE_CURVE_MAP_TT                  "Use with non-standart or thermistor based CLT sensor"
     IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT         "When this temperature reached then cooling fan will be turned on"
@@ -3004,7 +3070,7 @@ BEGIN
     IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Specify decreasing speed of ignition timing in crankshaft degrees per one engine stroke."
     IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Specify increasing speed of ignition timing in crankshaft degrees per one engine stroke."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Enable working of regulator when on the GAS_V input is high level"
-    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Select engine load measuring method: using MAP (Speed-density), TPS (Alpha-N) or MAP+TPS (mixed). In mixed mode additional table used for switching between MAP and TPS."
+    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Select engine load measuring method: using MAP or MAP(baro) (Speed-density), TPS (Alpha-N) or MAP+TPS (mixed). In mixed mode additional table used for switching between MAP and TPS. If the MAP(baro) mode is selected, then the barometric pressure will be used as the upper value along the load axis in the maps instead of a constant value."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Turn off petrol fuel pump when switching ot gas (high level at the GAS_V input)"
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Turn off fuel injectors when switching ot gas (high level at the GAS_V input)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Beginning of pulse relatively to TDC (if value > 0, then before TDC)"
@@ -3081,14 +3147,14 @@ BEGIN
     IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Number of engine strokes per one correction step. Set to 0, if you want to use delay in milliseconds."
     IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "How many times fuel injected into the intake manifold (number of injection events per cycle), not depending on injectors and channels number."
     IDS_PD_LAMBDA_SENSTYPE_COMBO_TT "Type of used oxygen sensor (narrow band or wide band). If NBO is selected, then mixture will be corrected only in modes for which in the AFR table specified value corresponding to switch point (e.g. 14.7 for petrol). WBO means its emulation using narrow band sensor and lookup table or using of wide band sensor with controller, which outputs voltage linearly dependent on the AFR."
-    IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Delay in milliseconds after each update of correction."
+    IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Delay in milliseconds after each update of correction. This parameter is used only if the value of 'Number of measures per step' is set to 0."
     IDS_PD_LAMBDA_RPMTHRD_EDIT_TT   "Lambda correction will work only if RPM is greater than this value."
     IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT  "Lambda correction will work only if coolant temperature is greater than this value."
 END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Engine displacement (Liters)"
+    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Engine displacement (Liters). Does not affect injection time on cranking. It can be also considered as a fuel delivery coefficient."
     IDS_INJ_CFG_THROTTLEBODY        "Throttle-body"
     IDS_INJ_CFG_SIMULTANEOUSLY      "Simultaneous"
     IDS_INJ_CFG_2BANK_ALTERN        "2 banks altern"
@@ -3171,6 +3237,80 @@ BEGIN
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "If enabled, when GAS_V=0 inj.outputs 1-4 will work, and when GAS_V=1 inj.outputs 5-8 will work."
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Correction coefficient of acceleration enrichment vs coolant temperature. Full value at -30°C, smoothly decreases till 70°C. 100% corresponds to coefficient = 1.0."
     IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Decay time in engine strokes. Decay begin when TPS speed drops to threshold (starts from the AE value corresponding to set threshold and ends with 0)."
+    IDS_PD_STARTER_FLDCLRTPS_EDIT_TT "If you press the gas pedal before starting the engine so that the throttle opens beyond this threshold, the system will enter the flood clear mode. Exiting the mode will happen automatically after starting the engine. Specify 0 if you want to disable flood clear mode."
+    IDS_PD_IDLREG_USECLOSEDLOOP_CHECK_TT "Turn on the closed loop control mode for the IAC valve. The system will try to maintain idling RPM which are set in the corresponding table by opening and closing the valve."
+    IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "This value will be added to the IAC position when you press the gas pedal and the transition from idling to load mode occurs."
+    IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT "RPM value to be added to the target RPM in the case of receipt of pulses from the speed sensor when the vehicle starts moving (applicable only when the sensor is used)"
+    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Coefficient of the proportional component of the PI-controller"
+    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Coefficient of the integral component of the PI-controller"
+    IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT "Coefficient by which the target RPM is multiplied to obtain threshold for entering the idling mode (for example, target idling RPM = 850, coefficient = 1.41, thus, RPM of the 1-st transient threshold = 850 * 1.41 = 1200 min-1)."
+    IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT "Coefficient by which the target RPM is multiplied to obtain threshold for exiting the idling mode (for example, target idling RPM = 850, coefficient = 1.88, thus, RPM of the 2-st transient threshold = 850 * 1.88 = 1600 min-1)."
+    IDS_PD_IDLREG_IACMINPOS_EDIT_TT "Limitation of minimum position of valve (IAC valve will not go below this value). Restriction is necessary to prevent valve from entering the nonlinearity zone, which is in the extreme position. When the air conditioner is turned on, this value increases by the value 'Add. to IAC pos on turn on of air cond.'"
+    IDS_PD_IDLREG_IACMAXPOS_EDIT_TT "Limitation of maximum position of valve (IAC valve will not go above this value). Restriction is necessary to prevent valve from entering the nonlinearity zone, which is in the extreme position."
+    IDS_PD_FUNSET_BENZIN_UNI_COMBO_TT "Determine which universal output is used as MAPSEL0 for petrol. If --no-- is selected, then the universal outputs have no effect on switching of tables. If 1,2 or 3 is selected, then the corresponding universal output will work as MAPSEL0. If you use an additional condition (tab Universal outputs) to combine the 1st and 2nd universal outputs, then you need to select the 1st output (do not select the 2nd!)."
+    IDS_PD_FUNSET_GAS_UNI_COMBO_TT "Determine which universal output is used as MAPSEL0 for gas. If --no-- is selected, then the universal outputs have no effect on switching of tables. If 1,2 or 3 is selected, then the corresponding universal output will work as MAPSEL0. If you use an additional condition (tab Universal outputs) to combine the 1st and 2nd universal outputs, then you need to select the 1st output (do not select the 2nd!)."
+    IDS_PD_FUNSET_BAROCORRTYPE_COMBO_TT "The choice of the barocorrection type. Options: Correction disabled, static barocorrection, dynamic barocorrection using the main MAP, dynamic barocorrection using the additional MAP."
+    IDS_PD_TEMPER_CONDMINRPM_EDIT_TT "Upon receipt of a request to turn on the air conditioner, the IAC will raise the engine speed to this value if RPM is lower."
+    IDS_PD_TEMPER_CONDPVTON_EDIT_TT  "Threshold of refrigerant pressure sensor (ADD_I3) for starting the air conditioner."
+    IDS_PD_TEMPER_CONDPVTOFF_EDIT_TT "Threshold of refrigerant pressure sensor (ADD_I3) for switching off the air conditioner."
+    IDS_PD_TEMPER_PWM_FRQ_EDIT_TT "PWM frequency for cooling fan/IAC/gas dispenser."
+    IDS_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT_TT "Fuel cutoff lower threshold. Fuel supply is turned on when the engine speed drops below this threshold."
+    IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT "Fuel cutoff upper threshold. Fuel supply is turned off when the engine speed raises above this threshold."
+    IDS_PD_CKPS_RISING_SPARK_TT "If you check this box, the firmware will generate pulses for CDI. The pulse starts at the moment of spark and ends after the time specified in the dwell time table."
+    IDS_PD_CKPS_USE_CAM_REF_TT "Allows synchronization from two sensors (CKP+cam) with non-missing tooth wheel (e.g. flywheel) and cam sensor (1 tooth)."
+    IDS_PD_CKPS_ENGINE_CYL_COMBO_TT "Number of cylinders in your engine. You should know this number, which is a good start point in tuning of the SECU-3 unit."
+    IDS_PD_MISC_UART_SPEED_COMBO_TT "The speed (bit/sec) at which SECU-3 receives and transmits data. For unit with ATmega644 processor, set 57600, for unit with ATmega1284 processor, set 115200."
+    IDS_PD_MISC_PACKET_PERIOD_EDIT_TT "Sets how often SECU-3 transmits data packets. The shorter the packet transmission period, the more computing resources firmware and SECU-3 Manager program will spend on their processing."
+    IDS_PD_MISC_INJ_OFFONPET_CHECK_TT "Turn off injectors when switching ot petrol (low level at the GAS_V input)."
+    IDS_PD_CHOKE_MAXFREQINIT_CHECK_TT "If the check mark is set, then no matter what frequency is selected for the stepper motor, initialization and first moving of stepper motor to the position in the table will occur at frequency of 300 Hz."
+    IDS_PD_CHOKE_SM_FREQ_COMBO_TT "Frequency of pulses for the SM_STP signal"
+    IDS_PD_STARTER_CRANKTORUNTIME1_EDIT_TT "After starting of engine cranking table will be used for a period of time specified by the 'Cranking map lasting vs temperature' parameters. Then, a smooth transition to the position from the working table will begin, which will last within the time specified in this parameter."
+    IDS_PD_SECUR_BT_TYPE_COMBO_TT "Select type of your bluetooth (name of the chip on which it is built). This is necessary for the correct download of settings to the bluetooth."
+    IDS_PD_SECUR_BT_NAME_EDIT_TT "Name of the device. It is displayed in the list of found devices."
+    IDS_PD_SECUR_BT_PASS_EDIT_TT "Password for connection, 4 digits. It is requested when connecting (pairing)."
+    IDS_PD_SECUR_IBTN_KEY1_EDIT_TT "Enter the 48 bit key's serial number (without a CRC byte and a family code byte). The value is usually indicated on the front of the iButton (see DS1990A). It is recommended to use two keys, one of the keys is usually spare."
+    IDS_PD_SECUR_USE_RESPAR_CHECK_TT "If checked, the reserve parameters from the flash will always be used, and if the parameters in the EEPROM are damaged, the corresponding CE error will not be set."
+    IDS_PD_SECUR_CHK_FWCRC_CHECK_TT "Uncheck if you do not want to check the checksum on startup of firmware and set the corresponding error."
+    IDS_PD_UNIOUT_1_COND1_COMBO_TT "Select argument for 1-st condition"
+    IDS_PD_UNIOUT_1_COND2_COMBO_TT "Select argument for 2-nd condition"
+    IDS_PD_UNIOUT_1_COND1_INV_CHECK_TT "Invert result of comparison with thresholds for the 1-st condition."
+    IDS_PD_UNIOUT_1_COND2_INV_CHECK_TT "Invert result of comparison with thresholds for the 2-st condition."
+    IDS_PD_GASDOSE_SM_FREQ_COMBO_TT "Frequency of pulses for the GD_STP signal"
+    IDS_PD_GASDOSE_STOICHAFR_EDIT_TT "The stoichiometry value of the fuel used. This value is used in the calculations of mixture and feedback on the oxygen sensor. Duplicated on the 'Lambda control' parameters tab."
+    IDS_PD_GASDOSE_FC_CLOSING_EDIT_TT "Indicates by how much % to close gas dispenser valve in forced idle mode. In mentioned mode, this value is subtracted from the current dispenser position."
+    IDS_PD_INJECTOR_FLOWRATE_EDIT_TT "Injector's flow rate. Does not affect injection time on cranking. It can be considered as a fuel delivery coefficient."
+    IDS_PD_INJECTOR_INJCONFIG_COMBO_TT "Tells the firmware how many injectors and how they should work."
+    IDS_PD_INJECTOR_USETIMINGMAP_CHECK_TT "Use the injection timing map instead of a simple constant. This checkmark does not apply to the cranking mode, in which the injection timing is determined only by a simple constant."
+    IDS_PD_INJECTOR_ANGLESPEC_COMBO_TT "Determines how the injection pulse is tied to the injection phase. The estimated moment of injection can be linked to the beginning of pulse, to the middle or its end. For example, you can configure the injection to end before the intake valve closes (select 'End' and tune the injection timing map)."
+    IDS_PD_INJECTOR_MINPW_EDIT_TT "Limiting the minimum injection pulse width. The width of the injection pulses cannot be lower than this value."
+    IDS_PD_INJECTOR_FFFCONST_EDIT_TT "Used by firmware in calculating the instantaneous fuel consumption to obtain values in the form of pulse frequency (Hz) from the computation of N pulses per 1 liter of burnt fuel. SECU-3 Manager, using same parameter value (specified in the ini-file) and the vehicle speed value, calculates the fuel consumption in L/100km."
+    IDS_PD_INJECTOR_USEADDCORRS_CHECK_TT "This checkmark allows the use of injection correction for gas temperature (TMP2) and gas pressure (MAP2). Use when SECU-3 controls injection of LPG directly."
+    IDS_PD_INJECTOR_USEAIRDEN_CHECK_TT "If checked, then for all modes of fuel supply calculation, air density correction is used only according to the table, while for Speed-Density modes (MAP, MAP+TPS), the air temperature in the formula is substituted by a constant equal to 20°C (it is necessary that in air density table at this temperature should be 1.0 value)."
+    IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT "Check this box if you want to use differential pressure (MAP2-MAP) instead of absolute gas pressure (MAP2) for correcting injection by the gas pressure sensor."
+    IDS_PD_LAMBDA_STEPSIZE_P_EDIT_TT "The value by which lambda correction increases if the voltage from the oxygen sensor is less than the switching threshold (taking into account parameter 'Switch point deadband +/-'). The correction value is updated after each set number of strokes or ms (see parameter 'Number of strokes per step')."
+    IDS_PD_LAMBDA_STEPSIZE_M_EDIT_TT "The value by which lambda correction decreases if the voltage from the oxygen sensor is above than the switching threshold (taking into account parameter 'Switch point deadband +/-'). The correction value is updated after each set number of strokes or ms (see parameter 'Number of strokes per step')."
+    IDS_PD_LAMBDA_CORRLIMIT_P_EDIT_TT "Limitting the positive value of lambda correction."
+    IDS_PD_LAMBDA_CORRLIMIT_M_EDIT_TT "Limitting the negative value of lambda correction"
+    IDS_PD_LAMBDA_SWTPOINT_EDIT_TT "Threshold for switching between rich and lean mixture for NBO. This parameter is not used if WBO is selected; for the latter, a table is used in which the dependence of AFR vs voltage at the output of the WBO is specified. See also 'Switch point deadband +/-' parameter."
+    IDS_PD_LAMBDA_ACTIVDELAY_EDIT_TT "Delay of activation of EGO sensor feedback (lambda correction). The countdown begins after the start of engine."
+    IDS_PD_LAMBDA_DEADBAND_EDIT_TT "Only for NBO. Deadband for lambda closed loop mixture control. Correction is updated only if the voltage from the EGO sensor exceeds the limits 'Switch point' +/- 'Switch point deadband'. This parameter also takes part in determining of sensor's heating (if enabled, see the checkbox 'Determine heating using voltage')."
+    IDS_PD_LAMBDA_HTGDET_CHECK_TT    "If checked and the voltage from EGO sensor is within the limits of 'Switch point' +/- 'Switch point deadband', then heating PWM will turn on without waiting for the end of the Heating time without PWM."
+    IDS_PD_LAMBDA_IDLCORR_CHECK_TT   "Closed loop control of the mixture by lambda on idling will work only if this check box is checked."
+    IDS_PD_LAMBDA_2STOICHAFR_EDIT_TT "The stoichiometric number for the 2nd type of fuel (GAS_V=1) is used in the calculations for closed loop mixture control. The value for the 1st type of fuel (GAS_V=0) is hardcoded into the firmware code and is equal to 14.7. This parameter is duplicated on the 'Gas Dose' parameters tab."
+    IDS_PD_LAMBDA_EH_TIME_COLD_EDIT_TT "It specifies how long the sensor heating will be switched on continuously (without PWM) after starting a cold engine. See parameter 'Cold/hot temperature threshold'."
+    IDS_PD_LAMBDA_EH_TIME_HOT_EDIT_TT "It specifies how long the sensor heating will be switched on continuously (without PWM) after starting a hot engine. See parameter 'Cold/hot temperature threshold'."
+    IDS_PD_LAMBDA_EH_TEMPER_THRD_EDIT_TT "If engine temperature is below this threshold, it is considered that the engine is cold. If the engine temperature is above this threshold, it is considered that the engine is hot."
+    IDS_PD_LAMBDA_EH_HEATING_ACT_EDIT_TT "Duration of the current supply applied to the sensor's heater with PWM (active half-wave duration). See also table 'EGO sensor's heating pause', in which dependence of the half-wave of the pause vs voltage is specified."
+    IDS_PD_LAMBDA_EH_AFLOW_THRD_EDIT_TT "If air flow exceeds specified value, sensor's heating is turned off. The air flow is calculated as rpm * load."
+    IDS_PD_LAMBDA_CRKHEAT_CHECK_TT "Sensor's heating will be turned on at full power immediately after the ignition is turned on for an unlimited time before the engine starts. Use to warm up the sensor if you need to watch the mixture during cranking."
+    IDS_PD_KNOCK_ENABLE_KC_COMBO_TT "Enable/disable knock control."
+    IDS_MAP_CALC_1STPT_PRESS_EDIT_TT "Enter pressure value corresponding to the point on the graph"
+    IDS_MAP_CALC_1STPT_PRESS_COMBO_TT "Select pressure unit"
+    IDS_MAP_CALC_1STPT_VOLT_EDIT_TT "Enter voltage value corresponding to the point on the graph"
+    IDS_MAP_CALC_1STPT_VOLT_COMBO_TT "Select voltage unit"
+    IDS_MAP_CALC_GRADIENT_EDIT_TT    "Enter the value of the pressure change, which leads to a change in the voltage at the output of the sensor by 1V or vice versa (the value of the voltage change to the value of the pressure change)."
+    IDS_MAP_CALC_GRADIENT_N_COMBO_TT "Enter the unit of measure (unit of pressure or unit of voltage)"
+    IDS_MAP_CALC_GRADIENT_D_COMBO_TT "Enter the unit of measure (unit of pressure or unit of voltage)"
 END
 
 STRINGTABLE

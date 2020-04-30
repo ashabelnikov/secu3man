@@ -28,6 +28,7 @@
 #include <math.h>
 #include "resource.h"
 #include "DwellCalcDlg.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CDwellCalcDlg::IDD = IDD_DWELL_CALC;
 
@@ -141,6 +142,18 @@ BOOL CDwellCalcDlg::OnInitDialog()
  m_i_edit.SetLimitText(5);
  m_i_edit.SetDecimalPlaces(2);
  m_i_spin.SetRangeAndDelta(1.0f, 20.0f, 0.01f);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_r_edit, MLL::GetString(IDS_DWELL_CALC_R_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_r_spin, MLL::GetString(IDS_DWELL_CALC_R_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_l_edit, MLL::GetString(IDS_DWELL_CALC_L_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_l_spin, MLL::GetString(IDS_DWELL_CALC_L_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_i_edit, MLL::GetString(IDS_DWELL_CALC_I_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_i_spin, MLL::GetString(IDS_DWELL_CALC_I_EDIT_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control

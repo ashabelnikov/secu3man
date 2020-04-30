@@ -238,8 +238,8 @@ bool CAutoTuneController::_ApplyCorrection(void)
      ve*= corr;  //change VE cell
      if (ve > 1.99f)
       ve = 1.99f;
-     if (ve < 0.01)
-      ve = 0.01; //do not let value to reach zero, because after that result of any further correction will always be zero...
+     if (ve < 0.01f)
+      ve = 0.01f; //do not let value to reach zero, because after that result of any further correction will always be zero...
      m_lastchg[l][r] = 0xFFFFFFFF;
      node.clear();
      any_change = true;

@@ -162,6 +162,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   CButton m_save_button;
   CTabController m_tab_control;
   CImageList* m_pImgList;
+  std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
 
   bool m_enabled;
   bool m_fuel_injection;

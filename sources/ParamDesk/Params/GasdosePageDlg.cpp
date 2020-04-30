@@ -213,8 +213,14 @@ BOOL CGasdosePageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_corrlimit_p_spin, MLL::GetString(IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_corrlimit_m_edit, MLL::GetString(IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_corrlimit_m_spin, MLL::GetString(IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_sm_maxfreqinit_check, MLL::GetString(IDS_PD_CHOKE_MAXFREQINIT_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_sm_freq_combo, MLL::GetString(IDS_PD_GASDOSE_SM_FREQ_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_stoichval_edit, MLL::GetString(IDS_PD_GASDOSE_STOICHAFR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_stoichval_spin, MLL::GetString(IDS_PD_GASDOSE_STOICHAFR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fc_closing_edit, MLL::GetString(IDS_PD_GASDOSE_FC_CLOSING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fc_closing_spin, MLL::GetString(IDS_PD_GASDOSE_FC_CLOSING_EDIT_TT)));
 
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  //initialize window scroller

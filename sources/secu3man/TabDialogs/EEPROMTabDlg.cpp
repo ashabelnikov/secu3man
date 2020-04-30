@@ -33,6 +33,7 @@
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "tabldesk/ButtonsPanel.h"
 #include "EEPROMContextMenuManager.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 #define TIMER_ID 0
 
@@ -61,6 +62,7 @@ void CEEPROMTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_EE_MODIFICATION_FLAG, m_modification_flag);
  DDX_Control(pDX, IDC_EE_MAPSET_NAME, m_ee_mapset_name);
  DDX_Control(pDX, IDC_EE_POPUPMENU_BUTTON, m_ee_popup_menu_button);
+ DDX_Control(pDX, IDC_EE_CE_ERRORS_BTN, m_ee_ce_errors_btn);
 }
 
 LPCTSTR CEEPROMTabDlg::GetDialogID(void) const
@@ -132,6 +134,15 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  DragAcceptFiles(true);
 
  m_initialized = true;
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_ee_name, MLL::GetString(IDS_EE_EE_NAME_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ee_mapset_name, MLL::GetString(IDS_EE_MAPSET_NAME_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ee_ce_errors_btn, MLL::GetString(IDS_EE_CE_ERRORS_BTN_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }

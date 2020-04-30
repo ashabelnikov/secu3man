@@ -228,6 +228,8 @@ class CAppSettingsModel : public ISettingsData
 
   virtual void GetFunctionality(Functionality& o_fnc) const;
 
+  virtual int GetToolTipTime(void) const;
+
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
   //запущена программа.
@@ -280,6 +282,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optPortAutoReopen;  
   OptField_t<int> m_optToggleMapWnd;
   OptField_t<bool> m_optExistingPorts;
+  OptField_t<int> m_optToolTipTime;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;

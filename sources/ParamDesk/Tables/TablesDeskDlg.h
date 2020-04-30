@@ -138,6 +138,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   CString m_names_text;
   CStatic m_midification_flag;
   std::auto_ptr<CTDContextMenuManager> mp_ContextMenuManager;
+  std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
 
   //event handlers (delegates)
   EventWithCode m_OnMapChanged;

@@ -49,8 +49,14 @@ class AFX_EXT_CLASS CToolTipCtrlEx : public CToolTipCtrl
   //Activates/Deactivates tool tip control. Use this method instead of base implementation
   void ActivateToolTips(bool i_activate);
 
+  //Set time during which tool tips will be visible, value in ms
+  static void SetVisibleTime(int timems);
+
+  virtual BOOL Create(CWnd* pParentWnd, DWORD dwStyle = 0);
+
  private:
   static std::list<CToolTipCtrlEx*> m_insts;
   static bool m_activated_all;
+  static int  m_visibilityTime;
   bool m_activated;
 };

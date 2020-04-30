@@ -30,6 +30,7 @@
 #include "io-core/SECU3IO.h"
 
 class CWndScroller;
+class CToolTipCtrlEx;
 
 class CDevDiagInpsDlg : public CDialog
 {
@@ -68,4 +69,5 @@ class CDevDiagInpsDlg : public CDialog
   SECU3IO::DiagInpDat m_inputValues;
   CFont m_textFont;
   std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

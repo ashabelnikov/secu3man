@@ -246,6 +246,9 @@ BOOL CStarterPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_primedelay_edit, MLL::GetString(IDS_PD_STARTER_PRIMEDELAY_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_primedelay_spin, MLL::GetString(IDS_PD_STARTER_PRIMEDELAY_EDIT_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_fldclrtps_edit, MLL::GetString(IDS_PD_STARTER_FLDCLRTPS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fldclrtps_spin, MLL::GetString(IDS_PD_STARTER_FLDCLRTPS_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
 
