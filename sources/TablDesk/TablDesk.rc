@@ -567,6 +567,12 @@ BEGIN
     IDS_DWELL_CALC_I_EDIT_TT "Ток в конце времени накопления (на момент разрыва тока в первичной обмотке и начала искры). Чем больше ток, тем мощнее искра. Мы не советуем превышать рекомендуемое значение указанное в паспорте на вашу катушку."
     IDS_RGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки оборотов, которые используются по умолчанию"
     IDS_CGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки температуры, которые используются по умолчанию"
+    IDS_TD_VIEW_START_MAP_TT "Таблица пускового УОЗ. Используется при запуске двигателя пока обороты не достигнут значения 'Обороты пер. с пуск. УОЗ'"
+    IDS_TD_VIEW_IDLE_MAP_TT  "Таблица УОЗ на холостом ходу. Используется когда прошивка определяет, что дроссельная заслонка закрыта."
+    IDS_TD_VIEW_WORK_MAP_TT  "Таблица УОЗ рабочего режима. Используется когда прошивка определяет, что дроссельная заслонка открыта."
+    IDS_TD_VIEW_TEMP_MAP_TT  "Таблица коррекции УОЗ по температуре двигателя. Значение из таблицы прибавляется к УОЗ в рабочем режиме и режиме холостого хода. Для коррекции на пуске используется отдельная таблица."
+    IDS_TD_VIEW_CRKTEMP_MAP_TT "Таблица коррекции УОЗ по температуре двигателя на пуске. Используется для коррекции УОЗ в пусковом режиме."
+    IDS_TD_VIEW_ATTENUATOR_MAP_TT "Таблица коэффициентов усиления, используемая для настройки процессора детектирования детонации (HIP9011/TPIC8101)."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1158,6 +1164,12 @@ BEGIN
     IDS_DWELL_CALC_I_EDIT_TT "The current at the end of accumulation time (at the time of current disruption in the primary winding and the beginning of the spark). The greater the current, the more powerful the spark. We do not recommend exceeding the recommended value indicated in the datasheet for your coil."
     IDS_RGE_LOAD_DEF_VAL_TT  "Return standard RPM grid values which are used by default"
     IDS_CGE_LOAD_DEF_VAL_TT  "Return standard temperature grid values which are used by default"
+    IDS_TD_VIEW_START_MAP_TT "Look up table of ignition timing for cranking mode. It is used when starting the engine until RPM reaches the value of 'Switch from cranking ignition map RPM'"
+    IDS_TD_VIEW_IDLE_MAP_TT  "Look up table of ignition timing for idle mode. Used when firmware determines that the throttle is closed."
+    IDS_TD_VIEW_WORK_MAP_TT  "Look up table of ignition timing for working mode. Used when firmware determines that the throttle is open."
+    IDS_TD_VIEW_TEMP_MAP_TT  "Look up table of ignition timing correction vs coolant temperature. The value from table is added to the ignition timing in the working mode and idle mode. For correction at cranking mode, a separate table is used."
+    IDS_TD_VIEW_CRKTEMP_MAP_TT "Look up table of ignition timing correction vs coolant temperature for cranking mode. The value from table is added to the ignition timing during cranking."
+    IDS_TD_VIEW_ATTENUATOR_MAP_TT "Table containong gain coefficients used to configure the knock detection processor (HIP9011 / TPIC8101)."
 END
 
 STRINGTABLE DISCARDABLE 

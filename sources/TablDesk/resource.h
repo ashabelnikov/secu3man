@@ -354,3 +354,9 @@
 #define IDS_DWELL_CALC_I_EDIT_TT        5708
 #define IDS_RGE_LOAD_DEF_VAL_TT         5709
 #define IDS_CGE_LOAD_DEF_VAL_TT         5710
+#define IDS_TD_VIEW_START_MAP_TT        5711
+#define IDS_TD_VIEW_IDLE_MAP_TT         5712
+#define IDS_TD_VIEW_WORK_MAP_TT         5713
+#define IDS_TD_VIEW_TEMP_MAP_TT         5714
+#define IDS_TD_VIEW_CRKTEMP_MAP_TT      5715
+#define IDS_TD_VIEW_ATTENUATOR_MAP_TT   5716

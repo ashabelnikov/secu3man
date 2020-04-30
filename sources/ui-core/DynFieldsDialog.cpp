@@ -29,6 +29,7 @@
 #include "common/DPIAware.h"
 #include "common/GDIHelpers.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 // Child dialog
 int CDynFieldsDialog::ItemData::idCntr = IDC_DYNFLDDLG_START;
@@ -54,6 +55,7 @@ CDynFieldsDialog::CDynFieldsDialog(CWnd* pParentWnd /*= NULL*/)
 , m_initialized(false)
 , mp_scr(new CWndScroller)
 , m_contentHeight(0)
+, m_allowToolTips(false)
 {
  CDynFieldsDialog::ItemData::idCntr = IDC_DYNFLDDLG_START; //reset counter
  CDynFieldsDialog::ItemData::groupIdx = 0; //reset group index
@@ -87,6 +89,17 @@ BOOL CDynFieldsDialog::OnInitDialog()
  GetClientRect(&rc);
  _UpdateScrlViewSize(rc.Width(), rc.Height());
 
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ for(std::list<ItemData>::iterator it = m_fl.begin(); it != m_fl.end(); ++it)
+ {
+  VERIFY(mp_ttc->AddWindow(it->p_edit, (LPCTSTR)it->tooltip));
+  VERIFY(mp_ttc->AddWindow(it->p_spin, (LPCTSTR)it->tooltip));
+ }
+ mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
+ mp_ttc->ActivateToolTips(m_allowToolTips);
+
  m_initialized = true;
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -115,7 +128,7 @@ void CDynFieldsDialog::_UpdateScrlViewSize(int cx, int cy)
   mp_scr->SetViewSize(cx, dpi.ScaleY(m_contentHeight));
 }
 
-bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value)
+bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip)
 {
  ItemData id;
  id.caption = caption.c_str();
@@ -126,11 +139,12 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.decPls = decPls;
  id.fltVal = NULL;
  id.intVal = p_value;
+ id.tooltip = tooltip.c_str();
  m_fl.push_back(id);
  return true;
 }
 
-bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value)
+bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip)
 {
  ItemData id;
  id.caption = caption.c_str();
@@ -141,8 +155,14 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.decPls = decPls;
  id.fltVal = p_value;
  id.intVal = NULL;
+ id.tooltip = tooltip.c_str();
  m_fl.push_back(id);
  return true;
+}
+
+void CDynFieldsDialog::AllowToolTips(bool allowToolTips)
+{
+ m_allowToolTips = allowToolTips;
 }
 
 void CDynFieldsDialog::OnChangeData(UINT nID)
@@ -177,13 +197,13 @@ BEGIN_MESSAGE_MAP(CDynFieldsContainer, Super)
  ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
-CDynFieldsContainer::CDynFieldsContainer(CWnd* pParentWnd, const _TSTRING& caption, int height)
+CDynFieldsContainer::CDynFieldsContainer(CWnd* pParentWnd, const _TSTRING& caption, int height, bool allowToolTips)
 : Super(IDD_DYNFLDCNTR, pParentWnd)
 , m_caption(caption)
 , m_initialized(false)
 , m_height(height)
 {
- //empty
+ m_dlg.AllowToolTips(allowToolTips);
 }
 
 CDynFieldsContainer::~CDynFieldsContainer()
@@ -265,14 +285,14 @@ void CDynFieldsContainer::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
  }
 }
 
-bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value)
+bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip)
 {
- return m_dlg.AppendItem(caption, unit, vMin, vMax, vStp, decPls, p_value);
+ return m_dlg.AppendItem(caption, unit, vMin, vMax, vStp, decPls, p_value, tooltip);
 }
 
-bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value)
+bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip)
 {
- return m_dlg.AppendItem(caption, unit, vMin, vMax, vStp, decPls, p_value);
+ return m_dlg.AppendItem(caption, unit, vMin, vMax, vStp, decPls, p_value, tooltip);
 }
 
 void CDynFieldsContainer::OnOK()
