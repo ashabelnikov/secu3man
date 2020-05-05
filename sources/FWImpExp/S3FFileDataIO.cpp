@@ -41,7 +41,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0111 //01.11
+#define CURRENT_VERSION 0x0112 //01.12
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -74,6 +74,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.09 - Added some maps which were not added yet (28.12.2018)
 // 01.10 - Added 3 new separate tables which were not added yet
 // 01.11 - CLT grid has been added (02.02.2020)
+// 01.12 - Fixed overflow bug in inj_iatclt_corr map (05.05.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -376,7 +377,12 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   for(i = 0; i < INJ_IAC_CORR_SIZE+2; ++i)
    p_setItem[s].inj_iac_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iac_corr[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
-   p_setItem[s].inj_iatclt_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iatclt_corr[i] * INT_MULTIPLIER);
+  {
+   if (i < INJ_IATCLT_CORR_SIZE)
+    p_setItem[s].inj_iatclt_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iatclt_corr[i] * INT_MULTIPLIER);
+   else
+    p_setItem[s].inj_iatclt_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iatclt_corr[i]); //do not use INT_MULTIPLIER for last 2 values (preventing overflow)
+  }
   for(i = 0; i < INJ_TPSSWT_SIZE; ++i)
    p_setItem[s].inj_tpsswt[i] = MathHelpers::Round(m_data.maps[s].inj_tpsswt[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
@@ -526,6 +532,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  //resize container to hold all map sets
  m_data = FWMapsDataHolder(p_fileHdr->nofsets);
 
+ bool wrong_iatclt_corr_x_grid = (p_fileHdr->version < 0x0112);
+
  //convert sets of tables
  const S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
  for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
@@ -574,7 +582,17 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   for(i = 0; i < INJ_IAC_CORR_SIZE+2; ++i)
    m_data.maps[s].inj_iac_corr[i] = p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
-   m_data.maps[s].inj_iatclt_corr[i] = p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER;
+  {
+   if (i < INJ_IATCLT_CORR_SIZE)
+    m_data.maps[s].inj_iatclt_corr[i] = p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER;
+   else if (!wrong_iatclt_corr_x_grid)
+    m_data.maps[s].inj_iatclt_corr[i] = (float)p_setItem[s].inj_iatclt_corr[i]; //do not use INT_MULTIPLIER
+  }
+  if (wrong_iatclt_corr_x_grid)
+  { //use default values when loading from old version of S3F (which contains bug)
+   m_data.maps[s].inj_iatclt_corr[INJ_IATCLT_CORR_SIZE] = 4992;
+   m_data.maps[s].inj_iatclt_corr[INJ_IATCLT_CORR_SIZE+1] = 960000;
+  }
   for(i = 0; i < INJ_TPSSWT_SIZE; ++i)
    m_data.maps[s].inj_tpsswt[i] = p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
