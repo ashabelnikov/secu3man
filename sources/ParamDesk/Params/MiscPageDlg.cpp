@@ -268,8 +268,8 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_igncutoff_rpm_edit.SetLimitText(5);
  m_igncutoff_rpm_edit.SetDecimalPlaces(5);
  m_igncutoff_rpm_spin.SetBuddy(&m_igncutoff_rpm_edit);
- m_igncutoff_rpm_spin.SetRangeAndDelta(1000, 18000, 10);
- m_igncutoff_rpm_edit.SetRange(1000, 18000);
+ m_igncutoff_rpm_spin.SetRangeAndDelta(1000, 30000, 10);
+ m_igncutoff_rpm_edit.SetRange(1000, 30000);
 
  m_hop_start_edit.SetLimitText(3);
  m_hop_start_edit.SetDecimalPlaces(3);

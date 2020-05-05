@@ -231,13 +231,13 @@ BOOL CCarburPageDlg::OnInitDialog()
 
  m_shutoff_lo_threshold_edit.SetLimitText(4);
  m_shutoff_lo_threshold_spin.SetBuddy(&m_shutoff_lo_threshold_edit);
- m_shutoff_lo_threshold_spin.SetRangeAndDelta(250,7500,10);
- m_shutoff_lo_threshold_edit.SetRange(250,7500);
+ m_shutoff_lo_threshold_spin.SetRangeAndDelta(250,30000,10);
+ m_shutoff_lo_threshold_edit.SetRange(250,30000);
 
  m_shutoff_hi_threshold_edit.SetLimitText(4);
  m_shutoff_hi_threshold_spin.SetBuddy(&m_shutoff_hi_threshold_edit);
- m_shutoff_hi_threshold_spin.SetRangeAndDelta(250,7500,10);
- m_shutoff_hi_threshold_edit.SetRange(250,7500);
+ m_shutoff_hi_threshold_spin.SetRangeAndDelta(250,30000,10);
+ m_shutoff_hi_threshold_edit.SetRange(250,30000);
 
  m_epm_on_threshold_spin.SetBuddy(&m_epm_on_threshold_edit);
  m_epm_on_threshold_edit.SetLimitText(5);
@@ -247,13 +247,13 @@ BOOL CCarburPageDlg::OnInitDialog()
 
  m_shutoff_lo_threshold_edit_g.SetLimitText(4);
  m_shutoff_lo_threshold_spin_g.SetBuddy(&m_shutoff_lo_threshold_edit_g);
- m_shutoff_lo_threshold_spin_g.SetRangeAndDelta(250,15000,10);
- m_shutoff_lo_threshold_edit_g.SetRange(250,15000);
+ m_shutoff_lo_threshold_spin_g.SetRangeAndDelta(250,30000,10);
+ m_shutoff_lo_threshold_edit_g.SetRange(250,30000);
 
  m_shutoff_hi_threshold_edit_g.SetLimitText(4);
  m_shutoff_hi_threshold_spin_g.SetBuddy(&m_shutoff_hi_threshold_edit_g);
- m_shutoff_hi_threshold_spin_g.SetRangeAndDelta(250,15000,10);
- m_shutoff_hi_threshold_edit_g.SetRange(250,15000);
+ m_shutoff_hi_threshold_spin_g.SetRangeAndDelta(250,30000,10);
+ m_shutoff_hi_threshold_edit_g.SetRange(250,30000);
 
  m_shutoff_delay_spin.SetBuddy(&m_shutoff_delay_edit);
  m_shutoff_delay_edit.SetLimitText(4);
@@ -276,18 +276,18 @@ BOOL CCarburPageDlg::OnInitDialog()
  m_fuelcut_cts_thrd_spin.SetBuddy(&m_fuelcut_cts_thrd_edit);
  m_fuelcut_cts_thrd_edit.SetLimitText(5);
  m_fuelcut_cts_thrd_edit.SetDecimalPlaces(1);
- m_fuelcut_cts_thrd_spin.SetRangeAndDelta(-30.0f, 180.0f, 0.25f);
- m_fuelcut_cts_thrd_edit.SetRange(-30.0f, 180.0f);
+ m_fuelcut_cts_thrd_spin.SetRangeAndDelta(-40.0f, 300.0f, 0.25f);
+ m_fuelcut_cts_thrd_edit.SetRange(-40.0f, 300.0f);
 
  m_revlim_lo_threshold_edit.SetLimitText(5);
  m_revlim_lo_threshold_spin.SetBuddy(&m_revlim_lo_threshold_edit);
- m_revlim_lo_threshold_spin.SetRangeAndDelta(500,16000,50);
- m_revlim_lo_threshold_edit.SetRange(500,16000);
+ m_revlim_lo_threshold_spin.SetRangeAndDelta(500,30000,50);
+ m_revlim_lo_threshold_edit.SetRange(500,30000);
 
  m_revlim_hi_threshold_edit.SetLimitText(5);
  m_revlim_hi_threshold_spin.SetBuddy(&m_revlim_hi_threshold_edit);
- m_revlim_hi_threshold_spin.SetRangeAndDelta(500,16000,50);
- m_revlim_hi_threshold_edit.SetRange(500,16000);
+ m_revlim_hi_threshold_spin.SetRangeAndDelta(500,30000,50);
+ m_revlim_hi_threshold_edit.SetRange(500,30000);
 
  //initialize window scroller
  mp_scr->Init(this);
