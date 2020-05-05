@@ -330,8 +330,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_turn_on_temp_spin.SetBuddy(&m_turn_on_temp_edit);
  m_turn_on_temp_edit.SetLimitText(5);
  m_turn_on_temp_edit.SetDecimalPlaces(2);
- m_turn_on_temp_spin.SetRangeAndDelta(0.0f,100.0f,0.2f);
- m_turn_on_temp_edit.SetRange(0.0f,100.0f);
+ m_turn_on_temp_spin.SetRangeAndDelta(0.0f,300.0f,0.2f);
+ m_turn_on_temp_edit.SetRange(0.0f,300.0f);
 
  //closed loop related
  m_idltorunadd_spin.SetBuddy(&m_idltorunadd_edit);

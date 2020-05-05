@@ -181,7 +181,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
  m_params.eh_heating_time[1] = 30.0f;
  m_params.eh_temper_thrd = 70.0f;
  m_params.eh_heating_act = 0.06f;
- m_params.eh_aflow_thrd = 320000.0f; 
+ m_params.eh_aflow_thrd = 320000.0f;
 }
 
 CLambdaPageDlg::~CLambdaPageDlg()
@@ -327,14 +327,14 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_tempthrd_spin.SetBuddy(&m_tempthrd_edit);
  m_tempthrd_edit.SetLimitText(5);
  m_tempthrd_edit.SetDecimalPlaces(2);
- m_tempthrd_spin.SetRangeAndDelta(0.00f, 200.00f, 0.25f);
- m_tempthrd_edit.SetRange(0.00f, 200.00f);
+ m_tempthrd_spin.SetRangeAndDelta(0.00f, 300.00f, 0.25f);
+ m_tempthrd_edit.SetRange(0.00f, 300.00f);
 
  m_rpmthrd_spin.SetBuddy(&m_rpmthrd_edit);
  m_rpmthrd_edit.SetLimitText(5);
  m_rpmthrd_edit.SetDecimalPlaces(5);
- m_rpmthrd_spin.SetRangeAndDelta(0, 15000, 50);
- m_rpmthrd_edit.SetRange(0, 15000);
+ m_rpmthrd_spin.SetRangeAndDelta(0, 30000, 50);
+ m_rpmthrd_edit.SetRange(0, 30000);
 
  m_activdelay_spin.SetBuddy(&m_activdelay_edit);
  m_activdelay_edit.SetLimitText(3);
@@ -369,8 +369,8 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_eh_temper_thrd_spin.SetBuddy(&m_eh_temper_thrd_edit);
  m_eh_temper_thrd_edit.SetLimitText(3);
  m_eh_temper_thrd_edit.SetDecimalPlaces(0);
- m_eh_temper_thrd_spin.SetRangeAndDelta(0.0f, 200.00f, 1.0f);
- m_eh_temper_thrd_edit.SetRange(0.0f, 200.00f);
+ m_eh_temper_thrd_spin.SetRangeAndDelta(0.0f, 300.00f, 1.0f);
+ m_eh_temper_thrd_edit.SetRange(0.0f, 300.00f);
 
  m_eh_heating_act_spin.SetBuddy(&m_eh_heating_act_edit);
  m_eh_heating_act_edit.SetLimitText(4);

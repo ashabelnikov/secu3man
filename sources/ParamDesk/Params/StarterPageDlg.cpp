@@ -175,13 +175,13 @@ BOOL CStarterPageDlg::OnInitDialog()
 
  m_smap_abandon_rpm_edit.SetLimitText(4);
  m_smap_abandon_rpm_spin.SetBuddy(&m_smap_abandon_rpm_edit);
- m_smap_abandon_rpm_spin.SetRangeAndDelta(0,2500,10);
- m_smap_abandon_rpm_edit.SetRange(0, 2500);
+ m_smap_abandon_rpm_spin.SetRangeAndDelta(0, 6000, 10);
+ m_smap_abandon_rpm_edit.SetRange(0, 6000);
 
  m_starter_off_rpm_edit.SetLimitText(4);
  m_starter_off_rpm_spin.SetBuddy(&m_starter_off_rpm_edit);
- m_starter_off_rpm_spin.SetRangeAndDelta(0,2500,10);
- m_starter_off_rpm_edit.SetRange(0, 2500);
+ m_starter_off_rpm_spin.SetRangeAndDelta(0, 6000, 10);
+ m_starter_off_rpm_edit.SetRange(0, 6000);
 
  m_cranktoruntime_edit.SetLimitText(5);
  m_cranktoruntime_spin.SetBuddy(&m_cranktoruntime_edit);
