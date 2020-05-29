@@ -77,7 +77,7 @@ namespace DLL
 
  //common
  typedef void (__cdecl *ChartxDSetLanguage_Addr) (int i_language);
- typedef void (__cdecl *ChartxDShowHints_Addr) (int i_show);
+ typedef void (__cdecl *ChartxDShowHints_Addr) (int i_show, int timeToShow);
 
  ///////////////////////////////////////////////////////////////////
  extern Chart2DCreate_Addr              Chart2DCreate;
@@ -125,5 +125,5 @@ namespace DLL
  DLLLF_API bool LoadDLLsAndLinkToFunctions(void);
 
  //Set hints' showing mode
- DLLLF_API void ShowHints(bool i_show);
+ DLLLF_API void ShowHints(bool i_show, int timeToShow);
 };

@@ -30,6 +30,8 @@
 #include "common/FastDelegate.h"
 #include "MapImpExpDlg.h"
 #include "S3FFileDataIO.h"
+#include "ui-core/FileDialogEx.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 
@@ -75,7 +77,7 @@ S3FImportController::S3FImportController(FWMapsDataHolder* ip_fwd)
 int S3FImportController::DoImport(void)
 {
  static TCHAR BASED_CODE szFilter[] = _T("SECU-3 Format Files (*.s3f)|*.s3f|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
@@ -83,12 +85,12 @@ int S3FImportController::DoImport(void)
   bool result = mp_s3f_io->Load(_TSTRING(open.GetPathName()));
   if (!result)
   {
-   AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
+   SECUMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
    return IDCANCEL;
   }
   if (!mp_s3f_io->IsFileIntegrityOk())
   { //file CRC is bad, warn user
-   if (IDCANCEL == AfxMessageBox(MLL::LoadString(IDS_FILE_WRONG_CRC),MB_OKCANCEL|MB_ICONWARNING))
+   if (IDCANCEL == SECUMessageBox(MLL::LoadString(IDS_FILE_WRONG_CRC),MB_OKCANCEL|MB_ICONWARNING))
     return IDCANCEL;
   }
  }
@@ -422,12 +424,12 @@ S3FExportController::S3FExportController(FWMapsDataHolder* ip_fwd)
 int S3FExportController::DoExport(void)
 {
  //этот класс необходим чтобы изменять дефаултное расширение в зависимости от выбранного фильтра
- class CFileDialogEx : public CFileDialog
+ class CFileDialogEx1 : public CFileDialogEx
  {
   public:
-   CFileDialogEx() : CFileDialog(FALSE,_T("s3f"), NULL, NULL,
+   CFileDialogEx1() : CFileDialogEx(FALSE,_T("s3f"), NULL, NULL,
      _T("SECU-3 Format Files (*.s3f)|*.s3f|All Files (*.*)|*.*||"), NULL) {};
-   virtual ~CFileDialogEx() {};
+   virtual ~CFileDialogEx1() {};
 
   protected:
    virtual void OnTypeChange( )
@@ -437,7 +439,7 @@ int S3FExportController::DoExport(void)
    }
  };
 
- CFileDialogEx save;
+ CFileDialogEx1 save;
  if (save.DoModal()==IDOK)
  {
   //сохраняет имя файла выбранного пользователем для сохранения
@@ -449,7 +451,7 @@ int S3FExportController::DoExport(void)
    bool result = mp_s3f_io->Save(_TSTRING(save.GetPathName()));
    if (!result)
    {
-    AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
+    SECUMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
     return IDCANCEL;
    }
   }

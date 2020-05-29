@@ -33,6 +33,7 @@
 #include "io-core/FirmwareMapsDataHolder.h"
 #include "io-core/PlatformParamHolder.h"
 #include "MapImpExpDlg.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 
@@ -484,7 +485,7 @@ void SECU3ExportController::OnOkPressed(void)
  if(!f.Open(m_secu3_file_path.c_str(),CFile::modeWrite|CFile::modeCreate,&ex))
  {
   ex.GetErrorMessage(szError, 1024);
-  AfxMessageBox(szError);
+  SECUMessageBox(szError);
   return; //ошибка - данные не сохранены
  }
 

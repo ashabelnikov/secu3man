@@ -32,6 +32,7 @@
 #include "ISECU3Man.h"
 #include "Settings/AppSettingsManager.h"
 #include "Settings/ISettingsData.h"
+#include "ui-core/MsgBox.h"
 
 CCommunicationManager::CCommunicationManager()
 : m_pComPort(NULL)
@@ -138,7 +139,7 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
     {  
      //Say to user that we was not able to open specified COM-port
      if (m_pSettings->GetCOMPortBother())
-      AfxMessageBox(e.GetDetailStr());
+      SECUMessageBox(e.GetDetailStr());
      status = false;
     }
     if (status) //update settings if opening was successful  
@@ -148,7 +149,7 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
    {
     //Say to user that we was not able to open specified COM-port
     if (m_pSettings->GetCOMPortBother())
-     AfxMessageBox(e.GetDetailStr());
+     SECUMessageBox(e.GetDetailStr());
     status = false;
    }
   }
@@ -156,7 +157,7 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
   {
    //Say to user that we was not able to open specified COM-port
    if (m_pSettings->GetCOMPortBother())
-    AfxMessageBox(e.GetDetailStr());
+    SECUMessageBox(e.GetDetailStr());
    status = false;
   }
  }

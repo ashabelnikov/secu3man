@@ -32,6 +32,7 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/MsgBox.h"
 
 const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
 
@@ -526,7 +527,7 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
    if (!m_ovf_msgbox)
    {
     m_ovf_msgbox = true;
-    AfxMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
+    SECUMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
     m_ovf_msgbox = false;
    }
   }

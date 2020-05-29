@@ -36,6 +36,7 @@
 #include "InjDrvFileDataIO.h"
 #include "ErrorMsg.h"
 #include "FWImpExp/InjDrvFWMCntr.h"
+#include "ui-core/MsgBox.h"
 
 #pragma warning(disable : 4355)  
 
@@ -441,7 +442,7 @@ void CInjDriverTabController::OnShowFirmwareInfo(void)
  char* ld_flash = CHECKBIT8(params.fw_opt, 5) ? "Yes" : "No"; 
  char* pwcorr = CHECKBIT8(params.fw_opt, 6) ? "Yes" : "No";
  str.Format("Firmware version: v%d.%d\nDriver type: %s\nInv. PWM outputs: %s\nInv. FLB outputs: %s\nInv. inputs: %s\nCurrent cut off: %s\nFive channels: %s\nLoad from flash: %s\nPW corrections: %s\n", ver_maj, ver_min, strDrvType, inv_pwm, inv_flb, inv_inp, cur_cut, five_ch, ld_flash, pwcorr);
- AfxMessageBox(str, MB_ICONINFORMATION);
+ SECUMessageBox(str, MB_ICONINFORMATION);
 }
 
 void CInjDriverTabController::OnExitOfflineMode(void)
@@ -669,7 +670,7 @@ void CInjDriverTabController::OnEnd(const int opcode,const int status)
    {
     m_bl_data[CBootLoader::BL_SIGNATURE_STR_LEN] = 0;
     mp_sbar->SetInformationText(&m_bl_data[0]);
-    AfxMessageBox(CString(&m_bl_data[0]), MB_OK | MB_ICONINFORMATION);
+    SECUMessageBox(CString(&m_bl_data[0]), MB_OK | MB_ICONINFORMATION);
    }
    else
    {
@@ -781,7 +782,7 @@ void CInjDriverTabController::OnEnd(const int opcode,const int status)
 
 void CInjDriverTabController::OnResetEEPROM(void)
 {
- if (IDYES==AfxMessageBox(MLL::GetString(IDS_RESET_EEPROM_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
+ if (IDYES==SECUMessageBox(MLL::GetString(IDS_RESET_EEPROM_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
  {
   m_saving_proc_state = 1;
   mp_view->EnableSaveBtn(false);

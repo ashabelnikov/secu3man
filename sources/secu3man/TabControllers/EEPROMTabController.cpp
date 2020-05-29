@@ -42,6 +42,7 @@
 #include "io-core/ce_errors.h"
 #include "CEErrorIdStr.h"
 #include "ErrorMsg.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -318,7 +319,7 @@ void CEEPROMTabController::OnOpenEEPROMFromFile(void)
  //проверка контрольной суммы загружаемых параметров и вывод предупреждения
  if (!m_eedm->VerifyParamsCheckSum(buff))
  {
-  if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
+  if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
  }
 
@@ -350,7 +351,7 @@ void CEEPROMTabController::OnDropFile(_TSTRING fileName)
  //проверка контрольной суммы загружаемых параметров и вывод предупреждения
  if (!m_eedm->VerifyParamsCheckSum(buff))
  {
-  if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
+  if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
  }
 
@@ -472,7 +473,7 @@ bool CEEPROMTabController::CheckChangesAskAndSaveEEPROM(void)
  bool modified = m_eedm->IsModified();
  if (modified && mp_settings->GetSaveWarning())
  {
-  int result = AfxMessageBox(MLL::LoadString(IDS_EE_MODIFICATION_WARNING), MB_YESNOCANCEL);
+  int result = SECUMessageBox(MLL::LoadString(IDS_EE_MODIFICATION_WARNING), MB_YESNOCANCEL);
   if (result==IDCANCEL)
   {
    return false; //пользователь отменил действие
@@ -757,13 +758,13 @@ void CEEPROMTabController::OnShowCEErrors()
  if (errors.empty())
  { //no errors
   str = MLL::LoadString(IDS_EE_NO_CE_ERRORS);
-  AfxMessageBox(str, MB_OK | MB_ICONINFORMATION);
+  SECUMessageBox(str, MB_OK | MB_ICONINFORMATION);
  }
  else
  { //at least one error is present
   str+= _T("\n\n");
   str+= MLL::LoadString(IDS_EE_MB_RESET_CE_ERRORS);
-  int result = AfxMessageBox(str, MB_YESNO | MB_DEFBUTTON2 | MB_ICONINFORMATION);
+  int result = SECUMessageBox(str, MB_YESNO | MB_DEFBUTTON2 | MB_ICONINFORMATION);
   if (result == IDYES) 
   {
    m_eedm->ResetCEErrorsList();
@@ -843,7 +844,7 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
     bool chk_sum_status = true;
     if (!m_eedm->VerifyParamsCheckSum(mp_bl_data))
     {
-     if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
+     if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
       chk_sum_status = false; //user canceled
     }
 

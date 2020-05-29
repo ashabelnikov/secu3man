@@ -877,6 +877,8 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_funset_listbox, MLL::GetString(IDS_TD_FUNSET_LIST_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_crktemp_map_btn, MLL::GetString(IDS_TD_VIEW_CRKTEMP_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_attenuator_map_btn, MLL::GetString(IDS_TD_VIEW_ATTENUATOR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_gasdose_map_btn, MLL::GetString(IDS_TD_VIEW_GDP_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_barocorr_map_btn, MLL::GetString(IDS_TD_VIEW_BAROCORR_MAP_TT))); 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

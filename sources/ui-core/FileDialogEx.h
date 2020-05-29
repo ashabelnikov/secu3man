@@ -19,39 +19,26 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file ScrlMessageBox.h
+/** \file FileDialogEx.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
-#include "common/unicodesupport.h"
 
-class AFX_EXT_CLASS CScrlMessageBox : public CDialog
+class AFX_EXT_CLASS CFileDialogEx : public CFileDialog
 {
- typedef CDialog Super;
+  typedef CFileDialog Super;
 
  public:
-  CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon);
+  CFileDialogEx(BOOL bOpenFileDialog,
+                LPCTSTR lpszDefExt = NULL,
+                LPCTSTR lpszFileName = NULL,
+                DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+                LPCTSTR lpszFilter = NULL,
+                CWnd* pParentWnd = NULL,
+                DWORD dwSize = 0);
+
+  virtual ~CFileDialogEx();
 
   virtual INT_PTR DoModal();
-
- protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  virtual BOOL OnInitDialog();
-  afx_msg void OnPaint();
-  afx_msg void OnSize(UINT nType, int cx, int cy);
-  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
-  DECLARE_MESSAGE_MAP()
-
-  void _AlignControls(int cx, int cy);
-
- private:
-  CEdit m_edit;
-  const _TSTRING m_caption;
-  const _TSTRING m_text;
-  LPCSTR m_icon;
-  HICON m_hIcon;
-  bool m_initialized;
-  CSize m_createSize;
-  CButton m_ok_btn;
 };

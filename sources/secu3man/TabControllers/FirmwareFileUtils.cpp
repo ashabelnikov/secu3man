@@ -31,6 +31,8 @@
 #include "io-core/EEPROMDataMediator.h"
 #include "HexUtils/readhex.h"
 #include "Resources/resource.h"
+#include "ui-core/FileDialogEx.h"
+#include "ui-core/MsgBox.h"
 
 namespace FirmwareFileUtils { 
 
@@ -42,7 +44,7 @@ bool SaveEEPROMToFile(const BYTE* p_data, const int size, EEPROMDataMediator* p_
  BYTE *save_buff = NULL;
  HANDLE   hFile=0;
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
- CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("BIN");
  if (save.DoModal()==IDOK)
  {
@@ -52,7 +54,7 @@ bool SaveEEPROMToFile(const BYTE* p_data, const int size, EEPROMDataMediator* p_
   if(!f.Open(save.GetPathName(),CFile::modeWrite|CFile::modeCreate,&ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false;
   }
 
@@ -85,7 +87,7 @@ bool SaveFLASHToFile(const BYTE* p_data, const int size, CFirmwareDataMediator* 
  if (!p_fwdm) return false;
 
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
- CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("BIN");
  if (save.DoModal()==IDOK)
  {
@@ -95,7 +97,7 @@ bool SaveFLASHToFile(const BYTE* p_data, const int size, CFirmwareDataMediator* 
   if(!f.Open(save.GetPathName(),CFile::modeWrite|CFile::modeCreate,&ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false; //ошибка - данные не сохранены
   }
 
@@ -148,7 +150,7 @@ bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_sele
 {
  HANDLE hFile = 0;
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
  CString cs;
 
  if (sizes.empty())
@@ -165,7 +167,7 @@ bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_sele
   if(!f.Open(fileName.c_str(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false; //error, can't open file
   }
 
@@ -173,7 +175,7 @@ bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_sele
   std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), f.GetLength());
   if (p_size==sizes.end())
   {
-   AfxMessageBox(GenMessage()(sizes, IDS_FW_WRONG_EE_FILE_SIZE));
+   SECUMessageBox(GenMessage()(sizes, IDS_FW_WRONG_EE_FILE_SIZE));
    f.Close();
    return false; //ошибка
   }
@@ -216,7 +218,7 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
 {
  HANDLE   hFile=0;
  static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex;*.a90)|*.hex;*.a90|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
  if (i_title)
   open.m_ofn.lpstrTitle = i_title->c_str();
  CString cs;
@@ -235,7 +237,7 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
   if(!f.Open(fileName.c_str(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false; //ошибка
   }
 
@@ -256,7 +258,7 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
    ULONGLONG ulonglong_size = f.GetLength();
    if (ulonglong_size > 524288)
    {
-    AfxMessageBox(MLL::LoadString(IDS_FW_FILE_IS_TOO_BIG));
+    SECUMessageBox(MLL::LoadString(IDS_FW_FILE_IS_TOO_BIG));
     f.Close();
     return false; //ошибка
    }
@@ -271,13 +273,13 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
    switch(status)
    {
     case RH_INCORRECT_CHKSUM:
-     AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_CRC_ERROR));
+     SECUMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_CRC_ERROR));
      f.Close();
      return false; //ошибка
 
     default:
      case RH_UNEXPECTED_SYMBOL:
-     AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_STRUCTURE_ERROR));
+     SECUMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_STRUCTURE_ERROR));
      f.Close();
      return false; //ошибка
 
@@ -292,7 +294,7 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
    std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), bin_size);
    if ((p_size==sizes.end()) || (status == RH_ADDRESS_EXCEDED))
    {
-    AfxMessageBox(GenMessage()(sizes, IDS_FW_WRONG_FW_FILE_SIZE));
+    SECUMessageBox(GenMessage()(sizes, IDS_FW_WRONG_FW_FILE_SIZE));
     f.Close();
     return false; //ошибка
    }
@@ -305,7 +307,7 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
    std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), f.GetLength());
    if (p_size==sizes.end())
    {
-    AfxMessageBox(GenMessage()(sizes, IDS_FW_WRONG_FW_FILE_SIZE));
+    SECUMessageBox(GenMessage()(sizes, IDS_FW_WRONG_FW_FILE_SIZE));
     f.Close();
     return false; //ошибка
    }
@@ -377,7 +379,7 @@ bool CheckFirmwareIntegrity(BYTE* p_data, int size)
  {
   if (std::search(p_data, p_data + size, sign2, sign2 + signLen2) == data_end)
   {
-   AfxMessageBox(buff, MB_OK | MB_ICONSTOP);
+   SECUMessageBox(buff, MB_OK | MB_ICONSTOP);
    return false;
   }
  }

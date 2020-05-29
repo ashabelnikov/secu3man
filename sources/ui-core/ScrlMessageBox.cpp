@@ -28,6 +28,7 @@
 #include "ScrlMessageBox.h"
 #include "common/GDIHelpers.h"
 #include "common/DPIAware.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 BEGIN_MESSAGE_MAP(CScrlMessageBox, Super)
  ON_WM_PAINT()
@@ -112,4 +113,11 @@ void CScrlMessageBox::_AlignControls(int cx, int cy)
  CRect rced = GDIHelpers::GetChildWndRect(&m_edit);
  rced.bottom = rcok.top - dpi.ScaleY(3);
  m_edit.MoveWindow(rced);
+}
+
+INT_PTR CScrlMessageBox::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
 }

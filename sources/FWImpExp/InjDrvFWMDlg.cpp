@@ -149,3 +149,10 @@ void CInjDrvFWMDlg::EnableFwmFlag(FwmFlag i_flag_type, bool i_enable)
  BOOL enable = i_enable ? true : false;
  m_fwm_checks[i_flag_type].EnableWindow(enable);
 }
+
+INT_PTR CInjDrvFWMDlg::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

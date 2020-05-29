@@ -30,6 +30,8 @@
 #include "common/FastDelegate.h"
 #include "MapImpExpDlg.h"
 #include "MPSZFileDataIO.h"
+#include "ui-core/FileDialogEx.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 
@@ -56,7 +58,7 @@ MPSZImportController::MPSZImportController(FWMapsDataHolder* ip_fwd)
 int MPSZImportController::DoImport(void)
 {
  static TCHAR BASED_CODE szFilter[] = _T("MPSZ Files (*.mpx)|*.mpx|MPSZ-II Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
@@ -81,7 +83,7 @@ int MPSZImportController::DoImport(void)
   bool result = mp_mpsz_io->Load(_TSTRING(open.GetPathName()),type);
   if (!result)
   {
-   AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
+   SECUMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
    return IDCANCEL;
   }
  }
@@ -275,12 +277,12 @@ MPSZExportController::MPSZExportController(FWMapsDataHolder* ip_fwd)
 int MPSZExportController::DoExport(void)
 {
  //этот класс необходим чтобы изменять дефаултное расширение в зависимости от выбранного фильтра
- class CFileDialogEx : public CFileDialog
+ class CFileDialogEx1 : public CFileDialogEx
  {
   public:
-   CFileDialogEx() : CFileDialog(FALSE,_T("mpx"), NULL, NULL,
+   CFileDialogEx1() : CFileDialogEx(FALSE,_T("mpx"), NULL, NULL,
      _T("MPSZ Files (*.mpx)|*.mpx|MPSZ-II Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||"), NULL) {};
-   virtual ~CFileDialogEx() {};
+   virtual ~CFileDialogEx1() {};
 
   protected:
    virtual void OnTypeChange( )
@@ -294,7 +296,7 @@ int MPSZExportController::DoExport(void)
    }
  };
 
- CFileDialogEx save;
+ CFileDialogEx1 save;
  if (save.DoModal()==IDOK)
  {
   MPSZFileDataIO::EFileTypes type;
@@ -328,7 +330,7 @@ int MPSZExportController::DoExport(void)
    bool result = mp_mpsz_io->Save(_TSTRING(save.GetPathName()),type);
    if (!result)
    {
-    AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
+    SECUMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
     return IDCANCEL;
    }
   }

@@ -19,39 +19,30 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file ScrlMessageBox.h
+/** \file ColorDialogEx.cpp
  * \author Alexey A. Shabelnikov
  */
 
-#pragma once
-#include "common/unicodesupport.h"
+#include "stdafx.h"
+#include "ColorDialogEx.h"
+#include "ToolTipCtrlEx.h"
 
-class AFX_EXT_CLASS CScrlMessageBox : public CDialog
+CColorDialogEx::CColorDialogEx(COLORREF clrInit /*= 0*/,
+                               DWORD dwFlags /*= 0*/,
+                               CWnd* pParentWnd /*= NULL*/)
+: Super(clrInit, dwFlags, pParentWnd)
 {
- typedef CDialog Super;
+ //empty
+}
 
- public:
-  CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon);
+CColorDialogEx::~CColorDialogEx()
+{
+ //empty
+}
 
-  virtual INT_PTR DoModal();
-
- protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  virtual BOOL OnInitDialog();
-  afx_msg void OnPaint();
-  afx_msg void OnSize(UINT nType, int cx, int cy);
-  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
-  DECLARE_MESSAGE_MAP()
-
-  void _AlignControls(int cx, int cy);
-
- private:
-  CEdit m_edit;
-  const _TSTRING m_caption;
-  const _TSTRING m_text;
-  LPCSTR m_icon;
-  HICON m_hIcon;
-  bool m_initialized;
-  CSize m_createSize;
-  CButton m_ok_btn;
-};
+INT_PTR CColorDialogEx::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

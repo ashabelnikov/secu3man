@@ -62,6 +62,8 @@ class CInjDrvFWMDlg : public CDialog
   bool GetFwmFlag(FwmFlag i_flag_type);
   void EnableFwmFlag(FwmFlag i_flag_type, bool i_enable);
 
+  virtual INT_PTR DoModal();
+
     // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

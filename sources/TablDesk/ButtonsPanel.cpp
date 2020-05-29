@@ -1579,7 +1579,17 @@ BOOL CButtonsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_start_map_btn, MLL::GetString(IDS_TD_VIEW_START_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_idle_map_btn, MLL::GetString(IDS_TD_VIEW_IDLE_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_work_map_btn, MLL::GetString(IDS_TD_VIEW_WORK_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_temp_map_btn, MLL::GetString(IDS_TD_VIEW_TEMP_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_temp_map_btn, MLL::GetString(IDS_TD_VIEW_TEMP_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_crnk_map_btn, MLL::GetString(IDS_TD_VIEW_CRNK_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_ve_map_btn, MLL::GetString(IDS_TD_VIEW_VE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_afr_map_btn, MLL::GetString(IDS_TD_VIEW_AFR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_wrmp_map_btn, MLL::GetString(IDS_TD_VIEW_WRMP_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_atsc_map_btn, MLL::GetString(IDS_TD_VIEW_ATSC_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_aetps_map_btn, MLL::GetString(IDS_TD_VIEW_AETPS_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_aerpm_map_btn, MLL::GetString(IDS_TD_VIEW_AERPM_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_aftstr_map_btn, MLL::GetString(IDS_TD_VIEW_AFTSTR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_gtsc_map_btn, MLL::GetString(IDS_TD_VIEW_GTSC_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_gpsc_map_btn, MLL::GetString(IDS_TD_VIEW_GPSC_MAP_TT))); 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

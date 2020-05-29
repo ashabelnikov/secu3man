@@ -33,6 +33,7 @@
 #include "FirmwareMasterDlg.h"
 #include "FirmwareMasterCntr.h"
 #include "hexutils/readhex.h"
+#include "ui-core/MsgBox.h"
 //LZMA SDK:
 #include "7z/CpuArch.h"
 #include "7z/7z.h"
@@ -316,7 +317,7 @@ bool FirmwareMasterCntr::_LoadFirmware(const std::set<_TSTRING>& opts)
 
  if (InFile_Open(&archiveStream.file, fullPath.c_str()))
  {
-   AfxMessageBox((_TSTRING(_T("Can't find and open \"")) + fullPath + _T("\" file!")).c_str());
+   SECUMessageBox((_TSTRING(_T("Can't find and open \"")) + fullPath + _T("\" file!")).c_str());
    return false;
  }
 
@@ -411,20 +412,20 @@ bool FirmwareMasterCntr::_LoadFirmware(const std::set<_TSTRING>& opts)
   return true; //ok
  else if (res == SZ_OK && !match)
  {
-  AfxMessageBox(_T("Firmware with specified options has not been found!\nPlease contact the author!"));
+  SECUMessageBox(_T("Firmware with specified options has not been found!\nPlease contact the author!"));
   return false;
  }
  else if (res == SZ_ERROR_UNSUPPORTED)
-  AfxMessageBox(_T("Decoder doesn't support this archive!"));
+  SECUMessageBox(_T("Decoder doesn't support this archive!"));
  else if (res == SZ_ERROR_MEM)
- AfxMessageBox(_T("Can't allocate memory for extraction!"));
+  SECUMessageBox(_T("Can't allocate memory for extraction!"));
  else if (res == SZ_ERROR_CRC)
-  AfxMessageBox(_T("CRC error!"));
+  SECUMessageBox(_T("CRC error!"));
  else
  {
   TCHAR str[32];
   _itot(res, str, 10);
-  AfxMessageBox(str);
+  SECUMessageBox(str);
  }
 
  return false;
@@ -460,18 +461,18 @@ bool FirmwareMasterCntr::_StoreResult(const _TSTRING& name, BYTE* buffHex, size_
  switch(status)
  {
   case RH_INCORRECT_CHKSUM:
-   AfxMessageBox(MLL::LoadString(IDS_FWM_HEX_FILE_CRC_ERROR));
+   SECUMessageBox(MLL::LoadString(IDS_FWM_HEX_FILE_CRC_ERROR));
    return false; //error
   default:
   case RH_UNEXPECTED_SYMBOL:
-   AfxMessageBox(MLL::LoadString(IDS_FWM_HEX_FILE_STRUCTURE_ERROR));
+   SECUMessageBox(MLL::LoadString(IDS_FWM_HEX_FILE_STRUCTURE_ERROR));
    return false; //error
   case RH_ADDRESS_EXCEDED:
    {
     CString sz, str;
     sz.Format(_T("%d"), m_size);
     str.Format(MLL::LoadString(IDS_FWM_WRONG_FW_FILE_SIZE), sz);
-    AfxMessageBox((LPCTSTR)str);   
+    SECUMessageBox((LPCTSTR)str);   
     return false; //error, wrong size
    }
   case RH_SUCCESS:

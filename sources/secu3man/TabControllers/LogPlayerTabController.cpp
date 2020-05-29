@@ -42,7 +42,8 @@
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/LogPlayerTabDlg.h"
 #include "TabDialogs/LPControlPanelDlg.h"
-#include "ui-core/OscillCtrl.h"
+#include "ui-core/FileDialogEx.h"
+#include "ui-core/MsgBox.h"
 
 #undef max
 
@@ -423,7 +424,7 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
 {
  HANDLE   hFile = NULL;
  static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
- CFileDialog open(TRUE, NULL, NULL, NULL, szFilter, NULL);
+ CFileDialogEx open(TRUE, NULL, NULL, NULL, szFilter, NULL);
 
  if (fileName.empty() && open.DoModal() != IDOK)
   return; //пользователь передумал
@@ -440,12 +441,12 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
  if (false==result)
  {
   if (error_id==LogReader::FE_OPEN)
-   AfxMessageBox(MLL::LoadString(IDS_LP_CANT_OPEN_FILE));
+   SECUMessageBox(MLL::LoadString(IDS_LP_CANT_OPEN_FILE));
   else if (error_id==LogReader::FE_PENDING)
-   AfxMessageBox(MLL::LoadString(IDS_LP_OPEN_PENDING));
+   SECUMessageBox(MLL::LoadString(IDS_LP_OPEN_PENDING));
   else if (error_id==LogReader::FE_FORMAT)
   {
-   AfxMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));
+   SECUMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));
   }
   else
    ASSERT(0);
@@ -513,7 +514,7 @@ void CLogPlayerTabController::_GetRecord(void)
  bool status = mp_log_reader->GetRecord(m_curr_record.first, m_curr_record.second, m_curr_marks);
  if (!status)
  {
-  AfxMessageBox(MLL::LoadString(IDS_LP_FILE_READ_ERROR), MB_OK);
+  SECUMessageBox(MLL::LoadString(IDS_LP_FILE_READ_ERROR), MB_OK);
   _ClosePlayer(); //прекращаем проигрывание
  }
 }

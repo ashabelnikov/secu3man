@@ -11,6 +11,7 @@ ADD_DEFINITIONS(-DDDX_HELPERS_EXPORTS)
 ADD_DEFINITIONS(-DFNT_HELPERS_EXPORTS)
 ADD_DEFINITIONS(-DIMAGE_UTILS_EXPORTS)
 ADD_DEFINITIONS(-DXBROWSEFORFOLDER_EXPORTS)
+ADD_DEFINITIONS(-DMSGBOX_EXPORTS)
 
 set(CMAKE_MFC_FLAG 2)
 set(PROJECT ui-core)
@@ -30,6 +31,7 @@ set(HEADERS
   AnalogMeterCtrl.h
   Chart2D.h
   ClickableBmp.h
+  ColorDialogEx.h
   ddx_helpers.h
   fnt_helpers.h
   DialogWithAccelerators.h
@@ -59,6 +61,8 @@ set(HEADERS
   XBrowseForFolder.h
   ScrlMessageBox.h
   ListCtrlEx.h
+  FileDialogEx.h
+  MsgBox.h
   )
 
 set(SOURCES
@@ -66,6 +70,7 @@ set(SOURCES
   AnalogMeterCtrl.cpp
   Chart2D.cpp
   ClickableBmp.cpp
+  ColorDialogEx.cpp
   ddx_helpers.cpp
   fnt_helpers.cpp
   DialogWithAccelerators.cpp
@@ -95,6 +100,8 @@ set(SOURCES
   XBrowseForFolder.cpp
   ScrlMessageBox.cpp
   ListCtrlEx.cpp
+  FileDialogEx.cpp
+  MsgBox.cpp
   uicore.cpp
   uicore.rc
   )

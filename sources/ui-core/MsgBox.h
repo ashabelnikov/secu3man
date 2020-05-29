@@ -19,39 +19,18 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file ScrlMessageBox.h
+/** \file MsgBox.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
-#include "common/unicodesupport.h"
 
-class AFX_EXT_CLASS CScrlMessageBox : public CDialog
-{
- typedef CDialog Super;
+#ifdef MSGBOX_EXPORTS
+ #define MSGBOX_API __declspec(dllexport)
+#else
+ #define MSGBOX_API __declspec(dllimport)
+#endif
 
- public:
-  CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon);
+int MSGBOX_API SECUMessageBox(LPCTSTR lpszText, UINT nType = MB_OK, UINT nIDHelp = 0);
 
-  virtual INT_PTR DoModal();
-
- protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  virtual BOOL OnInitDialog();
-  afx_msg void OnPaint();
-  afx_msg void OnSize(UINT nType, int cx, int cy);
-  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
-  DECLARE_MESSAGE_MAP()
-
-  void _AlignControls(int cx, int cy);
-
- private:
-  CEdit m_edit;
-  const _TSTRING m_caption;
-  const _TSTRING m_text;
-  LPCSTR m_icon;
-  HICON m_hIcon;
-  bool m_initialized;
-  CSize m_createSize;
-  CButton m_ok_btn;
-};
+int MSGBOX_API SECUMessageBox(UINT nIDPrompt, UINT nType = MB_OK, UINT nIDHelp = (UINT) -1);

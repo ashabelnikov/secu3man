@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MPSZFileDataIO.h"
+#include "ui-core/MsgBox.h"
 
 #include <vector>
 #include "common/MathHelpers.h"
@@ -107,7 +108,7 @@ bool MPSZFileDataIO::Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes
  if(!file.Open(i_file_name.c_str(),CFile::modeRead,&ex))
  {
   ex.GetErrorMessage(szError, 1024);
-  AfxMessageBox(szError);
+  SECUMessageBox(szError);
   return false;
  }
 
@@ -162,7 +163,7 @@ bool MPSZFileDataIO::Save(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes
  if(!file.Open(i_file_name.c_str(), CFile::modeWrite|CFile::modeCreate, &ex))
  {
   ex.GetErrorMessage(szError, 1024);
-  AfxMessageBox(szError);
+  SECUMessageBox(szError);
   return false;
  }
 

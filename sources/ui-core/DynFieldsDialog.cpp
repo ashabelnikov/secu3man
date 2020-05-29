@@ -317,3 +317,10 @@ void CDynFieldsContainer::_UpdateControlsPosition(int cx, int cy)
  rcdl.bottom = rcok.top - dpi.ScaleY(8);
  m_dlg.MoveWindow(&rcdl);
 }
+
+INT_PTR CDynFieldsContainer::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

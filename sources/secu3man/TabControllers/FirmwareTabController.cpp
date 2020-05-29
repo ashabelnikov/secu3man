@@ -56,6 +56,7 @@
 #include "TablDesk/CESettingsDlg.h"
 #include "ErrorMsg.h"
 #include "ui-core/DynFieldsDialog.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 
@@ -688,7 +689,7 @@ void CFirmwareTabController::OnWriteEepromFromFile(void)
 
 void CFirmwareTabController::OnResetEeprom(void)
 {
- if (IDYES==AfxMessageBox(MLL::GetString(IDS_RESET_EEPROM_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
+ if (IDYES==SECUMessageBox(MLL::GetString(IDS_RESET_EEPROM_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
  {
   SECU3IO::OPCompNc packet_data;
   packet_data.opcode = SECU3IO::OPCODE_RESET_EEPROM;
@@ -726,7 +727,7 @@ bool CFirmwareTabController::_CheckFirmwareCompatibilityAndAskUser(BYTE* i_buff,
 
  if (!mp_fwdm->CheckCompatibility(i_buff, p_pph ? &p_pph->GetFlashParameters() : NULL))
  {
-  if (IDNO==AfxMessageBox(MLL::LoadString(IDS_INCOMPATIBLE_FIRMWARE), MB_YESNO | MB_ICONEXCLAMATION))
+  if (IDNO==SECUMessageBox(MLL::LoadString(IDS_INCOMPATIBLE_FIRMWARE), MB_YESNO | MB_ICONEXCLAMATION))
    return false; //aborted by user
  }
 
@@ -744,7 +745,7 @@ bool CFirmwareTabController::_CheckQuartzCompatibilityAndAskUser(BYTE* ip_buff, 
   PlatformParamHolder pph(platform_id);
   if (m_fpp.m_fcpu_hz != pph.GetFlashParameters().m_fcpu_hz)
   {
-   if (IDNO==AfxMessageBox(MLL::LoadString(IDS_INCOMPATIBLE_QUARTZ), MB_YESNO | MB_ICONEXCLAMATION))
+   if (IDNO==SECUMessageBox(MLL::LoadString(IDS_INCOMPATIBLE_QUARTZ), MB_YESNO | MB_ICONEXCLAMATION))
     return false; //aborted by user
   }
  }
@@ -849,7 +850,7 @@ bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
  bool modified = mp_fwdm->IsModified();
  if (modified && mp_settings->GetSaveWarning())
  {
-  int result = AfxMessageBox(MLL::LoadString(IDS_FW_MODIFICATION_WARNING), MB_YESNOCANCEL);
+  int result = SECUMessageBox(MLL::LoadString(IDS_FW_MODIFICATION_WARNING), MB_YESNOCANCEL);
   if (result==IDCANCEL)
   {
    return false; //пользователь отменил действие
@@ -1579,7 +1580,7 @@ void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
  //проверка контрольной суммы загружаемых параметров и вывод предупреждения
  if (!mp_edm->VerifyParamsCheckSum(eeprom))
  {
-  if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
+  if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
  }
 
@@ -1883,7 +1884,7 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options,
   _TSSTREAM str;  str << _T(" ") << opt_count;
   str << _T("  Version v") << (int)fw_version[1] << _T(".") << (int)fw_version[0];
   str_options+=str.str();
-  AfxMessageBox(str_options.c_str(), MB_OK|MB_ICONINFORMATION);
+  SECUMessageBox(str_options.c_str(), MB_OK|MB_ICONINFORMATION);
  }
 }
 
@@ -1989,7 +1990,7 @@ void CFirmwareTabController::OnCESettingsButton(void)
  CPoint wndPos = dialog.GetWndPosition();
  ws.m_CESettingsWnd_X = wndPos.x; 
  ws.m_CESettingsWnd_Y = wndPos.y;
- mp_settings->SetWndSettings(ws); 
+ mp_settings->SetWndSettings(ws);
 }
 
 void CFirmwareTabController::OnChangeSettingsMapEd(void)

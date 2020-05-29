@@ -179,3 +179,10 @@ const float* CDwellCalcDlg::GetTimeValues(void)
 {
  return mp_t_values;
 }
+
+INT_PTR CDwellCalcDlg::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

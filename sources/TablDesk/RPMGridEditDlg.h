@@ -53,6 +53,8 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   void SetErrMessage(int mode, const _TSTRING& str);
   void SetItemError(int mode, size_t index, bool i_error);
 
+  virtual INT_PTR DoModal();
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

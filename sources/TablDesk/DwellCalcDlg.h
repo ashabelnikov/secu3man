@@ -45,6 +45,8 @@ class CDwellCalcDlg : public CDialog
   void SetLimits(float t_lo_limit, float t_hi_limit);
   const float* GetTimeValues(void);
 
+  virtual INT_PTR DoModal();
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

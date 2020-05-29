@@ -276,6 +276,8 @@ void TForm2D::InitHints(HINSTANCE hInstance)
  ::LoadString(hInstance, IDS_TT_H_AXIS_END_VAL, string, 1024);
  EditXEnd->Hint = string;
  SpinXEnd->Hint = string; 
+ ::LoadString(hInstance, IDS_TT_EDIT_X_GRID, string, 1024);
+ ButtonShowBins->Hint = string;
 }
 
 //---------------------------------------------------------------------------

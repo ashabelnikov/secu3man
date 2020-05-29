@@ -209,6 +209,8 @@ class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip = _TSTRING());
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip = _TSTRING());
 
+  virtual INT_PTR DoModal();
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();

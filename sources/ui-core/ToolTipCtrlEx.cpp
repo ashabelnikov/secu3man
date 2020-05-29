@@ -89,9 +89,10 @@ bool CToolTipCtrlEx::UpdateText(CWnd* pWnd, const _TSTRING& text)
  return (bool)SendMessage(TTM_UPDATETIPTEXT, 0, (LPARAM) &ti);
 }
 
-/*static*/ void CToolTipCtrlEx::ActivateAllTooltips(bool i_activate)
+/*static*/ void CToolTipCtrlEx::ActivateAllTooltips(bool i_activate, bool update_state /*= true*/)
 {
- m_activated_all = i_activate;
+ if (update_state)
+  m_activated_all = i_activate;
  std::list<CToolTipCtrlEx*>::iterator it;
  for(it = m_insts.begin(); it != m_insts.end(); ++it)
  {

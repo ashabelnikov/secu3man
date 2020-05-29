@@ -212,3 +212,10 @@ int CFirmwareMasterDlg::GetSyncCombo(void)
  UpdateData();
  return m_sync_idx;
 }
+
+INT_PTR CFirmwareMasterDlg::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

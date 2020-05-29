@@ -88,6 +88,8 @@ class CMAPCalcDlg : public CDialog
   void setOnGradientUnit(const EventHandler2Id& OnFunctionN, const EventHandler2Id& OnFunctionD);
   void setOnOK(const EventResult& OnFunction);
 
+  virtual INT_PTR DoModal();
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

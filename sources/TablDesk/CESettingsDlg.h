@@ -161,6 +161,7 @@ class AFX_EXT_CLASS CCESettingsCntr : public CDialog
   void EnableExtraIO(bool i_enable);
   void SetWndPosition(int x, int y);
   const CPoint& GetWndPosition(void);
+  virtual INT_PTR DoModal();
 
  // Implementation
  protected:
