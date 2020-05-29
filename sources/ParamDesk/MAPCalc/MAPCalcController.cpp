@@ -30,6 +30,7 @@
 #include "common/fastdelegate.h"
 #include "MAPCalcDlg.h"
 #include "Resources/resource.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 
@@ -185,7 +186,7 @@ bool CMAPCalcController::OnOK()
 {
  if ((mp_view->Get1stptVolt() >= mp_view->Get2ndptVolt()) && !m_know_gradient)
  {
-  AfxMessageBox(MLL::GetString(IDS_MAP_CALC_1V_ABOVE_2V).c_str());
+  SECUMessageBox(MLL::GetString(IDS_MAP_CALC_1V_ABOVE_2V).c_str());
   return false; //user warned and made to eliminate error, so do not exit
  }
  return true; //ok

@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "ImageUtils.h"
+#include "ui-core/FileDialogEx.h"
 
 bool IMAGE_UTILS_API SaveScreenshot(CWnd* pWnd, bool selectFile)
 {
@@ -52,7 +53,7 @@ bool IMAGE_UTILS_API SaveScreenshot(CWnd* pWnd, bool selectFile)
  //save image
  str.Format(_T("%02d.%02d.%04d_%02d.%02d.%02d.png"), t.GetDay(), t.GetMonth(), t.GetYear(), t.GetHour(), t.GetMinute(), t.GetSecond());
  static TCHAR BASED_CODE szFilter[] = _T("PNG Files (*.png)|*.png||");
- CFileDialog save(FALSE,_T("png"), str, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter);
+ CFileDialogEx save(FALSE,_T("png"), str, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter);
  INT_PTR result = IDOK;
  if (selectFile)
   result = save.DoModal();

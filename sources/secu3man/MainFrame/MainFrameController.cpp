@@ -44,6 +44,7 @@
 #include "ui-core/ScrlMessageBox.h"
 #include "ui-core/ImageUtils.h"
 #include "Application/RestartAPI.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 
@@ -163,8 +164,7 @@ void MainFrameController::OnAppSettings()
 
   //–азрешаем или запрещаем показавание подсказок
   CToolTipCtrlEx::ActivateAllTooltips(settings->GetShowToolTips());
-  DLL::ShowHints(settings->GetShowToolTips());  
-
+  DLL::ShowHints(settings->GetShowToolTips(), settings->GetToolTipTime());  
   CToolTipCtrlEx::SetVisibleTime(settings->GetToolTipTime());
 
   //Start logging if user selected always to write log  
@@ -175,7 +175,7 @@ void MainFrameController::OnAppSettings()
 
   if (m_pAppSettingsManager->IsRestartRequired())
   {
-   if (IDYES == AfxMessageBox(MLL::LoadString(IDS_APP_SETTINGS_APPRESTART_CONFIRM), MB_YESNO | MB_DEFBUTTON1))
+   if (IDYES == SECUMessageBox(MLL::LoadString(IDS_APP_SETTINGS_APPRESTART_CONFIRM), MB_YESNO | MB_DEFBUTTON1))
    {
     if (RA_ActivateRestartProcess())
      AfxGetMainWnd()->DestroyWindow();
@@ -210,7 +210,7 @@ void MainFrameController::OnAppBeginLog()
  {
   CString  string;
   string.Format(MLL::LoadString(IDS_CANT_START_LOG_WRITING), full_file_name.c_str());
-  AfxMessageBox(string,MB_OK | MB_ICONSTOP);
+  SECUMessageBox(string,MB_OK | MB_ICONSTOP);
   return;
  }
 
@@ -391,8 +391,6 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldLogMarks);
  m_pLogWriter->SetFieldName(i++, lff.m_fldCECodes);
  m_pLogWriter->SetWriteFields(settings->GetWriteLogFields());
-
- CToolTipCtrlEx::SetVisibleTime(settings->GetToolTipTime());
 }
 
 bool MainFrameController::OnClose(void)
@@ -448,6 +446,11 @@ void MainFrameController::OnAfterCreate(void)
   mp_view->ShowWindow(SW_MAXIMIZE);
 
  mp_view->UpdateWindow();
+
+ //–азрешаем или запрещаем показавание подсказок
+ CToolTipCtrlEx::ActivateAllTooltips(settings->GetShowToolTips());
+ DLL::ShowHints(settings->GetShowToolTips(), settings->GetToolTipTime());  
+ CToolTipCtrlEx::SetVisibleTime(settings->GetToolTipTime());
 }
 
 void MainFrameController::OnGetInitialPos(CPoint& o_point)

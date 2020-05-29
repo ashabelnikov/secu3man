@@ -34,6 +34,7 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/WndScroller.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/tooltipctrlex.h"
 
 #undef max   //avoid conflicts with C++
 
@@ -614,4 +615,11 @@ void CCESettingsCntr::_UpdateControlsPosition(int cx, int cy)
  CRect rcdl = GDIHelpers::GetChildWndRect(&m_dlg);
  rcdl.bottom = rcok.top - dpi.ScaleY(8);
  m_dlg.MoveWindow(&rcdl);
+}
+
+INT_PTR CCESettingsCntr::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
 }

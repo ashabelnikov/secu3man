@@ -360,3 +360,15 @@
 #define IDS_TD_VIEW_TEMP_MAP_TT         5714
 #define IDS_TD_VIEW_CRKTEMP_MAP_TT      5715
 #define IDS_TD_VIEW_ATTENUATOR_MAP_TT   5716
+#define IDS_TD_VIEW_CRNK_MAP_TT         5717
+#define IDS_TD_VIEW_GDP_MAP_TT          5718
+#define IDS_TD_VIEW_VE_MAP_TT           5719
+#define IDS_TD_VIEW_AFR_MAP_TT          5720
+#define IDS_TD_VIEW_WRMP_MAP_TT         5721
+#define IDS_TD_VIEW_ATSC_MAP_TT         5722
+#define IDS_TD_VIEW_AETPS_MAP_TT        5723
+#define IDS_TD_VIEW_AERPM_MAP_TT        5724
+#define IDS_TD_VIEW_AFTSTR_MAP_TT       5725
+#define IDS_TD_VIEW_BAROCORR_MAP_TT     5726
+#define IDS_TD_VIEW_GTSC_MAP_TT         5727
+#define IDS_TD_VIEW_GPSC_MAP_TT         5728

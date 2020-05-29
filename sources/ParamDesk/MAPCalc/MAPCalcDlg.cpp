@@ -499,3 +499,10 @@ void CMAPCalcDlg::setOnGradientUnit(const EventHandler2Id& OnFunctionN, const Ev
 
 void CMAPCalcDlg::setOnOK(const EventResult& OnFunction)
 { m_OnOK = OnFunction;}
+
+INT_PTR CMAPCalcDlg::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

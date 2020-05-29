@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "ErrorMsg.h"
 #include "Application/CommunicationManager.h"
+#include "ui-core/MsgBox.h"
 
 namespace ErrorMsg
 {
@@ -49,12 +50,12 @@ CString GenerateErrorStr(CCommunicationManager* p_comm) //redundant to same func
 
 bool AskUserAboutTabLeaving(void)
 {
- return (IDYES==AfxMessageBox(MLL::LoadString(IDS_FW_LEAVE_TAB_WARNING), MB_YESNO|MB_DEFBUTTON2));
+ return (IDYES==SECUMessageBox(MLL::LoadString(IDS_FW_LEAVE_TAB_WARNING), MB_YESNO|MB_DEFBUTTON2));
 }
 
 bool AskUserAboutVrefCompensation(void)
 {
- return (IDYES == AfxMessageBox(MLL::GetString(IDS_ASK_USER_ABOUT_VREF_COMP).c_str(), MB_YESNO));
+ return (IDYES == SECUMessageBox(MLL::GetString(IDS_ASK_USER_ABOUT_VREF_COMP).c_str(), MB_YESNO));
 }
 
 };

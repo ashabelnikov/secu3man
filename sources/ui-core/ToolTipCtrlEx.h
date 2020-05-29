@@ -44,7 +44,7 @@ class AFX_EXT_CLASS CToolTipCtrlEx : public CToolTipCtrl
   bool UpdateText(CWnd* pWnd, const _TSTRING& text);
 
   //This method affects all instances of this class
-  static void ActivateAllTooltips(bool i_activate);
+  static void ActivateAllTooltips(bool i_activate, bool update_state = true);
 
   //Activates/Deactivates tool tip control. Use this method instead of base implementation
   void ActivateToolTips(bool i_activate);

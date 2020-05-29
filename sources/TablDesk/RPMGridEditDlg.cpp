@@ -265,3 +265,10 @@ void CRPMGridEditDlg::SetItemError(int mode, size_t index, bool i_error)
  //Update cprresponding control
  m_edits[mode][index]->Invalidate();
 }
+
+INT_PTR CRPMGridEditDlg::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

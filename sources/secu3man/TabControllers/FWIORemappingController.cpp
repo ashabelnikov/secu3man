@@ -1750,7 +1750,7 @@ void CFWIORemappingController::_DisplayPlugs(void)
   n.Format("%02d   ", p);
   out+=n+str_i+str_d+_T("\n");
  }
- AfxMessageBox(out);
+ SECUMessageBox(out);
 }
 else
 {//SECU-3i:

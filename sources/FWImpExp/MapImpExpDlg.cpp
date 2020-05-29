@@ -537,3 +537,10 @@ void CMapImpExpDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.25f);
  }
 }
+
+INT_PTR CMapImpExpDlg::DoModal()
+{
+ INT_PTR result = Super::DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}

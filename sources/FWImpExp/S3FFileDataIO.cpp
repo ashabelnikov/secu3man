@@ -33,6 +33,7 @@
 #include "io-core/CRC16.h"
 #include "io-core/FirmwareMapsDataHolder.h"
 #include "io-core/SECU3IO.h"
+#include "ui-core/MsgBox.h"
 
 #pragma pack( push, enter_S3FFileMap )
 #pragma pack(1) //<--SECU3
@@ -262,7 +263,7 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  if(!file.Open(i_file_name.c_str(),CFile::modeRead,&ex))
  {
   ex.GetErrorMessage(szError, 1024);
-  AfxMessageBox(szError);
+  SECUMessageBox(szError);
   return false;
  }
  //read the file into memory
@@ -312,7 +313,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  if(!file.Open(i_file_name.c_str(), CFile::modeWrite|CFile::modeCreate, &ex))
  {
   ex.GetErrorMessage(szError, 1024);
-  AfxMessageBox(szError);
+  SECUMessageBox(szError);
   return false;
  }
 

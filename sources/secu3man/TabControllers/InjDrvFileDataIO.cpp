@@ -32,6 +32,8 @@
 #include <algorithm>
 #include "HexUtils/readhex.h"
 #include "HexUtils/writehex.h"
+#include "ui-core/FileDialogEx.h"
+#include "ui-core/MsgBox.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -272,14 +274,14 @@ bool CInjDrvFileDataIO::ExportSet(SECU3IO::InjDrvPar* ip_set)
 {
  FILE* fout = NULL;
  static TCHAR BASED_CODE szFilter[] = _T("LZID Files (*.lzid)|*.lzid|All Files (*.*)|*.*||");
- CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("lzid");
  if (save.DoModal()==IDOK)
  {
   fout = _tfopen(save.GetPathName(),_T("wb+"));
   if (NULL == fout)
   {
-   AfxMessageBox("Error opening file for saving!", MB_ICONSTOP);
+   SECUMessageBox("Error opening file for saving!", MB_ICONSTOP);
    return false;
   }
   lzid_sett_t fwd;  
@@ -295,14 +297,14 @@ bool CInjDrvFileDataIO::ImportSet(SECU3IO::InjDrvPar* op_set)
 {
  FILE* fin = NULL;
  static TCHAR BASED_CODE szFilter[] = _T("LZID Files (*.lzid)|*.lzid|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
   fin = _tfopen(open.GetPathName(),_T("rb"));
   if (NULL == fin)
   {
-   AfxMessageBox("Error opening file for read!", MB_ICONSTOP);
+   SECUMessageBox("Error opening file for read!", MB_ICONSTOP);
    return false;
   }
 
@@ -333,7 +335,7 @@ bool CInjDrvFileDataIO::ImportSet(SECU3IO::InjDrvPar* op_set)
 
   if (!result || 0 != strncmp(buff, strHeader, strlen(strHeader)))
   { //data corrupted
-   AfxMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
+   SECUMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
    fclose(fin);
    return false;
   }
@@ -365,7 +367,7 @@ bool getSettAddresses(std::vector<BYTE>& buff, T** op_set)
 bool CInjDrvFileDataIO::LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set)
 {
  static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex;*.a90)|*.hex;*.a90|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
@@ -375,7 +377,7 @@ bool CInjDrvFileDataIO::LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set)
   if(!f.Open(open.GetPathName(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false;
   }
 
@@ -400,14 +402,14 @@ bool CInjDrvFileDataIO::LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set)
    switch(status)
    {
     case RH_INCORRECT_CHKSUM:
-     AfxMessageBox("Hex file CRC error! File corrupted!", MB_ICONSTOP);
+     SECUMessageBox("Hex file CRC error! File corrupted!", MB_ICONSTOP);
      return false;
     default:
      case RH_UNEXPECTED_SYMBOL:
-     AfxMessageBox("Hex file structure error!", MB_ICONSTOP);
+     SECUMessageBox("Hex file structure error!", MB_ICONSTOP);
      return false;
     case RH_ADDRESS_EXCEDED:
-     AfxMessageBox("Hex file is too big!", MB_ICONSTOP);
+     SECUMessageBox("Hex file is too big!", MB_ICONSTOP);
      break;
     case RH_SUCCESS:
      break;
@@ -435,7 +437,7 @@ bool CInjDrvFileDataIO::LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set)
   //For now we ignore check sum, because it is not calculated in the firmware
   if (!result1 || !result2)
   { //data corrupted
-   AfxMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
+   SECUMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
    return false;
   }
   return true;
@@ -446,7 +448,7 @@ bool CInjDrvFileDataIO::LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set)
 bool CInjDrvFileDataIO::SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set)
 {
  static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex;*.a90)|*.hex;*.a90|All Files (*.*)|*.*||");
- CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("BIN");
  if (save.DoModal()==IDOK)
  {
@@ -456,7 +458,7 @@ bool CInjDrvFileDataIO::SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set)
   if(!f.Open(save.GetPathName(), CFile::modeReadWrite | CFile::typeBinary, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false;
   }
 
@@ -480,16 +482,16 @@ bool CInjDrvFileDataIO::SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set)
    switch(status)
    {
     case RH_INCORRECT_CHKSUM:
-     AfxMessageBox("Hex file CRC error! File corrupted!", MB_ICONSTOP);
+     SECUMessageBox("Hex file CRC error! File corrupted!", MB_ICONSTOP);
      f.Close();
      return false;
     default:
      case RH_UNEXPECTED_SYMBOL:
-     AfxMessageBox("Hex file structure error!", MB_ICONSTOP);
+     SECUMessageBox("Hex file structure error!", MB_ICONSTOP);
      f.Close();
      return false;
     case RH_ADDRESS_EXCEDED:
-     AfxMessageBox("Hex file is too big!", MB_ICONSTOP);
+     SECUMessageBox("Hex file is too big!", MB_ICONSTOP);
      f.Close();
      return false;
     case RH_SUCCESS:
@@ -534,7 +536,7 @@ bool CInjDrvFileDataIO::SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set)
 bool CInjDrvFileDataIO::SaveFirmware(const std::vector<BYTE>& buffer)
 {
  static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex)|*.hex|HEX Files (*.a90)|*.a90|All Files (*.*)|*.*||");
- CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("BIN");
  if (save.DoModal()==IDOK)
  {
@@ -544,7 +546,7 @@ bool CInjDrvFileDataIO::SaveFirmware(const std::vector<BYTE>& buffer)
   if(!f.Open(save.GetPathName(), CFile::modeCreate | CFile::modeReadWrite | CFile::typeBinary, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false;
   }
 
@@ -573,7 +575,7 @@ bool CInjDrvFileDataIO::SaveFirmware(const std::vector<BYTE>& buffer)
 bool CInjDrvFileDataIO::LoadFirmware(std::vector<BYTE>& buffer)
 {
  static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex)|*.hex|HEX Files (*.a90)|*.a90|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
@@ -583,7 +585,7 @@ bool CInjDrvFileDataIO::LoadFirmware(std::vector<BYTE>& buffer)
   if(!f.Open(open.GetPathName(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false;
   }
 
@@ -608,14 +610,14 @@ bool CInjDrvFileDataIO::LoadFirmware(std::vector<BYTE>& buffer)
    switch(status)
    {
     case RH_INCORRECT_CHKSUM:
-     AfxMessageBox("Hex file CRC error! File corrupted!", MB_ICONSTOP);
+     SECUMessageBox("Hex file CRC error! File corrupted!", MB_ICONSTOP);
      return false;
     default:
      case RH_UNEXPECTED_SYMBOL:
-     AfxMessageBox("Hex file structure error!", MB_ICONSTOP);
+     SECUMessageBox("Hex file structure error!", MB_ICONSTOP);
      return false;
     case RH_ADDRESS_EXCEDED:
-     AfxMessageBox("Hex file is too big!", MB_ICONSTOP);
+     SECUMessageBox("Hex file is too big!", MB_ICONSTOP);
      break;
     case RH_SUCCESS:
      break;
@@ -640,7 +642,7 @@ bool CInjDrvFileDataIO::LoadFirmware(std::vector<BYTE>& buffer)
 bool CInjDrvFileDataIO::SaveEEPROM(const std::vector<BYTE>& buffer, size_t size)
 {
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
- CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("BIN");
  if (save.DoModal()==IDOK)
  {
@@ -650,7 +652,7 @@ bool CInjDrvFileDataIO::SaveEEPROM(const std::vector<BYTE>& buffer, size_t size)
   if(!f.Open(save.GetPathName(), CFile::modeCreate | CFile::modeReadWrite | CFile::typeBinary, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false;
   }
 
@@ -664,7 +666,7 @@ bool CInjDrvFileDataIO::SaveEEPROM(const std::vector<BYTE>& buffer, size_t size)
 bool CInjDrvFileDataIO::LoadEEPROM(std::vector<BYTE>& buffer, size_t size)
 {
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
@@ -674,7 +676,7 @@ bool CInjDrvFileDataIO::LoadEEPROM(std::vector<BYTE>& buffer, size_t size)
   if(!f.Open(open.GetPathName(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
+   SECUMessageBox(szError);
    return false;
   }
 

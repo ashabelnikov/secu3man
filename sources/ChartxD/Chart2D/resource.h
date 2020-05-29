@@ -16,3 +16,4 @@
 #define IDS_PM_SET_PTMOV_STEP          110
 #define IDS_PM_HIDE_MARKS              112
 #define IDS_PM_HIDE_OLDCURVE           113
+#define IDS_TT_EDIT_X_GRID             114

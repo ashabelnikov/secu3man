@@ -126,6 +126,8 @@ class CMapImpExpDlg : public CDialog
   bool IsEnabledFWDFlag(EFWDFlags i_flag_type);
   void SetExchangeButtonCaption(const _TSTRING& i_text);
 
+  virtual INT_PTR DoModal();
+
     // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

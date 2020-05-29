@@ -546,7 +546,9 @@ void CAppSettingsDlg::setFunctionOnActivate(EventHandler OnActivate)
 
 int CAppSettingsDlg::ShowDialog(void)
 {
- return DoModal();
+ INT_PTR result = DoModal();
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
 }
 
 void CAppSettingsDlg::SetMIDeskUpdatePeriod(int i_period)

@@ -27,6 +27,7 @@
 #include "common/ModuleName.h"
 #include "common/UnicodeSupport.h"
 #include "DLLLinkedFunctions.h"
+#include "ui-core/MsgBox.h"
 
 namespace DLL
 {
@@ -83,7 +84,7 @@ namespace DLL
    OemToChar(name, string);
    str+= string;
    str+= _T(" symbol");
-   AfxMessageBox(str.c_str(),MB_OK|MB_ICONSTOP);
+   SECUMessageBox(str.c_str(),MB_OK|MB_ICONSTOP);
    ptr = NULL;
    status = false;
   }
@@ -100,7 +101,7 @@ namespace DLL
   hModule = LoadLibrary(ModuleName::chartxd);
   if (hModule==NULL)
   {
-   AfxMessageBox(_T("Can't load library ChartxD.dll"), MB_OK|MB_ICONSTOP);
+   SECUMessageBox(_T("Can't load library ChartxD.dll"), MB_OK|MB_ICONSTOP);
    Chart2DCreate = NULL;
    Chart2DUpdate = NULL;
    Chart2DSetOnChange = NULL;
@@ -188,10 +189,10 @@ namespace DLL
    DLL::ChartxDSetLanguage(language);
  }
 
- void ShowHints(bool i_show)
+ void ShowHints(bool i_show, int timeToShow)
  {
   if (ChartxDShowHints)
-   DLL::ChartxDShowHints(i_show);
+   DLL::ChartxDShowHints(i_show, timeToShow);
  }
 
 };//namespace

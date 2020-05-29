@@ -39,6 +39,8 @@
 #include "TabControllersCommunicator.h"
 #include "TabDialogs/KnockChannelTabDlg.h"
 #include "Settings/ISettingsData.h"
+#include "ui-core/FileDialogEx.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -616,7 +618,7 @@ void CKnockChannelTabController::OnSigmaFilter(void)
  //at least 30% of points must be valid
  if ((begin > end) || (end - begin) < (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS/3))
  { 
-  AfxMessageBox(IDS_KC_PLEASE_COLLECT_MORE_STAT);
+  SECUMessageBox(IDS_KC_PLEASE_COLLECT_MORE_STAT);
   return;
  }
 
@@ -669,14 +671,14 @@ void CKnockChannelTabController::OnLoadPoints(void)
 {
  FILE* fin = NULL;
  static TCHAR BASED_CODE szFilter[] = _T("KND Files (*.knd)|*.knd|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
   fin = _tfopen(open.GetPathName(),_T("rb"));
   if (NULL == fin)
   {
-   AfxMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_LOAD_FILE).c_str(), MB_ICONSTOP);
+   SECUMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_LOAD_FILE).c_str(), MB_ICONSTOP);
    return;
   }
 
@@ -703,7 +705,7 @@ void CKnockChannelTabController::OnLoadPoints(void)
 
   if (error || (values.size() != CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS))
   {
-   AfxMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_LOAD_FILE).c_str(), MB_ICONSTOP);
+   SECUMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_LOAD_FILE).c_str(), MB_ICONSTOP);
    return;
   }
 
@@ -719,14 +721,14 @@ void CKnockChannelTabController::OnSavePoints(void)
 {
  FILE* fout = NULL;
  static TCHAR BASED_CODE szFilter[] = _T("KND Files (*.knd)|*.knd|All Files (*.*)|*.*||");
- CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("knd");
  if (save.DoModal()==IDOK)
  {
   fout = _tfopen(save.GetPathName(),_T("wb+"));
   if (NULL == fout)
   {
-   AfxMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_SAVE_FILE).c_str(), MB_ICONSTOP);
+   SECUMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_SAVE_FILE).c_str(), MB_ICONSTOP);
    return;
   }
 

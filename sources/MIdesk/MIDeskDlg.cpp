@@ -36,6 +36,7 @@
 #include "common/DPIAware.h"
 #include "ui-core/AnalogMeterCtrl.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/ColorDialogEx.h"
 
 #include "MIAirFlow.h"
 #include "MIDwellAngle.h"
@@ -2311,7 +2312,7 @@ void CMIDeskDlg::_IndFactory(UINT uiID)
 
 void CMIDeskDlg::OnIndSetColor()
 {
- CColorDialog dlg; 
+ CColorDialogEx dlg; 
  if (dlg.DoModal() == IDOK) 
  { 
   COLORREF color = dlg.GetColor(); 

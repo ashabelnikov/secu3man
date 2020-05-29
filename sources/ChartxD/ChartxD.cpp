@@ -39,7 +39,7 @@ enum ELanguage
 extern "C"
 {
  void  __declspec(dllexport)  __cdecl ChartxDSetLanguage(int i_language);
- void  __declspec(dllexport)  __cdecl ChartxDShowHints(int i_show);
+ void  __declspec(dllexport)  __cdecl ChartxDShowHints(int i_show, int timeToShow);
 }
 
 //---------------------------------------------------------------------------
@@ -57,9 +57,10 @@ void __cdecl ChartxDSetLanguage(int i_language)
 }
 
 //---------------------------------------------------------------------------
-void __cdecl ChartxDShowHints(int i_show)
+void __cdecl ChartxDShowHints(int i_show, int timeToShow)
 {
  Application->ShowHint = i_show;
+ Application->HintHidePause = timeToShow;
 }
 
 //---------------------------------------------------------------------------

@@ -18,12 +18,13 @@ stringtable
   IDS_PM_SET_PTMOV_STEP, "Шаг смещения точек..."
   IDS_PM_HIDE_MARKS, "Спрятать надписи"
   IDS_PM_HIDE_OLDCURVE, "Спрятать 'старую' кривую"
-  IDS_TT_SMOOTHING_3_POINTS, "Сглаживание по 3-м соседним точкам"
-  IDS_TT_SMOOTHING_5_POINTS, "Сглаживание по 5-ти соседним точкам"
+  IDS_TT_SMOOTHING_3_POINTS, "Сглаживание по 3-м соседним точкам (фильтр скользящего среднего)"
+  IDS_TT_SMOOTHING_5_POINTS, "Сглаживание по 5-ти соседним точкам (фильтр скользящего среднего)"
   IDS_TT_MOVE_FUNC_UP, "Сместить функцию вверх на текущее значение 'Шаг смещения точек'"
   IDS_TT_MOVE_FUNC_DOWN, "Сместить функцию вниз на текущее значение 'Шаг смещения точек'"
   IDS_TT_H_AXIS_BEGIN_VAL, "Значение определяющее начало горизонтальной оси. Должно быть меньше конечного значения!"
   IDS_TT_H_AXIS_END_VAL, "Значение определяющее конец горизонтальной оси. Должно быть больше начального значения!"
+  IDS_TT_EDIT_X_GRID, "Редактировать сетку значений горизонтальной оси"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -38,10 +39,11 @@ stringtable
   IDS_PM_SET_PTMOV_STEP, "Points' moving step..."
   IDS_PM_HIDE_MARKS, "Hide marks"
   IDS_PM_HIDE_OLDCURVE, "Hide 'old' curve"
-  IDS_TT_SMOOTHING_3_POINTS, "Smoothing uning 3 adjacent points"
-  IDS_TT_SMOOTHING_5_POINTS, "Smoothing using 5 adjacent points"
+  IDS_TT_SMOOTHING_3_POINTS, "Smoothing uning 3 adjacent points (moving average filter)"
+  IDS_TT_SMOOTHING_5_POINTS, "Smoothing using 5 adjacent points (moving average filter)"
   IDS_TT_MOVE_FUNC_UP, "Move function up by current value of 'Points' moving step'"
   IDS_TT_MOVE_FUNC_DOWN, "Move function down by current value of 'Points' moving step'"
   IDS_TT_H_AXIS_BEGIN_VAL, "This value defines beginning of the horizontal axis. Must be less than end value!"
   IDS_TT_H_AXIS_END_VAL, "This value defines ending of the horizontal axis. Must be greater than begin value!"
+  IDS_TT_EDIT_X_GRID, "Edit grid of horizontal axis values (bins)"
 }

@@ -41,6 +41,8 @@
 #include "fwimpexp/S3FFileDataIO.h"
 #include "fwimpexp/S3FImpExpController.h"
 #include "Settings/IsettingsData.h"
+#include "ui-core/FileDialogEx.h"
+#include "ui-core/MsgBox.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -760,12 +762,12 @@ void CPMTablesController::OnImportFromS3F(void)
 void CPMTablesController::OnExportToS3F(void)
 {
  //этот класс необходим чтобы изменять дефаултное расширение в зависимости от выбранного фильтра
- class CFileDialogEx : public CFileDialog
+ class CFileDialogEx1 : public CFileDialogEx
  {
   public:
-   CFileDialogEx() : CFileDialog(FALSE,_T("s3f"), NULL, NULL,
+   CFileDialogEx1() : CFileDialogEx(FALSE,_T("s3f"), NULL, NULL,
      _T("SECU-3 Format Files (*.s3f)|*.s3f|All Files (*.*)|*.*||"), NULL) {};
-   virtual ~CFileDialogEx() {};
+   virtual ~CFileDialogEx1() {};
 
   protected:
    virtual void OnTypeChange( )
@@ -775,7 +777,7 @@ void CPMTablesController::OnExportToS3F(void)
    }
  };
 
- CFileDialogEx save;
+ CFileDialogEx1 save;
  S3FFileDataIO s3f_io(false); //no separate maps
 
  //Set data (maps and RPM grid)
@@ -789,7 +791,7 @@ void CPMTablesController::OnExportToS3F(void)
  {
   bool result = s3f_io.Save(_TSTRING(save.GetPathName()));
   if (!result)
-   AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
+   SECUMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
  }
 }
 
