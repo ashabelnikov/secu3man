@@ -432,7 +432,7 @@ BEGIN
     EDITTEXT        IDC_INJDRV_TESTCH_DUTY_EDIT,115,261,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
     RTEXT           "Скважн. тест. сигнала (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
-    CONTROL         "Загружать из flash",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,285,100,10
+    CONTROL         "Загружать из прошивки (flash)",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,285,120,10
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -560,14 +560,14 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_READ_FLASH                     "Прочитать FLASH из SECU-3   Ctrl + R"
-    IDS_WRITE_FLASH                    "Записать FLASH в SECU-3       Ctrl + W"
-    IDS_READ_FLASH_TO_FILE             "Прочитать FLASH из SECU-3 в файл..."
-    IDS_WRITE_FLASH_FROM_FILE          "Записать FLASH в SECU-3 из файла..."
+    IDS_READ_FLASH                     "Прочитать прошивку из SECU-3   Ctrl + R"
+    IDS_WRITE_FLASH                    "Записать прошивку в SECU-3       Ctrl + W"
+    IDS_READ_FLASH_TO_FILE             "Прочитать прошивку из SECU-3 в файл..."
+    IDS_WRITE_FLASH_FROM_FILE          "Записать прошивку в SECU-3 из файла..."
     IDS_READ_EEPROM_TO_FILE            "Прочитать EEPROM в файл...  Ctrl + G"
     IDS_WRITE_EEPROM_FROM_FILE         "Записать EEPROM из файла... Ctrl + P"
-    IDS_OPEN_FLASH                     "Открыть FLASH из файла...   Ctrl + O"
-    IDS_SAVE_FLASH                     "Сохранить FLASH в файл...    Ctrl + S"
+    IDS_OPEN_FLASH                     "Открыть прошивку из файла...   Ctrl + O"
+    IDS_SAVE_FLASH                     "Сохранить прошивку в файл...    Ctrl + S"
     IDS_READ_BOOTLOADER_SIGNATURE      "Информация о бутлоадере      Ctrl + L"
     IDS_CONN_CONNECTED                 "connected"
     IDS_CONN_DISCONNECTED              "disconnected"
@@ -745,8 +745,8 @@ BEGIN
     IDS_INJDRV_TESTCH_COMBO_TT      "На выбранном входе драйвера будут сгенерированы импульсы заданной частоты и скважности (см. параметры 'Частота тест. сигнала' и 'Скважн. тест. сигнала')"
     IDS_INJDRV_TESTCH_FRQ_EDIT_TT   "Частота тестового сигнала используемого для тестирования каналов драйвера (см. выпадающий список 'Генер. импульсы на входе')"
     IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "Скважность тестового сигнала используемого для тестирования каналов драйвера (см. выпадающий список 'Генер. импульсы на входе')"
-    IDS_CRC0_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные первого набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из flash."
-    IDS_CRC1_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные второго набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из flash."
+    IDS_CRC0_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные первого набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из прошивки (flash)."
+    IDS_CRC1_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные второго набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из прошивки (flash)."
     IDS_LOAD_FLASH_CHECK_TT         "Если вы хотите чтобы данные всегда загружались только из flash, то поставьте эту галочку перед тем как сохранять настройки в файл прошивки."
     IDS_INJDRV_PWMUL_TITLE          "Множитель длительности впрыска по каналам (%)"
     IDS_INJDRV_PWADD_TITLE          "Добавка к длительности впрыска по каналам (мкс)"
@@ -1242,7 +1242,7 @@ BEGIN
     EDITTEXT        IDC_INJDRV_TESTCH_DUTY_EDIT,115,261,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
     RTEXT           "Test signal duty (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
-    CONTROL         "Load from flash",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,285,100,10
+    CONTROL         "Load from firmware (flash)",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,285,120,10
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -1275,14 +1275,14 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_READ_FLASH                      "Read FLASH from SECU-3   Ctrl + R"
-    IDS_WRITE_FLASH                     "Write FLASH to SECU-3       Ctrl + W"
-    IDS_READ_FLASH_TO_FILE              "Read FLASH from SECU-3 into file..."
-    IDS_WRITE_FLASH_FROM_FILE           "Write FLASH to SECU-3 from file..."
+    IDS_READ_FLASH                      "Read firmware from SECU-3   Ctrl + R"
+    IDS_WRITE_FLASH                     "Write firmware to SECU-3       Ctrl + W"
+    IDS_READ_FLASH_TO_FILE              "Read firmware from SECU-3 into file..."
+    IDS_WRITE_FLASH_FROM_FILE           "Write firmware to SECU-3 from file..."
     IDS_READ_EEPROM_TO_FILE             "Read EEPROM into file...   Ctrl + G"
     IDS_WRITE_EEPROM_FROM_FILE          "Write EEPROM from file... Ctrl + P"
-    IDS_OPEN_FLASH                      "Open FLASH from file...      Ctrl + O"
-    IDS_SAVE_FLASH                      "Save FLASH into file...        Ctrl + S"
+    IDS_OPEN_FLASH                      "Open firmware from file...      Ctrl + O"
+    IDS_SAVE_FLASH                      "Save firmware into file...        Ctrl + S"
     IDS_READ_BOOTLOADER_SIGNATURE       "Boot loader information     Ctrl + L"
     IDS_CONN_CONNECTED                  "connected"
     IDS_CONN_DISCONNECTED               "disconnected"
@@ -1555,8 +1555,8 @@ BEGIN
     IDS_INJDRV_TESTCH_COMBO_TT      "At the selected input will be generated pulses with specified frequency and duty (see 'Test signal frequency' and 'Test signal duty' parameters)"
     IDS_INJDRV_TESTCH_FRQ_EDIT_TT   "Frequency of the test signal used for testing of channels (see dropdown list 'Generate pulses at input')"
     IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "Duty of the test signal used for testing of channels  (see dropdown list 'Generate pulses at input')"
-    IDS_CRC0_PANE_TT                "OK - check sum is right. NOK - First set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
-    IDS_CRC1_PANE_TT                "OK - check sum is right. NOK - Second set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
+    IDS_CRC0_PANE_TT                "OK - check sum is right. NOK - First set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from firmware (flash)."
+    IDS_CRC1_PANE_TT                "OK - check sum is right. NOK - Second set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from firmware (flash)."
     IDS_LOAD_FLASH_CHECK_TT         "If you want settings to be loaded always from flash, then set this check before writing of settings into a firmware file."
     IDS_INJDRV_PWMUL_TITLE          "PW multiplier per channel (%)"
     IDS_INJDRV_PWADD_TITLE          "PW addition per channel (us)"
