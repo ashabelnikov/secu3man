@@ -470,9 +470,9 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowableWndStates.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Normal")), _TSTRING(_T("normal"))), 1) );
  m_AllowableWndStates.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Maximized")), _TSTRING(_T("maximized"))), 2) );
 
- m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega64")), _TSTRING(_T("atmega64"))), EP_ATMEGA64) );
+// m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega64")), _TSTRING(_T("atmega64"))), EP_ATMEGA64) );
+// m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega128")), _TSTRING(_T("atmega128"))), EP_ATMEGA128) );
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega644")), _TSTRING(_T("atmega644"))), EP_ATMEGA644) );
- m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega128")), _TSTRING(_T("atmega128"))), EP_ATMEGA128) );
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega1284")), _TSTRING(_T("atmega1284"))), EP_ATMEGA1284) );
 
  m_AllowableSpeedUnits.push_back(std::make_pair(std::make_pair(_TSTRING(_T("km/h")), _TSTRING(_T("kmh"))), SU_KMH));
@@ -519,7 +519,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optAlwaysWriteLog, _T("1"), 0, 1);
  os.ReadInt(m_optMIDeskUpdatePeriod, _T("40"), 0, 1000); 
  os.ReadEnum(m_optInterfaceLang, 0, m_AllowableLanguages);
- os.ReadEnum(m_optECUPlatformType, 3, m_AllowablePlatforms); //1284
+ os.ReadEnum(m_optECUPlatformType, 1, m_AllowablePlatforms); //1284
  os.ReadInt(m_optDVDeskUpdatePeriod, _T("40"), 0, 1000);
  os.ReadInt(m_optUseDVFeatures, _T("0"), 0, 1);
  os.ReadInt(m_optShowToolTips, _T("1"), 0, 1);
