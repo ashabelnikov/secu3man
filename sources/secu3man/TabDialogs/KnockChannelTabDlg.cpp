@@ -49,7 +49,7 @@ using namespace fastdelegate;
 #define K_SIG_MIN 0.0f
 #define K_SIG_MAX 5.0f
 #define LEVEL_SLIDER_POS_NUM 100
-#define RPM_AXIS_MAX  (RPM_AXIS_MIN + (RPM_KNOCK_SIGNAL_POINTS * RPM_AXIS_STEP))
+#define RPM_AXIS_MAX  (RPM_AXIS_MIN + ((RPM_KNOCK_SIGNAL_POINTS-1) * RPM_AXIS_STEP))
 
 const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
 
@@ -66,14 +66,14 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_dlsm_checkbox_state(true)
 , m_initialized(false)
 {
- mp_RTChart->AddSerie(100);    //signal serie
+ mp_RTChart->AddSerie(RPM_KNOCK_SIGNAL_POINTS);    //signal serie
  mp_RTChart->AddSerie(2);      //level serie (horiz. line)
  mp_RTChart->AddSerie(2);      //RPM serie (vert. line)
  mp_RTChart->SetXAxisValueFormat(_T("%.0f")); //integers
  mp_RTChart->SetChartTitle(_T(""));
  mp_RTChart->SetChartLabel(_T(""),_T(""));
  mp_RTChart->SetGridXYNumber(10, 10);
- mp_RTChart->SetRange(RPM_AXIS_MIN, RPM_AXIS_MIN + (RPM_AXIS_STEP * RPM_KNOCK_SIGNAL_POINTS), K_SIG_MIN, K_SIG_MAX);
+ mp_RTChart->SetRange(RPM_AXIS_MIN, RPM_AXIS_MAX, K_SIG_MIN, K_SIG_MAX);
  mp_RTChart->SetBackColor(RGB(192, 192, 192));
  mp_RTChart->SetSerieColor(0, RGB(80, 80, 200));
  mp_RTChart->SetSerieColor(1, RGB(50, 200, 0));
@@ -297,7 +297,6 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
  ScreenToClient(rect);
 
  int rpm = RPM_AXIS_MIN;
- int rpm_step = RPM_AXIS_STEP;
 
  mp_RTChart->Create(WS_CHILD | WS_VISIBLE, rect, this, IDC_KC_REALTIME_CHART);
 
@@ -307,7 +306,7 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
  for (size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; i++)
  {
   mp_RTChart->SetXYValue(0, rpm, 0.0, i);
-  rpm+=rpm_step;
+  rpm+=RPM_AXIS_STEP;
  }
 
  //Second point of desired signal level line
@@ -330,7 +329,6 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalList(void)
  m_RTList.InsertColumn(2, MLL::GetString(IDS_KC_LIST_HDR_VALUE).c_str(), LVCFMT_CENTER, 160);
 
  int rpm = RPM_AXIS_MIN;
- int rpm_step = RPM_AXIS_STEP;
  //Add items
  for(size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; ++i)
  {  
@@ -339,7 +337,7 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalList(void)
   m_RTList.InsertItem(i, str);
   _stprintf(str, _T("%d"), rpm);
   m_RTList.SetItemText(i, 1, str);
-  rpm+=rpm_step;
+  rpm+=RPM_AXIS_STEP;
  }
 }
 
@@ -434,7 +432,7 @@ void CKnockChannelTabDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScroll
 {
 #define _SET_LEVEL(pos) {\
     mp_RTChart->SetXYValue(1, RPM_AXIS_MIN, SliderToLevel((pos)), 0);\
-    mp_RTChart->SetXYValue(1, RPM_AXIS_MIN + (RPM_AXIS_STEP * RPM_KNOCK_SIGNAL_POINTS), SliderToLevel((pos)), 1);\
+    mp_RTChart->SetXYValue(1, RPM_AXIS_MAX, SliderToLevel((pos)), 1);\
     CString cs; cs.Format(_T("%.02f"), SliderToLevel((pos))); \
     m_level_text.SetWindowText(cs); \
     }
@@ -474,7 +472,7 @@ void CKnockChannelTabDlg::SetDesiredLevel(float i_level)
  float factor = (((float)LEVEL_SLIDER_POS_NUM) / (K_SIG_MAX - K_SIG_MIN));
  m_level_slider.SetPos(MathHelpers::Round((K_SIG_MAX - i_level) * factor));
  mp_RTChart->SetXYValue(1, RPM_AXIS_MIN, i_level, 0);
- mp_RTChart->SetXYValue(1, RPM_AXIS_MIN + (RPM_AXIS_STEP * RPM_KNOCK_SIGNAL_POINTS), i_level, 1);
+ mp_RTChart->SetXYValue(1, RPM_AXIS_MAX, i_level, 1);
  CString cs; cs.Format(_T("%.02f"), i_level);
  m_level_text.SetWindowText(cs);
 }
