@@ -41,10 +41,12 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Мастер прошивок"
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "Инверсия входов",IDC_FWM_INPINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,20,120,10
-    CONTROL         "Инверсия выходов рекуперации",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,40,120,10
-    CONTROL         "Инверсия выходов ШИМ",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,60,120,10
-    CONTROL         "Коррекции длительн. впрыска",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,80,120,10
+    RTEXT           "Ваш процессор:",IDC_FWM_PROCESSOR_CAPTION,17,10,60,10
+    COMBOBOX        IDC_FWM_PROCESSOR_COMBO,85,8,80,37,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Инверсия входов",IDC_FWM_INPINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,30,120,10
+    CONTROL         "Инверсия выходов рекуперации",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,50,120,10
+    CONTROL         "Инверсия выходов ШИМ",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
+    CONTROL         "Коррекции длительн. впрыска",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     PUSHBUTTON      "Сохранить",IDC_FWM_SAVE_BTN,20,110,50,16
     DEFPUSHBUTTON   "Загрузить",IDOK,80,110,50,16
     PUSHBUTTON      "Отмена",IDCANCEL,140,110,50,16
@@ -175,6 +177,7 @@ BEGIN
     IDS_FWM_SAVE_BTN_TT      "Сохранить на диск"
     IDS_FWM_LOAD_BTN_TT      "Прошить процессор"
     IDS_FWM_SELECT_FOLDER_FOR_FW "Выберите куда сохранить прошивку"
+    IDS_FWM_PROCESSOR_COMBO_TT "Выберите марку процессора вашего драйвера форсунок"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -214,10 +217,12 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Firmware master"
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "Inversion of inputs",IDC_FWM_INPINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,20,120,10
-    CONTROL         "Inversion of flyback outputs",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,40,120,10
-    CONTROL         "Inversion of PWM outputs",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,60,120,10
-    CONTROL         "Corrections of inj. PW",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,80,120,10
+    RTEXT           "Your processor:",IDC_FWM_PROCESSOR_CAPTION,17,10,60,10
+    COMBOBOX        IDC_FWM_PROCESSOR_COMBO,85,8,80,37,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Inversion of inputs",IDC_FWM_INPINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,30,120,10
+    CONTROL         "Inversion of flyback outputs",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,50,120,10
+    CONTROL         "Inversion of PWM outputs",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
+    CONTROL         "Corrections of inj. PW",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     PUSHBUTTON      "Save",IDC_FWM_SAVE_BTN,20,110,50,16
     DEFPUSHBUTTON   "Load",IDOK,80,110,50,16
     PUSHBUTTON      "Cancel",IDCANCEL,140,110,50,16
@@ -348,6 +353,7 @@ BEGIN
     IDS_FWM_SAVE_BTN_TT      "Save firmware on disk"
     IDS_FWM_LOAD_BTN_TT      "Load firmware to driver"
     IDS_FWM_SELECT_FOLDER_FOR_FW "Select where to store firmware"
+    IDS_FWM_PROCESSOR_COMBO_TT "Select processor name of your inj. driver"
 END
 
 /////////////////////////////////////////////////////////////////////////////

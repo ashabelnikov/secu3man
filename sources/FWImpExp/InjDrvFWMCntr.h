@@ -46,8 +46,8 @@ class AFX_EXT_CLASS InjDrvFWMCntr
   bool GetStatus(void);
 
  private:
-  void _BuildOptList(std::set<_TSTRING> &opts);
-  bool _LoadFirmware(const std::set<_TSTRING>& opts, bool save);
+  void _BuildOptList(std::set<_TSTRING> &opts, int procId);
+  bool _LoadFirmware(const std::set<_TSTRING>& opts, int procId, bool save);
   bool _FindMatchForOpts(const _TSTRING& name, const std::set<_TSTRING>& opts);
   bool _StoreResult(const _TSTRING& name, BYTE* buff, size_t size, bool save);
 

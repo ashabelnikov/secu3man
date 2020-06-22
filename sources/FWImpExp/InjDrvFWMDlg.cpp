@@ -45,6 +45,7 @@ END_MESSAGE_MAP()
 
 CInjDrvFWMDlg::CInjDrvFWMDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjDrvFWMDlg::IDD, pParent)
+, m_proc_idx(0)
 {
  for (int i = 0; i < FWM_NR_OF_FLAGS; ++i)
   m_fwm_flags[i] = false;
@@ -53,6 +54,10 @@ CInjDrvFWMDlg::CInjDrvFWMDlg(CWnd* pParent /*=NULL*/)
 void CInjDrvFWMDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
+
+ DDX_Control(pDX, IDC_FWM_PROCESSOR_COMBO, m_proc_combo);
+
+ DDX_CBIndex_int(pDX, IDC_FWM_PROCESSOR_COMBO, m_proc_idx);
 
  DDX_Control(pDX, IDC_FWM_INPINV_CHECK, m_fwm_checks[FWM_INPINV]);
  DDX_Control(pDX, IDC_FWM_FLBINV_CHECK, m_fwm_checks[FWM_FLBINV]);
@@ -106,6 +111,7 @@ BOOL CInjDrvFWMDlg::OnInitDialog()
  for (UINT ids = IDS_FWM_INPINV_CHECK_TT; ids <= IDS_FWM_PWCORR_CHECK_TT; ids++, idc++)
   VERIFY(mp_ttc->AddWindow(GetDlgItem(idc), MLL::GetString(ids)));
 
+ VERIFY(mp_ttc->AddWindow(&m_proc_combo, MLL::GetString(IDS_FWM_PROCESSOR_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_FWM_SAVE_BTN), MLL::GetString(IDS_FWM_SAVE_BTN_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDOK), MLL::GetString(IDS_FWM_LOAD_BTN_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
@@ -155,4 +161,22 @@ INT_PTR CInjDrvFWMDlg::DoModal()
  INT_PTR result = Super::DoModal();
  CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
  return result;
+}
+
+void CInjDrvFWMDlg::FillProcCombo(void)
+{
+ m_proc_combo.AddString(_T("ATmega328PB"));
+ m_proc_combo.AddString(_T("ATmega328(P)")); //*
+}
+
+void CInjDrvFWMDlg::SetProcCombo(int id)
+{
+ m_proc_idx = id;
+ UpdateData(FALSE);
+}
+
+int CInjDrvFWMDlg::GetProcCombo(void)
+{
+ UpdateData();
+ return m_proc_idx;
 }

@@ -431,6 +431,8 @@ void CInjDriverTabController::OnShowFirmwareInfo(void)
   strDrvType = "1 - SECU-LZID4 (mega1284)";
  else if (params.type == 2)
   strDrvType = "2 - SECU-LZID5 (mega328PB)";
+ else if (params.type == 3)
+  strDrvType = "3 - SECU-LZID2 (mega328)";
  else
   strDrvType = "Unknown type";
 

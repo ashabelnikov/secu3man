@@ -31,6 +31,14 @@
 
 class CToolTipCtrlEx;
 
+//Note! order in this enum must correspond to order in the related combobox
+//See CFirmwareMasterDlg::FillProcCombo()
+enum ProcId
+{
+ PROC_328PB = 0,
+ PROC_328,
+};
+
 //constants for check boxes
 enum FwmFlag
 {
@@ -58,6 +66,10 @@ class CInjDrvFWMDlg : public CDialog
   void setOnChangeFwmCheck(EventWithCode OnChange) {m_OnChangeFwmCheck = OnChange;};
   void setOnSaveButton(EventHandler OnFunction) {m_OnSaveButton = OnFunction;};
 
+  void FillProcCombo(void);
+  void SetProcCombo(int id);
+  int GetProcCombo(void);
+
   void SetFwmFlag(FwmFlag i_flag_type, bool i_state);
   bool GetFwmFlag(FwmFlag i_flag_type);
   void EnableFwmFlag(FwmFlag i_flag_type, bool i_enable);
@@ -83,8 +95,11 @@ class CInjDrvFWMDlg : public CDialog
   EventHandler m_OnActivate;
   EventWithCode m_OnChangeFwmCheck;
 
+  CComboBox m_proc_combo;
+
   CButton m_fwm_checks[FWM_NR_OF_FLAGS];
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
   bool m_fwm_flags[FWM_NR_OF_FLAGS];
+  int m_proc_idx;
 };
