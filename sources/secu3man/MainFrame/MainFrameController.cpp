@@ -329,6 +329,8 @@ void MainFrameController::OnCreate(void)
  settings->GetWndSize(sz);
  if (sz.m_MainFrmWnd_W != std::numeric_limits<int>::max() && sz.m_MainFrmWnd_H != std::numeric_limits<int>::max())
   mp_view->SetWindowPos(NULL, 0, 0, sz.m_MainFrmWnd_W, sz.m_MainFrmWnd_H, SWP_NOZORDER | SWP_NOMOVE);
+ else
+  mp_view->SetWindowPos(NULL, 0, 0, 750, 500, SWP_NOZORDER | SWP_NOMOVE); //fix issue with first launch
 
  mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
  mp_view->CheckOnChildCharts(settings->GetChildCharts());
