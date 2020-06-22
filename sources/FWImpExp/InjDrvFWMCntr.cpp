@@ -80,18 +80,20 @@ InjDrvFWMCntr::~InjDrvFWMCntr()
 void InjDrvFWMCntr::OnOkPressed(void)
 {
  std::set<_TSTRING> opts;
- _BuildOptList(opts);
+ int procId = mp_view->GetProcCombo();
+ _BuildOptList(opts, procId);
  AfxGetMainWnd()->BeginWaitCursor();
- m_status = _LoadFirmware(opts, false); //load and store result
+ m_status = _LoadFirmware(opts, procId, false); //load and store result
  AfxGetMainWnd()->EndWaitCursor();
 }
 
 void InjDrvFWMCntr::OnSavePressed(void)
 {
  std::set<_TSTRING> opts;
- _BuildOptList(opts);
+ int procId = mp_view->GetProcCombo();
+ _BuildOptList(opts, procId);
  mp_view->EndDialog(IDCANCEL); //close window
- m_status = _LoadFirmware(opts, true); //load and save result on disk
+ m_status = _LoadFirmware(opts, procId, true); //load and save result on disk
 }
 
 void InjDrvFWMCntr::OnCancelPressed(void)
@@ -101,6 +103,10 @@ void InjDrvFWMCntr::OnCancelPressed(void)
 
 void InjDrvFWMCntr::OnViewActivate(void)
 {
+ mp_view->FillProcCombo();
+
+ mp_view->SetProcCombo(PROC_328PB); 
+
  //set check boxes to default values
  mp_view->SetFwmFlag(FWM_INPINV, false);
  mp_view->SetFwmFlag(FWM_FLBINV, false);
@@ -126,11 +132,12 @@ void InjDrvFWMCntr::OnChangeFwmCheck(int id)
  }
 }
 
-void InjDrvFWMCntr::_BuildOptList(std::set<_TSTRING> &opts)
+void InjDrvFWMCntr::_BuildOptList(std::set<_TSTRING> &opts, int procId)
 {
  //fill list with all possible options:
  m_allopts.clear();
- m_allopts.insert(_T("seculzid5"));
+ _TSTRING seculzid_str = procId==PROC_328 ? _T("seculzid2") : _T("seculzid5");
+ m_allopts.insert(seculzid_str);
  m_allopts.insert(_T("inpinv"));
  m_allopts.insert(_T("flbinv"));
  m_allopts.insert(_T("pwminv"));
@@ -138,7 +145,7 @@ void InjDrvFWMCntr::_BuildOptList(std::set<_TSTRING> &opts)
 
  //fill list, which will contain only options selected by user:
  opts.clear();
- opts.insert(_T("seculzid5"));
+ opts.insert(seculzid_str);
 
  if (mp_view->GetFwmFlag(FWM_INPINV))
   opts.insert(_T("inpinv"));
@@ -187,7 +194,7 @@ static SRes Utf16_To_Char(CBuf *buf, const UInt16 *s, UINT codePage)
  }
 }
 
-bool InjDrvFWMCntr::_LoadFirmware(const std::set<_TSTRING>& opts, bool save)
+bool InjDrvFWMCntr::_LoadFirmware(const std::set<_TSTRING>& opts, int procId, bool save)
 {
  ISzAlloc allocImp;
  ISzAlloc allocTempImp;
@@ -203,7 +210,7 @@ bool InjDrvFWMCntr::_LoadFirmware(const std::set<_TSTRING>& opts, bool save)
  allocImp = g_Alloc;
  allocTempImp = g_Alloc;
 
- _TSTRING fnstr = _TSTRING(_T("secu-lzid5")) + _T(".7z");
+ _TSTRING fnstr = ((procId==PROC_328) ? _TSTRING(_T("secu-lzid2")) : _TSTRING(_T("secu-lzid5"))) + _T(".7z");
 
  //get current directory
  HMODULE hModule = GetModuleHandle(NULL);
