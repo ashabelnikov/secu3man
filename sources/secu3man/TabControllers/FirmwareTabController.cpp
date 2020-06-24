@@ -1813,9 +1813,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Low dead band for cooling fan's PWM"), _T("N"), 0, 60, 1, 1, &d.vent_minband, _T("If the current step number (duty) is less than this value, the fan turns off completely (or does not turn on). This is necessary so that the PWM in vain does not 'torment' the fan's brushes when duty cycle is not enough to create torque to rotate the shaft."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Alpha-N: умножать время впрыска на ДПДЗ"), _T(""), 0, 1, 1, 0, &d.an_tps_mul, _T("Выбор на что умножать базовое время впрыска при работе в режиме Alpha-N: на ДАД или ДПДЗ. Если установить 0, то прошивка производит умножение на ДАД, если установить 1, то прошивка производит умножение на ДПДЗ"));
+  dfd.AppendItem(_T("Alpha-N: умножать время впрыска на ДПДЗ"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("Выбор на что умножать базовое время впрыска при работе в режиме Alpha-N: на ДАД или ДПДЗ. Если установить 0, то прошивка производит умножение на ДАД, если установить 1, то прошивка производит умножение на ДПДЗ. Если установить 2, то прошивка производит умножение на 101.3"));
  else
-  dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 1, 1, 0, &d.an_tps_mul, _T("The choice of what to multiply the base injection PW when working in Alpha-N mode: by MAP or TPS. If you set 0, then the firmware multiplies by MAP, if you set 1, then the firmware multiplies by TPS"));
+  dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("The choice of what to multiply the base injection PW when working in Alpha-N mode: by MAP or TPS. If you set 0, then the firmware multiplies by MAP, if you set 1, then the firmware multiplies by TPS. If you set it to 2, then firmware multiplies by 101.3 constant"));
 
  if (dfd.DoModal()==IDOK)
  {
