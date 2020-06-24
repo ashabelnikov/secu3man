@@ -879,6 +879,17 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_attenuator_map_btn, MLL::GetString(IDS_TD_VIEW_ATTENUATOR_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_gasdose_map_btn, MLL::GetString(IDS_TD_VIEW_GDP_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_barocorr_map_btn, MLL::GetString(IDS_TD_VIEW_BAROCORR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_cts_curve_map_btn, MLL::GetString(IDS_TD_VIEW_CTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_ats_curve_map_btn, MLL::GetString(IDS_TD_VIEW_ATS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_ats_aac_map_btn, MLL::GetString(IDS_TD_VIEW_ATS_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_edit_cesettings_btn, MLL::GetString(IDS_TD_EDIT_CEPAR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_manigntim_map_btn, MLL::GetString(IDS_TD_VIEW_MANIGNTIM_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_tmp2_curve_map_btn, MLL::GetString(IDS_TD_VIEW_TMP2_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_eh_pause_map_btn, MLL::GetString(IDS_TD_VIEW_EH_PAUSE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_cranking_thrd_map_btn, MLL::GetString(IDS_TD_CRANKING_THRD_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_cranking_time_map_btn, MLL::GetString(IDS_TD_CRANKING_TIME_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_smapaban_thrd_map_btn, MLL::GetString(IDS_TD_SMAPABAN_THRD_MAP_TT)));
+
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

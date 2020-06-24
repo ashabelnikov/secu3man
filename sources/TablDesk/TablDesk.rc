@@ -480,8 +480,8 @@ BEGIN
     IDS_MAPS_STROKE_UNIT    "Время в тактах"
     IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_DPDT_UNIT      "d%/dt"
-    IDS_MAPS_AETPS_UNIT     "%"
-    IDS_MAPS_AERPM_UNIT     "%"
+    IDS_MAPS_AETPS_UNIT     "Коэффициент (%)"
+    IDS_MAPS_AERPM_UNIT     "Коэффициент (%)"
     IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
     IDS_MAPS_INJTIM_UNIT    "Фаза впрыска (град. до ВМТ)"
     IDS_MAPS_INJTIM_UNIT1   "Фаза впрыска (град. после ВМТ)"
@@ -577,14 +577,41 @@ BEGIN
     IDS_TD_VIEW_GDP_MAP_TT "Задает базовое положение газового дозатора. Все последующие коррекции накладываются на это значение."
     IDS_TD_VIEW_VE_MAP_TT  "Используется при вычисления длительности впрыска и для коррекции положения газового дозатора"
     IDS_TD_VIEW_AFR_MAP_TT "Используется при вычисления длительности впрыска и для коррекции положения газового дозатора"
-    IDS_TD_VIEW_WRMP_MAP_TT "Используется для коррекции длительности впрыска от температуры двигателя. Данная таблица также используется для коррекции положения газового дозатора."
+    IDS_TD_VIEW_WRMP_MAP_TT "Используется для коррекции длительности впрыска от температуры двигателя. Данная таблица также используется для коррекции положения газового дозатора. Длительность впрыска умножается на значение этой коррекции."
     IDS_TD_VIEW_ATSC_MAP_TT "Коррекция длительности впрыска по температуре воздуха (плотность воздуха меняется с изменением температуры). Данная таблица также используется для коррекции положения дозатора газа и воздушной заслонки карбюратора."
-    IDS_TD_VIEW_AETPS_MAP_TT "Используется для вычисления обогащения при ускорении для впрыска топлива. Данная таблица также используется для газового дозатора."
-    IDS_TD_VIEW_AERPM_MAP_TT "Используется для коррекции обогащения при ускорении для впрыска топлива. Данная таблица также используется для газового дозатора."
-    IDS_TD_VIEW_AFTSTR_MAP_TT "Обогащение после пуска. Используется для коррекции времени впрыска и положения газового дозатора."
+    IDS_TD_VIEW_AETPS_MAP_TT "Используется для вычисления обогащения при ускорении для впрыска топлива. Данная таблица также используется для газового дозатора. Формула: Добавка к дительности впрыска = Константа * (Обогащение от скорости ДЗ * Коррекция по ДТОЖ * Обогащение от оборотов)"
+    IDS_TD_VIEW_AERPM_MAP_TT "Используется для коррекции обогащения при ускорении для впрыска топлива. Данная таблица также используется для газового дозатора. Формула: Добавка к дительности впрыска = Константа * (Обогащение от скорости ДЗ * Коррекция по ДТОЖ * Обогащение от оборотов)"
+    IDS_TD_VIEW_AFTSTR_MAP_TT "Обогащение после пуска. Используется для коррекции времени впрыска и положения газового дозатора. Значение данной коррекции прибавляется к длительности впрыска и плавно убывает до 0 после пуска (см. параметр 'Время обогащения после пуска в тактах')."
     IDS_TD_VIEW_BAROCORR_MAP_TT "Используется для коррекции длительности впрыска и коррекции положения дозатора газа."
     IDS_TD_VIEW_GTSC_MAP_TT  "Коррекция длительности впрыска по температуре газа (ГБО). Используется также для коррекции положения дозатора газа."
     IDS_TD_VIEW_GPSC_MAP_TT  "Коррекция длительности впрыска по давлению газа (ГБО). Используется также для коррекции положения дозатора газа."
+END
+
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TD_VIEW_DEAD_MAP_TT   "Карта лага форсунки. Данная таблица задает время на протяжении которого форсунка реально не впрыскивает топливо. Обычно это разница между длительностью включения и длительностью выключения форсунки. Значение этой коррекции прибавляется к длительности впрыска в самую последнюю очередь."
+    IDS_TD_VIEW_IDLR_MAP_TT   "Положение клапана РХХ/ВЗ при работе двигателя. Используется в прошивках с впрыском топлива и для управления воздушной заслонкой карбюратора."
+    IDS_TD_VIEW_IDLC_MAP_TT   "Положение клапана РХХ/ВЗ при пуске двигателя. Используется в прошивках с впрыском топлива и для управления воздушной заслонкой карбюратора."
+    IDS_TD_VIEW_IT_MAP_TT     "Фаза впрыска. Используется при работе двигателя если в параметрах впрыска разрешена соответствующей галочкой. При пуске двигателя используется простая константа (см. параметры впрыска)."
+    IDS_TD_VIEW_ITRPM_MAP_TT  "Задает целевые обороты двигателя, которые прошивка в режиме closed loop будет автоматически поддерживать путем изменения проходного сечения клапана РХХ. Данная таблица используется в прошивках с впрыском топлива и для управления воздушной заслонкой карбюратора."
+    IDS_TD_VIEW_RIGID_MAP_TT  "Жесткость РХХ. Задает коэффициент, который зависит от отклонения режимной точки (обороты, нагрузка) от заданного текущего значения. На этот коэффициент умножается аддитивное значение управляющего воздействия вырабатываемое при каждом вызове регулятора."
+    IDS_TD_VIEW_EGOCRV_MAP_TT "Задает зависимость AFR от напряжения на УДК или ШДК (эмуляция ШДК при помощи УДК). Используется только если в настройках лямбды выбран тип датчика: ШДК."
+    IDS_TD_VIEW_IACC_MAP_TT   "Коррекция смеси по положению клапана РДВ"
+    IDS_TD_VIEW_IACCW_MAP_TT  "Коррекция смеси по положению дроссельной заслонки (вес коррекции смеси по положению клапана РДВ)"
+    IDS_TD_VIEW_IATCLT_MAP_TT "Используется для коррекции температуры воздуха на впуске от температуры двигателя (при движении воздуха по впускной системе происходит теплообмен с корпусом и это нужно учитывать)."
+    IDS_TD_VIEW_TPSSWT_MAP_TT "Положение дроссельной заслонки при котором достигается 100кПа. Данная таблица используется при смешанном методе определения нагрузки (ДАД+ДПДЗ)."
+
+    IDS_TD_VIEW_CTS_CURVE_TT  "Настройка зависимости температуры от напряжения для датчика температуры охлаждающей жидкости. Данная таблица необходима для правильного преобразования напряжения на датчике в значение температуры."
+    IDS_TD_VIEW_ATS_CURVE_TT  "Настройка зависимости температуры от напряжения для датчика температуры воздуха на впуске. Данная таблица необходима для правильного преобразования напряжения на датчике в значение температуры."
+    IDS_TD_VIEW_ATS_MAP_TT    "Карта коррекции УОЗ по температуре воздуха на впуске."       
+    IDS_TD_EDIT_CEPAR_TT      "Установки порогов ошибок для Check Engine."      
+    IDS_TD_VIEW_MANIGNTIM_MAP_TT "Функция ручной коррекции УОЗ. Используется для преобразования напряжения (например после потенциометра) на выбранном входе в значение УОЗ."    
+    IDS_TD_VIEW_TMP2_CURVE_TT "Настройка зависимости температуры от напряжения для датчика температуры 2 (ДТГ). Данная таблица необходима для правильного преобразования напряжения на датчике в значение температуры."      
+    IDS_TD_VIEW_EH_PAUSE_MAP_TT "Пауза прогрева ДК в зависимости от напряжения бортовой сети. Вместе с параметром 'Длительность включения нагревателя при ШИМ' позволяет изменять скважность ШИМ."    
+    IDS_TD_CRANKING_THRD_MAP_TT "Порог оборотов блокировки стартера в зависимости от температуры двигателя. Смотрите также параметр 'Обороты блокир. стартера'"    
+    IDS_TD_CRANKING_TIME_MAP_TT "Время работы стартера после достижения оборотов блокировки в зависимости от температуры двигателя."    
+    IDS_TD_SMAPABAN_THRD_MAP_TT "Обороты перехода с пусковой карты. Смотрите также параметр 'Обороты пер. с пуск УОЗ'"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1089,14 +1116,14 @@ BEGIN
     IDS_MAPS_STROKE_UNIT    "Time in strokes"
     IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_DPDT_UNIT      "d%/dt"
-    IDS_MAPS_AETPS_UNIT     "%"
-    IDS_MAPS_AERPM_UNIT     "%"
+    IDS_MAPS_AETPS_UNIT     "Coefficient (%)"
+    IDS_MAPS_AERPM_UNIT     "Coefficient (%)"
     IDS_MAPS_ADVANGLE_UNIT  "Angle (degr.)"
     IDS_MAPS_INJTIM_UNIT    "Injection timing (degr. BTDC)"
     IDS_MAPS_INJTIM_UNIT1   "Injection timing (degr. ATDC)"
     IDS_MAPS_GDP_UNIT       "Gas dose pos. (%)"
     IDS_MAPS_COEFF_UNIT     "Coefficient"
-    IDS_MAPS_COEFFP_UNIT     "Coefficient (%)"
+    IDS_MAPS_COEFFP_UNIT    "Coefficient (%)"
     IDS_MAPS_RIGID_UNIT     "Distance from the specified target (map, rpm) point"
     IDS_START_MAP           "Start angle map"
     IDS_IDLE_MAP            "Idle angle map"
@@ -1186,15 +1213,43 @@ BEGIN
     IDS_TD_VIEW_GDP_MAP_TT "Sets base position of the gas dispenser. All subsequent corrections are superimposed on this value."
     IDS_TD_VIEW_VE_MAP_TT  "Used to calculate injection PW and for correction of gas dispenser's position."
     IDS_TD_VIEW_AFR_MAP_TT "Used to calculate injection PW and for correction of gas dispenser's position."
-    IDS_TD_VIEW_WRMP_MAP_TT "Used to correct injection PW vs CLT. This table is also used to correct the position of gas dispenser."
+    IDS_TD_VIEW_WRMP_MAP_TT "Used to correct injection PW vs CLT. This table is also used to correct the position of gas dispenser. Injection PW is multiplied by this correction."
     IDS_TD_VIEW_ATSC_MAP_TT "Correction of injection PW vs intake air temperature (air density changes with temperature). This table is also used to correct the position of gas dispenser and carburetor's choke."
-    IDS_TD_VIEW_AETPS_MAP_TT "Used to calculate acceleration enrichment for fuel injection. This table is also used for gas dispenser."
-    IDS_TD_VIEW_AERPM_MAP_TT "Used to correct acceleration enrichment for fuel injection. This table is also used for gas dispenser."
-    IDS_TD_VIEW_AFTSTR_MAP_TT "After start enrichment. Used to correct the injection PW and the position of the gas dispenser."
+    IDS_TD_VIEW_AETPS_MAP_TT "Used to calculate acceleration enrichment for fuel injection. This table is also used for gas dispenser. Formula: Inj. PW addition = Constant * (Enrichment vs throttle speed * Coolant temperature correction * Enrichment vs engine speed)"
+    IDS_TD_VIEW_AERPM_MAP_TT "Used to correct acceleration enrichment for fuel injection. This table is also used for gas dispenser. Formula: Inj. PW addition = Constant * (Enrichment vs throttle speed * Coolant temperature correction * Enrichment vs engine speed)"
+    IDS_TD_VIEW_AFTSTR_MAP_TT "After start enrichment. Used to correct the injection PW and the position of the gas dispenser. The value of this correction is added to the injection PW and gradually decreases to 0 after cranking (see the parameter 'Afterstart enrichment time in strokes')."
     IDS_TD_VIEW_BAROCORR_MAP_TT "It is used to correct of injection PW and to correct the position of gas dispenser."
     IDS_TD_VIEW_GTSC_MAP_TT  "Correction of the injection PW by gas temperature (LPG). It is also used to correct the position of the gas dispenser."
     IDS_TD_VIEW_GPSC_MAP_TT  "Correction of the injection PW by gas pressure (LPG). It is also used to correct the position of the gas dispenser."
 END
+
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TD_VIEW_DEAD_MAP_TT   "Map of injector's lag. This table sets the time during which injector does not actually inject fuel. Usually this is the difference between the on-time and the off-time of the injector. Value of this correction is added to the injection PW last of all."
+    IDS_TD_VIEW_IDLR_MAP_TT   "Sets Position of IAC / choke valve during engine operation. Used in fuel injection firmware and to control the carburetor's choke."
+    IDS_TD_VIEW_IDLC_MAP_TT   "Sets Position of IAC / choke valve during cranking. Used in fuel injection firmware and to control the carburetor's choke."
+    IDS_TD_VIEW_IT_MAP_TT     "Injection timing. Used when the engine is running if enabled by a corresponding checkmark in the injection parameters. During cranking, a simple constant is used (see injection parameters)."
+    IDS_TD_VIEW_ITRPM_MAP_TT  "Sets the target engine speed that the firmware in closed loop mode will automatically maintain by changing the flow area of the IAC valve. This table is used in firmware with fuel injection and for controlling the carburetor's choke."
+    IDS_TD_VIEW_RIGID_MAP_TT  "Rigidity of idling regulator. Sets the coefficient, which depends on the deviation of the operating point (speed, load) from the current target value."
+    IDS_TD_VIEW_EGOCRV_MAP_TT "Defines the dependence of AFR on the voltage at the NBO or the WBO sensor (emulation of the WBO using the NBO). Used only if the WBO sensor type is selected in the lambda settings."
+    IDS_TD_VIEW_IACC_MAP_TT   "Correction of mixture (inj. PW) according to the position of the IAC valve"
+    IDS_TD_VIEW_IACCW_MAP_TT  "Correction of mixture (inj. PW) by the position of the throttle valve (weight of mixture correction vs position of the IAC valve)"
+    IDS_TD_VIEW_IATCLT_MAP_TT "This map is used to correct the intake air temperature from the engine temperature (when air moves through the intake system, heat exchange with the body takes place and this must be taken into account)."
+    IDS_TD_VIEW_TPSSWT_MAP_TT "The throttle position at which 100kPa is achieved. This table is used for the mixed method of determining the load (MAP+TPS)."
+
+    IDS_TD_VIEW_CTS_CURVE_TT  "Setting temperature versus voltage dependance for the coolant temperature sensor. This table is necessary for the correct conversion of the voltage at the sensor to a temperature value."
+    IDS_TD_VIEW_ATS_CURVE_TT  "Setting temperature versus voltage dependance for the air temperature sensor. This table is necessary for the correct conversion of the voltage at the sensor to a temperature value."
+    IDS_TD_VIEW_ATS_MAP_TT    "Map of ignition timing correcting vs intake air temperature"
+    IDS_TD_EDIT_CEPAR_TT      "Settings of errors' thresholds for Check Engine."      
+    IDS_TD_VIEW_MANIGNTIM_MAP_TT "Used to convert the voltage (for example, after the potentiometer) at the selected input to the value of the ignition timing correction."    
+    IDS_TD_VIEW_TMP2_CURVE_TT "Setting temperature versus voltage dependance for the temperature sensor 2 (gas temperature sensor). This table is necessary for the correct conversion of the voltage at the sensor to a temperature value."      
+    IDS_TD_VIEW_EH_PAUSE_MAP_TT "Oxygen sensor's heating pause depending on the board voltage. Together with the parameter 'Turn on time in the PWM mode', it allows to change the duty cycle of PWM."     
+    IDS_TD_CRANKING_THRD_MAP_TT "Starter's blocking threshold vs engine temperature. See also the parameter 'Starter blocking RPM'"    
+    IDS_TD_CRANKING_TIME_MAP_TT "Time of working of starter after reaching blocking threshold vs engine temperature"    
+    IDS_TD_SMAPABAN_THRD_MAP_TT "RPM of the cranking to run transition vs engine temperature. See also the parameter 'Switch from cranking ignition map'"
+END
+
 
 STRINGTABLE DISCARDABLE 
 BEGIN
