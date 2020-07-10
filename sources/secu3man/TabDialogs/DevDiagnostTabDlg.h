@@ -172,6 +172,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   CStatic m_outputs_group;
   CStatic m_inputs_group;
   CStatic m_warning_text;
+  CStatic m_warning_text1;
   EventOutputToggle m_on_output_check;
   EventHandler m_on_enter_button;
   EventHandler m_on_start_outauto_tst;

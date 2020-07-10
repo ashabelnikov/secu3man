@@ -352,7 +352,8 @@ BEGIN
     GROUPBOX        "Входы",IDC_DEV_DIAG_INPUTS_GROUP,100,2,371,183
     CONTROL         "",IDC_DEV_DIAG_INPUTS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,102,12,214,128
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,191,88,22
-    LTEXT           "ВНИМАНИЕ! Отключите катушки зажиг. и форсунки перед входом в диагност. режим. Перед тестиров. вых. BL и DE убедитесь, что перемычки сняты!\nВНИМАНИЕ! Значения входов показываются на выводах МК, а не на внешнем разъеме (есть отличия).",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,32
+    LTEXT           "ВНИМАНИЕ! Отключите катушки зажиг. и форсунки перед входом в диагност. режим. Перед тестиров. вых. BL и DE убедитесь, что перемычки сняты!",IDC_DEV_DIAG_WARNING_TEXT,201,190,280,16
+    LTEXT           "ВНИМАНИЕ! Значения входов показываются на выводах МК, а не на внешнем разъеме (могут быть отличия). Переназначение I/O не учитывается.",IDC_DEV_DIAG_WARNING_TEXT1,201,206,280,16
 END
 
 IDD_KC_KNOCK_FRQ_CALC DIALOGEX 0, 0, 70, 25
@@ -1163,7 +1164,8 @@ BEGIN
     GROUPBOX        "Inputs",IDC_DEV_DIAG_INPUTS_GROUP,100,2,371,183
     CONTROL         "",IDC_DEV_DIAG_INPUTS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,102,12,214,128
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,191,88,22
-    LTEXT           "WARNING! Disconnect ign. coils and injectors before entering diagnostic mode. Before testing of BL, DE outputs make sure corresp. jumpers are opened!\nWARNING! Displayed inputs' values are on the MCU pins, not on the ext. connector (there are differences).",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,32
+    LTEXT           "WARNING! Disconnect ign. coils and injectors before entering diagnostic mode. Before testing of BL, DE outputs make sure corresp. jumpers are opened!",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,16
+    LTEXT           "WARNING! Displayed inputs' values are on the MCU pins, not on the ext. connector (there are may be differences). I/O remapping doesn't matter.",IDC_DEV_DIAG_WARNING_TEXT1,201,206,268,16
 END
 
 IDD_KC_KNOCK_FRQ_CALC DIALOGEX 0, 0, 70, 25
