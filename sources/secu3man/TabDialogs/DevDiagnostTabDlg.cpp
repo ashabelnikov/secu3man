@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_ENABLE_TACH_O_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_ENTER_CHECK, OnUpdateEnterButton)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_WARNING_TEXT, OnUpdateEnterButton)
+ ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_WARNING_TEXT1, OnUpdateEnterButton)
 
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_KS_1_CAPTION, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_KS_2_CAPTION, OnUpdateDiagControls) 
@@ -101,6 +102,7 @@ void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_DEV_DIAG_ENTER_CHECK, m_enter_button);
  DDX_Control(pDX, IDC_DEV_DIAG_OUTPUTS_GROUP, m_outputs_group);
  DDX_Control(pDX, IDC_DEV_DIAG_WARNING_TEXT, m_warning_text);
+ DDX_Control(pDX, IDC_DEV_DIAG_WARNING_TEXT1, m_warning_text1);
  DDX_Control(pDX, IDC_DEV_DIAG_INPUTS_GROUP, m_inputs_group);
 }
 
@@ -415,7 +417,9 @@ void CDevDiagnostTabDlg::OnSize( UINT nType, int cx, int cy )
   m_enter_button.MoveWindow(rc1.left, cy - rc1.Height() - da.ScaleY(10), rc1.Width(), rc1.Height());
 
   rc1 = GDIHelpers::GetChildWndRect(&m_warning_text);
-  m_warning_text.MoveWindow(rc1.left, cy - rc1.Height()- da.ScaleY(2), rc1.Width(), rc1.Height());
+  m_warning_text.MoveWindow(rc1.left, cy - (rc1.Height()*2) - da.ScaleY(2), rc1.Width(), rc1.Height());
+  m_warning_text1.MoveWindow(rc1.left, cy - rc1.Height() - da.ScaleY(2), rc1.Width(), rc1.Height());
+  m_warning_text1.Invalidate();
 
   GetClientRect(&rc2);
   
