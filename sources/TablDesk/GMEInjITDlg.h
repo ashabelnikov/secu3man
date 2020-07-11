@@ -29,6 +29,8 @@
 #include "ui-core/TabDialog.h"
 #include "ui-core/MapEditorCtrl.h"
 
+class CToolTipCtrlEx;
+
 class CGMEInjITDlg : public CTabDialog
 {
   typedef CTabDialog Super;
@@ -79,4 +81,6 @@ class CGMEInjITDlg : public CTabDialog
   float* mp_ITMap;
   float* mp_rpmGrid;
   float* mp_loadGrid;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

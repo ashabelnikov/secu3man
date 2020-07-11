@@ -28,6 +28,7 @@
 #include "GMEInjVEDlg.h"
 #include "common/fastdelegate.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CGMEInjVEDlg::IDD = IDD_GME_INJ_VE;
 
@@ -151,6 +152,21 @@ BOOL CGMEInjVEDlg::OnInitDialog()
 
  if (m_OnViewActivate)
   m_OnViewActivate();
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_lamdel_button, MLL::GetString(IDS_GME_INJ_LAMDEL_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_celwgt_button, MLL::GetString(IDS_GME_INJ_CELWGT_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strstp_button, MLL::GetString(IDS_GME_INJ_STRSTP_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rststt_button, MLL::GetString(IDS_GME_INJ_RSTSTT_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rstall_check, MLL::GetString(IDS_GME_INJ_RSTALL_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_celblk_button, MLL::GetString(IDS_GME_INJ_CELBLK_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_blkall_check, MLL::GetString(IDS_GME_INJ_BLKALL_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_smooth_button, MLL::GetString(IDS_GME_INJ_SMOOTH_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_finish_check, MLL::GetString(IDS_GME_INJ_FINISH_CHECK_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
