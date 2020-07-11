@@ -29,6 +29,8 @@
 #include "ui-core/TabDialog.h"
 #include "ui-core/MapEditorCtrl.h"
 
+class CToolTipCtrlEx;
+
 class CGMEInjVEDlg : public CTabDialog
 {
   typedef CTabDialog Super;
@@ -124,4 +126,6 @@ class CGMEInjVEDlg : public CTabDialog
   EventHandler m_OnChangeLamDel;
   EventResult  m_IsReady; //if this CB is not initialized all autotune related controls will be disabled
   EventHandler m_OnSmooth;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

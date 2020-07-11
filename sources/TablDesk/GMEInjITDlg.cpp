@@ -28,6 +28,7 @@
 #include "GMEInjITDlg.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CGMEInjITDlg::IDD = IDD_GME_INJ_IT;
 
@@ -90,6 +91,13 @@ BOOL CGMEInjITDlg::OnInitDialog()
  m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_M360360A));
 
  SetITMode(m_it_mode_val);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_it_mode, MLL::GetString(IDS_GME_IT_MODE_COMBO_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);

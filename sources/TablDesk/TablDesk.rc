@@ -620,6 +620,17 @@ BEGIN
     IDS_GME_IT_MODE_720ATDC "0...720° после ВМТ"
     IDS_GME_IT_MODE_M360360 "-360...360° (до ВМТ)"
     IDS_GME_IT_MODE_M360360A "-360...360° (после ВМТ)"
+
+    IDS_GME_IT_MODE_COMBO_TT    "Выбор режима определяющего как угол фазы впрыска задается в таблице. Вы можете выбрать между 4 различными режимами представления данных в таблице. Данная галочка также влияет на таблицы отображающие значения фазы впрыска в виде графиков (действует глобально)."
+    IDS_GME_INJ_LAMDEL_BTN_TT   "Переключиться в режим редактирования таблицы задержки датчика кислорода. Повторное нажатие кнопки возвращает к редактированию таблицы наполнения. Значения данной таблицы хранятся в ini файле (прошивка не хранит данную таблицу)."
+    IDS_GME_INJ_CELWGT_BTN_TT   "Переключиться в режим просмотра таблицы весов ячеек. Повторное нажатие кнопки возвращает к редактированию таблицы наполнения. Каждый раз когда обнаруживается совпадение фактического и целевого значений воздух/топливо (+/- допуск), значение соответствующей ячейки таблицы весов увеличивается на 1. Допуск AFR задается в ini-файле и называется AFRError."
+    IDS_GME_INJ_STRSTP_BTN_TT   "Запуск/остановка автонастройки таблицы наполнения. Автонастройку следует проводить только на прогретом двигателе, с отключенной коррекцией смеси по лямбде и обогащениями."
+    IDS_GME_INJ_RSTSTT_BTN_TT   "Сброс статистики накопленной в процессе автонастройки (очистка таблицы весов и т.д.) для выбранной ячейки. Если установлена галочка 'Все', то будет сброшена статистика для всех ячеек."
+    IDS_GME_INJ_RSTALL_CHECK_TT "Установите эту галочку если вы хотите сбросить статистику для всех ячеек таблицы наполнения (установите галочку и нажмите кнопку 'Сброс стат.')."
+    IDS_GME_INJ_CELBLK_BTN_TT   "Блокирование/разблокирование выбранной ячейки. Если установлена галочка 'Все', то операция блокирования/разблокирования будет применена для всех ячеек таблицы наполнения. После блокирования ячейка больше не учавствует в автонастройке."
+    IDS_GME_INJ_BLKALL_CHECK_TT "Установите эту галочку если вы хотите заблокировать/разблокировать все ячейки таблицы наполнения (установите галочку и нажмите кнопку 'Блокировать (Разблокировать)')."
+    IDS_GME_INJ_SMOOTH_BTN_TT   "Сгладить значения ячеек в таблице наполнения. Если при этом установлена галочка 'Достроить', то значения ячеек для которых нет статистики будут вычислены на основе ближайших откатанных ячеек (для которых есть статистика)."
+    IDS_GME_INJ_FINISH_CHECK_TT "Установите эту галочку если вы хотите чтобы значения ячеек таблицы наполнения для которых нет статистики были вычислены на основе соседних уже настроенных ячеек (установите галочку и нажмите 'Сгладить')."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1257,6 +1268,17 @@ BEGIN
     IDS_GME_IT_MODE_720ATDC "0...720° after TDC"
     IDS_GME_IT_MODE_M360360 "-360...360° (BTDC)"
     IDS_GME_IT_MODE_M360360A "-360...360° (ATDC)"
+
+    IDS_GME_IT_MODE_COMBO_TT    "The choice of the mode determining how values of injection timing are set in the table. You can choose between 4 different presentation modes in the table. This checkmark also affects tables showing the injection timing values in the form of graphs (acts globally)."
+    IDS_GME_INJ_LAMDEL_BTN_TT   "Switch to the editing mode of the oxygen sensor's delay table. Pressing the button again returns to editing the VE table. The values of this table are stored in the ini file (firmware does not store this table)."
+    IDS_GME_INJ_CELWGT_BTN_TT   "Switch to the mode of viewing the table of cell weights. Pressing the button again returns to editing the VE table. Each time a coincidence of the actual and target air/fuel values (+/- tolerance) is detected, the value of the corresponding cell in the weight table is increased by 1. The AFR tolerance is specified in the ini file and is called 'AFRError'."
+    IDS_GME_INJ_STRSTP_BTN_TT   "Start/stop auto-tuning of the VE table. Auto-tuning should be carried out only on a warm engine, with lambda mixture correction and enrichments disabled."
+    IDS_GME_INJ_RSTSTT_BTN_TT   "Reset statistics accumulated during the auto-tuning process (clearing the weight table etc.) for the selected cell. If 'All' checkbox is checked, then statistics for all cells will be reset."
+    IDS_GME_INJ_RSTALL_CHECK_TT "Check this box if you want to reset statistics for all cells of the VE table (check the box and click the 'Reset stat.' button)."
+    IDS_GME_INJ_CELBLK_BTN_TT   "Block/unblock the selected VE table cell. If 'All' checkbox is checked, then the block/unblock operation will be applied to all the cells in the VE table. After blocking, the cell no longer participates in auto-tuning."
+    IDS_GME_INJ_BLKALL_CHECK_TT "Set this checkbox if you want to block/unblock all cells in the VE table (check the box and click the 'Block (Unlock) cell' button)."
+    IDS_GME_INJ_SMOOTH_BTN_TT   "Smooth cell values in the VE table. If 'Finish' checkbox is checked, then the values of the cells for which there are no statistics will be calculated basing on the nearest auto-tuned cells (for which there are statistics)."
+    IDS_GME_INJ_FINISH_CHECK_TT "Set this checkbox if you want the values of the VE table cells for which there are no statistics to be calculated basing on neighboring cells already auto-tuned (check the box and click 'Smoothing' button)."
 END
 
 /////////////////////////////////////////////////////////////////////////////
