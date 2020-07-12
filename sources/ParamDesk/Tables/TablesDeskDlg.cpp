@@ -505,10 +505,12 @@ void CTablesDeskDlg::OnSaveButton()
  if (m_OnSaveButton)
   m_OnSaveButton();
 
+ OnRangeCmdsSave(IDM_TD_SAVE_NAMES_RESERVED0);
+
  //open popup menu beneath of button!
- CRect rc;
- m_save_button.GetWindowRect(rc);
- mp_ContextMenuManager->TrackPopupMenuSave(rc.left, rc.bottom);
+// CRect rc;
+// m_save_button.GetWindowRect(rc);
+// mp_ContextMenuManager->TrackPopupMenuSave(rc.left, rc.bottom);
 }
 
 void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)

@@ -34,6 +34,7 @@
 
 #undef max //avoid conflicts with C++
 
+#define SECU3_CBR_250000 250000
 #define SECU3_CBR_500000 500000
 
 CAppSettingsModel::CAppSettingsModel()
@@ -439,6 +440,7 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowableBaudRates.push_back(CBR_57600);
  m_AllowableBaudRates.push_back(CBR_115200);
  m_AllowableBaudRates.push_back(CBR_256000);
+ m_AllowableBaudRates.push_back(SECU3_CBR_250000);  //not standard
  m_AllowableBaudRates.push_back(SECU3_CBR_500000);  //not standard
  //fill database with allowed COM-port numbers
  for(int i = 1; i < 256; i++)

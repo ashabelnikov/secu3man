@@ -366,20 +366,20 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
 
 void CRSDeskDlg::updateScrollerSize(void)
 {
- mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.0f : 1.62f);
+ mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.0f : 1.75f);
 }
 
-void CRSDeskDlg::OnSize( UINT nType, int cx, int cy )
+void CRSDeskDlg::OnSize(UINT nType, int cx, int cy)
 {
  Super::OnSize(nType, cx, cy);
  if (m_was_initialized)
  {
+  mp_scr->ResetScrollPos(false);
+  updateScrollerSize();
+
   CRect rect;
   GetClientRect(&rect);
   if (!rect.IsRectNull())
    Resize(rect);
-
-  mp_scr->ResetScrollPos(false);
-  updateScrollerSize();
  }
 }
