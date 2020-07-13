@@ -91,6 +91,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_EE_SAVE_EEPROM, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDC_EE_MAPSET_NAME, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_EE_CE_ERRORS_BTN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_EE_GRID_WARNING, OnUpdateControls)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

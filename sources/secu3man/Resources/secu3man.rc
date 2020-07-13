@@ -126,6 +126,7 @@ BEGIN
     CONTROL         "",IDC_EE_TD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,214,128
     PUSHBUTTON      "Действия над EEPROM",IDC_EE_POPUPMENU_BUTTON,255,210,100,15
     PUSHBUTTON      "Ошибки CE",IDC_EE_CE_ERRORS_BTN,170,20,50,20
+    LTEXT           "Сетки оборотов и температуры отсутствуют в EEPROM, так как хранятся в прошивке. По горизонтальной оси в соответствующих таблицах отображаются 0.",IDC_EE_GRID_WARNING,170,50,70,80
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 237
@@ -937,6 +938,7 @@ BEGIN
     CONTROL         "",IDC_EE_TD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,214,128
     PUSHBUTTON      "Actions on the EEPROM",IDC_EE_POPUPMENU_BUTTON,255,210,100,15
     PUSHBUTTON      "CE errors",IDC_EE_CE_ERRORS_BTN,170,20,50,20
+    LTEXT           "RPM and temperature grids are absent in the EEPROM, as they are stored in the firmware. On the horizontal axis, 0 is displayed in the corresponding tables.",IDC_EE_GRID_WARNING,170,50,70,80
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 237
