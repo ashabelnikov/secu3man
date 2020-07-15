@@ -82,6 +82,7 @@ class CMainFrame : public CFrameWnd
   void setOnCloseNotify(EventHandler i_OnFunction);
   void setOnAppSwitchDashboards(EventHandler i_OnFunction);
   void setOnAppSaveScreenshot(EventHandler i_OnFunction);
+  void setOnAppSaveScreenshot5sec(EventHandler i_OnFunction);
   void setOnAppSaveSettings(EventHandler i_OnFunction);
   void setOnChildCharts(EventHandler i_OnFunction);
   void setOnToggleMapWnd(EventHandler i_OnFunction);
@@ -111,6 +112,7 @@ protected:
   afx_msg void OnAppSwitchDashboards();
   afx_msg void OnAppNightMode();
   afx_msg void OnAppSaveScreenshot();
+  afx_msg void OnAppSaveScreenshot5sec();
   afx_msg void OnAppSaveSettings();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
@@ -149,6 +151,7 @@ private:
   EventHandler m_OnCloseNotify;
   EventHandler m_OnSwitchDashboards;
   EventHandler m_OnSaveScreenshot;
+  EventHandler m_OnSaveScreenshot5sec;
   EventHandler m_OnSaveSettings;
   EventHandler m_OnChildCharts;
   EventHandler m_OnToggleMapWnd;

@@ -21,6 +21,7 @@ BEGIN
     POPUP "&Программа"
     BEGIN
         MENUITEM "Сохранить скриншот", ID_APP_SAVESCR
+        MENUITEM "Сохранить скриншот 5 сек.", ID_APP_SAVESCR5SEC
         MENUITEM "Сохранить настройки", ID_APP_SAVEINI
         MENUITEM "Выход    Ctrl + Q", ID_APP_EXIT
     END
@@ -833,6 +834,7 @@ BEGIN
     POPUP "&Program"
     BEGIN
         MENUITEM "Save screenshot", ID_APP_SAVESCR
+        MENUITEM "Save screenshot 5 sec.", ID_APP_SAVESCR5SEC
         MENUITEM "Save settings", ID_APP_SAVEINI
         MENUITEM "Exit    Ctrl + Q", ID_APP_EXIT
     END

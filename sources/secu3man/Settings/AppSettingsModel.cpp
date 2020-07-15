@@ -2201,9 +2201,9 @@ bool CAppSettingsModel::WriteSettings(void)
  //Inj.driver
  IniIO dr(IniFileName, m_Name_InjDrv_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  dr.WriteComment(_T("*** Settings related to \"Injector Driver\" tab ***"));
+  dr.WriteComment(_T("*** Settings related to \"Injector Driver\" tab ***"), false, true);
  else
-  dr.WriteComment(_T("*** Настройки для вкладки \"Драйвер форсунок\" ***"));
+  dr.WriteComment(_T("*** Настройки для вкладки \"Драйвер форсунок\" ***"), false, true);
  dr.CreateSection();
 
  if (m_optInterfaceLang.value == IL_ENGLISH)

@@ -63,6 +63,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_SWITCH_DASHBOARD, OnAppSwitchDashboards)
  ON_COMMAND(ID_APP_NIGHT_MODE, OnAppNightMode)
  ON_COMMAND(ID_APP_SAVESCR, OnAppSaveScreenshot)
+ ON_COMMAND(ID_APP_SAVESCR5SEC, OnAppSaveScreenshot5sec)
  ON_COMMAND(ID_APP_SAVEINI, OnAppSaveSettings)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
@@ -324,6 +325,11 @@ void CMainFrame::setOnAppSwitchDashboards(EventHandler i_OnFunction)
 void CMainFrame::setOnAppSaveScreenshot(EventHandler i_OnFunction)
 {
  m_OnSaveScreenshot = i_OnFunction;
+}
+
+void CMainFrame::setOnAppSaveScreenshot5sec(EventHandler i_OnFunction)
+{
+ m_OnSaveScreenshot5sec = i_OnFunction;
 }
 
 void CMainFrame::setOnAppSaveSettings(EventHandler i_OnFunction)
@@ -598,6 +604,12 @@ void CMainFrame::OnAppSaveScreenshot()
 {
  if (m_OnSaveScreenshot)
   m_OnSaveScreenshot();
+}
+
+void CMainFrame::OnAppSaveScreenshot5sec()
+{
+ if (m_OnSaveScreenshot5sec)
+  m_OnSaveScreenshot5sec();
 }
 
 void CMainFrame::OnAppSaveSettings()

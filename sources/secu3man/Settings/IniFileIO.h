@@ -315,8 +315,8 @@ class IniIO
    if (f == NULL)
     return false;
    if (precedEmptyLine)
-    _ftprintf(f, _T("\r"));
-   if (_ftprintf(f, _T("; %s\r"), text.c_str()) < 0)
+    _ftprintf(f, _T("\r\n"));
+   if (_ftprintf(f, _T("; %s\r\n"), text.c_str()) < 0)
    {
     fclose(f);
     return false;
