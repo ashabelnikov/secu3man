@@ -627,3 +627,4 @@
 #define IDS_PTH_PAUSE_TABSEL_CHECK_TT   4751
 #define IDC_DEV_DIAG_WARNING_TEXT1      4752
 #define IDC_EE_GRID_WARNING             4753
+#define ID_APP_SAVESCR5SEC              4754

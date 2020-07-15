@@ -65,6 +65,7 @@ class MainFrameController : public IAPPEventHandler
   void OnAppLogFormat();
   void OnAppSwitchDashboards();
   void OnAppSaveScreenshot();
+  void OnAppSaveScreenshot5sec();
   void OnAppSaveSettings();
   void OnActivate(bool i_state);
   void OnFullScreen(bool i_what);
@@ -75,6 +76,7 @@ class MainFrameController : public IAPPEventHandler
   bool OnClose(void);
   void OnCreate(void);
   void OnWelcomeTimer(void);
+  void OnScr5SecTimer(void);
 
   //called by VIEW at the startup for get desired window position
   void OnGetInitialPos(CPoint& o_point);
@@ -91,4 +93,5 @@ class MainFrameController : public IAPPEventHandler
   CStatusBarManager*     m_pStatusBarManager;
   LogWriter*             m_pLogWriter;
   CObjectTimer<MainFrameController> m_welcome_timer;
+  CObjectTimer<MainFrameController> m_scr5sec_timer;
 };

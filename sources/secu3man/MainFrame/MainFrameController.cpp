@@ -58,6 +58,13 @@ void MainFrameController::OnWelcomeTimer(void)
  DisplayWelcome();
 }
 
+void MainFrameController::OnScr5SecTimer(void)
+{
+ mp_view->RedrawWindow();
+ SaveScreenshot(AfxGetMainWnd(), true);
+ m_scr5sec_timer.KillTimer();
+}
+
 MainFrameController::MainFrameController(CCommunicationManager* i_pCommunicationManager,
                    CAppSettingsManager* i_pAppSettingsManager, CStatusBarManager* i_pStatusBarManager,
                    LogWriter* i_pLogWriter, CMainFrame* ip_view /* = NULL*/)
@@ -103,6 +110,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppLogFormat(MakeDelegate(this, &MainFrameController::OnAppLogFormat));
  mp_view->setOnAppSwitchDashboards(MakeDelegate(this, &MainFrameController::OnAppSwitchDashboards));
  mp_view->setOnAppSaveScreenshot(MakeDelegate(this, &MainFrameController::OnAppSaveScreenshot));
+ mp_view->setOnAppSaveScreenshot5sec(MakeDelegate(this, &MainFrameController::OnAppSaveScreenshot5sec));
  mp_view->setOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
  mp_view->setOnChildCharts(MakeDelegate(this, &MainFrameController::OnChildCharts));
  mp_view->setOnToggleMapWnd(MakeDelegate(this, &MainFrameController::OnToggleMapWnd));
@@ -489,6 +497,11 @@ void MainFrameController::OnAppSaveScreenshot()
 {
  mp_view->RedrawWindow();
  SaveScreenshot(AfxGetMainWnd(), true);
+}
+
+void MainFrameController::OnAppSaveScreenshot5sec()
+{
+ m_scr5sec_timer.SetTimer(this, &MainFrameController::OnScr5SecTimer, 5000);
 }
 
 void MainFrameController::OnAppSaveSettings()
