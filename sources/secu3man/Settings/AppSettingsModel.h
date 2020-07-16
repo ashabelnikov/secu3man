@@ -66,6 +66,10 @@ class CAppSettingsModel : public ISettingsData
   //write settings into INI-file
   bool WriteSettings(void);
 
+  //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
+  //запущена программа.
+  virtual CString GetINIFileFullName(void) const;
+
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;
   virtual void SetPortName(const _TSTRING& name);
@@ -97,6 +101,7 @@ class CAppSettingsModel : public ISettingsData
   virtual void SetLogPlayerVert(int pos);
   virtual bool GetExistingPorts(void) const;
   virtual void SetToggleMapWnd(bool toggle);
+  virtual int GetIniEditorSyntax(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -231,9 +236,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetToolTipTime(void) const;
 
  private:
-  //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
-  //запущена программа.
-  CString GetINIFileFullName(void) const;
+  bool _CheckAndCorrectLFCRs(void);
 
   //data which stored in the INI-file:
   //Section names
@@ -283,6 +286,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optToggleMapWnd;
   OptField_t<bool> m_optExistingPorts;
   OptField_t<int> m_optToolTipTime;
+  OptField_t<bool> m_optIniEdSyntax;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;
