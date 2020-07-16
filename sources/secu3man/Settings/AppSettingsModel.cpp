@@ -66,6 +66,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optToggleMapWnd(_T("ToggleMapWnd"))
 , m_optExistingPorts(_T("ExistingPorts"))
 , m_optToolTipTime(_T("ToolTipTime"))
+, m_optIniEdSyntax(_T("IniEditorSyntax"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -538,6 +539,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optToggleMapWnd, _T("0"), 0, 1);
  os.ReadInt(m_optExistingPorts, _T("1"), 0, 1);
  os.ReadInt(m_optToolTipTime, _T("5000"), 1000, 60000);
+ os.ReadInt(m_optIniEdSyntax, _T("1"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -1067,6 +1069,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Время, на протяжении которого отображаются всплывающие подсказки. Увеличьте, если не успеваете читать подсказки"));
  os.WriteInt(m_optToolTipTime); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Control of syntax highlighting in program settings file editor. 0 - do not highlight, 1 - highlight."));
+ else
+  os.WriteComment(_T("Управление подсветкой синтаксиса в редакторе файла настроек программы. 0 - не подсвечивать, 1 - подсвечивать."));
+ os.WriteInt(m_optIniEdSyntax); 
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section); 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2544,7 +2552,53 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fn.WriteInt(m_optFuncGD_CONTROL, _T("Разрешение функциональности дозатора газа. Установите в 1 для разрешения (0 для запрещения)."));
 
+
+ if (!_CheckAndCorrectLFCRs())
+  status = false;
+
  return status;
+}
+
+bool CAppSettingsModel::_CheckAndCorrectLFCRs(void)
+{
+ //correct CFCRs
+ FILE* f = _tfopen((LPCTSTR)GetINIFileFullName(), _T("rb"));
+ if (f == NULL)
+  return false;
+
+ fseek(f, 0L, SEEK_END);
+ long int fsize = ftell(f);
+ fseek(f, 0L, SEEK_SET);
+
+ std::vector<BYTE> srcbuf(fsize), dstbuf(fsize);
+ if (fread(&srcbuf[0], 1, fsize, f) != fsize)
+ {
+  fclose(f);
+  return false;
+ }
+ fclose(f);
+
+ size_t dstsize = 0;
+ BYTE prev = 0;
+ for(int i = 0; i < fsize; ++i)
+ { 
+  if (srcbuf[i] == 0x0D && prev == 0x0D)
+   continue; //skip redundant symbol
+  dstbuf[dstsize++] = srcbuf[i];
+  prev = srcbuf[i];  
+ }
+
+ f = _tfopen((LPCTSTR)GetINIFileFullName(), _T("wb"));
+ if (f == NULL)
+  return false;
+
+ if (fwrite(&dstbuf[0], 1, dstsize, f) != dstsize)
+ {
+  fclose(f);
+  return false;
+ }
+ fclose(f);
+ return true;
 }
 
 const _TSTRING& CAppSettingsModel::GetPortName(void) const
@@ -3777,4 +3831,9 @@ int CAppSettingsModel::GetGraphShtPixels(void)
 int CAppSettingsModel::GetToolTipTime(void) const
 {
  return m_optToolTipTime.value;
+}
+
+int CAppSettingsModel::GetIniEditorSyntax(void) const
+{
+ return m_optIniEdSyntax.value;
 }

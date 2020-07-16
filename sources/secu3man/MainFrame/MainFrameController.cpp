@@ -37,6 +37,7 @@
 #include "MIDesk/DVDeskDlg.h"
 #include "Settings/AppSettingsManager.h"
 #include "Settings/ISettingsData.h"
+#include "Settings/EditSettingsDlg.h"
 #include "StatusBarManager.h"
 #include "TablDesk/DLLLinkedFunctions.h"  //for ShowHints()
 #include "ui-core/HotKeysManager.h"
@@ -114,6 +115,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
  mp_view->setOnChildCharts(MakeDelegate(this, &MainFrameController::OnChildCharts));
  mp_view->setOnToggleMapWnd(MakeDelegate(this, &MainFrameController::OnToggleMapWnd));
+ mp_view->setOnEditSettings(MakeDelegate(this, &MainFrameController::OnEditSettings));
 }
 
 MainFrameController::~MainFrameController()
@@ -527,4 +529,22 @@ void MainFrameController::OnToggleMapWnd()
  mp_view->CheckOnToggleMapWnd(tmw);
  m_pAppSettingsManager->GetSettings()->SetToggleMapWnd(tmw);
  m_pCommunicationManager->NotifySettingsChanged(3); //only Toggle map windows check changed
+}
+
+void MainFrameController::OnEditSettings()
+{
+ OnAppSaveSettings();
+ ISettingsData* p_sett = m_pAppSettingsManager->GetSettings();
+ CEditSettingsDlg esd((LPCTSTR)p_sett->GetINIFileFullName(), p_sett->GetIniEditorSyntax());
+ if (IDOK==esd.DoModal())
+ { //apply updated settings from a file
+  mp_view->BeginWaitCursor();
+  m_pAppSettingsManager->ReadSettings(); 
+  mp_view->EndWaitCursor();
+  if (IDYES == SECUMessageBox(MLL::LoadString(IDS_APP_SETTINGS_APPRESTART_CONFIRM), MB_YESNO | MB_DEFBUTTON1))
+  {
+   if (RA_ActivateRestartProcess())
+    AfxGetMainWnd()->DestroyWindow();
+  }
+ }
 }

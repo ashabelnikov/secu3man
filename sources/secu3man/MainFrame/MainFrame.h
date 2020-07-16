@@ -86,6 +86,7 @@ class CMainFrame : public CFrameWnd
   void setOnAppSaveSettings(EventHandler i_OnFunction);
   void setOnChildCharts(EventHandler i_OnFunction);
   void setOnToggleMapWnd(EventHandler i_OnFunction);
+  void setOnEditSettings(EventHandler i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -114,6 +115,7 @@ protected:
   afx_msg void OnAppSaveScreenshot();
   afx_msg void OnAppSaveScreenshot5sec();
   afx_msg void OnAppSaveSettings();
+  afx_msg void OnAppEditSettings();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI);
@@ -155,6 +157,7 @@ private:
   EventHandler m_OnSaveSettings;
   EventHandler m_OnChildCharts;
   EventHandler m_OnToggleMapWnd;
+  EventHandler m_OnEditSettings;
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;

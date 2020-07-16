@@ -628,3 +628,6 @@
 #define IDC_DEV_DIAG_WARNING_TEXT1      4752
 #define IDC_EE_GRID_WARNING             4753
 #define ID_APP_SAVESCR5SEC              4754
+#define ID_APP_EDITINI                  4755
+#define IDD_APP_SETTINGS_EDITOR         4756
+#define IDC_INI_RICHEDIT                4757

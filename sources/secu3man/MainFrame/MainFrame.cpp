@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_SAVESCR, OnAppSaveScreenshot)
  ON_COMMAND(ID_APP_SAVESCR5SEC, OnAppSaveScreenshot5sec)
  ON_COMMAND(ID_APP_SAVEINI, OnAppSaveSettings)
+ ON_COMMAND(ID_APP_EDITINI, OnAppEditSettings)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK1,OnUpdateOnAppEndLog)
@@ -347,6 +348,11 @@ void CMainFrame::setOnToggleMapWnd(EventHandler i_OnFunction)
  m_OnToggleMapWnd = i_OnFunction;
 }
 
+void CMainFrame::setOnEditSettings(EventHandler i_OnFunction)
+{
+ m_OnEditSettings = i_OnFunction;
+}
+
 void CMainFrame::OnClose()
 {
  bool result = true;
@@ -616,6 +622,12 @@ void CMainFrame::OnAppSaveSettings()
 {
  if (m_OnSaveSettings)
   m_OnSaveSettings();
+}
+
+void CMainFrame::OnAppEditSettings()
+{
+ if (m_OnEditSettings)
+  m_OnEditSettings();
 }
 
 BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam)

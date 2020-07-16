@@ -226,6 +226,8 @@ BOOL CSecu3manApp::InitInstance()
  CoInitialize(NULL);
  InitCommonControls();
 
+ ::AfxInitRichEdit2();
+
 #if (_MSC_VER <1300)
  #ifdef _AFXDLL
   Enable3dControls();           // Call this when using MFC in a shared DLL

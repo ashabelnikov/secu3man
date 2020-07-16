@@ -77,6 +77,7 @@ class MainFrameController : public IAPPEventHandler
   void OnCreate(void);
   void OnWelcomeTimer(void);
   void OnScr5SecTimer(void);
+  void OnEditSettings();
 
   //called by VIEW at the startup for get desired window position
   void OnGetInitialPos(CPoint& o_point);

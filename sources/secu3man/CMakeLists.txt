@@ -50,6 +50,7 @@ set(HEADERS
   Settings/AppSettingsDlg.h
   Settings/AppSettingsManager.h
   Settings/AppSettingsModel.h
+  Settings/EditSettingsDlg.h
   Settings/IAppSettingsDlg.h
   Settings/IniFileIO.h
   Settings/ISettingsData.h
@@ -112,6 +113,7 @@ set(SOURCES
   Settings/AppSettingsDlg.cpp
   Settings/AppSettingsManager.cpp
   Settings/AppSettingsModel.cpp
+  Settings/EditSettingsDlg.cpp
   TabControllers/CEErrorIdStr.cpp
   TabControllers/ErrorMsg.cpp
   TabControllers/CheckEngineTabController.cpp

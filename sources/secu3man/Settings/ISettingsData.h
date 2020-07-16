@@ -308,6 +308,8 @@ struct Functionality
 class ISettingsData
 {
  public:
+  virtual CString GetINIFileFullName(void) const = 0;
+
   virtual const _TSTRING& GetPortName(void) const = 0;
   virtual void SetPortName(const _TSTRING& name) = 0;
   virtual DWORD GetBaudRateApplication(void) const = 0;
@@ -336,6 +338,7 @@ class ISettingsData
   virtual void SetLogPlayerVert(int pos) = 0;
   virtual bool GetExistingPorts(void) const = 0;
   virtual int GetToolTipTime(void) const = 0;
+  virtual int GetIniEditorSyntax(void) const = 0;
 
   //Fixtures's customization settings
   virtual int GetTachometerMax(void) const = 0;
