@@ -1672,9 +1672,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("CLT threshold for turn on of air cond."), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt, _T("Air conditioner will turn on only if the engine temperature is above this threshold, otherwise requests for switching on will be ignored."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог ДПДЗ вкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("Компрессор кондиционера не будет включаться если положение дроссельной заслогки превышает указанное значение."));
+  dfd.AppendItem(_T("Порог ДПДЗ выкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("Компрессор кондиционера не будет включаться (или будет выключаться) если положение дроссельной заслогки превышает указанное значение."));
  else
-  dfd.AppendItem(_T("TPS threshold for turn on of air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("The compressor of air conditioner will not turn on if throttle position exceeds specified value."));
+  dfd.AppendItem(_T("TPS threshold for turning off air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("The compressor of air conditioner will not turn on (or it will turn off) if throttle position exceeds specified value."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Наполнение на ХХ для бенз. (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для бензина (GAS_V = 0)."));
