@@ -43,6 +43,7 @@ class AFX_EXT_CLASS FirmwareMasterCntr
   void OnChangeFwmCheck(int id);
   void OnChangeUnit(void);
   void OnChangeSync(void);
+  void OnFuseLink(void);
 
   bool GetStatus(void);
 

@@ -28,6 +28,7 @@
 #include "InjDrvFWMDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/Label.h"
 
 const UINT CInjDrvFWMDlg::IDD = IDD_INJDRV_FWM;
 
@@ -46,6 +47,7 @@ END_MESSAGE_MAP()
 CInjDrvFWMDlg::CInjDrvFWMDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjDrvFWMDlg::IDD, pParent)
 , m_proc_idx(0)
+, mp_FuseLink(new CLabel)
 {
  for (int i = 0; i < FWM_NR_OF_FLAGS; ++i)
   m_fwm_flags[i] = false;
@@ -68,6 +70,8 @@ void CInjDrvFWMDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_FWM_FLBINV_CHECK, m_fwm_flags[FWM_FLBINV]);
  DDX_Check_bool(pDX, IDC_FWM_PWMINV_CHECK, m_fwm_flags[FWM_PWMINV]);
  DDX_Check_bool(pDX, IDC_FWM_PWCORR_CHECK, m_fwm_flags[FWM_PWCORR]);
+
+ DDX_Control(pDX, IDC_FWM_FUSE_LINK, *mp_FuseLink);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -116,6 +120,13 @@ BOOL CInjDrvFWMDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDOK), MLL::GetString(IDS_FWM_LOAD_BTN_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //init tip link
+ mp_FuseLink->SetLink(true);
+ mp_FuseLink->SetTextColor(RGB(0, 0, 255));
+ mp_FuseLink->SetFontUnderline(true);
+ mp_FuseLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_FuseLink->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDrvFWMDlg::OnFuseLinkClick));
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -179,4 +190,10 @@ int CInjDrvFWMDlg::GetProcCombo(void)
 {
  UpdateData();
  return m_proc_idx;
+}
+
+void CInjDrvFWMDlg::OnFuseLinkClick(void)
+{
+ if (m_OnFuseLink)
+  m_OnFuseLink();
 }

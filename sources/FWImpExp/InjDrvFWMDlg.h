@@ -30,6 +30,7 @@
 #include "common/UnicodeSupport.h"
 
 class CToolTipCtrlEx;
+class CLabel;
 
 //Note! order in this enum must correspond to order in the related combobox
 //See CFirmwareMasterDlg::FillProcCombo()
@@ -65,6 +66,7 @@ class CInjDrvFWMDlg : public CDialog
   void setOnActivate(EventHandler OnActivate) {m_OnActivate = OnActivate;};
   void setOnChangeFwmCheck(EventWithCode OnChange) {m_OnChangeFwmCheck = OnChange;};
   void setOnSaveButton(EventHandler OnFunction) {m_OnSaveButton = OnFunction;};
+  void setOnFuseLink(EventHandler OnFunction) {m_OnFuseLink = OnFunction;};
 
   void FillProcCombo(void);
   void SetProcCombo(int id);
@@ -88,17 +90,21 @@ class CInjDrvFWMDlg : public CDialog
   afx_msg void OnSave();
   DECLARE_MESSAGE_MAP()
 
+  void OnFuseLinkClick(void);
+
  private:
   EventHandler m_OnOkButton;
   EventHandler m_OnSaveButton;
   EventHandler m_OnCancelButton;
   EventHandler m_OnActivate;
   EventWithCode m_OnChangeFwmCheck;
+  EventHandler m_OnFuseLink;
 
   CComboBox m_proc_combo;
 
   CButton m_fwm_checks[FWM_NR_OF_FLAGS];
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CLabel> mp_FuseLink;
 
   bool m_fwm_flags[FWM_NR_OF_FLAGS];
   int m_proc_idx;

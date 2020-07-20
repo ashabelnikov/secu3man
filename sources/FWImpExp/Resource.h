@@ -114,3 +114,7 @@
 #define IDC_FWM_PROCESSOR_CAPTION       6113
 #define IDC_FWM_PROCESSOR_COMBO         6114
 #define IDS_FWM_PROCESSOR_COMBO_TT      6115
+#define IDC_FWM_FUSE_LINK               6116
+#define IDC_CURSOR_HAND                 6117
+#define IDS_FWM_FUSEBITS_SECU           6118
+#define IDS_FWM_FUSEBITS_LZID           6119

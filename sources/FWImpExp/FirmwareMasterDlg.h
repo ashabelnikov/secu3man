@@ -30,6 +30,7 @@
 #include "common/UnicodeSupport.h"
 
 class CToolTipCtrlEx;
+class CLabel;
 
 //Note! order in this enum must correspond to order in the related combobox
 //See CFirmwareMasterDlg::FillUnitCombo()
@@ -83,6 +84,7 @@ class CFirmwareMasterDlg : public CDialog
   void setOnChangeFwmCheck(EventWithCode OnChange) {m_OnChangeFwmCheck = OnChange;};
   void setOnChangeUnit(EventHandler OnChange) {m_OnChangeUnit = OnChange;};
   void setOnChangeSync(EventHandler OnChange) {m_OnChangeSync = OnChange;};
+  void setOnFuseLink(EventHandler OnFunction) {m_OnFuseLink = OnFunction;};
 
   void FillUnitCombo(void);
   void FillSyncCombo(void);
@@ -112,6 +114,7 @@ class CFirmwareMasterDlg : public CDialog
   afx_msg void OnChangeSyncCombo();
   DECLARE_MESSAGE_MAP()
 
+  void OnFuseLinkClick(void);
  private:
   EventHandler m_OnOkButton;
   EventHandler m_OnCancelButton;
@@ -119,11 +122,13 @@ class CFirmwareMasterDlg : public CDialog
   EventWithCode m_OnChangeFwmCheck;
   EventHandler m_OnChangeUnit;
   EventHandler m_OnChangeSync;
+  EventHandler m_OnFuseLink;
 
   CComboBox m_unit_combo;
   CComboBox m_sync_combo;
   CButton m_fwm_checks[FWM_NR_OF_FLAGS];
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CLabel> mp_FuseLink;
 
   int m_unit_idx;
   int m_sync_idx;

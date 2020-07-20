@@ -32,11 +32,12 @@ BEGIN
     CONTROL         "Двухканальный коммутатор",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
     CONTROL         "Поддержка OBD (мод. MCP2515)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,122,10
     CONTROL         "Управ. сост. смеси на карбюр.",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
+    LTEXT           "Fuse биты?",IDC_FWM_FUSE_LINK,200,19,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     DEFPUSHBUTTON   "Загрузить",IDOK,84,159,50,16
     PUSHBUTTON      "Отмена",IDCANCEL,157,159,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 136
+IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 156
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Мастер прошивок"
 FONT 8, "MS Sans Serif"
@@ -47,9 +48,10 @@ BEGIN
     CONTROL         "Инверсия выходов рекуперации",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,50,120,10
     CONTROL         "Инверсия выходов ШИМ",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
     CONTROL         "Коррекции длительн. впрыска",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
-    PUSHBUTTON      "Сохранить",IDC_FWM_SAVE_BTN,20,110,50,16
-    DEFPUSHBUTTON   "Загрузить",IDOK,80,110,50,16
-    PUSHBUTTON      "Отмена",IDCANCEL,140,110,50,16
+    LTEXT           "Fuse биты?",IDC_FWM_FUSE_LINK,23,110,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS    
+    PUSHBUTTON      "Сохранить",IDC_FWM_SAVE_BTN,20,130,50,16
+    DEFPUSHBUTTON   "Загрузить",IDOK,80,130,50,16
+    PUSHBUTTON      "Отмена",IDCANCEL,140,130,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -178,6 +180,9 @@ BEGIN
     IDS_FWM_LOAD_BTN_TT      "Прошить процессор"
     IDS_FWM_SELECT_FOLDER_FOR_FW "Выберите куда сохранить прошивку"
     IDS_FWM_PROCESSOR_COMBO_TT "Выберите марку процессора вашего драйвера форсунок"
+
+    IDS_FWM_FUSEBITS_SECU   "Если вы собираете блок SECU самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения:\n LOCK  = 0xE0    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при\nпомощи программатора." 
+    IDS_FWM_FUSEBITS_LZID   "Если вы собираете драйвер SECU-LZID самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения.\nATmega328PB:\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при помощи\nпрограмматора."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -208,11 +213,12 @@ BEGIN
     CONTROL         "Two-channel igniter",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
     CONTROL         "OBD support (MCP2515 required)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,120,10
     CONTROL         "AFR control on the carburetor",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
+    LTEXT           "Fuse bits?",IDC_FWM_FUSE_LINK,200,19,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     DEFPUSHBUTTON   "Load",IDOK,84,159,50,16
     PUSHBUTTON      "Cancel",IDCANCEL,157,159,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 136
+IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 156
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Firmware master"
 FONT 8, "MS Sans Serif"
@@ -223,9 +229,10 @@ BEGIN
     CONTROL         "Inversion of flyback outputs",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,50,120,10
     CONTROL         "Inversion of PWM outputs",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
     CONTROL         "Corrections of inj. PW",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
-    PUSHBUTTON      "Save",IDC_FWM_SAVE_BTN,20,110,50,16
-    DEFPUSHBUTTON   "Load",IDOK,80,110,50,16
-    PUSHBUTTON      "Cancel",IDCANCEL,140,110,50,16
+    LTEXT           "Fuse bits?",IDC_FWM_FUSE_LINK,23,110,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    PUSHBUTTON      "Save",IDC_FWM_SAVE_BTN,20,130,50,16
+    DEFPUSHBUTTON   "Load",IDOK,80,130,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,140,130,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -354,6 +361,9 @@ BEGIN
     IDS_FWM_LOAD_BTN_TT      "Load firmware to driver"
     IDS_FWM_SELECT_FOLDER_FOR_FW "Select where to store firmware"
     IDS_FWM_PROCESSOR_COMBO_TT "Select processor name of your inj. driver"
+
+    IDS_FWM_FUSEBITS_SECU   "If you assemble SECU unit by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values:\n LOCK  = 0xE0    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer." 
+    IDS_FWM_FUSEBITS_LZID   "If you assemble SECU-LZID unit by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values.\nATmega328PB:\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -361,6 +371,13 @@ END
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information

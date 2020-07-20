@@ -28,6 +28,7 @@
 #include "FirmwareMasterDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/Label.h"
 
 const UINT CFirmwareMasterDlg::IDD = IDD_FIRMWARE_MASTER;
 
@@ -48,6 +49,7 @@ CFirmwareMasterDlg::CFirmwareMasterDlg(CWnd* pParent /*=NULL*/)
 : Super(CFirmwareMasterDlg::IDD, pParent)
 , m_unit_idx(0)
 , m_sync_idx(0)
+, mp_FuseLink(new CLabel)
 {
  for (int i = 0; i < FWM_NR_OF_FLAGS; ++i)
   m_fwm_flags[i] = false;
@@ -80,6 +82,9 @@ void CFirmwareMasterDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_FWM_OBD_CHECK, m_fwm_flags[FWM_OBD]);
  DDX_Check_bool(pDX, IDC_FWM_TPIC_CHECK, m_fwm_flags[FWM_TPIC]);
  DDX_Check_bool(pDX, IDC_FWM_FPWM_CHECK, m_fwm_flags[FWM_FPWM]);
+
+ DDX_Control(pDX, IDC_FWM_FUSE_LINK, *mp_FuseLink);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -126,6 +131,13 @@ BOOL CFirmwareMasterDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(GetDlgItem(idc), MLL::GetString(ids)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //init tip link
+ mp_FuseLink->SetLink(true);
+ mp_FuseLink->SetTextColor(RGB(0, 0, 255));
+ mp_FuseLink->SetFontUnderline(true);
+ mp_FuseLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_FuseLink->SetOnClick(fastdelegate::MakeDelegate(this, &CFirmwareMasterDlg::OnFuseLinkClick));
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -218,4 +230,10 @@ INT_PTR CFirmwareMasterDlg::DoModal()
  INT_PTR result = Super::DoModal();
  CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
  return result;
+}
+
+void CFirmwareMasterDlg::OnFuseLinkClick(void)
+{
+ if (m_OnFuseLink)
+  m_OnFuseLink();
 }
