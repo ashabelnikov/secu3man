@@ -165,14 +165,14 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
 
  //calculate correction factor using actual and target AFRs
  float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, &mp_loadGrid[0]);
- if (target_afr==.0f)
+ if (target_afr < 0.0001f)
  {
   SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::SetDynamicValues"));
   return; //error: division by zero
  }
  float corrFactor = lde.afr / target_afr;
 
- if (0==lde.afr)
+ if (lde.afr < 0.0001f)
  {
   mp_view->SetStatusText(MLL::GetString(IDS_GME_INJ_STATUS_EGOCFG));
   return; //system has no information about AFR (e.g. sensor not enabled etc)
