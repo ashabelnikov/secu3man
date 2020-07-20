@@ -2187,7 +2187,7 @@ void CMIDeskDlg::OnIndPercHeight(UINT nID)
 void CMIDeskDlg::OnUpdateIndPercHeight(CCmdUI* pCmdUI)
 {
  float coeff = _HeightCoeffFromID(pCmdUI->m_nID);
- pCmdUI->SetCheck(m_IndHeightCoeff == coeff);
+ pCmdUI->SetCheck(fabs(m_IndHeightCoeff - coeff) < 0.001f);
 }
 
 void CMIDeskDlg::OnIndEnDragNDrop()
