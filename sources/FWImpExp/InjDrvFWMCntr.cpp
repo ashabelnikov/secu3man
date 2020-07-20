@@ -58,6 +58,7 @@ InjDrvFWMCntr::InjDrvFWMCntr()
  mp_view->setOnCancelButton(MakeDelegate(this,&InjDrvFWMCntr::OnCancelPressed));
  mp_view->setOnActivate(MakeDelegate(this,&InjDrvFWMCntr::OnViewActivate));
  mp_view->setOnChangeFwmCheck(MakeDelegate(this,&InjDrvFWMCntr::OnChangeFwmCheck));
+ mp_view->setOnFuseLink(MakeDelegate(this,&InjDrvFWMCntr::OnFuseLink));
 }
 
 bool InjDrvFWMCntr::GetStatus(void)
@@ -409,4 +410,9 @@ bool InjDrvFWMCntr::_StoreResult(const _TSTRING& name, BYTE* buffHex, size_t siz
   }
 
  return true;
+}
+
+void InjDrvFWMCntr::OnFuseLink(void)
+{
+ SECUMessageBox(IDS_FWM_FUSEBITS_LZID, MB_OK | MB_ICONINFORMATION);
 }

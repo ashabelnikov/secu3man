@@ -59,6 +59,7 @@ FirmwareMasterCntr::FirmwareMasterCntr()
  mp_view->setOnChangeFwmCheck(MakeDelegate(this,&FirmwareMasterCntr::OnChangeFwmCheck));
  mp_view->setOnChangeUnit(MakeDelegate(this,&FirmwareMasterCntr::OnChangeUnit));
  mp_view->setOnChangeSync(MakeDelegate(this,&FirmwareMasterCntr::OnChangeSync));
+ mp_view->setOnFuseLink(MakeDelegate(this,&FirmwareMasterCntr::OnFuseLink));
 }
 
 bool FirmwareMasterCntr::GetStatus(void)
@@ -481,4 +482,9 @@ bool FirmwareMasterCntr::_StoreResult(const _TSTRING& name, BYTE* buffHex, size_
 
  *mp_file_name = name;
  return true;
+}
+
+void FirmwareMasterCntr::OnFuseLink(void)
+{
+ SECUMessageBox(IDS_FWM_FUSEBITS_SECU, MB_OK | MB_ICONINFORMATION);
 }
