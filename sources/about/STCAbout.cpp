@@ -169,7 +169,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     ::SetFocus(hCloseButton);
 
    fntDescr.CreateFont(
-   12,                        // nHeight
+   -9,                        // nHeight
    0,                         // nWidth
    0,                         // nEscapement
    0,                         // nOrientation
@@ -185,7 +185,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    _T("Arial"));
 
    fntTitle.CreateFont(
-   14,                        // nHeight
+   -11,                       // nHeight
    0,                         // nWidth
    0,                         // nEscapement
    0,                         // nOrientation
