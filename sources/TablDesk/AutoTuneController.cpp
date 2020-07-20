@@ -32,6 +32,7 @@
 #include "GMEInjVEDlg.h"
 #include "GridModeEditorInjDlg.h"
 #include "MapIds.h"
+#include "ui-core/MsgBox.h"
 
 #define LDQUEUE_SIZE 500 //approx. at least 5 seconds of records
 #define LDQUEUE_SIZE_MIN 20
@@ -89,6 +90,8 @@ size_t CAutoTuneController::_CalcFIFOSize(void)
  if (m_logdata.size() < LDQUEUE_SIZE_MIN)
   return LDQUEUE_SIZE;
  int dtm = (m_logdata[0].time - m_logdata[LDQUEUE_SIZE_MIN-1].time);
+ if (dtm==0)
+  SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::_CalcFIFOSize"));
  return MathHelpers::Round((m_maxLamDel * LDQUEUE_SIZE_MIN) / dtm);
 }
 
@@ -162,6 +165,11 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
 
  //calculate correction factor using actual and target AFRs
  float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, &mp_loadGrid[0]);
+ if (target_afr==.0f)
+ {
+  SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::SetDynamicValues"));
+  return; //error: division by zero
+ }
  float corrFactor = lde.afr / target_afr;
 
  if (0==lde.afr)
@@ -181,7 +189,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  int r_idx = _FindNearestGridPoint(e.rpm, mp_rpmGrid, VEMAP_RPM_SIZE);
  int l_idx = _FindNearestGridPoint(e.load, &mp_loadGrid[0], VEMAP_LOAD_SIZE);
 
- //if growing mode enebled, state depends on relationship of current and previous RPMs
+ //if growing mode enabled, state depends on relationship of current and previous RPMs
  bool growing = (!m_growingMode || (((i+1) < m_logdata.size()) && e.rpm > m_logdata[i+1].rpm));
 
  //skip if AFR is outside set range
@@ -442,12 +450,17 @@ float CAutoTuneController::_ShepardInterpolation(float rpm, float load, const Sc
   w[i] = 1.0 / pow(d, power);  //1 / (d) ^ p
   ws+= w[i];
  }
+
+ if (points.size()==0)
+  SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::_ShepardInterpolation"));  
  o_avdist = (float)(avd / points.size()); //average
 
  double f = 0;
  for(size_t i = 0; i < points.size(); ++i)
   f+= (points[i].f * w[i]);
 
+ if (ws==.0)
+  SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::_ShepardInterpolation"));
  return (float)(f / ws);
 }
 

@@ -119,18 +119,21 @@ void CEditSettingsDlg::_HighlightSyntax(void)
 
  CHARFORMAT cf_comm;
  cf_comm.cbSize = sizeof(cf_comm);
- cf_comm.dwMask = CFM_STRIKEOUT | CFM_COLOR;
+ cf_comm.dwMask = CFM_STRIKEOUT | CFM_COLOR | CFM_CHARSET;
  cf_comm.dwEffects = 0;
+ cf_comm.bCharSet = RUSSIAN_CHARSET;
  cf_comm.crTextColor = RGB(200,200,150);
 
  CHARFORMAT cf_sect;
  cf_sect.cbSize = sizeof(cf_sect);
- cf_sect.dwMask = CFM_STRIKEOUT | CFM_BOLD;
+ cf_sect.dwMask = CFM_STRIKEOUT | CFM_BOLD | CFM_CHARSET;
+ cf_comm.bCharSet = RUSSIAN_CHARSET;
  cf_sect.dwEffects = CFE_BOLD;
 
  CHARFORMAT cf_var;
  cf_var.cbSize = sizeof(cf_var);
- cf_var.dwMask = CFM_STRIKEOUT | CFM_COLOR;
+ cf_var.dwMask = CFM_STRIKEOUT | CFM_COLOR | CFM_CHARSET;
+ cf_comm.bCharSet = RUSSIAN_CHARSET;
  cf_var.dwEffects = 0;
  cf_var.crTextColor = RGB(0,0,255);
 
