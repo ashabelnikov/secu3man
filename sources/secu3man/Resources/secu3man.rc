@@ -634,7 +634,7 @@ BEGIN
     IDS_FW_DEF_PARAMETR                "Резервн. парам."
     IDS_RESET_EEPROM                   "Сброс EEPROM"
     IDS_RESET_EEPROM_COMFIRMATION      "Вы действительно хотите сбросить EEPROM?\n Сохраненные данные будут потеряны."
-    IDS_FW_RESET_EEPROM_STARTED        "Сброс EEPROM можеть занять несколько секунд..."
+    IDS_FW_RESET_EEPROM_STARTED        "Сброс EEPROM может занять несколько секунд..."
     IDS_FW_TOTAL_NUMOF_OPT             "Всего опций:"
 END
 
