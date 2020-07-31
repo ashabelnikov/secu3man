@@ -1697,7 +1697,7 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Low TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_lo, _T("The canister purge valve will not turn on if throttle position is lower or equal to this threshold. Purge should not work on idling."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Верх. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("Продувка адсорбера не будет включаться если положение дроссельной заслонки выше этого порога. Продусвка не должна работать в режимах полных нагрузок."));
+  dfd.AppendItem(_T("Верх. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("Продувка адсорбера не будет включаться если положение дроссельной заслонки выше этого порога. Продувка не должна работать в режимах полных нагрузок."));
  else
   dfd.AppendItem(_T("Hi TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("The canister purge valve will not turn on if throttle position is above this threshold. Purge should not work in full load conditions."));
 
