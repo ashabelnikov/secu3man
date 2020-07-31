@@ -34,6 +34,7 @@
 
 class CHeaderCtrlEx;
 class CToolTipCtrlEx;
+class CLabel;
 
 class CCheckEngineTabDlg : public CTabDialog
 {
@@ -84,6 +85,8 @@ class CCheckEngineTabDlg : public CTabDialog
   DECLARE_MESSAGE_MAP()
 
  private:
+  void OnCeresetLinkClick(void);
+
   CStatic m_quick_help_text;
   CListCtrlEx m_errors_list;
   CImageList m_image_list;
@@ -114,4 +117,5 @@ class CCheckEngineTabDlg : public CTabDialog
 
   std::auto_ptr<CHeaderCtrlEx> m_header_ctrl;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CLabel> mp_ceresetLink;
 };

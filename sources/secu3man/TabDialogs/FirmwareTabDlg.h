@@ -39,6 +39,7 @@ class CParamDeskDlg;
 class CTablesSetPanel;
 class CToolTipCtrlEx;
 class IDeskView;
+class CLabel;
 
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
@@ -214,6 +215,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
 
   bool IsFirmwareOpened(void);
   bool IsIORemappingAvailable(void);
+  void OnEeresetLinkClick(void);
 
   bool m_is_bl_started_emergency_available;
   bool m_is_bl_items_available;
@@ -227,4 +229,5 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CFont m_tab_selection_fnt;
+  std::auto_ptr<CLabel> mp_eeresetLink;
 };

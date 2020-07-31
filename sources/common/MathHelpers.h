@@ -202,7 +202,10 @@ namespace MathHelpers
       }
      }
     }
-    m/=((T)n);
+    if (0==n)
+     m = 0;
+    else
+     m/=((T)n);
     //calculate standard deviation
     T s = 0;
     for(ki = -k2; ki <= k2; ++ki)
@@ -215,7 +218,10 @@ namespace MathHelpers
        s+= pow(in[ii*xSize + jj] - m, 2.0f);
      }
     }
-    s = sqrt(s / ((T)n));
+    if (0==n)
+     s = 0;
+    else
+     s = sqrt(s / ((T)n));
 
     if (median)
     {

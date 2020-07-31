@@ -34,6 +34,8 @@
 #include "tabldesk/ButtonsPanel.h"
 #include "EEPROMContextMenuManager.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/Label.h"
+#include "ui-core/MsgBox.h"
 
 #define TIMER_ID 0
 
@@ -46,6 +48,7 @@ CEEPROMTabDlg::CEEPROMTabDlg(CWnd* pParent /*=NULL*/)
 , mp_TablesPanel(new CButtonsPanel(0, NULL))
 , m_is_bl_items_available(false)
 , m_initialized(false)
+, mp_eeresetLink(new CLabel)
 {
  mp_ContextMenuManager->CreateContent();
 
@@ -63,6 +66,7 @@ void CEEPROMTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_EE_MAPSET_NAME, m_ee_mapset_name);
  DDX_Control(pDX, IDC_EE_POPUPMENU_BUTTON, m_ee_popup_menu_button);
  DDX_Control(pDX, IDC_EE_CE_ERRORS_BTN, m_ee_ce_errors_btn);
+ DDX_Control(pDX, IDC_EE_EERESET_LINK, *mp_eeresetLink);
 }
 
 LPCTSTR CEEPROMTabDlg::GetDialogID(void) const
@@ -144,6 +148,13 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_ee_ce_errors_btn, MLL::GetString(IDS_EE_CE_ERRORS_BTN_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //init HTTP link
+ mp_eeresetLink->SetLink(true);
+ mp_eeresetLink->SetTextColor(RGB(0, 0, 255));
+ mp_eeresetLink->SetFontUnderline(true);
+ mp_eeresetLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_eeresetLink->SetOnClick(fastdelegate::MakeDelegate(this, &CEEPROMTabDlg::OnEeresetLinkClick));
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -390,4 +401,9 @@ void CEEPROMTabDlg::EnableToggleMapWnd(bool toggle)
 {
  if (mp_TablesPanel.get() && ::IsWindow(mp_TablesPanel->m_hWnd))
   mp_TablesPanel->EnableToggleMapWnd(toggle);
+}
+
+void CEEPROMTabDlg::OnEeresetLinkClick(void)
+{
+ SECUMessageBox(IDS_HOW_TO_RESET_EEPROM, MB_OK | MB_ICONINFORMATION);
 }

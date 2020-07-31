@@ -2548,7 +2548,7 @@ bool CAppSettingsModel::WriteSettings(void)
   fn.WriteInt(m_optFuncSM_CONTROL, _T("Разрешение функциональности воздушной заслонки. Установите в 1 для разрешения (0 для запрещения)."));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fn.WriteInt(m_optFuncGD_CONTROL, _T("Enable gas dispencer functionality. Set to 1 to enable (0 - for disabling)"));
+  fn.WriteInt(m_optFuncGD_CONTROL, _T("Enable gas dispenser functionality. Set to 1 to enable (0 - for disabling)"));
  else
   fn.WriteInt(m_optFuncGD_CONTROL, _T("Разрешение функциональности дозатора газа. Установите в 1 для разрешения (0 для запрещения)."));
 
