@@ -181,8 +181,8 @@ BEGIN
     IDS_FWM_SELECT_FOLDER_FOR_FW "Выберите куда сохранить прошивку"
     IDS_FWM_PROCESSOR_COMBO_TT "Выберите марку процессора вашего драйвера форсунок"
 
-    IDS_FWM_FUSEBITS_SECU   "Если вы собираете блок SECU самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения:\n LOCK  = 0xE0    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при\nпомощи программатора." 
-    IDS_FWM_FUSEBITS_LZID   "Если вы собираете драйвер SECU-LZID самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения.\nATmega328PB:\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при помощи\nпрограмматора."
+    IDS_FWM_FUSEBITS_SECU   "Если вы собираете блок SECU самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения:\n LOCK  = 0xEF    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при\nпомощи программатора." 
+    IDS_FWM_FUSEBITS_LZID   "Если вы собираете драйвер SECU-LZID самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения.\nATmega328PB:\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при помощи\nпрограмматора."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -362,8 +362,8 @@ BEGIN
     IDS_FWM_SELECT_FOLDER_FOR_FW "Select where to store firmware"
     IDS_FWM_PROCESSOR_COMBO_TT "Select processor name of your inj. driver"
 
-    IDS_FWM_FUSEBITS_SECU   "If you assemble SECU unit by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values:\n LOCK  = 0xE0    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer." 
-    IDS_FWM_FUSEBITS_LZID   "If you assemble SECU-LZID driver by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values.\nATmega328PB:\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xE0    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer."
+    IDS_FWM_FUSEBITS_SECU   "If you assemble SECU unit by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values:\n LOCK  = 0xEF    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer." 
+    IDS_FWM_FUSEBITS_LZID   "If you assemble SECU-LZID driver by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values.\nATmega328PB:\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer."
 END
 
 /////////////////////////////////////////////////////////////////////////////
