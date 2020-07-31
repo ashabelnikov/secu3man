@@ -368,4 +368,14 @@ namespace MathHelpers
   }
   return value;
  }
+
+
+ //Compare two floating point numbers
+ //Note: this function may work incorrectly with small values of e due to features of floating point numbers' representation.
+ template <class T>
+ bool IsEqualFlt(T a, T b, T e)
+ {
+  return fabs(a - b) < e;
+ }
+
 }
