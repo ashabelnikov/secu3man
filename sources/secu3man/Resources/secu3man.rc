@@ -114,6 +114,7 @@ BEGIN
     CONTROL         "",IDC_FW_TD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,229,128
     CONTROL         "tab",IDC_FW_PARAM_SEL_TAB,"SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS | TCS_OWNERDRAWFIXED,461,70,20,140
     PUSHBUTTON      "Действия над прошивкой",IDC_FW_POPUPMENU_BUTTON,270,210,100,15
+    CTEXT           "Как сбросить EEPROM?",IDC_FW_EERESET_LINK,380,210,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_EEPROM_DATA DIALOGEX 0, 0, 480, 225
@@ -129,6 +130,7 @@ BEGIN
     PUSHBUTTON      "Действия над EEPROM",IDC_EE_POPUPMENU_BUTTON,255,210,100,15
     PUSHBUTTON      "Ошибки CE",IDC_EE_CE_ERRORS_BTN,170,20,50,20
     LTEXT           "Сетки оборотов и температуры отсутствуют в EEPROM, так как хранятся в прошивке. По горизонтальной оси в соответствующих таблицах отображаются 0.",IDC_EE_GRID_WARNING,170,50,70,80
+    CTEXT           "Как сбросить EEPROM?",IDC_EE_EERESET_LINK,160,150,95,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 237
@@ -211,6 +213,7 @@ BEGIN
     PUSHBUTTON      "ЗАПИСАТЬ сохраненные ошибки",IDC_CE_WRITE_ERRORS_BUTTON,179,179,101,23,BS_MULTILINE
     CONTROL         "Считывать ошибки в реальном времени",IDC_CE_READ_REALTIME_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
+    CTEXT           "Как стереть ошибки?",IDC_CE_CERESET_LINK,393,196,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -770,7 +773,7 @@ BEGIN
     IDS_FW_FW_NAME_TT               "Имя файла прошивки. Если прошивка считана из блока SECU-3, то имя для нее генерируется автоматически."
     IDS_FW_PROG_ONLY_CODE_TT        "Установите эту галочку если обновляетесь в пределах одного релиза и хотите обновить только код с сохранением старых данных прошивки. Рекомендуется использовать только опытным пользователям."
     IDS_FW_PARAM_SEL_TAB_TT         "Переключение между редактированием резервных параметров и переназначением функций входов/выходов."
-    IDS_FW_BL_STARTED_EMERGENCY_TT  "Используйте для восстановления прошивки, если она перестала работать (не отвечает на команды). Последовательность действий: установить галочку, установить перемычку 'Boot loader', включить питание блока. После завершения манипуляций не забудьте убрать перемычку и перезапустить блок."
+    IDS_FW_BL_STARTED_EMERGENCY_TT  "Используйте для восстановления прошивки, если она перестала работать (не отвечает на команды). Последовательность действий: установить галочку, установить перемычку 'Boot loader' (BL_I=0 для SECU-3i), включить питание блока. После завершения манипуляций не забудьте убрать перемычку и перезапустить блок. Для запуска загрузчика в блоке SECU-3i нужно замкнуть вход BL_I на массу. В блоках SECU-3T/Micro/Lite перемычки находятся на плате (нужно вскрывать блок)."
     IDS_EE_EE_NAME_TT               "Имя файла EEPROM. При чтении EEPROM из блока SECU-3 имя генерируется автоматически."
     IDS_EE_MAPSET_NAME_TT           "Редактирование имени набора таблиц хранимого в EEPROM. В EEPROM хранится один набор таблиц."
     IDS_EE_CE_ERRORS_BTN_TT         "Просмотр кодов ошибок Check Engine, которые были зафиксированы блоком и хранятся в EEPROM. Если в появившемся окне нажать Yes(Да), то ошибки будут сброшены."
@@ -826,6 +829,12 @@ BEGIN
     IDS_HOLD_DUTY_TABSEL_CHECK_TT "Скважность ШИМ удерж.(%). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
     IDS_PEAK_FULL_TABSEL_CHECK_TT "Время Вкл.+время ШИМ (мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
     IDS_PTH_PAUSE_TABSEL_CHECK_TT "Пауза включ.-удерж.(мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_HOW_TO_RESET_EEPROM "Сбросить EEPROM можно 2 способами: 1. Используя пункт 'Сброс EEPROM' во всплывающем\nменю на вкладке 'Данные прошивки'; 2. Используя соответствующую перемычку \n(DE_I=0 для SECU-3i) и следующую последовательность действий: установить перемычку,\nвключить питание блока, подождать 20 секунд, убрать перемычку. Для сброса EEPROM в\nблоке SECU-3i нужно замкнуть вход DE_I на массу. В блоках SECU-3T/Micro/Lite перемычки\nнаходятся на плате (нужно вскрывать блок).\n\n При сбросе EEPROM в него происходит запись резервных параметров, запись 1-го набора\n таблиц из прошивки и стирание всех сохраненных кодов ошибок CE."
+    IDS_HOW_TO_RESET_CEERRORS "Отдельные ошибки можно установить/сбросить клацнув в соответствующую ячейку\nв столбце 'Состояние' и затем нажать кнопку 'ЗАПИСАТЬ сохраненные ошибки'. Также,\nошибки стираются при сбросе EEPROM (сбросить EEPROM можно на вкладке 'Данные прошивки'\nили перемычкой DE (в SECU-3i вход DE_I нужно замыкнуть на массу))."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -937,6 +946,7 @@ BEGIN
     CONTROL         "",IDC_FW_TD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,229,128
     CONTROL         "tab",IDC_FW_PARAM_SEL_TAB,"SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS | TCS_OWNERDRAWFIXED,461,70,20,140
     PUSHBUTTON      "Actions on the firmware",IDC_FW_POPUPMENU_BUTTON,270,210,100,15
+    CTEXT           "How to reset EEPROM?",IDC_FW_EERESET_LINK,380,210,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_EEPROM_DATA DIALOGEX 0, 0, 480, 225
@@ -952,6 +962,7 @@ BEGIN
     PUSHBUTTON      "Actions on the EEPROM",IDC_EE_POPUPMENU_BUTTON,255,210,100,15
     PUSHBUTTON      "CE errors",IDC_EE_CE_ERRORS_BTN,170,20,50,20
     LTEXT           "RPM and temperature grids are absent in the EEPROM, as they are stored in the firmware. On the horizontal axis, 0 is displayed in the corresponding tables.",IDC_EE_GRID_WARNING,170,50,70,80
+    CTEXT           "How to reset EEPROM?",IDC_EE_EERESET_LINK,160,150,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 237
@@ -1028,14 +1039,13 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Set All",IDC_CE_LIST_SETALL_BUTTON,52,3,65,16
     PUSHBUTTON      "Reset All",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
-    CONTROL         "Show errors with inertness",IDC_CE_READ_INERTNESS_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
+    CONTROL         "Show errors with inertness",IDC_CE_READ_INERTNESS_CHECKBOX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
     CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,153
     PUSHBUTTON      "READ saved errors",IDC_CE_READ_ERRORS_BUTTON,59,179,102,23,BS_MULTILINE
     PUSHBUTTON      "WRITE saved errors",IDC_CE_WRITE_ERRORS_BUTTON,179,179,101,23,BS_MULTILINE
-    CONTROL         "Read errors in realtime", IDC_CE_READ_REALTIME_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
+    CONTROL         "Read errors in realtime", IDC_CE_READ_REALTIME_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
+    CTEXT           "How to clear errors?",IDC_CE_CERESET_LINK,393,196,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -1649,6 +1659,12 @@ BEGIN
     IDS_HOLD_DUTY_TABSEL_CHECK_TT "Hold PWM duty (%). This table is used by the firmware only if corresponding 'Table' checkbox is set"
     IDS_PEAK_FULL_TABSEL_CHECK_TT "Peak ON + PWM time (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
     IDS_PTH_PAUSE_TABSEL_CHECK_TT "Peak-to-hold pause (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_HOW_TO_RESET_EEPROM "You can reset the EEPROM in 2 ways: 1. Using the 'Reset EEPROM' item\nin the pop-up menu on the 'Firmware data' tab; 2. Using the appropriate jumper \n (DE_I = 0 for SECU-3i) and the following sequence of actions: set the jumper,\npower on the unit, wait 20 seconds, remove the jumper. To reset the EEPROM for the\nSECU-3i unit, close the DE_I input to ground. In SECU-3T/Micro/Lite units, jumpers are\n on the board (you need to open the unit).\n\nWhen the EEPROM is reset, reserve parameters are written to it, the 1st set of\n tables is written from the firmware and all stored CE error codes are erased."
+    IDS_HOW_TO_RESET_CEERRORS "Individual errors can be set/reset by clicking in the corresponding cell\nin the 'Status' column and then clicking the 'WRITE saved errors' button. Also,\nerrors are erased when the EEPROM is reset (you can reset the EEPROM on\nthe 'Firmware Data' tab or with the DE jumper (in SECU-3i, the DE_I input\nshould be shorted to ground))."
 END
 
 /////////////////////////////////////////////////////////////////////////////

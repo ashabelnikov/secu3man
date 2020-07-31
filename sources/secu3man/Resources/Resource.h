@@ -631,3 +631,8 @@
 #define ID_APP_EDITINI                  4755
 #define IDD_APP_SETTINGS_EDITOR         4756
 #define IDC_INI_RICHEDIT                4757
+#define IDC_FW_EERESET_LINK             4758
+#define IDC_EE_EERESET_LINK             4759
+#define IDS_HOW_TO_RESET_EEPROM         4760
+#define IDC_CE_CERESET_LINK             4761
+#define IDS_HOW_TO_RESET_CEERRORS       4762

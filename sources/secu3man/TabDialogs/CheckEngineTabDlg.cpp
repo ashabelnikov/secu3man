@@ -32,6 +32,8 @@
 #include "common/unicodesupport.h"
 #include "ui-core/HeaderCtrlEx.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/Label.h"
+#include "ui-core/MsgBox.h"
 
 #define TIMER_ID 0
 
@@ -43,6 +45,7 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 , m_rw_buttons_enabled(false)
 , m_initialized(false)
 , m_header_ctrl(new CHeaderCtrlEx())
+, mp_ceresetLink(new CLabel)
 {
  m_image_list.Create(IDB_CE_LIST_ICONS, 16, 2, RGB(255,255,255));
  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT);
@@ -64,6 +67,7 @@ void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CE_WRITE_ERRORS_BUTTON, m_write_saved_button);
  DDX_Control(pDX, IDC_CE_LIST_SETALL_BUTTON, m_list_set_all_button);
  DDX_Control(pDX, IDC_CE_LIST_CLEARALL_BUTTON, m_list_clear_all_button);
+ DDX_Control(pDX, IDC_CE_CERESET_LINK, *mp_ceresetLink);
 }
 
 LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
@@ -137,6 +141,13 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_realtime_checkbox, MLL::GetString(IDS_CE_READ_REALTIME_CHECKBOX_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //init HTTP link
+ mp_ceresetLink->SetLink(true);
+ mp_ceresetLink->SetTextColor(RGB(0, 0, 255));
+ mp_ceresetLink->SetFontUnderline(true);
+ mp_ceresetLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_ceresetLink->SetOnClick(fastdelegate::MakeDelegate(this, &CCheckEngineTabDlg::OnCeresetLinkClick));
 
  m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -337,6 +348,10 @@ void CCheckEngineTabDlg::OnSize( UINT nType, int cx, int cy )
   rc2 = GDIHelpers::GetChildWndRect(&m_read_saved_button);
   m_errors_list.SetWindowPos(NULL, 0, 0, rc1.Width(), rc2.top - rc1.top - da.ScaleY(3), SWP_NOMOVE | SWP_NOZORDER);
 
+  rc1 = GDIHelpers::GetChildWndRect(mp_ceresetLink.get());
+  rc2 = GDIHelpers::GetChildWndRect(&m_quick_help_text);
+  mp_ceresetLink->MoveWindow(rc1.left, rc2.top  - rc1.Height() - da.ScaleY(8), rc1.Width(), rc1.Height());
+
   m_write_saved_button.Invalidate();
   m_read_saved_button.Invalidate();
   m_realtime_checkbox.Invalidate();
@@ -357,4 +372,9 @@ void CCheckEngineTabDlg::OnPaint()
   m_normal_text_color = normal_text_color;
   m_header_ctrl->SetTextColor(m_all_enabled ? m_normal_text_color : m_gray_text_color);
  }
+}
+
+void CCheckEngineTabDlg::OnCeresetLinkClick(void)
+{
+ SECUMessageBox(IDS_HOW_TO_RESET_CEERRORS, MB_OK | MB_ICONINFORMATION);
 }
