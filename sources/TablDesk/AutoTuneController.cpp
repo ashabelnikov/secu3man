@@ -91,7 +91,10 @@ size_t CAutoTuneController::_CalcFIFOSize(void)
   return LDQUEUE_SIZE;
  int dtm = (m_logdata[0].time - m_logdata[LDQUEUE_SIZE_MIN-1].time);
  if (dtm==0)
+ {
   SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::_CalcFIFOSize"));
+  dtm = 1; //replace zero by minimum possible value
+ }
  return MathHelpers::Round((m_maxLamDel * LDQUEUE_SIZE_MIN) / dtm);
 }
 
@@ -102,7 +105,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
 
  //update load axis grid if necessry
  bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
- if (m_ldaxNeedsUpdate || ((m_baro_press != dv.baro_press) && useBaroMax))
+ if (m_ldaxNeedsUpdate || (!MathHelpers::IsEqualFlt(m_baro_press, dv.baro_press, 0.01f) && useBaroMax))
  {
   mp_loadGrid = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, VEMAP_LOAD_SIZE);
   m_ldaxNeedsUpdate = false;
@@ -418,7 +421,7 @@ void CAutoTuneController::Smoothing(void)
  //assign time to associated changed VE cells
  for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
   for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
-   if (_GetVEItem(l, r) != orig[(((VEMAP_LOAD_SIZE - 1) - l)*VEMAP_RPM_SIZE)+r])
+   if (!MathHelpers::IsEqualFlt(_GetVEItem(l, r), orig[(((VEMAP_LOAD_SIZE - 1) - l)*VEMAP_RPM_SIZE)+r], 0.0001f)) // !=
     m_lastchg[l][r] = GetTickCount();
 
  mp_view->UpdateView(); //Update our view
@@ -439,6 +442,11 @@ int CAutoTuneController::_FindNearestGridPoint(float arg, float *grid, int gSize
 float CAutoTuneController::_ShepardInterpolation(float rpm, float load, const ScatterItem_t& points, double power, double eps /*= 0.01*/, float& o_avdist)
 {
  std::vector<double> w(points.size(), 0);
+ if (0==points.size())
+ {
+  o_avdist = 0;
+  return 0; //prevent dision by zero
+ }
  
  double ws = 0, avd = 0;
  for(size_t i = 0; i < points.size(); ++i)
@@ -451,8 +459,6 @@ float CAutoTuneController::_ShepardInterpolation(float rpm, float load, const Sc
   ws+= w[i];
  }
 
- if (points.size()==0)
-  SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::_ShepardInterpolation"));  
  o_avdist = (float)(avd / points.size()); //average
 
  double f = 0;
@@ -533,7 +539,7 @@ void CAutoTuneController::setOnMapChanged(EventWithCode OnFunction)
 
 void CAutoTuneController::SetLoadAxisCfg(float minVal, float maxVal)
 {
- if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal))
+ if (!MathHelpers::IsEqualFlt(m_ldaxMin, minVal, 0.01f) || !MathHelpers::IsEqualFlt(m_ldaxMax, maxVal, 0.01f))
   m_ldaxNeedsUpdate = true;
  m_ldaxMin = minVal;
  m_ldaxMax = maxVal;
