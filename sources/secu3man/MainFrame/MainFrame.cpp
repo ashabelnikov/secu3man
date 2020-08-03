@@ -77,6 +77,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_MESSAGE(WM_SYSCOLORCHANGE, OnSysColorChange)
  ON_COMMAND(ID_APP_CHILD_CHATRS, OnChildCharts)
  ON_COMMAND(ID_APP_TOGGLE_MAPWND, OnToggleMapWnd)
+ ON_COMMAND(ID_HELP, OnHelp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -351,6 +352,11 @@ void CMainFrame::setOnToggleMapWnd(EventHandler i_OnFunction)
 void CMainFrame::setOnEditSettings(EventHandler i_OnFunction)
 {
  m_OnEditSettings = i_OnFunction;
+}
+
+void CMainFrame::setOnHelp(EventHandler i_OnFunction)
+{
+ m_OnHelp = i_OnFunction;
 }
 
 void CMainFrame::OnClose()
@@ -628,6 +634,12 @@ void CMainFrame::OnAppEditSettings()
 {
  if (m_OnEditSettings)
   m_OnEditSettings();
+}
+
+void CMainFrame::OnHelp()
+{
+ if (m_OnHelp)
+  m_OnHelp();
 }
 
 BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam)

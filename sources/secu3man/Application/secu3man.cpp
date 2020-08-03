@@ -199,6 +199,8 @@ CSecu3manApp::CSecu3manApp()
  if (!CheckAppIntegrity() || !CheckVersion())
   delete this;
  //========================================================
+
+ EnableHtmlHelp();
 }
 
 CSecu3manApp::~CSecu3manApp()

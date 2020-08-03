@@ -12,7 +12,7 @@ CFLAGS  = $(CFLAGS) -D_CRT_NON_CONFORMING_SWPRINTFS -D_CRT_SECURE_NO_WARNINGS -D
 CFLAGS  = $(CFLAGS) /D NDEBUG
 CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
-SYSLIBS = shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+SYSLIBS = shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Htmlhelp.lib
 LIBS    = about.lib hexutils.lib ui-core.lib io-core.lib fwimpexp.lib tabldesk.lib midesk.lib paramdesk.lib
 # linker flags and directives
 LFLAGS  = /nologo /subsystem:windows /MACHINE:x86 /release /OUT:../../binaries/secu3man.exe /LIBPATH:../../libraries secu3man.res

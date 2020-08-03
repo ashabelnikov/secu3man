@@ -22,6 +22,8 @@ set(LIBRARIES about fwimpexp hexutils io-core midesk
   paramdesk tabldesk ui-core
   )
 
+set(SYSLIB Htmlhelp.lib)
+
 foreach(LIBRARY ${LIBRARIES})
   add_subdirectory(../${LIBRARY} ../${LIBRARY})
 endforeach()
@@ -164,4 +166,4 @@ endforeach(src_file ${SOURCES})
 set_source_files_properties(Application/StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
 
 add_executable(${PROJECT} WIN32 ${HEADERS} ${SOURCES} ${RESOURCES})
-target_link_libraries(${PROJECT} ${LIBRARIES})
+target_link_libraries(${PROJECT} ${LIBRARIES} ${SYSLIB})

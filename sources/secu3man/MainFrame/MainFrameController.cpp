@@ -28,6 +28,7 @@
 #include "MainFrameController.h"
 
 #include <limits>
+#include <shlwapi.h>
 #include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/fastdelegate.h"
@@ -116,6 +117,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnChildCharts(MakeDelegate(this, &MainFrameController::OnChildCharts));
  mp_view->setOnToggleMapWnd(MakeDelegate(this, &MainFrameController::OnToggleMapWnd));
  mp_view->setOnEditSettings(MakeDelegate(this, &MainFrameController::OnEditSettings));
+ mp_view->setOnHelp(MakeDelegate(this, &MainFrameController::OnHelp));
 }
 
 MainFrameController::~MainFrameController()
@@ -547,4 +549,27 @@ void MainFrameController::OnEditSettings()
     AfxGetMainWnd()->DestroyWindow();
   }
  }
+}
+
+void MainFrameController::OnHelp()
+{
+ TCHAR directory[MAX_PATH+1];
+ HMODULE hModule = GetModuleHandle(NULL);
+ ASSERT(hModule);
+ _tcscpy(directory,_T(""));
+ GetModuleFileName(hModule, directory, MAX_PATH);
+ VERIFY(PathRemoveFileSpec(directory));
+ 
+ CString path(directory);
+ CString last_char = path.Right(1);
+ if (last_char != _T("\\")) //если корневой каталог, то '\' уже есть
+  path+=_T("\\");
+
+ ISettingsData* p_sett = m_pAppSettingsManager->GetSettings();
+ if (p_sett->GetInterfaceLanguage() == IL_RUSSIAN)
+  path = path + _T("secu3help-ru.chm");
+ else
+  path = path + _T("secu3help-en.chm");
+
+ VERIFY(::HtmlHelp(mp_view->m_hWnd, (LPCTSTR)path, HH_DISPLAY_TOPIC, NULL));
 }

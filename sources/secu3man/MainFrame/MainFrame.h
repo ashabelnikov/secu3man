@@ -87,6 +87,7 @@ class CMainFrame : public CFrameWnd
   void setOnChildCharts(EventHandler i_OnFunction);
   void setOnToggleMapWnd(EventHandler i_OnFunction);
   void setOnEditSettings(EventHandler i_OnFunction);
+  void setOnHelp(EventHandler i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -126,6 +127,7 @@ protected:
   LRESULT OnSysColorChange(WPARAM wParam, LPARAM lParam);
   afx_msg void OnChildCharts();
   afx_msg void OnToggleMapWnd();
+  afx_msg void OnHelp();
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -158,6 +160,7 @@ private:
   EventHandler m_OnChildCharts;
   EventHandler m_OnToggleMapWnd;
   EventHandler m_OnEditSettings;
+  EventHandler m_OnHelp;
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;
