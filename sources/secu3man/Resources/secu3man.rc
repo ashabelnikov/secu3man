@@ -43,8 +43,9 @@ BEGIN
         MENUITEM "Дочерние окна таблиц", ID_APP_CHILD_CHATRS
         MENUITEM "Переключать окна таблиц", ID_APP_TOGGLE_MAPWND
     END
-    POPUP "&Help"
+    POPUP "&Помощь"
     BEGIN
+        MENUITEM "Справка", ID_HELP 
         MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
         MENUITEM "Сайт разработчиков", ID_APP_DEV_SITE
         MENUITEM "Поддержка на форуме", ID_APP_DEV_FORUM
@@ -877,6 +878,7 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
+        MENUITEM "Help", ID_HELP 
         MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
         MENUITEM "Developers' site", ID_APP_DEV_SITE
         MENUITEM "Support forum", ID_APP_DEV_FORUM
