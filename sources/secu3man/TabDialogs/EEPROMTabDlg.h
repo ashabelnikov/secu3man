@@ -102,9 +102,13 @@ class CEEPROMTabDlg : public CTabDialog
 
  private:
   void OnEeresetLinkClick(void);
+  void OnEeContLinkClick(void);
+  void OnEeUsingLinkClick(void);
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CLabel> mp_eeresetLink;
+  std::auto_ptr<CLabel> mp_eecontLink;
+  std::auto_ptr<CLabel> mp_eeusingLink;
 
   CEdit     m_ee_name;
   CEdit     m_ee_mapset_name;

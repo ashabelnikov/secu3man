@@ -636,3 +636,7 @@
 #define IDS_HOW_TO_RESET_EEPROM         4760
 #define IDC_CE_CERESET_LINK             4761
 #define IDS_HOW_TO_RESET_CEERRORS       4762
+#define IDC_EE_CONTENT_LINK             4763
+#define IDS_WHAT_STORED_EEPROM          4764
+#define IDC_EE_USING_LINK               4765
+#define IDS_WHEN_TO_USE_EEPROM          4766
