@@ -69,90 +69,445 @@ CBootLoader::~CBootLoader()
 bool CBootLoader::FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int* current)
 {
  BYTE t_buf[2048];
- BYTE t_byte = 0;
  int  block_size = FLASH_PAGE_SIZE * 2;
- int index = 0;
 
- t_buf[index++] = '!'; //!R
- t_buf[index++] = 'R';
-
- if (m_ppf.m_page_count <= 256) //NN
+ for(int attempt = 0; attempt < 3; ++attempt) //try several times
  {
-  CNumericConv::Bin8ToHex(n_page, &t_buf[index]); //добавили номер страницы (t_buf[2],t_buf[3])
-  index+=2;
+  BYTE t_byte = 0;
+  int index = 0;
+  t_buf[index++] = '!'; //!R
+  t_buf[index++] = 'R';
+
+  if (attempt > 0)
+   Sleep(100); //deleay 100ms after errors
+
+  if (m_ppf.m_page_count <= 256) //NN
+  {
+   CNumericConv::Bin8ToHex(n_page, &t_buf[index]); //добавили номер страницы (t_buf[2],t_buf[3])
+   index+=2;
+  }
+  else //need NNN instead of NN
+  {
+   CNumericConv::Bin12ToHex(n_page, &t_buf[index]); //добавили номер страницы (t_buf[2],t_buf[3],t_buf[4])
+   index+=3;
+  }
+
+  t_buf[index++] = 0;  //завершили строку
+  m_p_port->SendASCII((char*)t_buf);         //послали команду чтения страницы
+
+  //теперь необходимо получить данные страницы
+  if (!m_p_port->RecvByte(&t_byte))
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   continue; //error, try one more time
+  }
+
+  if (t_byte!='<')
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   continue; //error, try one more time
+  }
+
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));  //1 байт получен
+
+  if (!m_p_port->RecvBlock(t_buf, block_size))  //приняли очередную страницу
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   --(*current);
+   continue; //error, try one more time
+  }
+
+  if (!CNumericConv::HexArrayToBin(t_buf, o_buf, FLASH_PAGE_SIZE))
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   --(*current);
+   continue; //error, try one more time
+  }
+
+  (*current)+=block_size;
+  EventHandler_OnUpdateUI(m_opdata.opcode,total_size,*current); //очередная страница принята
+
+  if (!m_p_port->RecvBlock(t_buf,2))  //CS - two symbols
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   (*current)-=block_size+1; //return value back
+   continue; //error, try one more time
+  }
+
+  if (!CNumericConv::Hex8ToBin(t_buf, &t_byte))   //t_buf -> symbol
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   (*current)-=block_size+1;
+   continue; //error, try one more time
+  }
+
+  if (CNumericConv::CheckSum_8_xor(o_buf, FLASH_PAGE_SIZE)!=t_byte) //проверяем контрольную сумму
+  {
+   m_ErrorCode = BL_ERROR_CHKSUM;
+   (*current)-=block_size+1;
+   continue; //error, try one more time
+  }
+
+  *current+=2;
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);  //page has been received
+  m_ErrorCode = 0;
+  return true; //exit if there are no errors
  }
- else //need NNN instead of NN
- {
-  CNumericConv::Bin12ToHex(n_page, &t_buf[index]); //добавили номер страницы (t_buf[2],t_buf[3],t_buf[4])
-  index+=3;
- }
-
- t_buf[index++] = 0;  //завершили строку
- m_p_port->SendASCII((char*)t_buf);         //послали команду чтения страницы
-
- //теперь необходимо получить данные страницы
- if (!m_p_port->RecvByte(&t_byte))
- {
-  m_ErrorCode = BL_ERROR_NOANSWER;
-  return false; //нет смысла продолжать дальше
- }
-
- if (t_byte!='<')
- {
-  m_ErrorCode = BL_ERROR_WRONG_DATA;
-  return false; //нет смысла продолжать дальше
- }
-
- EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));  //1 байт получен
-
- if (!m_p_port->RecvBlock(t_buf, block_size))  //приняли очередную страницу
- {
-  m_ErrorCode = BL_ERROR_NOANSWER;
-  return false; //часть данных потеряна - нет смысла продолжать дальше
- }
-
- (*current)+=block_size;
- EventHandler_OnUpdateUI(m_opdata.opcode,total_size,*current); //очередная страница принята
-
- if (!CNumericConv::HexArrayToBin(t_buf, o_buf, FLASH_PAGE_SIZE))
- {
-  m_ErrorCode = BL_ERROR_WRONG_DATA;
-  return false;
- }
-
- if (!m_p_port->RecvBlock(t_buf,2))  //CS - two symbols
- {
-  m_ErrorCode = BL_ERROR_NOANSWER;
-  return false;
- }
-
- *current+=2;
- EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);  //page has been received
-
- if (!CNumericConv::Hex8ToBin(t_buf, &t_byte))   //t_buf -> symbol
- {
-  m_ErrorCode = BL_ERROR_WRONG_DATA;
-  return false;
- }
-
- if (CNumericConv::CheckSum_8_xor(o_buf, FLASH_PAGE_SIZE)!=t_byte) //проверяем контрольную сумму
- {
-  m_ErrorCode = BL_ERROR_CHKSUM;
-  return false; //контрольные суммы не совпадают
- }
- return true; //All are OK
+ return false; //errors and all attempts were used
 }
 
+//-----------------------------------------------------------------------
+//Helper function for writing of one FLASH page
+//n_page - number of page for reading
+//i_buf  - buffer containing data for writing (array of bytes)
+//total_size,current - for updating of UI
+bool CBootLoader::FLASH_WriteOnePage(int n_page, BYTE* i_buf, int total_size, int* current)
+{
+ BYTE raw[8192]; //хватит с запасом для любой меги
+ int block_size = m_ppf.m_page_size * 2;
+
+ for(int attempt = 0; attempt < 3; ++attempt) //try several times
+ {
+  int index = 0;
+  BYTE symbol = 0;
+  raw[index++] = '!';	//!P
+  raw[index++] = 'P';
+
+  if (attempt > 0)
+   Sleep(100); //deleay 100ms after errors
+
+  if (m_ppf.m_page_count <= 256)
+  {
+   CNumericConv::Bin8ToHex(n_page, &raw[index]); //append page number NN
+   index+=2;
+  }
+  else //number of pages more than 256
+  {
+   CNumericConv::Bin12ToHex(n_page, &raw[index]); //append page number NNN
+   index+=3;
+  }
+
+  raw[index++] = 0;
+  m_p_port->SendASCII((char*)raw); //послали команду записи страницы
+
+  //теперь необходимо подождать завершения стирания страницы (несколько мс)
+  Sleep(FLASH_PG_ERASE_DELAY*(attempt+1));
+
+  //сконвертировали байты в HEX-символы (raw будет содержать HEX-символы)
+  CNumericConv::BinToHexArray(i_buf, raw, m_ppf.m_page_size);
+  raw[block_size] = 0; //завершаем строку
+
+  m_p_port->SendASCII((char*)raw); //послали данные страницы
+
+  (*current)+=block_size;
+  EventHandler_OnUpdateUI(m_opdata.opcode,total_size,(*current));  //была передана страница
+
+  //теперь будем принимать сигнальный символ и два символа контрольной суммы
+  //теперь необходимо получить данные
+  if (!m_p_port->RecvByte(&symbol))
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   (*current)-=block_size;
+   continue; //error, try one more time
+  }
+
+  if (symbol!='<')
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   (*current)-=block_size;
+   continue; //error, try one more time
+  }
+
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));  //1 byte received
+
+  if (!m_p_port->RecvBlock(raw,2))  //CS
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   (*current)-=block_size+1;
+   continue; //error, try one more time
+  }
+
+  if (!CNumericConv::Hex8ToBin(raw,&symbol))
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   (*current)-=block_size+1;
+   continue; //error, try one more time
+  }
+
+  if (CNumericConv::CheckSum_8_xor(i_buf, m_ppf.m_page_size)!=symbol)
+  {
+   m_ErrorCode = BL_ERROR_CHKSUM; //check sums don't match 
+   (*current)-=block_size+1;
+   continue; //error, try one more time
+  }
+
+  (*current)+=2;
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, (*current));   //2 bytes received
+  m_ErrorCode = 0;
+  return true; //all is Ok
+ }
+ return false; //errors and all attempts were used
+}
+
+//-----------------------------------------------------------------------
+//Helper function for reading of EEPROM
+bool CBootLoader::EEPROM_Read(BYTE* o_buf, int total_size, int* current)
+{
+ BYTE raw[8192+8]; //хватит с запасом для любой меги
+ int i, block_size = (m_ppe.m_size*2) / EEPROM_RD_BLOCKS;
+
+ for(int attempt = 0; attempt < 3; ++attempt) //try several times
+ {
+next_attempt:
+  BYTE symbol = 0;
+
+  if (attempt > 0)
+   Sleep(1000); //deleay 1000ms after errors
+
+  m_p_port->SendASCII("!J"); //чтение
+  if (!m_p_port->RecvByte(&symbol))
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   continue; //error, try one more time
+  }
+  if (symbol!='<')
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   continue; //error, try one more time
+  }
+
+  int current_s = *current;
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));
+
+  for(i = 0; i < EEPROM_RD_BLOCKS; i++) //принимаем данные по блокам
+  {
+   if (!m_p_port->RecvBlock(raw+(i*block_size), block_size))  //receive the data
+   {
+    m_ErrorCode = BL_ERROR_NOANSWER;
+    *current = current_s;
+    goto next_attempt; //часть данных потеряна - нет смысла продолжать дальше
+   }
+   *current+=block_size;
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *(current));
+  }//for
+
+  if (!CNumericConv::HexArrayToBin(raw, o_buf, m_ppe.m_size))
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *(current));
+
+  if (!m_p_port->RecvBlock(raw, 2))  //CS
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  if (!CNumericConv::Hex8ToBin(raw, &symbol))
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  if (CNumericConv::CheckSum_8_xor(o_buf, m_ppe.m_size) != symbol)
+  {
+   m_ErrorCode = BL_ERROR_CHKSUM;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  *current+=2;
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *(current));
+  m_ErrorCode = 0;
+  return true; //all is Ok
+ }
+ return false; //errors and all attempts were used
+}
+
+//-----------------------------------------------------------------------
+//Helper function for writing of EEPROM
+bool CBootLoader::EEPROM_Write(BYTE* i_buf, int total_size, int* current)
+{
+ BYTE raw[8192+8]; //хватит с запасом для любой меги
+ int k, i, j, block_size = (m_ppe.m_size*2) / EEPROM_WR_BLOCKS;
+
+ for(int attempt = 0; attempt < 3; ++attempt) //try several times
+ {
+  BYTE symbol = 0;
+
+  if (attempt > 0)
+   Sleep(1000); //deleay 1000ms after errors
+
+  m_p_port->SendASCII("!W");  //запись
+
+  //сконвертировали байты в HEX-символы
+  CNumericConv::BinToHexArray(i_buf, raw, m_ppe.m_size);
+
+  int current_s = *current;
+  k = 0;
+  for(i = 0; i < EEPROM_WR_BLOCKS; i++) //передаем данные по блокам
+  {
+   for(j = 0; j < block_size; j++) //цикл: на каждый байт по 2 символа
+   {
+    m_p_port->SendByte(raw[k]);
+    Sleep(EEPROM_WR_DELAY_MULTIPLIER);
+    k++;
+   }
+   *current+=block_size;
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);
+  }//for
+
+  //принимаем ответ
+  if (!m_p_port->RecvByte(&symbol))
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  if (symbol!='<')  //символ не является сигнальным (хотя и был принят успешно)
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));
+
+  if (!m_p_port->RecvBlock(raw, 2))  //CS
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  if (!CNumericConv::Hex8ToBin(raw, &symbol))
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  if (CNumericConv::CheckSum_8_xor(i_buf, m_ppe.m_size) != symbol)
+  {
+   m_ErrorCode = BL_ERROR_CHKSUM;
+   *current = current_s;
+   continue; //error, try one more time
+  }
+
+  *current+=2;
+  EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *(current));
+  m_ErrorCode = 0;
+  return true; //all is Ok
+ }
+ return false; //errors and all attempts were used
+}
+
+//-----------------------------------------------------------------------
+bool CBootLoader::ReadSignature(BYTE* o_buf, int total_size, int* current)
+{
+ for(int attempt = 0; attempt < 3; ++attempt) //try several times
+ {
+  BYTE symbol = 0;
+
+  if (attempt > 0)
+   Sleep(1000); //deleay 1000ms after errors
+
+  m_p_port->SendASCII("!I");
+  if (!m_p_port->RecvByte(&symbol))
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   continue; //error, try one more time
+  }
+  if (symbol != '<')
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;          
+   continue; //error, try one more time
+  }
+  else
+  {
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));
+   if (!m_p_port->RecvBlock(o_buf, BL_SIGNATURE_STR_LEN))
+   {
+    m_ErrorCode = BL_ERROR_NOANSWER;
+    --(*current);
+    continue; //error, try one more time
+   }
+   (*current)+=BL_SIGNATURE_STR_LEN;
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);
+  }
+  m_ErrorCode = 0;
+  return true; //all is Ok
+ }
+ return false; //errors and all attempts were used
+}
+
+//-----------------------------------------------------------------------
+//Exit from boot loader
+bool CBootLoader::ExitBootLoader(int total_size, int* current)
+{
+ for(int attempt = 0; attempt < 3; ++attempt) //try several times
+ {
+  BYTE symbol = 0;
+
+  if (attempt > 0)
+   Sleep(100); //deleay 1000ms after errors
+
+  //посылаем команду
+  m_p_port->SendASCII("!T");
+  //принимаем и анализируем ответ
+  if (!m_p_port->RecvByte(&symbol))
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   continue; //error, try one more time
+  }
+  if (symbol!='<')
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   continue; //error, try one more time
+  }
+  else
+  {
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current)); //рапортуем о принятии первого байта
+  }
+
+  symbol = 0;
+  //второй байт
+  if (!m_p_port->RecvByte(&symbol))
+  {
+   m_ErrorCode = BL_ERROR_NOANSWER;
+   --(*current);
+   continue; //error, try one more time
+  }
+  if (symbol!='@')
+  {
+   m_ErrorCode = BL_ERROR_WRONG_DATA;
+   --(*current);
+   continue; //error, try one more time
+  }
+  else
+  {
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current)); //рапортуем о принятии второго байта
+  }
+
+  m_ErrorCode = 0;
+  return true; //all is Ok
+ }
+ return false; //errors and all attempts were used
+}
 
 //-----------------------------------------------------------------------
 DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 {
  CBootLoader* p_boot = (CBootLoader*)lpParameter;
  CComPort* p_port = p_boot->m_p_port;
- int opcode = 0, i = 0, j = 0, k = 0;
- int block_size,total_size,current;
- BYTE symbol = 0;  //для принятия символа '<'
- BYTE raw[8192+8]; //хватит с запасом для любой меги
+ int opcode = 0, i = 0, j = 0;
+ int block_size, total_size, current;
  BYTE t_buf[1024];
  BYTE* fw_buf = &p_boot->m_fw_buf[0];
 #define FLASH_PAGE_SIZE_S (p_boot->m_ppf.m_page_size)
@@ -178,7 +533,6 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
     }
 
     p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
-    symbol     = 0;
     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
     block_size = FLASH_PAGE_SIZE_S * 2;
     current    = 0;
@@ -187,9 +541,6 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
     //сколько байтов нехватает от начала страницы до стартового адреса
     int bottom_offset = p_boot->m_opdata.addr % FLASH_PAGE_SIZE_S;
-
-    /*//сколько байтов нехватает от конечного адреса до конца страницы
-    int top_overhead  = (end_size % FLASH_PAGE_SIZE) ? FLASH_PAGE_SIZE - (end_size % FLASH_PAGE_SIZE) : 0;*/
 
     int page_start = (p_boot->m_opdata.addr / FLASH_PAGE_SIZE_S);
     int page_end = (end_size / FLASH_PAGE_SIZE_S) + ((end_size % FLASH_PAGE_SIZE_S)!=0) - 1;
@@ -217,7 +568,6 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
    //=========================================================================================
    case BL_OP_WRITE_FLASH:   //write FLASH
     p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
-    symbol = 0;
     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
     block_size = FLASH_PAGE_SIZE_S * 2;
     current = 0;
@@ -253,72 +603,8 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
       memcpy(t_buf, p_boot->m_opdata.data+(i*FLASH_PAGE_SIZE_S), FLASH_PAGE_SIZE_S);
      }
 
-     int index = 0;
-     raw[index++] = '!';	//!P
-     raw[index++] = 'P';
-     if (p_boot->m_ppf.m_page_count <= 256)
-     {
-      CNumericConv::Bin8ToHex(i, &raw[index]); //append page number NN
-      index+=2;
-     }
-     else //number of pages more than 256
-     {
-      CNumericConv::Bin12ToHex(i, &raw[index]); //append page number NNN
-      index+=3;
-     }
-
-     raw[index++] = 0;
-     p_port->SendASCII((char*)raw); //послали команду записи страницы
-
-     //теперь необходимо подождать завершения стирания страницы (несколько мс)
-     Sleep(FLASH_PG_ERASE_DELAY);
-
-     //сконвертировали байты в HEX-символы (raw будет содержать HEX-символы)
-     CNumericConv::BinToHexArray(t_buf, raw, FLASH_PAGE_SIZE_S);
-     raw[block_size] = 0; //завершаем строку
-
-     p_port->SendASCII((char*)raw); //послали данные страницы
-
-     current+=block_size;
-     p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);  //была передана страница
-
-     //теперь будем принимать сигнальный символ и два символа контрольной суммы
-     //теперь необходимо получить данные
-     if (!p_port->RecvByte(&symbol))
-     {
-      p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-      break; //нет смысла продолжать дальше
-     }
-
-     if (symbol!='<')
-     {
-      p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-      break; //нет смысла продолжать дальше
-     }
-
-     p_boot->EventHandler_OnUpdateUI(opcode, total_size, ++current);  //1 byte received
-
-     if (!p_port->RecvBlock(raw,2))  //CS
-     {
-      p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-      break;
-     }
-
-     current+=2;
-     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);   //2 bytes received
-
-     if (!CNumericConv::Hex8ToBin(raw,&symbol))
-     {
-      p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-      break;
-     }
-
-     if (CNumericConv::CheckSum_8_xor(t_buf, FLASH_PAGE_SIZE_S)!=symbol)
-     {
-      p_boot->m_ErrorCode = BL_ERROR_CHKSUM; //check sums don't match 
-      break;
-     }
-
+     if (false == p_boot->FLASH_WriteOnePage(i, t_buf, total_size, &current))
+      break; //ошибка!
     }//for
 
     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
@@ -328,164 +614,43 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
    //=========================================================================================
    case BL_OP_READ_EEPROM:    //read EEPROM
     p_boot->m_ErrorCode = 0;  //перед выполнением новой команды необходимо сбросить ошибки
-    symbol = 0;
-    block_size = (EEPROM_SIZE_S*2)/EEPROM_RD_BLOCKS;
     total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
     current = 0;
 
-    p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
-    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
-    p_port->SendASCII("!J"); //чтение
-    if (!p_port->RecvByte(&symbol))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-     goto finish_read_eeprom;  //ошибка принятия сигнального символа
-    }
-    if (symbol!='<')
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-     goto finish_read_eeprom;
-    }
-
-    p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current);
-
-    for(i = 0; i < EEPROM_RD_BLOCKS; i++) //принимаем данные по блокам
-    {
-     if (!p_port->RecvBlock(raw+(i*block_size),block_size))  //receive the data
-     {
-      p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-      goto finish_read_eeprom;//часть данных потеряна - нет смысла продолжать дальше
-     }
-     current+=block_size;
-     p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
-    }//for
-
-    if (!CNumericConv::HexArrayToBin(raw,p_boot->m_opdata.data, EEPROM_SIZE_S))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-     goto finish_read_eeprom;
-    }
-
-    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
-
-    if (!p_port->RecvBlock(raw,2))  //CS
-    {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-     goto finish_read_eeprom;
-    }
-
-    current+=2;
+    p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
 
-    if (!CNumericConv::Hex8ToBin(raw,&symbol))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-     goto finish_read_eeprom;
-    }
+    p_boot->EEPROM_Read(p_boot->m_opdata.data, total_size, &current);
 
-    if (CNumericConv::CheckSum_8_xor(p_boot->m_opdata.data,EEPROM_SIZE_S)!=symbol)
-     p_boot->m_ErrorCode = BL_ERROR_CHKSUM;
-
-finish_read_eeprom:
-    p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+    p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
     p_boot->m_opdata.opcode = 0;
     break;
 
    //=========================================================================================
    case BL_OP_WRITE_EEPROM:    //запись EEPROM
     p_boot->m_ErrorCode = 0;   //перед выполнение новой команды необходимо сбросить ошибки
-    symbol = 0;
-    block_size = (EEPROM_SIZE_S*2)/EEPROM_WR_BLOCKS;
     total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
     current = 0;
 
-    p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
-    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
-    p_port->SendASCII("!W");  //запись
+    p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
+    p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
 
-    //сконвертировали байты в HEX-символы
-    CNumericConv::BinToHexArray(p_boot->m_opdata.data, raw, EEPROM_SIZE_S);
+    p_boot->EEPROM_Write(p_boot->m_opdata.data, total_size, &current);
 
-     k = 0;
-    for(i = 0; i < EEPROM_WR_BLOCKS; i++) //передаем данные по блокам
-    {
-     for(j = 0; j < block_size; j++) //цикл: на каждый байт по 2 символа
-     {
-      p_port->SendByte(raw[k]);
-      Sleep(EEPROM_WR_DELAY_MULTIPLIER);
-      k++;
-     }
-     current+=block_size;
-     p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
-    }//for
-
-    //принимаем ответ
-    if (!p_port->RecvByte(&symbol))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-     goto finish_write_eeprom; //ошибка принятия сигнального символа
-    }
-
-    if (symbol!='<')  //символ не является сигнальным (хотя и был принят успешно)
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-     goto finish_write_eeprom;
-    }
-
-    p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current);
-
-    if (!p_port->RecvBlock(raw,2))  //CS
-    {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-     goto finish_write_eeprom;
-    }
-
-    current+=2;
-    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
-
-    if (!CNumericConv::Hex8ToBin(raw,&symbol))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-     goto finish_write_eeprom;
-    }
-
-    if (CNumericConv::CheckSum_8_xor(p_boot->m_opdata.data, EEPROM_SIZE_S)!=symbol)
-     p_boot->m_ErrorCode = BL_ERROR_CHKSUM;
-
-finish_write_eeprom:
-    p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+    p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
     p_boot->m_opdata.opcode = 0; //сброс кода операции
     break;
 
    //=========================================================================================
    case BL_OP_READ_SIGNATURE:  //чтение сигнатурной информации о бутлоадере
     p_boot->m_ErrorCode  = 0;
-    symbol = 0;
     total_size = BL_SIGNATURE_STR_LEN+1; //1 byte - '<'
     current = 0;
     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
-    p_port->SendASCII("!I");
-    if (!p_port->RecvByte(&symbol))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-     goto finish_read_signature; //нет смысла продолжать дальше
-    }
-    if (symbol != '<')
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;          
-    }
-    else
-    {
-     p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current);
 
-     if (!p_port->RecvBlock(p_boot->m_opdata.data,BL_SIGNATURE_STR_LEN))
-      p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
+    p_boot->ReadSignature(p_boot->m_opdata.data, total_size, &current);
 
-     current+=BL_SIGNATURE_STR_LEN;
-     p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
-    }
-finish_read_signature:
     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
     p_boot->m_opdata.opcode = 0;
     break;
@@ -493,46 +658,13 @@ finish_read_signature:
    //=========================================================================================
    case BL_OP_EXIT:            //выход из загрузчика
     p_boot->m_ErrorCode = 0;
-    symbol = 0;
     total_size = 1+1; //1 byte - '<', 1 byte - '@'
     current = 0;
     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
-    //посылаем команду
-    p_port->SendASCII("!T");
-    //принимаем и анализируем ответ
-    if (!p_port->RecvByte(&symbol))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-     goto finish_exit;
-    }
-    if (symbol!='<')
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-     goto finish_exit;
-    }
-    else
-    {
-     p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current); //рапортуем о принятии первого байта
-    }
 
-    symbol = 0;
-    //второй байт
-    if (!p_port->RecvByte(&symbol))
-    {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
-     goto finish_exit;
-    }
-    if (symbol!='<')
-    {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
-    }
-    else
-    {
-     p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current); //рапортуем о принятии второго байта
-    }
+    p_boot->ExitBootLoader(total_size, &current);
 
-finish_exit:
     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
     p_boot->m_opdata.opcode = 0;
     break;
