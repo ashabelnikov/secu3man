@@ -160,7 +160,12 @@ class AFX_EXT_CLASS CBootLoader
   }m_opdata;
 
   bool IsOpcodeValid(const int opcode);
-  bool FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* current);
+  bool FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int* current);
+  bool FLASH_WriteOnePage(int n_page, BYTE* i_buf, int total_size, int* current);
+  bool EEPROM_Read(BYTE* o_buf, int total_size, int* current);
+  bool EEPROM_Write(BYTE* i_buf, int total_size, int* current);
+  bool ReadSignature(BYTE* o_buf, int total_size, int* current);
+  bool ExitBootLoader(int total_size, int* current);
 
   void EventHandler_OnUpdateUI(const int i_opcode,const int i_total,const int i_current);
   void EventHandler_OnBegin(const int i_opcode, const int i_status);
