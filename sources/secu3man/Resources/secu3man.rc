@@ -132,6 +132,8 @@ BEGIN
     PUSHBUTTON      "Ошибки CE",IDC_EE_CE_ERRORS_BTN,170,20,50,20
     LTEXT           "Сетки оборотов и температуры отсутствуют в EEPROM, так как хранятся в прошивке. По горизонтальной оси в соответствующих таблицах отображаются 0.",IDC_EE_GRID_WARNING,170,50,70,80
     CTEXT           "Как сбросить EEPROM?",IDC_EE_EERESET_LINK,160,150,95,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CTEXT           "Что хранится в EEPROM?",IDC_EE_CONTENT_LINK,160,170,95,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CTEXT           "Когда использовать?",IDC_EE_USING_LINK,160,190,95,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS   
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 237
@@ -836,6 +838,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_HOW_TO_RESET_EEPROM "Сбросить EEPROM можно 2 способами: 1. Используя пункт 'Сброс EEPROM' во всплывающем\nменю на вкладке 'Данные прошивки'; 2. Используя соответствующую перемычку \n(DE_I=0 для SECU-3i) и следующую последовательность действий: установить перемычку,\nвключить питание блока, подождать 20 секунд, убрать перемычку. Для сброса EEPROM в\nблоке SECU-3i нужно замкнуть вход DE_I на массу. В блоках SECU-3T/Micro/Lite перемычки\nнаходятся на плате (нужно вскрывать блок).\n\n При сбросе EEPROM в него происходит запись резервных параметров, запись 1-го набора\n таблиц из прошивки и стирание всех сохраненных кодов ошибок CE."
     IDS_HOW_TO_RESET_CEERRORS "Отдельные ошибки можно установить/сбросить клацнув в соответствующую ячейку\nв столбце 'Состояние' и затем нажать кнопку 'ЗАПИСАТЬ сохраненные ошибки'. Также,\nошибки стираются при сбросе EEPROM (сбросить EEPROM можно на вкладке 'Данные прошивки'\nили перемычкой DE (в SECU-3i вход DE_I нужно замыкнуть на массу))."
+    IDS_WHAT_STORED_EEPROM "В EEPROM хранятся: параметры, 5-й набор таблиц, коды ошибок СЕ.\n\nПараметры и 5-й набор таблиц доступны для редактирования\nв режиме онлайн на вкладке 'Параметры и монитор'.\nКоды ошибок CE доступны для редактирования на вкладке\n'Check Engine'.\n\nНа вкладке 'EEPROM' производится редактирование в офлайн\nрежиме (аналогично редактированию прошивки на вкладке\n'Данные прошивки')."
+    IDS_WHEN_TO_USE_EEPROM "Использовать данные из EEPROM рекомендуется только во время настройки.\nПосле завершения настройки рекомендуется использовать данные из\nпрошивки. Для этого необходимо импортировать параметры и таблицы\nв прошивку из файла EEPROM\n(Данные прошивки-->Действия над прошивкой-->Импорт данных),\nна вкладке резервных параметров 'Безопасность' установить галочку\n'Всегда загружать параметры из flash'.\n\nПри возможности используйте управление питанием блока, так как оно\nповышает надежность хранения данных в EEPROM."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -965,6 +969,8 @@ BEGIN
     PUSHBUTTON      "CE errors",IDC_EE_CE_ERRORS_BTN,170,20,50,20
     LTEXT           "RPM and temperature grids are absent in the EEPROM, as they are stored in the firmware. On the horizontal axis, 0 is displayed in the corresponding tables.",IDC_EE_GRID_WARNING,170,50,70,80
     CTEXT           "How to reset EEPROM?",IDC_EE_EERESET_LINK,160,150,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CTEXT           "What is stored in EEPROM?",IDC_EE_CONTENT_LINK,160,170,95,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CTEXT           "When to use?",IDC_EE_USING_LINK,160,190,95,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS   
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 237
@@ -1667,6 +1673,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_HOW_TO_RESET_EEPROM "You can reset the EEPROM in 2 ways: 1. Using the 'Reset EEPROM' item\nin the pop-up menu on the 'Firmware data' tab; 2. Using the appropriate jumper \n (DE_I = 0 for SECU-3i) and the following sequence of actions: set the jumper,\npower on the unit, wait 20 seconds, remove the jumper. To reset the EEPROM for the\nSECU-3i unit, close the DE_I input to ground. In SECU-3T/Micro/Lite units, jumpers are\n on the board (you need to open the unit).\n\nWhen the EEPROM is reset, reserve parameters are written to it, the 1st set of\n tables is written from the firmware and all stored CE error codes are erased."
     IDS_HOW_TO_RESET_CEERRORS "Individual errors can be set/reset by clicking in the corresponding cell\nin the 'Status' column and then clicking the 'WRITE saved errors' button. Also,\nerrors are erased when the EEPROM is reset (you can reset the EEPROM on\nthe 'Firmware Data' tab or with the DE jumper (in SECU-3i, the DE_I input\nshould be shorted to ground))."
+    IDS_WHAT_STORED_EEPROM "EEPROM stores: parameters, 5th set of tables, CE error codes.\n\nParameters and 5th set of tables are available for editing\nonline on 'Parameters and monitor' tab.\nCE error codes are available for editing on 'Check Engine' tab.\n\nOn the 'EEPROM' tab, offline editing is performed\n(similar to editing the firmware on the 'Firmware data' tab)."
+    IDS_WHEN_TO_USE_EEPROM "It is recommended to use data from EEPROM only during setup/tuning.\nAfter setup is complete, it is recommended to use data from firmware.\nTo do this, you need to import parameters and tables\nto the firmware from the EEPROM file\n(Firmware data->Actions on the firmware->Import data),\non the 'Security' tab of the reserve parameters set the checkbox\n'Always load parameters from flash'.\n\nUse power management for unit's supply when possible, as it\nimproves the reliability of data storage in the EEPROM."
 END
 
 /////////////////////////////////////////////////////////////////////////////

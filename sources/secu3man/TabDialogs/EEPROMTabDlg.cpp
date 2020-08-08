@@ -49,6 +49,8 @@ CEEPROMTabDlg::CEEPROMTabDlg(CWnd* pParent /*=NULL*/)
 , m_is_bl_items_available(false)
 , m_initialized(false)
 , mp_eeresetLink(new CLabel)
+, mp_eecontLink(new CLabel)
+, mp_eeusingLink(new CLabel)
 {
  mp_ContextMenuManager->CreateContent();
 
@@ -67,6 +69,8 @@ void CEEPROMTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_EE_POPUPMENU_BUTTON, m_ee_popup_menu_button);
  DDX_Control(pDX, IDC_EE_CE_ERRORS_BTN, m_ee_ce_errors_btn);
  DDX_Control(pDX, IDC_EE_EERESET_LINK, *mp_eeresetLink);
+ DDX_Control(pDX, IDC_EE_CONTENT_LINK, *mp_eecontLink);
+ DDX_Control(pDX, IDC_EE_USING_LINK, *mp_eeusingLink);
 }
 
 LPCTSTR CEEPROMTabDlg::GetDialogID(void) const
@@ -149,12 +153,24 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
- //init HTTP link
+ //init HTTP links
  mp_eeresetLink->SetLink(true);
  mp_eeresetLink->SetTextColor(RGB(0, 0, 255));
  mp_eeresetLink->SetFontUnderline(true);
  mp_eeresetLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
  mp_eeresetLink->SetOnClick(fastdelegate::MakeDelegate(this, &CEEPROMTabDlg::OnEeresetLinkClick));
+
+ mp_eecontLink->SetLink(true);
+ mp_eecontLink->SetTextColor(RGB(0, 0, 255));
+ mp_eecontLink->SetFontUnderline(true);
+ mp_eecontLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_eecontLink->SetOnClick(fastdelegate::MakeDelegate(this, &CEEPROMTabDlg::OnEeContLinkClick));
+
+ mp_eeusingLink->SetLink(true);
+ mp_eeusingLink->SetTextColor(RGB(0, 0, 255));
+ mp_eeusingLink->SetFontUnderline(true);
+ mp_eeusingLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_eeusingLink->SetOnClick(fastdelegate::MakeDelegate(this, &CEEPROMTabDlg::OnEeUsingLinkClick));
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -406,4 +422,14 @@ void CEEPROMTabDlg::EnableToggleMapWnd(bool toggle)
 void CEEPROMTabDlg::OnEeresetLinkClick(void)
 {
  SECUMessageBox(IDS_HOW_TO_RESET_EEPROM, MB_OK | MB_ICONINFORMATION);
+}
+
+void CEEPROMTabDlg::OnEeContLinkClick(void)
+{
+ SECUMessageBox(IDS_WHAT_STORED_EEPROM, MB_OK | MB_ICONINFORMATION);
+}
+
+void CEEPROMTabDlg::OnEeUsingLinkClick(void)
+{
+ SECUMessageBox(IDS_WHEN_TO_USE_EEPROM, MB_OK | MB_ICONINFORMATION);
 }
