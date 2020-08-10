@@ -92,8 +92,8 @@ size_t CAutoTuneController::_CalcFIFOSize(void)
  int dtm = (m_logdata[0].time - m_logdata[LDQUEUE_SIZE_MIN-1].time);
  if (dtm==0)
  {
-  SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::_CalcFIFOSize"));
-  dtm = 1; //replace zero by minimum possible value
+  ASSERT(0); //internal error
+  return 0;
  }
  return MathHelpers::Round((m_maxLamDel * LDQUEUE_SIZE_MIN) / dtm);
 }
@@ -128,6 +128,8 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
   return;
 
  size_t fifoSize = _CalcFIFOSize();
+ if (0==fifosize)
+  return; //unexpected situation
  size_t fifoSize50 = (size_t)(fifoSize*1.5f); //+50%
  while (m_logdata.size() > fifoSize50)
   m_logdata.pop_back();
