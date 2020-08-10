@@ -70,6 +70,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 , m_tab_selection(0) //<-- "default parameters" is selected by default
 , m_initialized(false)
 , mp_eeresetLink(new CLabel)
+, mp_noanswerLink(new CLabel)
 {
  mp_ContextMenuManager->CreateContent();
  //create list of tabs
@@ -95,6 +96,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_FW_PARAM_SEL_TAB, m_param_sel_tab);
  DDX_Control(pDX, IDC_FW_POPUPMENU_BUTTON, m_fw_popup_menu_button);
  DDX_Control(pDX, IDC_FW_EERESET_LINK, *mp_eeresetLink);
+ DDX_Control(pDX, IDC_FW_NOANSWER_LINK, *mp_noanswerLink);
 }
 
 LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
@@ -199,6 +201,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
+ mp_ParamDeskDlg->ShowHelpLink(true);
  mp_ParamDeskDlg->EnableUseResParCheck(true);
  mp_ParamDeskDlg->ShowWindow(SW_HIDE);
 
@@ -244,12 +247,18 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  //Enable drap & drop functionality
  DragAcceptFiles(true);
 
- //init HTTP link
+ //init HTTP links:
  mp_eeresetLink->SetLink(true);
  mp_eeresetLink->SetTextColor(RGB(0, 0, 255));
  mp_eeresetLink->SetFontUnderline(true);
  mp_eeresetLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
  mp_eeresetLink->SetOnClick(fastdelegate::MakeDelegate(this, &CFirmwareTabDlg::OnEeresetLinkClick));
+
+ mp_noanswerLink->SetLink(true);
+ mp_noanswerLink->SetTextColor(RGB(0, 0, 255));
+ mp_noanswerLink->SetFontUnderline(true);
+ mp_noanswerLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_noanswerLink->SetOnClick(fastdelegate::MakeDelegate(this, &CFirmwareTabDlg::OnNoanswerLinkClick));
 
  UpdateDialogControls(this,TRUE);
  m_initialized = true;
@@ -818,6 +827,9 @@ void CFirmwareTabDlg::OnSize( UINT nType, int cx, int cy )
   rc1 = GDIHelpers::GetChildWndRect(&m_bl_started_emergency);
   m_bl_started_emergency.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
 
+  rc1 = GDIHelpers::GetChildWndRect(mp_noanswerLink.get());
+  mp_noanswerLink->MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
   rc1 = GDIHelpers::GetChildWndRect(&m_fw_popup_menu_button);
   m_fw_popup_menu_button.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
 
@@ -855,4 +867,9 @@ void CFirmwareTabDlg::EnableToggleMapWnd(bool toggle)
 void CFirmwareTabDlg::OnEeresetLinkClick(void)
 {
  SECUMessageBox(IDS_HOW_TO_RESET_EEPROM, MB_OK | MB_ICONINFORMATION);
+}
+
+void CFirmwareTabDlg::OnNoanswerLinkClick()
+{
+ SECUMessageBox(IDS_FW_NOANSWER_LINK, MB_OK | MB_ICONINFORMATION);
 }

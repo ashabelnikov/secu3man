@@ -54,6 +54,8 @@
 #include "io-core/ufcodes.h"
 #include "ui-core/HotKeysToCmdRouter.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/Label.h"
+#include "ui-core/MsgBox.h"
 #include "common/MathHelpers.h"
 
 #define TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
@@ -77,6 +79,7 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_choke_ctrls(false)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
+, mp_reservparsLink(new CLabel())
 {
  //создаем image list для TabCtrl
  m_pImgList = new CImageList();
@@ -171,6 +174,7 @@ void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PARAMETERS_DESK_TITLE, m_pd_title);
  DDX_Control(pDX, IDC_PD_TAB_CTRL, m_tab_control);
  DDX_Control(pDX, IDC_PD_SAVE_BUTTON, m_save_button);
+ DDX_Control(pDX, IDC_RESERVPARS_LINK, *mp_reservparsLink);
 }
 
 BEGIN_MESSAGE_MAP(CParamDeskDlg, Super)
@@ -308,6 +312,13 @@ BOOL CParamDeskDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_save_button, MLL::GetString(IDS_PD_SAVE_BUTTON_TT)));
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //init HTTP link
+ mp_reservparsLink->SetLink(true);
+ mp_reservparsLink->SetTextColor(RGB(0, 0, 255));
+ mp_reservparsLink->SetFontUnderline(true);
+ mp_reservparsLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_reservparsLink->SetOnClick(fastdelegate::MakeDelegate(this, &CParamDeskDlg::OnReservparsLinkClick));
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -786,6 +797,11 @@ void CParamDeskDlg::ShowSaveButton(bool i_show)
  m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
 }
 
+void CParamDeskDlg::ShowHelpLink(bool i_show)
+{
+ mp_reservparsLink->ShowWindow(i_show ? SW_SHOW : SW_HIDE);
+}
+
 int CParamDeskDlg::_GetTabIndex(unsigned i_descriptor)
 {
  TabDescriptor::const_iterator it = m_tab_descriptors.begin();
@@ -883,4 +899,9 @@ void CParamDeskDlg::OnSize( UINT nType, int cx, int cy )
 void CParamDeskDlg::SetITEdMode(int mode)
 {
  m_pInjectorPageDlg->SetITEdMode(mode);
+}
+
+void CParamDeskDlg::OnReservparsLinkClick(void)
+{
+ SECUMessageBox(IDS_RESERVE_PARS_INFO, MB_OK | MB_ICONINFORMATION);
 }

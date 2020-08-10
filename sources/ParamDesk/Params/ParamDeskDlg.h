@@ -35,6 +35,7 @@
 #include "ui-core/UpdatableDialog.h"
 
 class CHotKeysToCmdRouter;
+class CLabel;
 
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
@@ -58,6 +59,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void Enable(bool enable);
   virtual void Show(bool show);
   virtual void ShowSaveButton(bool i_show);
+  virtual void ShowHelpLink(bool i_show);
 
   virtual bool SetValues(BYTE i_descriptor, const void* i_values);
   virtual bool GetValues(BYTE i_descriptor, void* o_values);
@@ -137,6 +139,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   int  _GetTabIndex(unsigned i_descriptor);
   void _RegisterHotKeys(void);
 
+  void OnReservparsLinkClick();
+
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
 
   //Pointers to dialogs of all tabs
@@ -163,6 +167,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   CTabController m_tab_control;
   CImageList* m_pImgList;
   std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CLabel> mp_reservparsLink;
 
   bool m_enabled;
   bool m_fuel_injection;

@@ -216,6 +216,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   bool IsFirmwareOpened(void);
   bool IsIORemappingAvailable(void);
   void OnEeresetLinkClick(void);
+  void OnNoanswerLinkClick(void);
 
   bool m_is_bl_started_emergency_available;
   bool m_is_bl_items_available;
@@ -230,4 +231,5 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CFont m_tab_selection_fnt;
   std::auto_ptr<CLabel> mp_eeresetLink;
+  std::auto_ptr<CLabel> mp_noanswerLink;
 };
