@@ -552,6 +552,8 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  if (cyl > m_max_cylinders)
   cyl = m_max_cylinders;
  int cogs = m_params.ckps_cogs_num;
+ if (cogs==0)
+  return; //prevent division by zero;
  float deg = degBTDC[cyl];
  int cogsBTDC = MathHelpers::Round(ceil(deg / (360.0f / cogs)));
  int lo_limit = /*(m_params.ckps_miss_num > 0) ? MathHelpers::Round(cogsBTDC - (cogsBTDC / 2.0f)) :*/ MathHelpers::Round(ceil(66.0f / (360.0f / cogs)));
@@ -585,6 +587,8 @@ int CCKPSPageDlg::_GetCKPSTeethBTDCComboBoxSelection(void)
   return 0;
  }
  int cog_index = m_teeth_before_tdc_combo.GetItemData(index);
+ if ((size_t)cog_index >= m_cogs_numbers.size())
+  return 0;
  return m_cogs_numbers[cog_index].first;
 }
 
@@ -656,6 +660,8 @@ int CCKPSPageDlg::_GetCKPSEngineCylComboBoxSelection(void)
   return 0;
  }
  int cyl_index = m_engine_cyl_combo.GetItemData(index);
+ if ((size_t)cyl_index >= m_engine_cyls.size())
+  return 0;
  return m_engine_cyls[cyl_index].first;
 }
 
