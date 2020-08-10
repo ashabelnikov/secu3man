@@ -117,6 +117,7 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_EE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
+ mp_ParamDeskDlg->ShowHelpLink(false);
  mp_ParamDeskDlg->ShowWindow(SW_SHOW);
 
  //create tables desk

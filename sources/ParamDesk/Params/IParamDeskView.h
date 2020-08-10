@@ -40,6 +40,7 @@ class IParamDeskView : public IDeskView
   virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;        //get data from specified tab
   virtual bool LockUIUpdate(BYTE i_descriptor, bool lock) = 0;
   virtual void ShowSaveButton(bool i_show) = 0;
+  virtual void ShowHelpLink(bool i_show) = 0;
 
   //установка/получение имен семейств характеристик (для вкладки FunSet...)
   //вектор содержит набор имен семейств характеристик хранимых в прошивке SECU-3

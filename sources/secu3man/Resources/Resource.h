@@ -640,3 +640,5 @@
 #define IDS_WHAT_STORED_EEPROM          4764
 #define IDC_EE_USING_LINK               4765
 #define IDS_WHEN_TO_USE_EEPROM          4766
+#define IDC_FW_NOANSWER_LINK            4767
+#define IDS_FW_NOANSWER_LINK            4768

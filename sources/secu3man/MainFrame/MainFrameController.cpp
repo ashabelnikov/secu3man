@@ -62,9 +62,9 @@ void MainFrameController::OnWelcomeTimer(void)
 
 void MainFrameController::OnScr5SecTimer(void)
 {
+ m_scr5sec_timer.KillTimer();
  mp_view->RedrawWindow();
  SaveScreenshot(AfxGetMainWnd(), true);
- m_scr5sec_timer.KillTimer();
 }
 
 MainFrameController::MainFrameController(CCommunicationManager* i_pCommunicationManager,

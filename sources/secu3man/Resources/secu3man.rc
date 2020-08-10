@@ -108,7 +108,8 @@ BEGIN
     EDITTEXT        IDC_FW_FW_INFORMATION,72,29,156,16,ES_AUTOHSCROLL
     PUSHBUTTON      "Опц.",IDC_FW_VIEW_FWOPT,234,29,22,17
     CONTROL         "Прошивать только код (без данных)",IDC_FW_PROG_ONLY_CODE,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,209,86,17
-    CONTROL         "Boot loader запущен аварийно (установлена перемычка)",IDC_FW_BL_STARTED_EMERGENCY,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,209,122,21
+    CONTROL         "Boot loader запущен аварийно (установлена перемычка)",IDC_FW_BL_STARTED_EMERGENCY,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,106,209,122,21
+    LTEXT           "нет\nсвязи?",IDC_FW_NOANSWER_LINK,229,225,50,21,WS_CLIPSIBLINGS
     CONTROL         "",IDC_FW_PD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,272,10,185,196
     CTEXT           "Доп. информ.\nо прошивке:",IDC_FW_FW_INFORMATION_CAPTION,14,29,56,18
     LTEXT           "",IDC_FW_MODIFICATION_FLAG,258,14,8,10
@@ -840,6 +841,7 @@ BEGIN
     IDS_HOW_TO_RESET_CEERRORS "Отдельные ошибки можно установить/сбросить клацнув в соответствующую ячейку\nв столбце 'Состояние' и затем нажать кнопку 'ЗАПИСАТЬ сохраненные ошибки'. Также,\nошибки стираются при сбросе EEPROM (сбросить EEPROM можно на вкладке 'Данные прошивки'\nили перемычкой DE (в SECU-3i вход DE_I нужно замыкнуть на массу))."
     IDS_WHAT_STORED_EEPROM "В EEPROM хранятся: параметры, 5-й набор таблиц, коды ошибок СЕ.\n\nПараметры и 5-й набор таблиц доступны для редактирования\nв режиме онлайн на вкладке 'Параметры и монитор'.\nКоды ошибок CE доступны для редактирования на вкладке\n'Check Engine'.\n\nНа вкладке 'EEPROM' производится редактирование в офлайн\nрежиме (аналогично редактированию прошивки на вкладке\n'Данные прошивки')."
     IDS_WHEN_TO_USE_EEPROM "Использовать данные из EEPROM рекомендуется только во время настройки.\nПосле завершения настройки рекомендуется использовать данные из\nпрошивки. Для этого необходимо импортировать параметры и таблицы\nв прошивку из файла EEPROM\n(Данные прошивки-->Действия над прошивкой-->Импорт данных),\nна вкладке резервных параметров 'Безопасность' установить галочку\n'Всегда загружать параметры из flash'.\n\nПри возможности используйте управление питанием блока, так как оно\nповышает надежность хранения данных в EEPROM."
+    IDS_FW_NOANSWER_LINK   "Для восстановления работы прошивки необходимо выполнить следующую\nпоследовательность действий. Установите галочку\n'Boot loader запущен аварийно', установите перемычку 'Boot loader'\n(для SECU-3i читайте ниже), включите питание блока, откройте нужную вам\nпрошивку при помощи мастера прошивок (или выберите необходимый вам\nфайл вручную), запишите ее в блок SECU-3. После завершения\nманипуляций не забудьте убрать перемычку и галочку и перезапустить\nблок. Для запуска загрузчика в блоке SECU-3i нужно замкнуть вход\nBL_I на массу. В блоках SECU-3T/Micro/Lite перемычки находятся на\nплате (нужно вскрывать блок).\n\nЕсли запись прошивки не помогла, то попробуйте сбросить EEPROM.\nВсегда используйте прошивку и программу-менеджер из одного релиза!\nХраните резервные копии своих прошивки, EEPROM и настроек!"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -945,7 +947,8 @@ BEGIN
     EDITTEXT        IDC_FW_FW_INFORMATION,72,29,156,16,ES_AUTOHSCROLL
     PUSHBUTTON      "Opt.",IDC_FW_VIEW_FWOPT,234,29,22,17
     CONTROL         "Program only code (without data)",IDC_FW_PROG_ONLY_CODE,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,209,86,17
-    CONTROL         "Boot loader been launched emergency (jumper set)",IDC_FW_BL_STARTED_EMERGENCY,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,209,122,21
+    CONTROL         "Boot loader been launched emergency (jumper set)",IDC_FW_BL_STARTED_EMERGENCY,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,106,209,122,21
+    LTEXT           "no\nlink?",IDC_FW_NOANSWER_LINK,229,225,50,21,WS_CLIPSIBLINGS
     CONTROL         "",IDC_FW_PD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,272,10,185,196
     CTEXT           "Addit. inform.\nabout firmware:",IDC_FW_FW_INFORMATION_CAPTION,14,29,56,18
     LTEXT           "",IDC_FW_MODIFICATION_FLAG,258,14,8,10
@@ -1675,6 +1678,7 @@ BEGIN
     IDS_HOW_TO_RESET_CEERRORS "Individual errors can be set/reset by clicking in the corresponding cell\nin the 'Status' column and then clicking the 'WRITE saved errors' button. Also,\nerrors are erased when the EEPROM is reset (you can reset the EEPROM on\nthe 'Firmware Data' tab or with the DE jumper (in SECU-3i, the DE_I input\nshould be shorted to ground))."
     IDS_WHAT_STORED_EEPROM "EEPROM stores: parameters, 5th set of tables, CE error codes.\n\nParameters and 5th set of tables are available for editing\nonline on 'Parameters and monitor' tab.\nCE error codes are available for editing on 'Check Engine' tab.\n\nOn the 'EEPROM' tab, offline editing is performed\n(similar to editing the firmware on the 'Firmware data' tab)."
     IDS_WHEN_TO_USE_EEPROM "It is recommended to use data from EEPROM only during setup/tuning.\nAfter setup is complete, it is recommended to use data from firmware.\nTo do this, you need to import parameters and tables\nto the firmware from the EEPROM file\n(Firmware data->Actions on the firmware->Import data),\non the 'Security' tab of the reserve parameters set the checkbox\n'Always load parameters from flash'.\n\nUse power management for unit's supply when possible, as it\nimproves the reliability of data storage in the EEPROM."
+    IDS_FW_NOANSWER_LINK   "To restore the firmware, you must perform following\nsequence of actions. Check the box\n'Boot loader started emergency', set the jumper 'Boot loader'\n(for SECU-3i, read below), turn on the power to the unit, open the firmware\nyou need using the firmware master (or select the file you need manually),\nwrite it to the SECU-3 unit. After completing manipulations, do not forget\nto remove the jumper and checkbox and restart the unit. To start the boot\nloader of the SECU-3i unit, close BL_I input to ground. In SECU-3T/Micro/Lite\nunits, jumpers are located on the board (you need to open the unit).\n\nIf writing the firmware did not help, then try resetting the EEPROM.\nAlways use the firmware and the manager program from the same release!\nSave backups of your firmware, EEPROM and settings!"
 END
 
 /////////////////////////////////////////////////////////////////////////////

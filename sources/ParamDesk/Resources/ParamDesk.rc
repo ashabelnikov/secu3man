@@ -23,7 +23,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Сохранить",IDC_PD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",TCS_OWNERDRAWFIXED | WS_TABSTOP,4,17,175,190
-    CTEXT           "",IDC_PARAMETERS_DESK_TITLE,48,2,116,11
+    LTEXT           "",IDC_PARAMETERS_DESK_TITLE,58,2,116,11
+    CTEXT           "?",IDC_RESERVPARS_LINK,48,1,8,11,SS_CENTERIMAGE | WS_CLIPSIBLINGS | NOT WS_VISIBLE
 END
 
 IDD_TABLES_DESK DIALOGEX 0, 0, 184, 211
@@ -1542,7 +1543,7 @@ BEGIN
     IDS_IO_REMAPPING3I_IGN_I_TT   "Вход состояния зажигания"
     IDS_IO_REMAPPING3I_COND_I_TT  "Вход запроса на включение кондиционера"
     IDS_IO_REMAPPING3I_EPAS_I_TT  "Вход запроса усилителя руля"
-    IDS_IO_REMAPPING3I_TACH_O_TT  "Выход для тахометра. Если переназначен на другую функцию, то контроль детонации невозможен и должен быть отключен. Галочка инверсии не работает для 'NONE'."
+    IDS_IO_REMAPPING3I_TACH_O_TT  "Выход для тахометра. Для работы выхода необходимо разрешить контроль детонации. Если переназначен на другую функцию (например HALL_OUT), то контроль детонации невозможен и должен быть отключен. Галочка инверсии не работает для 'NONE'."
     IDS_IO_REMAPPING3I_KSP_CS_TT  "Вывод процессора PB4, который используется как сигнал CS для TPIC8101. Если переназначен на другую функцию, то контроль детонации невозможен и должен быть отключен. Галочка инверсии не работает для 'NONE'."
     IDS_IO_REMAPPING3I_ADD_I5_TT  "Аналоговый вход 5. Доступен только в прошивках с поддержкой MCP3204"
 END
@@ -1640,6 +1641,10 @@ BEGIN
     IDS_PD_FUNSET_BAROCORR_TYPE3    "Динам. ДАД2"
 END
 
+STRINGTABLE
+BEGIN
+    IDS_RESERVE_PARS_INFO "Резервные параметры хранятся в прошивке и загружаются при сбросе\nEEPROM или если в момент запуска прошивка обнаруживает, что\nпараметры в EEPROM повреждены. Резервные параметры будут использоваться\nесли установить галочку 'Всегда загружать параметры из flash',\nкоторая находится на вкладке 'Безопасность' (галочка доступна только\nв резервных параметрах на вкладке 'Данные прошивки').\n\nПосле завершения настройки рекомендуется использовать резервные\nпараметры (данные параметров из EEPROM в прошивку можно\nперенести используя меню 'Импорт данных')."
+END
 
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
@@ -1659,7 +1664,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Save",IDC_PD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",TCS_OWNERDRAWFIXED | WS_TABSTOP,4,17,175,190
-    CTEXT           "",IDC_PARAMETERS_DESK_TITLE,48,2,116,11
+    LTEXT           "",IDC_PARAMETERS_DESK_TITLE,58,2,116,11
+    CTEXT           "?",IDC_RESERVPARS_LINK,48,1,8,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS | NOT WS_VISIBLE
 END
 
 IDD_TABLES_DESK DIALOGEX 0, 0, 184, 211
@@ -2918,6 +2924,7 @@ IDB_CALC_UP             BITMAP     "res\\calc_up.bmp"
 IDB_CALC_DOWN           BITMAP     "res\\calc_down.bmp"
 IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
 IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
+IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3223,7 +3230,7 @@ BEGIN
     IDS_IO_REMAPPING3I_IGN_I_TT   "Ignition state input"
     IDS_IO_REMAPPING3I_COND_I_TT  "Air conditioner turn on request input"
     IDS_IO_REMAPPING3I_EPAS_I_TT  "Power steering request input"
-    IDS_IO_REMAPPING3I_TACH_O_TT  "Output for a tachometer. If remmapoed to other function, then knock control will not be available and must be disabled. 'Invert' check doesn't work for 'NONE'."
+    IDS_IO_REMAPPING3I_TACH_O_TT  "Output for a tachometer. You should enable knock control for working of this output. If remmaped to other function, then knock control will not be available and must be disabled. 'Invert' check doesn't work for 'NONE'."
     IDS_IO_REMAPPING3I_KSP_CS_TT  "Processor port's line PB4, which is used as CS signal for TPIC8101. If remmapoed to other function, then knock control will not be available and must be disabled. 'Invert' check doesn't work for 'NONE'."
     IDS_IO_REMAPPING3I_ADD_I5_TT  "Analog input 5. Awailable only in firmware with MCP3204 support"
 END
@@ -3319,6 +3326,11 @@ BEGIN
     IDS_PD_FUNSET_BAROCORR_TYPE1     "Static MAP1"
     IDS_PD_FUNSET_BAROCORR_TYPE2     "Dynam. MAP1"
     IDS_PD_FUNSET_BAROCORR_TYPE3     "Dynam. MAP2"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RESERVE_PARS_INFO "Reserve parameters are stored in the firmware and are loaded when\nEEPROM is reset or if at startup firmware detects the parameters\nin the EEPROM damaged. Reserve parameters will be used if you\nselect the 'Always load parameters from flash' checkbox, which is\nlocated on the 'Security' tab (checkbox is only available in reserve\nparameters on the 'Firmware data' tab).\n\nAfter the configuration is complete, it is recommended to use reserve\nparameters (parameters' data from EEPROM to firmware can be\ntransferred using the 'Import data' menu)."
 END
 
 /////////////////////////////////////////////////////////////////////////////
