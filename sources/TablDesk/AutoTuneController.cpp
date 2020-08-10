@@ -128,7 +128,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
   return;
 
  size_t fifoSize = _CalcFIFOSize();
- if (0==fifosize)
+ if (0==fifoSize)
   return; //unexpected situation
  size_t fifoSize50 = (size_t)(fifoSize*1.5f); //+50%
  while (m_logdata.size() > fifoSize50)
