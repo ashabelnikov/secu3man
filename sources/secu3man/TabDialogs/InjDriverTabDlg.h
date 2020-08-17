@@ -38,6 +38,7 @@ class CChart2D;
 class CToolTipCtrlEx;
 class CClickableBmp;
 class CLabel;
+class CWndScroller;
 
 class CInjDriverTabDlg : public CTabDialog
 {
@@ -198,6 +199,7 @@ class CInjDriverTabDlg : public CTabDialog
   std::auto_ptr<CClickableBmp> mp_secu3logo;
   std::auto_ptr<CLabel> mp_secu3orgLink;
   std::auto_ptr<CLabel> mp_TipLink;
+  std::auto_ptr<CWndScroller> mp_scr;
 
  private:
   EventHandler m_onChange;
