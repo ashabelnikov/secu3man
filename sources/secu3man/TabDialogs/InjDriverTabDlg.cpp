@@ -31,13 +31,14 @@
 #include "common/FastDelegate.h"
 #include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
-#include "ui-core/Chart2D.h"
-#include "ui-core/ToolTipCtrlEx.h"
-#include "ui-core/ddx_helpers.h"
-#include "ui-core/Label.h"
-#include "ui-core/ClickableBmp.h"
 #include "InjDriverTipDlg.h"
 #include "io-core/Bitmask.h"
+#include "ui-core/Chart2D.h"
+#include "ui-core/ClickableBmp.h"
+#include "ui-core/ddx_helpers.h"
+#include "ui-core/Label.h"
+#include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CInjDriverTabDlg::IDD = IDD_INJ_DRIVER;
 
@@ -63,6 +64,7 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 , mp_secu3orgLink(new CLabel)
 , mp_TipLink(new CLabel)
 , mp_secu3logo(new CClickableBmp())
+, mp_scr(new CWndScroller)
 , m_initialized(false)
 , m_enable(false)
 , m_enable_ee_save(false)
@@ -577,6 +579,9 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -585,6 +590,7 @@ void CInjDriverTabDlg::OnDestroy()
  Super::OnDestroy();
  m_initialized = false;
  m_enable = false;
+ mp_scr->Close();
 }
 
 void CInjDriverTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
@@ -684,7 +690,6 @@ void CInjDriverTabDlg::OnSize( UINT nType, int cx, int cy )
   m_up_arrow.SetWindowPos(NULL, rc2.right - rc1.Width() - da.ScaleX(3), rc1.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
   rc1 = GDIHelpers::GetChildWndRect(&m_down_arrow);
-  GetClientRect(&rc2);
   int buttonPos = rc2.right - rc1.Width() - da.ScaleX(3);
   m_down_arrow.SetWindowPos(NULL, buttonPos, rc1.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
@@ -693,6 +698,10 @@ void CInjDriverTabDlg::OnSize( UINT nType, int cx, int cy )
  }
 
  Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(da.ScaleX(1010), da.ScaleY(528));
 }
 
 void CInjDriverTabDlg::SetVoltLineColor(DWORD color)
