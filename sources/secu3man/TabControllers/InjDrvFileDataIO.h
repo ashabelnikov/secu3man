@@ -36,6 +36,8 @@ class CInjDrvFileDataIO
 
  static bool ImportSet(SECU3IO::InjDrvPar* op_set);
 
+ static bool ImportSet(SECU3IO::InjDrvPar* op_set, BYTE* ip_buff, size_t size);
+
  static bool LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set);
 
  static bool SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set);

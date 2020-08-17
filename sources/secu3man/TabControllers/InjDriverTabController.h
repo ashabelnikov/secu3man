@@ -72,6 +72,7 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
   void OnSaveParameters(void);
   void OnExportToAFile(void);
   void OnImportFromAFile(void);
+  void OnImportFromStock(void);
   void OnSaveToFirmware(void);
   void OnLoadFromFirmware(void);
   void OnShowFirmwareInfo(void);

@@ -36,6 +36,7 @@
 #include "InjDrvFileDataIO.h"
 #include "ErrorMsg.h"
 #include "FWImpExp/InjDrvFWMCntr.h"
+#include "FWImpExp/InjDrvStockCntr.h"
 #include "ui-core/MsgBox.h"
 
 #pragma warning(disable : 4355)  
@@ -70,6 +71,7 @@ CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCom
  mp_view->setOnSaveButton(MakeDelegate(this, &CInjDriverTabController::OnSaveParameters));
  mp_view->setOnExportToAFile(MakeDelegate(this, &CInjDriverTabController::OnExportToAFile));
  mp_view->setOnImportFromAFile(MakeDelegate(this, &CInjDriverTabController::OnImportFromAFile));
+ mp_view->setOnImportFromStock(MakeDelegate(this, &CInjDriverTabController::OnImportFromStock));
  mp_view->setOnSaveToFirmware(MakeDelegate(this, &CInjDriverTabController::OnSaveToFirmware));
  mp_view->setOnLoadFromFirmware(MakeDelegate(this, &CInjDriverTabController::OnLoadFromFirmware));
  mp_view->setOnShowFirmwareInfo(MakeDelegate(this, &CInjDriverTabController::OnShowFirmwareInfo));
@@ -851,4 +853,28 @@ void CInjDriverTabController::OnFirmwareMaster()
   mp_sbar->ShowProgressBar(true);
   mp_sbar->SetProgressPos(0);
  }
+}
+
+void CInjDriverTabController::OnImportFromStock()
+{
+ int set_idx = mp_view->GetCurrSetIdx();
+ SECU3IO::InjDrvPar params;
+ params.set_idx = set_idx; //specify desired set to obtain
+ mp_view->GetValues(&params);
+ 
+ size_t buffSize = 2048;
+ std::vector<BYTE> buff(buffSize);
+ InjDrvStockCntr sc;
+ if (IDCANCEL==sc.DoLoad(&buff[0], &buffSize))
+  return;
+ if (!CInjDrvFileDataIO::ImportSet(&params, &buff[0], buffSize))
+  return;
+
+ params.set_idx = set_idx;
+ mp_view->SetValues(&params);
+ params.ee_status = false; //no command
+ params.start_bldr = false;
+ params.reset_eeprom = false;
+ params.dev_address = mp_view->GetInjDrvSel();
+ mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }

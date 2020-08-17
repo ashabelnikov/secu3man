@@ -274,6 +274,7 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
 
  ON_COMMAND(ID_INJDRV_POPUP_EXPORTTOAFILE, OnExportToAFile)
  ON_COMMAND(ID_INJDRV_POPUP_IMPORTFROMAFILE, OnImportFromAFile)
+ ON_COMMAND(ID_INJDRV_POPUP_IMPORTFROMSTOCK, OnImportFromStock)
  ON_COMMAND(ID_INJDRV_POPUP_SAVETOFIRMWARE, OnSaveToFirmware)
  ON_COMMAND(ID_INJDRV_POPUP_LOADFROMFIRMWARE, OnLoadFromFirmware)
  ON_COMMAND(ID_INJDRV_POPUP_SHOWFIRMWAREINFO, OnShowFirmwareInfo)
@@ -348,6 +349,7 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
 
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_EXPORTTOAFILE, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_IMPORTFROMAFILE, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_IMPORTFROMSTOCK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_SAVETOFIRMWARE, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_SHOWFIRMWAREINFO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_OFFLINEMODE, OnUpdateOfflineModeExit)
@@ -1195,6 +1197,11 @@ void CInjDriverTabDlg::setOnSelInjDrv(EventHandler onCB)
  m_onSelInjDrv = onCB;
 }
 
+void CInjDriverTabDlg::setOnImportFromStock(EventHandler onCB)
+{
+ m_onImportFromStock = onCB;
+}
+
 void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only /*= false*/)
 {
  if (voltage_only)
@@ -1310,6 +1317,12 @@ void CInjDriverTabDlg::OnImportFromAFile()
 {
  if (m_onImportFromAFile)
   m_onImportFromAFile();
+}
+
+void CInjDriverTabDlg::OnImportFromStock()
+{
+ if (m_onImportFromStock)
+  m_onImportFromStock();
 }
 
 void CInjDriverTabDlg::OnSaveToFirmware()

@@ -35,6 +35,8 @@ set(HEADERS
   StdAfx.h
   InjDrvFWMDlg.h
   InjDrvFWMCntr.h
+  InjDrvStockDlg.h
+  InjDrvStockCntr.h
   )
 
 set(SOURCES
@@ -69,6 +71,8 @@ set(SOURCES
   7z/BraIA64.c
   InjDrvFWMDlg.cpp
   InjDrvFWMCntr.cpp
+  InjDrvStockDlg.cpp
+  InjDrvStockCntr.cpp
   )
 
 add_library (${PROJECT} SHARED ${HEADERS} ${SOURCES})

@@ -21,7 +21,9 @@ SOURCES =   StdAfx.cpp EEPROMImpExpController.cpp FwImpExp.cpp MapImpExpDlg.cpp 
   MPSZImpExpController.cpp S3FImpExpController.cpp S3FFileDataIO.cpp SECUImpExpController.cpp \
   FirmwareMasterDlg.cpp FirmwareMasterCntr.cpp 7z/7zAlloc.c 7z/CpuArch.c 7z/7zBuf.c 7z/7zCrc.c \
   7z/7zFile.c 7z/7zCrcOpt.c 7z/7zArcIn.c 7z/7zStream.c 7z/7zDec.c 7z/Bcj2.c 7z/Delta.c 7z/LzmaDec.c \
-  7z/Lzma2Dec.c 7z/Ppmd7.c 7z/Bra.c 7z/Bra86.c 7z/BraIA64.c InjDrvFWMDlg.c InjDrvFWMCntr.c
+  7z/Lzma2Dec.c 7z/Ppmd7.c 7z/Bra.c 7z/Bra86.c 7z/BraIA64.c InjDrvFWMDlg.c InjDrvFWMCntr.c InjDrvStockDlg.cpp \
+  InjDrvStockCntr.cpp
+
 
 # DLL building
 all: fwimpexp
