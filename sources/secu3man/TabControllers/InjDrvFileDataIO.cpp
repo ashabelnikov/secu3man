@@ -345,6 +345,35 @@ bool CInjDrvFileDataIO::ImportSet(SECU3IO::InjDrvPar* op_set)
  return false; //canceled by user
 }
 
+bool CInjDrvFileDataIO::ImportSet(SECU3IO::InjDrvPar* op_set, BYTE* ip_buff, size_t size)
+{
+ bool result = false;
+ if (size == (sizeof(lzid_sett_t) + strlen(strHeader)))
+ {
+  lzid_sett_t fwd;
+  memcpy(&fwd, ip_buff + strlen(strHeader), sizeof(lzid_sett_t));
+  result = ConvertFromFirmwareData<lzid_sett_t>(*op_set, fwd, false, true); //preserve firmware information
+ }
+ else if (size == (sizeof(lzid_sett_t_v23) + strlen(strHeader)))
+ { //old
+  lzid_sett_t_v23 fwd;
+  memcpy(&fwd, ip_buff + strlen(strHeader), sizeof(lzid_sett_t_v23));
+  result = ConvertFromFirmwareData<lzid_sett_t_v23>(*op_set, fwd, false, true); //preserve firmware information
+ }
+ else
+ {
+  ASSERT(0);
+ }
+
+ if (!result || 0 != strncmp((char*)ip_buff, strHeader, strlen(strHeader)))
+ { //data corrupted
+  SECUMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
+  return false;
+ }
+
+ return true; //Ok
+}
+
 template <class T>
 bool getSettAddresses(std::vector<BYTE>& buff, T** op_set)
 {

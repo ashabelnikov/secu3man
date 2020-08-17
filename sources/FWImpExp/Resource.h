@@ -118,3 +118,6 @@
 #define IDC_CURSOR_HAND                 6117
 #define IDS_FWM_FUSEBITS_SECU           6118
 #define IDS_FWM_FUSEBITS_LZID           6119
+#define IDD_INJDRV_STOCK                6120
+#define IDC_INJDRV_PRESETS_LIST         6121
+#define IDS_INJDRV_PRESETS_LIST_TT      6122

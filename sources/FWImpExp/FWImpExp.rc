@@ -16,7 +16,7 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // Dialog
 //
 IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 182
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Мастер прошивок"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -52,6 +52,16 @@ BEGIN
     PUSHBUTTON      "Сохранить",IDC_FWM_SAVE_BTN,20,130,50,16
     DEFPUSHBUTTON   "Загрузить",IDOK,80,130,50,16
     PUSHBUTTON      "Отмена",IDCANCEL,140,130,50,16
+END
+
+IDD_INJDRV_STOCK DIALOGEX 0, 0, 288, 182
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Импорт настроек из хранилища"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_INJDRV_PRESETS_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,10,10,267,140,WS_EX_LEFTSCROLLBAR
+    DEFPUSHBUTTON   "Импорт",IDOK,84,159,50,16
+    PUSHBUTTON      "Отмена",IDCANCEL,157,159,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -185,6 +195,12 @@ BEGIN
     IDS_FWM_FUSEBITS_LZID   "Если вы собираете драйвер SECU-LZID самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения.\nATmega328PB:\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при помощи\nпрограмматора."
 END
 
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_INJDRV_PRESETS_LIST_TT "Список с пресетами для разных форсунок"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -197,7 +213,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 182
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Firmware master"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -233,6 +249,16 @@ BEGIN
     PUSHBUTTON      "Save",IDC_FWM_SAVE_BTN,20,130,50,16
     DEFPUSHBUTTON   "Load",IDOK,80,130,50,16
     PUSHBUTTON      "Cancel",IDCANCEL,140,130,50,16
+END
+
+IDD_INJDRV_STOCK DIALOGEX 0, 0, 288, 182
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Import of settings from storage"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_INJDRV_PRESETS_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,10,10,267,140,WS_EX_LEFTSCROLLBAR
+    DEFPUSHBUTTON   "Import",IDOK,84,159,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,157,159,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -364,6 +390,11 @@ BEGIN
 
     IDS_FWM_FUSEBITS_SECU   "If you assemble SECU unit by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values:\n LOCK  = 0xEF    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer." 
     IDS_FWM_FUSEBITS_LZID   "If you assemble SECU-LZID driver by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values.\nATmega328PB:\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_INJDRV_PRESETS_LIST_TT "List with presets for various injectors"
 END
 
 /////////////////////////////////////////////////////////////////////////////

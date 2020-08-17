@@ -61,6 +61,7 @@ BEGIN
     BEGIN
         MENUITEM "Экспортировать набор в файл",       ID_INJDRV_POPUP_EXPORTTOAFILE
         MENUITEM "Импортировать набор из файла",      ID_INJDRV_POPUP_IMPORTFROMAFILE
+        MENUITEM "Импортировать набор из хранилища",  ID_INJDRV_POPUP_IMPORTFROMSTOCK
         MENUITEM SEPARATOR
         MENUITEM "Сохранить наборы в прошивку",       ID_INJDRV_POPUP_SAVETOFIRMWARE
         MENUITEM "Загрузить наборы из прошивки",      ID_INJDRV_POPUP_LOADFROMFIRMWARE
@@ -900,6 +901,7 @@ BEGIN
     BEGIN
         MENUITEM "Export set to a file",        ID_INJDRV_POPUP_EXPORTTOAFILE
         MENUITEM "Import set from a file",      ID_INJDRV_POPUP_IMPORTFROMAFILE
+        MENUITEM "Import set from stock",       ID_INJDRV_POPUP_IMPORTFROMSTOCK
         MENUITEM SEPARATOR
         MENUITEM "Save sets to firmware",       ID_INJDRV_POPUP_SAVETOFIRMWARE
         MENUITEM "Load sets from firmware",     ID_INJDRV_POPUP_LOADFROMFIRMWARE
