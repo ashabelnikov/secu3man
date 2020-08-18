@@ -689,7 +689,7 @@ BEGIN
     IDS_KC_OSCILLOSCOPE_V_UNIT    "В"
     IDS_KC_OSCILLOSCOPE_H_UNIT    "Выборки"
     IDS_PM_EDIT_TABLES_TT         "Открывает панель редактирования таблиц в реальном времени"
-    IDS_PM_SHOW_RAW_SENSORS_TT    "Показать значения напряжений на датчиках"
+    IDS_PM_SHOW_RAW_SENSORS_TT    "Показать значения напряжений на датчиках. В этом режиме запись данных в лог приостанавливается, индикация рабочих точек в редакторах таблиц не работает, работа автонастройки VE также невозможна."
     IDS_FW_VIEW_FWOPT_TT          "Просмотр опций с которыми скомпилирована прошивка"
     IDS_ASK_USER_ABOUT_VREF_COMP  "Программа определила что загружаемые данные возможно использовались в прошивке с другим опорным напряжением АЦП.\n Пересчитать поправочные коэффициенты АЦП?"
     IDS_FW_LEAVE_TAB_WARNING      "Выполняется важная операция, если вы ее прервете, то данные блока SECU-3 могут стать некорректными.\nВы уверены что хотите продолжить?"
@@ -1491,7 +1491,7 @@ BEGIN
     IDS_KC_OSCILLOSCOPE_V_UNIT    "V"
     IDS_KC_OSCILLOSCOPE_H_UNIT    "Samples"
     IDS_PM_EDIT_TABLES_TT         "Opens panel for editing of maps in the realtime"
-    IDS_PM_SHOW_RAW_SENSORS_TT    "Show voltage values on sensors"
+    IDS_PM_SHOW_RAW_SENSORS_TT    "Show voltage values on sensors. In this mode, data recording to the log is suspended, the indication of operating points in the map editors does not work, and the VE autotuning is also impossible."
 END
 
 STRINGTABLE DISCARDABLE 

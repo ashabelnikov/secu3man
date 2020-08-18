@@ -788,7 +788,7 @@ bool CAppSettingsModel::ReadSettings(void)
  dr.ReadFlt(m_optHoldDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
  dr.ReadFlt(m_optPeakFullPtMovStep, _T("1.0"), 1.0f, 10000.0f);
  dr.ReadFlt(m_optPthPausePtMovStep, _T("1.0"), 1.0f, 10000.0f);
- dr.ReadInt(m_optShowGraphLabels, _T("0"), 0, 1);
+ dr.ReadInt(m_optShowGraphLabels, _T("1"), 0, 1);
  dr.ReadFlt(m_optPWMulPtMovStep, _T("0.1"), 0.0f, 5.0f); //%
  dr.ReadFlt(m_optPWAddPtMovStep, _T("10"), 0.0f, 2500.0f); //us
  
