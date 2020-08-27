@@ -571,5 +571,8 @@ void MainFrameController::OnHelp()
  else
   path = path + _T("secu3help-en.chm");
 
- VERIFY(::HtmlHelp(mp_view->m_hWnd, (LPCTSTR)path, HH_DISPLAY_TOPIC, NULL));
+ if (!PathFileExists((LPCTSTR)path))
+  SECUMessageBox(_T("File not found: ") + path);
+ else
+  VERIFY(::HtmlHelp(mp_view->m_hWnd, (LPCTSTR)path, HH_DISPLAY_TOPIC, NULL));
 }

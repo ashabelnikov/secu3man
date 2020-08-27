@@ -40,3 +40,10 @@ int MSGBOX_API SECUMessageBox(UINT nIDPrompt, UINT nType /*= MB_OK*/, UINT nIDHe
  CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
  return result;
 }
+
+int MSGBOX_API SECUMessageBox(const CString& text, UINT nType /*= MB_OK*/, UINT nIDHelp /*= 0*/)
+{
+ int result = AfxMessageBox((LPCTSTR)text, nType, nIDHelp);
+ CToolTipCtrlEx::ActivateAllTooltips(false, false); //update visibility status of tool tips (prevent bug)
+ return result;
+}
