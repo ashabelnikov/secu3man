@@ -34,3 +34,5 @@
 int MSGBOX_API SECUMessageBox(LPCTSTR lpszText, UINT nType = MB_OK, UINT nIDHelp = 0);
 
 int MSGBOX_API SECUMessageBox(UINT nIDPrompt, UINT nType = MB_OK, UINT nIDHelp = (UINT) -1);
+
+int MSGBOX_API SECUMessageBox(const CString& text, UINT nType = MB_OK, UINT nIDHelp = (UINT) -1);
