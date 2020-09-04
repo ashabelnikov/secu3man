@@ -364,9 +364,15 @@ void CMainFrame::OnClose()
  bool result = true;
 
  //все ли согласны с закрытием программы?
- for (size_t i = 0; i < m_OnClose.size(); ++i)
-  if (m_OnClose[i] && !m_OnClose[i]())
-    result = false;
+ std::vector<EventResult>::reverse_iterator it = m_OnClose.rbegin();
+ for (; it != m_OnClose.rend(); ++it)
+ {
+  if ((*it) && !(*it)())
+  {
+   result = false;
+   break;
+  }
+ }
 
  if (result)
  {
