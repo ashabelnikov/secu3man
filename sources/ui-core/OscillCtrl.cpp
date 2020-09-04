@@ -69,11 +69,11 @@ COscillCtrl::COscillCtrl()
 }
 
 COscillCtrl::~COscillCtrl()
-{
+{/*
  if (m_pBmpOldPlot != NULL)
   m_dcPlot.SelectObject(m_pBmpOldPlot);
  if (m_pBmpOldGrid != NULL)
-  m_dcGrid.SelectObject(m_pBmpOldGrid);
+  m_dcGrid.SelectObject(m_pBmpOldGrid);*/
 }
 
 // COscillCtrl message handlers

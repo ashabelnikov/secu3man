@@ -105,7 +105,7 @@ CAnalogMeter::CAnalogMeter()
 }
 
 CAnalogMeter::~CAnalogMeter()
-{
+{/*
  if (m_pbitmapOldGrid)
   m_dcGrid.SelectObject(m_pbitmapOldGrid);
  m_dcGrid.DeleteDC();
@@ -113,8 +113,8 @@ CAnalogMeter::~CAnalogMeter()
   m_dcNeedle.SelectObject(m_pbitmapOldNeedle);
  m_dcNeedle.DeleteDC();
  m_bitmapGrid.DeleteObject();
- m_bitmapNeedle.DeleteObject();
- ResetAlertZones();
+ m_bitmapNeedle.DeleteObject();*/
+ ResetAlertZones(); //free memory
 }
 
 // CAnalogMeter message handlers

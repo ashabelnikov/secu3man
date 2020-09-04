@@ -111,8 +111,8 @@ CChart2D::CChart2D()
 
 CChart2D::~CChart2D()
 {
- if(memBkDC.GetSafeHdc() != NULL)
-  memBkDC.SelectObject(mp_oldBkBitmap);
+/* if(memBkDC.GetSafeHdc() != NULL)
+  memBkDC.SelectObject(mp_oldBkBitmap);*/
  delete mp_titleFont;
  delete mp_titleFontB;
  delete mp_legendFontX;
