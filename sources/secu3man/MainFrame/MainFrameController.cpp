@@ -410,6 +410,7 @@ void MainFrameController::OnCreate(void)
 bool MainFrameController::OnClose(void)
 {
  _GrabWindowPos(false);
+ mp_view->RedrawWindow();
  return true;
 }
 
