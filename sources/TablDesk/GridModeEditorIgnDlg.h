@@ -35,6 +35,8 @@
 
 #undef max
 
+class CLabel;
+
 class CStaticDisp : public CStatic
 {
  public:
@@ -101,6 +103,8 @@ class CGridModeEditorIgnDlg : public CDialog
  private:
   void _ResetUseFlags(void);
 
+  void OnAcronymsLinkClick();
+
   void OnChangeStart(void);
   void OnChangeIdle(void);
   void OnChangeWork(void);
@@ -140,4 +144,6 @@ class CGridModeEditorIgnDlg : public CDialog
   float m_ldaxMax;
   bool m_ldaxNeedsUpdate;
   std::vector<float> work_map_load_slots;
+
+  std::auto_ptr<CLabel> mp_acronLink;
 };

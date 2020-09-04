@@ -403,3 +403,6 @@
 #define IDS_GME_INJ_BLKALL_CHECK_TT     5757
 #define IDS_GME_INJ_SMOOTH_BTN_TT       5758
 #define IDS_GME_INJ_FINISH_CHECK_TT     5759
+#define IDC_GME_ACRONYMS_LINK           5760
+#define IDC_CURSOR_HAND                 5761
+#define IDS_GME_DESCR_ABBREV            5762
