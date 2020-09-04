@@ -194,7 +194,7 @@ BEGIN
     CTEXT           "Рабочая",IDC_GME_WM_CAPTION,58,320,35,10
     CTEXT           "ОктКор",IDC_GME_OC_CAPTION,98,320,35,10
     CTEXT           "Ткор",IDC_GME_TC_CAPTION,138,320,35,10
-    CTEXT           "ДДКор",IDC_GME_KC_CAPTION,178,320,35,10
+    CTEXT           "ДДкор",IDC_GME_KC_CAPTION,178,320,35,10
     CTEXT           "ХХ",IDC_GME_IM_CAPTION,218,320,35,10
     CTEXT           "РХХ",IDC_GME_IC_CAPTION,258,320,35,10
     CTEXT           "Вкор",IDC_GME_AC_CAPTION,298,320,35,10
@@ -215,6 +215,8 @@ BEGIN
     CTEXT           "+",IDC_GME_ICP_TEXT,290,330,10,10
     CTEXT           "",IDC_GME_AC_VALUE,300,330,30,12, SS_SUNKEN
     LTEXT           "° (КВ)",IDC_GME_AA_UNIT,332,330,50,10
+
+    CTEXT           "Описание сокращений",IDC_GME_ACRONYMS_LINK,420,330,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 
@@ -633,6 +635,11 @@ BEGIN
     IDS_GME_INJ_FINISH_CHECK_TT "Установите эту галочку если вы хотите чтобы значения ячеек таблицы наполнения для которых нет статистики были вычислены на основе соседних уже настроенных ячеек (установите галочку и нажмите 'Сгладить')."
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_GME_DESCR_ABBREV  "ХХ - Карта/значение УОЗ для ХХ\nТкор - Карта/значение коррекции УОЗ по температуре двигателя\nПуск - Карта/значение УОЗ для пуска\nУОЗ - Результирующее значение угла опережения зажигания\nРабочая - Значение из карты УОЗ для рабочего режима\nОктКор - Значение октан коррекции УОЗ\nДДкор - Текущее значение коррекции УОЗ по детонации\nРХХ - Значение коррекции УОЗ от регулятора оборотов холостого хода\nВкор - Коррекция УОЗ по температуре воздуха на впуске\n\nВо время пуска в поле Ткор отображается значение коррекции\nУОЗ по температуре двигателя из таблицы для пуска\n(таблица редактируется на вкладке 'Данные прошивки')"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -821,7 +828,7 @@ BEGIN
     CTEXT           "Work",IDC_GME_WM_CAPTION,58,320,35,10
     CTEXT           "OctCorr",IDC_GME_OC_CAPTION,98,320,35,10
     CTEXT           "Tcorr",IDC_GME_TC_CAPTION,138,320,35,10
-    CTEXT           "KSCorr",IDC_GME_KC_CAPTION,178,320,35,10
+    CTEXT           "KScorr",IDC_GME_KC_CAPTION,178,320,35,10
     CTEXT           "Idle",IDC_GME_IM_CAPTION,218,320,35,10
     CTEXT           "IdlReg",IDC_GME_IC_CAPTION,258,320,35,10
     CTEXT           "ATcorr",IDC_GME_AC_CAPTION,298,320,35,10
@@ -842,6 +849,8 @@ BEGIN
     CTEXT           "+",IDC_GME_ICP_TEXT,290,330,10,10
     CTEXT           "",IDC_GME_AC_VALUE,300,330,30,12, SS_SUNKEN
     LTEXT           "° (crankshaft)",IDC_GME_AA_UNIT,332,330,50,10   
+
+    CTEXT           "Descr. of abbreviations",IDC_GME_ACRONYMS_LINK,420,330,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_GRID_MODE_EDITOR_INJ DIALOGEX 0, 0, 530, 344
@@ -1281,11 +1290,19 @@ BEGIN
     IDS_GME_INJ_FINISH_CHECK_TT "Set this checkbox if you want the values of the VE table cells for which there are no statistics to be calculated basing on neighboring cells already auto-tuned (check the box and click 'Smoothing' button)."
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_GME_DESCR_ABBREV  "Idle - Map/value of ignition timing for idling\nTcorr - Map/value of ignition timing correction vs coolant temperature\nStart - Map/value of ignition timing for cranking\nAdv.ang. - Resulting value of the ignition timing\nWork - Value from the ignition timing map for working mode\nOctCorr - Value of octane correction\nKScorr - Current value of ignition timing correction fvs detonation\nIdlReg - Value of ignition timing correction from the idle speed regulator\nATcorr - Value of ignition timing correction vs intake air temperature\n\nDuring cranking the Tcorr field displays ign. timing correction\nvs coolant temperature value from the cranking map\n(the map is edited on the 'Firmware data' tab)"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
+
+// BITMAP
+IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information

@@ -31,6 +31,8 @@
 #include "io-core/SECU3IO.h"
 #include "MapIds.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/Label.h"
+#include "ui-core/MsgBox.h"
 
 const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 
@@ -85,6 +87,7 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , m_ldaxMin(1.0f)
 , m_ldaxMax(16.0f)
 , m_ldaxNeedsUpdate(false)
+, mp_acronLink(new CLabel)
 {
  _ResetUseFlags();
  work_map_load_slots.reserve(32);
@@ -116,6 +119,8 @@ void CGridModeEditorIgnDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_IM_VALUE, m_im_value);
  DDX_Control(pDX, IDC_GME_IC_VALUE, m_ic_value);
  DDX_Control(pDX, IDC_GME_AC_VALUE, m_ac_value);
+
+ DDX_Control(pDX, IDC_GME_ACRONYMS_LINK, *mp_acronLink);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -187,6 +192,13 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
   m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
 
  SetIcon((HICON)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH), IMAGE_ICON, 0, 0, LR_SHARED), TRUE);
+
+ //init HTTP links:
+ mp_acronLink->SetLink(true);
+ mp_acronLink->SetTextColor(RGB(0, 0, 255));
+ mp_acronLink->SetFontUnderline(true);
+ mp_acronLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_acronLink->SetOnClick(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnAcronymsLinkClick));
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -391,4 +403,9 @@ void CGridModeEditorIgnDlg::OnAbroadMoveTemp(CMapEditorCtrl::AbroadDir direction
   m_idle_map.SetSelection(0, column);
  if (direction==CMapEditorCtrl::ABROAD_DOWN)
   m_start_map.SetSelection(0, column);
+}
+
+void CGridModeEditorIgnDlg::OnAcronymsLinkClick()
+{
+ SECUMessageBox(IDS_GME_DESCR_ABBREV, MB_OK | MB_ICONINFORMATION);
 }
