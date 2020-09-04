@@ -270,6 +270,12 @@ void CEEPROMTabController::OnConnection(const bool i_online)
 //This method called when framework ask to close application
 bool CEEPROMTabController::OnClose(void)
 {
+ //save positions of windows of opened charts
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(i), i);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
+
  if (m_active && (!mp_comm->m_pBootLoader->IsIdle() || m_waiting_bl_timer.isActive()))
   if (!ErrorMsg::AskUserAboutTabLeaving())
    return false;
@@ -292,6 +298,15 @@ bool CEEPROMTabController::OnAskChangeTab(void)
  if (mp_comm->m_pBootLoader->IsIdle() && !m_waiting_bl_timer.isActive())
   return true; //allows
  return ErrorMsg::AskUserAboutTabLeaving();
+}
+
+void CEEPROMTabController::OnSaveSettings(void)
+{
+ //save positions of windows of opened charts
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(i), i);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
 }
 
 void CEEPROMTabController::OnOpenEEPROMFromFile(void)

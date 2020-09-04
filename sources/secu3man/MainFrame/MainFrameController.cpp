@@ -113,7 +113,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppSwitchDashboards(MakeDelegate(this, &MainFrameController::OnAppSwitchDashboards));
  mp_view->setOnAppSaveScreenshot(MakeDelegate(this, &MainFrameController::OnAppSaveScreenshot));
  mp_view->setOnAppSaveScreenshot5sec(MakeDelegate(this, &MainFrameController::OnAppSaveScreenshot5sec));
- mp_view->setOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
+ mp_view->addOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
  mp_view->setOnChildCharts(MakeDelegate(this, &MainFrameController::OnChildCharts));
  mp_view->setOnToggleMapWnd(MakeDelegate(this, &MainFrameController::OnToggleMapWnd));
  mp_view->setOnEditSettings(MakeDelegate(this, &MainFrameController::OnEditSettings));
@@ -409,6 +409,12 @@ void MainFrameController::OnCreate(void)
 
 bool MainFrameController::OnClose(void)
 {
+ _GrabWindowPos(false);
+ return true;
+}
+
+void MainFrameController::_GrabWindowPos(bool restZoom)
+{
  ISettingsData* settings = m_pAppSettingsManager->GetSettings();
 
  //Save state of the main window
@@ -421,6 +427,7 @@ bool MainFrameController::OnClose(void)
   sw.m_MainFrmWnd = 2; 
  settings->SetWndState(sw);
 
+ bool wasZoomed = mp_view->IsZoomed();
  mp_view->ShowWindow(SW_SHOWNORMAL); //normalize window pos, otherwise saved position will be wrong
  if (!mp_view->IsIconic() && !mp_view->IsZoomed())
  {
@@ -443,7 +450,8 @@ bool MainFrameController::OnClose(void)
   settings->SetWndSize(sz);
  }
 
- return true;
+ if (wasZoomed && restZoom)
+  mp_view->ShowWindow(SW_MAXIMIZE);
 }
 
 void MainFrameController::OnAfterCreate(void)
@@ -512,6 +520,11 @@ void MainFrameController::OnAppSaveSettings()
 {
  m_pStatusBarManager->SetInformationText(MLL::LoadString(IDS_SAVING_APP_SETTINGS));
  mp_view->BeginWaitCursor();
+ mp_view->LockWindowUpdate();
+ mp_view->SetRedraw(false);
+ _GrabWindowPos(true); //call it to update window position before saving of settings
+ mp_view->SetRedraw(true);
+ mp_view->UnlockWindowUpdate();
  m_pAppSettingsManager->WriteSettings();
  mp_view->EndWaitCursor();
  m_pStatusBarManager->SetInformationText(MLL::LoadString(IDS_SAVED_APP_SETTINGS));

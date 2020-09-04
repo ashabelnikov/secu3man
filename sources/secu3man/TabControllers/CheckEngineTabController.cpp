@@ -222,6 +222,11 @@ bool CCheckEngineTabController::OnAskChangeTab(void)
  return true; //always allows to change tab
 }
 
+void CCheckEngineTabController::OnSaveSettings(void)
+{
+ //empty
+}
+
 //посльзователь "дернул" чек бокс "—читывать ошибки в реальном времени".
 void CCheckEngineTabController::OnRealTimeErrors(void)
 {

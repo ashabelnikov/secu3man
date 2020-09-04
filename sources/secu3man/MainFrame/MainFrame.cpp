@@ -334,9 +334,9 @@ void CMainFrame::setOnAppSaveScreenshot5sec(EventHandler i_OnFunction)
  m_OnSaveScreenshot5sec = i_OnFunction;
 }
 
-void CMainFrame::setOnAppSaveSettings(EventHandler i_OnFunction)
+void CMainFrame::addOnAppSaveSettings(EventHandler i_OnFunction)
 {
- m_OnSaveSettings = i_OnFunction;
+ m_OnSaveSettings.push_back(i_OnFunction);
 }
 
 void CMainFrame::setOnChildCharts(EventHandler i_OnFunction)
@@ -626,8 +626,12 @@ void CMainFrame::OnAppSaveScreenshot5sec()
 
 void CMainFrame::OnAppSaveSettings()
 {
- if (m_OnSaveSettings)
-  m_OnSaveSettings();
+ std::vector<EventHandler>::reverse_iterator it = m_OnSaveSettings.rbegin();
+ for (; it != m_OnSaveSettings.rend(); ++it) //ensure first of all processing of tabs and main frame controller is last
+ {
+  if (*it)
+   (*it)();
+ }
 }
 
 void CMainFrame::OnAppEditSettings()

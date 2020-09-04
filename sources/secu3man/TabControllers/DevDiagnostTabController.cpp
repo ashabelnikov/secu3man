@@ -440,6 +440,11 @@ bool CDevDiagnostTabController::OnAskChangeTab(void)
  return true; //always allows to change tab
 }
 
+void CDevDiagnostTabController::OnSaveSettings(void)
+{
+ //empty
+}
+
 void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
 {
  _SetOuptutMapItem(output_id, state);

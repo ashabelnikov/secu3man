@@ -83,7 +83,7 @@ class CMainFrame : public CFrameWnd
   void setOnAppSwitchDashboards(EventHandler i_OnFunction);
   void setOnAppSaveScreenshot(EventHandler i_OnFunction);
   void setOnAppSaveScreenshot5sec(EventHandler i_OnFunction);
-  void setOnAppSaveSettings(EventHandler i_OnFunction);
+  void addOnAppSaveSettings(EventHandler i_OnFunction);
   void setOnChildCharts(EventHandler i_OnFunction);
   void setOnToggleMapWnd(EventHandler i_OnFunction);
   void setOnEditSettings(EventHandler i_OnFunction);
@@ -156,7 +156,7 @@ private:
   EventHandler m_OnSwitchDashboards;
   EventHandler m_OnSaveScreenshot;
   EventHandler m_OnSaveScreenshot5sec;
-  EventHandler m_OnSaveSettings;
+  std::vector<EventHandler> m_OnSaveSettings;
   EventHandler m_OnChildCharts;
   EventHandler m_OnToggleMapWnd;
   EventHandler m_OnEditSettings;

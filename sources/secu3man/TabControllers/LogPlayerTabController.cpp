@@ -301,6 +301,11 @@ bool CLogPlayerTabController::OnAskChangeTab(void)
  return true; //always allows to change tab
 }
 
+void CLogPlayerTabController::OnSaveSettings(void)
+{
+ //empty
+}
+
 void CLogPlayerTabController::OnOpenFileButton(void)
 {
  if (mp_log_reader->IsOpened())

@@ -42,6 +42,7 @@ class CChildViewManager
   virtual bool OnClose(void);
   virtual void OnCloseNotify(void);
   virtual void OnFullScreen(bool i_what);
+  virtual void OnSaveSettings(void);
 
  private:
   std::auto_ptr<CChildView> mp_wndView;

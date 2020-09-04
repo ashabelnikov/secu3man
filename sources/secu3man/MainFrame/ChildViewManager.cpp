@@ -200,3 +200,9 @@ void CChildViewManager::OnFullScreen(bool i_what)
  ASSERT(mp_MainTabController->GetActiveController());
  mp_MainTabController->GetActiveController()->OnFullScreen(i_what);
 }
+
+void CChildViewManager::OnSaveSettings(void)
+{
+ ASSERT(mp_MainTabController->GetActiveController());
+ mp_MainTabController->GetActiveController()->OnSaveSettings();
+}

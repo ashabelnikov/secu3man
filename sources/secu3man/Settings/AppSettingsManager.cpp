@@ -52,8 +52,8 @@ CAppSettingsManager::~CAppSettingsManager()
 
 bool CAppSettingsManager::ReadSettings(void) const
 {
-  ASSERT(m_pModel);
-  return m_pModel->ReadSettings();
+ ASSERT(m_pModel);
+ return m_pModel->ReadSettings();
 }
 
 bool CAppSettingsManager::WriteSettings(void) const
