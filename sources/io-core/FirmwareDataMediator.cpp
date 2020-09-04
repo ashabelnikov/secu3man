@@ -239,11 +239,12 @@ typedef struct
  _uchar vent_pwmsteps;
  _uchar vent_minband;
  _uchar an_tps_mul;
+ _uchar igntim_wrkmap;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4101];
+ _uchar reserved[4100];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2209,6 +2210,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.vent_pwmsteps = exd.vent_pwmsteps;
  o_data.vent_minband = exd.vent_minband;
  o_data.an_tps_mul = exd.an_tps_mul;
+ o_data.igntim_wrkmap = exd.igntim_wrkmap;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2240,4 +2242,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.vent_pwmsteps = i_data.vent_pwmsteps;
  exd.vent_minband = i_data.vent_minband;
  exd.an_tps_mul = i_data.an_tps_mul;
+ exd.igntim_wrkmap = i_data.igntim_wrkmap;
 }

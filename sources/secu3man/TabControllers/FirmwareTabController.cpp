@@ -1782,6 +1782,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("The choice of what to multiply the base injection PW when working in Alpha-N mode: by MAP or TPS. If you set 0, then the firmware multiplies by MAP, if you set 1, then the firmware multiplies by TPS. If you set it to 2, then firmware multiplies by 101.3 constant"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Всегда использовать карту УОЗ рабочего режима"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("Если установить в 1, то рабочая карта УОЗ будет использоваться не только для рабочего режима, но и для режима ХХ. Установите в 0 для работы в обычном режиме (для ХХ своя карта УОЗ)"));
+ else
+  dfd.AppendItem(_T("Always use working mode's ignition timing map"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("If set to 1, then working ignition timing map will be used also for idling mode. Set ot 0 for working in default mode (seperate map will be used on idling)"));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);
