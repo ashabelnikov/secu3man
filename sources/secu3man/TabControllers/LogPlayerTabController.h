@@ -53,6 +53,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   virtual void OnCloseNotify(void);
   virtual void OnFullScreen(bool i_what);
   virtual bool OnAskChangeTab(void);
+  virtual void OnSaveSettings(void);
 
   //from IAPPEventHandler:
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);

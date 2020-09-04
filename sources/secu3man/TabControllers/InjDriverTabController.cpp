@@ -317,6 +317,11 @@ bool CInjDriverTabController::OnAskChangeTab(void)
  return ErrorMsg::AskUserAboutTabLeaving();
 }
 
+void CInjDriverTabController::OnSaveSettings(void)
+{
+ //empty
+}
+
 void CInjDriverTabController::OnChange(void)
 {
  int set_idx = mp_view->GetCurrSetIdx();

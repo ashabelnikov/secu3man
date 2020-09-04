@@ -815,11 +815,29 @@ void CPMTablesController::OnTableDeskChangesTimer(void)
  //todo
 }
 
+void CPMTablesController::OnClose()
+{
+ //save positions of windows of opened charts
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+  OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(i), i);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
+}
+
 void CPMTablesController::OnCloseNotify()
 {
  mp_view->CloseAllCharts();
  mp_settings->SetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
  mp_settings->SetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
+}
+
+void CPMTablesController::OnSaveSettings()
+{
+ //save positions of windows of opened charts
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+  OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(i), i);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
 }
 
 void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)

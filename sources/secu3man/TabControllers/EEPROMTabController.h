@@ -69,6 +69,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   virtual void OnCloseNotify(void);
   virtual void OnFullScreen(bool i_what);
   virtual bool OnAskChangeTab(void);
+  virtual void OnSaveSettings(void);
 
   void OnSettingsChanged(int action);
 

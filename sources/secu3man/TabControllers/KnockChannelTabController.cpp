@@ -357,6 +357,11 @@ bool CKnockChannelTabController::OnAskChangeTab(void)
  return true; //always allows to change tab
 }
 
+void CKnockChannelTabController::OnSaveSettings(void)
+{
+ //empty
+}
+
 void CKnockChannelTabController::OnSaveParameters(void)
 {
  mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_WRITING_PARAMETERS));

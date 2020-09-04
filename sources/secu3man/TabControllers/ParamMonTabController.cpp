@@ -288,13 +288,14 @@ void CParamMonTabController::OnConnection(const bool i_online)
 
 bool CParamMonTabController::OnClose(void)
 {
+ mp_tabcntr->OnClose();
  mp_settings->SetParamMonVert(mp_view->GetSplitterPos());
  return true; //отвечаем что данная вкладка готова к закрытию приложения
 }
 
 void CParamMonTabController::OnCloseNotify(void)
 {
-  mp_tabcntr->OnCloseNotify();
+ mp_tabcntr->OnCloseNotify();
 }
 
 void CParamMonTabController::OnFullScreen(bool i_what)
@@ -305,6 +306,11 @@ void CParamMonTabController::OnFullScreen(bool i_what)
 bool CParamMonTabController::OnAskChangeTab(void)
 {
  return true; //always allows to change tab
+}
+
+void CParamMonTabController::OnSaveSettings(void)
+{
+ mp_tabcntr->OnSaveSettings();
 }
 
 //Событие от чекбокса переключающего режим мониторинга (приборы/сырые данные)

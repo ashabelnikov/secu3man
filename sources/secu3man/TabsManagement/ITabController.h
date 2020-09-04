@@ -35,4 +35,5 @@ class ITabController
   virtual void OnFullScreen(bool i_what) = 0;
   virtual bool OnAskChangeTab(void) = 0;
   virtual void OnCloseNotify(void) = 0;
+  virtual void OnSaveSettings(void) = 0;
 };

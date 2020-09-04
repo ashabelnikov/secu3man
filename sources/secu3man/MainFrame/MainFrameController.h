@@ -89,6 +89,8 @@ class MainFrameController : public IAPPEventHandler
   //You have to call this function before using of this controller!
   void _SetDelegates(void);
 
+  void _GrabWindowPos(bool restZoom);
+
   CMainFrame*            mp_view;
   CCommunicationManager* m_pCommunicationManager;
   CAppSettingsManager*   m_pAppSettingsManager;

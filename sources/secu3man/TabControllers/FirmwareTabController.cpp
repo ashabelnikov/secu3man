@@ -872,53 +872,11 @@ bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
 //Эта функция вызывается при выходе из приложения. Эта функция может запретить выход, если вернет false
 bool CFirmwareTabController::OnClose(void)
 {
- //сохраняем позиции открытых окон!
- //ignition
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_START), TYPE_MAP_DA_START);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_IDLE),  TYPE_MAP_DA_IDLE);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
- //fuel injection
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_VE), TYPE_MAP_INJ_VE);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFR), TYPE_MAP_INJ_AFR);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_CRNK), TYPE_MAP_INJ_CRNK);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_WRMP), TYPE_MAP_INJ_WRMP);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_DEAD), TYPE_MAP_INJ_DEAD);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLR), TYPE_MAP_INJ_IDLR);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLC), TYPE_MAP_INJ_IDLC);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AETPS), TYPE_MAP_INJ_AETPS);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AERPM), TYPE_MAP_INJ_AERPM);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR), TYPE_MAP_INJ_AFTSTR);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IT), TYPE_MAP_INJ_IT);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM), TYPE_MAP_INJ_ITRPM);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_RIGID), TYPE_MAP_INJ_RIGID);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV), TYPE_MAP_INJ_EGOCRV);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACC), TYPE_MAP_INJ_IACC);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACCW), TYPE_MAP_INJ_IACCW);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT), TYPE_MAP_INJ_IATCLT);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_TPSSWT), TYPE_MAP_INJ_TPSSWT);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GTSC), TYPE_MAP_INJ_GTSC);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GPSC), TYPE_MAP_INJ_GPSC);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ATSC), TYPE_MAP_INJ_ATSC);
+ //save positions of windows of opened charts
+ for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END; ++i)
+  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(i), i);
 
- //separate
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CTS_CURVE), TYPE_MAP_CTS_CURVE);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CURVE), TYPE_MAP_ATS_CURVE);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CORR), TYPE_MAP_ATS_CORR);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GASDOSE), TYPE_MAP_GASDOSE);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_BAROCORR), TYPE_MAP_BAROCORR);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_MANIGNTIM), TYPE_MAP_MANIGNTIM);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_TMP2_CURVE), TYPE_MAP_TMP2_CURVE);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRKCLT_CORR), TYPE_MAP_CRKCLT_CORR);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_EH_PAUSE), TYPE_MAP_EH_PAUSE);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRANKING_THRD), TYPE_MAP_CRANKING_THRD);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRANKING_TIME), TYPE_MAP_CRANKING_TIME);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_SMAPABAN_THRD), TYPE_MAP_SMAPABAN_THRD);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
-
+ //warnings user about leaving of this tab
  if (m_active && (!mp_comm->m_pBootLoader->IsIdle() || m_waiting_bl_timer.isActive()))
   if (!ErrorMsg::AskUserAboutTabLeaving())
    return false;
@@ -941,6 +899,13 @@ bool CFirmwareTabController::OnAskChangeTab(void)
  if (mp_comm->m_pBootLoader->IsIdle() && !m_waiting_bl_timer.isActive())
   return true; //allows
  return ErrorMsg::AskUserAboutTabLeaving();
+}
+
+void CFirmwareTabController::OnSaveSettings(void)
+{
+ //save positions of windows of opened charts
+ for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END; ++i)
+  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(i), i);
 }
 
 void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name)

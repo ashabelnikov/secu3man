@@ -56,7 +56,11 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
 
   virtual void StartDataCollection(void);
 
+  void OnClose();
+
   void OnCloseNotify();
+
+  void OnSaveSettings();
 
   //Чтение всех необходимых данных после коннекта (конечный автомат)
   //возвращает true когда все данные прочитаны  
