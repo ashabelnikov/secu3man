@@ -637,7 +637,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_GME_DESCR_ABBREV  "ХХ - Карта/значение УОЗ для ХХ\nТкор - Карта/значение коррекции УОЗ по температуре двигателя\nПуск - Карта/значение УОЗ для пуска\nУОЗ - Результирующее значение угла опережения зажигания\nРабочая - Значение из карты УОЗ для рабочего режима\nОктКор - Значение октан коррекции УОЗ\nДДкор - Текущее значение коррекции УОЗ по детонации\nРХХ - Значение коррекции УОЗ от регулятора оборотов холостого хода\nВкор - Коррекция УОЗ по температуре воздуха на впуске\n\nВо время пуска в поле Ткор отображается значение коррекции\nУОЗ по температуре двигателя из таблицы для пуска\n(таблица редактируется на вкладке 'Данные прошивки')"
+    IDS_GME_DESCR_ABBREV  "ХХ - Карта/значение УОЗ для ХХ\nТкор - Карта/значение коррекции УОЗ по температуре двигателя\nПуск - Карта/значение УОЗ для пуска\nУОЗ - Результирующее значение угла опережения зажигания\nРабочая - Значение из карты УОЗ для рабочего режима\nОктКор - Значение октан коррекции УОЗ\nДДкор - Текущее значение коррекции УОЗ по детонации\nРХХ - Значение коррекции УОЗ от регулятора оборотов холостого хода\nВкор - Коррекция УОЗ по температуре воздуха на впуске\n\nВо время пуска в поле Ткор отображается значение коррекции\nУОЗ по температуре двигателя из таблицы для пуска\n(таблица редактируется на вкладке 'Данные прошивки')\n\nЕсли разрешена ручная октан коррекция, то в поле ОктКор\nотображается сумма значения октан коррекции из параметров\nи значения ручной коррекции"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1292,7 +1292,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_GME_DESCR_ABBREV  "Idle - Map/value of ignition timing for idling\nTcorr - Map/value of ignition timing correction vs coolant temperature\nStart - Map/value of ignition timing for cranking\nAdv.ang. - Resulting value of the ignition timing\nWork - Value from the ignition timing map for working mode\nOctCorr - Value of octane correction\nKScorr - Current value of ignition timing correction fvs detonation\nIdlReg - Value of ignition timing correction from the idle speed regulator\nATcorr - Value of ignition timing correction vs intake air temperature\n\nDuring cranking the Tcorr field displays ign. timing correction\nvs coolant temperature value from the cranking map\n(the map is edited on the 'Firmware data' tab)"
+    IDS_GME_DESCR_ABBREV  "Idle - Map/value of ignition timing for idling\nTcorr - Map/value of ignition timing correction vs coolant temperature\nStart - Map/value of ignition timing for cranking\nAdv.ang. - Resulting value of the ignition timing\nWork - Value from the ignition timing map for working mode\nOctCorr - Value of octane correction\nKScorr - Current value of ignition timing correction fvs detonation\nIdlReg - Value of ignition timing correction from the idle speed regulator\nATcorr - Value of ignition timing correction vs intake air temperature\n\nDuring cranking the Tcorr field displays ign. timing correction\nvs coolant temperature value from the cranking map\n(the map is edited on the 'Firmware data' tab)\n\nIf manual ign. timing correction is enabled, then the OctCorr field\ndisplays the sum of the octane correction from the parameters\nand the manual correction value"   
 END
 
 /////////////////////////////////////////////////////////////////////////////

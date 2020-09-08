@@ -1948,8 +1948,11 @@ void CFirmwareTabController::OnCESettingsButton(void)
  dialog.EnableSECU3TItems(CHECKBIT32(mp_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
  dialog.EnableExtraIO(!CHECKBIT32(mp_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(mp_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
  WndSettings ws;
+ WndSize sz;
  mp_settings->GetWndSettings(ws);
+ mp_settings->GetWndSize(sz);
  dialog.SetWndPosition(ws.m_CESettingsWnd_X, ws.m_CESettingsWnd_Y);
+ dialog.SetWndSize(sz.m_CESettingsWnd_W, sz.m_CESettingsWnd_H);
 
  if (dialog.DoModal() == IDOK)
  {
@@ -1958,9 +1961,13 @@ void CFirmwareTabController::OnCESettingsButton(void)
  }
 
  CPoint wndPos = dialog.GetWndPosition();
+ CSize wndSize = dialog.GetWndSize();
  ws.m_CESettingsWnd_X = wndPos.x; 
  ws.m_CESettingsWnd_Y = wndPos.y;
  mp_settings->SetWndSettings(ws);
+ sz.m_CESettingsWnd_W = wndSize.cx; 
+ sz.m_CESettingsWnd_H = wndSize.cy;
+ mp_settings->SetWndSize(sz);
 }
 
 void CFirmwareTabController::OnChangeSettingsMapEd(void)

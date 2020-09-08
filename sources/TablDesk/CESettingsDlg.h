@@ -161,6 +161,9 @@ class AFX_EXT_CLASS CCESettingsCntr : public CDialog
   void EnableExtraIO(bool i_enable);
   void SetWndPosition(int x, int y);
   const CPoint& GetWndPosition(void);
+  void SetWndSize(int cx, int cy);
+  const CSize& GetWndSize(void);
+
   virtual INT_PTR DoModal();
 
  // Implementation
@@ -180,6 +183,7 @@ class AFX_EXT_CLASS CCESettingsCntr : public CDialog
   void _UpdateControlsPosition(int cx, int cy);
   CCESettingsDlg m_dlg;
   CPoint m_wndPos;
+  CSize m_wndSize;
   CSize m_createSize;
   bool m_initialized;
   CButton m_ok_btn;

@@ -468,6 +468,7 @@ END_MESSAGE_MAP()
 CCESettingsCntr::CCESettingsCntr(CWnd* pParent /*=NULL*/)
 : Super(CCESettingsCntr::IDD, pParent)
 , m_wndPos(0, 0)
+, m_wndSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max())
 , m_initialized(false)
 {
  //empty
@@ -515,12 +516,14 @@ BOOL CCESettingsCntr::OnInitDialog()
  m_dlg.SetPosition(0,0);
  m_dlg.ShowWindow(SW_SHOW);
 
- if (m_wndPos.x != std::numeric_limits<int>::max() && m_wndPos.y != std::numeric_limits<int>::max())
- SetWindowPos(NULL, m_wndPos.x, m_wndPos.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-
  CRect rc;
  GetWindowRect(&rc);
  m_createSize = rc.Size();
+
+ if (m_wndPos.x != std::numeric_limits<int>::max() && m_wndPos.y != std::numeric_limits<int>::max())
+  SetWindowPos(NULL, m_wndPos.x, m_wndPos.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+ if (m_wndSize.cx != std::numeric_limits<int>::max() && m_wndSize.cy != std::numeric_limits<int>::max())
+  SetWindowPos(NULL, 0, 0, m_wndSize.cx, m_wndSize.cy, SWP_NOMOVE | SWP_NOZORDER);
 
  m_initialized = true;
 
@@ -537,6 +540,8 @@ void CCESettingsCntr::OnDestroy()
  GetWindowRect(&rc);
  m_wndPos.x = rc.left;
  m_wndPos.y = rc.top;
+ m_wndSize.cx = rc.right - rc.left;
+ m_wndSize.cy = rc.bottom - rc.top;
 
  Super::OnDestroy();
 }
@@ -575,6 +580,16 @@ void CCESettingsCntr::SetWndPosition(int x, int y)
 const CPoint& CCESettingsCntr::GetWndPosition(void)
 {
  return m_wndPos;
+}
+
+void CCESettingsCntr::SetWndSize(int cx, int cy)
+{
+ m_wndSize = CSize(cx, cy);
+}
+
+const CSize& CCESettingsCntr::GetWndSize(void)
+{
+ return m_wndSize;
 }
 
 void CCESettingsCntr::OnSize(UINT nType, int cx, int cy)

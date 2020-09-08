@@ -30,6 +30,8 @@
 //Holds windows's position data
 struct WndSettings
 {
+ int m_MainFrmWnd_X;  //main window x
+ int m_MainFrmWnd_Y;  //main window y
  int m_StrtMapWnd_X;
  int m_StrtMapWnd_Y;
  int m_IdleMapWnd_X;
@@ -40,8 +42,6 @@ struct WndSettings
  int m_TempMapWnd_Y;
  int m_AttenuatorMapWnd_X;
  int m_AttenuatorMapWnd_Y;
- int m_MainFrmWnd_X;
- int m_MainFrmWnd_Y;
  int m_DwellCntrlMapWnd_X;
  int m_DwellCntrlMapWnd_Y;
  int m_CTSCurveMapWnd_X;
@@ -121,8 +121,92 @@ struct WndSettings
 //Holds windows's size data
 struct WndSize
 {
- int m_MainFrmWnd_W;
- int m_MainFrmWnd_H;
+ int m_MainFrmWnd_W; //main window width
+ int m_MainFrmWnd_H; //main window height
+ int m_StrtMapWnd_W;
+ int m_StrtMapWnd_H;
+ int m_IdleMapWnd_W;
+ int m_IdleMapWnd_H;
+ int m_WorkMapWnd_W;
+ int m_WorkMapWnd_H;
+ int m_TempMapWnd_W;
+ int m_TempMapWnd_H;
+ int m_AttenuatorMapWnd_W;
+ int m_AttenuatorMapWnd_H;
+ int m_DwellCntrlMapWnd_W;
+ int m_DwellCntrlMapWnd_H;
+ int m_CTSCurveMapWnd_W;
+ int m_CTSCurveMapWnd_H;
+ //int m_GridMapIgnWnd_W;
+ //int m_GridMapIgnWnd_H;
+ //int m_GridMapInjWnd_W;
+ //int m_GridMapInjWnd_H;
+ int m_VEMapWnd_W;
+ int m_VEMapWnd_H;
+ int m_AFRMapWnd_W;
+ int m_AFRMapWnd_H;
+ int m_CrnkMapWnd_W;
+ int m_CrnkMapWnd_H;
+ int m_WrmpMapWnd_W;
+ int m_WrmpMapWnd_H;
+ int m_DeadMapWnd_W;
+ int m_DeadMapWnd_H;
+ int m_IdlrMapWnd_W;
+ int m_IdlrMapWnd_H;
+ int m_IdlcMapWnd_W;
+ int m_IdlcMapWnd_H;
+ int m_ATSCurvMapWnd_W;
+ int m_ATSCurvMapWnd_H;
+ int m_ATSCorrMapWnd_W;
+ int m_ATSCorrMapWnd_H;
+ int m_AETPSMapWnd_W;
+ int m_AETPSMapWnd_H;
+ int m_AERPMMapWnd_W;
+ int m_AERPMMapWnd_H;
+ int m_AftstrMapWnd_W;
+ int m_AftstrMapWnd_H;
+ int m_GasdoseMapWnd_W;
+ int m_GasdoseMapWnd_H;
+ int m_ITMapWnd_W;
+ int m_ITMapWnd_H;
+ int m_ITRPMMapWnd_W;
+ int m_ITRPMMapWnd_H;
+ int m_RigidMapWnd_W;
+ int m_RigidMapWnd_H;
+ int m_EGOCrvMapWnd_W;
+ int m_EGOCrvMapWnd_H;
+ int m_IACCMapWnd_W;
+ int m_IACCMapWnd_H;
+ int m_IACCWMapWnd_W;
+ int m_IACCWMapWnd_H;
+ int m_IATCLTMapWnd_W;
+ int m_IATCLTMapWnd_H;
+ int m_BarocorrMapWnd_W;
+ int m_BarocorrMapWnd_H;
+ int m_ManIgntimMapWnd_W;
+ int m_ManIgntimMapWnd_H;
+ int m_CESettingsWnd_W;
+ int m_CESettingsWnd_H;
+ int m_TpsswtMapWnd_W;
+ int m_TpsswtMapWnd_H;
+ int m_Tmp2CurveMapWnd_W;
+ int m_Tmp2CurveMapWnd_H;
+ int m_GtscMapWnd_W;
+ int m_GtscMapWnd_H;
+ int m_GpscMapWnd_W;
+ int m_GpscMapWnd_H;
+ int m_AtscMapWnd_W;
+ int m_AtscMapWnd_H;
+ int m_CrkTempMapWnd_W;
+ int m_CrkTempMapWnd_H;
+ int m_EHPauseMapWnd_W;
+ int m_EHPauseMapWnd_H;
+ int m_CrankingThrdMapWnd_W;
+ int m_CrankingThrdMapWnd_H;
+ int m_CrankingTimeMapWnd_W;
+ int m_CrankingTimeMapWnd_H;
+ int m_SmapabanThrdMapWnd_W;
+ int m_SmapabanThrdMapWnd_H;
 };
 
 //Holds windows's state data
@@ -420,6 +504,8 @@ class ISettingsData
 
   virtual void SetWndSize(const WndSize& i_wndSize) = 0;
   virtual void GetWndSize(WndSize& o_wndSize) const = 0;
+  virtual void SetWndSize1(const WndSize& i_wndSize) = 0;
+  virtual void GetWndSize1(WndSize& o_wndSize) const = 0;
 
   virtual void SetWndState(const WndState& i_wndState) = 0;
   virtual void GetWndState(WndState& o_wndState) const = 0;
