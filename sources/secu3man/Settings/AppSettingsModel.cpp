@@ -189,6 +189,77 @@ CAppSettingsModel::CAppSettingsModel()
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
+, m_optStrtMapWndSize(_T("StrtMapWnd"))
+, m_optIdleMapWndSize(_T("IdleMapWnd"))
+, m_optWorkMapWndSize(_T("WorkMapWnd"))
+, m_optTempMapWndSize(_T("TempMapWnd"))
+, m_optAttenMapWndSize(_T("AttenMapWnd"))
+, m_optDwellCntrlMapWndSize(_T("DwellCntrlMapWnd"))
+, m_optCTSCurveMapWndSize(_T("CTSCurveMapWnd"))
+//, m_optGridMapIgnWndSize(_T("GridMapIgnWnd"))
+//, m_optGridMapInjWndSize(_T("GridMapInjWnd"))
+, m_optVEMapWndSize(_T("VEMapWnd"))
+, m_optAFRMapWndSize(_T("AFRMapWnd"))
+, m_optCrnkMapWndSize(_T("CrnkMapWnd"))
+, m_optWrmpMapWndSize(_T("WrmpMapWnd"))
+, m_optDeadMapWndSize(_T("DeadMapWnd"))
+, m_optIdlrMapWndSize(_T("IdlrMapWnd"))
+, m_optIdlcMapWndSize(_T("IdlcMapWnd"))
+, m_optATSCurvMapWndSize(_T("ATSCurvMapWnd"))
+, m_optATSCorrMapWndSize(_T("ATSCorrMapWnd"))
+, m_optAETPSMapWndSize(_T("AETPSMapWnd"))
+, m_optAERPMMapWndSize(_T("AERPMMapWnd"))
+, m_optAftstrMapWndSize(_T("AftstrMapWnd"))
+, m_optGasdoseMapWndSize(_T("GasdoseMapWnd"))
+, m_optITMapWndSize(_T("ITMapWnd"))
+, m_optITRPMMapWndSize(_T("ITRPMMapWnd"))
+, m_optRigidMapWndSize(_T("RigidMapWnd"))
+, m_optEGOCrvMapWndSize(_T("EGOCrvMapWnd"))
+, m_optIACCMapWndSize(_T("IACCMapWnd"))
+, m_optIACCWMapWndSize(_T("IACCWMapWnd"))
+, m_optIATCLTMapWndSize(_T("IATCLTCorrMapWnd"))
+, m_optBarocorrMapWndSize(_T("BarocorrMapWnd"))
+, m_optManIgntimMapWndSize(_T("ManIgntimMapWnd"))
+, m_optCESettingsWndSize(_T("CESettingsWnd"))
+, m_optTpsswtMapWndSize(_T("TpsSwtMapWnd"))
+, m_optTmp2CurveMapWndSize(_T("Tmp2CurveMapWnd"))
+, m_optGtscMapWndSize(_T("GTSCMapWnd"))
+, m_optGpscMapWndSize(_T("GPSCMapWnd"))
+, m_optAtscMapWndSize(_T("AirDenMapWnd"))
+, m_optCrkTempMapWndSize(_T("CrkTempMapWnd"))
+, m_optEHPauseMapWndSize(_T("EHPauseMapWnd"))
+, m_optCrankingThrdMapWndSize(_T("CrankingThrdMapWnd"))
+, m_optCrankingTimeMapWndSize(_T("CrankingTimeMapWnd"))
+, m_optSmapabanThrdMapWndSize(_T("SmapabanThrdMapWnd"))
+//positions of windows (online tables)
+, m_Name_WndSize_Section1(_T("WndSizeOnline"))
+, m_optStrtMapWndSize1(_T("StrtMapWnd"))
+, m_optIdleMapWndSize1(_T("IdleMapWnd"))
+, m_optWorkMapWndSize1(_T("WorkMapWnd"))
+, m_optTempMapWndSize1(_T("TempMapWnd"))
+//, m_optGridMapIgnWnd1(_T("GridMapIgnWnd"))
+//, m_optGridMapInjWnd1(_T("GridMapInjWnd"))
+, m_optVEMapWndSize1(_T("VEMapWnd"))
+, m_optAFRMapWndSize1(_T("AFRMapWnd"))
+, m_optCrnkMapWndSize1(_T("CrnkMapWnd"))
+, m_optWrmpMapWndSize1(_T("WrmpMapWnd"))
+, m_optDeadMapWndSize1(_T("DeadMapWnd"))
+, m_optIdlrMapWndSize1(_T("IdlrMapWnd"))
+, m_optIdlcMapWndSize1(_T("IdlcMapWnd"))
+, m_optAETPSMapWndSize1(_T("AETPSMapWnd"))
+, m_optAERPMMapWndSize1(_T("AERPMMapWnd"))
+, m_optAftstrMapWndSize1(_T("AftstrMapWnd"))
+, m_optITMapWndSize1(_T("ITMapWnd"))
+, m_optITRPMMapWndSize1(_T("ITRPMMapWnd"))
+, m_optRigidMapWndSize1(_T("RigidMapWnd"))
+, m_optEGOCrvMapWndSize1(_T("EGOCrvMapWnd"))
+, m_optIACCMapWndSize1(_T("IACCMapWnd"))
+, m_optIACCWMapWndSize1(_T("IACCWMapWnd"))
+, m_optIATCLTMapWndSize1(_T("IATCLTCorrMapWnd"))
+, m_optTpsswtMapWndSize1(_T("TpsSwtMapWnd"))
+, m_optGtscMapWndSize1(_T("GTSCMapWnd"))
+, m_optGpscMapWndSize1(_T("GPSCMapWnd"))
+, m_optAtscMapWndSize1(_T("AirDenMapWnd"))
 //state of windows (minimized, normal, maximized)
 , m_Name_WndState_Section(_T("WndState"))
 , m_optMainFrmWndState(_T("MainFrmWnd"))
@@ -669,6 +740,77 @@ bool CAppSettingsModel::ReadSettings(void)
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
  sz.ReadWndPos(m_optMainFrmWndSize, 0, 10000); //Main frame window
+ sz.ReadWndPos(m_optStrtMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optIdleMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optWorkMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optTempMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAttenMapWndSize, 0, 10000); 
+ sz.ReadWndPos(m_optDwellCntrlMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCTSCurveMapWndSize, 0, 10000);
+//sz.ReadWndPos(m_optGridMapIgnWndSize, 0, 10000);
+//sz.ReadWndPos(m_optGridMapInjWndSize, 0, 10000);
+ sz.ReadWndPos(m_optVEMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAFRMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCrnkMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optWrmpMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optDeadMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optIdlrMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optIdlcMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAETPSMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAERPMMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAftstrMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optATSCurvMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optATSCorrMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optGasdoseMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optITMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optITRPMMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optRigidMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optEGOCrvMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optIACCMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optIACCWMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optIATCLTMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optBarocorrMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optManIgntimMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCESettingsWndSize, 0, 10000);
+ sz.ReadWndPos(m_optTpsswtMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optTmp2CurveMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optGtscMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optGpscMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAtscMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCrkTempMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optEHPauseMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCrankingThrdMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCrankingTimeMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optSmapabanThrdMapWndSize, 0, 10000);
+ //Positions of windows (online tables)
+ IniIO sz1(IniFileName, m_Name_WndSize_Section1);
+ sz1.ReadWndPos(m_optStrtMapWndSize1);
+ sz1.ReadWndPos(m_optIdleMapWndSize1);
+ sz1.ReadWndPos(m_optWorkMapWndSize1);
+ sz1.ReadWndPos(m_optTempMapWndSize1);
+//sz1.ReadWndPos(m_optGridMapIgnWndSize1);
+//sz1.ReadWndPos(m_optGridMapInjWndSize1);
+ sz1.ReadWndPos(m_optVEMapWndSize1);
+ sz1.ReadWndPos(m_optAFRMapWndSize1);
+ sz1.ReadWndPos(m_optCrnkMapWndSize1);
+ sz1.ReadWndPos(m_optWrmpMapWndSize1);
+ sz1.ReadWndPos(m_optDeadMapWndSize1);
+ sz1.ReadWndPos(m_optIdlrMapWndSize1);
+ sz1.ReadWndPos(m_optIdlcMapWndSize1);
+ sz1.ReadWndPos(m_optAETPSMapWndSize1);
+ sz1.ReadWndPos(m_optAERPMMapWndSize1);
+ sz1.ReadWndPos(m_optAftstrMapWndSize1);
+ sz1.ReadWndPos(m_optITMapWndSize1);
+ sz1.ReadWndPos(m_optITRPMMapWndSize1);
+ sz1.ReadWndPos(m_optRigidMapWndSize1);
+ sz1.ReadWndPos(m_optEGOCrvMapWndSize1);
+ sz1.ReadWndPos(m_optIACCMapWndSize1);
+ sz1.ReadWndPos(m_optIACCWMapWndSize1);
+ sz1.ReadWndPos(m_optIATCLTMapWndSize1);
+ sz1.ReadWndPos(m_optTpsswtMapWndSize1);
+ sz1.ReadWndPos(m_optGtscMapWndSize1);
+ sz1.ReadWndPos(m_optGpscMapWndSize1);
+ sz1.ReadWndPos(m_optAtscMapWndSize1);
 
  //State of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -1712,6 +1854,359 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optMainFrmWndSize, _T("Main window"));
  else
   sz.WriteWndPos(m_optMainFrmWndSize, _T("Главное окно"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optStrtMapWndSize, _T("Cranking ignition timing map"));
+ else
+  sz.WriteWndPos(m_optStrtMapWndSize, _T("Таблица УОЗ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optIdleMapWndSize, _T("Idling ignition timing map"));
+ else
+  sz.WriteWndPos(m_optIdleMapWndSize, _T("Таблица УОЗ на ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optWorkMapWndSize, _T("Work ignition timing map"));
+ else
+  sz.WriteWndPos(m_optWorkMapWndSize, _T("Рабочая карта УОЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optTempMapWndSize, _T("Ign. timing vs CLT correction map"));
+ else
+  sz.WriteWndPos(m_optTempMapWndSize, _T("Коррекция УОЗ по ДТОЖ"));
+
+// if (m_optInterfaceLang.value == IL_ENGLISH)
+//  sz.WriteWndPos(m_optGridMapIgnWndSize, _T("Grid editing window for ign.timing maps"));
+// else
+//  sz.WriteWndPos(m_optGridMapIgnWndSize, _T("Редактирование в виде таблиц (зажигание)"));
+
+// if (m_optInterfaceLang.value == IL_ENGLISH)
+//  sz.WriteWndPos(m_optGridMapInjWndSize, _T("Grid editing window for injection maps"));
+// else
+//  sz.WriteWndPos(m_optGridMapInjWndSize, _T("Редактирование в виде таблиц (впрыск)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAttenMapWndSize, _T("Attenuator's curve of amplification"));
+ else
+  sz.WriteWndPos(m_optAttenMapWndSize, _T("Таблица функции аттенюатора"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optDwellCntrlMapWndSize, _T("Dwell time map"));
+ else
+  sz.WriteWndPos(m_optDwellCntrlMapWndSize, _T("Время накопления"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCTSCurveMapWndSize, _T("Coolant temperature sensor table"));
+ else
+  sz.WriteWndPos(m_optCTSCurveMapWndSize, _T("Кривая датчика температуры охлажд.житкости"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optVEMapWndSize, _T("VE map"));
+ else
+  sz.WriteWndPos(m_optVEMapWndSize, _T("Наполнение (объемный КПД)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAFRMapWndSize, _T("AFR map"));
+ else
+  sz.WriteWndPos(m_optAFRMapWndSize, _T("Соотношение Воздух/топливо"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCrnkMapWndSize, _T("Injection PW on cranking"));
+ else
+  sz.WriteWndPos(m_optCrnkMapWndSize, _T("Длительность впрыска на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optWrmpMapWndSize, _T("Warmup enrichment map"));
+ else
+  sz.WriteWndPos(m_optWrmpMapWndSize, _T("Обогащение при прогреве"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optDeadMapWndSize, _T("Injector's lag map"));
+ else
+  sz.WriteWndPos(m_optDeadMapWndSize, _T("Лаг форсунки"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optIdlrMapWndSize, _T("IAC position (working)"));
+ else
+  sz.WriteWndPos(m_optIdlrMapWndSize, _T("Положение РДВ (рабочее)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optIdlcMapWndSize, _T("IAC position (cranking)"));
+ else
+  sz.WriteWndPos(m_optIdlcMapWndSize, _T("Положение РДВ (на пуске)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAETPSMapWndSize, _T("Enrichment vs throttle speed map"));
+ else
+  sz.WriteWndPos(m_optAETPSMapWndSize, _T("Обогащение по скорости ДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAERPMMapWndSize, _T("Enrichment vs engine speed map"));
+ else
+  sz.WriteWndPos(m_optAERPMMapWndSize, _T("Обогащение по оборотам"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAftstrMapWndSize, _T("Afterstart enrichment map"));
+ else
+  sz.WriteWndPos(m_optAftstrMapWndSize, _T("Обогащение после пуска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optATSCurvMapWndSize, _T("MAT sensor table"));
+ else
+  sz.WriteWndPos(m_optATSCurvMapWndSize, _T("Кривая датчика температуры воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optATSCorrMapWndSize, _T("Ign.timing correction vs MAT map"));
+ else
+  sz.WriteWndPos(m_optATSCorrMapWndSize, _T("Коррекция УОЗ по температуре воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optGasdoseMapWndSize, _T("Gas valve position vs RPM,TPS map"));
+ else
+  sz.WriteWndPos(m_optGasdoseMapWndSize, _T("Положение дозатора газа от оборотов и ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optITMapWndSize, _T("Injection timing map"));
+ else
+  sz.WriteWndPos(m_optITMapWndSize, _T("Фаза впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optITRPMMapWndSize, _T("Target idling RPM"));
+ else
+  sz.WriteWndPos(m_optITRPMMapWndSize, _T("Целевые обороты ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optRigidMapWndSize, _T("Idling regulator's rigidity map"));
+ else
+  sz.WriteWndPos(m_optRigidMapWndSize, _T("Жесткость РХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optEGOCrvMapWndSize, _T("EGO sensor curve"));
+ else
+  sz.WriteWndPos(m_optEGOCrvMapWndSize, _T("Кривая датчика кислорода"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optIACCMapWndSize, _T("Mixture correction vs IAC pos"));
+ else
+  sz.WriteWndPos(m_optIACCMapWndSize, _T("Коррекция смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optIACCWMapWndSize, _T("Weight of mixture correction vs IAC pos"));
+ else
+  sz.WriteWndPos(m_optIACCWMapWndSize, _T("Вес коррекции смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optIATCLTMapWndSize, _T("CLT to MAT influence factor"));
+ else
+  sz.WriteWndPos(m_optIATCLTMapWndSize, _T("Коэффициент влияния ТОЖ на ТВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optBarocorrMapWndSize, _T("Barometric correction map"));
+ else
+  sz.WriteWndPos(m_optBarocorrMapWndSize, _T("Барометрическая коррекция"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optManIgntimMapWndSize, _T("Manual ignition timing corr. map"));
+ else
+  sz.WriteWndPos(m_optManIgntimMapWndSize, _T("Ручная октан-коррекция"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCESettingsWndSize, _T("CE settings window"));
+ else
+  sz.WriteWndPos(m_optCESettingsWndSize, _T("Настройки СЕ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optTpsswtMapWndSize, _T("TPS switch point map"));
+ else
+  sz.WriteWndPos(m_optTpsswtMapWndSize, _T("Точка переключения по ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optTmp2CurveMapWndSize, _T("TMP2 sensor table"));
+ else
+  sz.WriteWndPos(m_optTmp2CurveMapWndSize, _T("Кривая датчика температуры на входе TMP2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optGtscMapWndSize, _T("Gas temperature correction map"));
+ else
+  sz.WriteWndPos(m_optGtscMapWndSize, _T("Коррекция смеси по температуре газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optGpscMapWndSize, _T("Gas pressure correction map"));
+ else
+  sz.WriteWndPos(m_optGpscMapWndSize, _T("Коррекция смеси по давлению газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAtscMapWndSize, _T("Air density correction map"));
+ else
+  sz.WriteWndPos(m_optAtscMapWndSize, _T("Коррекция смеси по плотности воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCrkTempMapWndSize, _T("Ign.timing vs CLT correction on cranking"));
+ else
+  sz.WriteWndPos(m_optCrkTempMapWndSize, _T("Коррекция УОЗ по ДТОЖ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optEHPauseMapWndSize, _T("EGO heater's pause map (for PWM)"));
+ else
+  sz.WriteWndPos(m_optEHPauseMapWndSize, _T("Время паузы подогрева ДК (для ШИМ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCrankingThrdMapWndSize, _T("Starter's blocking RPM"));
+ else
+  sz.WriteWndPos(m_optCrankingThrdMapWndSize, _T("Обороты блокировки стартера"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCrankingTimeMapWndSize, _T("Starter's blocking delay (strokes)"));
+ else
+  sz.WriteWndPos(m_optCrankingTimeMapWndSize, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optSmapabanThrdMapWndSize, _T("RPM threshold for abandon from start map"));
+ else
+  sz.WriteWndPos(m_optSmapabanThrdMapWndSize, _T("Обороты перехода с пусковой карты"));
+
+ //Sizes of windows (online)
+ IniIO sz1(IniFileName, m_Name_WndSize_Section1);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteComment(_T("*** Remembered sizes of windows (opened from the \"Parameters and monitor\" tab) ***"), false, true);
+ else
+  sz1.WriteComment(_T("*** Запомненные размеры окон (открываются с вкладки \"Параметры и монитор\") ***"), false, true);
+ sz1.CreateSection();
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optStrtMapWndSize1, _T("Cranking ignition timing map"));
+ else
+  sz1.WriteWndPos(m_optStrtMapWndSize1, _T("Таблица УОЗ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optIdleMapWndSize1, _T("Idling ignition timing map"));
+ else
+  sz1.WriteWndPos(m_optIdleMapWndSize1, _T("Таблица УОЗ на ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optWorkMapWndSize1, _T("Work ignition timing map"));
+ else
+  sz1.WriteWndPos(m_optWorkMapWndSize1, _T("Рабочая карта УОЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optTempMapWndSize1, _T("Ign. timing vs CLT correction map"));
+ else
+  sz1.WriteWndPos(m_optTempMapWndSize1, _T("Коррекция УОЗ по ДТОЖ"));
+
+// if (m_optInterfaceLang.value == IL_ENGLISH)
+//  sz1.WriteWndPos(m_optGridMapIgnWndSize1, _T("Grid editing window for ign.timing maps"));
+// else
+//  sz1.WriteWndPos(m_optGridMapIgnWndSize1, _T("Редактирование в виде таблиц (зажигание)"));
+
+// if (m_optInterfaceLang.value == IL_ENGLISH)
+//  sz1.WriteWndPos(m_optGridMapInjWndSize1, _T("Grid editing window for injection maps"));
+// else
+//  sz1.WriteWndPos(m_optGridMapInjWndSize1, _T("Редактирование в виде таблиц (впрыск)"));
+ 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optVEMapWndSize1, _T("VE map"));
+ else
+  sz1.WriteWndPos(m_optVEMapWndSize1, _T("Наполнение (объемный КПД)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optAFRMapWndSize1, _T("AFR map"));
+ else
+  sz1.WriteWndPos(m_optAFRMapWndSize1, _T("Соотношение Воздух/топливо"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optCrnkMapWndSize1, _T("Injection PW on cranking"));
+ else
+  sz1.WriteWndPos(m_optCrnkMapWndSize1, _T("Длительность впрыска на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optWrmpMapWndSize1, _T("Warmup enrichment map"));
+ else
+  sz1.WriteWndPos(m_optWrmpMapWndSize1, _T("Обогащение при прогреве"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optDeadMapWndSize1, _T("Injector's lag map"));
+ else
+  sz1.WriteWndPos(m_optDeadMapWndSize1, _T("Лаг форсунки"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optIdlrMapWndSize1, _T("IAC position (working)"));
+ else
+  sz1.WriteWndPos(m_optIdlrMapWndSize1, _T("Положение РДВ (рабочее)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optIdlcMapWndSize1, _T("IAC position (cranking)"));
+ else
+  sz1.WriteWndPos(m_optIdlcMapWndSize1, _T("Положение РДВ (на пуске)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optAETPSMapWndSize1, _T("Enrichment vs throttle speed map"));
+ else
+  sz1.WriteWndPos(m_optAETPSMapWndSize1, _T("Обогащение по скорости ДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optAERPMMapWndSize1, _T("Enrichment vs engine speed"));
+ else
+  sz1.WriteWndPos(m_optAERPMMapWndSize1, _T("Обогащение по оборотам"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optAftstrMapWndSize1, _T("Afterstart enrichment map"));
+ else
+  sz1.WriteWndPos(m_optAftstrMapWndSize1, _T("Обогащение после пуска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optITMapWndSize1, _T("Injection timing map"));
+ else
+  sz1.WriteWndPos(m_optITMapWndSize1, _T("Фаза впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optITRPMMapWndSize1, _T("Target idling RPM"));
+ else
+  sz1.WriteWndPos(m_optITRPMMapWndSize1, _T("Целевые обороты ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optRigidMapWndSize1, _T("Idling regulator's rigidity map"));
+ else
+  sz1.WriteWndPos(m_optRigidMapWndSize1, _T("Жесткость РХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optEGOCrvMapWndSize1, _T("EGO sensor curve"));
+ else
+  sz1.WriteWndPos(m_optEGOCrvMapWndSize1, _T("Кривая датчика кислорода"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optIACCMapWndSize1, _T("Mixture correction vs IAC pos"));
+ else
+  sz1.WriteWndPos(m_optIACCMapWndSize1, _T("Коррекция смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optIACCWMapWndSize1, _T("Weight of mixture correction vs IAC pos"));
+ else
+  sz1.WriteWndPos(m_optIACCWMapWndSize1, _T("Вес коррекции смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optIATCLTMapWndSize1, _T("CLT to MAT influence factor"));
+ else
+  sz1.WriteWndPos(m_optIATCLTMapWndSize1, _T("Коэффициент влияния ТОЖ на ТВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optTpsswtMapWndSize1, _T("TPS switch point map"));
+ else
+  sz1.WriteWndPos(m_optTpsswtMapWndSize1, _T("Точка переключения по ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optGtscMapWndSize1, _T("Gas temperature correction map"));
+ else
+  sz1.WriteWndPos(m_optGtscMapWndSize1, _T("Коррекция смеси по температуре газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optGpscMapWndSize1, _T("Gas pressure correction map"));
+ else
+  sz1.WriteWndPos(m_optGpscMapWndSize1, _T("Коррекция смеси по давлению газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optAtscMapWndSize1, _T("Air density correction map"));
+ else
+  sz1.WriteWndPos(m_optAtscMapWndSize1, _T("Коррекция смеси по плотности воздуха"));
 
  //States of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -2944,14 +3439,298 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
 {
- m_optMainFrmWndSize.value.x = i_wndSize.m_MainFrmWnd_W;
- m_optMainFrmWndSize.value.y = i_wndSize.m_MainFrmWnd_H;
+ m_optMainFrmWndSize.value.x = i_wndSize.m_MainFrmWnd_W; //main window
+ m_optMainFrmWndSize.value.y = i_wndSize.m_MainFrmWnd_H; //main window
+ m_optStrtMapWndSize.value.x = i_wndSize.m_StrtMapWnd_W;
+ m_optStrtMapWndSize.value.y = i_wndSize.m_StrtMapWnd_H;
+ m_optIdleMapWndSize.value.x = i_wndSize.m_IdleMapWnd_W;
+ m_optIdleMapWndSize.value.y = i_wndSize.m_IdleMapWnd_H;
+ m_optWorkMapWndSize.value.x = i_wndSize.m_WorkMapWnd_W;
+ m_optWorkMapWndSize.value.y = i_wndSize.m_WorkMapWnd_H;
+ m_optTempMapWndSize.value.x = i_wndSize.m_TempMapWnd_W;
+ m_optTempMapWndSize.value.y = i_wndSize.m_TempMapWnd_H;
+ m_optAttenMapWndSize.value.x = i_wndSize.m_AttenuatorMapWnd_W;
+ m_optAttenMapWndSize.value.y = i_wndSize.m_AttenuatorMapWnd_H;
+ m_optDwellCntrlMapWndSize.value.x = i_wndSize.m_DwellCntrlMapWnd_W;
+ m_optDwellCntrlMapWndSize.value.y = i_wndSize.m_DwellCntrlMapWnd_H;
+ m_optCTSCurveMapWndSize.value.x = i_wndSize.m_CTSCurveMapWnd_W;
+ m_optCTSCurveMapWndSize.value.y = i_wndSize.m_CTSCurveMapWnd_H;
+// m_optGridMapIgnWndSize.value.x = i_wndSize.m_GridMapIgnWnd_W;
+ //m_optGridMapIgnWndSize.value.y = i_wndSize.m_GridMapIgnWnd_H;
+ //m_optGridMapInjWndSize.value.x = i_wndSize.m_GridMapInjWnd_W;
+ //m_optGridMapInjWndSize.value.y = i_wndSize.m_GridMapInjWnd_H;
+ m_optVEMapWndSize.value.x = i_wndSize.m_VEMapWnd_W;
+ m_optVEMapWndSize.value.y = i_wndSize.m_VEMapWnd_H;
+ m_optAFRMapWndSize.value.x = i_wndSize.m_AFRMapWnd_W;
+ m_optAFRMapWndSize.value.y = i_wndSize.m_AFRMapWnd_H;
+ m_optCrnkMapWndSize.value.x = i_wndSize.m_CrnkMapWnd_W;
+ m_optCrnkMapWndSize.value.y = i_wndSize.m_CrnkMapWnd_H;
+ m_optWrmpMapWndSize.value.x = i_wndSize.m_WrmpMapWnd_W;
+ m_optWrmpMapWndSize.value.y = i_wndSize.m_WrmpMapWnd_H;
+ m_optDeadMapWndSize.value.x = i_wndSize.m_DeadMapWnd_W;
+ m_optDeadMapWndSize.value.y = i_wndSize.m_DeadMapWnd_H;
+ m_optIdlrMapWndSize.value.x = i_wndSize.m_IdlrMapWnd_W;
+ m_optIdlrMapWndSize.value.y = i_wndSize.m_IdlrMapWnd_H;
+ m_optIdlcMapWndSize.value.x = i_wndSize.m_IdlcMapWnd_W;
+ m_optIdlcMapWndSize.value.y = i_wndSize.m_IdlcMapWnd_H;
+ m_optAETPSMapWndSize.value.x = i_wndSize.m_AETPSMapWnd_W;
+ m_optAETPSMapWndSize.value.y = i_wndSize.m_AETPSMapWnd_H; 
+ m_optAERPMMapWndSize.value.x = i_wndSize.m_AERPMMapWnd_W;
+ m_optAERPMMapWndSize.value.y = i_wndSize.m_AERPMMapWnd_H; 
+ m_optAftstrMapWndSize.value.x = i_wndSize.m_AftstrMapWnd_W;
+ m_optAftstrMapWndSize.value.y = i_wndSize.m_AftstrMapWnd_H; 
+ m_optATSCurvMapWndSize.value.x = i_wndSize.m_ATSCurvMapWnd_W;
+ m_optATSCurvMapWndSize.value.y = i_wndSize.m_ATSCurvMapWnd_H;
+ m_optATSCorrMapWndSize.value.x = i_wndSize.m_ATSCorrMapWnd_W;
+ m_optATSCorrMapWndSize.value.y = i_wndSize.m_ATSCorrMapWnd_H; 
+ m_optGasdoseMapWndSize.value.x = i_wndSize.m_GasdoseMapWnd_W;
+ m_optGasdoseMapWndSize.value.y = i_wndSize.m_GasdoseMapWnd_H; 
+ m_optITMapWndSize.value.x = i_wndSize.m_ITMapWnd_W;
+ m_optITMapWndSize.value.y = i_wndSize.m_ITMapWnd_H;
+ m_optITRPMMapWndSize.value.x = i_wndSize.m_ITRPMMapWnd_W;
+ m_optITRPMMapWndSize.value.y = i_wndSize.m_ITRPMMapWnd_H;
+ m_optRigidMapWndSize.value.x = i_wndSize.m_RigidMapWnd_W;
+ m_optRigidMapWndSize.value.y = i_wndSize.m_RigidMapWnd_H;
+ m_optEGOCrvMapWndSize.value.x = i_wndSize.m_EGOCrvMapWnd_W;
+ m_optEGOCrvMapWndSize.value.y = i_wndSize.m_EGOCrvMapWnd_H;
+ m_optIACCMapWndSize.value.x = i_wndSize.m_IACCMapWnd_W;
+ m_optIACCMapWndSize.value.y = i_wndSize.m_IACCMapWnd_H;
+ m_optIACCWMapWndSize.value.x = i_wndSize.m_IACCWMapWnd_W;
+ m_optIACCWMapWndSize.value.y = i_wndSize.m_IACCWMapWnd_H;
+ m_optIATCLTMapWndSize.value.x = i_wndSize.m_IATCLTMapWnd_W;
+ m_optIATCLTMapWndSize.value.y = i_wndSize.m_IATCLTMapWnd_H;
+ m_optBarocorrMapWndSize.value.x = i_wndSize.m_BarocorrMapWnd_W;
+ m_optBarocorrMapWndSize.value.y = i_wndSize.m_BarocorrMapWnd_H; 
+ m_optManIgntimMapWndSize.value.x = i_wndSize.m_ManIgntimMapWnd_W;
+ m_optManIgntimMapWndSize.value.y = i_wndSize.m_ManIgntimMapWnd_H; 
+ m_optCESettingsWndSize.value.x = i_wndSize.m_CESettingsWnd_W;
+ m_optCESettingsWndSize.value.y = i_wndSize.m_CESettingsWnd_H; 
+ m_optTpsswtMapWndSize.value.x = i_wndSize.m_TpsswtMapWnd_W;
+ m_optTpsswtMapWndSize.value.y = i_wndSize.m_TpsswtMapWnd_H;
+ m_optTmp2CurveMapWndSize.value.x = i_wndSize.m_Tmp2CurveMapWnd_W;
+ m_optTmp2CurveMapWndSize.value.y = i_wndSize.m_Tmp2CurveMapWnd_H; 
+ m_optGtscMapWndSize.value.x = i_wndSize.m_GtscMapWnd_W;
+ m_optGtscMapWndSize.value.y = i_wndSize.m_GtscMapWnd_H;
+ m_optGpscMapWndSize.value.x = i_wndSize.m_GpscMapWnd_W;
+ m_optGpscMapWndSize.value.y = i_wndSize.m_GpscMapWnd_H;
+ m_optAtscMapWndSize.value.x = i_wndSize.m_AtscMapWnd_W;
+ m_optAtscMapWndSize.value.y = i_wndSize.m_AtscMapWnd_H;
+ m_optCrkTempMapWndSize.value.x = i_wndSize.m_CrkTempMapWnd_W;
+ m_optCrkTempMapWndSize.value.y = i_wndSize.m_CrkTempMapWnd_H;
+ m_optEHPauseMapWndSize.value.x = i_wndSize.m_EHPauseMapWnd_W;
+ m_optEHPauseMapWndSize.value.y = i_wndSize.m_EHPauseMapWnd_H;
+ m_optCrankingThrdMapWndSize.value.x = i_wndSize.m_CrankingThrdMapWnd_W;
+ m_optCrankingThrdMapWndSize.value.y = i_wndSize.m_CrankingThrdMapWnd_H;
+ m_optCrankingTimeMapWndSize.value.x = i_wndSize.m_CrankingTimeMapWnd_W;
+ m_optCrankingTimeMapWndSize.value.y = i_wndSize.m_CrankingTimeMapWnd_H;
+ m_optSmapabanThrdMapWndSize.value.x = i_wndSize.m_SmapabanThrdMapWnd_W;
+ m_optSmapabanThrdMapWndSize.value.y = i_wndSize.m_SmapabanThrdMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
 {
  o_wndSize.m_MainFrmWnd_W = m_optMainFrmWndSize.value.x;
  o_wndSize.m_MainFrmWnd_H = m_optMainFrmWndSize.value.y;
+ o_wndSize.m_StrtMapWnd_W = m_optStrtMapWndSize.value.x;
+ o_wndSize.m_StrtMapWnd_H = m_optStrtMapWndSize.value.y;
+ o_wndSize.m_IdleMapWnd_W = m_optIdleMapWndSize.value.x;
+ o_wndSize.m_IdleMapWnd_H = m_optIdleMapWndSize.value.y;
+ o_wndSize.m_WorkMapWnd_W = m_optWorkMapWndSize.value.x;
+ o_wndSize.m_WorkMapWnd_H = m_optWorkMapWndSize.value.y;
+ o_wndSize.m_TempMapWnd_W = m_optTempMapWndSize.value.x;
+ o_wndSize.m_TempMapWnd_H = m_optTempMapWndSize.value.y;
+ o_wndSize.m_AttenuatorMapWnd_W = m_optAttenMapWndSize.value.x;
+ o_wndSize.m_AttenuatorMapWnd_H = m_optAttenMapWndSize.value.y;
+ o_wndSize.m_DwellCntrlMapWnd_W = m_optDwellCntrlMapWndSize.value.x;
+ o_wndSize.m_DwellCntrlMapWnd_H = m_optDwellCntrlMapWndSize.value.y;
+ o_wndSize.m_CTSCurveMapWnd_W = m_optCTSCurveMapWndSize.value.x;
+ o_wndSize.m_CTSCurveMapWnd_H = m_optCTSCurveMapWndSize.value.y;
+ //o_wndSize.m_GridMapIgnWnd_W = m_optGridMapIgnWndSize.value.x;
+ //o_wndSize.m_GridMapIgnWnd_H = m_optGridMapIgnWndSize.value.y;
+ //o_wndSize.m_GridMapInjWnd_W = m_optGridMapInjWndSize.value.x;
+ //o_wndSize.m_GridMapInjWnd_H = m_optGridMapInjWndSize.value.y;
+ o_wndSize.m_VEMapWnd_W = m_optVEMapWndSize.value.x;
+ o_wndSize.m_VEMapWnd_H = m_optVEMapWndSize.value.y;
+ o_wndSize.m_AFRMapWnd_W = m_optAFRMapWndSize.value.x;
+ o_wndSize.m_AFRMapWnd_H = m_optAFRMapWndSize.value.y;
+ o_wndSize.m_CrnkMapWnd_W = m_optCrnkMapWndSize.value.x;
+ o_wndSize.m_CrnkMapWnd_H = m_optCrnkMapWndSize.value.y;
+ o_wndSize.m_WrmpMapWnd_W = m_optWrmpMapWndSize.value.x;
+ o_wndSize.m_WrmpMapWnd_H = m_optWrmpMapWndSize.value.y;
+ o_wndSize.m_DeadMapWnd_W = m_optDeadMapWndSize.value.x;
+ o_wndSize.m_DeadMapWnd_H = m_optDeadMapWndSize.value.y;
+ o_wndSize.m_IdlrMapWnd_W = m_optIdlrMapWndSize.value.x;
+ o_wndSize.m_IdlrMapWnd_H = m_optIdlrMapWndSize.value.y;
+ o_wndSize.m_IdlcMapWnd_W = m_optIdlcMapWndSize.value.x;
+ o_wndSize.m_IdlcMapWnd_H = m_optIdlcMapWndSize.value.y;
+ o_wndSize.m_AETPSMapWnd_W = m_optAETPSMapWndSize.value.x;
+ o_wndSize.m_AETPSMapWnd_H = m_optAETPSMapWndSize.value.y;
+ o_wndSize.m_AERPMMapWnd_W = m_optAERPMMapWndSize.value.x;
+ o_wndSize.m_AERPMMapWnd_H = m_optAERPMMapWndSize.value.y;
+ o_wndSize.m_AftstrMapWnd_W = m_optAftstrMapWndSize.value.x;
+ o_wndSize.m_AftstrMapWnd_H = m_optAftstrMapWndSize.value.y;
+ o_wndSize.m_ATSCurvMapWnd_W = m_optATSCurvMapWndSize.value.x;
+ o_wndSize.m_ATSCurvMapWnd_H = m_optATSCurvMapWndSize.value.y;
+ o_wndSize.m_ATSCorrMapWnd_W = m_optATSCorrMapWndSize.value.x;
+ o_wndSize.m_ATSCorrMapWnd_H = m_optATSCorrMapWndSize.value.y;
+ o_wndSize.m_GasdoseMapWnd_W = m_optGasdoseMapWndSize.value.x;
+ o_wndSize.m_GasdoseMapWnd_H = m_optGasdoseMapWndSize.value.y;
+ o_wndSize.m_ITMapWnd_W = m_optITMapWndSize.value.x;
+ o_wndSize.m_ITMapWnd_H = m_optITMapWndSize.value.y;
+ o_wndSize.m_ITRPMMapWnd_W = m_optITRPMMapWndSize.value.x;
+ o_wndSize.m_ITRPMMapWnd_H = m_optITRPMMapWndSize.value.y;
+ o_wndSize.m_RigidMapWnd_W = m_optRigidMapWndSize.value.x;
+ o_wndSize.m_RigidMapWnd_H = m_optRigidMapWndSize.value.y;
+ o_wndSize.m_EGOCrvMapWnd_W = m_optEGOCrvMapWndSize.value.x;
+ o_wndSize.m_EGOCrvMapWnd_H = m_optEGOCrvMapWndSize.value.y;
+ o_wndSize.m_IACCMapWnd_W = m_optIACCMapWndSize.value.x;
+ o_wndSize.m_IACCMapWnd_H = m_optIACCMapWndSize.value.y;
+ o_wndSize.m_IACCWMapWnd_W = m_optIACCWMapWndSize.value.x;
+ o_wndSize.m_IACCWMapWnd_H = m_optIACCWMapWndSize.value.y;
+ o_wndSize.m_IATCLTMapWnd_W = m_optIATCLTMapWndSize.value.x;
+ o_wndSize.m_IATCLTMapWnd_H = m_optIATCLTMapWndSize.value.y;
+ o_wndSize.m_BarocorrMapWnd_W = m_optBarocorrMapWndSize.value.x;
+ o_wndSize.m_BarocorrMapWnd_H = m_optBarocorrMapWndSize.value.y;
+ o_wndSize.m_ManIgntimMapWnd_W = m_optManIgntimMapWndSize.value.x;
+ o_wndSize.m_ManIgntimMapWnd_H = m_optManIgntimMapWndSize.value.y;
+ o_wndSize.m_CESettingsWnd_W = m_optCESettingsWndSize.value.x;
+ o_wndSize.m_CESettingsWnd_H = m_optCESettingsWndSize.value.y;
+ o_wndSize.m_TpsswtMapWnd_W = m_optTpsswtMapWndSize.value.x;
+ o_wndSize.m_TpsswtMapWnd_H = m_optTpsswtMapWndSize.value.y;
+ o_wndSize.m_Tmp2CurveMapWnd_W = m_optTmp2CurveMapWndSize.value.x;
+ o_wndSize.m_Tmp2CurveMapWnd_H = m_optTmp2CurveMapWndSize.value.y;
+ o_wndSize.m_GtscMapWnd_W = m_optGtscMapWndSize.value.x;
+ o_wndSize.m_GtscMapWnd_H = m_optGtscMapWndSize.value.y;
+ o_wndSize.m_GpscMapWnd_W = m_optGpscMapWndSize.value.x;
+ o_wndSize.m_GpscMapWnd_H = m_optGpscMapWndSize.value.y;
+ o_wndSize.m_AtscMapWnd_W = m_optAtscMapWndSize.value.x;
+ o_wndSize.m_AtscMapWnd_H = m_optAtscMapWndSize.value.y;
+ o_wndSize.m_CrkTempMapWnd_W = m_optCrkTempMapWndSize.value.x;
+ o_wndSize.m_CrkTempMapWnd_H = m_optCrkTempMapWndSize.value.y;
+ o_wndSize.m_EHPauseMapWnd_W = m_optEHPauseMapWndSize.value.x;
+ o_wndSize.m_EHPauseMapWnd_H = m_optEHPauseMapWndSize.value.y;
+ o_wndSize.m_CrankingThrdMapWnd_W = m_optCrankingThrdMapWndSize.value.x;
+ o_wndSize.m_CrankingThrdMapWnd_H = m_optCrankingThrdMapWndSize.value.y;
+ o_wndSize.m_CrankingTimeMapWnd_W = m_optCrankingTimeMapWndSize.value.x;
+ o_wndSize.m_CrankingTimeMapWnd_H = m_optCrankingTimeMapWndSize.value.y;
+ o_wndSize.m_SmapabanThrdMapWnd_W = m_optSmapabanThrdMapWndSize.value.x;
+ o_wndSize.m_SmapabanThrdMapWnd_H = m_optSmapabanThrdMapWndSize.value.y;
+}
+
+void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
+{
+ m_optStrtMapWndSize1.value.x = i_wndSize.m_StrtMapWnd_W;
+ m_optStrtMapWndSize1.value.y = i_wndSize.m_StrtMapWnd_H;
+ m_optIdleMapWndSize1.value.x = i_wndSize.m_IdleMapWnd_W;
+ m_optIdleMapWndSize1.value.y = i_wndSize.m_IdleMapWnd_H;
+ m_optWorkMapWndSize1.value.x = i_wndSize.m_WorkMapWnd_W;
+ m_optWorkMapWndSize1.value.y = i_wndSize.m_WorkMapWnd_H;
+ m_optTempMapWndSize1.value.x = i_wndSize.m_TempMapWnd_W;
+ m_optTempMapWndSize1.value.y = i_wndSize.m_TempMapWnd_H;
+// m_optGridMapIgnWndSize1.value.x = i_wndSize.m_GridMapIgnWnd_W;
+// m_optGridMapIgnWndSize1.value.y = i_wndSize.m_GridMapIgnWnd_H;
+// m_optGridMapInjWndSize1.value.x = i_wndSize.m_GridMapInjWnd_W;
+// m_optGridMapInjWndSize1.value.y = i_wndSize.m_GridMapInjWnd_H;
+ m_optVEMapWndSize1.value.x = i_wndSize.m_VEMapWnd_W;
+ m_optVEMapWndSize1.value.y = i_wndSize.m_VEMapWnd_H;
+ m_optAFRMapWndSize1.value.x = i_wndSize.m_AFRMapWnd_W;
+ m_optAFRMapWndSize1.value.y = i_wndSize.m_AFRMapWnd_H;
+ m_optCrnkMapWndSize1.value.x = i_wndSize.m_CrnkMapWnd_W;
+ m_optCrnkMapWndSize1.value.y = i_wndSize.m_CrnkMapWnd_H;
+ m_optWrmpMapWndSize1.value.x = i_wndSize.m_WrmpMapWnd_W;
+ m_optWrmpMapWndSize1.value.y = i_wndSize.m_WrmpMapWnd_H;
+ m_optDeadMapWndSize1.value.x = i_wndSize.m_DeadMapWnd_W;
+ m_optDeadMapWndSize1.value.y = i_wndSize.m_DeadMapWnd_H;
+ m_optIdlrMapWndSize1.value.x = i_wndSize.m_IdlrMapWnd_W;
+ m_optIdlrMapWndSize1.value.y = i_wndSize.m_IdlrMapWnd_H;
+ m_optIdlcMapWndSize1.value.x = i_wndSize.m_IdlcMapWnd_W;
+ m_optIdlcMapWndSize1.value.y = i_wndSize.m_IdlcMapWnd_H;
+ m_optAETPSMapWndSize1.value.x = i_wndSize.m_AETPSMapWnd_W;
+ m_optAETPSMapWndSize1.value.y = i_wndSize.m_AETPSMapWnd_H; 
+ m_optAERPMMapWndSize1.value.x = i_wndSize.m_AERPMMapWnd_W;
+ m_optAERPMMapWndSize1.value.y = i_wndSize.m_AERPMMapWnd_H; 
+ m_optAftstrMapWndSize1.value.x = i_wndSize.m_AftstrMapWnd_W;
+ m_optAftstrMapWndSize1.value.y = i_wndSize.m_AftstrMapWnd_H; 
+ m_optITMapWndSize1.value.x = i_wndSize.m_ITMapWnd_W;
+ m_optITMapWndSize1.value.y = i_wndSize.m_ITMapWnd_H;
+ m_optITRPMMapWndSize1.value.x = i_wndSize.m_ITRPMMapWnd_W;
+ m_optITRPMMapWndSize1.value.y = i_wndSize.m_ITRPMMapWnd_H;
+ m_optRigidMapWndSize1.value.x = i_wndSize.m_RigidMapWnd_W;
+ m_optRigidMapWndSize1.value.y = i_wndSize.m_RigidMapWnd_H;
+ m_optEGOCrvMapWndSize1.value.x = i_wndSize.m_EGOCrvMapWnd_W;
+ m_optEGOCrvMapWndSize1.value.y = i_wndSize.m_EGOCrvMapWnd_H;
+ m_optIACCMapWndSize1.value.x = i_wndSize.m_IACCMapWnd_W;
+ m_optIACCMapWndSize1.value.y = i_wndSize.m_IACCMapWnd_H;
+ m_optIACCWMapWndSize1.value.x = i_wndSize.m_IACCWMapWnd_W;
+ m_optIACCWMapWndSize1.value.y = i_wndSize.m_IACCWMapWnd_H;
+ m_optIATCLTMapWndSize1.value.x = i_wndSize.m_IATCLTMapWnd_W;
+ m_optIATCLTMapWndSize1.value.y = i_wndSize.m_IATCLTMapWnd_H;
+ m_optTpsswtMapWndSize1.value.x = i_wndSize.m_TpsswtMapWnd_W;
+ m_optTpsswtMapWndSize1.value.y = i_wndSize.m_TpsswtMapWnd_H;
+ m_optGtscMapWndSize1.value.x = i_wndSize.m_GtscMapWnd_W;
+ m_optGtscMapWndSize1.value.y = i_wndSize.m_GtscMapWnd_H;
+ m_optGpscMapWndSize1.value.x = i_wndSize.m_GpscMapWnd_W;
+ m_optGpscMapWndSize1.value.y = i_wndSize.m_GpscMapWnd_H;
+ m_optAtscMapWndSize1.value.x = i_wndSize.m_AtscMapWnd_W;
+ m_optAtscMapWndSize1.value.y = i_wndSize.m_AtscMapWnd_H;
+}
+
+void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
+{
+ o_wndSize.m_StrtMapWnd_W = m_optStrtMapWndSize1.value.x;
+ o_wndSize.m_StrtMapWnd_H = m_optStrtMapWndSize1.value.y;
+ o_wndSize.m_IdleMapWnd_W = m_optIdleMapWndSize1.value.x;
+ o_wndSize.m_IdleMapWnd_H = m_optIdleMapWndSize1.value.y;
+ o_wndSize.m_WorkMapWnd_W = m_optWorkMapWndSize1.value.x;
+ o_wndSize.m_WorkMapWnd_H = m_optWorkMapWndSize1.value.y;
+ o_wndSize.m_TempMapWnd_W = m_optTempMapWndSize1.value.x;
+ o_wndSize.m_TempMapWnd_H = m_optTempMapWndSize1.value.y;
+// o_wndSize.m_GridMapIgnWnd_W = m_optGridMapIgnWndSize1.value.x;
+// o_wndSize.m_GridMapIgnWnd_H = m_optGridMapIgnWndSize1.value.y;
+// o_wndSize.m_GridMapInjWnd_W = m_optGridMapInjWndSize1.value.x;
+// o_wndSize.m_GridMapInjWnd_H = m_optGridMapInjWndSize1.value.y;
+ o_wndSize.m_VEMapWnd_W = m_optVEMapWndSize1.value.x;
+ o_wndSize.m_VEMapWnd_H = m_optVEMapWndSize1.value.y;
+ o_wndSize.m_AFRMapWnd_W = m_optAFRMapWndSize1.value.x;
+ o_wndSize.m_AFRMapWnd_H = m_optAFRMapWndSize1.value.y;
+ o_wndSize.m_CrnkMapWnd_W = m_optCrnkMapWndSize1.value.x;
+ o_wndSize.m_CrnkMapWnd_H = m_optCrnkMapWndSize1.value.y;
+ o_wndSize.m_WrmpMapWnd_W = m_optWrmpMapWndSize1.value.x;
+ o_wndSize.m_WrmpMapWnd_H = m_optWrmpMapWndSize1.value.y;
+ o_wndSize.m_DeadMapWnd_W = m_optDeadMapWndSize1.value.x;
+ o_wndSize.m_DeadMapWnd_H = m_optDeadMapWndSize1.value.y;
+ o_wndSize.m_IdlrMapWnd_W = m_optIdlrMapWndSize1.value.x;
+ o_wndSize.m_IdlrMapWnd_H = m_optIdlrMapWndSize1.value.y;
+ o_wndSize.m_IdlcMapWnd_W = m_optIdlcMapWndSize1.value.x;
+ o_wndSize.m_IdlcMapWnd_H = m_optIdlcMapWndSize1.value.y;
+ o_wndSize.m_AETPSMapWnd_W = m_optAETPSMapWndSize1.value.x;
+ o_wndSize.m_AETPSMapWnd_H = m_optAETPSMapWndSize1.value.y;
+ o_wndSize.m_AERPMMapWnd_W = m_optAERPMMapWndSize1.value.x;
+ o_wndSize.m_AERPMMapWnd_H = m_optAERPMMapWndSize1.value.y;
+ o_wndSize.m_AftstrMapWnd_W = m_optAftstrMapWndSize1.value.x;
+ o_wndSize.m_AftstrMapWnd_H = m_optAftstrMapWndSize1.value.y;
+ o_wndSize.m_ITMapWnd_W = m_optITMapWndSize1.value.x;
+ o_wndSize.m_ITMapWnd_H = m_optITMapWndSize1.value.y;
+ o_wndSize.m_ITRPMMapWnd_W = m_optITRPMMapWndSize1.value.x;
+ o_wndSize.m_ITRPMMapWnd_H = m_optITRPMMapWndSize1.value.y;
+ o_wndSize.m_RigidMapWnd_W = m_optRigidMapWndSize1.value.x;
+ o_wndSize.m_RigidMapWnd_H = m_optRigidMapWndSize1.value.y;
+ o_wndSize.m_EGOCrvMapWnd_W = m_optEGOCrvMapWndSize1.value.x;
+ o_wndSize.m_EGOCrvMapWnd_H = m_optEGOCrvMapWndSize1.value.y;
+ o_wndSize.m_IACCMapWnd_W = m_optIACCMapWndSize1.value.x;
+ o_wndSize.m_IACCMapWnd_H = m_optIACCMapWndSize1.value.y;
+ o_wndSize.m_IACCWMapWnd_W = m_optIACCWMapWndSize1.value.x;
+ o_wndSize.m_IACCWMapWnd_H = m_optIACCWMapWndSize1.value.y;
+ o_wndSize.m_IATCLTMapWnd_W = m_optIATCLTMapWndSize1.value.x;
+ o_wndSize.m_IATCLTMapWnd_H = m_optIATCLTMapWndSize1.value.y;
+ o_wndSize.m_TpsswtMapWnd_W = m_optTpsswtMapWndSize1.value.x;
+ o_wndSize.m_TpsswtMapWnd_H = m_optTpsswtMapWndSize1.value.y;
+ o_wndSize.m_GtscMapWnd_W = m_optGtscMapWndSize1.value.x;
+ o_wndSize.m_GtscMapWnd_H = m_optGtscMapWndSize1.value.y;
+ o_wndSize.m_GpscMapWnd_W = m_optGpscMapWndSize1.value.x;
+ o_wndSize.m_GpscMapWnd_H = m_optGpscMapWndSize1.value.y;
+ o_wndSize.m_AtscMapWnd_W = m_optAtscMapWndSize1.value.x;
+ o_wndSize.m_AtscMapWnd_H = m_optAtscMapWndSize1.value.y;
 }
 
 void CAppSettingsModel::SetWndState(const WndState& i_wndState)
