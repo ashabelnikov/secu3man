@@ -3804,7 +3804,7 @@ void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
  {
   if (_this->m_md[i].state)
   {
-   if (i == TYPE_MAP_DA_WORK || i == TYPE_MAP_INJ_VE || i == TYPE_MAP_INJ_AFR || i == TYPE_MAP_INJ_IT)  
+   if (i == TYPE_MAP_DA_WORK || i == TYPE_MAP_INJ_VE || i == TYPE_MAP_INJ_AFR || i == TYPE_MAP_INJ_IT || i == TYPE_MAP_PWM1 || i == TYPE_MAP_PWM2 || i == TYPE_MAP_GASDOSE)  
     _this->m_md[i].ptMovStep = DLL::Chart3DGetPtMovingStep(_this->m_md[i].handle);
    else
     _this->m_md[i].ptMovStep = DLL::Chart2DGetPtMovingStep(_this->m_md[i].handle);
@@ -3831,7 +3831,7 @@ void CButtonsPanel::SetPtMovStep(int wndType, float value)
  m_md[wndType].ptMovStep = value;
  if (m_md[wndType].state)
  {
-  if (wndType == TYPE_MAP_DA_WORK || wndType == TYPE_MAP_INJ_VE || wndType == TYPE_MAP_INJ_AFR || wndType == TYPE_MAP_INJ_IT || wndType == TYPE_MAP_PWM1 || wndType == TYPE_MAP_PWM2)
+  if (wndType == TYPE_MAP_DA_WORK || wndType == TYPE_MAP_INJ_VE || wndType == TYPE_MAP_INJ_AFR || wndType == TYPE_MAP_INJ_IT || wndType == TYPE_MAP_PWM1 || wndType == TYPE_MAP_PWM2 || wndType == TYPE_MAP_GASDOSE)
    DLL::Chart3DSetPtMovingStep(m_md[wndType].handle, value);
   else
    DLL::Chart2DSetPtMovingStep(m_md[wndType].handle, value); 

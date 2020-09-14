@@ -58,6 +58,7 @@ using namespace SECU3IO::SECU3Types;
 #define CRANK_THRD_SIZE                  16
 #define CRANK_TIME_SIZE                  16
 #define SMAPABAN_THRD_SIZE               16
+#define KNKZONE_TPS_SIZE                 16
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
@@ -241,10 +242,12 @@ typedef struct
  _uchar an_tps_mul;
  _uchar igntim_wrkmap;
 
+ _uint knock_zone[KNKZONE_TPS_SIZE];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4100];
+ _uchar reserved[4068];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1343,6 +1346,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetCrankingTimeMap(op_fwd->cranking_time);
  GetSmapabanThrdMap(op_fwd->smapaban_thrd);
  GetCESettingsData(op_fwd->cesd);
+ GetKnockZoneMap(op_fwd->knock_zone);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1411,6 +1415,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetCrankingTimeMap(ip_fwd->cranking_time);
  SetSmapabanThrdMap(ip_fwd->smapaban_thrd);
  SetCESettingsData(ip_fwd->cesd);
+ SetKnockZoneMap(ip_fwd->knock_zone);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -1960,6 +1965,30 @@ void CFirmwareDataMediator::SetPwm2Map(int i_index, const float* ip_values)
   _uchar *p = &(p_fd->tables[i_index].pwm_duty2[0][0]);
   *(p + i) = MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
  }
+}
+
+void CFirmwareDataMediator::GetKnockZoneMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < F_WRK_POINTS_L; i++)
+  for (int b = 0; b < F_WRK_POINTS_F; b++)
+   op_values[(i*F_WRK_POINTS_F)+b] = (float)CHECKBIT16(p_fd->exdata.knock_zone[i], b);
+}
+
+void CFirmwareDataMediator::SetKnockZoneMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < F_WRK_POINTS_L; i++)
+  for (int b = 0; b < F_WRK_POINTS_F; b++)   
+   WRITEBIT16(p_fd->exdata.knock_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

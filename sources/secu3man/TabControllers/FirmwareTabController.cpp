@@ -271,6 +271,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRANKING_THRD, mptms.m_cranking_thrd_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRANKING_TIME, mptms.m_cranking_time_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_SMAPABAN_THRD, mptms.m_smapaban_thrd_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_KNOCK_ZONE, mptms.m_knock_zone_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -1113,6 +1114,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(false),false);
  mp_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(true),true);
+
+ mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(false),false);
+ mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(true),true);
  
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
@@ -1395,6 +1399,10 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_SMAPABAN_THRD:
    mp_fwdm->SetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(false));
    break;
+  case TYPE_MAP_KNOCK_ZONE:
+   mp_fwdm->SetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(false));
+   break;
+
  }
 }
 
@@ -2036,6 +2044,8 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_cranking_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRANKING_THRD);
  mptms.m_cranking_time_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRANKING_TIME);
  mptms.m_smapaban_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_SMAPABAN_THRD);
+ mptms.m_knock_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_KNOCK_ZONE);
+
  mp_settings->SetMapPtMovStep(mptms);
 }
 

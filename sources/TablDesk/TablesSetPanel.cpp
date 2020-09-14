@@ -754,6 +754,50 @@ void __cdecl CTablesSetPanel::OnWndActivationSmapabanThrdMap(void* i_param, long
  _this->OnWndActivation(_this->m_md[TYPE_MAP_SMAPABAN_THRD].handle, cmd);
 }
 
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeKnockZoneMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_KNOCK_ZONE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseKnockZoneMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_KNOCK_ZONE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_KNOCK_ZONE].handle, TYPE_MAP_KNOCK_ZONE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationKnockZoneMap(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_KNOCK_ZONE].handle, cmd);
+}
+
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -806,6 +850,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_CRANKING_THRD_MAP, m_view_cranking_thrd_map_btn);
  DDX_Control(pDX, IDC_TD_CRANKING_TIME_MAP, m_view_cranking_time_map_btn);
  DDX_Control(pDX, IDC_TD_SMAPABAN_THRD_MAP, m_view_smapaban_thrd_map_btn);
+ DDX_Control(pDX, IDC_TD_KNOCK_ZONES_MAP, m_view_knock_zone_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -827,6 +872,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_CRANKING_THRD_MAP, OnViewCrankingThrdMap)
  ON_BN_CLICKED(IDC_TD_CRANKING_TIME_MAP, OnViewCrankingTimeMap)
  ON_BN_CLICKED(IDC_TD_SMAPABAN_THRD_MAP, OnViewSmapabanThrdMap)
+ ON_BN_CLICKED(IDC_TD_KNOCK_ZONES_MAP, OnViewKnockZoneMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -848,6 +894,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_CRANKING_THRD_MAP, OnUpdateViewCrankingThrdMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_CRANKING_TIME_MAP, OnUpdateViewCrankingTimeMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_SMAPABAN_THRD_MAP, OnUpdateViewSmapabanThrdMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_KNOCK_ZONES_MAP, OnUpdateViewKnockZoneMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -889,8 +936,9 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_cranking_thrd_map_btn, MLL::GetString(IDS_TD_CRANKING_THRD_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_cranking_time_map_btn, MLL::GetString(IDS_TD_CRANKING_TIME_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_smapaban_thrd_map_btn, MLL::GetString(IDS_TD_SMAPABAN_THRD_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_knock_zone_map_btn, MLL::GetString(IDS_TD_VIEW_KNOCK_ZONE_MAP_TT))); 
 
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, TRUE);
@@ -1020,6 +1068,14 @@ void CTablesSetPanel::OnUpdateViewSmapabanThrdMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_SMAPABAN_THRD].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewKnockZoneMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_KNOCK_ZONE].state) ? TRUE : FALSE );
+}
+
 //Updates controls which state depends on whether or not data is
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -1071,6 +1127,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_SMAPABAN_THRD].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_SMAPABAN_THRD].handle, GetSmapabanThrdMap(true), GetSmapabanThrdMap(false));
+
+ if (m_md[TYPE_MAP_KNOCK_ZONE].state)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_KNOCK_ZONE].handle, GetKnockZoneMap(true), GetKnockZoneMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1686,6 +1745,41 @@ void CTablesSetPanel::OnViewSmapabanThrdMap()
  }
 }
 
+void CTablesSetPanel::OnViewKnockZoneMap()
+{
+ //if button has been turned off, then close editor's window
+ if (m_view_knock_zone_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_KNOCK_ZONE].handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_KNOCK_ZONE].state)&&(DLL::Chart3DCreate))
+ {
+  m_md[TYPE_MAP_KNOCK_ZONE].state = 1;
+  m_md[TYPE_MAP_KNOCK_ZONE].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetKnockZoneMap(true),GetKnockZoneMap(false),GetRPMGrid(),16,16,0,1.0,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_KNOCK_ZONE_UNIT).c_str(),
+    MLL::GetString(IDS_KNOCK_ZONE_MAP).c_str());
+  DLL::Chart3DSetPtValuesFormat(m_md[TYPE_MAP_KNOCK_ZONE].handle, _T("#0"));
+  DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_KNOCK_ZONE].handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_md[TYPE_MAP_KNOCK_ZONE].handle,OnChangeKnockZoneMap,this);
+  DLL::Chart3DSetOnChangeSettings(m_md[TYPE_MAP_KNOCK_ZONE].handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(m_md[TYPE_MAP_KNOCK_ZONE].handle,OnCloseKnockZoneMap,this);
+  DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_KNOCK_ZONE].handle, OnWndActivationKnockZoneMap, this);
+  DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_KNOCK_ZONE].handle, m_md[TYPE_MAP_KNOCK_ZONE].ptMovStep);
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_KNOCK_ZONE].handle, TYPE_MAP_KNOCK_ZONE);
+
+  DLL::Chart3DShow(m_md[TYPE_MAP_KNOCK_ZONE].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_KNOCK_ZONE].handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -1845,6 +1939,14 @@ float* CTablesSetPanel::GetSmapabanThrdMap(bool i_original)
   return m_md[TYPE_MAP_SMAPABAN_THRD].original;
  else
   return m_md[TYPE_MAP_SMAPABAN_THRD].active;
+}
+
+float* CTablesSetPanel::GetKnockZoneMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_KNOCK_ZONE].original;
+ else
+  return m_md[TYPE_MAP_KNOCK_ZONE].active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)

@@ -202,6 +202,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetSmapabanThrdMap(float* op_values, bool i_original = false);
   void SetSmapabanThrdMap(const float* ip_values);
 
+  void GetKnockZoneMap(float* op_values, bool i_original = false);
+  void SetKnockZoneMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

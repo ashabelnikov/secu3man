@@ -159,6 +159,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optSmapabanThrdMapWnd(_T("SmapabanThrdMapWnd"))
 , m_optPwm1MapWnd(_T("Pwm1MapWnd"))
 , m_optPwm2MapWnd(_T("Pwm2MapWnd"))
+, m_optKnockZoneMapWnd(_T("KnockZoneMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -237,6 +238,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optSmapabanThrdMapWndSize(_T("SmapabanThrdMapWnd"))
 , m_optPwm1MapWndSize(_T("Pwm1MapWnd"))
 , m_optPwm2MapWndSize(_T("Pwm2MapWnd"))
+, m_optKnockZoneMapWndSize(_T("KnockZoneMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -369,6 +371,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepCrankingThrdMap(_T("CrankingThrdMapWnd"))
 , m_optPtMovStepCrankingTimeMap(_T("CrankingTimeMapWnd"))
 , m_optPtMovStepSmapabanThrdMap(_T("SmapabanThrdMapWnd"))
+, m_optPtMovStepKnockZoneMap(_T("KnockZoneMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -717,6 +720,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optSmapabanThrdMapWnd);
  ws.ReadWndPos(m_optPwm1MapWnd);
  ws.ReadWndPos(m_optPwm2MapWnd);
+ ws.ReadWndPos(m_optKnockZoneMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -798,6 +802,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optSmapabanThrdMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optPwm1MapWndSize, 0, 10000);
  sz.ReadWndPos(m_optPwm2MapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optKnockZoneMapWndSize, 0, 10000);
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  sz1.ReadWndPos(m_optStrtMapWndSize1);
@@ -996,6 +1001,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepCrankingThrdMap, _T("100.0"), 0.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepCrankingTimeMap, _T("10.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepSmapabanThrdMap, _T("100.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepKnockZoneMap, _T("1.0"), 0.0f, 1.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1729,6 +1735,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optPwm2MapWnd, _T("Карта скважности ШИМ на выходе PWM2"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optKnockZoneMapWnd, _T("Knock zones vs RPM,TPS map"));
+ else
+  ws.WriteWndPos(m_optKnockZoneMapWnd, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2114,6 +2125,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optPwm2MapWndSize, _T("PWM2 duty map"));
  else
   sz.WriteWndPos(m_optPwm2MapWndSize, _T("Карта скважности на выходе PWM2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optKnockZoneMapWndSize, _T("Knock zones vs RPM,TPS map"));
+ else
+  sz.WriteWndPos(m_optKnockZoneMapWndSize, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3034,6 +3050,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepSmapabanThrdMap, 3, _T("Обороты перехода с пусковой карты"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepKnockZoneMap, 3, _T("Gas valve position vs RPM,TPS map"));
+ else
+  ms.WriteFlt(m_optPtMovStepKnockZoneMap, 3, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -3304,6 +3325,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optPwm1MapWnd.value.y = i_wndSettings.m_Pwm1MapWnd_Y;
  m_optPwm2MapWnd.value.x = i_wndSettings.m_Pwm2MapWnd_X;
  m_optPwm2MapWnd.value.y = i_wndSettings.m_Pwm2MapWnd_Y;
+ m_optKnockZoneMapWnd.value.x = i_wndSettings.m_KnockZoneMapWnd_X;
+ m_optKnockZoneMapWnd.value.y = i_wndSettings.m_KnockZoneMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3398,6 +3421,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_Pwm1MapWnd_Y = m_optPwm1MapWnd.value.y;
  o_wndSettings.m_Pwm2MapWnd_X = m_optPwm2MapWnd.value.x;
  o_wndSettings.m_Pwm2MapWnd_Y = m_optPwm2MapWnd.value.y;
+ o_wndSettings.m_KnockZoneMapWnd_X = m_optKnockZoneMapWnd.value.x;
+ o_wndSettings.m_KnockZoneMapWnd_Y = m_optKnockZoneMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -3616,6 +3641,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optPwm1MapWndSize.value.y = i_wndSize.m_Pwm1MapWnd_H;
  m_optPwm2MapWndSize.value.x = i_wndSize.m_Pwm2MapWnd_W;
  m_optPwm2MapWndSize.value.y = i_wndSize.m_Pwm2MapWnd_H;
+ m_optKnockZoneMapWndSize.value.x = i_wndSize.m_KnockZoneMapWnd_W;
+ m_optKnockZoneMapWndSize.value.y = i_wndSize.m_KnockZoneMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -3710,6 +3737,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_Pwm1MapWnd_H = m_optPwm1MapWndSize.value.y;
  o_wndSize.m_Pwm2MapWnd_W = m_optPwm2MapWndSize.value.x;
  o_wndSize.m_Pwm2MapWnd_H = m_optPwm2MapWndSize.value.y;
+ o_wndSize.m_KnockZoneMapWnd_W = m_optKnockZoneMapWndSize.value.x;
+ o_wndSize.m_KnockZoneMapWnd_H = m_optKnockZoneMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4521,6 +4550,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepCrankingThrdMap.value = i_ptMovStep.m_cranking_thrd_map;
  m_optPtMovStepCrankingTimeMap.value = i_ptMovStep.m_cranking_time_map;
  m_optPtMovStepSmapabanThrdMap.value = i_ptMovStep.m_smapaban_thrd_map;
+ m_optPtMovStepKnockZoneMap.value = i_ptMovStep.m_knock_zone_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -4567,6 +4597,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_cranking_thrd_map = m_optPtMovStepCrankingThrdMap.value;
  o_ptMovStep.m_cranking_time_map = m_optPtMovStepCrankingTimeMap.value;
  o_ptMovStep.m_smapaban_thrd_map = m_optPtMovStepSmapabanThrdMap.value;
+ o_ptMovStep.m_knock_zone_map = m_optPtMovStepKnockZoneMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

@@ -321,6 +321,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 // sz.m_GridMapInjWnd_W = rc.right - rc.left;
 // sz.m_GridMapInjWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_KNOCK_ZONE:
+   ws.m_KnockZoneMapWnd_X = rc.left;
+   ws.m_KnockZoneMapWnd_Y = rc.top;
+   sz.m_KnockZoneMapWnd_W = rc.right - rc.left;
+   sz.m_KnockZoneMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -520,6 +526,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_PWM2:
    X = ws.m_Pwm2MapWnd_X, Y = ws.m_Pwm2MapWnd_Y;
    W = sz.m_Pwm2MapWnd_W, H = sz.m_Pwm2MapWnd_H;
+   break;
+  case TYPE_MAP_KNOCK_ZONE:
+   X = ws.m_KnockZoneMapWnd_X, Y = ws.m_KnockZoneMapWnd_Y;
+   W = sz.m_KnockZoneMapWnd_W, H = sz.m_KnockZoneMapWnd_H;
    break;
   case TYPE_MAP_GME_IGN_WND:
    X = ws.m_GridMapIgnWnd_X, Y = ws.m_GridMapIgnWnd_Y;

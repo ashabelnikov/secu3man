@@ -419,3 +419,8 @@
 #define IDC_GME_INJ_PWM2                5773
 #define IDS_GME_INJ_PWM1_TAB            5774
 #define IDS_GME_INJ_PWM2_TAB            5775
+#define IDC_TD_KNOCK_ZONES_MAP          5776
+#define IDS_MAPS_KNOCK_ZONE_UNIT        5777
+#define IDS_KNOCK_ZONE_MAP              5778
+#define IDS_TD_VIEW_KNOCK_ZONE_MAP_TT   5779
+ 

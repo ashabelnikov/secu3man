@@ -120,6 +120,8 @@ struct WndSettings
  int m_Pwm1MapWnd_Y;
  int m_Pwm2MapWnd_X;
  int m_Pwm2MapWnd_Y;
+ int m_KnockZoneMapWnd_X;
+ int m_KnockZoneMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -215,6 +217,8 @@ struct WndSize
  int m_Pwm1MapWnd_H;
  int m_Pwm2MapWnd_W;
  int m_Pwm2MapWnd_H;
+ int m_KnockZoneMapWnd_W;
+ int m_KnockZoneMapWnd_H;
 };
 
 //Holds windows's state data
@@ -331,6 +335,7 @@ struct MapPtMovStep
  float m_cranking_thrd_map;
  float m_cranking_time_map;
  float m_smapaban_thrd_map;
+ float m_knock_zone_map;
 };
 
 //Log file's fileds

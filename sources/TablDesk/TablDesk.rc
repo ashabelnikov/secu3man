@@ -108,6 +108,7 @@ BEGIN
     CONTROL         "Обор.блок.старт.",IDC_TD_CRANKING_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,443,96,18
     CONTROL         "Время.блок.старт.",IDC_TD_CRANKING_TIME_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,443,96,18
     CONTROL         "Обор.перех.пуск",IDC_TD_SMAPABAN_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,462,96,18
+    CONTROL         "Зона детонации",IDC_TD_KNOCK_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,462,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -665,6 +666,9 @@ BEGIN
     IDS_PWM1_MAP            "Скважность ШИМ на выходе PWM1"
     IDS_PWM2_MAP            "Скважность ШИМ на выходе PWM2"
     IDS_MAPS_DUTY_UNIT      "Скважность (%)"
+    IDS_MAPS_KNOCK_ZONE_UNIT "Состояние флага (0,1)"
+    IDS_KNOCK_ZONE_MAP       "Зоны контроля детонации"
+    IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Задает зоны контроля детонации. Используйте значения 0 (нет контроля детонации) и 1 (есть контроль детонации). Зона начинается со значений оборотов и нагрузки где стоит 1 и заканчивается в следующем узле сетки (в сторону возрастания) если там стоит 0."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -770,6 +774,7 @@ BEGIN
     CONTROL         "Start.block.RPM",IDC_TD_CRANKING_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,443,96,18
     CONTROL         "Start.block.time",IDC_TD_CRANKING_TIME_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,443,96,18
     CONTROL         "Crank.map.abandon",IDC_TD_SMAPABAN_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,462,96,18
+    CONTROL         "Knock zone",IDC_TD_KNOCK_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,462,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1347,6 +1352,9 @@ BEGIN
     IDS_PWM1_MAP            "PWM duty for PWM1 output"
     IDS_PWM2_MAP            "PWM duty for PWM2 output"
     IDS_MAPS_DUTY_UNIT      "Duty (%)"
+    IDS_MAPS_KNOCK_ZONE_UNIT "State of flag (0,1)"
+    IDS_KNOCK_ZONE_MAP       "Detonation control zones"
+    IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Sets the knock control zones. Use values 0 (no knock control) and 1 (knock control available). Zone starts with RPM and load values where there is 1 and ends at the next grid node (upward) if there is 0."
 END
 
 /////////////////////////////////////////////////////////////////////////////
