@@ -116,6 +116,10 @@ struct WndSettings
  int m_CrankingTimeMapWnd_Y;
  int m_SmapabanThrdMapWnd_X;
  int m_SmapabanThrdMapWnd_Y;
+ int m_Pwm1MapWnd_X;
+ int m_Pwm1MapWnd_Y;
+ int m_Pwm2MapWnd_X;
+ int m_Pwm2MapWnd_Y;
 };
 
 //Holds windows's size data
@@ -207,6 +211,10 @@ struct WndSize
  int m_CrankingTimeMapWnd_H;
  int m_SmapabanThrdMapWnd_W;
  int m_SmapabanThrdMapWnd_H;
+ int m_Pwm1MapWnd_W;
+ int m_Pwm1MapWnd_H;
+ int m_Pwm2MapWnd_W;
+ int m_Pwm2MapWnd_H;
 };
 
 //Holds windows's state data
@@ -305,6 +313,8 @@ struct MapPtMovStep
  float m_gtsc_map;
  float m_gpsc_map;
  float m_atsc_map;
+ float m_pwm1_map;
+ float m_pwm2_map;
  //separate
  float m_attenuator_map;
  float m_dwellcntrl_map;

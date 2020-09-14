@@ -37,6 +37,8 @@ class CGMEInjITDlg;
 class CGMEInjIRegDlg;
 class CGMEInjEnrDlg;
 class CGMEInjOtherDlg;
+class CGMEInjPwm1Dlg;
+class CGMEInjPwm2Dlg;
 
 class CGridModeEditorInjDlg : public CDialog
 {
@@ -51,7 +53,7 @@ class CGridModeEditorInjDlg : public CDialog
  ~CGridModeEditorInjDlg();
   static const UINT IDD;
 
-  void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc);
+  void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2);
   void BindRPMGrid(float* pGrid);
   void BindCLTGrid(float* pGrid);
   void UpdateView(bool axisLabels = false);
@@ -86,6 +88,8 @@ class CGridModeEditorInjDlg : public CDialog
   void OnChangeIReg(int mapId);
   void OnChangeEnr(int mapId);
   void OnChangeOther(int mapId);
+  void OnChangePwm1(void);
+  void OnChangePwm2(void);
 
   EventResult   m_IsAllowed;
   EventWithCode m_OnMapChanged;
@@ -99,6 +103,8 @@ class CGridModeEditorInjDlg : public CDialog
   std::auto_ptr<CGMEInjIRegDlg> m_pIRegPageDlg;
   std::auto_ptr<CGMEInjEnrDlg> m_pEnrPageDlg;
   std::auto_ptr<CGMEInjOtherDlg> m_pOtherPageDlg;
+  std::auto_ptr<CGMEInjPwm1Dlg> m_pPwm1PageDlg;
+  std::auto_ptr<CGMEInjPwm2Dlg> m_pPwm2PageDlg;
 
   float m_ldaxMin;
   float m_ldaxMax;

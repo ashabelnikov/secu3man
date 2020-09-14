@@ -1465,7 +1465,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
- if (size != (mp_pdp->isHex() ? 27 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 35 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1535,6 +1535,16 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_MiscPar.fp_timeout_strt = (((float)fp_timeout_strt) / 10.0f);
 
+ int pwmfrq1 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &pwmfrq1))
+  return false;
+ m_MiscPar.pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)pwmfrq1) / 524288.0));
+
+ int pwmfrq2 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &pwmfrq2))
+  return false;
+ m_MiscPar.pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)pwmfrq2) / 524288.0));
+
  return true;
 }
 
@@ -1558,7 +1568,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP &&
      m_EditTabPar.tab_id != ETMT_EGOCRV_MAP && m_EditTabPar.tab_id != ETMT_IACC_MAP && m_EditTabPar.tab_id != ETMT_IACCW_MAP &&
      m_EditTabPar.tab_id != ETMT_IATCLT_MAP && m_EditTabPar.tab_id != ETMT_TPSSWT_MAP && m_EditTabPar.tab_id != ETMT_GTSC_MAP &&
-     m_EditTabPar.tab_id != ETMT_GPSC_MAP && m_EditTabPar.tab_id != ETMT_ATSC_MAP)
+     m_EditTabPar.tab_id != ETMT_GPSC_MAP && m_EditTabPar.tab_id != ETMT_ATSC_MAP && m_EditTabPar.tab_id != ETMT_PWM1_MAP &&
+     m_EditTabPar.tab_id != ETMT_PWM2_MAP)
   return false;
 
  //check for 16-byte packets
@@ -1656,6 +1667,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       return false;
      else if (m_EditTabPar.tab_id == ETMT_AFR_MAP)
       m_EditTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
+     else if (m_EditTabPar.tab_id == ETMT_PWM1_MAP || m_EditTabPar.tab_id == ETMT_PWM2_MAP)
+      m_EditTabPar.table_data[i] = ((float)value * 100) / 255.0f;
      else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AFTSTR_MAP)
@@ -3408,6 +3421,12 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
 
  BYTE fp_timeout_strt = MathHelpers::Round(packet_data->fp_timeout_strt * 10.0f);
  mp_pdp->Bin8ToHex(fp_timeout_strt, m_outgoing_packet);
+
+ int pwmfrq1 = MathHelpers::Round((1.0/packet_data->pwm2_pwmfrq[0]) * 524288.0);
+ mp_pdp->Bin16ToHex(pwmfrq1, m_outgoing_packet);
+
+ int pwmfrq2 = MathHelpers::Round((1.0/packet_data->pwm2_pwmfrq[1]) * 524288.0);
+ mp_pdp->Bin16ToHex(pwmfrq2, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -3475,6 +3494,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    else if (packet_data->tab_id == ETMT_AFR_MAP)
    {
     unsigned char value = MathHelpers::Round((packet_data->table_data[i]-8) * AFR_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_PWM1_MAP || packet_data->tab_id == ETMT_PWM2_MAP)
+   {
+    unsigned char value = MathHelpers::Round((packet_data->table_data[i]*255.0f) / 100.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_WRMP_MAP)

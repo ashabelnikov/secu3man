@@ -406,3 +406,16 @@
 #define IDC_GME_ACRONYMS_LINK           5760
 #define IDC_CURSOR_HAND                 5761
 #define IDS_GME_DESCR_ABBREV            5762
+#define IDC_TD_VIEW_PWM1_MAP            5763
+#define IDC_TD_VIEW_PWM2_MAP            5764
+#define IDS_TD_VIEW_PWM1_MAP_TT         5765
+#define IDS_TD_VIEW_PWM2_MAP_TT         5766
+#define IDS_PWM1_MAP                    5767
+#define IDS_PWM2_MAP                    5768
+#define IDS_MAPS_DUTY_UNIT              5769
+#define IDD_GME_INJ_PWM1                5770
+#define IDD_GME_INJ_PWM2                5771
+#define IDC_GME_INJ_PWM1                5772
+#define IDC_GME_INJ_PWM2                5773
+#define IDS_GME_INJ_PWM1_TAB            5774
+#define IDS_GME_INJ_PWM2_TAB            5775

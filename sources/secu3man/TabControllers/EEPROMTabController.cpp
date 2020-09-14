@@ -178,6 +178,8 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GTSC, mptms.m_gtsc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GPSC, mptms.m_gpsc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -590,6 +592,12 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  m_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
  m_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
+
+ m_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(false),false);
+ m_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(true),true);
+
+ m_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
+ m_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
 }
 
 
@@ -705,6 +713,12 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_INJ_ATSC:
    m_eedm->SetAtscMap(funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
+   break;
+  case TYPE_MAP_PWM1:
+   m_eedm->SetPwm1Map(funset_index, mp_view->mp_TablesPanel->GetPwm1Map(false));
+   break;
+  case TYPE_MAP_PWM2:
+   m_eedm->SetPwm2Map(funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
    break;
  }
 }
@@ -964,5 +978,7 @@ void CEEPROMTabController::OnChangeSettingsMapEd(void)
  mptms.m_gtsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GTSC);
  mptms.m_gpsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
  mptms.m_atsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
+ mptms.m_pwm1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM1);
+ mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
  mp_settings->SetMapPtMovStep(mptms);
 }

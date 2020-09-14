@@ -1320,6 +1320,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetGpscMap(i, op_fwd->maps[i].inj_gps_corr);
   GetAtscMap(i, op_fwd->maps[i].inj_ats_corr);
   GetIATCLTMap(i, op_fwd->maps[i].inj_iatclt_corr);
+  GetPwm1Map(i,op_fwd->maps[i].pwm_duty1);
+  GetPwm2Map(i,op_fwd->maps[i].pwm_duty2);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1386,6 +1388,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetGpscMap(i, ip_fwd->maps[i].inj_gps_corr);
   SetAtscMap(i, ip_fwd->maps[i].inj_ats_corr);
   SetIATCLTMap(i, ip_fwd->maps[i].inj_iatclt_corr);
+  SetPwm1Map(i,ip_fwd->maps[i].pwm_duty1);
+  SetPwm2Map(i,ip_fwd->maps[i].pwm_duty2);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
@@ -1908,6 +1912,54 @@ void CFirmwareDataMediator::SetSmapabanThrdMap(const float* ip_values)
 
  for(size_t i = 0; i < SMAPABAN_THRD_SIZE; i++)
   p_fd->exdata.smapaban_thrd[i] = MathHelpers::Round(ip_values[i] / 10.0f);
+}
+
+void CFirmwareDataMediator::GetPwm1Map(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].pwm_duty1[0][0]);
+  op_values[i] = (((float) *(p + i)) * 100.0f) / 255.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetPwm1Map(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].pwm_duty1[0][0]);
+  *(p + i) = MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
+ }
+}
+
+void CFirmwareDataMediator::GetPwm2Map(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].pwm_duty2[0][0]);
+  op_values[i] = (((float) *(p + i)) * 100.0f) / 255.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetPwm2Map(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].pwm_duty2[0][0]);
+  *(p + i) = MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
+ }
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

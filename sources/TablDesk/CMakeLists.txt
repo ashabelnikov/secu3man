@@ -37,6 +37,8 @@ set(HEADERS
   GMEInjIRegDlg.h
   GMEInjEnrDlg.h
   GMEInjOtherDlg.h
+  GMEInjPwm1Dlg.h
+  GMEInjPwm2Dlg.h
   MapIds.h
   resource.h
   RPMGridEditDlg.h
@@ -58,6 +60,8 @@ set(SOURCES
   GMEInjIRegDlg.cpp
   GMEInjEnrDlg.cpp
   GMEInjOtherDlg.cpp
+  GMEInjPwm1Dlg.cpp
+  GMEInjPwm2Dlg.cpp
   RPMGridEditDlg.cpp
   StdAfx.cpp
   TablDesk.cpp

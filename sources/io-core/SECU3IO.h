@@ -332,6 +332,7 @@ namespace SECU3IO
   float evap_afbegin;
   float evap_afslope;
   float fp_timeout_strt;                //Fuel pump timeout for cranking (sec.)
+  int pwm2_pwmfrq[2];                   //Frequencies for PWM channels
  };
 
  struct EditTabPar
@@ -372,6 +373,8 @@ namespace SECU3IO
  const int ETMT_GTSC_MAP = 23;          //Inj. PW correction coefficient vs gas temperature
  const int ETMT_GPSC_MAP = 24;          //Inj. PW correction coefficient vs gas pressure
  const int ETMT_ATSC_MAP = 25;          //Inj. PW correction coefficient vs air temperature
+ const int ETMT_PWM1_MAP = 26;          //PWM1 duty
+ const int ETMT_PWM2_MAP = 27;          //PWM2 duty
 
  struct SepTabPar
  {

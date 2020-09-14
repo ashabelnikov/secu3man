@@ -276,6 +276,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->evap_afbegin = MathHelpers::Round(p_in->evap_afbegin / 32.0f);
     p_params->evap_afslope = MathHelpers::Round(p_in->evap_afslope * 1048576.0f * 32.0f);
     p_params->fp_timeout_strt = MathHelpers::Round(p_in->fp_timeout_strt * 10.0f);
+    p_params->pwm2_pwmfrq[0] = MathHelpers::Round((1.0/p_in->pwm2_pwmfrq[0]) * 524288.0);
+    p_params->pwm2_pwmfrq[1] = MathHelpers::Round((1.0/p_in->pwm2_pwmfrq[1]) * 524288.0);
    }
    break;
   case CHOKE_PAR:
@@ -663,6 +665,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->evap_afbegin = p_params->evap_afbegin * 32.0f;
      p_out->evap_afslope = (p_params->evap_afslope / 1048576.0f) / 32.0f;
      p_out->fp_timeout_strt = p_params->fp_timeout_strt / 10.0f;
+     p_out->pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)p_params->pwm2_pwmfrq[0]) / 524288.0));
+     p_out->pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)p_params->pwm2_pwmfrq[1]) / 524288.0));
     }
     break;
    case CHOKE_PAR:

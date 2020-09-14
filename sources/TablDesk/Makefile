@@ -21,7 +21,7 @@ LFLAGS  = /nologo /STACK:10000000 /MACHINE:x86 /release /DLL /OUT:../../binaries
 SOURCES = ButtonsPanel.cpp DLLLinkedFunctions.cpp DwellCalcDlg.cpp RPMGridEditDlg.cpp \
   StdAfx.cpp TablDesk.cpp TablesSetPanel.cpp GridModeEditorIgnDlg.cpp CESettingsDlg.cpp \
   GridModeEditorInjDlg.cpp GMEInjVEDlg.cpp GMEInjAFRDlg.cpp GMEInjITDlg.cpp GMEInjIRegDlg.cpp \
-  GMEInjEnrDlg.cpp GMEInjOtherDlg.cpp AutoTuneController.cpp
+  GMEInjEnrDlg.cpp GMEInjOtherDlg.cpp AutoTuneController.cpp GMEInjPwm1Dlg.cpp GMEInjPwm2Dlg.cpp
 
 
 # DLL building

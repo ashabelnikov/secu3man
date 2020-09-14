@@ -118,6 +118,10 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void SetITRPMMap(int i_index, const float* i_values);
   void SetRigidMap(int i_index, const float* i_values);
   void SetEGOCurveMap(int i_index, const float* i_values);
+  void GetPwm1Map(int i_index, float* o_values, bool i_original = false);
+  void SetPwm1Map(int i_index, const float* i_values);
+  void GetPwm2Map(int i_index, float* o_values, bool i_original = false);
+  void SetPwm2Map(int i_index, const float* i_values);
 
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);

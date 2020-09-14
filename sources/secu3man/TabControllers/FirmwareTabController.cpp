@@ -254,6 +254,8 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GTSC, mptms.m_gtsc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GPSC, mptms.m_gpsc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
  //separate
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_ATTENUATOR, mptms.m_attenuator_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DWELLCNTRL, mptms.m_dwellcntrl_map);
@@ -1192,6 +1194,12 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
  mp_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
+
+ mp_fwdm->GetPwm1Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm1Map(false),false);
+ mp_fwdm->GetPwm1Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm1Map(true),true);
+
+ mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
+ mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1334,6 +1342,14 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_ATSC:
    ASSERT(m_current_funset_index!=-1);
    mp_fwdm->SetAtscMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
+   break;
+  case TYPE_MAP_PWM1:
+   ASSERT(m_current_funset_index!=-1);
+   mp_fwdm->SetPwm1Map(m_current_funset_index, mp_view->mp_TablesPanel->GetPwm1Map(false));
+   break;
+  case TYPE_MAP_PWM2:
+   ASSERT(m_current_funset_index!=-1);
+   mp_fwdm->SetPwm2Map(m_current_funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
    break;
 
    //separate maps
@@ -2002,6 +2018,9 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_gtsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GTSC);
  mptms.m_gpsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
  mptms.m_atsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
+ mptms.m_pwm1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM1);
+ mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
+
  //separate
  mptms.m_attenuator_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_ATTENUATOR);
  mptms.m_dwellcntrl_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DWELLCNTRL);

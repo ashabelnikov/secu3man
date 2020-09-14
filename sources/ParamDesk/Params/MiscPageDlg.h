@@ -106,6 +106,12 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_hop_durat_spin;
   CStatic m_hop_durat_unit;
 
+  CSpinButtonCtrlEx m_pwm1frq_spin;
+  CEditEx m_pwm1frq_edit;
+
+  CSpinButtonCtrlEx m_pwm2frq_spin;
+  CEditEx m_pwm2frq_edit;
+
   SECU3IO::MiscelPar m_params;
   bool m_enabled;
   bool m_hall_output_enabled;

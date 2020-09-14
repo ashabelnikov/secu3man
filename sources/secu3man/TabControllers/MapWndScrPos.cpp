@@ -297,6 +297,18 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_SmapabanThrdMapWnd_W = rc.right - rc.left;
    sz.m_SmapabanThrdMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_PWM1:
+   ws.m_Pwm1MapWnd_X = rc.left;
+   ws.m_Pwm1MapWnd_Y = rc.top;
+   sz.m_Pwm1MapWnd_W = rc.right - rc.left;
+   sz.m_Pwm1MapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_PWM2:
+   ws.m_Pwm2MapWnd_X = rc.left;
+   ws.m_Pwm2MapWnd_Y = rc.top;
+   sz.m_Pwm2MapWnd_W = rc.right - rc.left;
+   sz.m_Pwm2MapWnd_H = rc.bottom - rc.top;
+   break;
   case TYPE_MAP_GME_IGN_WND: //pseudo map
    ws.m_GridMapIgnWnd_X = rc.left;
    ws.m_GridMapIgnWnd_Y = rc.top;
@@ -500,6 +512,14 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_SMAPABAN_THRD:
    X = ws.m_SmapabanThrdMapWnd_X, Y = ws.m_SmapabanThrdMapWnd_Y;
    W = sz.m_SmapabanThrdMapWnd_W, H = sz.m_SmapabanThrdMapWnd_H;
+   break;
+  case TYPE_MAP_PWM1:
+   X = ws.m_Pwm1MapWnd_X, Y = ws.m_Pwm1MapWnd_Y;
+   W = sz.m_Pwm1MapWnd_W, H = sz.m_Pwm1MapWnd_H;
+   break;
+  case TYPE_MAP_PWM2:
+   X = ws.m_Pwm2MapWnd_X, Y = ws.m_Pwm2MapWnd_Y;
+   W = sz.m_Pwm2MapWnd_W, H = sz.m_Pwm2MapWnd_H;
    break;
   case TYPE_MAP_GME_IGN_WND:
    X = ws.m_GridMapIgnWnd_X, Y = ws.m_GridMapIgnWnd_Y;

@@ -157,6 +157,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optCrankingThrdMapWnd(_T("CrankingThrdMapWnd"))
 , m_optCrankingTimeMapWnd(_T("CrankingTimeMapWnd"))
 , m_optSmapabanThrdMapWnd(_T("SmapabanThrdMapWnd"))
+, m_optPwm1MapWnd(_T("Pwm1MapWnd"))
+, m_optPwm2MapWnd(_T("Pwm2MapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -186,6 +188,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGtscMapWnd1(_T("GTSCMapWnd"))
 , m_optGpscMapWnd1(_T("GPSCMapWnd"))
 , m_optAtscMapWnd1(_T("AirDenMapWnd"))
+, m_optPwm1MapWnd1(_T("Pwm1MapWnd"))
+, m_optPwm2MapWnd1(_T("Pwm2MapWnd"))
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
@@ -231,7 +235,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optCrankingThrdMapWndSize(_T("CrankingThrdMapWnd"))
 , m_optCrankingTimeMapWndSize(_T("CrankingTimeMapWnd"))
 , m_optSmapabanThrdMapWndSize(_T("SmapabanThrdMapWnd"))
-//positions of windows (online tables)
+, m_optPwm1MapWndSize(_T("Pwm1MapWnd"))
+, m_optPwm2MapWndSize(_T("Pwm2MapWnd"))
+//sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
 , m_optIdleMapWndSize1(_T("IdleMapWnd"))
@@ -260,6 +266,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGtscMapWndSize1(_T("GTSCMapWnd"))
 , m_optGpscMapWndSize1(_T("GPSCMapWnd"))
 , m_optAtscMapWndSize1(_T("AirDenMapWnd"))
+, m_optPwm1MapWndSize1(_T("Pwm1MapWnd"))
+, m_optPwm2MapWndSize1(_T("Pwm2MapWnd"))
 //state of windows (minimized, normal, maximized)
 , m_Name_WndState_Section(_T("WndState"))
 , m_optMainFrmWndState(_T("MainFrmWnd"))
@@ -344,6 +352,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepGtscMap(_T("GTSCMapWnd"))
 , m_optPtMovStepGpscMap(_T("GPSCMapWnd"))
 , m_optPtMovStepAtscMap(_T("AirDenMapWnd"))
+, m_optPtMovStepPwm1Map(_T("Pwm1MapWnd"))
+, m_optPtMovStepPwm2Map(_T("Pwm2MapWnd"))
 //separate
 , m_optPtMovStepCrkTempMap(_T("CrkTempMapWnd"))
 , m_optPtMovStepEHPauseMap(_T("EHPauseMapWnd"))
@@ -705,6 +715,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optCrankingThrdMapWnd);
  ws.ReadWndPos(m_optCrankingTimeMapWnd);
  ws.ReadWndPos(m_optSmapabanThrdMapWnd);
+ ws.ReadWndPos(m_optPwm1MapWnd);
+ ws.ReadWndPos(m_optPwm2MapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -736,6 +748,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optGtscMapWnd1);
  ws1.ReadWndPos(m_optGpscMapWnd1);
  ws1.ReadWndPos(m_optAtscMapWnd1);
+ ws1.ReadWndPos(m_optPwm1MapWnd1);
+ ws1.ReadWndPos(m_optPwm2MapWnd1);
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -782,6 +796,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optCrankingThrdMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optCrankingTimeMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optSmapabanThrdMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optPwm1MapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optPwm2MapWndSize, 0, 10000);
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  sz1.ReadWndPos(m_optStrtMapWndSize1);
@@ -811,6 +827,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optGtscMapWndSize1);
  sz1.ReadWndPos(m_optGpscMapWndSize1);
  sz1.ReadWndPos(m_optAtscMapWndSize1);
+ sz1.ReadWndPos(m_optPwm1MapWndSize1);
+ sz1.ReadWndPos(m_optPwm2MapWndSize1);
 
  //State of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -961,6 +979,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepGtscMap, _T("0.01"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepGpscMap, _T("0.01"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAtscMap, _T("0.01"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepPwm1Map,  _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepPwm2Map,  _T("0.5"), 0.0f, 10.0f);
  //separate
  ms.ReadFlt(m_optPtMovStepCrkTempMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepEHPauseMap, _T("0.01"), 0.0f, 10.0f);
@@ -1699,6 +1719,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optSmapabanThrdMapWnd, _T("Обороты перехода с пусковой карты"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optPwm1MapWnd, _T("PWM1 duty map"));
+ else
+  ws.WriteWndPos(m_optPwm1MapWnd, _T("Карта скважности ШИМ на выходе PWM1"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optPwm2MapWnd, _T("PWM2 duty map"));
+ else
+  ws.WriteWndPos(m_optPwm2MapWnd, _T("Карта скважности ШИМ на выходе PWM2"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -1841,6 +1871,16 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optAtscMapWnd1, _T("Air density correction map"));
  else
   ws1.WriteWndPos(m_optAtscMapWnd1, _T("Коррекция смеси по плотности воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optPwm1MapWnd1, _T("PWM1 duty map"));
+ else
+  ws1.WriteWndPos(m_optPwm1MapWnd1, _T("Карта скважности ШИМ на выходе PWM1"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optPwm2MapWnd1, _T("PWM2 duty map"));
+ else
+  ws1.WriteWndPos(m_optPwm2MapWnd1, _T("Карта скважности ШИМ на выходе PWM2"));
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -2065,6 +2105,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   sz.WriteWndPos(m_optSmapabanThrdMapWndSize, _T("Обороты перехода с пусковой карты"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optPwm1MapWndSize, _T("PWM1 duty map"));
+ else
+  sz.WriteWndPos(m_optPwm1MapWndSize, _T("Карта скважности на выходе PWM1"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optPwm2MapWndSize, _T("PWM2 duty map"));
+ else
+  sz.WriteWndPos(m_optPwm2MapWndSize, _T("Карта скважности на выходе PWM2"));
+
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2207,6 +2257,16 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optAtscMapWndSize1, _T("Air density correction map"));
  else
   sz1.WriteWndPos(m_optAtscMapWndSize1, _T("Коррекция смеси по плотности воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optPwm1MapWndSize1, _T("PWM1 duty map"));
+ else
+  sz1.WriteWndPos(m_optPwm1MapWndSize1, _T("Карта скважности на выходе PWM1"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optPwm2MapWndSize1, _T("PWM2 duty map"));
+ else
+  sz1.WriteWndPos(m_optPwm2MapWndSize1, _T("Карта скважности на выходе PWM2"));
 
  //States of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -2892,6 +2952,17 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepAtscMap, 3, _T("Air density correction map"));
  else
   ms.WriteFlt(m_optPtMovStepAtscMap, 3, _T("Коррекция смеси по плотности воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepPwm1Map, 3, _T("PWM1 duty map"));
+ else
+  ms.WriteFlt(m_optPtMovStepPwm1Map, 3, _T("Скважность ШИМ на выходе PWM1"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepPwm2Map, 3, _T("PWM2 duty map"));
+ else
+  ms.WriteFlt(m_optPtMovStepPwm2Map, 3, _T("Скважность ШИМ на выходе PWM2"));
+
  //separate maps
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, _T("Ign.timing vs CLT correction on cranking"));
@@ -3229,6 +3300,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optCrankingTimeMapWnd.value.y = i_wndSettings.m_CrankingTimeMapWnd_Y;
  m_optSmapabanThrdMapWnd.value.x = i_wndSettings.m_SmapabanThrdMapWnd_X;
  m_optSmapabanThrdMapWnd.value.y = i_wndSettings.m_SmapabanThrdMapWnd_Y;
+ m_optPwm1MapWnd.value.x = i_wndSettings.m_Pwm1MapWnd_X;
+ m_optPwm1MapWnd.value.y = i_wndSettings.m_Pwm1MapWnd_Y;
+ m_optPwm2MapWnd.value.x = i_wndSettings.m_Pwm2MapWnd_X;
+ m_optPwm2MapWnd.value.y = i_wndSettings.m_Pwm2MapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3319,6 +3394,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_CrankingTimeMapWnd_Y = m_optCrankingTimeMapWnd.value.y;
  o_wndSettings.m_SmapabanThrdMapWnd_X = m_optSmapabanThrdMapWnd.value.x;
  o_wndSettings.m_SmapabanThrdMapWnd_Y = m_optSmapabanThrdMapWnd.value.y;
+ o_wndSettings.m_Pwm1MapWnd_X = m_optPwm1MapWnd.value.x;
+ o_wndSettings.m_Pwm1MapWnd_Y = m_optPwm1MapWnd.value.y;
+ o_wndSettings.m_Pwm2MapWnd_X = m_optPwm2MapWnd.value.x;
+ o_wndSettings.m_Pwm2MapWnd_Y = m_optPwm2MapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -3377,6 +3456,10 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optGpscMapWnd1.value.y = i_wndSettings.m_GpscMapWnd_Y;
  m_optAtscMapWnd1.value.x = i_wndSettings.m_AtscMapWnd_X;
  m_optAtscMapWnd1.value.y = i_wndSettings.m_AtscMapWnd_Y;
+ m_optPwm1MapWnd1.value.x = i_wndSettings.m_Pwm1MapWnd_X;
+ m_optPwm1MapWnd1.value.y = i_wndSettings.m_Pwm1MapWnd_Y;
+ m_optPwm2MapWnd1.value.x = i_wndSettings.m_Pwm2MapWnd_X;
+ m_optPwm2MapWnd1.value.y = i_wndSettings.m_Pwm2MapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
@@ -3435,6 +3518,10 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_GpscMapWnd_Y = m_optGpscMapWnd1.value.y;
  o_wndSettings.m_AtscMapWnd_X = m_optAtscMapWnd1.value.x;
  o_wndSettings.m_AtscMapWnd_Y = m_optAtscMapWnd1.value.y;
+ o_wndSettings.m_Pwm1MapWnd_X = m_optPwm1MapWnd1.value.x;
+ o_wndSettings.m_Pwm1MapWnd_Y = m_optPwm1MapWnd1.value.y;
+ o_wndSettings.m_Pwm2MapWnd_X = m_optPwm2MapWnd1.value.x;
+ o_wndSettings.m_Pwm2MapWnd_Y = m_optPwm2MapWnd1.value.y;
 }
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
@@ -3525,6 +3612,10 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optCrankingTimeMapWndSize.value.y = i_wndSize.m_CrankingTimeMapWnd_H;
  m_optSmapabanThrdMapWndSize.value.x = i_wndSize.m_SmapabanThrdMapWnd_W;
  m_optSmapabanThrdMapWndSize.value.y = i_wndSize.m_SmapabanThrdMapWnd_H;
+ m_optPwm1MapWndSize.value.x = i_wndSize.m_Pwm1MapWnd_W;
+ m_optPwm1MapWndSize.value.y = i_wndSize.m_Pwm1MapWnd_H;
+ m_optPwm2MapWndSize.value.x = i_wndSize.m_Pwm2MapWnd_W;
+ m_optPwm2MapWndSize.value.y = i_wndSize.m_Pwm2MapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -3615,6 +3706,10 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_CrankingTimeMapWnd_H = m_optCrankingTimeMapWndSize.value.y;
  o_wndSize.m_SmapabanThrdMapWnd_W = m_optSmapabanThrdMapWndSize.value.x;
  o_wndSize.m_SmapabanThrdMapWnd_H = m_optSmapabanThrdMapWndSize.value.y;
+ o_wndSize.m_Pwm1MapWnd_W = m_optPwm1MapWndSize.value.x;
+ o_wndSize.m_Pwm1MapWnd_H = m_optPwm1MapWndSize.value.y;
+ o_wndSize.m_Pwm2MapWnd_W = m_optPwm2MapWndSize.value.x;
+ o_wndSize.m_Pwm2MapWnd_H = m_optPwm2MapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -3673,6 +3768,10 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optGpscMapWndSize1.value.y = i_wndSize.m_GpscMapWnd_H;
  m_optAtscMapWndSize1.value.x = i_wndSize.m_AtscMapWnd_W;
  m_optAtscMapWndSize1.value.y = i_wndSize.m_AtscMapWnd_H;
+ m_optPwm1MapWndSize1.value.x = i_wndSize.m_Pwm1MapWnd_W;
+ m_optPwm1MapWndSize1.value.y = i_wndSize.m_Pwm1MapWnd_H;
+ m_optPwm2MapWndSize1.value.x = i_wndSize.m_Pwm2MapWnd_W;
+ m_optPwm2MapWndSize1.value.y = i_wndSize.m_Pwm2MapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
@@ -3731,6 +3830,10 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_GpscMapWnd_H = m_optGpscMapWndSize1.value.y;
  o_wndSize.m_AtscMapWnd_W = m_optAtscMapWndSize1.value.x;
  o_wndSize.m_AtscMapWnd_H = m_optAtscMapWndSize1.value.y;
+ o_wndSize.m_Pwm1MapWnd_W = m_optPwm1MapWndSize1.value.x;
+ o_wndSize.m_Pwm1MapWnd_H = m_optPwm1MapWndSize1.value.y;
+ o_wndSize.m_Pwm2MapWnd_W = m_optPwm2MapWndSize1.value.x;
+ o_wndSize.m_Pwm2MapWnd_H = m_optPwm2MapWndSize1.value.y;
 }
 
 void CAppSettingsModel::SetWndState(const WndState& i_wndState)
@@ -4401,6 +4504,8 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepGtscMap.value = i_ptMovStep.m_gtsc_map;
  m_optPtMovStepGpscMap.value = i_ptMovStep.m_gpsc_map;
  m_optPtMovStepAtscMap.value = i_ptMovStep.m_atsc_map;
+ m_optPtMovStepPwm1Map.value = i_ptMovStep.m_pwm1_map;
+ m_optPtMovStepPwm2Map.value = i_ptMovStep.m_pwm2_map;
  //separate
  m_optPtMovStepAttenMap.value = i_ptMovStep.m_attenuator_map;
  m_optPtMovStepDwellCntrlMap.value = i_ptMovStep.m_dwellcntrl_map;
@@ -4445,6 +4550,8 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_gtsc_map = m_optPtMovStepGtscMap.value;
  o_ptMovStep.m_gpsc_map = m_optPtMovStepGpscMap.value;
  o_ptMovStep.m_atsc_map = m_optPtMovStepAtscMap.value;
+ o_ptMovStep.m_pwm1_map = m_optPtMovStepPwm1Map.value;
+ o_ptMovStep.m_pwm2_map = m_optPtMovStepPwm2Map.value;
  //separate
  o_ptMovStep.m_attenuator_map = m_optPtMovStepAttenMap.value;
  o_ptMovStep.m_dwellcntrl_map = m_optPtMovStepDwellCntrlMap.value;

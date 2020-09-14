@@ -765,7 +765,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_cts_curve_enabled(false)
 , m_tmp2_curve_enabled(false)
 {
- m_scrl_view = 815;
+ m_scrl_view = 820;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {

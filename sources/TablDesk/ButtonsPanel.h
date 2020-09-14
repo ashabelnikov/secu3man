@@ -85,7 +85,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetGtscMap(bool i_original);
   float* GetGpscMap(bool i_original);
   float* GetAtscMap(bool i_original);
-
+  float* GetPwm1Map(bool i_original);
+  float* GetPwm2Map(bool i_original);
   float* GetRPMGrid(void);
   float* GetCLTGrid(void);
 
@@ -178,7 +179,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewGtscMap();
   afx_msg void OnViewGpscMap();
   afx_msg void OnViewAtscMap();
-
+  afx_msg void OnViewPwm1Map();
+  afx_msg void OnViewPwm2Map();
   afx_msg void OnGridModeEditingIgn();
   afx_msg void OnGridModeEditingInj();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
@@ -206,6 +208,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewGtscMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGpscMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAtscMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewPwm1Map(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewPwm2Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditingIgn(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditingInj(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
@@ -257,6 +261,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_gtsc_map_btn;
   CButton m_view_gpsc_map_btn;
   CButton m_view_atsc_map_btn;
+  CButton m_view_pwm1_map_btn;
+  CButton m_view_pwm2_map_btn;
 
   CButton m_grid_mode_editing_ign_check;
   CButton m_grid_mode_editing_inj_check;
@@ -345,6 +351,10 @@ private:
   static void __cdecl OnChangeGpscXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnChangeAtscMap(void* i_param);
   static void __cdecl OnCloseAtscMap(void* i_param);
+  static void __cdecl OnChangePwm1Map(void* i_param);
+  static void __cdecl OnClosePwm1Map(void* i_param);
+  static void __cdecl OnChangePwm2Map(void* i_param);
+  static void __cdecl OnClosePwm2Map(void* i_param);
 
   static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAFRMap(void* i_param, long cmd);
@@ -367,6 +377,8 @@ private:
   static void __cdecl OnWndActivationGtscMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationGpscMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAtscMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationPwm1Map(void* i_param, long cmd);
+  static void __cdecl OnWndActivationPwm2Map(void* i_param, long cmd);
 
   void OnGridMapChangedIgn(int mapType);
   void OnGridMapClosedIgn(HWND, int);
