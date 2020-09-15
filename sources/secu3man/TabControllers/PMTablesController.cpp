@@ -739,7 +739,7 @@ void CPMTablesController::OnImportFromS3F(void)
  std::copy(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, data.rpm_slots);
  std::copy(m_cltGrid, m_cltGrid + F_TMP_SLOTS, data.clt_slots);
 
- S3FImportController import(&data);
+ S3FImportController import(&data, false); //without separate maps
 
  int result = import.DoImport();
  if (result == IDOK)

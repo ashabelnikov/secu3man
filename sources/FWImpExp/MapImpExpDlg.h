@@ -58,29 +58,32 @@ enum EFWDFlags
  FLAG_GTSC_MAP      = 22,    //inj
  FLAG_GPSC_MAP      = 23,    //inj
  FLAG_ATSC_MAP      = 24,    //inj
+ FLAG_PWM1_MAP      = 25,    //
+ FLAG_PWM2_MAP      = 26,    //
 
- FLAG_DWLCNTR_MAP   = 25,    //separate
- FLAG_ATTEN_MAP     = 26,    //separate
- FLAG_CTS_MAP       = 27,    //separate
- FLAG_ATS_MAP       = 28,    //separate
- FLAG_ATSAAC_MAP    = 29,    //separate
- FLAG_GASDOSE_MAP   = 30,    //separate
- FLAG_BAROCORR_MAP  = 31,    //separate
- FLAG_MANIT_MAP     = 32,    //separate
- FLAG_TMP2CURVE_MAP = 33,    //separate
- FLAG_CRKTEMP_MAP   = 34,    //separate
- FLAG_EHPAUSE_MAP   = 35,    //separate
- FLAG_CRNKTHRD_MAP  = 36,    //separate
- FLAG_CRNKTIME_MAP  = 37,    //separate
- FLAG_ABANTHRD_MAP  = 38,    //separate
- FLAG_CESETT_DAT    = 39,    //separate (pseudomap)
+ FLAG_DWLCNTR_MAP   = 27,    //separate
+ FLAG_ATTEN_MAP     = 28,    //separate
+ FLAG_CTS_MAP       = 29,    //separate
+ FLAG_ATS_MAP       = 30,    //separate
+ FLAG_ATSAAC_MAP    = 31,    //separate
+ FLAG_GASDOSE_MAP   = 32,    //separate
+ FLAG_BAROCORR_MAP  = 33,    //separate
+ FLAG_MANIT_MAP     = 34,    //separate
+ FLAG_TMP2CURVE_MAP = 35,    //separate
+ FLAG_CRKTEMP_MAP   = 36,    //separate
+ FLAG_EHPAUSE_MAP   = 37,    //separate
+ FLAG_CRNKTHRD_MAP  = 38,    //separate
+ FLAG_CRNKTIME_MAP  = 39,    //separate
+ FLAG_ABANTHRD_MAP  = 40,    //separate
+ FLAG_KNOCKZONE_MAP = 41,    //separate
+ FLAG_CESETT_DAT    = 42,    //separate (pseudomap)
 
- FLAG_NR_OF_FLAGS   = 40,    //total number of flags
+ FLAG_NR_OF_FLAGS   = 43,    //total number of flags
 
  FLAG_SET_START     = 0,
- FLAG_SET_END       = 24,
- FLAG_SEP_START     = 25,
- FLAG_SEP_END       = 39,
+ FLAG_SET_END       = 26,
+ FLAG_SEP_START     = 27,
+ FLAG_SEP_END       = 42,
 };
 
 class CToolTipCtrlEx;

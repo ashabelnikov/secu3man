@@ -54,11 +54,12 @@ std::vector<_TSTRING> GenArtificialNames(const std::vector<_TSTRING>& inpNames)
 }
 }
 
-S3FImportController::S3FImportController(FWMapsDataHolder* ip_fwd)
+S3FImportController::S3FImportController(FWMapsDataHolder* ip_fwd, bool sepmaps)
 : mp_fwd(ip_fwd)
 , mp_view(new CMapImpExpDlg())
 , mp_s3f_io(new S3FFileDataIO())
 , m_s3f_file_name(_T(""))
+, m_sepmaps(sepmaps)
 {
  ASSERT(mp_fwd);
  ASSERT(mp_view);
@@ -169,6 +170,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
   memcpy(&mp_fwd->cesd, &mp_s3f_io->GetData().cesd, sizeof(CESettingsData));
 
+ if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
+  memcpy(mp_fwd->knock_zone, mp_s3f_io->GetData().knock_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -274,6 +278,12 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ats_corr, mp_s3f_io->GetData().maps[other_sel].inj_ats_corr,sizeof(float) * INJ_ATS_CORR_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
+  memcpy(mp_fwd->maps[current_sel].pwm_duty1, mp_s3f_io->GetData().maps[other_sel].pwm_duty1, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
+  memcpy(mp_fwd->maps[current_sel].pwm_duty2, mp_s3f_io->GetData().maps[other_sel].pwm_duty2, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -311,8 +321,9 @@ void S3FImportController::OnViewActivate(void)
  bool sv0109 = (mp_s3f_io->GetVersion() > 0x0108);
  bool sv0110 = (mp_s3f_io->GetVersion() > 0x0109);
  bool sv0111 = (mp_s3f_io->GetVersion() > 0x0110);
+ bool sv0113 = (mp_s3f_io->GetVersion() > 0x0112);
 
- bool sepmap = mp_s3f_io->HasSeparateMaps();
+ bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
  //injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, injen);
@@ -357,6 +368,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_GPSC_MAP, sv0109);      //since v01.09
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, sv0109);         //since v01.09
  mp_view->EnableFWDFlag(FLAG_ATSC_MAP, sv0109);      //since v01.09
+ mp_view->SetFWDFlag(FLAG_PWM1_MAP, sv0113);         //since v01.13
+ mp_view->EnableFWDFlag(FLAG_PWM1_MAP, sv0113);      //since v01.13
+ mp_view->SetFWDFlag(FLAG_PWM2_MAP, sv0113);         //since v01.13
+ mp_view->EnableFWDFlag(FLAG_PWM2_MAP, sv0113);      //since v01.13
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -373,6 +388,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
+ mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -388,6 +404,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CRNKTIME_MAP, sv0110 && sepmap);  //since v01.10
  mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, sv0110 && sepmap);  //since v01.10
  mp_view->EnableFWDFlag(FLAG_CESETT_DAT, sv0111 && sepmap);  //since v01.11
+ mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, sv0113 && sepmap);  //since v01.13
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -530,6 +547,9 @@ void S3FExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
   memcpy(&mp_s3f_io->GetDataLeft().cesd, &mp_fwd->cesd, sizeof(CESettingsData));
 
+ if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().knock_zone, mp_fwd->knock_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
   GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
@@ -632,6 +652,12 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ats_corr, mp_fwd->maps[current_sel].inj_ats_corr, sizeof(float) * INJ_ATS_CORR_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].pwm_duty1, mp_fwd->maps[current_sel].pwm_duty1, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].pwm_duty2, mp_fwd->maps[current_sel].pwm_duty2, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -676,6 +702,8 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -692,6 +720,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
+ mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

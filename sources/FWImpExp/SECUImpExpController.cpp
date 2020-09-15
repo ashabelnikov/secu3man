@@ -160,6 +160,9 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
   m_fwdm->GetCESettingsData(mp_fwd->cesd);
 
+ if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
+  m_fwdm->GetKnockZoneMap(mp_fwd->knock_zone);
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 
@@ -266,6 +269,12 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
   m_fwdm->GetAtscMap(other_sel, mp_fwd->maps[current_sel].inj_ats_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
+  m_fwdm->GetPwm1Map(other_sel, mp_fwd->maps[current_sel].pwm_duty1);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
+  m_fwdm->GetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -310,6 +319,8 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  //separate maps
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -326,6 +337,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
+ mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -466,6 +478,9 @@ void SECU3ExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
   m_fwdm->SetCESettingsData(mp_fwd->cesd);
 
+ if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
+  m_fwdm->SetKnockZoneMap(mp_fwd->knock_zone);
+
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
   m_fwdm->SetRPMGridMap(mp_fwd->rpm_slots);
@@ -583,6 +598,12 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
   m_fwdm->SetAtscMap(other_sel, mp_fwd->maps[current_sel].inj_ats_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
+  m_fwdm->SetPwm1Map(other_sel, mp_fwd->maps[current_sel].pwm_duty1);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
+  m_fwdm->SetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -627,6 +648,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -643,6 +666,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
+ mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

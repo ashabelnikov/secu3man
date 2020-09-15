@@ -33,7 +33,7 @@ class S3FFileDataIO;
 class AFX_EXT_CLASS S3FImportController
 {
  public:
-  S3FImportController(FWMapsDataHolder* ip_fwd);
+  S3FImportController(FWMapsDataHolder* ip_fwd, bool sepmaps = true);
  ~S3FImportController();
 
   int  DoImport(void);
@@ -51,6 +51,7 @@ class AFX_EXT_CLASS S3FImportController
   CMapImpExpDlg* mp_view;
   S3FFileDataIO* mp_s3f_io;
   _TSTRING m_s3f_file_name;
+  bool m_sepmaps;
 };
 
 class AFX_EXT_CLASS S3FExportController

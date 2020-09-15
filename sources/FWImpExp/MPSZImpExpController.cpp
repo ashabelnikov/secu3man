@@ -199,6 +199,10 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_GPSC_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATSC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_PWM1_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_PWM1_MAP, false);
+ mp_view->SetFWDFlag(FLAG_PWM2_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_PWM2_MAP, false);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
@@ -230,6 +234,8 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->EnableFWDFlag(FLAG_CESETT_DAT, false);
+ mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, false);
 
  mp_view->SetExchangeButtonCaption(_T("<"));
  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_MPSZ_TABLES));
@@ -441,6 +447,10 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_GPSC_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATSC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_PWM1_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_PWM1_MAP, false);
+ mp_view->SetFWDFlag(FLAG_PWM2_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_PWM2_MAP, false);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
@@ -472,6 +482,8 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->EnableFWDFlag(FLAG_CESETT_DAT, false);
+ mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, false);
  
  mp_view->SetExchangeButtonCaption(_T(">"));
  mp_view->SetWindowText(MLL::LoadString(IDS_EXPORT_MPSZ_TABLES));

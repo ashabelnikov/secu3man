@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0112 //01.12
+#define CURRENT_VERSION 0x0113 //01.13
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -76,6 +76,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.10 - Added 3 new separate tables which were not added yet
 // 01.11 - CLT grid has been added (02.02.2020)
 // 01.12 - Fixed overflow bug in inj_iatclt_corr map (05.05.2020)
+// 01.13 - Added 3 new maps: pwm_duty1, pwm_duty2, knock_zone (15.09.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -127,8 +128,11 @@ struct S3FMapSetItem
  s3f_int32_t inj_gts_corr[INJ_GTS_CORR_SIZE];              // PW correction vs gas temperature
  s3f_int32_t inj_gps_corr[INJ_GPS_CORR_SIZE+2];            // PW correction vs gas pressure
  s3f_int32_t inj_ats_corr[INJ_ATS_CORR_SIZE];              // PW correction vs air temperature
+ //since v01.13
+ s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty
+ s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty
 
- s3f_int32_t reserved[629]; //reserved bytes, = 0
+ s3f_int32_t reserved[117]; //reserved bytes, = 0
 };
 
 
@@ -210,8 +214,10 @@ struct S3FSepMaps
  //since v01.11
  s3f_int32_t clt_slots[F_TMP_SLOTS]; //CLT grid (appeared in version 01.11, reserved bytes were utilized)
  s3f_ce_sett_t cesd; //CE settings' data
+ //since v01.13
+ s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map
 
- s3f_int32_t reserved[1087];       //reserved bytes, = 0
+ s3f_int32_t reserved[831];       //reserved bytes, = 0
 };
 
 
@@ -392,6 +398,10 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].inj_gps_corr[i] = MathHelpers::Round(m_data.maps[s].inj_gps_corr[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    p_setItem[s].inj_ats_corr[i] = MathHelpers::Round(m_data.maps[s].inj_ats_corr[i] * INT_MULTIPLIER);
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   p_setItem[s].pwm_duty1[i] = MathHelpers::Round(m_data.maps[s].pwm_duty1[i] * INT_MULTIPLIER);
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   p_setItem[s].pwm_duty2[i] = MathHelpers::Round(m_data.maps[s].pwm_duty2[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -440,6 +450,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->cranking_time[i] = MathHelpers::Round(m_data.cranking_time[i] * INT_MULTIPLIER);
  for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
   p_sepMaps->smapaban_thrd[i] = MathHelpers::Round(m_data.smapaban_thrd[i] * INT_MULTIPLIER);
+ for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+  p_sepMaps->knock_zone[i] = MathHelpers::Round(m_data.knock_zone[i] * INT_MULTIPLIER);
+
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
@@ -602,6 +615,10 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_gps_corr[i] = p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   m_data.maps[s].pwm_duty1[i] = p_setItem[s].pwm_duty1[i] / INT_MULTIPLIER;
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   m_data.maps[s].pwm_duty2[i] = p_setItem[s].pwm_duty2[i] / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];
@@ -647,6 +664,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.cranking_time[i] = p_sepMaps->cranking_time[i] / INT_MULTIPLIER;
  for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
   m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
+ for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+  m_data.knock_zone[i] = p_sepMaps->knock_zone[i] / INT_MULTIPLIER;
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;

@@ -209,6 +209,12 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
   m_eedm->GetAtscMap(other_sel, mp_fwd->maps[current_sel].inj_ats_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
+  m_eedm->GetPwm1Map(other_sel, mp_fwd->maps[current_sel].pwm_duty1);
+
+ if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
+  m_eedm->GetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
 }
 
 //Modal window has been activated - perform its initialization
@@ -253,6 +259,8 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
+ mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
@@ -282,6 +290,8 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CRNKTIME_MAP, false);
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)
