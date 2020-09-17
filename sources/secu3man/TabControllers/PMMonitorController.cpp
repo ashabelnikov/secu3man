@@ -90,6 +90,7 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
  mp_view->SetTmp2AverageNum(mp_settings->GetTmp2Average());
  mp_view->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
+ mp_view->SetFuelConsumFAverageNum(mp_settings->GetFuelConsumFAverage());
  mp_view->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
  mp_view->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
  mp_view->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
@@ -129,6 +130,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
  mp_view->SetTmp2AverageNum(mp_settings->GetTmp2Average());
  mp_view->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
+ mp_view->SetFuelConsumFAverageNum(mp_settings->GetFuelConsumFAverage());
  mp_view->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
  mp_view->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
  mp_view->SetChokePosAverageNum(mp_settings->GetChokePosAverage());

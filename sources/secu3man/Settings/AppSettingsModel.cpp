@@ -102,6 +102,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optInjTimBAverage(_T("InjTimBAverage"))
 , m_optInjTimEAverage(_T("InjTimEAverage"))
 , m_optGraphShtPixels(_T("GraphShtPixels"))
+, m_optFuelConsumFAverage(_T("FuelConsumFAverage"))
 
 , m_optTitleFontSize(_T("TitleFontSize"))
 , m_optValueFontSize(_T("ValueFontSize"))
@@ -514,6 +515,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetInjTimB[i][1].name = _T("GrhInjTimB");
   m_optMetInjTimE[i][0].name = _T("MetInjTimE");
   m_optMetInjTimE[i][1].name = _T("GrhInjTimE");
+  m_optMetFuelConsumF[i][0].name = _T("MetFuelConsumF");
+  m_optMetFuelConsumF[i][1].name = _T("GrhFuelConsumF");
  }
 
  //заполн€ем базу данных допустимых скоростей дл€ COM-порта
@@ -655,6 +658,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optSynLoadAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optInjTimBAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optInjTimEAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optFuelConsumFAverage, _T("4"), 0, 16);
 
  fs.ReadInt(m_optTachometerMax, _T("8000"), 0, 15000);
  fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
@@ -878,8 +882,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColEpas_i,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][26*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][27*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -912,6 +916,7 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetSynLoad[i][g],metDef[i][d++], 0, 32, true);
    mm.ReadInt(m_optMetInjTimB[i][g],metDef[i][d++], 0, 32, true);
    mm.ReadInt(m_optMetInjTimE[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetFuelConsumF[i][g],metDef[i][d++], 0, 32, true);
   }
  }
 
@@ -1502,6 +1507,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T(" ол-во пикселей, на которое сдвигаютс€ графики при добавлени новой выборки"));
  fs.WriteInt(m_optGraphShtPixels); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for fuel consumption values (Hz). Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("–азмер €дра фильтра \"скольз€щее среднее\" используемого дл€ усреднени€ значений расхода топлива (√ц). ”становите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optFuelConsumFAverage); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -2629,6 +2640,11 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetInjTimE[i][g], _T("End phase of injection pulse"));
   else
    mm.WriteInt(m_optMetInjTimE[i][g], _T("‘аза конца впрыска"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetFuelConsumF[i][g], _T("Fuel consumption (Hz)"));
+  else
+   mm.WriteInt(m_optMetFuelConsumF[i][g], _T("–асход топлива (√ц)"));
   }
  }
 
@@ -4050,6 +4066,11 @@ int CAppSettingsModel::GetFuelConsumAverage(void) const
  return m_optFuelConsumAverage.value;
 }
 
+int CAppSettingsModel::GetFuelConsumFAverage(void) const
+{
+ return m_optFuelConsumFAverage.value;
+}
+
 int CAppSettingsModel::GetKnockRetardAverage(void) const
 {
  return m_optKnockRetardAverage.value;
@@ -4201,6 +4222,7 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0]);
  }
 }
 
@@ -4235,6 +4257,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0]);
  }
 }
 

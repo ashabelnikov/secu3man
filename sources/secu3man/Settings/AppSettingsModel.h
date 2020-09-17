@@ -150,6 +150,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetMAPDAverage(void) const;
   virtual int GetTmp2Average(void) const;
   virtual int GetFuelConsumAverage(void) const;
+  virtual int GetFuelConsumFAverage(void) const;
   virtual int GetKnockRetardAverage(void) const;
   virtual int GetSensAFRAverage(void) const;
   virtual int GetChokePosAverage(void) const;
@@ -325,6 +326,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optSynLoadAverage;
   OptField_t<int>  m_optInjTimBAverage;
   OptField_t<int>  m_optInjTimEAverage;
+  OptField_t<int>  m_optFuelConsumFAverage;
 
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
@@ -543,6 +545,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetSynLoad[2][2];
   OptField_t<int> m_optMetInjTimB[2][2];
   OptField_t<int> m_optMetInjTimE[2][2];
+  OptField_t<int> m_optMetFuelConsumF[2][2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;

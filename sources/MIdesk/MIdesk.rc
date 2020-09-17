@@ -200,6 +200,8 @@ BEGIN
     IDS_MI_KNOCK_TITLE       "Сигнал детонации"
     IDS_MI_INJTIMB_TITLE     "Фаза нач. впрыска"
     IDS_MI_INJTIME_TITLE     "Фаза конца впрыска"
+    IDS_MI_FUELCONSUMF_TITLE "Расход топлива (Гц)"
+    IDS_MI_FUELCONSUMF_UNIT  "Гц"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -231,6 +233,7 @@ BEGIN
     IDS_MI_TMP2GRAPH_V_UNIT   "ДТВ2,°C"
     IDS_MI_VSSGRAPH_V_UNIT    "км/ч"
     IDS_MI_TPSDOTGRAPH_V_UNIT "Скор.ДЗ,%/сек"
+    IDS_MI_FUELCONSUMFGRAPH_V_UNIT "Расход топл,Гц"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -467,6 +470,8 @@ BEGIN
     IDS_MI_KNOCK_TITLE       "Knock signal"
     IDS_MI_INJTIMB_TITLE     "Begin inj. phase"
     IDS_MI_INJTIME_TITLE     "End inj. phase"
+    IDS_MI_FUELCONSUMF_TITLE "Fuel consumption (Hz)"
+    IDS_MI_FUELCONSUMF_UNIT  "Hz"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -498,6 +503,7 @@ BEGIN
     IDS_MI_TMP2GRAPH_V_UNIT   "IAT2,°C"
     IDS_MI_VSSGRAPH_V_UNIT    "км/ч"
     IDS_MI_TPSDOTGRAPH_V_UNIT "TPSdot,%/sec"
+    IDS_MI_FUELCONSUMFGRAPH_V_UNIT "Fuel consum,Hz"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -299,7 +299,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_TMP2       =  77,     // TEMP2     (input)
    IOP3I_PWM1       =  78,     // PWM1      (output)
    IOP3I_PWM2       =  79,     // PWM2      (output)
-// IOP3I_RESERVED14 =  80,     // Reserved    ()
+   IOP3I_FL_CONS    =  80,     // FL_CONS   (output)
 // IOP3I_RESERVED15 =  81,     // Reserved    ()
 // IOP3I_RESERVED16 =  82,     // Reserved    ()
 // IOP3I_RESERVED17 =  83,     // Reserved    ()
@@ -311,7 +311,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP3I_RESERVED23 =  89,     // Reserved    ()
 // IOP3I_RESERVED24 =  90,     // Reserved    ()
 // IOP3I_RESERVED25 =  91,     // Reserved    ()
-   IOP3I_COUNT      =  80,     //DON'T forget to update this value
+   IOP3I_COUNT      =  81,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -396,7 +396,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_O2SH_O     =  78,     // O2SH_O      (output)
    IOP_PWM1       =  79,     // PWM1        (output)
    IOP_PWM2       =  80,     // PWM2        (output)
-// IOP_RESERVED30 =  81,     // Reserved    ()
+   IOP_FL_CONS    =  81,     // FL_CONS     (output)
 // IOP_RESERVED30 =  82,     // Reserved    ()
 // IOP_RESERVED30 =  83,     // Reserved    ()
 // IOP_RESERVED30 =  84,     // Reserved    ()
@@ -407,7 +407,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP_RESERVED30 =  89,     // Reserved    ()
 // IOP_RESERVED30 =  90,     // Reserved    ()
 // IOP_RESERVED30 =  91,     // Reserved    ()
-   IOP_COUNT      =  81,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  82,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
@@ -533,7 +533,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V28 = 0x28,           //V2.8  TACH_O and KSP_CS outputs were added
    IOV_V29 = 0x29,           //V2.9  ADD_I5 input has been added
    IOV_V30 = 0x30,           //V3.0  New reserved slots and plugs were added
-   IOV_V31 = 0x31            //V3.1  New plugs were added (PWM1 and PWM2)
+   IOV_V31 = 0x31            //V3.1  New plugs were added (PWM1 and PWM2 and FL_CONS)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
