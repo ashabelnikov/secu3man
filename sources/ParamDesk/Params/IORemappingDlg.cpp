@@ -370,6 +370,21 @@ void CIORemappingDlg::_SetTooltips(void)
  VERIFY(mp_ttc->AddWindow(GetDlgItem(m_enable_secu3t_features ? IDC_IO_REMAPPING_CKPS_CHECKBOX : IDC_IO_REMAPPING3I_CKPS_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING_CKPS_INV_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(m_enable_secu3t_features ? IDC_IO_REMAPPING_REF_S_CHECKBOX : IDC_IO_REMAPPING3I_REF_S_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING_REF_S_INV_TT)));
 
+ if (m_enable_secu3t_features)
+ { //SECU-3T
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING_ADD_IO1_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING_ADD_O1_INV_TT)));
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING_ADD_IO2_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING_ADD_O2_INV_TT)));
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING_BL_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING_BL_INV_TT)));
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING_DE_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING_DE_INV_TT)));
+ }
+ else
+ {
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING3I_IGN_O5_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING3I_IGN_O5_INV_TT)));
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING3I_INJ_O5_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING3I_INJ_O5_INV_TT)));
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING3I_BL_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING3I_BL_INV_TT)));
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IO_REMAPPING3I_DE_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING3I_DE_INV_TT)));
+ }
+
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 }
