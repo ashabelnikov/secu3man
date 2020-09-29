@@ -214,6 +214,8 @@ typedef struct
  //Sizes of cells in CLT grid (so, we don't need to calculate them at the runtime)
  _int clt_grid_sizes[CLT_GRID_SIZE-1];
 
+ _uint knock_zone[KNKZONE_TPS_SIZE];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -241,13 +243,12 @@ typedef struct
  _uchar vent_minband;
  _uchar an_tps_mul;
  _uchar igntim_wrkmap;
-
- _uint knock_zone[KNKZONE_TPS_SIZE];
+ _int   shift_igntim;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4068];
+ _uchar reserved[4066];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2292,6 +2293,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.vent_minband = exd.vent_minband;
  o_data.an_tps_mul = exd.an_tps_mul;
  o_data.igntim_wrkmap = exd.igntim_wrkmap;
+ o_data.shift_igntim = ((float)exd.shift_igntim) / ANGLE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2324,4 +2326,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.vent_minband = i_data.vent_minband;
  exd.an_tps_mul = i_data.an_tps_mul;
  exd.igntim_wrkmap = i_data.igntim_wrkmap;
+ exd.shift_igntim = MathHelpers::Round(i_data.shift_igntim * ANGLE_MULTIPLIER);
 }
