@@ -37,6 +37,10 @@
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/DevDiagnostTabDlg.h"
 
+static const int test_chan = 0;
+static const float test_frq = 10.0f;
+static const float test_duty = 50.0f;
+
 using namespace fastdelegate;
 
 #define EHKEY _T("DevDiagCntr")
@@ -209,6 +213,8 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
  mp_view->setOnStopOutAutoTesting(MakeDelegate(this,&CDevDiagnostTabController::OnStopOutputsAutoTesting));
  mp_view->setOnEnableBLDETesting(MakeDelegate(this,&CDevDiagnostTabController::OnEnableBLDETesting));
  mp_view->setOnEnableTACHOTesting(MakeDelegate(this,&CDevDiagnostTabController::OnEnableTACHOTesting));
+ mp_view->setOnTestChanChange(MakeDelegate(this, &CDevDiagnostTabController::OnTestChanChange));
+ mp_view->setOnTestParsChange(MakeDelegate(this, &CDevDiagnostTabController::OnTestParsChange));
 
  m_tst_timer.SetMsgHandler(this, &CDevDiagnostTabController::OnTstTimer);
 
@@ -237,9 +243,16 @@ void CDevDiagnostTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CDevDiagnostTabController::OnActivate(void)
 {
+ memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat)); //Outputs = 0, 3-state outputs = HiZ
+ m_outputs.diag_chan = test_chan;
+ m_outputs.diag_frq = test_frq;
+ m_outputs.diag_duty = test_duty;
+ mp_view->FillTestChanCombo(false);
+ mp_view->SetTestParameters(m_outputs.diag_chan, m_outputs.diag_frq, m_outputs.diag_duty);
+ mp_view->EnableOutputItem(-1, true); //all items are enabled
+
  mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->ResetOscilloscopes();
- memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat)); //Outputs = 0, 3-state outputs = HiZ
  m_comm_state = 0;
  m_diagnost_mode_active = false;
  mp_view->EnableEnterButton(false);
@@ -326,7 +339,10 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     mp_view->SetEnterButton(true);   //checked
     mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE));
     mp_view->EnableEnterButton(true);//enabled
-    mp_view->EnableSECU3TFeatures(((const SECU3IO::DiagInpDat*)ip_packet)->f_secu3t);
+    bool f_secu3t = ((const SECU3IO::DiagInpDat*)ip_packet)->f_secu3t;
+    mp_view->EnableSECU3TFeatures(f_secu3t);
+    mp_view->FillTestChanCombo(f_secu3t);
+    mp_view->SetTestParameters(m_outputs.diag_chan, m_outputs.diag_frq, m_outputs.diag_duty);
     //Set correct states of outputs
     UpdateOutputs();
     break;
@@ -355,8 +371,11 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
 
     bool enableEnterBtn = CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_DIAGNOSTICS);
     mp_view->EnableEnterButton(enableEnterBtn);
-    mp_view->EnableSECU3TFeatures(CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_SECU3T));
+    bool f_secu3t = CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_SECU3T);
+    mp_view->EnableSECU3TFeatures(f_secu3t);
+    mp_view->FillTestChanCombo(f_secu3t);
     mp_view->EnableExtraIO(!CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_TPIC8101));
+    mp_view->SetTestParameters(m_outputs.diag_chan, m_outputs.diag_frq, m_outputs.diag_duty);
     m_comm_state = 2;
     if (enableEnterBtn && mp_settings->GetAutoDiagEnter())
     { //automatic entering into a diagnostic mode
@@ -565,4 +584,23 @@ void CDevDiagnostTabController::_FillOutputsMap(void)
  m_outputs_map.clear();
  for(int i = 0; i < outNum; ++i)
   m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT1 + i, &m_outputs.out[i]));
+}
+
+void CDevDiagnostTabController::OnTestChanChange(int chan)
+{
+ m_outputs.diag_chan = chan;
+
+ if (chan > 0)
+  mp_view->EnableOutputItem(chan - 1, false);
+ else
+  mp_view->EnableOutputItem(-1, true);
+
+ UpdateOutputs();
+}
+
+void CDevDiagnostTabController::OnTestParsChange(void)
+{
+ m_outputs.diag_frq = mp_view->GetTestFrequency();
+ m_outputs.diag_duty = mp_view->GetTestDuty();
+ UpdateOutputs();
 }

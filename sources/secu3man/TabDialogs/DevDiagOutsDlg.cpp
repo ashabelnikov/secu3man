@@ -61,6 +61,7 @@ CDevDiagOutsDlg::CDevDiagOutsDlg(CWnd* pParent /*=NULL*/)
 , m_enable_blde_testing(false)
 , m_enable_tacho_testing(false)
 , mp_scr(new CWndScroller)
+, m_disabledItem(-1) //no disabled items
 {
  //empty
 }
@@ -107,22 +108,30 @@ BOOL CDevDiagOutsDlg::OnInitDialog()
 //secu-3t version
 void CDevDiagOutsDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
 {
+ bool state;
+
  switch(pCmdUI->m_nID)
  {
   case IDC_DEV_DIAG_BLO_CHECK: //secu-3i
   case IDC_DEV_DIAG_DEO_CHECK: //secu-3i
   case IDC_DEV_DIAG_BL_CHECK:
   case IDC_DEV_DIAG_DE_CHECK:
-   pCmdUI->Enable(m_enable_diag_controls && m_enable_blde_testing);  
+   state = m_enable_diag_controls && m_enable_blde_testing;
    break;
 
   case IDC_DEV_DIAG_TACH_O_CHECK: //secu-3i
-   pCmdUI->Enable(m_enable_diag_controls && m_enable_tacho_testing);  
+   state = m_enable_diag_controls && m_enable_tacho_testing;
    break;
 
   default:
-   pCmdUI->Enable(m_enable_diag_controls);
+   state = m_enable_diag_controls;
  };
+
+ int itemId = ((m_enable_secu3t_features ? OutputsCheckStart : OutputsCheckStart1) + m_disabledItem);
+ if (m_disabledItem != -1 && itemId == pCmdUI->m_nID)
+  pCmdUI->Enable(false);
+ else
+  pCmdUI->Enable(state);
 }
 
 void CDevDiagOutsDlg::OnTimer(UINT nIDEvent)
@@ -209,4 +218,13 @@ void CDevDiagOutsDlg::OnSize( UINT nType, int cx, int cy )
 {
  Super::OnSize(nType, cx, cy);
  _UpdateScrlViewSize();
+}
+
+void CDevDiagOutsDlg::EnableOutputItem(int id, bool state)
+{
+ if (state)
+  m_disabledItem = -1; //all items are enabled
+ else
+  m_disabledItem = id; //some item is disabled
+ UpdateDialogControls(this, TRUE);
 }

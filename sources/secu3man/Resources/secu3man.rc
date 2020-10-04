@@ -374,6 +374,13 @@ BEGIN
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,191,88,22
     LTEXT           "ВНИМАНИЕ! Отключите катушки зажиг. и форсунки перед входом в диагност. режим. Перед тестиров. вых. BL и DE убедитесь, что перемычки сняты!",IDC_DEV_DIAG_WARNING_TEXT,201,190,280,16
     LTEXT           "ВНИМАНИЕ! Значения входов показываются на выводах МК, а не на внешнем разъеме (могут быть отличия). Переназначение I/O не учитывается.",IDC_DEV_DIAG_WARNING_TEXT1,201,206,280,16
+    COMBOBOX        IDC_DEVDIAG_TESTCH_COMBO,291,180,48,50, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_DEVDIAG_TESTCH_FRQ_EDIT,435,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DEVDIAG_TESTCH_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,467,170,11,16
+    RTEXT           "Частота тест. сигнала (Гц)",IDC_DEVDIAG_TESTCH_FRQ_CAPTION,340,172,92,10
+    EDITTEXT        IDC_DEVDIAG_TESTCH_DUTY_EDIT,435,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DEVDIAG_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,467,190,11,16
+    RTEXT           "Скважн. тест. сигнала (%)",IDC_DEVDIAG_TESTCH_DUTY_CAPTION,340,192,92,10
 END
 
 IDD_KC_KNOCK_FRQ_CALC DIALOGEX 0, 0, 70, 25
@@ -843,6 +850,9 @@ BEGIN
     IDS_WHAT_STORED_EEPROM "В EEPROM хранятся: параметры, 5-й набор таблиц, коды ошибок СЕ.\n\nПараметры и 5-й набор таблиц доступны для редактирования\nв режиме онлайн на вкладке 'Параметры и монитор'.\nКоды ошибок CE доступны для редактирования на вкладке\n'Check Engine'.\n\nНа вкладке 'EEPROM' производится редактирование в офлайн\nрежиме (аналогично редактированию прошивки на вкладке\n'Данные прошивки')."
     IDS_WHEN_TO_USE_EEPROM "Использовать данные из EEPROM рекомендуется только во время настройки.\nПосле завершения настройки рекомендуется использовать данные из\nпрошивки. Для этого необходимо импортировать параметры и таблицы\nв прошивку из файла EEPROM\n(Данные прошивки-->Действия над прошивкой-->Импорт данных),\nна вкладке резервных параметров 'Безопасность' установить галочку\n'Всегда загружать параметры из flash'.\n\nПри возможности используйте управление питанием блока, так как оно\nповышает надежность хранения данных в EEPROM."
     IDS_FW_NOANSWER_LINK   "Для восстановления работы прошивки необходимо выполнить следующую\nпоследовательность действий. Установите галочку\n'Boot loader запущен аварийно', установите перемычку 'Boot loader'\n(для SECU-3i читайте ниже), включите питание блока, откройте нужную вам\nпрошивку при помощи мастера прошивок (или выберите необходимый вам\nфайл вручную), запишите ее в блок SECU-3. После завершения\nманипуляций не забудьте убрать перемычку и галочку и перезапустить\nблок. Для запуска загрузчика в блоке SECU-3i нужно замкнуть вход\nBL_I на массу. В блоках SECU-3T/Micro/Lite перемычки находятся на\nплате (нужно вскрывать блок).\n\nЕсли запись прошивки не помогла, то попробуйте сбросить EEPROM.\nВсегда используйте прошивку и программу-менеджер из одного релиза!\nХраните резервные копии своих прошивки, EEPROM и настроек!"
+    IDS_DEVDIAG_TESTCH_COMBO_TT "На выбранном выходе блока SECU-3 будут сгенерированы импульсы заданной частоты и скважности (см. параметры 'Частота тест. сигнала' и 'Скважн. тест. сигнала'). Обратите внимание, что в SECU-3i не все выходы способны корректно работать на высокой частоте."
+    IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT "Частота тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
+    IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT "Скважность тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1213,6 +1223,13 @@ BEGIN
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,191,88,22
     LTEXT           "WARNING! Disconnect ign. coils and injectors before entering diagnostic mode. Before testing of BL, DE outputs make sure corresp. jumpers are opened!",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,16
     LTEXT           "WARNING! Displayed inputs' values are on the MCU pins, not on the ext. connector (there are may be differences). I/O remapping doesn't matter.",IDC_DEV_DIAG_WARNING_TEXT1,201,206,268,16
+    COMBOBOX        IDC_DEVDIAG_TESTCH_COMBO,291,180,48,50, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_DEVDIAG_TESTCH_FRQ_EDIT,435,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DEVDIAG_TESTCH_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,467,170,11,16
+    RTEXT           "Test signal frequency (Hz)",IDC_DEVDIAG_TESTCH_FRQ_CAPTION,340,172,92,10
+    EDITTEXT        IDC_DEVDIAG_TESTCH_DUTY_EDIT,435,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DEVDIAG_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,467,190,11,16
+    RTEXT           "Test signal duty (%)",IDC_DEVDIAG_TESTCH_DUTY_CAPTION,340,192,92,10
 END
 
 IDD_KC_KNOCK_FRQ_CALC DIALOGEX 0, 0, 70, 25
@@ -1681,6 +1698,9 @@ BEGIN
     IDS_WHAT_STORED_EEPROM "EEPROM stores: parameters, 5th set of tables, CE error codes.\n\nParameters and 5th set of tables are available for editing\nonline on 'Parameters and monitor' tab.\nCE error codes are available for editing on 'Check Engine' tab.\n\nOn the 'EEPROM' tab, offline editing is performed\n(similar to editing the firmware on the 'Firmware data' tab)."
     IDS_WHEN_TO_USE_EEPROM "It is recommended to use data from EEPROM only during setup/tuning.\nAfter setup is complete, it is recommended to use data from firmware.\nTo do this, you need to import parameters and tables\nto the firmware from the EEPROM file\n(Firmware data->Actions on the firmware->Import data),\non the 'Security' tab of the reserve parameters set the checkbox\n'Always load parameters from flash'.\n\nUse power management for unit's supply when possible, as it\nimproves the reliability of data storage in the EEPROM."
     IDS_FW_NOANSWER_LINK   "To restore the firmware, you must perform following\nsequence of actions. Check the box\n'Boot loader started emergency', set the jumper 'Boot loader'\n(for SECU-3i, read below), turn on the power to the unit, open the firmware\nyou need using the firmware master (or select the file you need manually),\nwrite it to the SECU-3 unit. After completing manipulations, do not forget\nto remove the jumper and checkbox and restart the unit. To start the boot\nloader of the SECU-3i unit, close BL_I input to ground. In SECU-3T/Micro/Lite\nunits, jumpers are located on the board (you need to open the unit).\n\nIf writing the firmware did not help, then try resetting the EEPROM.\nAlways use the firmware and the manager program from the same release!\nSave backups of your firmware, EEPROM and settings!"
+    IDS_DEVDIAG_TESTCH_COMBO_TT "At the selected SECU-3 output will be generated pulses with specified frequency and duty (see 'Test signal frequency' and 'Test signal duty' parameters)"
+    IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT "Frequency of the test signal used for testing of SECU-3 outputs (see dropdown list located to the left)"
+    IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT "Duty of the test signal used for testing of SECU-3 outputs  (see dropdown list located to the left)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

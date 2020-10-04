@@ -69,6 +69,8 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   void OnStopOutputsAutoTesting(void);
   void OnEnableBLDETesting(bool enable);
   void OnEnableTACHOTesting(bool enable);
+  void OnTestChanChange(int);
+  void OnTestParsChange(void);
 
   void OnTstTimer(void);
   void UpdateOutputs(void);

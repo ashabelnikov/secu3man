@@ -29,6 +29,8 @@
 #include "common/FastDelegate.h"
 #include "io-core/SECU3IO.h"
 #include "ui-core/TabDialog.h"
+#include "ui-core/EditEx.h"
+#include "ui-core/SpinButtonCtrlEx.h"
 
 class CDiagnostContextMenuManager;
 class COscillCtrl;
@@ -42,6 +44,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate1<bool> EventFlag;
   typedef fastdelegate::FastDelegate2<int, bool> EventOutputToggle;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
   CDevDiagnostTabDlg(CWnd* pParent = NULL);
@@ -55,6 +58,8 @@ class CDevDiagnostTabDlg : public CTabDialog
   void setOnStopOutAutoTesting(EventHandler OnFunction);
   void setOnEnableBLDETesting(EventFlag OnFunction);
   void setOnEnableTACHOTesting(EventFlag OnFunction);
+  void setOnTestChanChange(EventWithCode OnFunction);
+  void setOnTestParsChange(EventHandler OnFunction);
 
   //Set values of inputs (digital and analog)
   void SetInputValues(const SECU3IO::DiagInpDat* i_values);
@@ -76,6 +81,12 @@ class CDevDiagnostTabDlg : public CTabDialog
 
   void ResetOscilloscopes(void);
   void SetGraphShtPixels(int n);
+
+  void FillTestChanCombo(bool secu3t);
+  void SetTestParameters(int chan, float frq, float duty);
+  float GetTestFrequency(void);
+  float GetTestDuty(void);
+  void EnableOutputItem(int id, bool state);
 
   //IDs for outputs (SECU-3T and SECU-3i)
   enum 
@@ -154,6 +165,8 @@ class CDevDiagnostTabDlg : public CTabDialog
   afx_msg void OnStopOutputsAutoTesting();
   afx_msg void OnEnableBLDETesting();
   afx_msg void OnEnableTACHOTesting();
+  afx_msg void OnChangeData();
+  afx_msg void OnSelendokTestCh();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -173,12 +186,19 @@ class CDevDiagnostTabDlg : public CTabDialog
   CStatic m_inputs_group;
   CStatic m_warning_text;
   CStatic m_warning_text1;
+  CComboBox m_testch_combo;
+  CEditEx m_testch_frq_edit;
+  CSpinButtonCtrlEx m_testch_frq_spin;
+  CEditEx m_testch_duty_edit;
+  CSpinButtonCtrlEx m_testch_duty_spin;
   EventOutputToggle m_on_output_check;
   EventHandler m_on_enter_button;
   EventHandler m_on_start_outauto_tst;
   EventHandler m_on_stop_outauto_tst;
   EventFlag m_on_enable_blde_tst;
   EventFlag m_on_enable_tacho_tst;
+  EventWithCode m_OnTestChanChange;
+  EventHandler m_OnTestParsChange;
 
   bool m_enable_diag_controls;
   bool m_enable_enter_button;
@@ -188,4 +208,8 @@ class CDevDiagnostTabDlg : public CTabDialog
   bool m_stop_autotst_enabled;
   
   bool m_initialized;
+
+  int m_test_chan;
+  float m_test_frq;
+  float m_test_duty;
 };

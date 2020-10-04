@@ -3622,6 +3622,15 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
  }
  
  mp_pdp->Bin32ToHex(bits, m_outgoing_packet);
+
+ int pwmfrq = MathHelpers::Round((1.0/packet_data->diag_frq) * 524288.0);
+ mp_pdp->Bin16ToHex(pwmfrq, m_outgoing_packet);
+
+ BYTE duty = MathHelpers::Round((packet_data->diag_duty / 100.0) * 255);
+ mp_pdp->Bin8ToHex(duty, m_outgoing_packet);
+
+ BYTE chan = packet_data->diag_chan;
+ mp_pdp->Bin8ToHex(chan, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

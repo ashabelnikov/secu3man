@@ -416,6 +416,10 @@ namespace SECU3IO
   // IGN_OUT1, IGN_OUT2, IGN_OUT3, IGN_OUT4, IE, FE, ECF, CE, ST_BLOCK, ADD_O1, ADD_O2, BL, DE
   //SECU-3i (21 values):
   // IGN_O1, IGN_O2, IGN_O3, IGN_O4, IGN_O5, ECF, INJ_O1, INJ_O2, INJ_O3, INJ_O4, INJ_O5, BL, DE, STBL_O, CEL_O, FPMP_O, PWRR_O, EVAP_O, O2SH_O, COND_O, ADD_O2, TACH_O
+
+  float diag_frq;                       //test signal frequency (10...5000 Hz)
+  float diag_duty;                      //test signal duty (0...100%)
+  int   diag_chan;                      // =0 - no selection
  };
 
  struct ChokePar

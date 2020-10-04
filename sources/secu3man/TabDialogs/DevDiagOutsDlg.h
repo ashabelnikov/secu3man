@@ -45,7 +45,7 @@ class CDevDiagOutsDlg : public CDialog
   //установка обработчиков событий от элементов управления
   void setOnOutputToggle(EventOutputToggle OnFunction);
 
-  //Set values of inputs (digital and analog)
+  //Set values of output
   void SetOutputValue(int id, bool state);
 
   void EnableDiagControls(bool i_enable);
@@ -59,6 +59,8 @@ class CDevDiagOutsDlg : public CDialog
 
   //note: use wnd_insert_after parameter to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
+
+  void EnableOutputItem(int id, bool state);
 
  protected:
   virtual BOOL OnInitDialog();
@@ -80,4 +82,5 @@ class CDevDiagOutsDlg : public CDialog
   bool m_enable_tacho_testing;
   std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  int m_disabledItem;
 };

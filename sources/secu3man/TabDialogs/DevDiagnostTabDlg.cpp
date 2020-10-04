@@ -51,6 +51,10 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_WM_INITMENUPOPUP()
  ON_WM_SIZE()
 
+ ON_EN_CHANGE(IDC_DEVDIAG_TESTCH_FRQ_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_DEVDIAG_TESTCH_DUTY_EDIT, OnChangeData)
+ ON_CBN_SELENDOK(IDC_DEVDIAG_TESTCH_COMBO, OnSelendokTestCh)
+
  ON_COMMAND(IDM_DEV_DIAG_START_OUTAUTO_TST, OnStartOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnStopOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_ENABLE_BLDE_TST, OnEnableBLDETesting)
@@ -69,6 +73,16 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_KS_1_CAPTION, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_KS_2_CAPTION, OnUpdateDiagControls) 
+
+ ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_FRQ_EDIT, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_FRQ_SPIN, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_FRQ_CAPTION, OnUpdateDiagControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_DUTY_EDIT, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_DUTY_SPIN, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_DUTY_CAPTION, OnUpdateDiagControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_COMBO, OnUpdateDiagControls)
 END_MESSAGE_MAP()
 
 CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
@@ -85,6 +99,11 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 , m_start_autotst_enabled(false)
 , m_stop_autotst_enabled(false)
 , m_initialized(false)
+, m_testch_frq_edit(CEditEx::MODE_FLOAT, true)
+, m_testch_duty_edit(CEditEx::MODE_FLOAT, true)
+, m_test_chan(0)
+, m_test_frq(10.0f)
+, m_test_duty(50.0)
 {
  mp_ContextMenuManager->CreateContent();
 
@@ -104,6 +123,16 @@ void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_DEV_DIAG_WARNING_TEXT, m_warning_text);
  DDX_Control(pDX, IDC_DEV_DIAG_WARNING_TEXT1, m_warning_text1);
  DDX_Control(pDX, IDC_DEV_DIAG_INPUTS_GROUP, m_inputs_group);
+
+ DDX_Control(pDX, IDC_DEVDIAG_TESTCH_FRQ_EDIT, m_testch_frq_edit);
+ DDX_Control(pDX, IDC_DEVDIAG_TESTCH_FRQ_SPIN, m_testch_frq_spin);
+ DDX_Control(pDX, IDC_DEVDIAG_TESTCH_DUTY_EDIT, m_testch_duty_edit);
+ DDX_Control(pDX, IDC_DEVDIAG_TESTCH_DUTY_SPIN, m_testch_duty_spin);
+ DDX_Control(pDX, IDC_DEVDIAG_TESTCH_COMBO, m_testch_combo);
+
+ DDX_CBIndex(pDX, IDC_DEVDIAG_TESTCH_COMBO, m_test_chan);
+ m_testch_frq_edit.DDX_Value(pDX, IDC_DEVDIAG_TESTCH_FRQ_EDIT, m_test_frq);
+ m_testch_duty_edit.DDX_Value(pDX, IDC_DEVDIAG_TESTCH_DUTY_EDIT, m_test_duty);
 }
 
 LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
@@ -114,6 +143,18 @@ LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
 BOOL CDevDiagnostTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ m_testch_frq_spin.SetBuddy(&m_testch_frq_edit);
+ m_testch_frq_edit.SetLimitText(6);
+ m_testch_frq_edit.SetDecimalPlaces(1);
+ m_testch_frq_spin.SetRangeAndDelta(10.0f, 5000.0f, 0.1f);
+ m_testch_frq_edit.SetRange(10.0f, 5000.0f);
+
+ m_testch_duty_spin.SetBuddy(&m_testch_duty_edit);
+ m_testch_duty_edit.SetLimitText(6);
+ m_testch_duty_edit.SetDecimalPlaces(1);
+ m_testch_duty_spin.SetRangeAndDelta(0.0f, 100.0f, 0.5f);
+ m_testch_duty_edit.SetRange(0.0f, 100.0f);
 
  //create outputs child dialog
  CRect rect;
@@ -151,6 +192,11 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(mp_OScopeCtrl2.get(), MLL::GetString(IDS_DEV_DIAG_OSCILLOSCOPE_KS2_TT)));  
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_KS_1_CAPTION), MLL::GetString(IDS_DEV_DIAG_OSCILLOSCOPE_KS1_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_KS_2_CAPTION), MLL::GetString(IDS_DEV_DIAG_OSCILLOSCOPE_KS2_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_combo, MLL::GetString(IDS_DEVDIAG_TESTCH_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_frq_edit, MLL::GetString(IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_frq_spin, MLL::GetString(IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_duty_edit, MLL::GetString(IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_duty_spin, MLL::GetString(IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -420,6 +466,7 @@ void CDevDiagnostTabDlg::OnSize( UINT nType, int cx, int cy )
   m_warning_text.MoveWindow(rc1.left, cy - (rc1.Height()*2) - da.ScaleY(2), rc1.Width(), rc1.Height());
   m_warning_text1.MoveWindow(rc1.left, cy - rc1.Height() - da.ScaleY(2), rc1.Width(), rc1.Height());
   m_warning_text1.Invalidate();
+  m_warning_text.Invalidate();
 
   GetClientRect(&rc2);
   
@@ -465,4 +512,100 @@ void CDevDiagnostTabDlg::SetGraphShtPixels(int n)
 {
  mp_OScopeCtrl1->SetShtPixels(n);
  mp_OScopeCtrl2->SetShtPixels(n);
+}
+
+void CDevDiagnostTabDlg::FillTestChanCombo(bool secu3t)
+{
+ m_testch_combo.ResetContent();
+ m_testch_combo.AddString(_T("NONE"));
+ if (secu3t)
+ {//note: order must correspond to enum declared in .h file
+  m_testch_combo.AddString(_T("IGN_OUT1"));
+  m_testch_combo.AddString(_T("IGN_OUT2"));
+  m_testch_combo.AddString(_T("IGN_OUT3"));
+  m_testch_combo.AddString(_T("IGN_OUT4"));
+  m_testch_combo.AddString(_T("IE"));
+  m_testch_combo.AddString(_T("FE"));
+  m_testch_combo.AddString(_T("ECF"));
+  m_testch_combo.AddString(_T("CE"));
+  m_testch_combo.AddString(_T("ST_BLOCK"));
+  m_testch_combo.AddString(_T("ADD_IO1"));
+  m_testch_combo.AddString(_T("ADD_IO2"));
+  m_testch_combo.AddString(_T("BL"));
+  m_testch_combo.AddString(_T("DE"));
+ }
+ else
+ {//note: order must correspond to enum declared in .h file
+  m_testch_combo.AddString(_T("IGN_O1"));
+  m_testch_combo.AddString(_T("IGN_O2"));
+  m_testch_combo.AddString(_T("IGN_O3"));
+  m_testch_combo.AddString(_T("IGN_O4"));
+  m_testch_combo.AddString(_T("IGN_O5"));
+  m_testch_combo.AddString(_T("ECF"));
+  m_testch_combo.AddString(_T("INJ_O1"));
+  m_testch_combo.AddString(_T("INJ_O2"));
+  m_testch_combo.AddString(_T("INJ_O3"));
+  m_testch_combo.AddString(_T("INJ_O4"));  
+  m_testch_combo.AddString(_T("INJ_O5"));
+  m_testch_combo.AddString(_T("BL"));
+  m_testch_combo.AddString(_T("DE"));
+  m_testch_combo.AddString(_T("STBL_O"));
+  m_testch_combo.AddString(_T("CEL_O"));
+  m_testch_combo.AddString(_T("FPMP_O"));
+  m_testch_combo.AddString(_T("PWRR_O"));
+  m_testch_combo.AddString(_T("EVAP_O"));
+  m_testch_combo.AddString(_T("O2SH_O"));
+  m_testch_combo.AddString(_T("COND_O"));
+  m_testch_combo.AddString(_T("ADD_O2"));
+  m_testch_combo.AddString(_T("TACH_O"));
+ }
+}
+
+void CDevDiagnostTabDlg::setOnTestChanChange(EventWithCode OnFunction)
+{
+ m_OnTestChanChange = OnFunction;
+}
+
+void CDevDiagnostTabDlg::setOnTestParsChange(EventHandler OnFunction)
+{
+ m_OnTestParsChange = OnFunction;
+}
+
+void CDevDiagnostTabDlg::SetTestParameters(int chan, float frq, float duty)
+{
+ m_test_chan = chan;
+ m_test_frq = frq;
+ m_test_duty = duty;
+ UpdateData(FALSE);
+}
+
+float CDevDiagnostTabDlg::GetTestFrequency(void)
+{
+ UpdateData(TRUE);
+ return m_test_frq;
+}
+
+float CDevDiagnostTabDlg::GetTestDuty(void)
+{
+ UpdateData(TRUE);
+ return m_test_duty;
+}
+
+void CDevDiagnostTabDlg::OnChangeData()
+{
+ UpdateData();
+ if (m_OnTestParsChange)
+  m_OnTestParsChange();
+}
+
+void CDevDiagnostTabDlg::OnSelendokTestCh()
+{
+ UpdateData();
+ if (m_OnTestChanChange)
+  m_OnTestChanChange(m_test_chan);
+}
+
+void CDevDiagnostTabDlg::EnableOutputItem(int id, bool state)
+{
+ mp_outsDlg->EnableOutputItem(id, state);
 }
