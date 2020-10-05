@@ -1816,6 +1816,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Ignition timing when shifting gears"), _T("°"), -15.0f, 55.0f, 0.1f, 1, &d.shift_igntim, _T("Value of ignition timing used when shifting gears (while signal is present at the AUTO_I input)"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Разрешить запуск при продувке двигателя"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."));
+ else
+  dfd.AppendItem(_T("Allow engine start in flood clear mode"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);

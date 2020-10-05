@@ -49,6 +49,7 @@ BEGIN
     CONTROL         "Инверсия выходов ШИМ",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
     CONTROL         "Коррекции длительн. впрыска",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     LTEXT           "Fuse биты?",IDC_FWM_FUSE_LINK,23,110,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS    
+    LTEXT           "Какие галочки ставить?",IDC_FWM_CHECKS_LINK,90,110,88,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS    
     PUSHBUTTON      "Сохранить",IDC_FWM_SAVE_BTN,20,130,50,16
     DEFPUSHBUTTON   "Загрузить",IDOK,80,130,50,16
     PUSHBUTTON      "Отмена",IDCANCEL,140,130,50,16
@@ -192,7 +193,7 @@ BEGIN
     IDS_FWM_SAVE_BTN_TT      "Сохранить на диск"
     IDS_FWM_LOAD_BTN_TT      "Прошить процессор"
     IDS_FWM_SELECT_FOLDER_FOR_FW "Выберите куда сохранить прошивку"
-    IDS_FWM_PROCESSOR_COMBO_TT "Выберите марку процессора вашего драйвера форсунок"
+    IDS_FWM_PROCESSOR_COMBO_TT "Выберите марку процессора вашего драйвера форсунок. В блоках SECU-3i TBZ и SECU-LZIDx установлен процессор ATmega328PB."
 
     IDS_FWM_FUSEBITS_SECU   "Если вы собираете блок SECU самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения:\n LOCK  = 0xEF    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при\nпомощи программатора." 
     IDS_FWM_FUSEBITS_LZID   "Если вы собираете драйвер SECU-LZID самостоятельно\nили заменили процессор, то вам необходимо\nустановить fuse биты в указанные значения.\nATmega328PB:\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse биты устанавливаются только при помощи\nпрограмматора."
@@ -202,6 +203,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_INJDRV_PRESETS_LIST_TT "Список с пресетами для разных форсунок"
+    IDS_FWM_CHECKMARKS_LZID  "Если у вас блок SECU-3i TBZ или SECU-LZIDx, то вам не нужно устанавливать галочки инверсии.\nГалочка 'Коррекции длительн. впрыска' разрешает работу таблиц 'Множитель' и 'Добавка'."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -249,6 +251,7 @@ BEGIN
     CONTROL         "Inversion of PWM outputs",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
     CONTROL         "Corrections of inj. PW",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     LTEXT           "Fuse bits?",IDC_FWM_FUSE_LINK,23,110,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    LTEXT           "Which checks to set?",IDC_FWM_CHECKS_LINK,90,110,88,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS    
     PUSHBUTTON      "Save",IDC_FWM_SAVE_BTN,20,130,50,16
     DEFPUSHBUTTON   "Load",IDOK,80,130,50,16
     PUSHBUTTON      "Cancel",IDCANCEL,140,130,50,16
@@ -392,7 +395,7 @@ BEGIN
     IDS_FWM_SAVE_BTN_TT      "Save firmware on disk"
     IDS_FWM_LOAD_BTN_TT      "Load firmware to driver"
     IDS_FWM_SELECT_FOLDER_FOR_FW "Select where to store firmware"
-    IDS_FWM_PROCESSOR_COMBO_TT "Select processor name of your inj. driver"
+    IDS_FWM_PROCESSOR_COMBO_TT "Select processor name of your inj. driver. SECU-3i TBZ and SECU-LZIDx units are with ATmega328PB processor."
 
     IDS_FWM_FUSEBITS_SECU   "If you assemble SECU unit by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values:\n LOCK  = 0xEF    (1110 0000)\nLFUSE = 0xD7    (1101 0111)\nHFUSE = 0xD4    (1101 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer." 
     IDS_FWM_FUSEBITS_LZID   "If you assemble SECU-LZID driver by yourself\nor replaced a microcontroller, then you need\nto set fuse bits to following values.\nATmega328PB:\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xF4    (1111 0100)\n\nATmega328(P):\n LOCK = 0xEF    (1110 0000)\nLFUSE = 0xC0    (1100 0000)\nHFUSE = 0xC4    (1100 0100)\nEFUSE = 0xFC    (1111 1100)\n\nFuse bits can be set only using a\nprogrammer."
@@ -401,6 +404,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_INJDRV_PRESETS_LIST_TT "List with presets for various injectors"
+    IDS_FWM_CHECKMARKS_LZID  "If you have a SECU-3i TBZ or SECU-LZIDx unit, then you do not need to check the inversion checkmarks.\nCheckmark 'Corrections of inj. PW' enables the operation of 'PW mul' and 'PW add' tables."
 END
 
 /////////////////////////////////////////////////////////////////////////////

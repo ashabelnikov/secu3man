@@ -67,6 +67,7 @@ class CInjDrvFWMDlg : public CDialog
   void setOnChangeFwmCheck(EventWithCode OnChange) {m_OnChangeFwmCheck = OnChange;};
   void setOnSaveButton(EventHandler OnFunction) {m_OnSaveButton = OnFunction;};
   void setOnFuseLink(EventHandler OnFunction) {m_OnFuseLink = OnFunction;};
+  void setOnChecksLink(EventHandler OnFunction) {m_OnChecksLink = OnFunction;};
 
   void FillProcCombo(void);
   void SetProcCombo(int id);
@@ -91,6 +92,7 @@ class CInjDrvFWMDlg : public CDialog
   DECLARE_MESSAGE_MAP()
 
   void OnFuseLinkClick(void);
+  void OnChecksLinkClick(void);
 
  private:
   EventHandler m_OnOkButton;
@@ -99,12 +101,14 @@ class CInjDrvFWMDlg : public CDialog
   EventHandler m_OnActivate;
   EventWithCode m_OnChangeFwmCheck;
   EventHandler m_OnFuseLink;
+  EventHandler m_OnChecksLink;
 
   CComboBox m_proc_combo;
 
   CButton m_fwm_checks[FWM_NR_OF_FLAGS];
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CLabel> mp_FuseLink;
+  std::auto_ptr<CLabel> mp_ChecksLink;
 
   bool m_fwm_flags[FWM_NR_OF_FLAGS];
   int m_proc_idx;

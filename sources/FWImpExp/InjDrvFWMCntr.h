@@ -43,6 +43,7 @@ class AFX_EXT_CLASS InjDrvFWMCntr
   void OnViewActivate(void);
   void OnChangeFwmCheck(int id);
   void OnFuseLink(void);
+  void OnChecksLink(void);
 
   bool GetStatus(void);
 

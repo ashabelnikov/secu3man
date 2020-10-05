@@ -48,6 +48,7 @@ CInjDrvFWMDlg::CInjDrvFWMDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjDrvFWMDlg::IDD, pParent)
 , m_proc_idx(0)
 , mp_FuseLink(new CLabel)
+, mp_ChecksLink(new CLabel)
 {
  for (int i = 0; i < FWM_NR_OF_FLAGS; ++i)
   m_fwm_flags[i] = false;
@@ -72,6 +73,7 @@ void CInjDrvFWMDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_FWM_PWCORR_CHECK, m_fwm_flags[FWM_PWCORR]);
 
  DDX_Control(pDX, IDC_FWM_FUSE_LINK, *mp_FuseLink);
+ DDX_Control(pDX, IDC_FWM_CHECKS_LINK, *mp_ChecksLink);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -121,12 +123,18 @@ BOOL CInjDrvFWMDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
- //init tip link
+ //init tip links
  mp_FuseLink->SetLink(true);
  mp_FuseLink->SetTextColor(RGB(0, 0, 255));
  mp_FuseLink->SetFontUnderline(true);
  mp_FuseLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
  mp_FuseLink->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDrvFWMDlg::OnFuseLinkClick));
+
+ mp_ChecksLink->SetLink(true);
+ mp_ChecksLink->SetTextColor(RGB(0, 0, 255));
+ mp_ChecksLink->SetFontUnderline(true);
+ mp_ChecksLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_ChecksLink->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDrvFWMDlg::OnChecksLinkClick));
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -196,4 +204,10 @@ void CInjDrvFWMDlg::OnFuseLinkClick(void)
 {
  if (m_OnFuseLink)
   m_OnFuseLink();
+}
+
+void CInjDrvFWMDlg::OnChecksLinkClick(void)
+{
+ if (m_OnChecksLink)
+  m_OnChecksLink();
 }

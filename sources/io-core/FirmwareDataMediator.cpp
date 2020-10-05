@@ -244,11 +244,12 @@ typedef struct
  _uchar an_tps_mul;
  _uchar igntim_wrkmap;
  _int   shift_igntim;
+ _uchar fldclr_start;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4066];
+ _uchar reserved[4065];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2294,6 +2295,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.an_tps_mul = exd.an_tps_mul;
  o_data.igntim_wrkmap = exd.igntim_wrkmap;
  o_data.shift_igntim = ((float)exd.shift_igntim) / ANGLE_MULTIPLIER;
+ o_data.fldclr_start = exd.fldclr_start;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2327,4 +2329,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.an_tps_mul = i_data.an_tps_mul;
  exd.igntim_wrkmap = i_data.igntim_wrkmap;
  exd.shift_igntim = MathHelpers::Round(i_data.shift_igntim * ANGLE_MULTIPLIER);
+ exd.fldclr_start = i_data.fldclr_start;
 }

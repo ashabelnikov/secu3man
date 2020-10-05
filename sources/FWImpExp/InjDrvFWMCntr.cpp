@@ -59,6 +59,7 @@ InjDrvFWMCntr::InjDrvFWMCntr()
  mp_view->setOnActivate(MakeDelegate(this,&InjDrvFWMCntr::OnViewActivate));
  mp_view->setOnChangeFwmCheck(MakeDelegate(this,&InjDrvFWMCntr::OnChangeFwmCheck));
  mp_view->setOnFuseLink(MakeDelegate(this,&InjDrvFWMCntr::OnFuseLink));
+ mp_view->setOnChecksLink(MakeDelegate(this,&InjDrvFWMCntr::OnChecksLink));
 }
 
 bool InjDrvFWMCntr::GetStatus(void)
@@ -415,4 +416,9 @@ bool InjDrvFWMCntr::_StoreResult(const _TSTRING& name, BYTE* buffHex, size_t siz
 void InjDrvFWMCntr::OnFuseLink(void)
 {
  SECUMessageBox(IDS_FWM_FUSEBITS_LZID, MB_OK | MB_ICONINFORMATION);
+}
+
+void InjDrvFWMCntr::OnChecksLink(void)
+{
+ SECUMessageBox(IDS_FWM_CHECKMARKS_LZID, MB_OK | MB_ICONINFORMATION);
 }
