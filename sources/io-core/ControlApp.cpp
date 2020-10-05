@@ -427,6 +427,8 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  else
   m_SensorDat.inj_ffd = .0f;
 
+ m_SensorDat.inj_ffh = (3600.0f * m_SensorDat.inj_fff) / ((float)m_fffConst); //consumption in L/h
+
  //Intake air temperature
  int air_temp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&air_temp,true))

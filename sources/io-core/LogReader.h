@@ -77,6 +77,8 @@ class IOCORE_API LogReader
   //Returns current position
   unsigned long GetCurPos(void) const;
 
+  void SetFFFConst(int fffConst);
+
  private:
   int _CompareFileHandles(FILE* f1, FILE* f2);
 
@@ -93,4 +95,6 @@ class IOCORE_API LogReader
   char m_csv_data_template[1024];
   unsigned long m_fileOffset;
   char *mp_recBuff;
+
+  int m_fffConst;
 };

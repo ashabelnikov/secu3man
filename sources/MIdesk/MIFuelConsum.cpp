@@ -46,6 +46,8 @@ void CMIFuelConsum::Create(CWnd* pParent)
 {
  MeasInstrBase::Create(pParent, IDC_MI_FUELCONSUM); //create window
 
+ m_tlpFmt = _T("%0.2f ");
+
  m_meter.SetRange (0.0, 50.0);
  m_meter.SetLabelsDecimals(0);
  m_meter.SetValueDecimals(2);
@@ -58,6 +60,8 @@ void CMIFuelConsum::Create(CWnd* pParent)
  m_meter.AddAlertZone(0,10,RGB(100,220,100));
  m_meter.AddAlertZone(10,20,RGB(180,180,100));
  m_meter.AddAlertZone(20,50,RGB(220,100,100));
+ m_meter.SetTRPane(_T("n/a"));
+ m_meter.SetTLPane(_T("n/a"));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
 }

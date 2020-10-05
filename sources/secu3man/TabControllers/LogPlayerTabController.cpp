@@ -167,6 +167,8 @@ void CLogPlayerTabController::OnSettingsChanged(int action)
 
  ConfigureIndicators();
  mp_view->Invalidate();
+
+ mp_log_reader->SetFFFConst(mp_settings->GetFFFConst());
 }
 
 //from MainTabController
@@ -238,6 +240,8 @@ void CLogPlayerTabController::OnActivate(void)
  ConfigureIndicators();
 
  m_one_shot_timer.SetTimer(this, &CLogPlayerTabController::_OnOneShotTimer, 0);
+
+ mp_log_reader->SetFFFConst(mp_settings->GetFFFConst());
 }
 
 //from MainTabController

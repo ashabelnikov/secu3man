@@ -338,6 +338,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.ign_i = ign_i;
  o_data.cond_i = cond_i;
  o_data.epas_i = epas_i;
+ o_data.inj_ffh = (3600.0f * inj_fff) / ((float)m_fffConst);
 
  //all read without errors
  return true;
@@ -405,4 +406,10 @@ int LogReader::_CompareFileHandles(FILE* f1, FILE* f2)
  // FileIdInfo to retrieve the FILE_ID_INFO structure. The 64-bit identifier in this structure 
  // is not guaranteed to be unique on ReFS.
  return (info1.dwVolumeSerialNumber == info2.dwVolumeSerialNumber) && (info1.nFileIndexHigh == info2.nFileIndexHigh) && (info1.nFileIndexLow == info2.nFileIndexLow);
+}
+
+//-----------------------------------------------------------------------
+void LogReader::SetFFFConst(int fffConst)
+{
+ m_fffConst = fffConst;
 }

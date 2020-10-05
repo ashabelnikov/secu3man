@@ -288,6 +288,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   RingBuffItem m_ringMAPD;
   RingBuffItem m_ringTmp2;
   RingBuffItem m_ringFuelConsum;
+  RingBuffItem m_ringFuelConsumH;
   RingBuffItem m_ringKnockRetard;
   RingBuffItem m_ringSensAFR;
   RingBuffItem m_ringChokePos;
@@ -316,6 +317,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   GraphVal_t m_mapdQVal[2];
   GraphVal_t m_tmp2QVal[2];
   GraphVal_t m_fuelcQVal[2];
+  GraphVal_t m_fuelchQVal[2];
   GraphVal_t m_knkretQVal[2];
   GraphVal_t m_senafrQVal[2];
   GraphVal_t m_chposQVal[2];

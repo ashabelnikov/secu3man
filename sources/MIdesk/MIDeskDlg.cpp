@@ -188,6 +188,8 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
  m_tmp2QVal[1].reserve(r);
  m_fuelcQVal[0].reserve(r);
  m_fuelcQVal[1].reserve(r);
+ m_fuelchQVal[0].reserve(r);
+// m_fuelchQVal[1].reserve(r);
  m_knkretQVal[0].reserve(r);
  m_knkretQVal[1].reserve(r);
  m_senafrQVal[0].reserve(r);
@@ -324,6 +326,7 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
  m_ringMAPD.Append(i_values->mapd);
  m_ringTmp2.Append(i_values->tmp2);
  m_ringFuelConsum.Append(i_values->inj_ffd);
+ m_ringFuelConsumH.Append(i_values->inj_ffh);
  m_ringKnockRetard.Append(i_values->knock_retard);
  m_ringSensAFR.Append(i_values->afr);
  m_ringChokePos.Append(i_values->choke_pos);
@@ -352,6 +355,7 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
  m_ringMAPD.Calculate();
  m_ringTmp2.Calculate();
  m_ringFuelConsum.Calculate();
+ m_ringFuelConsumH.Calculate();
  m_ringKnockRetard.Calculate();
  m_ringSensAFR.Calculate();
  m_ringChokePos.Calculate();
@@ -417,6 +421,9 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
 
  m_fuelcQVal[0].push_back(std::make_pair(m_ringFuelConsum.m_result, i_revdir));
  m_fuelcQVal[1].push_back(std::make_pair(i_values->inj_ffd, i_revdir));
+
+ m_fuelchQVal[0].push_back(std::make_pair(m_ringFuelConsumH.m_result, i_revdir));
+// m_fuelchQVal[1].push_back(std::make_pair(i_values->inj_ffh, i_revdir));
 
  m_knkretQVal[0].push_back(std::make_pair(m_ringKnockRetard.m_result, i_revdir));
  m_knkretQVal[1].push_back(std::make_pair(i_values->knock_retard, i_revdir));
@@ -499,6 +506,8 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_tmp2QVal[1].clear();
  m_fuelcQVal[0].clear();
  m_fuelcQVal[1].clear();
+ m_fuelchQVal[0].clear();
+ //m_fuelchQVal[1].clear();
  m_knkretQVal[0].clear();
  m_knkretQVal[1].clear();
  m_senafrQVal[0].clear();
@@ -688,6 +697,7 @@ void CMIDeskDlg::SetTmp2AverageNum(int avnum)
 void CMIDeskDlg::SetFuelConsumAverageNum(int avnum)
 {
  m_ringFuelConsum.m_avnum = avnum;
+ m_ringFuelConsumH.m_avnum = avnum;
 }
 
 void CMIDeskDlg::SetFuelConsumFAverageNum(int avnum)
@@ -1773,7 +1783,9 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
-   widget->BindVars(&m_fuelcQVal[0], NULL, NULL);
+   widget->BindVars(&m_fuelcQVal[0], &m_fuelchQVal[0], NULL);
+   widget->ShowTLP(true);
+   widget->SetPaneUnit(MLL::GetString(IDS_MI_FUELCONSUMH_UNIT), _T(""));
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
