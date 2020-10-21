@@ -100,6 +100,8 @@ class IOCORE_API CControlApp
  
   void SetFFFConst(int fffConst);
 
+  void SetSplitAngMode(bool mode);
+
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 
   class xThread {};
@@ -151,6 +153,7 @@ class IOCORE_API CControlApp
   float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
   long m_quartz_frq;                    //MCU clock frequency
   int m_speedUnit;
+  bool m_splitAng;
 
   //helper
   void SwitchOnThread(bool state);

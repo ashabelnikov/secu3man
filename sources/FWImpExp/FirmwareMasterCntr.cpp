@@ -112,6 +112,7 @@ void FirmwareMasterCntr::OnViewActivate(void)
  mp_view->SetFwmFlag(FWM_2CHIG, false);
  mp_view->SetFwmFlag(FWM_OBD, false);
  mp_view->SetFwmFlag(FWM_CAFR, false);
+ mp_view->SetFwmFlag(FWM_SPLIT, false);
 
  mp_view->EnableFwmFlag(FWM_TPIC, false);
 }
@@ -181,10 +182,13 @@ void FirmwareMasterCntr::OnChangeSync(void)
  {
   mp_view->EnableFwmFlag(FWM_PHIGN, false);
   mp_view->SetFwmFlag(FWM_PHIGN, false);
+  mp_view->EnableFwmFlag(FWM_SPLIT, false); //disable splitting
+  mp_view->SetFwmFlag(FWM_SPLIT, false);
  }
  else
  {
   mp_view->EnableFwmFlag(FWM_PHIGN, true);
+  mp_view->EnableFwmFlag(FWM_SPLIT, true); //enable splitting
  }
 }
 
@@ -207,6 +211,7 @@ void FirmwareMasterCntr::_BuildOptList(std::set<_TSTRING> &opts)
  m_allopts.insert(_T("2chig"));
  m_allopts.insert(_T("obd"));
  m_allopts.insert(_T("cafr"));
+ m_allopts.insert(_T("split"));
 
  //fill list, which will contain only options selected by user:
  opts.clear();
@@ -250,6 +255,8 @@ void FirmwareMasterCntr::_BuildOptList(std::set<_TSTRING> &opts)
   opts.insert(_T("obd"));
  if (mp_view->GetFwmFlag(FWM_CAFR))
   opts.insert(_T("cafr"));
+ if (mp_view->GetFwmFlag(FWM_SPLIT))
+  opts.insert(_T("split"));
 }
 
 
@@ -305,7 +312,11 @@ bool FirmwareMasterCntr::_LoadFirmware(const std::set<_TSTRING>& opts)
  allocImp = g_Alloc;
  allocTempImp = g_Alloc;
 
- _TSTRING fnstr = _T("secu3app-") + m_procStr + _T(".7z");
+ _TSTRING fnstr;
+ if (mp_view->GetFwmFlag(FWM_SPLIT))
+  fnstr = _T("secu3app-") + m_procStr + _T("-split") + _T(".7z");
+ else
+  fnstr = _T("secu3app-") + m_procStr + _T(".7z");
 
  //get current directory
  HMODULE hModule = GetModuleHandle(NULL);

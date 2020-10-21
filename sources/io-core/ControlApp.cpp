@@ -123,6 +123,7 @@ CControlApp::CControlApp()
 , m_fffConst(16000)
 , m_portAutoReopen(true)
 , m_ignore_n_packets(0)
+, m_splitAng(false)
 {
  m_pPackets = new Packets();
  m_pPackets->reserve(256);
@@ -1669,7 +1670,9 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       return false;
      else if (m_EditTabPar.tab_id == ETMT_AFR_MAP)
       m_EditTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
-     else if (m_EditTabPar.tab_id == ETMT_PWM1_MAP || m_EditTabPar.tab_id == ETMT_PWM2_MAP)
+     else if (m_EditTabPar.tab_id == ETMT_PWM1_MAP)
+      m_EditTabPar.table_data[i] = m_splitAng ? ((float)((signed char)value)) / AA_MAPS_M_FACTOR : ((float)value * 100) / 255.0f;
+     else if (m_EditTabPar.tab_id == ETMT_PWM2_MAP)
       m_EditTabPar.table_data[i] = ((float)value * 100) / 255.0f;
      else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
@@ -3498,7 +3501,12 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     unsigned char value = MathHelpers::Round((packet_data->table_data[i]-8) * AFR_MAPS_M_FACTOR);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
-   else if (packet_data->tab_id == ETMT_PWM1_MAP || packet_data->tab_id == ETMT_PWM2_MAP)
+   else if (packet_data->tab_id == ETMT_PWM1_MAP)
+   {
+    unsigned char value = m_splitAng ? MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR) : MathHelpers::Round((packet_data->table_data[i]*255.0f) / 100.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_PWM2_MAP)
    {
     unsigned char value = MathHelpers::Round((packet_data->table_data[i]*255.0f) / 100.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
@@ -4038,6 +4046,12 @@ void CControlApp::IgnoreNPackets(int n)
  ASSERT(n > 0); //zero is not safe with current implementation
  if (n > 0)
   InterlockedExchange(&m_ignore_n_packets, n);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::SetSplitAngMode(bool mode)
+{
+ m_splitAng = mode;
 }
 
 //-----------------------------------------------------------------------

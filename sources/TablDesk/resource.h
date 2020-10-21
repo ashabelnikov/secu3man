@@ -423,4 +423,7 @@
 #define IDS_MAPS_KNOCK_ZONE_UNIT        5777
 #define IDS_KNOCK_ZONE_MAP              5778
 #define IDS_TD_VIEW_KNOCK_ZONE_MAP_TT   5779
- 
+#define IDS_SPLIT_ANGLE_MAP             5780
+#define IDS_TD_VIEW_PWM1_MAP            5781
+#define IDS_TD_VIEW_SPLIT_MAP           5782
+#define IDS_GME_INJ_SPLIT_TAB           5783

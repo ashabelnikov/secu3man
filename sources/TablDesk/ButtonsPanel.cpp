@@ -39,6 +39,9 @@
 
 #define TIMER_ID 0
 
+static const float splitAngMin = -20.0f;
+static const float splitAngMax =  20.0f;
+
 void __cdecl CButtonsPanel::OnChangeStartMap(void* i_param)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -1547,6 +1550,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , m_openedChart(NULL)
 , m_toggleMapWnd(false)
 , m_it_mode(0)
+, m_splitAng(false)
 {
  for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
  {
@@ -2625,10 +2629,10 @@ void CButtonsPanel::OnViewPwm1Map()
  if ((!m_md[TYPE_MAP_PWM1].state)&&(DLL::Chart3DCreate))
  {
   m_md[TYPE_MAP_PWM1].state = 1;
-  m_md[TYPE_MAP_PWM1].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetPwm1Map(true),GetPwm1Map(false),GetRPMGrid(),16,16,0.0,100.0,
+  m_md[TYPE_MAP_PWM1].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetPwm1Map(true),GetPwm1Map(false),GetRPMGrid(),16,16, (m_splitAng ? splitAngMin : 0.0f), (m_splitAng ? splitAngMax : 100.0f),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
-    MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str(),
-    MLL::GetString(IDS_PWM1_MAP).c_str());
+    m_splitAng ? MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str() : MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str(), //unit
+    m_splitAng ? MLL::GetString(IDS_SPLIT_ANGLE_MAP).c_str() : MLL::GetString(IDS_PWM1_MAP).c_str()); //title
   DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_PWM1].handle, OnWndActivationPwm1Map, this);
   DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_PWM1].handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart3DSetOnChange(m_md[TYPE_MAP_PWM1].handle,OnChangePwm1Map,this);
@@ -2736,6 +2740,7 @@ void CButtonsPanel::OnGridModeEditingInj()
   VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
   mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
   mp_gridModeEditorInjDlg->SetITMode(m_it_mode);
+  mp_gridModeEditorInjDlg->SetSplitAngMode(m_splitAng); //splitting
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
 
   if (mp_autoTuneCntr.get())
@@ -3843,4 +3848,27 @@ void CButtonsPanel::TransformValues(void)
  float* p_map = m_md[TYPE_MAP_INJ_IT].active;
  for (int i = 0; i < 16*16; ++i)
   p_map[i] = OnValueTransformITMap(this, OnValueTransformITMap(this, p_map[i], 0), 1);
+}
+
+void CButtonsPanel::SetSplitAngMode(bool mode)
+{
+ m_splitAng = mode; 
+
+ if (mp_gridModeEditorInjDlg.get())
+  mp_gridModeEditorInjDlg->SetSplitAngMode(m_splitAng);
+
+ if (m_splitAng)
+ {
+  DLL::Chart3DSetFncRange(m_md[TYPE_MAP_PWM1].handle, splitAngMin, splitAngMax); //split angle
+  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_PWM1].handle, 1, MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str());
+  DLL::Chart3DSetTitle(m_md[TYPE_MAP_PWM1].handle, MLL::GetString(IDS_SPLIT_ANGLE_MAP).c_str());
+  m_view_pwm1_map_btn.SetWindowText(MLL::GetString(IDS_TD_VIEW_SPLIT_MAP).c_str());
+ }
+ else
+ {
+  DLL::Chart3DSetFncRange(m_md[TYPE_MAP_PWM1].handle, 0.0f, 100.0f);  //PWM duty
+  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_PWM1].handle, 1, MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str());
+  DLL::Chart3DSetTitle(m_md[TYPE_MAP_PWM1].handle, MLL::GetString(IDS_PWM1_MAP).c_str());
+  m_view_pwm1_map_btn.SetWindowText(MLL::GetString(IDS_TD_VIEW_PWM1_MAP).c_str());
+ }
 }

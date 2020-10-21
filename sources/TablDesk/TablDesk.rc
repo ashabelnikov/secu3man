@@ -572,6 +572,7 @@ BEGIN
     IDS_GME_INJ_OTHER_TAB   "Другие"
     IDS_GME_INJ_PWM1_TAB    "Cкважность PWM1"
     IDS_GME_INJ_PWM2_TAB    "Cкважность PWM2"
+    IDS_GME_INJ_SPLIT_TAB   "Сплитинг УОЗ"
     IDS_GME_INJ_STATUS_INIFIFO "Инициализация буфера..."
     IDS_GME_INJ_STATUS_STOP "Приостановлено."
     IDS_GME_INJ_BUTTON_STOP "Стоп"
@@ -610,8 +611,9 @@ BEGIN
     IDS_TD_VIEW_BAROCORR_MAP_TT "Используется для коррекции длительности впрыска и коррекции положения дозатора газа."
     IDS_TD_VIEW_GTSC_MAP_TT  "Коррекция длительности впрыска по температуре газа (ГБО). Используется также для коррекции положения дозатора газа."
     IDS_TD_VIEW_GPSC_MAP_TT  "Коррекция длительности впрыска по давлению газа (ГБО). Используется также для коррекции положения дозатора газа."
+    IDS_TD_VIEW_PWM1_MAP   "Cкважность ШИМ1"
+    IDS_TD_VIEW_SPLIT_MAP  "Сплитинг УОЗ"
 END
-
 
 STRINGTABLE DISCARDABLE 
 BEGIN
@@ -661,7 +663,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_GME_DESCR_ABBREV  "ХХ - Карта/значение УОЗ для ХХ\nТкор - Карта/значение коррекции УОЗ по температуре двигателя\nПуск - Карта/значение УОЗ для пуска\nУОЗ - Результирующее значение угла опережения зажигания\nРабочая - Значение из карты УОЗ для рабочего режима\nОктКор - Значение октан коррекции УОЗ\nДДкор - Текущее значение коррекции УОЗ по детонации\nРХХ - Значение коррекции УОЗ от регулятора оборотов холостого хода\nВкор - Коррекция УОЗ по температуре воздуха на впуске\n\nВо время пуска в поле Ткор отображается значение коррекции\nУОЗ по температуре двигателя из таблицы для пуска\n(таблица редактируется на вкладке 'Данные прошивки')\n\nЕсли разрешена ручная октан коррекция, то в поле ОктКор\nотображается сумма значения октан коррекции из параметров\nи значения ручной коррекции"
-    IDS_TD_VIEW_PWM1_MAP_TT "Скважность ШИМ на выходе PWM1"
+    IDS_TD_VIEW_PWM1_MAP_TT "Скважность ШИМ на выходе PWM1. Если прошивка собрана с поддержкой сплитинга (SPLIT_ANGLE), то данная таблица задает угол опережения сплитинга. Положительное значение означает, что первая свеча сработает раньше чем вторая. Отрицательное значение означает, что вторая свеча сработает раньше чем первая."
     IDS_TD_VIEW_PWM2_MAP_TT "Скважность ШИМ на выходе PWM2"
     IDS_PWM1_MAP            "Скважность ШИМ на выходе PWM1"
     IDS_PWM2_MAP            "Скважность ШИМ на выходе PWM2"
@@ -669,6 +671,7 @@ BEGIN
     IDS_MAPS_KNOCK_ZONE_UNIT "Состояние флага (0,1)"
     IDS_KNOCK_ZONE_MAP       "Зоны контроля детонации"
     IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Задает зоны контроля детонации. Используйте значения 0 (нет контроля детонации) и 1 (есть контроль детонации). Зона начинается со значений оборотов и нагрузки где стоит 1 и заканчивается в следующем узле сетки (в сторону возрастания) если там стоит 0."
+    IDS_SPLIT_ANGLE_MAP     "Сплитинг УОЗ"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1257,6 +1260,7 @@ BEGIN
     IDS_GME_INJ_OTHER_TAB   "Others"
     IDS_GME_INJ_PWM1_TAB    "PWM1 duty"
     IDS_GME_INJ_PWM2_TAB    "PWM2 duty"
+    IDS_GME_INJ_SPLIT_TAB   "Split angle"
     IDS_GME_INJ_STATUS_INIFIFO "Initializing buffer..."
     IDS_GME_INJ_STATUS_STOP "Stopped"
     IDS_GME_INJ_BUTTON_STOP "Stop"
@@ -1347,7 +1351,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_GME_DESCR_ABBREV  "Idle - Map/value of ignition timing for idling\nTcorr - Map/value of ignition timing correction vs coolant temperature\nStart - Map/value of ignition timing for cranking\nAdv.ang. - Resulting value of the ignition timing\nWork - Value from the ignition timing map for working mode\nOctCorr - Value of octane correction\nKScorr - Current value of ignition timing correction fvs detonation\nIdlReg - Value of ignition timing correction from the idle speed regulator\nATcorr - Value of ignition timing correction vs intake air temperature\n\nDuring cranking the Tcorr field displays ign. timing correction\nvs coolant temperature value from the cranking map\n(the map is edited on the 'Firmware data' tab)\n\nIf manual ign. timing correction is enabled, then the OctCorr field\ndisplays the sum of the octane correction from the parameters\nand the manual correction value"   
-    IDS_TD_VIEW_PWM1_MAP_TT "PWM duty for PWM1 output"
+    IDS_TD_VIEW_PWM1_MAP_TT "PWM duty for PWM1 output. If firmware is built with support of split angle (SPLIT_ANGLE), then this map stores value of split angle. Positive split angle means the leading spark plug fires before the trailing one, while negative split angle means the trailing fires before the leading."
     IDS_TD_VIEW_PWM2_MAP_TT "PWM duty for PWM2 output"
     IDS_PWM1_MAP            "PWM duty for PWM1 output"
     IDS_PWM2_MAP            "PWM duty for PWM2 output"
@@ -1355,6 +1359,9 @@ BEGIN
     IDS_MAPS_KNOCK_ZONE_UNIT "State of flag (0,1)"
     IDS_KNOCK_ZONE_MAP       "Detonation control zones"
     IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Sets the knock control zones. Use values 0 (no knock control) and 1 (knock control available). Zone starts with RPM and load values where there is 1 and ends at the next grid node (upward) if there is 0."
+    IDS_SPLIT_ANGLE_MAP     "Splitting angle (rotary engines)"
+    IDS_TD_VIEW_PWM1_MAP   "PWM1 duty"
+    IDS_TD_VIEW_SPLIT_MAP  "Split angle"
 END
 
 /////////////////////////////////////////////////////////////////////////////

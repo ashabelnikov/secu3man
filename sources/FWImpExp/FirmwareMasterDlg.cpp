@@ -40,7 +40,7 @@ const UINT CFirmwareMasterDlg::IDD = IDD_FIRMWARE_MASTER;
 BEGIN_MESSAGE_MAP(CFirmwareMasterDlg, Super)
  ON_WM_DESTROY()
  ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
- ON_COMMAND_RANGE(IDC_FWM_DWELL_CHECK, IDC_FWM_CAFR_CHECK, OnFwmCheck)
+ ON_COMMAND_RANGE(IDC_FWM_DWELL_CHECK, IDC_FWM_SPLIT_CHECK, OnFwmCheck)
  ON_CBN_SELCHANGE(IDC_FWM_SECU3_UNIT_COMBO, OnChangeUnitCombo)
  ON_CBN_SELCHANGE(IDC_FWM_SYNCHRO_COMBO, OnChangeSyncCombo)
 END_MESSAGE_MAP()
@@ -70,6 +70,7 @@ void CFirmwareMasterDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_FWM_OBD_CHECK, m_fwm_checks[FWM_OBD]);
  DDX_Control(pDX, IDC_FWM_TPIC_CHECK, m_fwm_checks[FWM_TPIC]);
  DDX_Control(pDX, IDC_FWM_FPWM_CHECK, m_fwm_checks[FWM_FPWM]);
+ DDX_Control(pDX, IDC_FWM_SPLIT_CHECK, m_fwm_checks[FWM_SPLIT]);
 
  DDX_CBIndex_int(pDX, IDC_FWM_SECU3_UNIT_COMBO, m_unit_idx);
  DDX_CBIndex_int(pDX, IDC_FWM_SYNCHRO_COMBO, m_sync_idx);
@@ -82,6 +83,7 @@ void CFirmwareMasterDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_FWM_OBD_CHECK, m_fwm_flags[FWM_OBD]);
  DDX_Check_bool(pDX, IDC_FWM_TPIC_CHECK, m_fwm_flags[FWM_TPIC]);
  DDX_Check_bool(pDX, IDC_FWM_FPWM_CHECK, m_fwm_flags[FWM_FPWM]);
+ DDX_Check_bool(pDX, IDC_FWM_SPLIT_CHECK, m_fwm_flags[FWM_SPLIT]);
 
  DDX_Control(pDX, IDC_FWM_FUSE_LINK, *mp_FuseLink);
 
@@ -127,7 +129,7 @@ BOOL CFirmwareMasterDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_unit_combo, MLL::GetString(IDS_FWM_SECU3_UNIT_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_sync_combo, MLL::GetString(IDS_FWM_SYNCHRO_COMBO_TT)));
  int idc = IDC_FWM_DWELL_CHECK;
- for (UINT ids = IDS_FWM_DWELL_CHECK_TT; ids <= IDS_FWM_CAFR_CHECK_TT; ids++, idc++)
+ for (UINT ids = IDS_FWM_DWELL_CHECK_TT; ids <= IDS_FWM_SPLIT_CHECK_TT; ids++, idc++)
  VERIFY(mp_ttc->AddWindow(GetDlgItem(idc), MLL::GetString(ids)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

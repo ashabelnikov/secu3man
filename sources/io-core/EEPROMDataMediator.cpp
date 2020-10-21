@@ -868,10 +868,11 @@ void EEPROMDataMediator::GetPwm1Map(int i_index, float* op_values, bool i_origin
  //gets address of the sets of maps
  f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
 
+ bool splitAng = GetSplitAngMode(i_index);
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _uchar *p = &(p_maps[i_index].pwm_duty1[0][0]);
-  op_values[i] = (((float) *(p + i)) * 100.0f) / 255.0f;
+  op_values[i] = splitAng ? ((float) *(p + i)) / AA_MAPS_M_FACTOR : (((float) *(p + i)) * 100.0f) / 255.0f;
  }
 }
 
@@ -881,10 +882,11 @@ void EEPROMDataMediator::SetPwm1Map(int i_index, const float* ip_values)
  //gets address of the sets of maps
  f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
 
+ bool splitAng = GetSplitAngMode(i_index);
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _uchar *p = &(p_maps[i_index].pwm_duty1[0][0]);
-  *(p + i) = MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
+  *(p + i) = splitAng ? MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR)) : MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
  }
 }
 
@@ -912,4 +914,12 @@ void EEPROMDataMediator::SetPwm2Map(int i_index, const float* ip_values)
   _uchar *p = &(p_maps[i_index].pwm_duty2[0][0]);
   *(p + i) = MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
  }
+}
+
+bool EEPROMDataMediator::GetSplitAngMode(int i_index)
+{
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ return (p_maps[i_index].map_mode != 0);
 }

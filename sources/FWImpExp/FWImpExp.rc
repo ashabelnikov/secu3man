@@ -15,7 +15,7 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 //
 // Dialog
 //
-IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 182
+IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 202
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Мастер прошивок"
 FONT 8, "MS Sans Serif"
@@ -28,13 +28,14 @@ BEGIN
     CONTROL         "Фазированное зажигание",IDC_FWM_PHIGN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     CONTROL         "Впрыск топлива",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
     CONTROL         "Поддержка TPIC8101",IDC_FWM_TPIC_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,130,120,10
+    CONTROL         "Сплитинг УОЗ (для РПД)",IDC_FWM_SPLIT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,150,120,10
     CONTROL         "Управ. вентилятором c ШИМ",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,120,10
     CONTROL         "Двухканальный коммутатор",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
     CONTROL         "Поддержка OBD (мод. MCP2515)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,122,10
     CONTROL         "Управ. сост. смеси на карбюр.",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
     LTEXT           "Fuse биты?",IDC_FWM_FUSE_LINK,200,19,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
-    DEFPUSHBUTTON   "Загрузить",IDOK,84,159,50,16
-    PUSHBUTTON      "Отмена",IDCANCEL,157,159,50,16
+    DEFPUSHBUTTON   "Загрузить",IDOK,84,179,50,16
+    PUSHBUTTON      "Отмена",IDCANCEL,157,179,50,16
 END
 
 IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 156
@@ -178,6 +179,7 @@ BEGIN
     IDS_FWM_PHIGN_CHECK_TT  "COPT_PHASED_IGNITION. Данная опция не совместима с COPT_CKPS_2CHIGN"       
     IDS_FWM_INJ_CHECK_TT    "COPT_FUEL_INJECTION. Данная опция не совместима с COPT_CARB_AFR"
     IDS_FWM_TPIC_CHECK_TT   "COPT_TPIC8101. Только в блоках SECU-3i"
+    IDS_FWM_SPLIT_CHECK_TT  "COPT_SPLIT_ANGLE. Включить сплитинг УОЗ для двигателей Ванкеля."
     IDS_FWM_FPWM_CHECK_TT   "COPT_COOLINGFAN_PWM. Установите эту галочку, если вам нужно управлять вентилятором охлаждения или моментным РДВ/дозатором газа при помощи ШИМ. Без этой галочки финкции IAC_PWM/GD_PWM работать не будут."
     IDS_FWM_2CHIG_CHECK_TT  "COPT_CKPS_2CHIGN. Данная опция не совместима с COPT_PHASED_IGNITION"
     IDS_FWM_OBD_CHECK_TT    "COPT_OBD_SUPPORT"
@@ -217,7 +219,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 182
+IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 202
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Firmware master"
 FONT 8, "MS Sans Serif"
@@ -230,13 +232,14 @@ BEGIN
     CONTROL         "Phased ignition",IDC_FWM_PHIGN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     CONTROL         "Fuel injection",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
     CONTROL         "Support of TPIC8101",IDC_FWM_TPIC_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,130,120,10
+    CONTROL         "Split angle (rotary engines)",IDC_FWM_SPLIT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,150,120,10
     CONTROL         "PWM for cooling fan",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,120,10
     CONTROL         "Two-channel igniter",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
     CONTROL         "OBD support (MCP2515 required)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,120,10
     CONTROL         "AFR control on the carburetor",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
     LTEXT           "Fuse bits?",IDC_FWM_FUSE_LINK,200,19,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
-    DEFPUSHBUTTON   "Load",IDOK,84,159,50,16
-    PUSHBUTTON      "Cancel",IDCANCEL,157,159,50,16
+    DEFPUSHBUTTON   "Load",IDOK,84,179,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,157,179,50,16
 END
 
 IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 156
@@ -379,6 +382,7 @@ BEGIN
     IDS_FWM_PHIGN_CHECK_TT  "COPT_PHASED_IGNITION. This option is not compatible with COPT_CKPS_2CHIGN"       
     IDS_FWM_INJ_CHECK_TT    "COPT_FUEL_INJECTION. This option is not compatible with COPT_CARB_AFR"
     IDS_FWM_TPIC_CHECK_TT   "COPT_TPIC8101. Only in SECU-3i units"
+    IDS_FWM_SPLIT_CHECK_TT  "COPT_SPLIT_ANGLE. Turn on split angle for rotary (Wankel) engines"
     IDS_FWM_FPWM_CHECK_TT   "COPT_COOLINGFAN_PWM. Set this check if you need to control cooling fan or IAC/gas dispenser valve using PWM. Without this check mark IAC_PWM/GD_PWM function will not work."
     IDS_FWM_2CHIG_CHECK_TT  "COPT_CKPS_2CHIGN. This option is not compatible with COPT_PHASED_IGNITION"
     IDS_FWM_OBD_CHECK_TT    "COPT_OBD_SUPPORT"

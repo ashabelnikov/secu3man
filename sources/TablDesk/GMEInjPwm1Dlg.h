@@ -47,6 +47,8 @@ class CGMEInjPwm1Dlg : public CTabDialog
 
   void SetArguments(int rpm, int air_flow, bool strt_use, float load);
 
+  void SetSplitAngMode(bool mode);
+
  public:
 
  // Implementation
@@ -65,4 +67,6 @@ class CGMEInjPwm1Dlg : public CTabDialog
   float* mp_pwm1Map;
   float* mp_rpmGrid;
   float* mp_loadGrid;
+ 
+  bool m_splitAng;
 };

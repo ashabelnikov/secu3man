@@ -448,6 +448,8 @@ void CPMTablesController::ApplyFWOptions(DWORD opt)
  bool en_for_gd = (CHECKBIT32(opt, COPT_ATMEGA1284) || CHECKBIT32(opt, COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
  mp_view->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, COPT_SECU3T) && en_for_gd);
  mp_view->mp_ButtonsPanel->EnableChokeOp(fnc.SM_CONTROL && CHECKBIT32(opt, COPT_SM_CONTROL));
+ mp_comm->m_pControlApp->SetSplitAngMode(CHECKBIT32(opt, COPT_SPLIT_ANGLE)); 
+ mp_view->mp_ButtonsPanel->SetSplitAngMode(CHECKBIT32(opt, COPT_SPLIT_ANGLE)); 
 }
 
 //----------------------------------------------------------------

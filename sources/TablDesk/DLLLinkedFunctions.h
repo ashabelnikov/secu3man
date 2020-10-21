@@ -74,6 +74,7 @@ namespace DLL
  typedef void (__cdecl *Chart3DSetFncRange_Addr) (HWND hWnd, float fnc_min, float fnc_max);
  typedef void (__cdecl *Chart3DSetOnValueTransform_Addr) (HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
  typedef void (__cdecl *Chart3DSetAxisTitle_Addr) (HWND hWnd, int i_axis, LPCTSTR axisTitle);
+ typedef void (__cdecl *Chart3DSetTitle_Addr) (HWND hWnd, LPCTSTR axisTitle);
 
  //common
  typedef void (__cdecl *ChartxDSetLanguage_Addr) (int i_language);
@@ -114,6 +115,7 @@ namespace DLL
  extern Chart3DSetFncRange_Addr         Chart3DSetFncRange; 
  extern Chart3DSetOnValueTransform_Addr Chart3DSetOnValueTransform;
  extern Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle;
+ extern Chart3DSetTitle_Addr            Chart3DSetTitle;
 
  extern ChartxDSetLanguage_Addr         ChartxDSetLanguage;
  extern ChartxDShowHints_Addr           ChartxDShowHints;

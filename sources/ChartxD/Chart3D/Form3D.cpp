@@ -1155,7 +1155,18 @@ void TForm3D::UpdateSystemColors(void)
  Chart1->DepthAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
 }
 
+//---------------------------------------------------------------------------
 void TForm3D::SetYAxisTitle(const AnsiString& title)
 {
+ m_y_title = title;
  Chart1->LeftAxis->Title->Caption = title;
 }
+
+//---------------------------------------------------------------------------
+void TForm3D::SetChartTitle(const AnsiString& title)
+{
+ m_u_title = title;
+ Chart1->Title->Text->SetText(title.c_str());
+}
+
+//---------------------------------------------------------------------------

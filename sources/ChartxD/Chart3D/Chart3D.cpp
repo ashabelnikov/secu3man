@@ -54,6 +54,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DSetFncRange(HWND hWnd, float fnc_min, float fnc_max);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnValueTransform(HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle);
+ void  __declspec(dllexport)  __cdecl Chart3DSetTitle(HWND hWnd, LPCTSTR title);
 }
 
 extern HINSTANCE hInst;
@@ -264,6 +265,16 @@ void __cdecl Chart3DSetOnChangeSettings(HWND hWnd, EventHandler i_pOnChange, voi
  if (NULL==pForm)
   return;
  pForm->SetOnChangeSettings(i_pOnChange, i_param);
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetTitle(HWND hWnd, LPCTSTR title)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+
+ pForm->SetChartTitle(title);
 }
 
 //---------------------------------------------------------------------------

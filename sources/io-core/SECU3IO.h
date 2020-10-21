@@ -798,7 +798,7 @@ const int INPAVNUM = 10;
   _SD(1,  _T("COPT_ATMEGA1284")),
   _SD(2,  _T("COPT_ATMEGA64")),
   _SD(3,  _T("COPT_ATMEGA128")),
-  _SD(4,  _T("COPT_VPSEM")),
+  _SD(4,  _T("COPT_SPLIT_ANGLE")),
   _SD(5,  _T("COPT_TPIC8101")),
   _SD(6,  _T("COPT_CAM_SYNC")),
   _SD(7,  _T("COPT_DWELL_CONTROL")),
@@ -833,7 +833,7 @@ const int INPAVNUM = 10;
  const int COPT_ATMEGA1284 = 1;
  const int COPT_ATMEGA64 = 2;
  const int COPT_ATMEGA128 = 3;
- const int COPT_VPSEM = 4;
+ const int COPT_SPLIT_ANGLE = 4;
  const int COPT_TPIC8101 = 5;
  const int COPT_CAM_SYNC = 6;
  const int COPT_DWELL_CONTROL = 7;

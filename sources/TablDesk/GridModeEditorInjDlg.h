@@ -66,6 +66,8 @@ class CGridModeEditorInjDlg : public CDialog
   void SetITMode(int mode);
   int GetITMode(void) const;
 
+  void SetSplitAngMode(bool mode);
+
  public:
   void setOnChangeSettings(EventHandler OnCB);
   void setIsAllowed(EventResult IsFunction);
@@ -113,4 +115,6 @@ class CGridModeEditorInjDlg : public CDialog
   std::vector<float> work_map_load_slots;
 
   friend class CAutoTuneController;
+
+  int m_pwm1TabIdx;
 };

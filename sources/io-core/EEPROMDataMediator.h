@@ -132,6 +132,8 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   std::set<int> GetCEErrorsList(void);
   void ResetCEErrorsList(void);
 
+  bool GetSplitAngMode(int i_index);
+
 protected:
   virtual SECU3IO::params_t* GetParamsPtr(void);
   virtual EECUPlatform GetPlatformId(void);

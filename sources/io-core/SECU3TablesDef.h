@@ -78,9 +78,10 @@ typedef struct
  _uchar inj_ats_corr[INJ_ATS_CORR_SIZE];               // PW correction from air temperature sensor, value * 128, max. 1.99
 
  _uchar pwm_duty1[F_WRK_POINTS_L][F_WRK_POINTS_F];     //Duty for PWM1 channel
+ _uchar map_mode;
  _uchar pwm_duty2[F_WRK_POINTS_L][F_WRK_POINTS_F];     //Duty for PWM2 channel
 
- _uchar reserved[512];                                 // reserved bytes - for compatibility
+ _uchar reserved[511];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 static int w12GetCell(BYTE* data, int cellOffset)

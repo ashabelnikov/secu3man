@@ -181,6 +181,7 @@ class TForm3D : public TForm
   void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnValueTransform(OnValueTransform i_pOnValueTransform, void* i_param);
   void SetYAxisTitle(const AnsiString& title);
+  void SetChartTitle(const AnsiString& title);
 
   void Enable(bool enable);
   void InitPopupMenu(HINSTANCE hInstance);

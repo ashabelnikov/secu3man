@@ -58,6 +58,7 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
 , m_ldaxMax(16.0f)
 , m_ldaxNeedsUpdate(false)
 , m_baro_press(101.3f) //sea level atmospheric pressure by default
+, m_pwm1TabIdx(0)
 {
  work_map_load_slots.reserve(32);
  work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
@@ -122,7 +123,7 @@ BOOL CGridModeEditorInjDlg::OnInitDialog()
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_IREG_TAB), m_pIRegPageDlg.get(), 0);
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_ENR_TAB), m_pEnrPageDlg.get(), 0);
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_OTHER_TAB), m_pOtherPageDlg.get(), 0);
- m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_PWM1_TAB), m_pPwm1PageDlg.get(), 0);
+ m_pwm1TabIdx = m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_PWM1_TAB), m_pPwm1PageDlg.get(), 0);
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_PWM2_TAB), m_pPwm2PageDlg.get(), 0);
 
  m_tab_control.SetCurSel(0);
@@ -370,4 +371,17 @@ int CGridModeEditorInjDlg::GetITMode(void) const
 void CGridModeEditorInjDlg::setOnChangeSettings(EventHandler OnCB)
 {
  m_pITPageDlg->setOnChangeSettings(OnCB);
+}
+
+void CGridModeEditorInjDlg::SetSplitAngMode(bool mode)
+{
+ m_pPwm1PageDlg->SetSplitAngMode(mode);
+
+ if (m_tab_control.GetSafeHwnd())
+ {
+  if (mode)
+   m_tab_control.SetPageCaption(m_pwm1TabIdx, MLL::LoadString(IDS_GME_INJ_SPLIT_TAB)); //split angle
+  else
+   m_tab_control.SetPageCaption(m_pwm1TabIdx, MLL::LoadString(IDS_GME_INJ_PWM1_TAB));  //PWM duty
+ }
 }

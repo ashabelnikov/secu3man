@@ -1926,10 +1926,12 @@ void CFirmwareDataMediator::GetPwm1Map(int i_index, float* op_values, bool i_ori
  ASSERT(op_values);
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
+ bool splitAng = CHECKBIT32(GetFWOptions(), COPT_SPLIT_ANGLE);
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _uchar *p = &(p_fd->tables[i_index].pwm_duty1[0][0]);
-  op_values[i] = (((float) *(p + i)) * 100.0f) / 255.0f;
+  //we interpret data depending on firmware option (split angle or PWM duty)
+  op_values[i] = splitAng ? ((float) *(p + i)) / AA_MAPS_M_FACTOR : (((float) *(p + i)) * 100.0f) / 255.0f;
  }
 }
 
@@ -1938,10 +1940,12 @@ void CFirmwareDataMediator::SetPwm1Map(int i_index, const float* ip_values)
  ASSERT(ip_values);
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
+ bool splitAng = CHECKBIT32(GetFWOptions(), COPT_SPLIT_ANGLE);
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _uchar *p = &(p_fd->tables[i_index].pwm_duty1[0][0]);
-  *(p + i) = MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
+  //we interpret data depending on firmware option (split angle or PWM duty)
+  *(p + i) = splitAng ? MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR)) : MathHelpers::Round((ip_values[i]*255.0f)/100.0f);
  }
 }
 

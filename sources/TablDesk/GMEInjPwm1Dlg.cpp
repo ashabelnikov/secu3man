@@ -28,6 +28,9 @@
 #include "GMEInjPwm1Dlg.h"
 #include "ui-core/fnt_helpers.h"
 
+static const float splitAngMin = -20.0f;
+static const float splitAngMax =  20.0f;
+
 const UINT CGMEInjPwm1Dlg::IDD = IDD_GME_INJ_PWM1;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -43,6 +46,7 @@ CGMEInjPwm1Dlg::CGMEInjPwm1Dlg(CWnd* pParent /*=NULL*/)
 , mp_pwm1Map(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
+, m_splitAng(false)
 {
  //empty
 }
@@ -69,7 +73,11 @@ BOOL CGMEInjPwm1Dlg::OnInitDialog()
  if (!m_font.GetSafeHandle())
   CloneWndFont(this, &m_font, -1, false);
 
- m_pwm1_map.SetRange(0.0f, 100.0f);
+ if (m_splitAng)
+  m_pwm1_map.SetRange(splitAngMin, splitAngMax); //split angle
+ else
+  m_pwm1_map.SetRange(0.0f, 100.0f);  //PWM duty
+
  m_pwm1_map.AttachMap(mp_pwm1Map);
  m_pwm1_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_pwm1_map.ShowLabels(true, true);
@@ -135,5 +143,17 @@ void CGMEInjPwm1Dlg::SetArguments(int rpm, int air_flow, bool strt_use, float lo
  {
   m_pwm1_map.ShowMarkers(!strt_use, false);
   m_pwm1_map.SetArguments(load, (float)rpm);
+ }
+}
+
+void CGMEInjPwm1Dlg::SetSplitAngMode(bool mode)
+{
+ m_splitAng = mode;
+ if (m_pwm1_map.GetSafeHwnd())
+ {
+  if (m_splitAng)
+   m_pwm1_map.SetRange(splitAngMin, splitAngMax); //split angle
+  else
+   m_pwm1_map.SetRange(0.0f, 100.0f);  //PWM duty
  }
 }

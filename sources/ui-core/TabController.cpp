@@ -587,3 +587,19 @@ CTabDialog* CTabController::GetCurrentPage(void) const
 {
  return mp_CurDlg;
 }
+
+void CTabController::SetPageCaption(int iTab, CString text)
+{
+ TCITEM tcItem;
+ int count_of_items = GetItemCount();
+ if (iTab >= count_of_items)
+  return; //invalid iTab parameter!
+ TCHAR buffer[256] = {0};
+ tcItem.pszText = buffer;
+ tcItem.cchTextMax = 256;
+ tcItem.mask = TCIF_TEXT;
+ GetItem(0, &tcItem);
+ tcItem.pszText = text.LockBuffer();
+ SetItem(iTab, &tcItem);
+ text.UnlockBuffer();
+}

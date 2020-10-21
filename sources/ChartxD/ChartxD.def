@@ -35,6 +35,7 @@ EXPORTS
   Chart3DSetOnValueTransform = _Chart3DSetOnValueTransform
   Chart3DSetAxisTitle        = _Chart3DSetAxisTitle
   Chart3DGetPtMovingStep     = _Chart3DGetPtMovingStep
+  Chart3DSetTitle            = _Chart3DSetTitle
 
   ; VC funcname              = BCB funcname
   ChartxDSetLanguage         = _ChartxDSetLanguage

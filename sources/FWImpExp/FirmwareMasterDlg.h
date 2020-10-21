@@ -64,7 +64,8 @@ enum FwmFlag
   FWM_2CHIG = 5,
   FWM_OBD = 6,
   FWM_CAFR = 7,
-  FWM_NR_OF_FLAGS = 8
+  FWM_SPLIT = 8,
+  FWM_NR_OF_FLAGS = 9
 };
 
 //view

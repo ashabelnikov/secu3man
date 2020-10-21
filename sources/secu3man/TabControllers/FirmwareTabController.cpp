@@ -205,6 +205,12 @@ void CFirmwareTabController::OnActivate(void)
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
+ if (IsFirmwareOpened())
+ {
+  DWORD opt = mp_fwdm->GetFWOptions();
+  mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE));
+ }
+
  //////////////////////////////////////////////////////////////////
  //подключаем контроллер к потоку данных идущих от SECU-3
  mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
@@ -973,6 +979,8 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_ParamDeskDlg->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
 
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+
+ mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
 
  SetViewFirmwareValues();
 }

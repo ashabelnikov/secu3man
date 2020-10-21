@@ -135,6 +135,12 @@ void CEEPROMTabController::OnActivate(void)
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
+ if (m_eedm->IsLoaded())
+ {
+  bool splitAng = m_eedm->GetSplitAngMode(0);
+  mp_view->mp_TablesPanel->SetSplitAngMode(splitAng);
+ }
+
  mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
  mp_comm->m_pBldAdapter->SetEventHandler(this);
  mp_comm->setOnSettingsChanged(MakeDelegate(this,&CEEPROMTabController::OnSettingsChanged));
@@ -482,6 +488,9 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  mp_view->mp_ParamDeskDlg->EnableChoke(true);
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(true);
 
+ bool splitAng = m_eedm->GetSplitAngMode(0);
+ mp_view->mp_TablesPanel->SetSplitAngMode(splitAng);
+ 
  SetViewValues();
 }
 

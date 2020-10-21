@@ -63,6 +63,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
 
   CTabDialog* GetCurrentPage(void) const;
 
+  void SetPageCaption(int ITab, CString text);
+
  protected:
   // Generated message map functions
   afx_msg void OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult);

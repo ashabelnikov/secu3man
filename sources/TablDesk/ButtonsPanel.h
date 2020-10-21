@@ -141,6 +141,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float GetPtMovStep(int wndType);
   void  SetPtMovStep(int wndType, float value);
 
+  void SetSplitAngMode(bool mode);
+
  public: //установка обработчиков событий
   void setOnChangeSettings(EventHandler OnCB);
   void setOnMapChanged(EventWithCode OnFunction);
@@ -415,4 +417,5 @@ protected:
   bool m_toggleMapWnd;
   
   int m_it_mode;
+  bool m_splitAng;
 };
