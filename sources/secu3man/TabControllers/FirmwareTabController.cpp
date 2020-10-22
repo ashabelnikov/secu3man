@@ -1829,6 +1829,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Allow engine start in flood clear mode"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Алгоритм прогнозирования положения коленвала для ДХ"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Выбор алгоритма прогнозирования положения коленвала в прошивках с синхронизацией от ДХ (Nзуб=Nцил). 0 - последний интервал. 1 - Первая производная"));
+ else
+  dfd.AppendItem(_T("Algorithm of crankshaft position prediction for hall"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Selection of algorithm of crankshaft position prediction for firmwares with synchronization from a Hall sensor (Nteeth=Ncyl). 0 - Last interval. 1 - First derivative."));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);
