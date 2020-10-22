@@ -2089,7 +2089,7 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::UniOutPar& m_UniOutPar = m_recepted_packet.m_UniOutPar;
- if (size != (mp_pdp->isHex() ? 67 : 34))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 133 : 67))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  CondEncoder cen(m_quartz_frq, m_period_distance);

@@ -63,6 +63,9 @@ class CUniOutPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControlsOut1Con2(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsOut2Con2(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsOut3Con2(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsOut4Con2(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsOut5Con2(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsOut6Con2(CCmdUI* pCmdUI);
   afx_msg void OnChangeInvFlags(void);
   afx_msg void OnChangeDataOut1Con1(void);
   afx_msg void OnChangeDataOut1Con2(void);
@@ -70,6 +73,12 @@ class CUniOutPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeDataOut2Con2(void);
   afx_msg void OnChangeDataOut3Con1(void);
   afx_msg void OnChangeDataOut3Con2(void);
+  afx_msg void OnChangeDataOut4Con1(void);
+  afx_msg void OnChangeDataOut4Con2(void);
+  afx_msg void OnChangeDataOut5Con1(void);
+  afx_msg void OnChangeDataOut5Con2(void);
+  afx_msg void OnChangeDataOut6Con1(void);
+  afx_msg void OnChangeDataOut6Con2(void);
   afx_msg void OnChangeDataLFCombo(void);
   afx_msg void OnChangeDataLF12Combo(void);
   afx_msg void OnChangeData(void);

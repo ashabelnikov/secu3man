@@ -42,22 +42,48 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_UNIOUT_2_COND2_INV_CHECK, OnChangeInvFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_3_COND1_INV_CHECK, OnChangeInvFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_3_COND2_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_4_COND1_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_4_COND2_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_5_COND1_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_5_COND2_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_6_COND1_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_6_COND2_INV_CHECK, OnChangeInvFlags)
+
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_COND1_COMBO, OnChangeDataOut1Con1)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_COND2_COMBO, OnChangeDataOut1Con2)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_2_COND1_COMBO, OnChangeDataOut2Con1)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_2_COND2_COMBO, OnChangeDataOut2Con2)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_3_COND1_COMBO, OnChangeDataOut3Con1)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_3_COND2_COMBO, OnChangeDataOut3Con2)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_4_COND1_COMBO, OnChangeDataOut4Con1)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_4_COND2_COMBO, OnChangeDataOut4Con2)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_5_COND1_COMBO, OnChangeDataOut5Con1)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_5_COND2_COMBO, OnChangeDataOut5Con2)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_6_COND1_COMBO, OnChangeDataOut6Con1)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_6_COND2_COMBO, OnChangeDataOut6Con2)
+
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_LOGFUN_COMBO, OnChangeDataLFCombo)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_2_LOGFUN_COMBO, OnChangeDataLFCombo)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_3_LOGFUN_COMBO, OnChangeDataLFCombo)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_4_LOGFUN_COMBO, OnChangeDataLFCombo)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_5_LOGFUN_COMBO, OnChangeDataLFCombo)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_6_LOGFUN_COMBO, OnChangeDataLFCombo)
+
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_12_LOGFUN_COMBO, OnChangeDataLF12Combo)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_GROUP, IDC_PD_UNIOUT_1_LOGFUN_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_GROUP, IDC_PD_UNIOUT_2_LOGFUN_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_3_GROUP, IDC_PD_UNIOUT_3_LOGFUN_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_4_GROUP, IDC_PD_UNIOUT_4_LOGFUN_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_5_GROUP, IDC_PD_UNIOUT_5_LOGFUN_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_6_GROUP, IDC_PD_UNIOUT_6_LOGFUN_COMBO, OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_COND2_COMBO, IDC_PD_UNIOUT_1_COND2_INV_CHECK, OnUpdateControlsOut1Con2)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_COND2_COMBO, IDC_PD_UNIOUT_2_COND2_INV_CHECK, OnUpdateControlsOut2Con2)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_3_COND2_COMBO, IDC_PD_UNIOUT_3_COND2_INV_CHECK, OnUpdateControlsOut3Con2)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_4_COND2_COMBO, IDC_PD_UNIOUT_4_COND2_INV_CHECK, OnUpdateControlsOut4Con2)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_5_COND2_COMBO, IDC_PD_UNIOUT_5_COND2_INV_CHECK, OnUpdateControlsOut5Con2)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_6_COND2_COMBO, IDC_PD_UNIOUT_6_COND2_INV_CHECK, OnUpdateControlsOut6Con2)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_12_LOGFUN_COMBO, OnUpdateControls)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND1_ON_EDIT,  OnChangeData)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND1_OFF_EDIT, OnChangeData)
@@ -71,6 +97,18 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_UNIOUT_3_COND1_OFF_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_UNIOUT_3_COND2_ON_EDIT,  OnChangeData)
  ON_EN_CHANGE(IDC_PD_UNIOUT_3_COND2_OFF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_4_COND1_ON_EDIT,  OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_4_COND1_OFF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_4_COND2_ON_EDIT,  OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_4_COND2_OFF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_5_COND1_ON_EDIT,  OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_5_COND1_OFF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_5_COND2_ON_EDIT,  OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_5_COND2_OFF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_6_COND1_ON_EDIT,  OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_6_COND1_OFF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_6_COND2_ON_EDIT,  OnChangeData)
+ ON_EN_CHANGE(IDC_PD_UNIOUT_6_COND2_OFF_EDIT, OnChangeData)
 END_MESSAGE_MAP()
 
 CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
@@ -196,6 +234,21 @@ void CUniOutPageDlg::OnUpdateControlsOut3Con2(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_params.out[2].logicFunc != SECU3IO::UNIOUT_LF_NONE);
 }
 
+void CUniOutPageDlg::OnUpdateControlsOut4Con2(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[3].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+}
+
+void CUniOutPageDlg::OnUpdateControlsOut5Con2(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[4].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+}
+
+void CUniOutPageDlg::OnUpdateControlsOut6Con2(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[5].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CUniOutPageDlg message handlers
 
@@ -306,6 +359,48 @@ void CUniOutPageDlg::OnChangeDataOut3Con1(void)
 void CUniOutPageDlg::OnChangeDataOut3Con2(void)
 {
  _SetCondInputFormat(2, true);
+ UpdateData(FALSE);
+ UpdateData();
+ OnChangeNotify();
+}
+void CUniOutPageDlg::OnChangeDataOut4Con1(void)
+{
+ _SetCondInputFormat(3, false);
+ UpdateData(FALSE);
+ UpdateData();
+ OnChangeNotify();
+}
+void CUniOutPageDlg::OnChangeDataOut4Con2(void)
+{
+ _SetCondInputFormat(3, true);
+ UpdateData(FALSE);
+ UpdateData();
+ OnChangeNotify();
+}
+void CUniOutPageDlg::OnChangeDataOut5Con1(void)
+{
+ _SetCondInputFormat(4, false);
+ UpdateData(FALSE);
+ UpdateData();
+ OnChangeNotify();
+}
+void CUniOutPageDlg::OnChangeDataOut5Con2(void)
+{
+ _SetCondInputFormat(4, true);
+ UpdateData(FALSE);
+ UpdateData();
+ OnChangeNotify();
+}
+void CUniOutPageDlg::OnChangeDataOut6Con1(void)
+{
+ _SetCondInputFormat(5, false);
+ UpdateData(FALSE);
+ UpdateData();
+ OnChangeNotify();
+}
+void CUniOutPageDlg::OnChangeDataOut6Con2(void)
+{
+ _SetCondInputFormat(5, true);
  UpdateData(FALSE);
  UpdateData();
  OnChangeNotify();
@@ -568,5 +663,5 @@ void CUniOutPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(520));
+  mp_scr->SetViewSize(cx, da.ScaleY(1000));
 }

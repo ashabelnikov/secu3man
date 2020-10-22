@@ -35,7 +35,7 @@ namespace SECU3IO {
 
 using namespace SECU3Types;
 
-//Describes a unirersal programmable output
+//Describes a universal programmable output
 typedef struct
 {
  _uchar flags;                          // MS Nibble - logic function, LS Nibble - flags (inversion)
@@ -147,7 +147,7 @@ typedef struct params_t
  _uchar bt_flags;                       // Bluetooth and security related flags
  _uchar ibtn_keys[2][6];                // iButton keys for immobilizer
 
- uni_output_t uni_output[3];            // parameters for versatile outputs
+ uni_output_t uni_output[6];            // parameters for versatile outputs
  _uchar uniout_12lf;                    // logic function for 1st and second outputs
 
  // Fuel injection
@@ -270,7 +270,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[247];
+ _uchar reserved[214];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

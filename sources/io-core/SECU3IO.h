@@ -481,7 +481,7 @@ namespace SECU3IO
   float off_thrd_2;                     //same as off_thrd_1
  };
 
- const int UNI_OUTPUT_NUM = 3;
+ const int UNI_OUTPUT_NUM = 6;
 
  struct UniOutPar
  {
