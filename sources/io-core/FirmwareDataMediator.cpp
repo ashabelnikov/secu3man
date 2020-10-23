@@ -246,11 +246,12 @@ typedef struct
  _int   shift_igntim;
  _uchar fldclr_start;
  _uchar hall_predict;
+ _uint  vtachom_mult; //value * 8192
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4064];
+ _uchar reserved[4062];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2302,6 +2303,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.shift_igntim = ((float)exd.shift_igntim) / ANGLE_MULTIPLIER;
  o_data.fldclr_start = exd.fldclr_start;
  o_data.hall_predict = exd.hall_predict;
+ o_data.vtachom_mult = 1.0f / ((float)exd.vtachom_mult / 8192.0f); //1/x
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2337,4 +2339,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.shift_igntim = MathHelpers::Round(i_data.shift_igntim * ANGLE_MULTIPLIER);
  exd.fldclr_start = i_data.fldclr_start;
  exd.hall_predict = i_data.hall_predict;
+ exd.vtachom_mult = MathHelpers::Round((1.0f / i_data.vtachom_mult) * 8192.0f);
 }

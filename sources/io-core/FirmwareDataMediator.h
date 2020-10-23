@@ -304,14 +304,14 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_PWM2       =  82,     // PWM2      (output)
    IOP3I_FL_CONS    =  83,     // FL_CONS   (output)
    IOP3I_AUTO_I     =  84,     // AUTO_I    (input)
-// IOP3I_RESERVED19 =  85,     // Reserved    ()
+   IOP3I_VTACHOM    =  85,     // VTACHOM   (output)
 // IOP3I_RESERVED20 =  86,     // Reserved    ()
 // IOP3I_RESERVED21 =  87,     // Reserved    ()
 // IOP3I_RESERVED22 =  88,     // Reserved    ()
 // IOP3I_RESERVED23 =  89,     // Reserved    ()
 // IOP3I_RESERVED24 =  90,     // Reserved    ()
 // IOP3I_RESERVED25 =  91,     // Reserved    ()
-   IOP3I_COUNT      =  85,     //DON'T forget to update this value
+   IOP3I_COUNT      =  86,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -401,13 +401,13 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_PWM2       =  83,     // PWM2        (output)
    IOP_FL_CONS    =  84,     // FL_CONS     (output)
    IOP_AUTO_I     =  85,     // AUTO_I      (input)
-// IOP_RESERVED30 =  86,     // Reserved    ()
+   IOP_VTACHOM    =  86,     // VTACHOM     (output)
 // IOP_RESERVED30 =  87,     // Reserved    ()
 // IOP_RESERVED30 =  88,     // Reserved    ()
 // IOP_RESERVED30 =  89,     // Reserved    ()
 // IOP_RESERVED30 =  90,     // Reserved    ()
 // IOP_RESERVED30 =  91,     // Reserved    ()
-   IOP_COUNT      =  86,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  87,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
@@ -533,7 +533,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V28 = 0x28,           //V2.8  TACH_O and KSP_CS outputs were added
    IOV_V29 = 0x29,           //V2.9  ADD_I5 input has been added
    IOV_V30 = 0x30,           //V3.0  New reserved slots and plugs were added
-   IOV_V31 = 0x31            //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5)
+   IOV_V31 = 0x31            //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5, VTACHOM)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
