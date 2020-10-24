@@ -70,6 +70,7 @@ BOOL CEditSettingsDlg::OnInitDialog()
   f.Read(&buff[0], size);
   f.Close();
   m_edit.SetWindowText(&buff[0]);
+  m_edit.LimitText(131072);
   //highlight syntax:
   if (m_syntaxHighlight)
    _HighlightSyntax();
