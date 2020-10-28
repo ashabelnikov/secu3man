@@ -44,7 +44,7 @@ class AFX_EXT_CLASS CCEDeskDlg : public CModelessDialog
 
   void Show(bool show);
   void Enable(bool enable);
-  void SetValues(WORD errors);
+  void SetValues(DWORD errors);
 
   //изменение размеров окна
   void Resize(const CRect& i_rect);

@@ -35,10 +35,10 @@ const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";                    
 const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%01d%c %%s\r\n";
 
 namespace {
-void wordToString(WORD value, char* str)
+void DwordToString(DWORD value, char* str)
 {
- WORD z, i = 0;
- for (z = 32768; z > 0; z >>= 1)
+ DWORD z, i = 0;
+ for (z = 2147483648; z > 0; z >>= 1)
   str[i++] = ((value & z) == z) ? '1' : '0';
  str[i] = '\0';
 }
@@ -76,8 +76,8 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
   fprintf(m_out_handle, cCSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
 
   //Convert binary to string
-  char ce_errors[20];
-  wordToString(p_sensors->ce_errors, ce_errors);
+  char ce_errors[35];
+  DwordToString(p_sensors->ce_errors, ce_errors);
 
   fprintf(m_out_handle, m_csv_data_template,
                         p_sensors->frequen,

@@ -87,6 +87,11 @@ struct CESettingsData
  , add_i2_v_min(.0f), add_i2_v_max(.0f), add_i2_v_em(.0f), add_i2_v_useem(false)
  , add_i3_v_min(.0f), add_i3_v_max(.0f), add_i3_v_em(.0f), add_i3_v_useem(false)
  , add_i4_v_min(.0f), add_i4_v_max(.0f), add_i4_v_em(.0f), add_i4_v_useem(false)
+ , add_i5_v_min(.0f), add_i5_v_max(.0f), add_i5_v_em(.0f), add_i5_v_useem(false)
+ , add_i6_v_min(.0f), add_i6_v_max(.0f), add_i6_v_em(.0f), add_i6_v_useem(false)
+ , add_i7_v_min(.0f), add_i7_v_max(.0f), add_i7_v_em(.0f), add_i7_v_useem(false)
+ , add_i8_v_min(.0f), add_i8_v_max(.0f), add_i8_v_em(.0f), add_i8_v_useem(false)
+
  {}
 
  float map_v_min;
@@ -133,6 +138,26 @@ struct CESettingsData
  float add_i4_v_max;
  float add_i4_v_em;
  bool  add_i4_v_useem;
+
+ float add_i5_v_min;
+ float add_i5_v_max;
+ float add_i5_v_em;
+ bool  add_i5_v_useem;
+
+ float add_i6_v_min;
+ float add_i6_v_max;
+ float add_i6_v_em;
+ bool  add_i6_v_useem;
+
+ float add_i7_v_min;
+ float add_i7_v_max;
+ float add_i7_v_em;
+ bool  add_i7_v_useem;
+
+ float add_i8_v_min;
+ float add_i8_v_max;
+ float add_i8_v_em;
+ bool  add_i8_v_useem;
 };
 
 struct SECU3FWMapsItem

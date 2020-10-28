@@ -252,12 +252,12 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_TACH_O     =  32,     // TACH_O      (output)
    IOP3I_KSP_CS     =  33,     // KSP_CS      (output)
    IOP3I_ADD_I5     =  34,     // ADD_I5      (input)
-   IOP3I_OILP_I     =  35,     // OILP_I      (input)
-   IOP3I_GENS_I     =  36,     // GENS_I      (input)   
+   IOP3I_ADD_I6     =  35,     // ADD_I6      (input)
+   IOP3I_ADD_I7     =  36,     // ADD_I7      (input)
+   IOP3I_ADD_I8     =  37,     // ADD_I8      (input)
+   IOP3I_OILP_I     =  38,     // OILP_I      (input)
+   IOP3I_GENS_I     =  39,     // GENS_I      (input)   
    //reserved slots are here
-   IOP3I_RESERVED0  =  37,     // Reserved      ()
-   IOP3I_RESERVED1  =  38,     // Reserved      ()
-   IOP3I_RESERVED2  =  39,     // Reserved      ()
    IOP3I_RESERVED3  =  40,     // Reserved      ()
    IOP3I_RESERVED4  =  41,     // Reserved      ()
    IOP3I_RESERVED5  =  42,     // Reserved      ()
@@ -451,11 +451,11 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS3I_TACH_O     =  32,     // TACH_O      (output)
    IOS3I_KSP_CS     =  33,     // KSP_CS      (output)
    IOS3I_ADD_I5     =  34,     // ADD_I5      (input)
-   IOS3I_OILP_I     =  35,     // OILP_I      (input)
-   IOS3I_GENS_I     =  36,     // GENS_I      (input)
-// IOS_RESERVED0    =  37,     // Reserved    ()
-// IOS_RESERVED1    =  38,     // Reserved    ()
-// IOS_RESERVED2    =  39,     // Reserved    ()
+   IOS3I_ADD_I6     =  35,     // ADD_I6      (input)
+   IOS3I_ADD_I7     =  36,     // ADD_I7      (input)
+   IOS3I_ADD_I8     =  37,     // ADD_I8      (input)
+   IOS3I_OILP_I     =  38,     // OILP_I      (input)
+   IOS3I_GENS_I     =  39,     // GENS_I      (input)
 // IOS_RESERVED3    =  40,     // Reserved    ()
 // IOS_RESERVED4    =  41,     // Reserved    ()
 // IOS_RESERVED5    =  42,     // Reserved    ()
@@ -466,7 +466,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOS_RESERVED10   =  47,     // Reserved    ()
 // IOS_RESERVED11   =  48,     // Reserved    ()
    //reserved slots are here
-   IOS3I_COUNT      =  35,
+   IOS3I_COUNT      =  38,
    //SECU-3T:   
    IOS_IGN_OUT1     =   0,     // IGN_OUT1
    IOS_IGN_OUT2     =   1,     // IGN_OUT2
@@ -533,7 +533,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V28 = 0x28,           //V2.8  TACH_O and KSP_CS outputs were added
    IOV_V29 = 0x29,           //V2.9  ADD_I5 input has been added
    IOV_V30 = 0x30,           //V3.0  New reserved slots and plugs were added
-   IOV_V31 = 0x31            //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5, VTACHOM)
+   IOV_V31 = 0x31,           //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5, VTACHOM)
+   IOV_V32 = 0x32            //V3.2  New slots were added (ADD_I5,6,7,8)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

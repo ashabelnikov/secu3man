@@ -69,6 +69,54 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_MAX_CAPTION, OnUpdateSECU3iEx)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_EM_CAPTION, OnUpdateSECU3iEx)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_USEEM_CHECK, OnUpdateSECU3iEx)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_MIN_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_MIN_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_MAX_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_MAX_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_EM_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_EM_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_GROUP, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_MIN_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_MAX_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_EM_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I5_V_USEEM_CHECK, OnUpdateSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_MIN_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_MIN_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_MAX_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_MAX_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_EM_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_EM_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_GROUP, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_MIN_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_MAX_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_EM_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I6_V_USEEM_CHECK, OnUpdateSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_MIN_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_MIN_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_MAX_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_MAX_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_EM_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_EM_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_GROUP, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_MIN_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_MAX_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_EM_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I7_V_USEEM_CHECK, OnUpdateSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_MIN_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_MIN_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_MAX_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_MAX_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_EM_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_EM_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_GROUP, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_MIN_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_MAX_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_EM_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_USEEM_CHECK, OnUpdateSECU3i)
 END_MESSAGE_MAP()
 
 CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
@@ -104,6 +152,18 @@ CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
 , m_add_i4_v_min_edit(CEditEx::MODE_FLOAT)
 , m_add_i4_v_max_edit(CEditEx::MODE_FLOAT)
 , m_add_i4_v_em_edit(CEditEx::MODE_FLOAT)
+, m_add_i5_v_min_edit(CEditEx::MODE_FLOAT)
+, m_add_i5_v_max_edit(CEditEx::MODE_FLOAT)
+, m_add_i5_v_em_edit(CEditEx::MODE_FLOAT)
+, m_add_i6_v_min_edit(CEditEx::MODE_FLOAT)
+, m_add_i6_v_max_edit(CEditEx::MODE_FLOAT)
+, m_add_i6_v_em_edit(CEditEx::MODE_FLOAT)
+, m_add_i7_v_min_edit(CEditEx::MODE_FLOAT)
+, m_add_i7_v_max_edit(CEditEx::MODE_FLOAT)
+, m_add_i7_v_em_edit(CEditEx::MODE_FLOAT)
+, m_add_i8_v_min_edit(CEditEx::MODE_FLOAT)
+, m_add_i8_v_max_edit(CEditEx::MODE_FLOAT)
+, m_add_i8_v_em_edit(CEditEx::MODE_FLOAT)
 {
  //empty
 }
@@ -189,6 +249,38 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_ADD_I4_V_EM_SPIN, m_add_i4_v_em_spin);
  DDX_Control(pDX, IDC_CESETT_ADD_I4_V_USEEM_CHECK, m_add_i4_v_useem_check);
 
+ DDX_Control(pDX, IDC_CESETT_ADD_I5_V_MIN_EDIT, m_add_i5_v_min_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I5_V_MIN_SPIN, m_add_i5_v_min_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I5_V_MAX_EDIT, m_add_i5_v_max_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I5_V_MAX_SPIN, m_add_i5_v_max_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I5_V_EM_EDIT, m_add_i5_v_em_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I5_V_EM_SPIN, m_add_i5_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I5_V_USEEM_CHECK, m_add_i5_v_useem_check);
+
+ DDX_Control(pDX, IDC_CESETT_ADD_I6_V_MIN_EDIT, m_add_i6_v_min_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I6_V_MIN_SPIN, m_add_i6_v_min_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I6_V_MAX_EDIT, m_add_i6_v_max_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I6_V_MAX_SPIN, m_add_i6_v_max_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I6_V_EM_EDIT, m_add_i6_v_em_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I6_V_EM_SPIN, m_add_i6_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I6_V_USEEM_CHECK, m_add_i6_v_useem_check);
+
+ DDX_Control(pDX, IDC_CESETT_ADD_I7_V_MIN_EDIT, m_add_i7_v_min_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I7_V_MIN_SPIN, m_add_i7_v_min_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I7_V_MAX_EDIT, m_add_i7_v_max_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I7_V_MAX_SPIN, m_add_i7_v_max_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I7_V_EM_EDIT, m_add_i7_v_em_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I7_V_EM_SPIN, m_add_i7_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I7_V_USEEM_CHECK, m_add_i7_v_useem_check);
+
+ DDX_Control(pDX, IDC_CESETT_ADD_I8_V_MIN_EDIT, m_add_i8_v_min_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I8_V_MIN_SPIN, m_add_i8_v_min_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I8_V_MAX_EDIT, m_add_i8_v_max_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I8_V_MAX_SPIN, m_add_i8_v_max_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I8_V_EM_EDIT, m_add_i8_v_em_edit);
+ DDX_Control(pDX, IDC_CESETT_ADD_I8_V_EM_SPIN, m_add_i8_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I8_V_USEEM_CHECK, m_add_i8_v_useem_check);
+
  //Do data exchange and validation
  m_map_v_min_edit.DDX_Value(pDX, IDC_CESETT_MAP_V_MIN_EDIT, mp_data->map_v_min);
  DDV_MinMaxFloat(pDX, mp_data->map_v_min, 0.0f, 5.5f);
@@ -261,6 +353,38 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  m_add_i4_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I4_V_EM_EDIT, mp_data->add_i4_v_em);
  DDV_MinMaxFloat(pDX, mp_data->add_i4_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I4_V_USEEM_CHECK, mp_data->add_i4_v_useem);
+
+ m_add_i5_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I5_V_MIN_EDIT, mp_data->add_i5_v_min);
+ DDV_MinMaxFloat(pDX, mp_data->add_i5_v_min, 0.0f, 5.5f);
+ m_add_i5_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I5_V_MAX_EDIT, mp_data->add_i5_v_max);
+ DDV_MinMaxFloat(pDX, mp_data->add_i5_v_max, 0.0f, 5.5f);
+ m_add_i5_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I5_V_EM_EDIT, mp_data->add_i5_v_em);
+ DDV_MinMaxFloat(pDX, mp_data->add_i5_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I5_V_USEEM_CHECK, mp_data->add_i5_v_useem);
+
+ m_add_i6_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I6_V_MIN_EDIT, mp_data->add_i6_v_min);
+ DDV_MinMaxFloat(pDX, mp_data->add_i6_v_min, 0.0f, 5.5f);
+ m_add_i6_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I6_V_MAX_EDIT, mp_data->add_i6_v_max);
+ DDV_MinMaxFloat(pDX, mp_data->add_i6_v_max, 0.0f, 5.5f);
+ m_add_i6_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I6_V_EM_EDIT, mp_data->add_i6_v_em);
+ DDV_MinMaxFloat(pDX, mp_data->add_i6_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I6_V_USEEM_CHECK, mp_data->add_i6_v_useem);
+
+ m_add_i7_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I7_V_MIN_EDIT, mp_data->add_i7_v_min);
+ DDV_MinMaxFloat(pDX, mp_data->add_i7_v_min, 0.0f, 5.5f);
+ m_add_i7_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I7_V_MAX_EDIT, mp_data->add_i7_v_max);
+ DDV_MinMaxFloat(pDX, mp_data->add_i7_v_max, 0.0f, 5.5f);
+ m_add_i7_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I7_V_EM_EDIT, mp_data->add_i7_v_em);
+ DDV_MinMaxFloat(pDX, mp_data->add_i7_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I7_V_USEEM_CHECK, mp_data->add_i7_v_useem);
+
+ m_add_i8_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I8_V_MIN_EDIT, mp_data->add_i8_v_min);
+ DDV_MinMaxFloat(pDX, mp_data->add_i8_v_min, 0.0f, 5.5f);
+ m_add_i8_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I8_V_MAX_EDIT, mp_data->add_i8_v_max);
+ DDV_MinMaxFloat(pDX, mp_data->add_i8_v_max, 0.0f, 5.5f);
+ m_add_i8_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I8_V_EM_EDIT, mp_data->add_i8_v_em);
+ DDV_MinMaxFloat(pDX, mp_data->add_i8_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I8_V_USEEM_CHECK, mp_data->add_i8_v_useem);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -397,6 +521,58 @@ BOOL CCESettingsDlg::OnInitDialog()
  m_add_i4_v_em_edit.SetLimitText(6);
  m_add_i4_v_em_edit.SetDecimalPlaces(3);
 
+ m_add_i5_v_min_spin.SetBuddy(&m_add_i5_v_min_edit);
+ m_add_i5_v_min_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i5_v_min_edit.SetLimitText(6);
+ m_add_i5_v_min_edit.SetDecimalPlaces(3);
+ m_add_i5_v_max_spin.SetBuddy(&m_add_i5_v_max_edit);
+ m_add_i5_v_max_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i5_v_max_edit.SetLimitText(6);
+ m_add_i5_v_max_edit.SetDecimalPlaces(3);
+ m_add_i5_v_em_spin.SetBuddy(&m_add_i5_v_em_edit);
+ m_add_i5_v_em_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i5_v_em_edit.SetLimitText(6);
+ m_add_i5_v_em_edit.SetDecimalPlaces(3);
+
+ m_add_i6_v_min_spin.SetBuddy(&m_add_i6_v_min_edit);
+ m_add_i6_v_min_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i6_v_min_edit.SetLimitText(6);
+ m_add_i6_v_min_edit.SetDecimalPlaces(3);
+ m_add_i6_v_max_spin.SetBuddy(&m_add_i6_v_max_edit);
+ m_add_i6_v_max_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i6_v_max_edit.SetLimitText(6);
+ m_add_i6_v_max_edit.SetDecimalPlaces(3);
+ m_add_i6_v_em_spin.SetBuddy(&m_add_i6_v_em_edit);
+ m_add_i6_v_em_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i6_v_em_edit.SetLimitText(6);
+ m_add_i6_v_em_edit.SetDecimalPlaces(3);
+
+ m_add_i7_v_min_spin.SetBuddy(&m_add_i7_v_min_edit);
+ m_add_i7_v_min_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i7_v_min_edit.SetLimitText(6);
+ m_add_i7_v_min_edit.SetDecimalPlaces(3);
+ m_add_i7_v_max_spin.SetBuddy(&m_add_i7_v_max_edit);
+ m_add_i7_v_max_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i7_v_max_edit.SetLimitText(6);
+ m_add_i7_v_max_edit.SetDecimalPlaces(3);
+ m_add_i7_v_em_spin.SetBuddy(&m_add_i7_v_em_edit);
+ m_add_i7_v_em_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i7_v_em_edit.SetLimitText(6);
+ m_add_i7_v_em_edit.SetDecimalPlaces(3);
+
+ m_add_i8_v_min_spin.SetBuddy(&m_add_i8_v_min_edit);
+ m_add_i8_v_min_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i8_v_min_edit.SetLimitText(6);
+ m_add_i8_v_min_edit.SetDecimalPlaces(3);
+ m_add_i8_v_max_spin.SetBuddy(&m_add_i8_v_max_edit);
+ m_add_i8_v_max_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i8_v_max_edit.SetLimitText(6);
+ m_add_i8_v_max_edit.SetDecimalPlaces(3);
+ m_add_i8_v_em_spin.SetBuddy(&m_add_i8_v_em_edit);
+ m_add_i8_v_em_spin.SetRangeAndDelta(0, 5.5, 0.01);
+ m_add_i8_v_em_edit.SetLimitText(6);
+ m_add_i8_v_em_edit.SetDecimalPlaces(3);
+
  //initialize window scroller
  mp_scr->Init(this);
  _UpdateScrlViewSize();
@@ -437,7 +613,7 @@ void CCESettingsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(550));
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(780));
 }
 
 void CCESettingsDlg::OnSize(UINT nType, int cx, int cy)
@@ -609,7 +785,7 @@ void CCESettingsCntr::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMinTrackSize.y = m_createSize.cy;
 
   lpMMI->ptMaxTrackSize.x = m_createSize.cx;
-  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.33f);
+  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.75f);
  }
 }
 

@@ -267,10 +267,19 @@ typedef struct params_t
 
  _uint  pwm2_pwmfrq[2];
 
+ _uint  ai5_adc_factor;                 // ADC error compensation factor for ADD_I5 input
+ _long  ai5_adc_correction;             // ADC error compensation correction for ADD_I5 input
+ _uint  ai6_adc_factor;                 // ADC error compensation factor for ADD_I6 input
+ _long  ai6_adc_correction;             // ADC error compensation correction for ADD_I6 input
+ _uint  ai7_adc_factor;                 // ADC error compensation factor for ADD_I7 input
+ _long  ai7_adc_correction;             // ADC error compensation correction for ADD_I7 input
+ _uint  ai8_adc_factor;                 // ADC error compensation factor for ADD_I8 input
+ _long  ai8_adc_correction;             // ADC error compensation correction for ADD_I8 input
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[214];
+ _uchar reserved[190];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

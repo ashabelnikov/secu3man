@@ -58,7 +58,7 @@ namespace SECU3IO
 
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации
-  WORD ce_errors;                       //биты ошибок СЕ
+  DWORD ce_errors;                      //биты ошибок СЕ
   float tps;                            //ДПДЗ (TPS sensor value)
   float add_i1;                         //ADD_I1 voltage
   float add_i2;                         //ADD_I2 voltage
@@ -240,6 +240,14 @@ namespace SECU3IO
   float  ai3_adc_correction;
   float  ai4_adc_factor;
   float  ai4_adc_correction;
+  float  ai5_adc_factor;                //MCP3204
+  float  ai5_adc_correction;
+  float  ai6_adc_factor;
+  float  ai6_adc_correction;
+  float  ai7_adc_factor;
+  float  ai7_adc_correction;
+  float  ai8_adc_factor;
+  float  ai8_adc_correction;
  };
 
  struct RawSensDat
@@ -747,7 +755,7 @@ namespace SECU3IO
   SECU3IO::LzidBLHS     m_LzidBLHS;   //SECU-LZID  
  };
 
-const int INPAVNUM = 10;
+const int INPAVNUM = 14;
 
  struct FwConstsData
  {  

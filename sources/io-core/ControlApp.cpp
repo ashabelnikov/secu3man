@@ -282,10 +282,10 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 136 : 68))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 140 : 70))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- //частота вращения двигателя
+ //частота вращения коленвала двигателя
  if (false == mp_pdp->Hex16ToBin(raw_packet, &m_SensorDat.frequen))
   return false;
 
@@ -371,8 +371,8 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  m_SensorDat.add_i2 = ((float)add_i2_v) * m_adc_discrete;
 
  //Биты ошибок СЕ
- int ce_errors = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet, &ce_errors))
+ unsigned long ce_errors = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &ce_errors))
   return false;
  m_SensorDat.ce_errors = ce_errors;
 
@@ -1171,7 +1171,7 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar;
- if (size != (mp_pdp->isHex() ? 96 : 48))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 144 : 72))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  signed int map_adc_factor = 0;
@@ -1266,6 +1266,54 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_ADCCompenPar.ai4_adc_correction = ((((float)ai4_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai4_adc_factor;
  m_ADCCompenPar.ai4_adc_correction*=m_adc_discrete; //в вольты
+
+ //ADD_I5 input
+ signed int ai5_adc_factor = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai5_adc_factor))
+  return false;
+ m_ADCCompenPar.ai5_adc_factor = ((float)ai5_adc_factor) / 16384;
+
+ signed long ai5_adc_correction = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&ai5_adc_correction))
+  return false;
+ m_ADCCompenPar.ai5_adc_correction = ((((float)ai5_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai5_adc_factor;
+ m_ADCCompenPar.ai5_adc_correction*=m_adc_discrete; //в вольты
+
+ //ADD_I6 input
+ signed int ai6_adc_factor = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ai6_adc_factor))
+  return false;
+ m_ADCCompenPar.ai6_adc_factor = ((float)ai6_adc_factor) / 16384;
+
+ signed long ai6_adc_correction = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&ai6_adc_correction))
+  return false;
+ m_ADCCompenPar.ai6_adc_correction = ((((float)ai6_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai6_adc_factor;
+ m_ADCCompenPar.ai6_adc_correction*=m_adc_discrete; //в вольты
+
+ //ADD_I7 input
+ signed int ai7_adc_factor = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai7_adc_factor))
+  return false;
+ m_ADCCompenPar.ai7_adc_factor = ((float)ai7_adc_factor) / 16384;
+
+ signed long ai7_adc_correction = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&ai7_adc_correction))
+  return false;
+ m_ADCCompenPar.ai7_adc_correction = ((((float)ai7_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai7_adc_factor;
+ m_ADCCompenPar.ai7_adc_correction*=m_adc_discrete; //в вольты
+
+ //ADD_I4 input
+ signed int ai8_adc_factor = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai8_adc_factor))
+  return false;
+ m_ADCCompenPar.ai8_adc_factor = ((float)ai8_adc_factor) / 16384;
+
+ signed long ai8_adc_correction = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&ai8_adc_correction))
+  return false;
+ m_ADCCompenPar.ai8_adc_correction = ((((float)ai8_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai8_adc_factor;
+ m_ADCCompenPar.ai8_adc_correction*=m_adc_discrete; //в вольты
 
  return true;
 }
@@ -1411,11 +1459,11 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
- if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- int flags = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&flags))
+ unsigned long flags = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &flags))
   return false;
  m_CEErrors.flags = flags;
 
@@ -1426,11 +1474,11 @@ bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
- if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- int flags = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&flags))
+ unsigned long flags = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &flags))
   return false;
  m_CEErrors.flags = flags;
 
@@ -2622,7 +2670,7 @@ bool CControlApp::ParsePackets()
     continue;
    case SENSOR_DAT:
     if (Parse_SENSOR_DAT(p_start, p_size))
-     break;
+     break;    
     continue;
    case DBGVAR_DAT:
     if (Parse_DBGVAR_DAT(p_start, p_size))
@@ -3330,6 +3378,30 @@ void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
  signed long ai4_correction_d = MathHelpers::Round((-packet_data->ai4_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long ai4_adc_correction = MathHelpers::Round(16384 * (0.5f - ai4_correction_d * packet_data->ai4_adc_factor));
  mp_pdp->Bin32ToHex(ai4_adc_correction,m_outgoing_packet);
+ //ADD_I5 input
+ signed int ai5_adc_factor = MathHelpers::Round(packet_data->ai5_adc_factor * 16384);
+ mp_pdp->Bin16ToHex(ai5_adc_factor,m_outgoing_packet);
+ signed long ai5_correction_d = MathHelpers::Round((-packet_data->ai5_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long ai5_adc_correction = MathHelpers::Round(16384 * (0.5f - ai5_correction_d * packet_data->ai5_adc_factor));
+ mp_pdp->Bin32ToHex(ai5_adc_correction, m_outgoing_packet);
+ //ADD_I6 input
+ signed int ai6_adc_factor = MathHelpers::Round(packet_data->ai6_adc_factor * 16384);
+ mp_pdp->Bin16ToHex(ai6_adc_factor,m_outgoing_packet);
+ signed long ai6_correction_d = MathHelpers::Round((-packet_data->ai6_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long ai6_adc_correction = MathHelpers::Round(16384 * (0.5f - ai6_correction_d * packet_data->ai6_adc_factor));
+ mp_pdp->Bin32ToHex(ai6_adc_correction, m_outgoing_packet);
+ //ADD_I7 input
+ signed int ai7_adc_factor = MathHelpers::Round(packet_data->ai7_adc_factor * 16384);
+ mp_pdp->Bin16ToHex(ai7_adc_factor,m_outgoing_packet);
+ signed long ai7_correction_d = MathHelpers::Round((-packet_data->ai7_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long ai7_adc_correction = MathHelpers::Round(16384 * (0.5f - ai7_correction_d * packet_data->ai7_adc_factor));
+ mp_pdp->Bin32ToHex(ai7_adc_correction,m_outgoing_packet);
+ //ADD_I8 input
+ signed int ai8_adc_factor = MathHelpers::Round(packet_data->ai8_adc_factor * 16384);
+ mp_pdp->Bin16ToHex(ai8_adc_factor,m_outgoing_packet);
+ signed long ai8_correction_d = MathHelpers::Round((-packet_data->ai8_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long ai8_adc_correction = MathHelpers::Round(16384 * (0.5f - ai8_correction_d * packet_data->ai8_adc_factor));
+ mp_pdp->Bin32ToHex(ai8_adc_correction,m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -3388,7 +3460,7 @@ void CControlApp::Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data)
 {
- mp_pdp->Bin16ToHex(packet_data->flags, m_outgoing_packet);
+ mp_pdp->Bin32ToHex(packet_data->flags, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

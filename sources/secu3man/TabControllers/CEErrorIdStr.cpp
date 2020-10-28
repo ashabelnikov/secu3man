@@ -50,6 +50,10 @@ CEErrorIdStr::CEErrorIdStr()
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I3_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I3_SENSOR), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I4_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I4_SENSOR), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_SYS_START, std::make_pair(MLL::GetString(IDS_ECUERROR_SYS_START), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I5_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I5_SENSOR), v))); 
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I6_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I6_SENSOR), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I7_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I7_SENSOR), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I8_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I8_SENSOR), v)));
 }
 
 const CEErrorIdStr::ErrorsIDContainer& CEErrorIdStr::Get(void) const

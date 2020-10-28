@@ -146,6 +146,26 @@ typedef struct
  _uint add_i4_v_max;
  _uint add_i4_v_em;
  _uchar add_i4_v_flg;
+
+ _uint add_i5_v_min;
+ _uint add_i5_v_max;
+ _uint add_i5_v_em;
+ _uchar add_i5_v_flg;
+
+ _uint add_i6_v_min;
+ _uint add_i6_v_max;
+ _uint add_i6_v_em;
+ _uchar add_i6_v_flg;
+
+ _uint add_i7_v_min;
+ _uint add_i7_v_max;
+ _uint add_i7_v_em;
+ _uchar add_i7_v_flg;
+
+ _uint add_i8_v_min;
+ _uint add_i8_v_max;
+ _uint add_i8_v_em;
+ _uchar add_i8_v_flg;
 }ce_sett_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -251,7 +271,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4062];
+ _uchar reserved[4030];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2218,6 +2238,26 @@ void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
  o_data.add_i4_v_max = ((float)p_fd->exdata.cesd.add_i4_v_max) * ADC_DISCRETE;
  o_data.add_i4_v_em  = ((float)p_fd->exdata.cesd.add_i4_v_em) * ADC_DISCRETE;
  o_data.add_i4_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i4_v_flg, 0); 
+
+ o_data.add_i5_v_min = ((float)p_fd->exdata.cesd.add_i5_v_min) * ADC_DISCRETE;
+ o_data.add_i5_v_max = ((float)p_fd->exdata.cesd.add_i5_v_max) * ADC_DISCRETE;
+ o_data.add_i5_v_em  = ((float)p_fd->exdata.cesd.add_i5_v_em) * ADC_DISCRETE;
+ o_data.add_i5_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i5_v_flg, 0); 
+
+ o_data.add_i6_v_min = ((float)p_fd->exdata.cesd.add_i6_v_min) * ADC_DISCRETE;
+ o_data.add_i6_v_max = ((float)p_fd->exdata.cesd.add_i6_v_max) * ADC_DISCRETE;
+ o_data.add_i6_v_em  = ((float)p_fd->exdata.cesd.add_i6_v_em) * ADC_DISCRETE;
+ o_data.add_i6_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i6_v_flg, 0); 
+
+ o_data.add_i7_v_min = ((float)p_fd->exdata.cesd.add_i7_v_min) * ADC_DISCRETE;
+ o_data.add_i7_v_max = ((float)p_fd->exdata.cesd.add_i7_v_max) * ADC_DISCRETE;
+ o_data.add_i7_v_em  = ((float)p_fd->exdata.cesd.add_i7_v_em) * ADC_DISCRETE;
+ o_data.add_i7_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i7_v_flg, 0); 
+
+ o_data.add_i8_v_min = ((float)p_fd->exdata.cesd.add_i8_v_min) * ADC_DISCRETE;
+ o_data.add_i8_v_max = ((float)p_fd->exdata.cesd.add_i8_v_max) * ADC_DISCRETE;
+ o_data.add_i8_v_em  = ((float)p_fd->exdata.cesd.add_i8_v_em) * ADC_DISCRETE;
+ o_data.add_i8_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i8_v_flg, 0); 
 }
 
 void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
@@ -2268,6 +2308,26 @@ void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
  p_fd->exdata.cesd.add_i4_v_max = MathHelpers::Round((i_data.add_i4_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i4_v_em  = MathHelpers::Round((i_data.add_i4_v_em / ADC_DISCRETE));
  WRITEBIT8(p_fd->exdata.cesd.add_i4_v_flg, 0, i_data.add_i4_v_useem);
+
+ p_fd->exdata.cesd.add_i5_v_min = MathHelpers::Round((i_data.add_i5_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i5_v_max = MathHelpers::Round((i_data.add_i5_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i5_v_em  = MathHelpers::Round((i_data.add_i5_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i5_v_flg, 0, i_data.add_i5_v_useem);
+
+ p_fd->exdata.cesd.add_i6_v_min = MathHelpers::Round((i_data.add_i6_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i6_v_max = MathHelpers::Round((i_data.add_i6_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i6_v_em  = MathHelpers::Round((i_data.add_i6_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i6_v_flg, 0, i_data.add_i6_v_useem);
+
+ p_fd->exdata.cesd.add_i7_v_min = MathHelpers::Round((i_data.add_i7_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i7_v_max = MathHelpers::Round((i_data.add_i7_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i7_v_em  = MathHelpers::Round((i_data.add_i7_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i7_v_flg, 0, i_data.add_i7_v_useem);
+
+ p_fd->exdata.cesd.add_i8_v_min = MathHelpers::Round((i_data.add_i8_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i8_v_max = MathHelpers::Round((i_data.add_i8_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i8_v_em  = MathHelpers::Round((i_data.add_i8_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i8_v_flg, 0, i_data.add_i8_v_useem);
 }
 
 void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
@@ -2303,7 +2363,11 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.shift_igntim = ((float)exd.shift_igntim) / ANGLE_MULTIPLIER;
  o_data.fldclr_start = exd.fldclr_start;
  o_data.hall_predict = exd.hall_predict;
- o_data.vtachom_mult = 1.0f / ((float)exd.vtachom_mult / 8192.0f); //1/x
+
+ int vtachom_mult = exd.vtachom_mult;
+ if (vtachom_mult == 0)
+  vtachom_mult = 1; //prevent division by zero
+ o_data.vtachom_mult = 1.0f / ((float)vtachom_mult / 8192.0f); //1/x
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)

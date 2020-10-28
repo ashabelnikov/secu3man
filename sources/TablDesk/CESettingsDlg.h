@@ -142,6 +142,38 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
   CEditEx m_add_i4_v_em_edit;
   CSpinButtonCtrlEx m_add_i4_v_em_spin;
   CButton m_add_i4_v_useem_check;
+
+  CEditEx m_add_i5_v_min_edit;
+  CSpinButtonCtrlEx m_add_i5_v_min_spin;
+  CEditEx m_add_i5_v_max_edit;
+  CSpinButtonCtrlEx m_add_i5_v_max_spin;
+  CEditEx m_add_i5_v_em_edit;
+  CSpinButtonCtrlEx m_add_i5_v_em_spin;
+  CButton m_add_i5_v_useem_check;
+
+  CEditEx m_add_i6_v_min_edit;
+  CSpinButtonCtrlEx m_add_i6_v_min_spin;
+  CEditEx m_add_i6_v_max_edit;
+  CSpinButtonCtrlEx m_add_i6_v_max_spin;
+  CEditEx m_add_i6_v_em_edit;
+  CSpinButtonCtrlEx m_add_i6_v_em_spin;
+  CButton m_add_i6_v_useem_check;
+
+  CEditEx m_add_i7_v_min_edit;
+  CSpinButtonCtrlEx m_add_i7_v_min_spin;
+  CEditEx m_add_i7_v_max_edit;
+  CSpinButtonCtrlEx m_add_i7_v_max_spin;
+  CEditEx m_add_i7_v_em_edit;
+  CSpinButtonCtrlEx m_add_i7_v_em_spin;
+  CButton m_add_i7_v_useem_check;
+
+  CEditEx m_add_i8_v_min_edit;
+  CSpinButtonCtrlEx m_add_i8_v_min_spin;
+  CEditEx m_add_i8_v_max_edit;
+  CSpinButtonCtrlEx m_add_i8_v_max_spin;
+  CEditEx m_add_i8_v_em_edit;
+  CSpinButtonCtrlEx m_add_i8_v_em_spin;
+  CButton m_add_i8_v_useem_check;
 };
 
 

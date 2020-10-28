@@ -217,7 +217,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
  float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
  float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
- char ce_errors[20] = {0};
+ char ce_errors[35] = {0};
 
  result = sscanf(mp_recBuff + CSV_TIME_PANE_LEN, m_csv_data_template,
                 &frequen,
@@ -273,15 +273,15 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
                 &log_mark,
                 &ce_errors);
 
- if ((result != CSV_COUNT_DATA_VAL) || (strlen(ce_errors) != 16))
+ if ((result != CSV_COUNT_DATA_VAL) || (strlen(ce_errors) != 32))
   return false;
  //Convert CE errors bits from string to binary
- WORD ce_bits = 0;
- for(size_t i = 0; i < 16; ++i)
+ DWORD ce_bits = 0;
+ for(size_t i = 0; i < 32; ++i)
  {
   if (ce_errors[i] != '0' && ce_errors[i] != '1')
    return false; //error (wrong char)
-  WORD mask = 32768;
+  DWORD mask = 2147483648;
   ce_bits|= (ce_errors[i] == '1') ? (mask >> i) : 0;
  }
  //Save all data fields

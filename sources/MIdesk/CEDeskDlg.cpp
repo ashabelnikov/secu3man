@@ -74,7 +74,7 @@ BOOL CCEDeskDlg::OnInitDialog()
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(this, MLL::GetString(IDS_CE_ERRORS_DESK_TT)));
- for(int i = IDS_CED_CKPS_MALFUNCTION_TT; i <= IDS_CED_SYS_START_TT; ++i)
+ for(int i = IDS_CED_CKPS_MALFUNCTION_TT; i <= IDS_CED_ADD_I8_SENSOR_TT; ++i)
  {
   VERIFY(mp_ttc->AddWindow(&m_CEErrors[i - IDS_CED_CKPS_MALFUNCTION_TT], MLL::GetString(i)));
  }
@@ -102,11 +102,11 @@ void CCEDeskDlg::Show(bool show)
  ShowWindow(sw);
 }
 
-void CCEDeskDlg::SetValues(WORD i_errors)
+void CCEDeskDlg::SetValues(DWORD i_errors)
 {
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
  {
-  bool status = (CHECKBIT16(i_errors, secu3_ce_error_codes[i].first) != 0);
+  bool status = (CHECKBIT32(i_errors, secu3_ce_error_codes[i].first) != 0);
   if (m_cashval[i] != status)
   {
    m_cashval[i] = status;

@@ -114,4 +114,24 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_ai4_correction_spin;
   CEditEx m_ai4_factor_edit;
   CEditEx m_ai4_correction_edit;
+
+  CSpinButtonCtrlEx m_ai5_factor_spin;
+  CSpinButtonCtrlEx m_ai5_correction_spin;
+  CEditEx m_ai5_factor_edit;
+  CEditEx m_ai5_correction_edit;
+
+  CSpinButtonCtrlEx m_ai6_factor_spin;
+  CSpinButtonCtrlEx m_ai6_correction_spin;
+  CEditEx m_ai6_factor_edit;
+  CEditEx m_ai6_correction_edit;
+
+  CSpinButtonCtrlEx m_ai7_factor_spin;
+  CSpinButtonCtrlEx m_ai7_correction_spin;
+  CEditEx m_ai7_factor_edit;
+  CEditEx m_ai7_correction_edit;
+
+  CSpinButtonCtrlEx m_ai8_factor_spin;
+  CSpinButtonCtrlEx m_ai8_correction_spin;
+  CEditEx m_ai8_factor_edit;
+  CEditEx m_ai8_correction_edit;
 };

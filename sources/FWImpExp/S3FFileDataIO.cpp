@@ -184,7 +184,27 @@ typedef struct
  s3f_int32_t add_i4_v_em;
  s3f_int32_t add_i4_v_flg;
 
- s3f_int32_t reserved[512];
+ s3f_int32_t add_i5_v_min;
+ s3f_int32_t add_i5_v_max;
+ s3f_int32_t add_i5_v_em;
+ s3f_int32_t add_i5_v_flg;
+
+ s3f_int32_t add_i6_v_min;
+ s3f_int32_t add_i6_v_max;
+ s3f_int32_t add_i6_v_em;
+ s3f_int32_t add_i6_v_flg;
+
+ s3f_int32_t add_i7_v_min;
+ s3f_int32_t add_i7_v_max;
+ s3f_int32_t add_i7_v_em;
+ s3f_int32_t add_i7_v_flg;
+
+ s3f_int32_t add_i8_v_min;
+ s3f_int32_t add_i8_v_max;
+ s3f_int32_t add_i8_v_em;
+ s3f_int32_t add_i8_v_flg;
+
+ s3f_int32_t reserved[496];
 }s3f_ce_sett_t;
 
 
@@ -506,6 +526,26 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_sepMaps->cesd.add_i4_v_em = MathHelpers::Round(m_data.cesd.add_i4_v_em * INT_MULTIPLIER);
  WRITEBIT8(p_sepMaps->cesd.add_i4_v_flg, 0, m_data.cesd.add_i4_v_useem);
 
+ p_sepMaps->cesd.add_i5_v_min = MathHelpers::Round(m_data.cesd.add_i5_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i5_v_max = MathHelpers::Round(m_data.cesd.add_i5_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i5_v_em = MathHelpers::Round(m_data.cesd.add_i5_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i5_v_flg, 0, m_data.cesd.add_i5_v_useem);
+
+ p_sepMaps->cesd.add_i6_v_min = MathHelpers::Round(m_data.cesd.add_i6_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i6_v_max = MathHelpers::Round(m_data.cesd.add_i6_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i6_v_em = MathHelpers::Round(m_data.cesd.add_i6_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i6_v_flg, 0, m_data.cesd.add_i6_v_useem);
+
+ p_sepMaps->cesd.add_i7_v_min = MathHelpers::Round(m_data.cesd.add_i7_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i7_v_max = MathHelpers::Round(m_data.cesd.add_i7_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i7_v_em = MathHelpers::Round(m_data.cesd.add_i7_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i7_v_flg, 0, m_data.cesd.add_i7_v_useem);
+
+ p_sepMaps->cesd.add_i8_v_min = MathHelpers::Round(m_data.cesd.add_i8_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i8_v_max = MathHelpers::Round(m_data.cesd.add_i8_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i8_v_em = MathHelpers::Round(m_data.cesd.add_i8_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i8_v_flg, 0, m_data.cesd.add_i8_v_useem);
+
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
  file.Write(&rawdata[0], size);
@@ -729,6 +769,26 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.cesd.add_i4_v_max = p_sepMaps->cesd.add_i4_v_max / INT_MULTIPLIER;
   m_data.cesd.add_i4_v_em = p_sepMaps->cesd.add_i4_v_em / INT_MULTIPLIER;
   m_data.cesd.add_i4_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i4_v_flg, 0);
+
+  m_data.cesd.add_i5_v_min = p_sepMaps->cesd.add_i5_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i5_v_max = p_sepMaps->cesd.add_i5_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i5_v_em = p_sepMaps->cesd.add_i5_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i5_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i5_v_flg, 0);
+
+  m_data.cesd.add_i6_v_min = p_sepMaps->cesd.add_i6_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i6_v_max = p_sepMaps->cesd.add_i6_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i6_v_em = p_sepMaps->cesd.add_i6_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i6_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i6_v_flg, 0);
+
+  m_data.cesd.add_i7_v_min = p_sepMaps->cesd.add_i7_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i7_v_max = p_sepMaps->cesd.add_i7_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i7_v_em = p_sepMaps->cesd.add_i7_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i7_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i7_v_flg, 0);
+
+  m_data.cesd.add_i8_v_min = p_sepMaps->cesd.add_i8_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i8_v_max = p_sepMaps->cesd.add_i8_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i8_v_em = p_sepMaps->cesd.add_i8_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i8_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i8_v_flg, 0);
  }
 
  return true;
