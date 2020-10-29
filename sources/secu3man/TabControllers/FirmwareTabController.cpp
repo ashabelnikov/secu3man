@@ -1839,6 +1839,26 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Frequency multiplier for tachometer output (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("This multiplier specify ratio of RPM and frequency of pulses produced at VTACHOM output. For example, 1.000 means that for 1 revolution of crankshaft 1 pulse is produced. The higher the value of multiplier, the higher the frequency."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I5"), _T(""), 1, 8, 1, 0, &d.inpavnum[10], _T("Размер буфера усреднения ADD_I5. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I5"), _T(""), 1, 8, 1, 0, &d.inpavnum[10], _T("Size of averaging buffer for ADD_I5. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I6"), _T(""), 1, 8, 1, 0, &d.inpavnum[11], _T("Размер буфера усреднения ADD_I6. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I6"), _T(""), 1, 8, 1, 0, &d.inpavnum[11], _T("Size of averaging buffer for ADD_I6. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I7"), _T(""), 1, 8, 1, 0, &d.inpavnum[12], _T("Размер буфера усреднения ADD_I7. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I7"), _T(""), 1, 8, 1, 0, &d.inpavnum[12], _T("Size of averaging buffer for ADD_I7. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I8"), _T(""), 1, 8, 1, 0, &d.inpavnum[13], _T("Размер буфера усреднения ADD_I8. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I8"), _T(""), 1, 8, 1, 0, &d.inpavnum[13], _T("Size of averaging buffer for ADD_I8. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);
