@@ -281,54 +281,54 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 140 : 70))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
+ if (size != (mp_pdp->isHex() ? 144 : 72))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_SensorDat.frequen))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &sensorDat.frequen))
   return false;
 
  //давление во впускном коллекторе
  int pressure = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pressure))
   return false;
- m_SensorDat.pressure = ((float)pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.pressure = ((float)pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //напряжение бортовой сети
  int voltage = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&voltage))
   return false;
- m_SensorDat.voltage = ((float)voltage) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.voltage = ((float)voltage) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Температура охлаждающей жидкости
  int temperature = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&temperature,true))
   return false;
- m_SensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- m_SensorDat.temperat = MathHelpers::RestrictValue(m_SensorDat.temperat, -99.9f, 999.0f);
+ sensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.temperat = MathHelpers::RestrictValue(sensorDat.temperat, -99.9f, 999.0f);
 
  //Текущий УОЗ (число со знаком)
  int adv_angle = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&adv_angle,true))
   return false;
- m_SensorDat.adv_angle = ((float)adv_angle) / m_angle_multiplier;
+ sensorDat.adv_angle = ((float)adv_angle) / m_angle_multiplier;
 
  //Уровень детонации двигателя
  int knock_k = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_k))
   return false;
- m_SensorDat.knock_k = ((float)knock_k) * m_adc_discrete;
+ sensorDat.knock_k = ((float)knock_k) * m_adc_discrete;
 
  //Корректировка УОЗ при детонации
  int knock_retard = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_retard, true))
   return false;
- m_SensorDat.knkret_use = (knock_retard != 32767);
- m_SensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
+ sensorDat.knkret_use = (knock_retard != 32767);
+ sensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
 
  //Расход воздуха
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_SensorDat.air_flow))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&sensorDat.air_flow))
   return false;
 
  //16 bit flags
@@ -337,56 +337,56 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
 
  //flags
- m_SensorDat.ephh_valve   = CHECKBIT16(flags, 0);
- m_SensorDat.carb         = CHECKBIT16(flags, 1);
- m_SensorDat.gas          = CHECKBIT16(flags, 2);
- m_SensorDat.epm_valve    = CHECKBIT16(flags, 3);
- m_SensorDat.ce_state     = CHECKBIT16(flags, 4);
- m_SensorDat.cool_fan     = CHECKBIT16(flags, 5);
- m_SensorDat.st_block     = CHECKBIT16(flags, 6);
- m_SensorDat.acceleration = CHECKBIT16(flags, 7);
- m_SensorDat.fc_revlim    = CHECKBIT16(flags, 8);
- m_SensorDat.floodclear   = CHECKBIT16(flags, 9);
- m_SensorDat.sys_locked   = CHECKBIT16(flags, 10);
- m_SensorDat.ign_i        = CHECKBIT16(flags, 11);
- m_SensorDat.cond_i       = CHECKBIT16(flags, 12);
- m_SensorDat.epas_i       = CHECKBIT16(flags, 13);
+ sensorDat.ephh_valve   = CHECKBIT16(flags, 0);
+ sensorDat.carb         = CHECKBIT16(flags, 1);
+ sensorDat.gas          = CHECKBIT16(flags, 2);
+ sensorDat.epm_valve    = CHECKBIT16(flags, 3);
+ sensorDat.ce_state     = CHECKBIT16(flags, 4);
+ sensorDat.cool_fan     = CHECKBIT16(flags, 5);
+ sensorDat.st_block     = CHECKBIT16(flags, 6);
+ sensorDat.acceleration = CHECKBIT16(flags, 7);
+ sensorDat.fc_revlim    = CHECKBIT16(flags, 8);
+ sensorDat.floodclear   = CHECKBIT16(flags, 9);
+ sensorDat.sys_locked   = CHECKBIT16(flags, 10);
+ sensorDat.ign_i        = CHECKBIT16(flags, 11);
+ sensorDat.cond_i       = CHECKBIT16(flags, 12);
+ sensorDat.epas_i       = CHECKBIT16(flags, 13);
 
  //TPS sensor
  unsigned char tps = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet,&tps))
   return false;
- m_SensorDat.tps = ((float)tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.tps = ((float)tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //ADD_I1 input
  int add_i1_v = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i1_v))
   return false;
- m_SensorDat.add_i1 = ((float)add_i1_v) * m_adc_discrete;
+ sensorDat.add_i1 = ((float)add_i1_v) * m_adc_discrete;
 
  //ADD_I2 input
  int add_i2_v = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i2_v))
   return false;
- m_SensorDat.add_i2 = ((float)add_i2_v) * m_adc_discrete;
+ sensorDat.add_i2 = ((float)add_i2_v) * m_adc_discrete;
 
  //Биты ошибок СЕ
  unsigned long ce_errors = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet, &ce_errors))
   return false;
- m_SensorDat.ce_errors = ce_errors;
+ sensorDat.ce_errors = ce_errors;
 
  //Choke position
  unsigned char choke_pos = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &choke_pos))
   return false;
- m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //gas dosator position
  unsigned char gasdose_pos = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &gasdose_pos))
   return false;
- m_SensorDat.gasdose_pos = ((float)gasdose_pos) / GD_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.gasdose_pos = ((float)gasdose_pos) / GD_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Vehicle speed
  int speed = 0;
@@ -395,40 +395,40 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (0 != speed && 65535 != speed)
  { //speed sensor is used, value is correct
   float period_s = ((float)speed / ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f)); //period in seconds
-  m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
-  if (m_SensorDat.speed > 999.9f)
-   m_SensorDat.speed = 999.9f;
+  sensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
+  if (sensorDat.speed > 999.9f)
+   sensorDat.speed = 999.9f;
   //convert to selected unit
   if (m_speedUnit == 1)
-   m_SensorDat.speed/= 1.609344f;
+   sensorDat.speed/= 1.609344f;
  }
  else //speed sensor is not used or speed is too low
-  m_SensorDat.speed = 0;
+  sensorDat.speed = 0;
 
  //Distance
  unsigned long distance = 0;
  if (false == mp_pdp->Hex24ToBin(raw_packet,&distance))
   return false;
- m_SensorDat.distance = (m_period_distance * distance) / 1000.0f;
- if (m_SensorDat.distance > 9999.99f)
-  m_SensorDat.distance = 9999.99f;
+ sensorDat.distance = (m_period_distance * distance) / 1000.0f;
+ if (sensorDat.distance > 9999.99f)
+  sensorDat.distance = 9999.99f;
  //convert to selected unit
  if (m_speedUnit == 1)
-  m_SensorDat.distance/= 1.609344f;
+  sensorDat.distance/= 1.609344f;
 
  //Fuel flow frequency
  int inj_fff = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_fff))
   return false;
- m_SensorDat.inj_fff = ((float)inj_fff) / 256.0f; //because raw value multiplied by 256
+ sensorDat.inj_fff = ((float)inj_fff) / 256.0f; //because raw value multiplied by 256
 
  //calculate value of fuel flow in L/100km
- if (m_SensorDat.speed > .0f) 
-  m_SensorDat.inj_ffd = (m_SensorDat.inj_fff / m_SensorDat.speed) * ((3600.0f * 100.0f) / ((float)m_fffConst));
+ if (sensorDat.speed > .0f) 
+  sensorDat.inj_ffd = (sensorDat.inj_fff / sensorDat.speed) * ((3600.0f * 100.0f) / ((float)m_fffConst));
  else
-  m_SensorDat.inj_ffd = .0f;
+  sensorDat.inj_ffd = .0f;
 
- m_SensorDat.inj_ffh = (3600.0f * m_SensorDat.inj_fff) / ((float)m_fffConst); //consumption in L/h
+ sensorDat.inj_ffh = (3600.0f * sensorDat.inj_fff) / ((float)m_fffConst); //consumption in L/h
 
  //Intake air temperature
  int air_temp = 0;
@@ -437,115 +437,115 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 
  if (air_temp!=0x7FFF)
  {
-  m_SensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
-  m_SensorDat.air_temp = MathHelpers::RestrictValue(m_SensorDat.air_temp, -99.9f, 999.0f);
-  m_SensorDat.add_i2_mode = 1;
+  sensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  sensorDat.air_temp = MathHelpers::RestrictValue(sensorDat.air_temp, -99.9f, 999.0f);
+  sensorDat.add_i2_mode = 1;
  }
  else //do not show air temperature
  {
-  m_SensorDat.air_temp = .0f;
-  m_SensorDat.add_i2_mode = 0;
+  sensorDat.air_temp = .0f;
+  sensorDat.add_i2_mode = 0;
  }
 
  // Advance angle from start map (signed value)
  int strt_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&strt_aalt,true))
   return false;
- m_SensorDat.strt_use = (strt_aalt != 32767);
- m_SensorDat.strt_aalt = m_SensorDat.strt_use ? (((float)strt_aalt) / m_angle_multiplier) : 0;
+ sensorDat.strt_use = (strt_aalt != 32767);
+ sensorDat.strt_aalt = sensorDat.strt_use ? (((float)strt_aalt) / m_angle_multiplier) : 0;
 
  //Advance angle from idle map (signed value)
  int idle_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&idle_aalt,true))
   return false;
- m_SensorDat.idle_use = (idle_aalt != 32767);
- m_SensorDat.idle_aalt = m_SensorDat.idle_use ? (((float)idle_aalt) / m_angle_multiplier) : 0;
+ sensorDat.idle_use = (idle_aalt != 32767);
+ sensorDat.idle_aalt = sensorDat.idle_use ? (((float)idle_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from work map (signed value)
  int work_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&work_aalt,true))
   return false;
- m_SensorDat.work_use = (work_aalt != 32767);
- m_SensorDat.work_aalt = m_SensorDat.work_use ? (((float)work_aalt) / m_angle_multiplier) : 0;
+ sensorDat.work_use = (work_aalt != 32767);
+ sensorDat.work_aalt = sensorDat.work_use ? (((float)work_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from coolant temperature correction map (signed value)
  int temp_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&temp_aalt,true))
   return false;
- m_SensorDat.temp_use = (temp_aalt != 32767);
- m_SensorDat.temp_aalt = m_SensorDat.temp_use ? (((float)temp_aalt) / m_angle_multiplier) : 0;
+ sensorDat.temp_use = (temp_aalt != 32767);
+ sensorDat.temp_aalt = sensorDat.temp_use ? (((float)temp_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from air temperature correction map (signed value)
  int airt_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&airt_aalt,true))
   return false;
- m_SensorDat.airt_use = (airt_aalt != 32767);
- m_SensorDat.airt_aalt = m_SensorDat.airt_use ? (((float)airt_aalt) / m_angle_multiplier) : 0;
+ sensorDat.airt_use = (airt_aalt != 32767);
+ sensorDat.airt_aalt = sensorDat.airt_use ? (((float)airt_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from correction from idling RPM regulator (signed value)
  int idlreg_aac = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&idlreg_aac,true))
   return false;
- m_SensorDat.idlreg_use = (idlreg_aac != 32767);
- m_SensorDat.idlreg_aac = m_SensorDat.idlreg_use ? (((float)idlreg_aac) / m_angle_multiplier) : 0;
+ sensorDat.idlreg_use = (idlreg_aac != 32767);
+ sensorDat.idlreg_aac = sensorDat.idlreg_use ? (((float)idlreg_aac) / m_angle_multiplier) : 0;
 
  // Octane correction value (signed value)
  int octan_aac = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&octan_aac,true))
   return false;
- m_SensorDat.octan_use = (octan_aac != 32767);
- m_SensorDat.octan_aac = m_SensorDat.octan_use ? (((float)octan_aac) / m_angle_multiplier) : 0;
+ sensorDat.octan_use = (octan_aac != 32767);
+ sensorDat.octan_aac = sensorDat.octan_use ? (((float)octan_aac) / m_angle_multiplier) : 0;
 
  // Lambda correction value (signed value)
  int lambda_corr = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&lambda_corr,true))
   return false;
- m_SensorDat.lambda_corr = (((float)lambda_corr) / 512.0f) * 100.0f; //obtain value in %
+ sensorDat.lambda_corr = (((float)lambda_corr) / 512.0f) * 100.0f; //obtain value in %
 
  //Injector pulse width (ms)
  int inj_pw = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_pw))
   return false;
- m_SensorDat.inj_pw = (inj_pw * 3.2f) / 1000.0f;
+ sensorDat.inj_pw = (inj_pw * 3.2f) / 1000.0f;
 
  //TPS opening/clising speed (d%/dt = %/s), signed value
  int tpsdot = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tpsdot, true))
   return false;
- m_SensorDat.tpsdot = tpsdot;
+ sensorDat.tpsdot = tpsdot;
 
  //Давление газа
  int map2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map2))
   return false;
- m_SensorDat.map2 = ((float)map2) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.map2 = ((float)map2) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  //calculate here differential pressure
- m_SensorDat.mapd = (m_SensorDat.map2 - m_SensorDat.pressure);
+ sensorDat.mapd = (sensorDat.map2 - sensorDat.pressure);
 
  //Температура газа
  int tmp2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tmp2,true))
   return false;
- m_SensorDat.tmp2 = ((float)tmp2) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- m_SensorDat.tmp2 = MathHelpers::RestrictValue(m_SensorDat.tmp2, -99.9f, 999.0f);
+ sensorDat.tmp2 = ((float)tmp2) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.tmp2 = MathHelpers::RestrictValue(sensorDat.tmp2, -99.9f, 999.0f);
 
  //AFR value
  int afr = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &afr))
   return false;
- m_SensorDat.afr = ((float)afr) / AFR_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.afr = ((float)afr) / AFR_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Load value
  int load = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &load))
   return false;
- m_SensorDat.load = ((float)load) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.load = ((float)load) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //baro pressure
  int baro_press = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &baro_press))
   return false;
- m_SensorDat.baro_press = ((float)baro_press) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.baro_press = ((float)baro_press) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //inj.timing with info
  int iit = 0;
@@ -553,33 +553,40 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  int mode = (iit >> 14) & 0x3;
  float inj_timing = ((float)(iit & 0x3FFF)) / 16.0f; //inj.timing in crankshaft degrees
- float inj_pw_degr = (((360.0f/(1000.0f*60.0f))* m_SensorDat.frequen) * m_SensorDat.inj_pw); //inj. PW in crankshaft degrees
+ float inj_pw_degr = (((360.0f/(1000.0f*60.0f))* sensorDat.frequen) * sensorDat.inj_pw); //inj. PW in crankshaft degrees
  if (mode == 0)
  { //begin
-  m_SensorDat.inj_tim_begin = inj_timing;
-  m_SensorDat.inj_tim_end = inj_timing - inj_pw_degr;
+  sensorDat.inj_tim_begin = inj_timing;
+  sensorDat.inj_tim_end = inj_timing - inj_pw_degr;
  }
  else if (mode == 1)
  { //middle
-  m_SensorDat.inj_tim_begin = inj_timing + (inj_pw_degr / 2);
-  m_SensorDat.inj_tim_end = inj_timing - (inj_pw_degr / 2);
+  sensorDat.inj_tim_begin = inj_timing + (inj_pw_degr / 2);
+  sensorDat.inj_tim_end = inj_timing - (inj_pw_degr / 2);
  }
  else
  {//end
-  m_SensorDat.inj_tim_begin = inj_timing + inj_pw_degr;
-  m_SensorDat.inj_tim_end = inj_timing; 
+  sensorDat.inj_tim_begin = inj_timing + inj_pw_degr;
+  sensorDat.inj_tim_end = inj_timing; 
  }
- if (m_SensorDat.inj_tim_begin > 720.0f)
-  m_SensorDat.inj_tim_begin = m_SensorDat.inj_tim_begin - 720.f;
- if (m_SensorDat.inj_tim_end < 0)
-  m_SensorDat.inj_tim_end = m_SensorDat.inj_tim_end + 720.0f;
+ if (sensorDat.inj_tim_begin > 720.0f)
+  sensorDat.inj_tim_begin = sensorDat.inj_tim_begin - 720.f;
+ if (sensorDat.inj_tim_end < 0)
+  sensorDat.inj_tim_end = sensorDat.inj_tim_end + 720.0f;
 
  //idling regulator's rigidity
  BYTE rigid_arg = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &rigid_arg))
   return false;
- m_SensorDat.rigid_use = (rigid_arg != 255);
- m_SensorDat.rigid_arg = m_SensorDat.rigid_use ? (1.0f + (((float)rigid_arg) / (256.0f/7.0f))) : 0;
+ sensorDat.rigid_use = (rigid_arg != 255);
+ sensorDat.rigid_arg = sensorDat.rigid_use ? (1.0f + (((float)rigid_arg) / (256.0f/7.0f))) : 0;
+
+ //Gas reducer's temperature
+ int grts = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &grts, true))
+  return false;
+ sensorDat.grts = ((float)grts) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.grts = MathHelpers::RestrictValue(sensorDat.grts, -99.9f, 999.0f);
 
  return true;
 }
@@ -613,27 +620,27 @@ bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::FnNameDat& m_FnNameDat = m_recepted_packet.m_FnNameDat;
+ SECU3IO::FnNameDat& fnNameDat = m_recepted_packet.m_FnNameDat;
  if (size != (mp_pdp->isHex() ? 20 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Общее кол-во наборов (семейств характеристик)
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FnNameDat.tables_num))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&fnNameDat.tables_num))
   return false;
 
  //номер этого набора характеристик
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FnNameDat.index))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&fnNameDat.index))
   return false;
 
  //имя этого набора характеристик
  size_t fn_name_size = size - (mp_pdp->getHex8Size()*2);
- strncpy(m_FnNameDat.name, (const char*)raw_packet, fn_name_size);
- m_FnNameDat.name[fn_name_size] = 0;
+ strncpy(fnNameDat.name, (const char*)raw_packet, fn_name_size);
+ fnNameDat.name[fn_name_size] = 0;
 
  //Заменяем символы FF на 0x20 
  for(size_t i = 0; i < fn_name_size; ++i)
-  if (((unsigned char)m_FnNameDat.name[i]) == 0xFF)
-   m_FnNameDat.name[i] = 0x20;
+  if (((unsigned char)fnNameDat.name[i]) == 0xFF)
+   fnNameDat.name[i] = 0x20;
 
  return true;
 }
@@ -642,52 +649,52 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
+ SECU3IO::StartrPar& startrPar = m_recepted_packet.m_StartrPar;
  if (size != (mp_pdp->isHex() ? 26 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
- if (false == mp_pdp->Hex16ToBin(raw_packet,&m_StartrPar.starter_off))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&startrPar.starter_off))
   return false;
 
  //Обороты перехода с пусковой карты
- if (false == mp_pdp->Hex16ToBin(raw_packet,&m_StartrPar.smap_abandon))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&startrPar.smap_abandon))
   return false;
 
  //IAC Crank to run time
  int cranktorun_time = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &cranktorun_time))
   return false;
- m_StartrPar.inj_cranktorun_time = float(cranktorun_time) / 100.0f;
+ startrPar.inj_cranktorun_time = float(cranktorun_time) / 100.0f;
 
  //Time of afterstart enrichment in strokes
  unsigned char aftstr_strokes = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_strokes))
   return false;
- m_StartrPar.inj_aftstr_strokes = aftstr_strokes * 2;
+ startrPar.inj_aftstr_strokes = aftstr_strokes * 2;
 
  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
  //prime pulse at -30C
  int prime_cold = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &prime_cold))
   return false;
- m_StartrPar.inj_prime_cold = (float(prime_cold) * discrete) / 1000.0f; //convert to ms
+ startrPar.inj_prime_cold = (float(prime_cold) * discrete) / 1000.0f; //convert to ms
  //prime pulse at 70C
  int prime_hot = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &prime_hot))
   return false;
- m_StartrPar.inj_prime_hot = (float(prime_hot) * discrete) / 1000.0f; //convert to ms
+ startrPar.inj_prime_hot = (float(prime_hot) * discrete) / 1000.0f; //convert to ms
  //prime pulse delay
  unsigned char prime_delay = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &prime_delay))
   return false;
- m_StartrPar.inj_prime_delay = float(prime_delay) / 10.0f;            //convert to seconds
+ startrPar.inj_prime_delay = float(prime_delay) / 10.0f;            //convert to seconds
 
  //flood clear mode entering threshold (% of TPS)
  unsigned char inj_floodclear_tps = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_floodclear_tps))
   return false;
- m_StartrPar.inj_floodclear_tps = float(inj_floodclear_tps) / 2.0f;
+ startrPar.inj_floodclear_tps = float(inj_floodclear_tps) / 2.0f;
 
  return true;
 }
@@ -696,7 +703,7 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::AnglesPar& m_AnglesPar = m_recepted_packet.m_AnglesPar;
+ SECU3IO::AnglesPar& anglesPar = m_recepted_packet.m_AnglesPar;
  if (size != (mp_pdp->isHex() ? 21 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -704,34 +711,34 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
  int max_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&max_angle,true))
   return false;
- m_AnglesPar.max_angle = ((float)max_angle) / m_angle_multiplier;
+ anglesPar.max_angle = ((float)max_angle) / m_angle_multiplier;
 
  //Минимальный, допустимый УОЗ (число со знаком)
  int  min_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&min_angle,true))
   return false;
- m_AnglesPar.min_angle = ((float)min_angle) / m_angle_multiplier;
+ anglesPar.min_angle = ((float)min_angle) / m_angle_multiplier;
 
  //Октан-коррекция УОЗ (число со знаком)
  int angle_corr;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&angle_corr,true))
   return false;
- m_AnglesPar.angle_corr = ((float)angle_corr) / m_angle_multiplier;
+ anglesPar.angle_corr = ((float)angle_corr) / m_angle_multiplier;
 
  //Скорость уменьшения УОЗ (число со знаком)
  int dec_speed;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&dec_speed,true))
   return false;
- m_AnglesPar.dec_speed = ((float)dec_speed) / m_angle_multiplier;
+ anglesPar.dec_speed = ((float)dec_speed) / m_angle_multiplier;
 
 //Скорость увеличения УОЗ (число со знаком)
  int inc_speed;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&inc_speed,true))
   return false;
- m_AnglesPar.inc_speed = ((float)inc_speed) / m_angle_multiplier;
+ anglesPar.inc_speed = ((float)inc_speed) / m_angle_multiplier;
 
  //Признак нулевого УОЗ
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_AnglesPar.zero_adv_ang))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &anglesPar.zero_adv_ang))
   return false;
 
  return true;
@@ -740,85 +747,85 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
+ SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
  if (size != (mp_pdp->isHex() ? 41 : 21))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FunSetPar.fn_benzin))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&funSetPar.fn_benzin))
   return false;
 
  //Номер семейства характеристик используемого для газа
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FunSetPar.fn_gas))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&funSetPar.fn_gas))
   return false;
 
  //Нижнее значение давления по оси ДАД
  int map_lower_pressure = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&map_lower_pressure))
   return false;
- m_FunSetPar.map_lower_pressure = ((float)map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ funSetPar.map_lower_pressure = ((float)map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Верхнее значение давления по оси ДАД
  int map_upper_pressure = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&map_upper_pressure))
   return false;
- m_FunSetPar.map_upper_pressure = ((float)map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ funSetPar.map_upper_pressure = ((float)map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Смещение кривой ДАД
  int map_curve_offset = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map_curve_offset, true))
   return false;
- m_FunSetPar.map_curve_offset = ((float)map_curve_offset) * m_adc_discrete;
+ funSetPar.map_curve_offset = ((float)map_curve_offset) * m_adc_discrete;
 
  //Наклон кривой ДАД
  int map_curve_gradient = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map_curve_gradient, true))
   return false;
- m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
+ funSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
  //Смещение кривой ДАД2
  int map2_curve_offset = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map2_curve_offset, true))
   return false;
- m_FunSetPar.map2_curve_offset = ((float)map2_curve_offset) * m_adc_discrete;
+ funSetPar.map2_curve_offset = ((float)map2_curve_offset) * m_adc_discrete;
 
  //Наклон кривой ДАД2
  int map2_curve_gradient = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map2_curve_gradient, true))
   return false;
- m_FunSetPar.map2_curve_gradient = ((float)map2_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
+ funSetPar.map2_curve_gradient = ((float)map2_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
  //TPS sensor curve offset
  int tps_curve_offset = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_offset, true))
   return false;
- m_FunSetPar.tps_curve_offset = ((float)tps_curve_offset) * m_adc_discrete;
+ funSetPar.tps_curve_offset = ((float)tps_curve_offset) * m_adc_discrete;
 
  //TPS sensor curve slope
  int tps_curve_gradient = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_gradient, true))
   return false;
- m_FunSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete * 128.0f);
+ funSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete * 128.0f);
 
  //Engine load measurement source
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_FunSetPar.load_src_cfg))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&funSetPar.load_src_cfg))
   return false;
 
  //Uni.outputs selected for map selection
  BYTE mapsel_uni = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &mapsel_uni))
   return false;
- m_FunSetPar.uni_gas = mapsel_uni >> 4;
- m_FunSetPar.uni_benzin = mapsel_uni & 0xF;
- if (m_FunSetPar.uni_gas == 0xF)
-  m_FunSetPar.uni_gas = UNI_OUTPUT_NUM; //disabled
- if (m_FunSetPar.uni_benzin == 0xF)
-  m_FunSetPar.uni_benzin = UNI_OUTPUT_NUM; //disabled
+ funSetPar.uni_gas = mapsel_uni >> 4;
+ funSetPar.uni_benzin = mapsel_uni & 0xF;
+ if (funSetPar.uni_gas == 0xF)
+  funSetPar.uni_gas = UNI_OUTPUT_NUM; //disabled
+ if (funSetPar.uni_benzin == 0xF)
+  funSetPar.uni_benzin = UNI_OUTPUT_NUM; //disabled
 
  BYTE barocorr_type = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &barocorr_type))
   return false;
- m_FunSetPar.barocorr_type = barocorr_type;
+ funSetPar.barocorr_type = barocorr_type;
 
  return true;
 }
@@ -827,7 +834,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
+ SECU3IO::IdlRegPar& idlRegPar = m_recepted_packet.m_IdlRegPar;
  if (size != (mp_pdp->isHex() ? 56 : 28))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -836,49 +843,49 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet,&idl_flags))
   return false;
 
- m_IdlRegPar.idl_regul = CHECKBIT8(idl_flags, 0);
- m_IdlRegPar.use_regongas = CHECKBIT8(idl_flags, 1);
- m_IdlRegPar.closed_loop = CHECKBIT8(idl_flags, 2);
- m_IdlRegPar.preg_mode = CHECKBIT8(idl_flags, 3);
- m_IdlRegPar.idl_useiacclongas = CHECKBIT8(idl_flags, 4);
+ idlRegPar.idl_regul = CHECKBIT8(idl_flags, 0);
+ idlRegPar.use_regongas = CHECKBIT8(idl_flags, 1);
+ idlRegPar.closed_loop = CHECKBIT8(idl_flags, 2);
+ idlRegPar.preg_mode = CHECKBIT8(idl_flags, 3);
+ idlRegPar.idl_useiacclongas = CHECKBIT8(idl_flags, 4);
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac1,true))
   return false;
- m_IdlRegPar.ifac1 = ((float)ifac1) / 256.0f;
+ idlRegPar.ifac1 = ((float)ifac1) / 256.0f;
 
  //Коэффициент регулятора при  отрицательной ошибке (число со знаком)
  int ifac2;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac2,true))
   return false;
- m_IdlRegPar.ifac2 = ((float)ifac2) / 256.0f;
+ idlRegPar.ifac2 = ((float)ifac2) / 256.0f;
 
  //Зона нечувствительности регулятора
- if (false == mp_pdp->Hex16ToBin(raw_packet,&m_IdlRegPar.MINEFR))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&idlRegPar.MINEFR))
   return false;
 
  //Поддерживаемые обороты
- if (false == mp_pdp->Hex16ToBin(raw_packet,&m_IdlRegPar.idling_rpm))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&idlRegPar.idling_rpm))
   return false;
 
  //Минимальный УОЗ (число со знаком)
  int min_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&min_angle,true))
   return false;
- m_IdlRegPar.min_angle = ((float)min_angle) / m_angle_multiplier;
+ idlRegPar.min_angle = ((float)min_angle) / m_angle_multiplier;
 
  //Максимальный УОЗ (число со знаком)
  int max_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&max_angle,true))
   return false;
- m_IdlRegPar.max_angle = ((float)max_angle) / m_angle_multiplier;
+ idlRegPar.max_angle = ((float)max_angle) / m_angle_multiplier;
 
  //Порог включения регулятора ХХ по температуре (число со знаком)
  int turn_on_temp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&turn_on_temp,true))
   return false;
- m_IdlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ idlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //CLOSED LOOP PARAMETERS (FUEL INJECTION)
 
@@ -886,61 +893,61 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  unsigned char idl_to_run_add = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_to_run_add))
   return false;
- m_IdlRegPar.idl_to_run_add = ((float)idl_to_run_add) / 2.0f;
+ idlRegPar.idl_to_run_add = ((float)idl_to_run_add) / 2.0f;
 
  //Value added to target RPM when vehicle starts to run
  unsigned char rpm_on_run_add = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &rpm_on_run_add))
   return false;
- m_IdlRegPar.rpm_on_run_add = rpm_on_run_add * 10;
+ idlRegPar.rpm_on_run_add = rpm_on_run_add * 10;
 
  //IAC closeed loop proportional coefficient
  int idl_reg_p = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_p))
   return false;
- m_IdlRegPar.idl_reg_p = ((float)idl_reg_p) / 256.0f;
+ idlRegPar.idl_reg_p = ((float)idl_reg_p) / 256.0f;
 
  //IAC closed loop integral coefficient
  int idl_reg_i = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_i))
   return false;
- m_IdlRegPar.idl_reg_i = ((float)idl_reg_i) / 256.0f;
+ idlRegPar.idl_reg_i = ((float)idl_reg_i) / 256.0f;
 
  //coefficient for calculating closed loop entering RPM threshold
  unsigned char idl_coef_thrd1 = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_coef_thrd1))
   return false;
- m_IdlRegPar.idl_coef_thrd1 = (((float)idl_coef_thrd1) / 128.0f) + 1.0f;
+ idlRegPar.idl_coef_thrd1 = (((float)idl_coef_thrd1) / 128.0f) + 1.0f;
 
  //coefficient for calculating closed loop leaving RPM threshold
  unsigned char idl_coef_thrd2 = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_coef_thrd2))
   return false;
- m_IdlRegPar.idl_coef_thrd2 = (((float)idl_coef_thrd2) / 128.0f) + 1.0f;
+ idlRegPar.idl_coef_thrd2 = (((float)idl_coef_thrd2) / 128.0f) + 1.0f;
 
  //RPM error limit for integrator
  unsigned char idl_intrpm_lim = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_intrpm_lim))
   return false;
- m_IdlRegPar.idl_intrpm_lim = idl_intrpm_lim * 10;
+ idlRegPar.idl_intrpm_lim = idl_intrpm_lim * 10;
 
  //intake manifold pressure on idling
  int idl_map_value = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_map_value))
   return false;
- m_IdlRegPar.idl_map_value = ((float)idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ idlRegPar.idl_map_value = ((float)idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //minimum IAC position
  unsigned char idl_iacminpos = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_iacminpos))
   return false;
- m_IdlRegPar.idl_iacminpos = ((float)idl_iacminpos / 2.0f);
+ idlRegPar.idl_iacminpos = ((float)idl_iacminpos / 2.0f);
 
  //maximum IAC position
  unsigned char idl_iacmaxpos = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_iacmaxpos))
   return false;
- m_IdlRegPar.idl_iacmaxpos = ((float)idl_iacmaxpos / 2.0f);
+ idlRegPar.idl_iacmaxpos = ((float)idl_iacmaxpos / 2.0f);
 
  return true;
 }
@@ -948,64 +955,64 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
+ SECU3IO::CarburPar& carburPar = m_recepted_packet.m_CarburPar;
  if (size != (mp_pdp->isHex() ? 41 : 21))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &carburPar.ephh_lot))
   return false;
 
  //Верхний порог ЭПХХ (бензин)
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &carburPar.ephh_hit))
   return false;
 
  //Признак инверсии концевика карбюратора
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_CarburPar.carb_invers))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &carburPar.carb_invers))
   return false;
 
  //Порог разрежения ЭМР
  int epm_on_threshold = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &epm_on_threshold, true))
   return false;
- m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ carburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Нижний порог ЭПХХ (газ)
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot_g))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &carburPar.ephh_lot_g))
   return false;
 
  //Верхний порог ЭПХХ (газ)
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit_g))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &carburPar.ephh_hit_g))
   return false;
 
  //Задержка выключения клапана ЭПХХ
  unsigned char shutoff_delay;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &shutoff_delay))
   return false;
- m_CarburPar.shutoff_delay = ((float)shutoff_delay) / 100.0f; //переводим в секунды
+ carburPar.shutoff_delay = ((float)shutoff_delay) / 100.0f; //переводим в секунды
 
  //Порог переключения в режим ХХ по ДПДЗ
  unsigned char tps_threshold;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &tps_threshold))
   return false;
- m_CarburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ carburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  int fuelcut_map_thrd=0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &fuelcut_map_thrd))
   return false;
- m_CarburPar.fuelcut_map_thrd = ((float)fuelcut_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ carburPar.fuelcut_map_thrd = ((float)fuelcut_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  int fuelcut_cts_thrd=0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &fuelcut_cts_thrd, true))
   return false;
- m_CarburPar.fuelcut_cts_thrd = ((float)fuelcut_cts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ carburPar.fuelcut_cts_thrd = ((float)fuelcut_cts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Rev.limitting lo threshold
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.revlim_lot))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &carburPar.revlim_lot))
   return false;
 
  //Rev.limitting hi threshold
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.revlim_hit))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &carburPar.revlim_hit))
   return false;
 
  return true;
@@ -1014,7 +1021,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
+ SECU3IO::TemperPar& temperPar = m_recepted_packet.m_TemperPar;
  if (size != (mp_pdp->isHex() ? 30 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -1024,11 +1031,11 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //Признак комплектации ДТОЖ (использования ДТОЖ)
- m_TemperPar.tmp_use = CHECKBIT8(tmp_flags, 0);
+ temperPar.tmp_use = CHECKBIT8(tmp_flags, 0);
  //Флаг использования таблицы для задания зависимости температуры от напрящения ДТОЖ
- m_TemperPar.cts_use_map = CHECKBIT8(tmp_flags, 1);
+ temperPar.cts_use_map = CHECKBIT8(tmp_flags, 1);
  //Флаг использования ШИМ для управления вентилятором охлаждения двигателя
- m_TemperPar.vent_pwm = CHECKBIT8(tmp_flags, 2);
+ temperPar.vent_pwm = CHECKBIT8(tmp_flags, 2);
 
  //Для удобства и повышения скорости обработки SECU-3 оперирует с температурой представленной
  //дискретами АЦП (как измеренное значение прямо с датчика)
@@ -1037,42 +1044,42 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
  int vent_on = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_on,true))
   return false;
- m_TemperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ temperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Порог выключения вентилятора (число со знаком)
  int vent_off = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_off,true))
   return false;
- m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ temperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  int vent_pwmfrq = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_pwmfrq))
   return false;
- m_TemperPar.vent_pwmfrq = MathHelpers::Round(1.0/(((double)vent_pwmfrq) / 524288.0));
+ temperPar.vent_pwmfrq = MathHelpers::Round(1.0/(((double)vent_pwmfrq) / 524288.0));
 
  //conditioner clutch turn on threshold (voltage from the refrigerant pressure sensor)
  int cond_pvt_on = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &cond_pvt_on))
   return false;
- m_TemperPar.cond_pvt_on = ((float)cond_pvt_on) * m_adc_discrete;
+ temperPar.cond_pvt_on = ((float)cond_pvt_on) * m_adc_discrete;
 
  //conditioner clutch turn off threshold (voltage from the refrigerant pressure sensor)
  int cond_pvt_off = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &cond_pvt_off))
   return false;
- m_TemperPar.cond_pvt_off = ((float)cond_pvt_off) * m_adc_discrete;
+ temperPar.cond_pvt_off = ((float)cond_pvt_off) * m_adc_discrete;
 
  //Minimum RPM for turning on of conditioner clutch
  int cond_min_rpm = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &cond_min_rpm))
   return false;
- m_TemperPar.cond_min_rpm = cond_min_rpm;
+ temperPar.cond_min_rpm = cond_min_rpm;
 
  //Cooling fan's timer (sec.)
  int vent_tmr = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &vent_tmr))
   return false;
- m_TemperPar.vent_tmr = vent_tmr / 100.0f;
+ temperPar.vent_tmr = vent_tmr / 100.0f;
 
  return true;
 }
@@ -1080,7 +1087,7 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
+ SECU3IO::RawSensDat& rawSensDat = m_recepted_packet.m_RawSensDat;
  if (size != (mp_pdp->isHex() ? 52 : 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -1088,79 +1095,79 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
  signed int map = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&map,true))
   return false;
- m_RawSensDat.map_value = map * m_adc_discrete;
+ rawSensDat.map_value = map * m_adc_discrete;
 
  //напряжение бортовой сети
  signed int ubat = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ubat,true))
   return false;
- m_RawSensDat.ubat_value = ubat * m_adc_discrete;
+ rawSensDat.ubat_value = ubat * m_adc_discrete;
 
  //температура ОЖ (ДТОЖ)
  signed int temp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&temp,true))
   return false;
- m_RawSensDat.temp_value = temp * m_adc_discrete;
+ rawSensDat.temp_value = temp * m_adc_discrete;
 
  //Уровень сигнала детонации
  signed int knock = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock,true))
   return false;
- m_RawSensDat.knock_value = knock * m_adc_discrete;
+ rawSensDat.knock_value = knock * m_adc_discrete;
 
  //Throttle position sensor
  signed int tps = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&tps,true))
   return false;
- m_RawSensDat.tps_value = tps * m_adc_discrete;
+ rawSensDat.tps_value = tps * m_adc_discrete;
 
  //ADD_I1 input
  signed int add_i1 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i1,true))
   return false;
- m_RawSensDat.add_i1_value = add_i1 * m_adc_discrete;
+ rawSensDat.add_i1_value = add_i1 * m_adc_discrete;
 
  //ADD_I2 input
  signed int add_i2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i2,true))
   return false;
- m_RawSensDat.add_i2_value = add_i2 * m_adc_discrete;
+ rawSensDat.add_i2_value = add_i2 * m_adc_discrete;
 
  //ADD_I3 input
  signed int add_i3 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i3,true))
   return false;
- m_RawSensDat.add_i3_value = add_i3 * m_adc_discrete;
+ rawSensDat.add_i3_value = add_i3 * m_adc_discrete;
 
  //ADD_I4 input
  signed int add_i4 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i4,true))
   return false;
- m_RawSensDat.add_i4_value = add_i4 * m_adc_discrete;
+ rawSensDat.add_i4_value = add_i4 * m_adc_discrete;
 
  //ADD_I5 input
  signed int add_i5 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i5,true))
   return false;
- m_RawSensDat.add_i5_value = add_i5 * m_adc_discrete;
+ rawSensDat.add_i5_value = add_i5 * m_adc_discrete;
 
  //ADD_I6 input
  signed int add_i6 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i6,true))
   return false;
- m_RawSensDat.add_i6_value = add_i6 * m_adc_discrete;
+ rawSensDat.add_i6_value = add_i6 * m_adc_discrete;
 
  //ADD_I7 input
  signed int add_i7 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i7,true))
   return false;
- m_RawSensDat.add_i7_value = add_i7 * m_adc_discrete;
+ rawSensDat.add_i7_value = add_i7 * m_adc_discrete;
 
  //ADD_I8 input
  signed int add_i8 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i8,true))
   return false;
- m_RawSensDat.add_i8_value = add_i8 * m_adc_discrete;
+ rawSensDat.add_i8_value = add_i8 * m_adc_discrete;
 
  return true;
 }
@@ -1170,150 +1177,150 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 //note: for more information see AVR120 application note.
 bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar;
+ SECU3IO::ADCCompenPar& adcCompenPar = m_recepted_packet.m_ADCCompenPar;
  if (size != (mp_pdp->isHex() ? 144 : 72))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  signed int map_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&map_adc_factor))
   return false;
- m_ADCCompenPar.map_adc_factor = ((float)map_adc_factor) / 16384;
+ adcCompenPar.map_adc_factor = ((float)map_adc_factor) / 16384;
 
  signed long map_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&map_adc_correction))
   return false;
- m_ADCCompenPar.map_adc_correction = ((((float)map_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.map_adc_factor;
- m_ADCCompenPar.map_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.map_adc_correction = ((((float)map_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.map_adc_factor;
+ adcCompenPar.map_adc_correction*=m_adc_discrete; //в вольты
 
  signed int ubat_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ubat_adc_factor))
   return false;
- m_ADCCompenPar.ubat_adc_factor = ((float)ubat_adc_factor) / 16384;
+ adcCompenPar.ubat_adc_factor = ((float)ubat_adc_factor) / 16384;
 
  signed long ubat_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ubat_adc_correction))
   return false;
- m_ADCCompenPar.ubat_adc_correction = ((((float)ubat_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ubat_adc_factor;
- m_ADCCompenPar.ubat_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ubat_adc_correction = ((((float)ubat_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ubat_adc_factor;
+ adcCompenPar.ubat_adc_correction*=m_adc_discrete; //в вольты
 
  signed int temp_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&temp_adc_factor))
   return false;
- m_ADCCompenPar.temp_adc_factor = ((float)temp_adc_factor) / 16384;
+ adcCompenPar.temp_adc_factor = ((float)temp_adc_factor) / 16384;
 
  signed long temp_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&temp_adc_correction))
   return false;
- m_ADCCompenPar.temp_adc_correction = ((((float)temp_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.temp_adc_factor;
- m_ADCCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.temp_adc_correction = ((((float)temp_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.temp_adc_factor;
+ adcCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты
  
  //TPS sensor
  signed int tps_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&tps_adc_factor))
   return false;
- m_ADCCompenPar.tps_adc_factor = ((float)tps_adc_factor) / 16384;
+ adcCompenPar.tps_adc_factor = ((float)tps_adc_factor) / 16384;
 
  signed long tps_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&tps_adc_correction))
   return false;
- m_ADCCompenPar.tps_adc_correction = ((((float)tps_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.tps_adc_factor;
- m_ADCCompenPar.tps_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.tps_adc_correction = ((((float)tps_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.tps_adc_factor;
+ adcCompenPar.tps_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I1 input
  signed int ai1_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ai1_adc_factor))
   return false;
- m_ADCCompenPar.ai1_adc_factor = ((float)ai1_adc_factor) / 16384;
+ adcCompenPar.ai1_adc_factor = ((float)ai1_adc_factor) / 16384;
 
  signed long ai1_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai1_adc_correction))
   return false;
- m_ADCCompenPar.ai1_adc_correction = ((((float)ai1_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai1_adc_factor;
- m_ADCCompenPar.ai1_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai1_adc_correction = ((((float)ai1_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai1_adc_factor;
+ adcCompenPar.ai1_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I2 input
  signed int ai2_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ai2_adc_factor))
   return false;
- m_ADCCompenPar.ai2_adc_factor = ((float)ai2_adc_factor) / 16384;
+ adcCompenPar.ai2_adc_factor = ((float)ai2_adc_factor) / 16384;
 
  signed long ai2_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai2_adc_correction))
   return false;
- m_ADCCompenPar.ai2_adc_correction = ((((float)ai2_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai2_adc_factor;
- m_ADCCompenPar.ai2_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai2_adc_correction = ((((float)ai2_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai2_adc_factor;
+ adcCompenPar.ai2_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I3 input
  signed int ai3_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ai3_adc_factor))
   return false;
- m_ADCCompenPar.ai3_adc_factor = ((float)ai3_adc_factor) / 16384;
+ adcCompenPar.ai3_adc_factor = ((float)ai3_adc_factor) / 16384;
 
  signed long ai3_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai3_adc_correction))
   return false;
- m_ADCCompenPar.ai3_adc_correction = ((((float)ai3_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai3_adc_factor;
- m_ADCCompenPar.ai3_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai3_adc_correction = ((((float)ai3_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai3_adc_factor;
+ adcCompenPar.ai3_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I4 input
  signed int ai4_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ai4_adc_factor))
   return false;
- m_ADCCompenPar.ai4_adc_factor = ((float)ai4_adc_factor) / 16384;
+ adcCompenPar.ai4_adc_factor = ((float)ai4_adc_factor) / 16384;
 
  signed long ai4_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai4_adc_correction))
   return false;
- m_ADCCompenPar.ai4_adc_correction = ((((float)ai4_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai4_adc_factor;
- m_ADCCompenPar.ai4_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai4_adc_correction = ((((float)ai4_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai4_adc_factor;
+ adcCompenPar.ai4_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I5 input
  signed int ai5_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ai5_adc_factor))
   return false;
- m_ADCCompenPar.ai5_adc_factor = ((float)ai5_adc_factor) / 16384;
+ adcCompenPar.ai5_adc_factor = ((float)ai5_adc_factor) / 16384;
 
  signed long ai5_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai5_adc_correction))
   return false;
- m_ADCCompenPar.ai5_adc_correction = ((((float)ai5_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai5_adc_factor;
- m_ADCCompenPar.ai5_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai5_adc_correction = ((((float)ai5_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai5_adc_factor;
+ adcCompenPar.ai5_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I6 input
  signed int ai6_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &ai6_adc_factor))
   return false;
- m_ADCCompenPar.ai6_adc_factor = ((float)ai6_adc_factor) / 16384;
+ adcCompenPar.ai6_adc_factor = ((float)ai6_adc_factor) / 16384;
 
  signed long ai6_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai6_adc_correction))
   return false;
- m_ADCCompenPar.ai6_adc_correction = ((((float)ai6_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai6_adc_factor;
- m_ADCCompenPar.ai6_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai6_adc_correction = ((((float)ai6_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai6_adc_factor;
+ adcCompenPar.ai6_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I7 input
  signed int ai7_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ai7_adc_factor))
   return false;
- m_ADCCompenPar.ai7_adc_factor = ((float)ai7_adc_factor) / 16384;
+ adcCompenPar.ai7_adc_factor = ((float)ai7_adc_factor) / 16384;
 
  signed long ai7_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai7_adc_correction))
   return false;
- m_ADCCompenPar.ai7_adc_correction = ((((float)ai7_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai7_adc_factor;
- m_ADCCompenPar.ai7_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai7_adc_correction = ((((float)ai7_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai7_adc_factor;
+ adcCompenPar.ai7_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I4 input
  signed int ai8_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ai8_adc_factor))
   return false;
- m_ADCCompenPar.ai8_adc_factor = ((float)ai8_adc_factor) / 16384;
+ adcCompenPar.ai8_adc_factor = ((float)ai8_adc_factor) / 16384;
 
  signed long ai8_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai8_adc_correction))
   return false;
- m_ADCCompenPar.ai8_adc_correction = ((((float)ai8_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai8_adc_factor;
- m_ADCCompenPar.ai8_adc_correction*=m_adc_discrete; //в вольты
+ adcCompenPar.ai8_adc_correction = ((((float)ai8_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai8_adc_factor;
+ adcCompenPar.ai8_adc_correction*=m_adc_discrete; //в вольты
 
  return true;
 }
@@ -1321,51 +1328,51 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
+ SECU3IO::CKPSPar& ckpsPar = m_recepted_packet.m_CKPSPar;
  if (size != (mp_pdp->isHex() ? 20 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Количество зубьев до в.м.т.
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_CKPSPar.ckps_cogs_btdc))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&ckpsPar.ckps_cogs_btdc))
   return false;
 
  //Длительность импульса запуска коммутаторов в зубьях шкива
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_CKPSPar.ckps_ignit_cogs))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&ckpsPar.ckps_ignit_cogs))
   return false;
 
  //Кол-во цилиндров двигателя
- if (false == mp_pdp->Hex8ToBin(raw_packet,&m_CKPSPar.ckps_engine_cyl))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&ckpsPar.ckps_engine_cyl))
   return false;
 
  //Кол-во зубьев задающего шкива, включая пропущенные
- if (false == mp_pdp->Hex8ToBin(raw_packet, &m_CKPSPar.ckps_cogs_num))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ckpsPar.ckps_cogs_num))
   return false;
 
  //Кол-во пропущенных зубьев задающего шкива (допустимые значения: 0, 1, 2)
- if (false == mp_pdp->Hex8ToBin(raw_packet, &m_CKPSPar.ckps_miss_num))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ckpsPar.ckps_miss_num))
   return false;
 
  //Hall sensor flags
  unsigned char flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
   return false;
- m_CKPSPar.ckps_rising_spark = CHECKBIT8(flags, 0);
- m_CKPSPar.ckps_use_cam_ref = CHECKBIT8(flags, 1);
- m_CKPSPar.ckps_edge_type = CHECKBIT8(flags, 2);
- m_CKPSPar.ref_s_edge_type = CHECKBIT8(flags, 3);
- m_CKPSPar.ckps_merge_ign_outs = CHECKBIT8(flags, 4);
+ ckpsPar.ckps_rising_spark = CHECKBIT8(flags, 0);
+ ckpsPar.ckps_use_cam_ref = CHECKBIT8(flags, 1);
+ ckpsPar.ckps_edge_type = CHECKBIT8(flags, 2);
+ ckpsPar.ref_s_edge_type = CHECKBIT8(flags, 3);
+ ckpsPar.ckps_merge_ign_outs = CHECKBIT8(flags, 4);
 
  //Hall shutter's window width
  int wnd_width;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&wnd_width,true))
   return false;
- m_CKPSPar.hall_wnd_width = ((float)wnd_width) / m_angle_multiplier;
+ ckpsPar.hall_wnd_width = ((float)wnd_width) / m_angle_multiplier;
 
  //Hall degrees BTDC
  int degrees_btdc;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&degrees_btdc,true))
   return false;
- m_CKPSPar.hall_degrees_btdc = ((float)degrees_btdc) / m_angle_multiplier;
+ ckpsPar.hall_degrees_btdc = ((float)degrees_btdc) / m_angle_multiplier;
 
  return true;
 }
@@ -1373,14 +1380,14 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::OPCompNc& m_OPCompNc = m_recepted_packet.m_OPCompNc;
+ SECU3IO::OPCompNc& opCompNc = m_recepted_packet.m_OPCompNc;
  if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Код завершенной операции
- if (false == mp_pdp->Hex8ToBin(raw_packet, &m_OPCompNc.opdata))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &opCompNc.opdata))
   return false;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &m_OPCompNc.opcode))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &opCompNc.opcode))
   return false;
 
  return true;
@@ -1389,68 +1396,68 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::KnockPar& m_KnockPar = m_recepted_packet.m_KnockPar;
+ SECU3IO::KnockPar& knockPar = m_recepted_packet.m_KnockPar;
  if (size != (mp_pdp->isHex() ? (14+17) : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Разрешен/запрещен
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_KnockPar.knock_use_knock_channel))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&knockPar.knock_use_knock_channel))
   return false;
 
  //Частота ПФ
  unsigned char knock_bpf_frequency;
  if (false == mp_pdp->Hex8ToBin(raw_packet,&knock_bpf_frequency))
   return false;
- m_KnockPar.knock_bpf_frequency = knock_bpf_frequency;
+ knockPar.knock_bpf_frequency = knock_bpf_frequency;
 
  //Начало фазового окна
  int  knock_k_wnd_begin_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_k_wnd_begin_angle,true))
   return false;
- m_KnockPar.knock_k_wnd_begin_angle = ((float)knock_k_wnd_begin_angle) / m_angle_multiplier;
+ knockPar.knock_k_wnd_begin_angle = ((float)knock_k_wnd_begin_angle) / m_angle_multiplier;
 
  //Конец фазового окна
  int  knock_k_wnd_end_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_k_wnd_end_angle,true))
   return false;
- m_KnockPar.knock_k_wnd_end_angle = ((float)knock_k_wnd_end_angle) / m_angle_multiplier;
+ knockPar.knock_k_wnd_end_angle = ((float)knock_k_wnd_end_angle) / m_angle_multiplier;
 
  //Постоянная времени интегрирования
  unsigned char knock_int_time_const;
  if (false == mp_pdp->Hex8ToBin(raw_packet,&knock_int_time_const))
   return false;
- m_KnockPar.knock_int_time_const = knock_int_time_const;
+ knockPar.knock_int_time_const = knock_int_time_const;
 
  //-----------------
  //Шаг смещения УОЗ при детонации
  int knock_retard_step;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_retard_step,true))
   return false;
- m_KnockPar.knock_retard_step = ((float)knock_retard_step) / m_angle_multiplier;
+ knockPar.knock_retard_step = ((float)knock_retard_step) / m_angle_multiplier;
 
  //Шаг восстановления УОЗ
  int knock_advance_step;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_advance_step,true))
   return false;
- m_KnockPar.knock_advance_step = ((float)knock_advance_step) / m_angle_multiplier;
+ knockPar.knock_advance_step = ((float)knock_advance_step) / m_angle_multiplier;
 
  //Максимальное смещение УОЗ
  int knock_max_retard;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_max_retard,true))
   return false;
- m_KnockPar.knock_max_retard = ((float)knock_max_retard) / m_angle_multiplier;
+ knockPar.knock_max_retard = ((float)knock_max_retard) / m_angle_multiplier;
 
  //Порог детонации
  int knock_threshold;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_threshold, false))
   return false;
- m_KnockPar.knock_threshold = ((float)knock_threshold) * m_adc_discrete;
+ knockPar.knock_threshold = ((float)knock_threshold) * m_adc_discrete;
 
  //Задержка восстановления УОЗ
  unsigned char knock_recovery_delay;
  if (false == mp_pdp->Hex8ToBin(raw_packet,&knock_recovery_delay))
   return false;
- m_KnockPar.knock_recovery_delay = knock_recovery_delay;
+ knockPar.knock_recovery_delay = knock_recovery_delay;
 
  return true;
 }
@@ -1458,14 +1465,14 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
+ SECU3IO::CEErrors& ceErrors = m_recepted_packet.m_CEErrors;
  if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned long flags = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet, &flags))
   return false;
- m_CEErrors.flags = flags;
+ ceErrors.flags = flags;
 
  return true;
 }
@@ -1473,14 +1480,14 @@ bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
+ SECU3IO::CEErrors& ceErrors = m_recepted_packet.m_CEErrors;
  if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned long flags = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet, &flags))
   return false;
- m_CEErrors.flags = flags;
+ ceErrors.flags = flags;
 
  return true;
 }
@@ -1488,26 +1495,26 @@ bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::FWInfoDat& m_FWInfoDat = m_recepted_packet.m_FWInfoDat;
+ SECU3IO::FWInfoDat& fwInfoDat = m_recepted_packet.m_FWInfoDat;
  if (size != (FW_SIGNATURE_INFO_SIZE + (mp_pdp->isHex() ? 10 : 5)))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //строка с информацией 
- strncpy(m_FWInfoDat.info,(const char*)raw_packet, FW_SIGNATURE_INFO_SIZE);
- m_FWInfoDat.info[FW_SIGNATURE_INFO_SIZE] = 0;
+ strncpy(fwInfoDat.info,(const char*)raw_packet, FW_SIGNATURE_INFO_SIZE);
+ fwInfoDat.info[FW_SIGNATURE_INFO_SIZE] = 0;
  raw_packet+=FW_SIGNATURE_INFO_SIZE;
 
  //биты опций прошивки
  DWORD options = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&options))
   return false;
- m_FWInfoDat.options = options;
+ fwInfoDat.options = options;
 
  unsigned char fw_version;
  if (false == mp_pdp->Hex8ToBin(raw_packet,&fw_version))
   return false;
- m_FWInfoDat.fw_version[0] = fw_version & 0x0F;
- m_FWInfoDat.fw_version[1] = fw_version >> 4;
+ fwInfoDat.fw_version[0] = fw_version & 0x0F;
+ fwInfoDat.fw_version[1] = fw_version >> 4;
 
  return true;
 }
@@ -1515,7 +1522,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
+ SECU3IO::MiscelPar& miscPar = m_recepted_packet.m_MiscelPar;
  if (size != (mp_pdp->isHex() ? 35 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -1524,27 +1531,27 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &divisor))
   return false;
 
- m_MiscPar.baud_rate = 0;
+ miscPar.baud_rate = 0;
 
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   if (SECU3IO::secu3_allowable_uart_divisors[i].second == divisor)
-    m_MiscPar.baud_rate = SECU3IO::secu3_allowable_uart_divisors[i].first;
- 
- ASSERT(m_MiscPar.baud_rate);
+    miscPar.baud_rate = SECU3IO::secu3_allowable_uart_divisors[i].first;
+
+ ASSERT(miscPar.baud_rate);
 
  //Период посылки пакетов в десятках миллисекунд
  unsigned char period_t_ms = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet,&period_t_ms))
   return false;
 
- m_MiscPar.period_ms = period_t_ms * 10;
+ miscPar.period_ms = period_t_ms * 10;
 
  //Отсечка разрешена/запрещена
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_MiscPar.ign_cutoff))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &miscPar.ign_cutoff))
   return false;
 
  //Обороты отсечки
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_MiscPar.ign_cutoff_thrd, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &miscPar.ign_cutoff_thrd, true))
   return false;
 
  //Выход ДХ: Начало импульса в зубьях шкива относительно ВМТ
@@ -1552,49 +1559,49 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &start))
   return false;
 
- m_MiscPar.hop_start_cogs = start;
+ miscPar.hop_start_cogs = start;
 
  //Выход ДХ: Длительность импульса в зубьях шкива
  unsigned char duration = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &duration))
   return false;
- m_MiscPar.hop_durat_cogs = duration;
+ miscPar.hop_durat_cogs = duration;
 
  //Fuel pump flags
  unsigned char flpmp_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flpmp_flags))
   return false;
- m_MiscPar.flpmp_offongas = CHECKBIT8(flpmp_flags, 0);
- m_MiscPar.inj_offongas = CHECKBIT8(flpmp_flags, 1);
- m_MiscPar.inj_offonpet = CHECKBIT8(flpmp_flags, 2);
+ miscPar.flpmp_offongas = CHECKBIT8(flpmp_flags, 0);
+ miscPar.inj_offongas = CHECKBIT8(flpmp_flags, 1);
+ miscPar.inj_offonpet = CHECKBIT8(flpmp_flags, 2);
 
  //Начальный порог расхода воздуха для EVAP
  int evap_afbegin = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &evap_afbegin))
   return false;
- m_MiscPar.evap_afbegin = ((float)evap_afbegin) * 32.0f;
+ miscPar.evap_afbegin = ((float)evap_afbegin) * 32.0f;
 
  //Наклон прямой расхода воздуха для EVAP
  int evap_afslope = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &evap_afslope))
   return false;
- m_MiscPar.evap_afslope = (((float)evap_afslope) / 1048576.0f) / 32.0f; //2^20
+ miscPar.evap_afslope = (((float)evap_afslope) / 1048576.0f) / 32.0f; //2^20
 
  //Fuel pump timeout for cranking
  BYTE fp_timeout_strt = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &fp_timeout_strt))
   return false;
- m_MiscPar.fp_timeout_strt = (((float)fp_timeout_strt) / 10.0f);
+ miscPar.fp_timeout_strt = (((float)fp_timeout_strt) / 10.0f);
 
  int pwmfrq1 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pwmfrq1))
   return false;
- m_MiscPar.pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)pwmfrq1) / 524288.0));
+ miscPar.pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)pwmfrq1) / 524288.0));
 
  int pwmfrq2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pwmfrq2))
   return false;
- m_MiscPar.pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)pwmfrq2) / 524288.0));
+ miscPar.pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)pwmfrq2) / 524288.0));
 
  return true;
 }
@@ -1602,45 +1609,45 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::EditTabPar& m_EditTabPar = m_recepted_packet.m_EditTabPar;
+ SECU3IO::EditTabPar& editTabPar = m_recepted_packet.m_EditTabPar;
  //check for 16 and 24 byte packets
  if (mp_pdp->isHex() ? (size < 6 || size > 52) : (size < 3 || size > 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //код таблицы в наборе
- if (false == mp_pdp->Hex8ToBin(raw_packet, &m_EditTabPar.tab_id))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &editTabPar.tab_id))
   return false;
 
- if (m_EditTabPar.tab_id != ETMT_STRT_MAP && m_EditTabPar.tab_id != ETMT_IDLE_MAP && m_EditTabPar.tab_id != ETMT_WORK_MAP &&
-     m_EditTabPar.tab_id != ETMT_TEMP_MAP && m_EditTabPar.tab_id != ETMT_NAME_STR && m_EditTabPar.tab_id != ETMT_VE_MAP &&
-     m_EditTabPar.tab_id != ETMT_AFR_MAP && m_EditTabPar.tab_id != ETMT_CRNK_MAP && m_EditTabPar.tab_id != ETMT_WRMP_MAP &&
-     m_EditTabPar.tab_id != ETMT_DEAD_MAP && m_EditTabPar.tab_id != ETMT_IDLR_MAP && m_EditTabPar.tab_id != ETMT_IDLC_MAP &&
-     m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP &&
-     m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP &&
-     m_EditTabPar.tab_id != ETMT_EGOCRV_MAP && m_EditTabPar.tab_id != ETMT_IACC_MAP && m_EditTabPar.tab_id != ETMT_IACCW_MAP &&
-     m_EditTabPar.tab_id != ETMT_IATCLT_MAP && m_EditTabPar.tab_id != ETMT_TPSSWT_MAP && m_EditTabPar.tab_id != ETMT_GTSC_MAP &&
-     m_EditTabPar.tab_id != ETMT_GPSC_MAP && m_EditTabPar.tab_id != ETMT_ATSC_MAP && m_EditTabPar.tab_id != ETMT_PWM1_MAP &&
-     m_EditTabPar.tab_id != ETMT_PWM2_MAP)
+ if (editTabPar.tab_id != ETMT_STRT_MAP && editTabPar.tab_id != ETMT_IDLE_MAP && editTabPar.tab_id != ETMT_WORK_MAP &&
+     editTabPar.tab_id != ETMT_TEMP_MAP && editTabPar.tab_id != ETMT_NAME_STR && editTabPar.tab_id != ETMT_VE_MAP &&
+     editTabPar.tab_id != ETMT_AFR_MAP && editTabPar.tab_id != ETMT_CRNK_MAP && editTabPar.tab_id != ETMT_WRMP_MAP &&
+     editTabPar.tab_id != ETMT_DEAD_MAP && editTabPar.tab_id != ETMT_IDLR_MAP && editTabPar.tab_id != ETMT_IDLC_MAP &&
+     editTabPar.tab_id != ETMT_AETPS_MAP && editTabPar.tab_id != ETMT_AERPM_MAP && editTabPar.tab_id != ETMT_AFTSTR_MAP &&
+     editTabPar.tab_id != ETMT_IT_MAP && editTabPar.tab_id != ETMT_ITRPM_MAP && editTabPar.tab_id != ETMT_RIGID_MAP &&
+     editTabPar.tab_id != ETMT_EGOCRV_MAP && editTabPar.tab_id != ETMT_IACC_MAP && editTabPar.tab_id != ETMT_IACCW_MAP &&
+     editTabPar.tab_id != ETMT_IATCLT_MAP && editTabPar.tab_id != ETMT_TPSSWT_MAP && editTabPar.tab_id != ETMT_GTSC_MAP &&
+     editTabPar.tab_id != ETMT_GPSC_MAP && editTabPar.tab_id != ETMT_ATSC_MAP && editTabPar.tab_id != ETMT_PWM1_MAP &&
+     editTabPar.tab_id != ETMT_PWM2_MAP)
   return false;
 
  //check for 16-byte packets
- if ((m_EditTabPar.tab_id != ETMT_VE_MAP) && (m_EditTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
+ if ((editTabPar.tab_id != ETMT_VE_MAP) && (editTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
  unsigned char address;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
- m_EditTabPar.address = address;
+ editTabPar.address = address;
 
  size-=(2 * mp_pdp->getHex8Size());
 
- if (m_EditTabPar.tab_id != ETMT_NAME_STR)
+ if (editTabPar.tab_id != ETMT_NAME_STR)
  {
   size_t div;
   size_t data_size = 0;
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
-  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP || m_EditTabPar.tab_id == ETMT_RIGID_MAP || m_EditTabPar.tab_id == ETMT_EGOCRV_MAP || m_EditTabPar.tab_id == ETMT_IACC_MAP || m_EditTabPar.tab_id == ETMT_IATCLT_MAP)
+  if (editTabPar.tab_id == ETMT_CRNK_MAP || editTabPar.tab_id == ETMT_DEAD_MAP || editTabPar.tab_id == ETMT_RIGID_MAP || editTabPar.tab_id == ETMT_EGOCRV_MAP || editTabPar.tab_id == ETMT_IACC_MAP || editTabPar.tab_id == ETMT_IATCLT_MAP)
   {
    div = mp_pdp->isHex() ? 4 : 2;
    if (size % div) // 1 byte in HEX is 2 symbols
@@ -1650,19 +1657,19 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    for(size_t i = 0; i < size / div; ++i)
    {
     int value;
-    if (false == mp_pdp->Hex16ToBin(raw_packet, &value, m_EditTabPar.tab_id == ETMT_DEAD_MAP)) //<--signed for dead map
+    if (false == mp_pdp->Hex16ToBin(raw_packet, &value, editTabPar.tab_id == ETMT_DEAD_MAP)) //<--signed for dead map
      return false;
 
-    if (m_EditTabPar.tab_id == ETMT_IATCLT_MAP)
-     m_EditTabPar.table_data[i] = (address >= INJ_IATCLT_CORR_SIZE) ? (((float)value) * 32.0f) : (((float)value) / 8192.0f);
-    else if (m_EditTabPar.tab_id == ETMT_IACC_MAP)
-     m_EditTabPar.table_data[i] = (address >= INJ_IAC_CORR_SIZE) ? (((float)value) / 128.0f) : (((float)(((signed short)value) + 8192)) / 8192.0f);
-    else if (m_EditTabPar.tab_id == ETMT_RIGID_MAP)
-     m_EditTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
-    else if (m_EditTabPar.tab_id == ETMT_EGOCRV_MAP)
-     m_EditTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (((float)value) / EGO_CURVE_M_FACTOR);
+    if (editTabPar.tab_id == ETMT_IATCLT_MAP)
+     editTabPar.table_data[i] = (address >= INJ_IATCLT_CORR_SIZE) ? (((float)value) * 32.0f) : (((float)value) / 8192.0f);
+    else if (editTabPar.tab_id == ETMT_IACC_MAP)
+     editTabPar.table_data[i] = (address >= INJ_IAC_CORR_SIZE) ? (((float)value) / 128.0f) : (((float)(((signed short)value) + 8192)) / 8192.0f);
+    else if (editTabPar.tab_id == ETMT_RIGID_MAP)
+     editTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
+    else if (editTabPar.tab_id == ETMT_EGOCRV_MAP)
+     editTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (((float)value) / EGO_CURVE_M_FACTOR);
     else
-     m_EditTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
+     editTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
    }
   }
@@ -1672,7 +1679,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    if (size % div) // 1 byte in HEX is 2 symbols
     return false;
 
-   if (m_EditTabPar.tab_id == ETMT_VE_MAP) //volumetric efficiency map
+   if (editTabPar.tab_id == ETMT_VE_MAP) //volumetric efficiency map
    { //VE
     BYTE buff[32]; unsigned char value;
     for(size_t i = 0; i < size / div; ++i)
@@ -1687,10 +1694,10 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 
     size_t numOfCells = (size / 3) * 2;
     for(size_t i = 0; i < numOfCells; ++i)
-     m_EditTabPar.table_data[i] = ((float)w12GetCell(buff, i)) / VE_MAPS_M_FACTOR;
+     editTabPar.table_data[i] = ((float)w12GetCell(buff, i)) / VE_MAPS_M_FACTOR;
     data_size = numOfCells;
    }
-   else if (m_EditTabPar.tab_id == ETMT_IT_MAP) //injection timing map
+   else if (editTabPar.tab_id == ETMT_IT_MAP) //injection timing map
    {
     BYTE buff[32]; unsigned char value;
     for(size_t i = 0; i < size / div; ++i)
@@ -1705,7 +1712,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 
     size_t numOfCells = (size / 3) * 2;
     for(size_t i = 0; i < numOfCells; ++i)
-     m_EditTabPar.table_data[i] = ((float)w12GetCell(buff, i)) / IT_MAPS_M_FACTOR;
+     editTabPar.table_data[i] = ((float)w12GetCell(buff, i)) / IT_MAPS_M_FACTOR;
     data_size = numOfCells;
    }
    else
@@ -1716,57 +1723,57 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      unsigned char value;
      if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
       return false;
-     else if (m_EditTabPar.tab_id == ETMT_AFR_MAP)
-      m_EditTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
-     else if (m_EditTabPar.tab_id == ETMT_PWM1_MAP)
-      m_EditTabPar.table_data[i] = m_splitAng ? ((float)((signed char)value)) / AA_MAPS_M_FACTOR : ((float)value * 100) / 255.0f;
-     else if (m_EditTabPar.tab_id == ETMT_PWM2_MAP)
-      m_EditTabPar.table_data[i] = ((float)value * 100) / 255.0f;
-     else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
-     else if (m_EditTabPar.tab_id == ETMT_AFTSTR_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / AFTSTR_MAPS_M_FACTOR;
-     else if (m_EditTabPar.tab_id == ETMT_IDLR_MAP || m_EditTabPar.tab_id == ETMT_IDLC_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / IACPOS_MAPS_M_FACTOR;
-     else if (m_EditTabPar.tab_id == ETMT_AETPS_MAP)
-      m_EditTabPar.table_data[i] = (i >= INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(float((signed char)value)/AETPSB_MAPS_M_FACTOR):(float(value)-AETPSV_MAPS_ADDER);
-     else if (m_EditTabPar.tab_id == ETMT_AERPM_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / ((i >= INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR);
-     else if (m_EditTabPar.tab_id == ETMT_ITRPM_MAP)
-      m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 10.0f;
-     else if (m_EditTabPar.tab_id == ETMT_IACCW_MAP)
-      m_EditTabPar.table_data[i] =  (address >= INJ_IAC_CORR_W_SIZE) ? (((float)value) / 2.0f) : (((float)value) / 256.0f);
-     else if (m_EditTabPar.tab_id == ETMT_TPSSWT_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / TPSSWT_MAPS_M_FACTOR;
-     else if (m_EditTabPar.tab_id == ETMT_GTSC_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / 128.0f;
-     else if (m_EditTabPar.tab_id == ETMT_GPSC_MAP)
-      m_EditTabPar.table_data[i] =  (i >= INJ_GPS_CORR_SIZE) ? (((float)value) * 2.0f) : (((float)value) / 128.0f);
-     else if (m_EditTabPar.tab_id == ETMT_ATSC_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / 128.0f;
+     else if (editTabPar.tab_id == ETMT_AFR_MAP)
+      editTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
+     else if (editTabPar.tab_id == ETMT_PWM1_MAP)
+      editTabPar.table_data[i] = m_splitAng ? ((float)((signed char)value)) / AA_MAPS_M_FACTOR : ((float)value * 100) / 255.0f;
+     else if (editTabPar.tab_id == ETMT_PWM2_MAP)
+      editTabPar.table_data[i] = ((float)value * 100) / 255.0f;
+     else if (editTabPar.tab_id == ETMT_WRMP_MAP)
+      editTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
+     else if (editTabPar.tab_id == ETMT_AFTSTR_MAP)
+      editTabPar.table_data[i] = ((float)value) / AFTSTR_MAPS_M_FACTOR;
+     else if (editTabPar.tab_id == ETMT_IDLR_MAP || editTabPar.tab_id == ETMT_IDLC_MAP)
+      editTabPar.table_data[i] = ((float)value) / IACPOS_MAPS_M_FACTOR;
+     else if (editTabPar.tab_id == ETMT_AETPS_MAP)
+      editTabPar.table_data[i] = (i >= INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(float((signed char)value)/AETPSB_MAPS_M_FACTOR):(float(value)-AETPSV_MAPS_ADDER);
+     else if (editTabPar.tab_id == ETMT_AERPM_MAP)
+      editTabPar.table_data[i] = ((float)value) / ((i >= INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR);
+     else if (editTabPar.tab_id == ETMT_ITRPM_MAP)
+      editTabPar.table_data[i] = ((float)((unsigned char)value)) * 10.0f;
+     else if (editTabPar.tab_id == ETMT_IACCW_MAP)
+      editTabPar.table_data[i] =  (address >= INJ_IAC_CORR_W_SIZE) ? (((float)value) / 2.0f) : (((float)value) / 256.0f);
+     else if (editTabPar.tab_id == ETMT_TPSSWT_MAP)
+      editTabPar.table_data[i] = ((float)value) / TPSSWT_MAPS_M_FACTOR;
+     else if (editTabPar.tab_id == ETMT_GTSC_MAP)
+      editTabPar.table_data[i] = ((float)value) / 128.0f;
+     else if (editTabPar.tab_id == ETMT_GPSC_MAP)
+      editTabPar.table_data[i] =  (i >= INJ_GPS_CORR_SIZE) ? (((float)value) * 2.0f) : (((float)value) / 128.0f);
+     else if (editTabPar.tab_id == ETMT_ATSC_MAP)
+      editTabPar.table_data[i] = ((float)value) / 128.0f;
      else
-      m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
+      editTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
     }
    }
   }
-  m_EditTabPar.data_size = data_size;
+  editTabPar.data_size = data_size;
  }
  else
  {
   //фрагмент с данными (текстовая информация)  
   std::string raw_string((char*)raw_packet, size);
-  OemToChar(raw_string.c_str(), m_EditTabPar.name_data);
-  m_EditTabPar.data_size = raw_string.size();
+  OemToChar(raw_string.c_str(), editTabPar.name_data);
+  editTabPar.data_size = raw_string.size();
  }
- 
+
  return true;
 }
 
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::SepTabPar& m_AttTabPar = m_recepted_packet.m_SepTabPar;
+ SECU3IO::SepTabPar& attTabPar = m_recepted_packet.m_SepTabPar;
  if (mp_pdp->isHex() ? (size < 4 || size > 34) : (size < 2 || size > 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -1774,7 +1781,7 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
  unsigned char address;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
- m_AttTabPar.address = address;
+ attTabPar.address = address;
 
  size-=mp_pdp->getHex8Size();
  size_t div = mp_pdp->isHex() ? 2 : 1;
@@ -1788,18 +1795,18 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
   unsigned char value;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
    return false;
-  m_AttTabPar.table_data[i] = value;
+  attTabPar.table_data[i] = value;
   ++data_size;
  }
- m_AttTabPar.data_size = data_size;
- 
+ attTabPar.data_size = data_size;
+
  return true;
 }
 
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::SepTabPar& m_RpmGrdPar = m_recepted_packet.m_SepTabPar;
+ SECU3IO::SepTabPar& rpmGrdPar = m_recepted_packet.m_SepTabPar;
  if (mp_pdp->isHex() ? (size != 66) : (size != 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -1807,7 +1814,7 @@ bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
  unsigned char address;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
- m_RpmGrdPar.address = address;
+ rpmGrdPar.address = address;
  if (0!=address)
   return false;  //address must be always zero
 
@@ -1826,18 +1833,18 @@ bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
   if (false == mp_pdp->Hex8ToBin(raw_packet, &hi_byte))
    return false;
 
-  m_RpmGrdPar.table_data[i] = MAKEWORD(lo_byte, hi_byte);
+  rpmGrdPar.table_data[i] = MAKEWORD(lo_byte, hi_byte);
   ++data_size;
  }
- m_RpmGrdPar.data_size = data_size;
- 
+ rpmGrdPar.data_size = data_size;
+
  return true;
 }
 
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::SepTabPar& m_CltGrdPar = m_recepted_packet.m_SepTabPar;
+ SECU3IO::SepTabPar& cltGrdPar = m_recepted_packet.m_SepTabPar;
  if (mp_pdp->isHex() ? (size != 66) : (size != 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -1845,7 +1852,7 @@ bool CControlApp::Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size)
  unsigned char address;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
- m_CltGrdPar.address = address;
+ cltGrdPar.address = address;
  if (0!=address)
   return false;  //address must be always zero
 
@@ -1864,18 +1871,18 @@ bool CControlApp::Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size)
   if (false == mp_pdp->Hex8ToBin(raw_packet, &hi_byte))
    return false;
 
-  m_CltGrdPar.table_data[i] = ((float)((signed short)MAKEWORD(lo_byte, hi_byte))) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  cltGrdPar.table_data[i] = ((float)((signed short)MAKEWORD(lo_byte, hi_byte))) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
   ++data_size;
  }
- m_CltGrdPar.data_size = data_size;
- 
+ cltGrdPar.data_size = data_size;
+
  return true;
 }
 
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
+ SECU3IO::DiagInpDat& diagInpDat = m_recepted_packet.m_DiagInpDat;
  if (size != (mp_pdp->isHex() ? 46 : 23))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -1883,67 +1890,67 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
  BYTE flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
   return false;
- m_DiagInpDat.f_secu3t = flags;
+ diagInpDat.f_secu3t = flags;
 
  //напряжение бортовой сети
  int voltage = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &voltage))
   return false;
- m_DiagInpDat.voltage = ((float)voltage) * m_adc_discrete;
+ diagInpDat.voltage = ((float)voltage) * m_adc_discrete;
 
  //датчик абсолютного давления
  int map = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map))
   return false;
- m_DiagInpDat.map = ((float)map) * m_adc_discrete;
+ diagInpDat.map = ((float)map) * m_adc_discrete;
 
  //датчик температуры охлаждающей жидкости
  int temp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &temp))
   return false;
- m_DiagInpDat.temp = ((float)temp) * m_adc_discrete;
+ diagInpDat.temp = ((float)temp) * m_adc_discrete;
 
  //дополнительный I1
  int add_i1 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i1))
   return false;
- m_DiagInpDat.add_i1 = ((float)add_i1) * m_adc_discrete;
+ diagInpDat.add_i1 = ((float)add_i1) * m_adc_discrete;
 
  //дополнительный I2
  int add_i2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i2))
   return false;
- m_DiagInpDat.add_i2 = ((float)add_i2) * m_adc_discrete;
+ diagInpDat.add_i2 = ((float)add_i2) * m_adc_discrete;
 
  //дополнительный I3 (SECU-3i)
  int add_i3 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i3))
   return false;
- m_DiagInpDat.add_i3 = ((float)add_i3) * m_adc_discrete;
+ diagInpDat.add_i3 = ((float)add_i3) * m_adc_discrete;
 
  //дополнительный I4 (SECU-3i, reserved)
  int add_i4 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i4))
   return false;
- m_DiagInpDat.add_i4 = ((float)add_i4) * m_adc_discrete;
+ diagInpDat.add_i4 = ((float)add_i4) * m_adc_discrete;
 
  //датчик положения дроссельной заслонки (концевик карбюратора)
  int carb = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &carb))
   return false;
- m_DiagInpDat.carb = ((float)carb) * m_adc_discrete;
+ diagInpDat.carb = ((float)carb) * m_adc_discrete;
 
  //Датчик детонации 1
  int ks_1 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &ks_1))
   return false;
- m_DiagInpDat.ks_1 = ((float)ks_1) * m_adc_discrete;
+ diagInpDat.ks_1 = ((float)ks_1) * m_adc_discrete;
 
  //Датчик детонации 2
  int ks_2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &ks_2))
   return false;
- m_DiagInpDat.ks_2 = ((float)ks_2) * m_adc_discrete;
+ diagInpDat.ks_2 = ((float)ks_2) * m_adc_discrete;
 
  //байт с состоянием цифровых входов
  int word = 0;
@@ -1951,15 +1958,15 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
   return false;
 
  //газовый клапан, ДПКВ, ДНО(VR), ДФ, "Bootloader", "Default EEPROM"
- m_DiagInpDat.gas    = CHECKBIT16(word, 0);
- m_DiagInpDat.ckps   = CHECKBIT16(word, 1);
- m_DiagInpDat.ref_s  = CHECKBIT16(word, 2);
- m_DiagInpDat.ps     = CHECKBIT16(word, 3);
- m_DiagInpDat.bl     = CHECKBIT16(word, 4);
- m_DiagInpDat.de     = CHECKBIT16(word, 5);
- m_DiagInpDat.ign_i  = CHECKBIT16(word, 6); //SECU-3i
- m_DiagInpDat.cond_i = CHECKBIT16(word, 7); //SECU-3i
- m_DiagInpDat.epas_i = CHECKBIT16(word, 8); //SECU-3i
+ diagInpDat.gas    = CHECKBIT16(word, 0);
+ diagInpDat.ckps   = CHECKBIT16(word, 1);
+ diagInpDat.ref_s  = CHECKBIT16(word, 2);
+ diagInpDat.ps     = CHECKBIT16(word, 3);
+ diagInpDat.bl     = CHECKBIT16(word, 4);
+ diagInpDat.de     = CHECKBIT16(word, 5);
+ diagInpDat.ign_i  = CHECKBIT16(word, 6); //SECU-3i
+ diagInpDat.cond_i = CHECKBIT16(word, 7); //SECU-3i
+ diagInpDat.epas_i = CHECKBIT16(word, 8); //SECU-3i
 
  return true;
 }
@@ -1967,60 +1974,60 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
+ SECU3IO::ChokePar& chokePar = m_recepted_packet.m_ChokePar;
  if (size != (mp_pdp->isHex() ? 27 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_ChokePar.sm_steps))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &chokePar.sm_steps))
   return false;
 
  //choke testing mode command/state (it is fake parameter)
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_ChokePar.testing))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &chokePar.testing))
   return false;
 
  //manual position setting delta (it is fake parameter and must be zero in this ingoing packet)
  int delta = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &delta))
   return false;
- m_ChokePar.manual_delta = delta;
+ chokePar.manual_delta = delta;
 
  //Choke RPM regulator integral factor
  int choke_rpm_if;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_rpm_if))
   return false;
- m_ChokePar.choke_rpm_if = ((float)choke_rpm_if) / 1024.0f;
+ chokePar.choke_rpm_if = ((float)choke_rpm_if) / 1024.0f;
 
  //Startup correction apply time (2 points)
  int choke_corr_time;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_corr_time))
   return false;
- m_ChokePar.choke_corr_time[0] = ((float)choke_corr_time / 100.0f);
+ chokePar.choke_corr_time[0] = ((float)choke_corr_time / 100.0f);
 
  if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_corr_time))
   return false;
- m_ChokePar.choke_corr_time[1] = ((float)choke_corr_time / 100.0f);
+ chokePar.choke_corr_time[1] = ((float)choke_corr_time / 100.0f);
 
  //Choke flags
  BYTE choke_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &choke_flags))
   return false;
- m_ChokePar.useclrpmreg = CHECKBIT8(choke_flags, 0);
- m_ChokePar.offrpmreg_ongas = CHECKBIT8(choke_flags, 1);
- m_ChokePar.usethrottle_pos = CHECKBIT8(choke_flags, 2);
- m_ChokePar.sm_maxfreqinit = CHECKBIT8(choke_flags, 3);
+ chokePar.useclrpmreg = CHECKBIT8(choke_flags, 0);
+ chokePar.offrpmreg_ongas = CHECKBIT8(choke_flags, 1);
+ chokePar.usethrottle_pos = CHECKBIT8(choke_flags, 2);
+ chokePar.sm_maxfreqinit = CHECKBIT8(choke_flags, 3);
 
  //frequency of stepper motor's pulses
  int sm_freq = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &sm_freq))
   return false;
- m_ChokePar.sm_freq = sm_freq;
+ chokePar.sm_freq = sm_freq;
 
  //IAC Crank to run time
  int cranktorun_time = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &cranktorun_time))
   return false;
- m_ChokePar.inj_cranktorun_time = float(cranktorun_time) / 100.0f;
+ chokePar.inj_cranktorun_time = float(cranktorun_time) / 100.0f;
 
  return true;
 }
@@ -2028,57 +2035,57 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
+ SECU3IO::GasdosePar& gasdosePar = m_recepted_packet.m_GasdosePar;
  if (size != (mp_pdp->isHex() ? 24 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
- if (false == mp_pdp->Hex16ToBin(raw_packet, &m_GasdosePar.gd_steps))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &gasdosePar.gd_steps))
   return false;
 
  //choke testing mode command/state (it is fake parameter)
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_GasdosePar.testing))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &gasdosePar.testing))
   return false;
 
  //manual position setting delta (it is fake parameter and must be zero in this ingoing packet)
  int delta = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &delta))
   return false;
- m_GasdosePar.manual_delta = delta;
+ gasdosePar.manual_delta = delta;
 
  //Closing in fuel cut mode
  BYTE fc_closing = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &fc_closing))
   return false;
- m_GasdosePar.fc_closing = ((float)fc_closing) / 2.0f;
+ gasdosePar.fc_closing = ((float)fc_closing) / 2.0f;
 
  int corrlimit_p = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_p))
   return false;
- m_GasdosePar.lam_corr_limit_p = (float(corrlimit_p) / 512.0f) * 100.0f;
+ gasdosePar.lam_corr_limit_p = (float(corrlimit_p) / 512.0f) * 100.0f;
 
  int corrlimit_m = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_m))
   return false;
- m_GasdosePar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
+ gasdosePar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
 
  //Stoichiometric value for gas
  int lam_stoichval = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &lam_stoichval))
   return false;
- m_GasdosePar.lam_stoichval = ((float)lam_stoichval) / 128.0f;
+ gasdosePar.lam_stoichval = ((float)lam_stoichval) / 128.0f;
 
  //frequency of stepper motor's pulses
  int gd_freq = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &gd_freq))
   return false;
- m_GasdosePar.gd_freq = gd_freq;
+ gasdosePar.gd_freq = gd_freq;
 
  //Flag
  int gd_maxfreqinit = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &gd_maxfreqinit))
   return false;
- m_GasdosePar.gd_maxfreqinit = gd_maxfreqinit;
+ gasdosePar.gd_maxfreqinit = gd_maxfreqinit;
 
  return true;
 }
@@ -2086,7 +2093,7 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::SecurPar& m_SecurPar = m_recepted_packet.m_SecurPar;
+ SECU3IO::SecurPar& securPar = m_recepted_packet.m_SecurPar;
  if (size != (mp_pdp->isHex() ? 28 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -2103,20 +2110,20 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
  if (numName || numPass)
   return false;
 
- _tcscpy(m_SecurPar.bt_name, _T(""));
- _tcscpy(m_SecurPar.bt_pass, _T(""));
+ _tcscpy(securPar.bt_name, _T(""));
+ _tcscpy(securPar.bt_pass, _T(""));
 
  //Bluetooth and security flags
  unsigned char flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
   return false;
 
- m_SecurPar.use_bt   = CHECKBIT8(flags, 0);
- m_SecurPar.set_btbr = CHECKBIT8(flags, 1);
- m_SecurPar.use_imm  = CHECKBIT8(flags, 2);
- m_SecurPar.use_respar = CHECKBIT8(flags, 3);
- m_SecurPar.chk_fwcrc = CHECKBIT8(flags, 4);
- m_SecurPar.bt_type = CHECKBIT8(flags, 5);
+ securPar.use_bt   = CHECKBIT8(flags, 0);
+ securPar.set_btbr = CHECKBIT8(flags, 1);
+ securPar.use_imm  = CHECKBIT8(flags, 2);
+ securPar.use_respar = CHECKBIT8(flags, 3);
+ securPar.chk_fwcrc = CHECKBIT8(flags, 4);
+ securPar.bt_type = CHECKBIT8(flags, 5);
 
  //Parse out iButton keys
  BYTE key[IBTN_KEY_SIZE]; int i, j;
@@ -2127,7 +2134,7 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
    if (false == mp_pdp->Hex8ToBin(raw_packet, &key[i]))
     return false;
   }
-  memcpy(m_SecurPar.ibtn_keys[j], key, IBTN_KEY_SIZE);
+  memcpy(securPar.ibtn_keys[j], key, IBTN_KEY_SIZE);
  }
 
  return true;
@@ -2136,7 +2143,7 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::UniOutPar& m_UniOutPar = m_recepted_packet.m_UniOutPar;
+ SECU3IO::UniOutPar& uniOutPar = m_recepted_packet.m_UniOutPar;
  if (size != (mp_pdp->isHex() ? 133 : 67))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -2147,46 +2154,46 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
   unsigned char flags = 0;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
    return false;
-  m_UniOutPar.out[oi].logicFunc = flags >> 4;
-  m_UniOutPar.out[oi].invers_1 = (flags & 0x01) != 0;
-  m_UniOutPar.out[oi].invers_2 = (flags & 0x02) != 0;
+  uniOutPar.out[oi].logicFunc = flags >> 4;
+  uniOutPar.out[oi].invers_1 = (flags & 0x01) != 0;
+  uniOutPar.out[oi].invers_2 = (flags & 0x02) != 0;
 
   unsigned char cond1 = 0;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &cond1))
    return false;
-  m_UniOutPar.out[oi].condition1 = cond1;
+  uniOutPar.out[oi].condition1 = cond1;
 
   unsigned char cond2 = 0;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &cond2))
    return false;
-  m_UniOutPar.out[oi].condition2 = cond2;
+  uniOutPar.out[oi].condition2 = cond2;
 
   int on_thrd_1 = 0;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_1, cen.isSigned(cond1)))
    return false;
-  m_UniOutPar.out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(on_thrd_1, cond1);
+  uniOutPar.out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(on_thrd_1, cond1);
 
   int off_thrd_1 = 0;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_1, cen.isSigned(cond1)))
    return false;
-  m_UniOutPar.out[oi].off_thrd_1 = cen.UniOutDecodeCondVal(off_thrd_1, cond1);
+  uniOutPar.out[oi].off_thrd_1 = cen.UniOutDecodeCondVal(off_thrd_1, cond1);
 
   int on_thrd_2 = 0;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_2, cen.isSigned(cond2)))
    return false;
-  m_UniOutPar.out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(on_thrd_2, cond2);
+  uniOutPar.out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(on_thrd_2, cond2);
 
   int off_thrd_2 = 0;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_2, cen.isSigned(cond2)))
    return false;
-  m_UniOutPar.out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(off_thrd_2, cond2);
+  uniOutPar.out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(off_thrd_2, cond2);
  }
 
  //logic function for 1st and 2nd outputs
  BYTE lf12 = 0;
  if (false == mp_pdp->Hex4ToBin(raw_packet, &lf12))
   return false;
- m_UniOutPar.logicFunc12 = lf12;
+ uniOutPar.logicFunc12 = lf12;
 
  return true;
 }
@@ -2194,103 +2201,103 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::InjctrPar& m_InjctrPar = m_recepted_packet.m_InjctrPar;
+ SECU3IO::InjctrPar& injctrPar = m_recepted_packet.m_InjctrPar;
  if (size != (mp_pdp->isHex() ? 60 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_flags))
   return false;
- m_InjctrPar.inj_usetimingmap[0] = CHECKBIT8(inj_flags, 0);
- m_InjctrPar.inj_usetimingmap[1] = CHECKBIT8(inj_flags, 1);
- m_InjctrPar.inj_useaddcorrs = CHECKBIT8(inj_flags, 2);
- m_InjctrPar.inj_useairden = CHECKBIT8(inj_flags, 3);
- m_InjctrPar.inj_usediffpress = CHECKBIT8(inj_flags, 4);
- m_InjctrPar.inj_secinjrowswt = CHECKBIT8(inj_flags, 5);
+ injctrPar.inj_usetimingmap[0] = CHECKBIT8(inj_flags, 0);
+ injctrPar.inj_usetimingmap[1] = CHECKBIT8(inj_flags, 1);
+ injctrPar.inj_useaddcorrs = CHECKBIT8(inj_flags, 2);
+ injctrPar.inj_useairden = CHECKBIT8(inj_flags, 3);
+ injctrPar.inj_usediffpress = CHECKBIT8(inj_flags, 4);
+ injctrPar.inj_secinjrowswt = CHECKBIT8(inj_flags, 5);
 
  unsigned char inj_config = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
   return false;
- m_InjctrPar.inj_config[0] = GETHI4BITS(inj_config);      //configuration
- m_InjctrPar.inj_squirt_num[0] = GETLO4BITS(inj_config);  //number of squirts per cycle
+ injctrPar.inj_config[0] = GETHI4BITS(inj_config);      //configuration
+ injctrPar.inj_squirt_num[0] = GETLO4BITS(inj_config);  //number of squirts per cycle
  //second fuel:
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
   return false;
- m_InjctrPar.inj_config[1] = GETHI4BITS(inj_config);      //configuration
- m_InjctrPar.inj_squirt_num[1] = GETLO4BITS(inj_config);  //number of squirts per cycle
+ injctrPar.inj_config[1] = GETHI4BITS(inj_config);      //configuration
+ injctrPar.inj_squirt_num[1] = GETLO4BITS(inj_config);  //number of squirts per cycle
 
  int inj_flow_rate = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_flow_rate))
   return false;
- m_InjctrPar.inj_flow_rate[0] = float(inj_flow_rate) / 64.0f;
+ injctrPar.inj_flow_rate[0] = float(inj_flow_rate) / 64.0f;
  //second fuel:
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_flow_rate))
   return false;
- m_InjctrPar.inj_flow_rate[1] = float(inj_flow_rate) / 64.0f;
+ injctrPar.inj_flow_rate[1] = float(inj_flow_rate) / 64.0f;
 
  int inj_cyl_disp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_cyl_disp))
   return false;
- m_InjctrPar.inj_cyl_disp = float(inj_cyl_disp) / 16384.0f;
+ injctrPar.inj_cyl_disp = float(inj_cyl_disp) / 16384.0f;
 
  unsigned long inj_sd_igl_const = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_sd_igl_const))
   return false;
- m_InjctrPar.inj_sd_igl_const[0] = (float)inj_sd_igl_const;
+ injctrPar.inj_sd_igl_const[0] = (float)inj_sd_igl_const;
  //second fuel:
  if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_sd_igl_const))
   return false;
- m_InjctrPar.inj_sd_igl_const[1] = (float)inj_sd_igl_const;
+ injctrPar.inj_sd_igl_const[1] = (float)inj_sd_igl_const;
 
  //read-only parameter: number of engine cylinders
  unsigned char cyl_num = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &cyl_num))
   return false;
- m_InjctrPar.cyl_num = cyl_num;
+ injctrPar.cyl_num = cyl_num;
 
  //injection timing (phase)
  int  inj_begin_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle, true))
   return false;
- m_InjctrPar.inj_timing[0] = ((float)inj_begin_angle) / m_angle_multiplier;
+ injctrPar.inj_timing[0] = ((float)inj_begin_angle) / m_angle_multiplier;
  //second fuel:
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle, true))
   return false;
- m_InjctrPar.inj_timing[1] = ((float)inj_begin_angle) / m_angle_multiplier;
+ injctrPar.inj_timing[1] = ((float)inj_begin_angle) / m_angle_multiplier;
 
  //injection timing (phase) on cranking
  int  inj_begin_angle_crk;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle_crk, true))
   return false;
- m_InjctrPar.inj_timing_crk[0] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
+ injctrPar.inj_timing_crk[0] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
  //second fuel:
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle_crk, true))
   return false;
- m_InjctrPar.inj_timing_crk[1] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
+ injctrPar.inj_timing_crk[1] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
 
  //inj.pulse origin
  unsigned char anglespec = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &anglespec))
   return false;
- m_InjctrPar.inj_anglespec[0] = GETLO4BITS(anglespec);
- m_InjctrPar.inj_anglespec[1] = GETHI4BITS(anglespec);  //second fuel
+ injctrPar.inj_anglespec[0] = GETLO4BITS(anglespec);
+ injctrPar.inj_anglespec[1] = GETHI4BITS(anglespec);  //second fuel
 
  //fff_const (fuel consumption)
  int  fff;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &fff))
   return false;
- m_InjctrPar.fff_const = ((float)fff / 65536.0f) * (1000.0f * 60.0f);
+ injctrPar.fff_const = ((float)fff / 65536.0f) * (1000.0f * 60.0f);
 
  //min. injection PW
  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
  unsigned char inj_min_pw = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_min_pw))
   return false;
- m_InjctrPar.inj_min_pw[1] = ((((float)inj_min_pw) * 8) * discrete) / 1000.0f; //convert to ms
+ injctrPar.inj_min_pw[1] = ((((float)inj_min_pw) * 8) * discrete) / 1000.0f; //convert to ms
  inj_min_pw = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_min_pw))
   return false;
- m_InjctrPar.inj_min_pw[0] = ((((float)inj_min_pw) * 8) * discrete) / 1000.0f; //convert to ms
+ injctrPar.inj_min_pw[0] = ((((float)inj_min_pw) * 8) * discrete) / 1000.0f; //convert to ms
 
  return true;
 }
@@ -2298,107 +2305,107 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
+ SECU3IO::LambdaPar& lambdaPar = m_recepted_packet.m_LambdaPar;
  if (size != (mp_pdp->isHex() ? 54 : 27))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &strperstp))
   return false;
- m_LambdaPar.lam_str_per_stp = strperstp;
+ lambdaPar.lam_str_per_stp = strperstp;
 
  unsigned char stepsize_p = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &stepsize_p))
   return false;
- m_LambdaPar.lam_step_size_p = (float(stepsize_p) / 512.0f) * 100.0f;
+ lambdaPar.lam_step_size_p = (float(stepsize_p) / 512.0f) * 100.0f;
 
  unsigned char stepsize_m = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &stepsize_m))
   return false;
- m_LambdaPar.lam_step_size_m = (float(stepsize_m) / 512.0f) * 100.0f;
+ lambdaPar.lam_step_size_m = (float(stepsize_m) / 512.0f) * 100.0f;
 
  int corrlimit_p = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_p))
   return false;
- m_LambdaPar.lam_corr_limit_p = (float(corrlimit_p) / 512.0f) * 100.0f;
+ lambdaPar.lam_corr_limit_p = (float(corrlimit_p) / 512.0f) * 100.0f;
 
  int corrlimit_m = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_m))
   return false;
- m_LambdaPar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
+ lambdaPar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
 
  int swtpoint = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &swtpoint))
   return false;
- m_LambdaPar.lam_swt_point = float(swtpoint) * ADC_DISCRETE;
+ lambdaPar.lam_swt_point = float(swtpoint) * ADC_DISCRETE;
 
  int tempthrd = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tempthrd))
   return false;
- m_LambdaPar.lam_temp_thrd = float(tempthrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ lambdaPar.lam_temp_thrd = float(tempthrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  int rpmthrd = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &rpmthrd))
   return false;
- m_LambdaPar.lam_rpm_thrd = rpmthrd;
+ lambdaPar.lam_rpm_thrd = rpmthrd;
 
  int activdelay = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &activdelay))
   return false;
- m_LambdaPar.lam_activ_delay = activdelay;
+ lambdaPar.lam_activ_delay = activdelay;
 
  int deadband = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &deadband))
   return false;
- m_LambdaPar.lam_dead_band = float(deadband) * ADC_DISCRETE;
+ lambdaPar.lam_dead_band = float(deadband) * ADC_DISCRETE;
 
  unsigned char senstype = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &senstype))
   return false;
- m_LambdaPar.lam_senstype = senstype;
+ lambdaPar.lam_senstype = senstype;
 
  unsigned char msperstp = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &msperstp))
   return false;
- m_LambdaPar.lam_ms_per_stp = msperstp * 10;
+ lambdaPar.lam_ms_per_stp = msperstp * 10;
 
  unsigned char lam_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &lam_flags))
   return false;
- m_LambdaPar.lam_htgdet = CHECKBIT8(lam_flags, 0);
- m_LambdaPar.lam_idlcorr = CHECKBIT8(lam_flags, 1);
- m_LambdaPar.lam_crkheat = CHECKBIT8(lam_flags, 2);
+ lambdaPar.lam_htgdet = CHECKBIT8(lam_flags, 0);
+ lambdaPar.lam_idlcorr = CHECKBIT8(lam_flags, 1);
+ lambdaPar.lam_crkheat = CHECKBIT8(lam_flags, 2);
 
  //Stoichiometric value for second fuel
  int lam_2stoichval = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &lam_2stoichval))
   return false;
- m_LambdaPar.lam_2stoichval = ((float)lam_2stoichval) / 128.0f;
+ lambdaPar.lam_2stoichval = ((float)lam_2stoichval) / 128.0f;
 
  //heating:
  unsigned char eh_heating_time[2] = {0, 0};
  if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_heating_time[0]))
   return false;
- m_LambdaPar.eh_heating_time[0] = eh_heating_time[0];
+ lambdaPar.eh_heating_time[0] = eh_heating_time[0];
 
  if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_heating_time[1]))
   return false;
- m_LambdaPar.eh_heating_time[1] = eh_heating_time[1];
+ lambdaPar.eh_heating_time[1] = eh_heating_time[1];
 
  unsigned char eh_temper_thrd = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_temper_thrd))
   return false;
- m_LambdaPar.eh_temper_thrd = (float)eh_temper_thrd;
+ lambdaPar.eh_temper_thrd = (float)eh_temper_thrd;
 
  unsigned char eh_heating_act = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_heating_act))
   return false;
- m_LambdaPar.eh_heating_act = ((float)eh_heating_act) / 100.0f;
+ lambdaPar.eh_heating_act = ((float)eh_heating_act) / 100.0f;
 
  int eh_aflow_thrd = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &eh_aflow_thrd))
   return false;
- m_LambdaPar.eh_aflow_thrd = float(eh_aflow_thrd) * 32.0f;
+ lambdaPar.eh_aflow_thrd = float(eh_aflow_thrd) * 32.0f;
 
  return true;
 }
@@ -2406,24 +2413,24 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::AccelPar& m_AccelPar = m_recepted_packet.m_AccelPar;
+ SECU3IO::AccelPar& accelPar = m_recepted_packet.m_AccelPar;
  if (size != (mp_pdp->isHex() ? 6 : 3))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char tpsdot_thrd = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &tpsdot_thrd))
   return false;
- m_AccelPar.ae_tpsdot_thrd = (float)tpsdot_thrd;
+ accelPar.ae_tpsdot_thrd = (float)tpsdot_thrd;
 
  unsigned char coldacc_mult = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &coldacc_mult))
   return false;
- m_AccelPar.ae_coldacc_mult = ((((float)coldacc_mult) + 128.0f) / 128.0f) * 100.0f; //convert to %
+ accelPar.ae_coldacc_mult = ((((float)coldacc_mult) + 128.0f) / 128.0f) * 100.0f; //convert to %
 
  unsigned char ae_decay_time = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &ae_decay_time))
   return false;
- m_AccelPar.ae_decay_time = ae_decay_time; //strokes
+ accelPar.ae_decay_time = ae_decay_time; //strokes
 
  return true;
 }
@@ -2431,7 +2438,7 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::InjDrvPar& m_recv = m_recepted_packet.m_InjDrvPar;
+ SECU3IO::InjDrvPar& recv = m_recepted_packet.m_InjDrvPar;
  if (size != (mp_pdp->isHex() ? 418 : 209))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
@@ -2441,111 +2448,111 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
  unsigned char ee_status = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &ee_status))
   return false;
- m_recv.ee_status = CHECKBIT8(ee_status, 0);
- m_recv.set0_corrupted = CHECKBIT8(ee_status, 1);
- m_recv.set1_corrupted = CHECKBIT8(ee_status, 2);
- m_recv.gas_v = CHECKBIT8(ee_status, 3);
- m_recv.dev_address = CHECKBIT8(ee_status, 4);
- m_recv.set_idx = CHECKBIT8(ee_status, 7);
+ recv.ee_status = CHECKBIT8(ee_status, 0);
+ recv.set0_corrupted = CHECKBIT8(ee_status, 1);
+ recv.set1_corrupted = CHECKBIT8(ee_status, 2);
+ recv.gas_v = CHECKBIT8(ee_status, 3);
+ recv.dev_address = CHECKBIT8(ee_status, 4);
+ recv.set_idx = CHECKBIT8(ee_status, 7);
 
  unsigned char type = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &type))
   return false;
- m_recv.type = type;
+ recv.type = type;
 
  unsigned char version = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &version))
   return false;
- m_recv.version = version;
+ recv.version = version;
 
  unsigned char fw_opt = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &fw_opt))
   return false;
- m_recv.fw_opt = fw_opt;
+ recv.fw_opt = fw_opt;
 
  int voltage = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &voltage))
   return false;
- m_recv.voltage = (float)(((double)voltage) * 0.004882812);
+ recv.voltage = (float)(((double)voltage) * 0.004882812);
 
  //settings
  unsigned char direct_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &direct_flags))
   return false;
  for (int i = 0; i < 8; i++)
-  m_recv.direct_flags[i] = CHECKBIT8(direct_flags, i);
+  recv.direct_flags[i] = CHECKBIT8(direct_flags, i);
 
  unsigned char lutabl_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &lutabl_flags))
   return false;
- m_recv.m_peak_on_usetab = CHECKBIT8(lutabl_flags, 0);
- m_recv.m_peak_duty_usetab = CHECKBIT8(lutabl_flags, 1);
- m_recv.m_hold_duty_usetab = CHECKBIT8(lutabl_flags, 2);
- m_recv.m_peak_full_usetab = CHECKBIT8(lutabl_flags, 3);
- m_recv.m_pth_pause_usetab = CHECKBIT8(lutabl_flags, 4);
+ recv.m_peak_on_usetab = CHECKBIT8(lutabl_flags, 0);
+ recv.m_peak_duty_usetab = CHECKBIT8(lutabl_flags, 1);
+ recv.m_hold_duty_usetab = CHECKBIT8(lutabl_flags, 2);
+ recv.m_peak_full_usetab = CHECKBIT8(lutabl_flags, 3);
+ recv.m_pth_pause_usetab = CHECKBIT8(lutabl_flags, 4);
 
  unsigned char gen_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &gen_flags))
   return false;
- m_recv.m_tst_peak_pwm = CHECKBIT8(gen_flags, 0);
- m_recv.m_tst_hold_pwm = CHECKBIT8(gen_flags, 1);
+ recv.m_tst_peak_pwm = CHECKBIT8(gen_flags, 0);
+ recv.m_tst_hold_pwm = CHECKBIT8(gen_flags, 1);
 
  unsigned char testch_sel = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &testch_sel))
   return false;
- m_recv.m_testch_sel = testch_sel;
+ recv.m_testch_sel = testch_sel;
 
  int testch_frq = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &testch_frq))
   return false;
- m_recv.m_testch_frq = (float)(1.0/(((double)testch_frq) / 131072.0));
+ recv.m_testch_frq = (float)(1.0/(((double)testch_frq) / 131072.0));
 
  BYTE testch_duty = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &testch_duty))
   return false;
- m_recv.m_testch_duty = (float)((((double)testch_duty) / 255.0) * 100.0f);
+ recv.m_testch_duty = (float)((((double)testch_duty) / 255.0) * 100.0f);
 
  int pwm_period;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pwm_period))
   return false;
- m_recv.m_pwm_period = ((float)pwm_period) / 20.0f;
+ recv.m_pwm_period = ((float)pwm_period) / 20.0f;
 
  int peak_duty;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &peak_duty))
   return false;
- m_recv.m_peak_duty = (((float)peak_duty) / 4096.0f) * 100.0f;
+ recv.m_peak_duty = (((float)peak_duty) / 4096.0f) * 100.0f;
 
  int reserved;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &reserved))
   return false;
- m_recv.m_reserved = (float)reserved;
+ recv.m_reserved = (float)reserved;
 
  int hold_duty;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &hold_duty))
   return false;
- m_recv.m_hold_duty = (((float)hold_duty) / 4096.0f) * 100.0f;
+ recv.m_hold_duty = (((float)hold_duty) / 4096.0f) * 100.0f;
 
  int peak_on_time;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &peak_on_time))
   return false;
- m_recv.m_peak_on_time = ((float)peak_on_time) / 2.5f;
+ recv.m_peak_on_time = ((float)peak_on_time) / 2.5f;
 
  int peak_pwm_time;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &peak_pwm_time))
   return false;
- m_recv.m_peak_pwm_time = ((float)peak_pwm_time) / 2.5f;
+ recv.m_peak_pwm_time = ((float)peak_pwm_time) / 2.5f;
 
  int pth_pause;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pth_pause))
   return false;
- m_recv.m_pth_pause = ((float)pth_pause) / 2.5f;
+ recv.m_pth_pause = ((float)pth_pause) / 2.5f;
 
  for (int i = 0; i < LUTABSIZE; ++i)
  {
   int value;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
-  m_recv.m_peak_on_tab[i] = ((float)value) / 2.5f;
+  recv.m_peak_on_tab[i] = ((float)value) / 2.5f;
  }
 
  for (int i = 0; i < LUTABSIZE; ++i)
@@ -2553,7 +2560,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   int value;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
-  m_recv.m_peak_duty_tab[i] = (((float)value) / 4096.0f) * 100.0f;
+  recv.m_peak_duty_tab[i] = (((float)value) / 4096.0f) * 100.0f;
  }
 
  for (int i = 0; i < LUTABSIZE; ++i)
@@ -2561,7 +2568,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   int value;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
-  m_recv.m_hold_duty_tab[i] = (((float)value) / 4096.0f) * 100.0f;
+  recv.m_hold_duty_tab[i] = (((float)value) / 4096.0f) * 100.0f;
  }
 
  for (int i = 0; i < LUTABSIZE; ++i)
@@ -2569,7 +2576,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   int value;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
-  m_recv.m_peak_full_tab[i] = ((float)value) / 2.5f;
+  recv.m_peak_full_tab[i] = ((float)value) / 2.5f;
  }
 
  for (int i = 0; i < LUTABSIZE; ++i)
@@ -2577,7 +2584,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   int value;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
-  m_recv.m_pth_pause_tab[i] = ((float)value) / 2.5f;
+  recv.m_pth_pause_tab[i] = ((float)value) / 2.5f;
  }
 
  for (int i = 0; i < PWCORSIZE; ++i)
@@ -2585,7 +2592,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   int value;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
-  m_recv.m_pwmul_tab[i] = ((float)value) / (65536.0f / 100.0f); //convert to %
+  recv.m_pwmul_tab[i] = ((float)value) / (65536.0f / 100.0f); //convert to %
  }
 
  for (int i = 0; i < PWCORSIZE; ++i)
@@ -2593,7 +2600,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   int value;
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
-  m_recv.m_pwadd_tab[i] = ((float)value) / 2.5f;        //convert to us
+  recv.m_pwadd_tab[i] = ((float)value) / 2.5f;        //convert to us
  }
 
  int calc_crc = mp_pdp->getCRC();
@@ -2610,11 +2617,11 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_LZIDBL_HS(const BYTE* raw_packet, size_t size)
 {
- SECU3IO::LzidBLHS& m_recv = m_recepted_packet.m_LzidBLHS;
+ SECU3IO::LzidBLHS& recv = m_recepted_packet.m_LzidBLHS;
  if (size != (mp_pdp->isHex() ? 5 : 5))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- strncpy(m_recv.data, (const char*)raw_packet, size); //text data
+ strncpy(recv.data, (const char*)raw_packet, size); //text data
  return true;
 }
 

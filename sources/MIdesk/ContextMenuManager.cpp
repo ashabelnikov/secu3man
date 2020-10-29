@@ -80,6 +80,7 @@ void CMetContextMenuManager::CreateContent(void)
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_INJTIMB, MLL::LoadString(IDS_MI_INJTIMB_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_INJTIME, MLL::LoadString(IDS_MI_INJTIME_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_FUELCONSUMF, MLL::LoadString(IDS_MI_FUELCONSUMF_TITLE));
+ m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_GRTS, MLL::LoadString(IDS_MI_GRTS_TITLE));
 
  //"Add graph" submenu
  m_addGraphMenu.CreatePopupMenu();
@@ -110,6 +111,7 @@ void CMetContextMenuManager::CreateContent(void)
  m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_INJTIMB, MLL::LoadString(IDS_MI_INJTIMB_TITLE));
  m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_INJTIME, MLL::LoadString(IDS_MI_INJTIME_TITLE));
  m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_FUELCONSUMF, MLL::LoadString(IDS_MI_FUELCONSUMF_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_GRTS, MLL::LoadString(IDS_MI_GRTS_TITLE));
 
  //"Number of rows" submenu
  m_rowsMenu.CreatePopupMenu();

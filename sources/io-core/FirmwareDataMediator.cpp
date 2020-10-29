@@ -236,6 +236,9 @@ typedef struct
 
  _uint knock_zone[KNKZONE_TPS_SIZE];
 
+ //Gas reducer's temperature (GRTEMP) sensor lookup table, last two values are related voltage limits for x-axis
+ _int grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -271,7 +274,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4030];
+ _uchar reserved[3994];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1364,6 +1367,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetBarocorrMap(op_fwd->barocorr_table);
  GetManIgntimMap(op_fwd->pa4_igntim_corr);
  GetTmp2CurveMap(op_fwd->tmp2_curve);
+ GetGrtsCurveMap(op_fwd->grts_curve);
  GetCrkTempMap(op_fwd->ctscrk_corr);
  GetEHPauseMap(op_fwd->eh_pause_table);
  GetCrankingThrdMap(op_fwd->cranking_thrd);
@@ -1433,6 +1437,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetBarocorrMap(ip_fwd->barocorr_table);
  SetManIgntimMap(ip_fwd->pa4_igntim_corr);
  SetTmp2CurveMap(ip_fwd->tmp2_curve);
+ SetGrtsCurveMap(ip_fwd->grts_curve);
  SetCrkTempMap(ip_fwd->ctscrk_corr);
  SetEHPauseMap(ip_fwd->eh_pause_table);
  SetCrankingThrdMap(ip_fwd->cranking_thrd);
@@ -1839,6 +1844,35 @@ void CFirmwareDataMediator::SetTmp2CurveMap(const float* ip_values)
   p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
   p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
+void CFirmwareDataMediator::GetGrtsCurveMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.grts_curve[i]) / 4.0f;
+
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->exdata.grts_curve[i]) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetGrtsCurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->exdata.grts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->exdata.grts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetCrkTempMap(float* op_values, bool i_original /* = false */)

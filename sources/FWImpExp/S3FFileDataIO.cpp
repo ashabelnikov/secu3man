@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0113 //01.13
+#define CURRENT_VERSION 0x0114 //01.14
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -77,6 +77,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.11 - CLT grid has been added (02.02.2020)
 // 01.12 - Fixed overflow bug in inj_iatclt_corr map (05.05.2020)
 // 01.13 - Added 3 new maps: pwm_duty1, pwm_duty2, knock_zone (15.09.2020)
+// 01.14 - Added CE settings for ADD_I5/6/7/8, GRTS curve map (29.10.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -184,6 +185,7 @@ typedef struct
  s3f_int32_t add_i4_v_em;
  s3f_int32_t add_i4_v_flg;
 
+ //since v01.14
  s3f_int32_t add_i5_v_min;
  s3f_int32_t add_i5_v_max;
  s3f_int32_t add_i5_v_em;
@@ -236,8 +238,10 @@ struct S3FSepMaps
  s3f_ce_sett_t cesd; //CE settings' data
  //since v01.13
  s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map
+ //since v01.14
+ s3f_int32_t grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //GRTS temperature sensor look up table, since v01.14
 
- s3f_int32_t reserved[831];       //reserved bytes, = 0
+ s3f_int32_t reserved[813];       //reserved bytes, = 0
 };
 
 
@@ -472,6 +476,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->smapaban_thrd[i] = MathHelpers::Round(m_data.smapaban_thrd[i] * INT_MULTIPLIER);
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
   p_sepMaps->knock_zone[i] = MathHelpers::Round(m_data.knock_zone[i] * INT_MULTIPLIER);
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
+  p_sepMaps->grts_curve[i] = MathHelpers::Round(m_data.grts_curve[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -706,6 +712,9 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
   m_data.knock_zone[i] = p_sepMaps->knock_zone[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
+
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;

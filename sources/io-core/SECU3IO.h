@@ -96,6 +96,7 @@ namespace SECU3IO
   float map2;                           // MAP2 (gas pressure)
   float tmp2;                           // TMP2 (gas temperature)
   float mapd;                           // Diffrerential pressure = (MAP2 - MAP)
+  float grts;                           // Gas reducer's temperature sensor
 
   float afr;                            // AFR calculated from lambda sensor
 

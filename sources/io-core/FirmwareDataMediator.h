@@ -186,6 +186,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetTmp2CurveMap(float* op_values, bool i_original = false);
   void SetTmp2CurveMap(const float* i_values);
 
+  void GetGrtsCurveMap(float* op_values, bool i_original = false);
+  void SetGrtsCurveMap(const float* i_values);
+
   void GetCrkTempMap(float* op_values, bool i_original = false);
   void SetCrkTempMap(const float* i_values);
 
@@ -305,13 +308,13 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_FL_CONS    =  83,     // FL_CONS   (output)
    IOP3I_AUTO_I     =  84,     // AUTO_I    (input)
    IOP3I_VTACHOM    =  85,     // VTACHOM   (output)
-// IOP3I_RESERVED20 =  86,     // Reserved    ()
-// IOP3I_RESERVED21 =  87,     // Reserved    ()
+   IOP3I_GRTEMP     =  86,     // GRTEMP    (input)
+   IOP3I_GRHEAT     =  87,     // GRHEAT    (output)
 // IOP3I_RESERVED22 =  88,     // Reserved    ()
 // IOP3I_RESERVED23 =  89,     // Reserved    ()
 // IOP3I_RESERVED24 =  90,     // Reserved    ()
 // IOP3I_RESERVED25 =  91,     // Reserved    ()
-   IOP3I_COUNT      =  86,     //DON'T forget to update this value
+   IOP3I_COUNT      =  88,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -534,7 +537,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V29 = 0x29,           //V2.9  ADD_I5 input has been added
    IOV_V30 = 0x30,           //V3.0  New reserved slots and plugs were added
    IOV_V31 = 0x31,           //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5, VTACHOM)
-   IOV_V32 = 0x32            //V3.2  New slots were added (ADD_I5,6,7,8)
+   IOV_V32 = 0x32            //V3.2  New slots were added (ADD_I5,6,7,8, GRTEMP, GRHEAT)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

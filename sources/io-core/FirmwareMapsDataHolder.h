@@ -217,6 +217,7 @@ struct FWMapsDataHolder
  float cranking_time[CRANK_TIME_SIZE];
  float smapaban_thrd[SMAPABAN_THRD_SIZE];
  float knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones vs rpm & tps
+ float grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
  CESettingsData cesd;
 
  //default constructor
@@ -243,6 +244,7 @@ struct FWMapsDataHolder
   std::fill(cranking_time, cranking_time + CRANK_TIME_SIZE, .0f);
   std::fill(smapaban_thrd, smapaban_thrd + SMAPABAN_THRD_SIZE, .0f);
   std::fill(knock_zone, knock_zone + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
+  std::fill(grts_curve, grts_curve + THERMISTOR_LOOKUP_TABLE_SIZE + 2, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

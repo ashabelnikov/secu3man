@@ -249,6 +249,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_Tmp2CurveMapWnd_W = rc.right - rc.left;
    sz.m_Tmp2CurveMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_GRTS_CURVE:
+   ws.m_GrtsCurveMapWnd_X = rc.left;
+   ws.m_GrtsCurveMapWnd_Y = rc.top;
+   sz.m_GrtsCurveMapWnd_W = rc.right - rc.left;
+   sz.m_GrtsCurveMapWnd_H = rc.bottom - rc.top;
+   break;
   case TYPE_MAP_INJ_GTSC:
    ws.m_GtscMapWnd_X = rc.left;
    ws.m_GtscMapWnd_Y = rc.top;
@@ -486,6 +492,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_TMP2_CURVE:
    X = ws.m_Tmp2CurveMapWnd_X, Y = ws.m_Tmp2CurveMapWnd_Y;
    W = sz.m_Tmp2CurveMapWnd_W, H = sz.m_Tmp2CurveMapWnd_H;
+   break;
+  case TYPE_MAP_GRTS_CURVE:
+   X = ws.m_GrtsCurveMapWnd_X, Y = ws.m_GrtsCurveMapWnd_Y;
+   W = sz.m_GrtsCurveMapWnd_W, H = sz.m_GrtsCurveMapWnd_H;
    break;
   case TYPE_MAP_INJ_GTSC:
    X = ws.m_GtscMapWnd_X, Y = ws.m_GtscMapWnd_Y;

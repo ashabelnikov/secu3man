@@ -49,6 +49,7 @@ set(HEADERS
   MIMap2.h
   MIMapD.h
   MITemp2.h
+  MIGrts.h
   MIFuelConsum.h
   MIFuelConsumF.h
   MIKnockRetard.h
@@ -86,6 +87,7 @@ set (SOURCES
   MIMap2.cpp
   MIMapD.cpp
   MITemp2.cpp
+  MIGrts.cpp
   MIFuelConsum.cpp
   MIFuelConsumF.cpp
   MIKnockRetard.cpp

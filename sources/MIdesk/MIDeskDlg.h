@@ -117,6 +117,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetSynLoadAverageNum(int avnum);
   void SetInjTimBAverageNum(int avnum);
   void SetInjTimEAverageNum(int avnum);
+  void SetGrtsAverageNum(int avnum);
 
   typedef std::pair<int, COLORREF> IndCfg_t;
 
@@ -129,12 +130,12 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
                     int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
-                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
+                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
 
   void GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
                     int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
-                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
+                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
 
   void SetMetersDragNDrop(bool enable);
   bool GetMetersDragNDrop(void) const;
@@ -297,6 +298,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   RingBuffItem m_ringInjTimB;
   RingBuffItem m_ringInjTimE;
   RingBuffItem m_ringFuelConsumF;
+  RingBuffItem m_ringGrts;
 
   GraphVal_t m_rpmQVal[2];
   GraphVal_t m_knockQVal[2];
@@ -327,6 +329,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   GraphVal_t m_iteQVal[2];
   GraphVal_t m_distQVal;
   GraphVal_t m_fuelcfQVal[2];
+  GraphVal_t m_grtsQVal[2];
 };
 
 /////////////////////////////////////////////////////////////////////////////

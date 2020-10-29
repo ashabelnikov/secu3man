@@ -98,6 +98,7 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
  mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
  mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
+ mp_view->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -138,6 +139,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
  mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
  mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
+ mp_view->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
  mp_view->SetITMode(mp_settings->GetITEdMode());
 }
 

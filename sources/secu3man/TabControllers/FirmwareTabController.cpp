@@ -278,6 +278,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRANKING_TIME, mptms.m_cranking_time_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_SMAPABAN_THRD, mptms.m_smapaban_thrd_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_KNOCK_ZONE, mptms.m_knock_zone_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRTS_CURVE, mptms.m_grts_curve_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -945,6 +946,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR));
  mp_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
  mp_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->EnableGrtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  bool en_for_gd = (CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
  mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && en_for_gd);
  mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
@@ -1125,6 +1127,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(false),false);
  mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(true),true);
+
+ mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(false),false);
+ mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(true),true);
  
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
@@ -1410,7 +1415,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_KNOCK_ZONE:
    mp_fwdm->SetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(false));
    break;
-
+  case TYPE_MAP_GRTS_CURVE:
+   mp_fwdm->SetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(false));
+   break;
  }
 }
 
@@ -2093,6 +2100,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_cranking_time_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRANKING_TIME);
  mptms.m_smapaban_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_SMAPABAN_THRD);
  mptms.m_knock_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_KNOCK_ZONE);
+ mptms.m_grts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRTS_CURVE);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

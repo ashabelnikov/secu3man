@@ -122,6 +122,8 @@ struct WndSettings
  int m_Pwm2MapWnd_Y;
  int m_KnockZoneMapWnd_X;
  int m_KnockZoneMapWnd_Y;
+ int m_GrtsCurveMapWnd_X;
+ int m_GrtsCurveMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -219,6 +221,8 @@ struct WndSize
  int m_Pwm2MapWnd_H;
  int m_KnockZoneMapWnd_W;
  int m_KnockZoneMapWnd_H;
+ int m_GrtsCurveMapWnd_W;
+ int m_GrtsCurveMapWnd_H;
 };
 
 //Holds windows's state data
@@ -277,6 +281,7 @@ struct MetersCfg
  int m_optMetInjTimB[2];
  int m_optMetInjTimE[2];
  int m_optMetFuelConsumF[2];
+ int m_optMetGrts[2];
 };
 
 typedef enum EInterLang
@@ -337,6 +342,7 @@ struct MapPtMovStep
  float m_cranking_time_map;
  float m_smapaban_thrd_map;
  float m_knock_zone_map;
+ float m_grts_curve_map;
 };
 
 //Log file's fileds
@@ -395,6 +401,7 @@ struct LogFileFields
  _TSTRING m_fldInjTimEnd;
  _TSTRING m_fldLogMarks;
  _TSTRING m_fldCECodes;
+ _TSTRING m_fldGrts;
 };
 
 //Functionality
@@ -473,6 +480,7 @@ class ISettingsData
   virtual int GetSynLoadAverage(void) const = 0;
   virtual int GetInjTimBAverage(void) const = 0;
   virtual int GetInjTimEAverage(void) const = 0;
+  virtual int GetGrtsAverage(void) const = 0;
 
   virtual int GetTitleFontSize(void) const = 0;
   virtual int GetValueFontSize(void) const = 0;

@@ -69,6 +69,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetCrankingTimeMap(bool i_original);
   float* GetSmapabanThrdMap(bool i_original);
   float* GetKnockZoneMap(bool i_original);
+  float* GetGrtsCurveMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -81,6 +82,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   virtual void EnableFuelInjection(bool i_enable);
   virtual void EnableGasdose(bool enable);
   void EnableTmp2Curve(bool enable);
+  void EnableGrtsCurve(bool enable);
 
   virtual void CloseCharts(void);
 
@@ -119,6 +121,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewCrankingTimeMap();
   afx_msg void OnViewSmapabanThrdMap();
   afx_msg void OnViewKnockZoneMap();
+  afx_msg void OnViewGrtsCurveMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -135,6 +138,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewCrankingTimeMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewSmapabanThrdMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewKnockZoneMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewGrtsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -160,6 +164,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_cranking_time_map_btn;
   CButton   m_view_smapaban_thrd_map_btn;
   CButton   m_view_knock_zone_map_btn;
+  CButton   m_view_grts_curve_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
@@ -240,9 +245,15 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseKnockZoneMap(void* i_param);
   static void __cdecl OnWndActivationKnockZoneMap(void* i_param, long cmd);
 
+  static void __cdecl OnChangeGrtsCurveTable(void* i_param);
+  static void __cdecl OnCloseGrtsCurveTable(void* i_param);
+  static void __cdecl OnChangeGrtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnWndActivationGrtsCurveTable(void* i_param, long cmd);
+
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
   bool m_tmp2_curve_enabled;
+  bool m_grts_curve_enabled;
 
   float m_attenuator_table_slots[128];
   float m_cts_curve_x_axis_limits[2];

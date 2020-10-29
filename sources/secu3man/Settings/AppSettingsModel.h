@@ -158,6 +158,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetSynLoadAverage(void) const;
   virtual int GetInjTimBAverage(void) const;
   virtual int GetInjTimEAverage(void) const;
+  virtual int GetGrtsAverage(void) const;
 
   virtual int GetTitleFontSize(void) const;
   virtual int GetValueFontSize(void) const;
@@ -327,6 +328,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optInjTimBAverage;
   OptField_t<int>  m_optInjTimEAverage;
   OptField_t<int>  m_optFuelConsumFAverage;
+  OptField_t<int>  m_optGrtsAverage;
 
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
@@ -385,6 +387,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optPwm1MapWnd;
   OptField_t<POINT> m_optPwm2MapWnd;
   OptField_t<POINT> m_optKnockZoneMapWnd;
+  OptField_t<POINT> m_optGrtsCurveMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -464,6 +467,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optPwm1MapWndSize;
   OptField_t<POINT> m_optPwm2MapWndSize;
   OptField_t<POINT> m_optKnockZoneMapWndSize;
+  OptField_t<POINT> m_optGrtsCurveMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -546,6 +550,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetInjTimB[2][2];
   OptField_t<int> m_optMetInjTimE[2][2];
   OptField_t<int> m_optMetFuelConsumF[2][2];
+  OptField_t<int> m_optMetGrts[2][2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
@@ -645,6 +650,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepCrankingTimeMap;
   OptField_t<float> m_optPtMovStepSmapabanThrdMap;
   OptField_t<float> m_optPtMovStepKnockZoneMap;
+  OptField_t<float> m_optPtMovStepGrtsCurveMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;
@@ -701,6 +707,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldInjTimEnd;
   OptField_t<_TSTRING> m_optLogFieldLogMarks;
   OptField_t<_TSTRING> m_optLogFieldCECodes;
+  OptField_t<_TSTRING> m_optLogFieldGrts;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

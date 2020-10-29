@@ -798,6 +798,73 @@ void __cdecl CTablesSetPanel::OnWndActivationKnockZoneMap(void* i_param, long cm
  _this->OnWndActivation(_this->m_md[TYPE_MAP_KNOCK_ZONE].handle, cmd);
 }
 
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeGrtsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_GRTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseGrtsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_GRTS_CURVE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_GRTS_CURVE].handle, TYPE_MAP_GRTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeGrtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetGrtsCurveMap(false)[16 + i_type] = i_value;
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_GRTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationGrtsCurveTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_GRTS_CURVE].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -808,8 +875,9 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_dwellcntrl_enabled(false)
 , m_cts_curve_enabled(false)
 , m_tmp2_curve_enabled(false)
+, m_grts_curve_enabled(false)
 {
- m_scrl_view = 820;
+ m_scrl_view = 845;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
@@ -851,6 +919,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_CRANKING_TIME_MAP, m_view_cranking_time_map_btn);
  DDX_Control(pDX, IDC_TD_SMAPABAN_THRD_MAP, m_view_smapaban_thrd_map_btn);
  DDX_Control(pDX, IDC_TD_KNOCK_ZONES_MAP, m_view_knock_zone_map_btn);
+ DDX_Control(pDX, IDC_TD_GRTS_CURVE, m_view_grts_curve_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -873,6 +942,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_CRANKING_TIME_MAP, OnViewCrankingTimeMap)
  ON_BN_CLICKED(IDC_TD_SMAPABAN_THRD_MAP, OnViewSmapabanThrdMap)
  ON_BN_CLICKED(IDC_TD_KNOCK_ZONES_MAP, OnViewKnockZoneMap)
+ ON_BN_CLICKED(IDC_TD_GRTS_CURVE, OnViewGrtsCurveMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -895,6 +965,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_CRANKING_TIME_MAP, OnUpdateViewCrankingTimeMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_SMAPABAN_THRD_MAP, OnUpdateViewSmapabanThrdMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_KNOCK_ZONES_MAP, OnUpdateViewKnockZoneMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_GRTS_CURVE, OnUpdateViewGrtsCurveMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -937,6 +1008,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_cranking_time_map_btn, MLL::GetString(IDS_TD_CRANKING_TIME_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_smapaban_thrd_map_btn, MLL::GetString(IDS_TD_SMAPABAN_THRD_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_knock_zone_map_btn, MLL::GetString(IDS_TD_VIEW_KNOCK_ZONE_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_grts_curve_map_btn, MLL::GetString(IDS_TD_GRTS_CURVE_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1026,6 +1098,14 @@ void CTablesSetPanel::OnUpdateViewTmp2CurveMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable && m_tmp2_curve_enabled);
  pCmdUI->SetCheck( (m_md[TYPE_MAP_TMP2_CURVE].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewGrtsCurveMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_grts_curve_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_GRTS_CURVE].state) ? TRUE : FALSE );
 }
 
 void CTablesSetPanel::OnUpdateViewCrkTempMap(CCmdUI* pCmdUI)
@@ -1130,6 +1210,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_KNOCK_ZONE].state)
   DLL::Chart3DUpdate(m_md[TYPE_MAP_KNOCK_ZONE].handle, GetKnockZoneMap(true), GetKnockZoneMap(false));
+
+ if (m_md[TYPE_MAP_GRTS_CURVE].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_GRTS_CURVE].handle, GetGrtsCurveMap(true), GetGrtsCurveMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1184,6 +1267,15 @@ void CTablesSetPanel::EnableTmp2Curve(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_TMP2_CURVE].state && ::IsWindow(m_md[TYPE_MAP_TMP2_CURVE].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_TMP2_CURVE].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableGrtsCurve(bool enable)
+{
+ m_grts_curve_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_GRTS_CURVE].state && ::IsWindow(m_md[TYPE_MAP_GRTS_CURVE].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_GRTS_CURVE].handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -1529,6 +1621,46 @@ void CTablesSetPanel::OnViewTmp2CurveMap()
   ::SetFocus(m_md[TYPE_MAP_TMP2_CURVE].handle);
  }
 }
+
+void CTablesSetPanel::OnViewGrtsCurveMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_grts_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_GRTS_CURVE].handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_GRTS_CURVE].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_GRTS_CURVE].state = 1;
+  m_md[TYPE_MAP_GRTS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrtsCurveMap(true), GetGrtsCurveMap(false), -40.0, 120.0, NULL, 16,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_GRTS_CURVE_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_GRTS_CURVE].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_GRTS_CURVE].handle, m_md[TYPE_MAP_GRTS_CURVE].ptMovStep);
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeGrtsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_GRTS_CURVE].handle, OnChangeGrtsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_GRTS_CURVE].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_GRTS_CURVE].handle, OnCloseGrtsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_GRTS_CURVE].handle, OnWndActivationGrtsCurveTable, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_GRTS_CURVE].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, GetGrtsCurveMap(false)[16], GetGrtsCurveMap(false)[16+1]);
+
+  //allow controller to detect closing of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_GRTS_CURVE].handle, TYPE_MAP_GRTS_CURVE);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_GRTS_CURVE].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_GRTS_CURVE].handle);
+ }
+}
+
 
 void CTablesSetPanel::OnViewManIgntimMap()
 {
@@ -1899,6 +2031,14 @@ float* CTablesSetPanel::GetTmp2CurveMap(bool i_original)
   return m_md[TYPE_MAP_TMP2_CURVE].original;
  else
   return m_md[TYPE_MAP_TMP2_CURVE].active;
+}
+
+float* CTablesSetPanel::GetGrtsCurveMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_GRTS_CURVE].original;
+ else
+  return m_md[TYPE_MAP_GRTS_CURVE].active;
 }
 
 float* CTablesSetPanel::GetCrkTempMap(bool i_original)

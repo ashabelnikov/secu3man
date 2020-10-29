@@ -173,6 +173,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
   memcpy(mp_fwd->knock_zone, mp_s3f_io->GetData().knock_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 
+ if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
+  memcpy(mp_fwd->grts_curve, mp_s3f_io->GetData().grts_curve, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -322,6 +325,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0110 = (mp_s3f_io->GetVersion() > 0x0109);
  bool sv0111 = (mp_s3f_io->GetVersion() > 0x0110);
  bool sv0113 = (mp_s3f_io->GetVersion() > 0x0112);
+ bool sv0114 = (mp_s3f_io->GetVersion() > 0x0113);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -389,22 +393,24 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
- mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen && sepmap);       //since v01.03
- mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen && sepmap);    //since v01.03
- mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, sv0104 && sepmap);  //since v01.04
- mp_view->EnableFWDFlag(FLAG_TMP2CURVE_MAP, sv0107 && sepmap);//since v01.07
- mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, sv0109 && sepmap); //since v01.09
- mp_view->EnableFWDFlag(FLAG_MANIT_MAP, sv0109 && sepmap);    //since v01.09
- mp_view->EnableFWDFlag(FLAG_CRKTEMP_MAP, sv0109 && sepmap);  //since v01.09
- mp_view->EnableFWDFlag(FLAG_EHPAUSE_MAP, sv0109 && sepmap);  //since v01.09
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen && sepmap);        //since v01.03
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen && sepmap);     //since v01.03
+ mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, sv0104 && sepmap);   //since v01.04
+ mp_view->EnableFWDFlag(FLAG_TMP2CURVE_MAP, sv0107 && sepmap); //since v01.07
+ mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, sv0109 && sepmap);  //since v01.09
+ mp_view->EnableFWDFlag(FLAG_MANIT_MAP, sv0109 && sepmap);     //since v01.09
+ mp_view->EnableFWDFlag(FLAG_CRKTEMP_MAP, sv0109 && sepmap);   //since v01.09
+ mp_view->EnableFWDFlag(FLAG_EHPAUSE_MAP, sv0109 && sepmap);   //since v01.09
  mp_view->EnableFWDFlag(FLAG_CRNKTHRD_MAP, sv0110 && sepmap);  //since v01.10
  mp_view->EnableFWDFlag(FLAG_CRNKTIME_MAP, sv0110 && sepmap);  //since v01.10
  mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, sv0110 && sepmap);  //since v01.10
- mp_view->EnableFWDFlag(FLAG_CESETT_DAT, sv0111 && sepmap);  //since v01.11
- mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, sv0113 && sepmap);  //since v01.13
+ mp_view->EnableFWDFlag(FLAG_CESETT_DAT, sv0111 && sepmap);    //since v01.11
+ mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, sv0113 && sepmap); //since v01.13
+ mp_view->EnableFWDFlag(FLAG_GRTSCURVE_MAP, sv0114 && sepmap); //since v01.14
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -549,6 +555,9 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().knock_zone, mp_fwd->knock_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().grts_curve, mp_fwd->grts_curve, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -721,6 +730,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

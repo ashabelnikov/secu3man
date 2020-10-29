@@ -109,6 +109,7 @@ BEGIN
     CONTROL         "Время.блок.старт.",IDC_TD_CRANKING_TIME_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,443,96,18
     CONTROL         "Обор.перех.пуск",IDC_TD_SMAPABAN_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,462,96,18
     CONTROL         "Зона детонации",IDC_TD_KNOCK_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,462,96,18
+    CONTROL         "Настр. крив. ДТГР",IDC_TD_GRTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,481,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -606,6 +607,7 @@ BEGIN
     IDS_MAPS_TPSSWT_UNIT    "ДПДЗ (%)"
     IDS_TPSSWT_MAP          "Положение дроссельной заслонки при котором достигается 100кПа"
     IDS_TMP2_CURVE_MAP      "Настройка кривой датчика температуры 2 (ДТГ)"
+    IDS_GRTS_CURVE_MAP      "Настройка кривой датчика температуры газового редуктора (ДТГР)"
     IDS_GTSC_MAP            "Коррекция впрыска от температуры газа"
     IDS_GPSC_MAP            "Коррекция впрыска от давления газа"
     IDS_ATSC_MAP            "Коррекция плотности воздуха по ДТВ"
@@ -687,6 +689,7 @@ BEGIN
     IDS_TD_CRANKING_THRD_MAP_TT "Порог оборотов блокировки стартера в зависимости от температуры двигателя. Смотрите также параметр 'Обороты блокир. стартера'"    
     IDS_TD_CRANKING_TIME_MAP_TT "Время работы стартера после достижения оборотов блокировки в зависимости от температуры двигателя."    
     IDS_TD_SMAPABAN_THRD_MAP_TT "Обороты перехода с пусковой карты. Смотрите также параметр 'Обороты пер. с пуск УОЗ'"
+    IDS_TD_GRTS_CURVE_TT      "Настройка зависимости температуры от напряжения для датчика температуры газового редуктора (ДТГР). Данная таблица необходима для правильного преобразования напряжения на датчике в значение температуры."      
 END
 
 STRINGTABLE DISCARDABLE 
@@ -826,6 +829,7 @@ BEGIN
     CONTROL         "Start.block.time",IDC_TD_CRANKING_TIME_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,443,96,18
     CONTROL         "Crank.map.abandon",IDC_TD_SMAPABAN_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,462,96,18
     CONTROL         "Knock zone",IDC_TD_KNOCK_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,462,96,18
+    CONTROL         "Tune GRTS curve",IDC_TD_GRTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,481,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1342,6 +1346,7 @@ BEGIN
     IDS_MAPS_TPSSWT_UNIT    "TPS (%)"
     IDS_TPSSWT_MAP          "Throttle position at which MAP reaches 100kPa"
     IDS_TMP2_CURVE_MAP      "Tune TEMP2 temperature sensor curve"
+    IDS_GRTS_CURVE_MAP      "Tune gas reducer temperature sensor's curve"
     IDS_GTSC_MAP            "Inj. PW correction vs gas temperature"
     IDS_GPSC_MAP            "Inj. PW correction vs gas pressure"
     IDS_ATSC_MAP            "Air density correction vs MAT"
@@ -1422,6 +1427,7 @@ BEGIN
     IDS_TD_CRANKING_THRD_MAP_TT "Starter's blocking threshold vs engine temperature. See also the parameter 'Starter blocking RPM'"    
     IDS_TD_CRANKING_TIME_MAP_TT "Time of working of starter after reaching blocking threshold vs engine temperature"    
     IDS_TD_SMAPABAN_THRD_MAP_TT "RPM of the cranking to run transition vs engine temperature. See also the parameter 'Switch from cranking ignition map'"
+    IDS_TD_GRTS_CURVE_TT "Setting temperature versus voltage dependance for the gas reducer's temperature  sensor (GRTS). This table is necessary for the correct conversion of the voltage at the sensor to a temperature value."      
 END
 
 

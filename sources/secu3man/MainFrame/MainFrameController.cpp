@@ -402,6 +402,7 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldBaroPress);
  m_pLogWriter->SetFieldName(i++, lff.m_fldInjTimBeg);
  m_pLogWriter->SetFieldName(i++, lff.m_fldInjTimEnd);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldGrts);
  m_pLogWriter->SetFieldName(i++, lff.m_fldLogMarks);
  m_pLogWriter->SetFieldName(i++, lff.m_fldCECodes);
  m_pLogWriter->SetWriteFields(settings->GetWriteLogFields());
