@@ -110,6 +110,7 @@ BEGIN
     CONTROL         "Обор.перех.пуск",IDC_TD_SMAPABAN_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,462,96,18
     CONTROL         "Зона детонации",IDC_TD_KNOCK_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,462,96,18
     CONTROL         "Настр. крив. ДТГР",IDC_TD_GRTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,481,96,18
+    CONTROL         "Скважн.нагр.газ.ред.",IDC_TD_GRHEAT_DUTY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,481,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -592,7 +593,7 @@ BEGIN
     IDS_TD_VIEW_DWELL_CONTROL_TT "Редактирование таблицы времени накопления энергии КЗ"
     IDS_CHOKE_OP_UNIT       "Закрытие воздушной заслонки (%)"
     IDS_CHOKE_OP_MAP        "Настройка положения воздушной заслонки от температуры"
-    IDS_TD_RPM_GRID_BUTTON_TT "Изменение сетки оборотов для таблиц УОЗ ХХ и рабочего режима."
+    IDS_TD_RPM_GRID_BUTTON_TT "Изменение сетки оборотов для таблиц УОЗ ХХ и рабочего режима, а также изменение сетки температуры."
     IDS_EGO_CURVE_MAP       "Зависимость AFR от напряжения на ДК (эмуляция ШДК)"
     IDS_IACC_CURVE_MAP      "Коррекция смеси по положению РДВ"
     IDS_IACCW_CURVE_MAP     "Коррекция смеси по ДПДЗ (вес корр. смеси по полож. РДВ)"
@@ -663,6 +664,7 @@ BEGIN
     IDS_TD_VIEW_GPSC_MAP_TT  "Коррекция длительности впрыска по давлению газа (ГБО). Используется также для коррекции положения дозатора газа."
     IDS_TD_VIEW_PWM1_MAP   "Cкважность ШИМ1"
     IDS_TD_VIEW_SPLIT_MAP  "Сплитинг УОЗ"
+    IDS_GRHEAT_DUTY_MAP      "Скважность ШИМ нагревателя газового редуктора"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -690,6 +692,7 @@ BEGIN
     IDS_TD_CRANKING_TIME_MAP_TT "Время работы стартера после достижения оборотов блокировки в зависимости от температуры двигателя."    
     IDS_TD_SMAPABAN_THRD_MAP_TT "Обороты перехода с пусковой карты. Смотрите также параметр 'Обороты пер. с пуск УОЗ'"
     IDS_TD_GRTS_CURVE_TT      "Настройка зависимости температуры от напряжения для датчика температуры газового редуктора (ДТГР). Данная таблица необходима для правильного преобразования напряжения на датчике в значение температуры."      
+    IDC_TD_GRHEAT_DUTY_MAP_TT "Настройка зависимости скважности ШИМ нагревателя газового редуктора от температуры редуктора."      
 END
 
 STRINGTABLE DISCARDABLE 
@@ -830,6 +833,7 @@ BEGIN
     CONTROL         "Crank.map.abandon",IDC_TD_SMAPABAN_THRD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,462,96,18
     CONTROL         "Knock zone",IDC_TD_KNOCK_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,462,96,18
     CONTROL         "Tune GRTS curve",IDC_TD_GRTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,481,96,18
+    CONTROL         "Gas red. heater duty",IDC_TD_GRHEAT_DUTY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,481,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1331,7 +1335,7 @@ BEGIN
     IDS_TD_VIEW_DWELL_CONTROL_TT "Edit dwell control lookup table"
     IDS_CHOKE_OP_UNIT       "Choke closing (%)"
     IDS_CHOKE_OP_MAP        "Tune choke position as function of temperature"
-    IDS_TD_RPM_GRID_BUTTON_TT "Alter RPM grid for afvance angle maps of idle and work modes."
+    IDS_TD_RPM_GRID_BUTTON_TT "Alter RPM grid for afvance angle maps of idle and work modes, also alter CLT grid"
     IDS_EGO_CURVE_MAP       "AFR vs voltage on the EGO sensor (WBO emulation)"
     IDS_IACC_CURVE_MAP      "Mixture correction vs IAC pos"
     IDS_IACCW_CURVE_MAP     "Correction of mixture vs TPS (weight of mixt. corr. vs IAC pos)"
@@ -1400,6 +1404,7 @@ BEGIN
     IDS_TD_VIEW_BAROCORR_MAP_TT "It is used to correct of injection PW and to correct the position of gas dispenser."
     IDS_TD_VIEW_GTSC_MAP_TT  "Correction of the injection PW by gas temperature (LPG). It is also used to correct the position of the gas dispenser."
     IDS_TD_VIEW_GPSC_MAP_TT  "Correction of the injection PW by gas pressure (LPG). It is also used to correct the position of the gas dispenser."
+    IDS_GRHEAT_DUTY_MAP      "PWM duty of gas reducer's heater"
 END
 
 
@@ -1428,6 +1433,7 @@ BEGIN
     IDS_TD_CRANKING_TIME_MAP_TT "Time of working of starter after reaching blocking threshold vs engine temperature"    
     IDS_TD_SMAPABAN_THRD_MAP_TT "RPM of the cranking to run transition vs engine temperature. See also the parameter 'Switch from cranking ignition map'"
     IDS_TD_GRTS_CURVE_TT "Setting temperature versus voltage dependance for the gas reducer's temperature  sensor (GRTS). This table is necessary for the correct conversion of the voltage at the sensor to a temperature value."      
+    IDC_TD_GRHEAT_DUTY_MAP_TT "Setting dependence of the PWM duty cycle of the gas reducer's heater on the reducer's temperature."      
 END
 
 

@@ -333,6 +333,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_KnockZoneMapWnd_W = rc.right - rc.left;
    sz.m_KnockZoneMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_GRHEAT_DUTY:
+   ws.m_GrHeatDutyMapWnd_X = rc.left;
+   ws.m_GrHeatDutyMapWnd_Y = rc.top;
+   sz.m_GrHeatDutyMapWnd_W = rc.right - rc.left;
+   sz.m_GrHeatDutyMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -540,6 +546,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_KNOCK_ZONE:
    X = ws.m_KnockZoneMapWnd_X, Y = ws.m_KnockZoneMapWnd_Y;
    W = sz.m_KnockZoneMapWnd_W, H = sz.m_KnockZoneMapWnd_H;
+   break;
+  case TYPE_MAP_GRHEAT_DUTY:
+   X = ws.m_GrHeatDutyMapWnd_X, Y = ws.m_GrHeatDutyMapWnd_Y;
+   W = sz.m_GrHeatDutyMapWnd_W, H = sz.m_GrHeatDutyMapWnd_H;
    break;
   case TYPE_MAP_GME_IGN_WND:
    X = ws.m_GridMapIgnWnd_X, Y = ws.m_GridMapIgnWnd_Y;

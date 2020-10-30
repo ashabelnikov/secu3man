@@ -128,6 +128,7 @@ BEGIN
     CONTROL         "Параметры CE",IDC_MAP_IMPEXP_CESETT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,216,90,8
     CONTROL         "Зона детонации",IDC_MAP_IMPEXP_KNOCKZONE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,230,90,8
     CONTROL         "Табл. кривой ДТГР",IDC_MAP_IMPEXP_GRTSCURVE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,244,90,8
+    CONTROL         "Скважн.нагр.газ.ред.",IDC_MAP_IMPEXP_GRHEAT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,258,90,8
 
     LTEXT           "Выберите по одному элементу в каждом из списков и нажмите кнопку расположенную между ними",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 
@@ -333,6 +334,7 @@ BEGIN
     CONTROL         "CE settings",IDC_MAP_IMPEXP_CESETT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,216,90,8
     CONTROL         "Knock zones",IDC_MAP_IMPEXP_KNOCKZONE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,230,90,8
     CONTROL         "GRTS curve",IDC_MAP_IMPEXP_GRTSCURVE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,244,90,8
+    CONTROL         "Gas red. heater duty",IDC_MAP_IMPEXP_GRHEAT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,258,90,8
 
     LTEXT           "\nSelect one item in each list and click button located between them",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 

@@ -239,6 +239,9 @@ typedef struct
  //Gas reducer's temperature (GRTEMP) sensor lookup table, last two values are related voltage limits for x-axis
  _int grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
 
+ //PWM duty for gas reducer's heater
+ _uchar grheat_duty[F_TMP_POINTS];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -270,11 +273,12 @@ typedef struct
  _uchar fldclr_start;
  _uchar hall_predict;
  _uint  vtachom_mult; //value * 8192
+ _uint  grheat_time;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3994];
+ _uchar reserved[3976];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1375,6 +1379,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetSmapabanThrdMap(op_fwd->smapaban_thrd);
  GetCESettingsData(op_fwd->cesd);
  GetKnockZoneMap(op_fwd->knock_zone);
+ GetGrHeatDutyMap(op_fwd->grheat_duty);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1445,6 +1450,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetSmapabanThrdMap(ip_fwd->smapaban_thrd);
  SetCESettingsData(ip_fwd->cesd);
  SetKnockZoneMap(ip_fwd->knock_zone);
+ SetGrHeatDutyMap(ip_fwd->grheat_duty);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2053,6 +2059,32 @@ void CFirmwareDataMediator::SetKnockZoneMap(const float* ip_values)
    WRITEBIT16(p_fd->exdata.knock_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
 }
 
+void CFirmwareDataMediator::GetGrHeatDutyMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < F_TMP_POINTS; i++)
+  op_values[i] = (p_fd->exdata.grheat_duty[i] / 2.0f);
+}
+
+void CFirmwareDataMediator::SetGrHeatDutyMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ if (!ip_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < F_TMP_POINTS; i++)
+  p_fd->exdata.grheat_duty[i] = (_uchar)MathHelpers::Round(ip_values[i] * 2.0);
+}
+
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
  if (!mp_cddata)
@@ -2402,6 +2434,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  if (vtachom_mult == 0)
   vtachom_mult = 1; //prevent division by zero
  o_data.vtachom_mult = 1.0f / ((float)vtachom_mult / 8192.0f); //1/x
+
+ o_data.grheat_time = ((float)exd.grheat_time) / 6000.0f; //convert from 1/100 sec units to minutes
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2438,4 +2472,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.fldclr_start = i_data.fldclr_start;
  exd.hall_predict = i_data.hall_predict;
  exd.vtachom_mult = MathHelpers::Round((1.0f / i_data.vtachom_mult) * 8192.0f);
+ exd.grheat_time = MathHelpers::Round(i_data.grheat_time * 6000.0f);
 }

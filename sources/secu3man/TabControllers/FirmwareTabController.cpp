@@ -279,6 +279,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_SMAPABAN_THRD, mptms.m_smapaban_thrd_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_KNOCK_ZONE, mptms.m_knock_zone_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRTS_CURVE, mptms.m_grts_curve_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRHEAT_DUTY, mptms.m_grheat_duty_map);
 
  //симулируем изменение состо€ни€ дл€ обновлени€ контроллов, так как OnConnection вызываетс€ только если
  //сбрываетс€ или разрываетс€ принудительно (путем деактивации коммуникационного контроллера)
@@ -947,6 +948,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
  mp_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableGrtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  bool en_for_gd = (CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
  mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && en_for_gd);
  mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
@@ -1130,6 +1132,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(false),false);
  mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(true),true);
+
+ mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(false),false);
+ mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(true),true);
  
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
@@ -1417,6 +1422,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_GRTS_CURVE:
    mp_fwdm->SetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(false));
+   break;
+  case TYPE_MAP_GRHEAT_DUTY:
+   mp_fwdm->SetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(false));
    break;
  }
 }
@@ -1866,6 +1874,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("size of averaging buffer for ADD_I8"), _T(""), 1, 8, 1, 0, &d.inpavnum[13], _T("Size of averaging buffer for ADD_I8. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ћакс. врем€ работы подогрева газового редуктора"), _T("мин"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("ѕодгрев впускного коллектора будет выключен по истечении этого времени когда двигатель остановлен. Ёто должно предотвратить чрезмерный разр€д аккумул€тора."));
+ else
+  dfd.AppendItem(_T("Timeout threshold of gas reducer's heater"), _T("min"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("Gas reducer's heating will be turned off after this time when engine is stopped. This should prevent over-discharge of the battery."));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);
@@ -2101,6 +2114,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_smapaban_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_SMAPABAN_THRD);
  mptms.m_knock_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_KNOCK_ZONE);
  mptms.m_grts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRTS_CURVE);
+ mptms.m_grheat_duty_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRHEAT_DUTY);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

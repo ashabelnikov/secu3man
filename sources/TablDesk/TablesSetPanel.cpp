@@ -864,6 +864,50 @@ void __cdecl CTablesSetPanel::OnWndActivationGrtsCurveTable(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeGrHeatDutyTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_GRHEAT_DUTY);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseGrHeatDutyTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_GRHEAT_DUTY].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_GRHEAT_DUTY].handle, TYPE_MAP_GRHEAT_DUTY);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationGrHeatDutyTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_GRHEAT_DUTY].handle, cmd);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -876,6 +920,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_cts_curve_enabled(false)
 , m_tmp2_curve_enabled(false)
 , m_grts_curve_enabled(false)
+, m_grheat_duty_enabled(false)
 {
  m_scrl_view = 845;
 
@@ -920,6 +965,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_SMAPABAN_THRD_MAP, m_view_smapaban_thrd_map_btn);
  DDX_Control(pDX, IDC_TD_KNOCK_ZONES_MAP, m_view_knock_zone_map_btn);
  DDX_Control(pDX, IDC_TD_GRTS_CURVE, m_view_grts_curve_map_btn);
+ DDX_Control(pDX, IDC_TD_GRHEAT_DUTY_MAP, m_view_grheat_duty_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -943,6 +989,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_SMAPABAN_THRD_MAP, OnViewSmapabanThrdMap)
  ON_BN_CLICKED(IDC_TD_KNOCK_ZONES_MAP, OnViewKnockZoneMap)
  ON_BN_CLICKED(IDC_TD_GRTS_CURVE, OnViewGrtsCurveMap)
+ ON_BN_CLICKED(IDC_TD_GRHEAT_DUTY_MAP, OnViewGrHeatDutyMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -966,6 +1013,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_SMAPABAN_THRD_MAP, OnUpdateViewSmapabanThrdMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_KNOCK_ZONES_MAP, OnUpdateViewKnockZoneMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GRTS_CURVE, OnUpdateViewGrtsCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_GRHEAT_DUTY_MAP, OnUpdateViewGrHeatDutyMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -1009,6 +1057,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_smapaban_thrd_map_btn, MLL::GetString(IDS_TD_SMAPABAN_THRD_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_knock_zone_map_btn, MLL::GetString(IDS_TD_VIEW_KNOCK_ZONE_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_grts_curve_map_btn, MLL::GetString(IDS_TD_GRTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_grheat_duty_map_btn, MLL::GetString(IDC_TD_GRHEAT_DUTY_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1163,6 +1212,14 @@ void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(enabled ? TRUE : FALSE);
 }
 
+void CTablesSetPanel::OnUpdateViewGrHeatDutyMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_grheat_duty_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_GRHEAT_DUTY].state) ? TRUE : FALSE );
+}
+
 void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
@@ -1212,7 +1269,13 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
   DLL::Chart3DUpdate(m_md[TYPE_MAP_KNOCK_ZONE].handle, GetKnockZoneMap(true), GetKnockZoneMap(false));
 
  if (m_md[TYPE_MAP_GRTS_CURVE].state)
+ {
+  DLL::Chart2DUpdateYRange(m_md[TYPE_MAP_GRTS_CURVE].handle, GetCLTGrid()[0], GetCLTGrid()[15]);
   DLL::Chart2DUpdate(m_md[TYPE_MAP_GRTS_CURVE].handle, GetGrtsCurveMap(true), GetGrtsCurveMap(false));
+ }
+
+ if (m_md[TYPE_MAP_GRHEAT_DUTY].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_GRHEAT_DUTY].handle, GetGrHeatDutyMap(true), GetGrHeatDutyMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1276,6 +1339,15 @@ void CTablesSetPanel::EnableGrtsCurve(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_GRTS_CURVE].state && ::IsWindow(m_md[TYPE_MAP_GRTS_CURVE].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_GRTS_CURVE].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableGrHeatDutyMap(bool enable)
+{
+ m_grheat_duty_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_GRHEAT_DUTY].state && ::IsWindow(m_md[TYPE_MAP_GRHEAT_DUTY].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_GRHEAT_DUTY].handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -1912,6 +1984,41 @@ void CTablesSetPanel::OnViewKnockZoneMap()
  }
 }
 
+void CTablesSetPanel::OnViewGrHeatDutyMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_grheat_duty_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_GRHEAT_DUTY].handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_GRHEAT_DUTY].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_GRHEAT_DUTY].state = 1;
+  m_md[TYPE_MAP_GRHEAT_DUTY].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrHeatDutyMap(true),GetGrHeatDutyMap(false),0.0,100.0, GetCLTGrid(),16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str(),
+    MLL::GetString(IDS_GRHEAT_DUTY_MAP).c_str(), false);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_GRHEAT_DUTY].handle,OnChangeGrHeatDutyTable,this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_GRHEAT_DUTY].handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_GRHEAT_DUTY].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_GRHEAT_DUTY].handle,OnCloseGrHeatDutyTable,this);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_GRHEAT_DUTY].handle, OnWndActivationGrHeatDutyTable, this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_GRHEAT_DUTY].handle, m_md[TYPE_MAP_GRHEAT_DUTY].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_GRHEAT_DUTY].handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_GRHEAT_DUTY].handle, TYPE_MAP_GRHEAT_DUTY);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_GRHEAT_DUTY].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_GRHEAT_DUTY].handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -2055,6 +2162,14 @@ float* CTablesSetPanel::GetEHPauseMap(bool i_original)
   return m_md[TYPE_MAP_EH_PAUSE].original;
  else
   return m_md[TYPE_MAP_EH_PAUSE].active;
+}
+
+float* CTablesSetPanel::GetGrHeatDutyMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_GRHEAT_DUTY].original;
+ else
+  return m_md[TYPE_MAP_GRHEAT_DUTY].active;
 }
 
 float* CTablesSetPanel::GetCrankingThrdMap(bool i_original)

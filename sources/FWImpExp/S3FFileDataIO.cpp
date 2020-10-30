@@ -77,7 +77,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.11 - CLT grid has been added (02.02.2020)
 // 01.12 - Fixed overflow bug in inj_iatclt_corr map (05.05.2020)
 // 01.13 - Added 3 new maps: pwm_duty1, pwm_duty2, knock_zone (15.09.2020)
-// 01.14 - Added CE settings for ADD_I5/6/7/8, GRTS curve map (29.10.2020)
+// 01.14 - Added CE settings for ADD_I5/6/7/8, GRTS curve map, GRHEAT map (28.10.2020-30.10.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -239,9 +239,10 @@ struct S3FSepMaps
  //since v01.13
  s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map
  //since v01.14
- s3f_int32_t grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //GRTS temperature sensor look up table, since v01.14
+ s3f_int32_t grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //GRTS temperature sensor look up table, since v01.14 
+ s3f_int32_t grheat_duty[F_TMP_POINTS];                       //temperature
 
- s3f_int32_t reserved[813];       //reserved bytes, = 0
+ s3f_int32_t reserved[797];       //reserved bytes, = 0
 };
 
 
@@ -478,6 +479,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->knock_zone[i] = MathHelpers::Round(m_data.knock_zone[i] * INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   p_sepMaps->grts_curve[i] = MathHelpers::Round(m_data.grts_curve[i] * INT_MULTIPLIER);
+ for(i = 0; i < F_TMP_POINTS; ++i)
+  p_sepMaps->grheat_duty[i] = MathHelpers::Round(m_data.grheat_duty[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -714,6 +717,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.knock_zone[i] = p_sepMaps->knock_zone[i] / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
+ for(i = 0; i < F_TMP_POINTS; ++i)
+  m_data.grheat_duty[i] = p_sepMaps->grheat_duty[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

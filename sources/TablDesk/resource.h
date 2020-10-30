@@ -474,3 +474,6 @@
 #define IDC_TD_GRTS_CURVE               5828
 #define IDS_TD_GRTS_CURVE_TT            5829
 #define IDS_GRTS_CURVE_MAP              5830 
+#define IDS_GRHEAT_DUTY_MAP             5831
+#define IDC_TD_GRHEAT_DUTY_MAP          5832
+#define IDC_TD_GRHEAT_DUTY_MAP_TT       5833

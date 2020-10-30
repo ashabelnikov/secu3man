@@ -163,6 +163,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwm2MapWnd(_T("Pwm2MapWnd"))
 , m_optKnockZoneMapWnd(_T("KnockZoneMapWnd"))
 , m_optGrtsCurveMapWnd(_T("GrtsCurveMapWnd"))
+, m_optGrHeatDutyMapWnd(_T("GrHeatDutyMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -243,6 +244,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwm2MapWndSize(_T("Pwm2MapWnd"))
 , m_optKnockZoneMapWndSize(_T("KnockZoneMapWnd"))
 , m_optGrtsCurveMapWndSize(_T("GrtsCurveMapWnd"))
+, m_optGrHeatDutyMapWndSize(_T("GrHeatDutyMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -377,6 +379,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepSmapabanThrdMap(_T("SmapabanThrdMapWnd"))
 , m_optPtMovStepKnockZoneMap(_T("KnockZoneMapWnd"))
 , m_optPtMovStepGrtsCurveMap(_T("GrtsCurveMapWnd"))
+, m_optPtMovStepGrHeatDutyMap(_T("GrHeatDutyMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -734,6 +737,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optPwm2MapWnd);
  ws.ReadWndPos(m_optKnockZoneMapWnd);
  ws.ReadWndPos(m_optGrtsCurveMapWnd);
+ ws.ReadWndPos(m_optGrHeatDutyMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -817,6 +821,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optPwm2MapWndSize, 0, 10000);
  sz.ReadWndPos(m_optKnockZoneMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optGrtsCurveMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optGrHeatDutyMapWndSize, 0, 10000);
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  sz1.ReadWndPos(m_optStrtMapWndSize1);
@@ -1019,6 +1024,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepSmapabanThrdMap, _T("100.0"), 0.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepKnockZoneMap, _T("1.0"), 0.0f, 1.0f);
  ms.ReadFlt(m_optPtMovStepGrtsCurveMap, _T("0.25"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepGrHeatDutyMap, _T("5.0"), 0.0f, 10.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1775,6 +1781,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optGrtsCurveMapWnd, _T("Кривая датчика температуры на входе GRTEMP"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optGrHeatDutyMapWnd, _T("PWM duty map for controlling of gas reducer's heater"));
+ else
+  ws.WriteWndPos(m_optGrHeatDutyMapWnd, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2170,6 +2181,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optGrtsCurveMapWndSize, _T("GRTEMP sensor table"));
  else
   sz.WriteWndPos(m_optGrtsCurveMapWndSize, _T("Кривая датчика температуры на входе GRTEMP"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optGrHeatDutyMapWndSize, _T("PWM duty map for controlling of gas reducer's heater"));
+ else
+  sz.WriteWndPos(m_optGrHeatDutyMapWndSize, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3110,6 +3126,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepGrtsCurveMap, 3, _T("Кривая датчика температуры на входе GRTEMP"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepGrHeatDutyMap, 3, _T("PWM duty map for controlling of gas reducer's heater"));
+ else
+  ms.WriteFlt(m_optPtMovStepGrHeatDutyMap, 3, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -3385,6 +3406,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optKnockZoneMapWnd.value.y = i_wndSettings.m_KnockZoneMapWnd_Y; 
  m_optGrtsCurveMapWnd.value.x = i_wndSettings.m_GrtsCurveMapWnd_X;
  m_optGrtsCurveMapWnd.value.y = i_wndSettings.m_GrtsCurveMapWnd_Y; 
+ m_optGrHeatDutyMapWnd.value.x = i_wndSettings.m_GrHeatDutyMapWnd_X;
+ m_optGrHeatDutyMapWnd.value.y = i_wndSettings.m_GrHeatDutyMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3483,6 +3506,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_KnockZoneMapWnd_Y = m_optKnockZoneMapWnd.value.y;
  o_wndSettings.m_GrtsCurveMapWnd_X = m_optGrtsCurveMapWnd.value.x;
  o_wndSettings.m_GrtsCurveMapWnd_Y = m_optGrtsCurveMapWnd.value.y;
+ o_wndSettings.m_GrHeatDutyMapWnd_X = m_optGrHeatDutyMapWnd.value.x;
+ o_wndSettings.m_GrHeatDutyMapWnd_Y = m_optGrHeatDutyMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -3705,6 +3730,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optKnockZoneMapWndSize.value.y = i_wndSize.m_KnockZoneMapWnd_H; 
  m_optGrtsCurveMapWndSize.value.x = i_wndSize.m_GrtsCurveMapWnd_W;
  m_optGrtsCurveMapWndSize.value.y = i_wndSize.m_GrtsCurveMapWnd_H; 
+ m_optGrHeatDutyMapWndSize.value.x = i_wndSize.m_GrHeatDutyMapWnd_W;
+ m_optGrHeatDutyMapWndSize.value.y = i_wndSize.m_GrHeatDutyMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -3803,6 +3830,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_KnockZoneMapWnd_H = m_optKnockZoneMapWndSize.value.y;
  o_wndSize.m_GrtsCurveMapWnd_W = m_optGrtsCurveMapWndSize.value.x;
  o_wndSize.m_GrtsCurveMapWnd_H = m_optGrtsCurveMapWndSize.value.y;
+ o_wndSize.m_GrHeatDutyMapWnd_W = m_optGrHeatDutyMapWndSize.value.x;
+ o_wndSize.m_GrHeatDutyMapWnd_H = m_optGrHeatDutyMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4625,6 +4654,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepSmapabanThrdMap.value = i_ptMovStep.m_smapaban_thrd_map;
  m_optPtMovStepKnockZoneMap.value = i_ptMovStep.m_knock_zone_map;
  m_optPtMovStepGrtsCurveMap.value = i_ptMovStep.m_grts_curve_map;
+ m_optPtMovStepGrHeatDutyMap.value = i_ptMovStep.m_grheat_duty_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -4673,6 +4703,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_smapaban_thrd_map = m_optPtMovStepSmapabanThrdMap.value;
  o_ptMovStep.m_knock_zone_map = m_optPtMovStepKnockZoneMap.value;
  o_ptMovStep.m_grts_curve_map = m_optPtMovStepGrtsCurveMap.value;
+ o_ptMovStep.m_grheat_duty_map = m_optPtMovStepGrHeatDutyMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

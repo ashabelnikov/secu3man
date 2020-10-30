@@ -388,6 +388,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optPwm2MapWnd;
   OptField_t<POINT> m_optKnockZoneMapWnd;
   OptField_t<POINT> m_optGrtsCurveMapWnd;
+  OptField_t<POINT> m_optGrHeatDutyMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -468,6 +469,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optPwm2MapWndSize;
   OptField_t<POINT> m_optKnockZoneMapWndSize;
   OptField_t<POINT> m_optGrtsCurveMapWndSize;
+  OptField_t<POINT> m_optGrHeatDutyMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -651,6 +653,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepSmapabanThrdMap;
   OptField_t<float> m_optPtMovStepKnockZoneMap;
   OptField_t<float> m_optPtMovStepGrtsCurveMap;
+  OptField_t<float> m_optPtMovStepGrHeatDutyMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;
