@@ -305,7 +305,7 @@ void CGMEInjOtherDlg::UpdateView(bool axisLabels /*= false*/)
 }
 
 
-void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat)
+void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat, float map2, int rxlaf)
 {
  if (m_crnk_map.GetSafeHwnd())
  {
@@ -329,12 +329,12 @@ void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, floa
   m_egocrv_map.ShowMarkers(true, false);
   m_egocrv_map.SetArguments(0, add_i1);
  }
- /*
+ 
  if (m_iatclt_map.GetSafeHwnd())
  {
-  m_iatclt_map.ShowMarkers(!strt_use, false);
-  m_iatclt_map.SetArguments(0, airflow);
- }*/
+  m_iatclt_map.ShowMarkers(true, false);
+  m_iatclt_map.SetArguments(0, (float)rxlaf);
+ }
 
  if (m_tpsswt_map.GetSafeHwnd())
  {
@@ -353,12 +353,12 @@ void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, floa
   m_gtsc_map.ShowMarkers(true, false);
   m_gtsc_map.SetArguments(0, tmp2);
  }
-/*
+
  if (m_gpsc_map.GetSafeHwnd())
  {
-  m_gpsc_map.ShowMarkers(!strt_use, false);
+  m_gpsc_map.ShowMarkers(true, false);
   m_gpsc_map.SetArguments(0, map2);
- }*/
+ }
 }
 
 void CGMEInjOtherDlg::OnChangeCrnk(void)

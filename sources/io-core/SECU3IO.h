@@ -108,6 +108,8 @@ namespace SECU3IO
 
   float rigid_arg;                      //idling regulator rigidity's argument
   bool  rigid_use;
+
+  int rxlaf;                            //RxL air flow
  };
 
  struct DbgvarDat
@@ -533,6 +535,9 @@ namespace SECU3IO
  const int UNIOUT_COND_AI6 = 25;      //analog input 6
  const int UNIOUT_COND_AI7 = 26;      //analog input 7
  const int UNIOUT_COND_AI8 = 27;      //analog input 8
+ const int UNIOUT_COND_GRTS = 28;     //GRTS
+ const int UNIOUT_COND_MAP2 = 29;     //MAP2
+ const int UNIOUT_COND_TMP2 = 30;     //TMP2
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

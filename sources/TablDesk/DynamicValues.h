@@ -69,5 +69,9 @@ namespace TablDesk
 
   float rigid_arg; //idling regulator rigidity's argument
   bool rigid_use;
+
+  float map2;  //gas pressure sensor
+
+  int rxlaf;
  };
 }

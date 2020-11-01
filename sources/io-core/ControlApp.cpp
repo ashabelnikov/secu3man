@@ -282,7 +282,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 144 : 72))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 148 : 74))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -587,6 +587,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  sensorDat.grts = ((float)grts) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  sensorDat.grts = MathHelpers::RestrictValue(sensorDat.grts, -99.9f, 999.0f);
+
+ //RxL
+ int rxlaf = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &rxlaf))
+  return false;
+ sensorDat.rxlaf = rxlaf * 32;
 
  return true;
 }
@@ -4175,6 +4181,9 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_CE: return MathHelpers::Round(val);
   case UNIOUT_COND_OFTMR: return MathHelpers::Round(val * 100.0f);
   case UNIOUT_COND_LPTMR: return MathHelpers::Round(val * 100.0f);
+  case UNIOUT_COND_GRTS:  return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_MAP2:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_TMP2: return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  }
  return 0;
 }
@@ -4217,6 +4226,9 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_CE: return (float)val;
   case UNIOUT_COND_OFTMR: return ((float)val) / 100.0f;
   case UNIOUT_COND_LPTMR: return ((float)val) / 100.0f;
+  case UNIOUT_COND_GRTS:  return (((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_MAP2:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_TMP2: return ((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  }
  return .0f;
 }

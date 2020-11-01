@@ -1565,6 +1565,9 @@ BEGIN
     IDS_UNIOUT_COND_AI6    "Аналогов.вход 6(В)"
     IDS_UNIOUT_COND_AI7    "Аналогов.вход 7(В)"
     IDS_UNIOUT_COND_AI8    "Аналогов.вход 8(В)"
+    IDS_UNIOUT_COND_GRTS   "ДТ Газ. Ред (°C)"
+    IDS_UNIOUT_COND_MAP2   "MAP2 (кПа)"
+    IDS_UNIOUT_COND_TMP2   "TEMP2 (°C)"
 END
 
 STRINGTABLE
@@ -3378,6 +3381,9 @@ BEGIN
     IDS_UNIOUT_COND_AI6    "Analog input 6(V)"
     IDS_UNIOUT_COND_AI7    "Analog input 7(V)"
     IDS_UNIOUT_COND_AI8    "Analog input 8(V)"
+    IDS_UNIOUT_COND_GRTS   "GRTS (°C)"
+    IDS_UNIOUT_COND_MAP2   "MAP2 (kPa)"
+    IDS_UNIOUT_COND_TMP2   "TEMP2 (°C)"
 END
 
 STRINGTABLE

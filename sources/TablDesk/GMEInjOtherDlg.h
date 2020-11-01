@@ -47,7 +47,7 @@ class CGMEInjOtherDlg : public CTabDialog
   void setOnChange(EventWithCode OnCB);
   void UpdateView(bool axisLabels = false);
 
-  void SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat);
+  void SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat, float map2, int rxlaf);
 
  public:
 

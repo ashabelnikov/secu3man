@@ -181,7 +181,7 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      mp_cedview->SetValues(sd->ce_errors);
      mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->air_flow, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
       sd->idle_aalt, sd->idle_use, sd->work_aalt, sd->work_use, sd->temp_aalt, sd->temp_use, sd->airt_aalt, sd->airt_use,
-      sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use, sd->tps, sd->choke_pos, sd->tpsdot, sd->voltage, sd->add_i1, sd->tmp2, sd->baro_press, sd->load, sd->afr, sd->acceleration, sd->ephh_valve, sd->air_temp, sd->rigid_arg, sd->rigid_use);
+      sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use, sd->tps, sd->choke_pos, sd->tpsdot, sd->voltage, sd->add_i1, sd->tmp2, sd->baro_press, sd->load, sd->afr, sd->acceleration, sd->ephh_valve, sd->air_temp, sd->rigid_arg, sd->rigid_use, sd->map2, sd->rxlaf);
      mp_view->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
      mp_cedview->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
      mp_tdview->EnableAdvanceAngleIndication(mp_comm->m_pControlApp->GetOnlineStatus());
@@ -217,7 +217,7 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      mp_cedview->SetValues(sd->ce_errors);
      mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->air_flow, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
       sd->idle_aalt, sd->idle_use, sd->work_aalt, sd->work_use, sd->temp_aalt, sd->temp_use, sd->airt_aalt, sd->airt_use,
-      sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use, sd->tps, sd->choke_pos, sd->tpsdot, sd->voltage, sd->add_i1, sd->tmp2, sd->baro_press, sd->load, sd->afr, sd->acceleration, sd->ephh_valve, sd->air_temp, sd->rigid_arg, sd->rigid_use);
+      sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use, sd->tps, sd->choke_pos, sd->tpsdot, sd->voltage, sd->add_i1, sd->tmp2, sd->baro_press, sd->load, sd->afr, sd->acceleration, sd->ephh_valve, sd->air_temp, sd->rigid_arg, sd->rigid_use, sd->map2, sd->rxlaf);
     }
    }
    else
