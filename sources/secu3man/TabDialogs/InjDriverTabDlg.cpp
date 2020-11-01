@@ -823,6 +823,7 @@ void CInjDriverTabDlg::OnPeakOnTabSelCheck()
  mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetSerieVisibility(SERIE_PM, false);
  mp_chart->SetSerieVisibility(SERIE_PA, false);
+ mp_chart->SetSerieVisibility(SERIE_VT, true);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_PEAK_ON_TIME_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.0f")); //integer
  mp_chart->SetXAxisValueFormat(_T("%.01f"));
@@ -859,6 +860,7 @@ void CInjDriverTabDlg::OnPeakDutyTabSelCheck()
  mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetSerieVisibility(SERIE_PM, false);
  mp_chart->SetSerieVisibility(SERIE_PA, false);
+ mp_chart->SetSerieVisibility(SERIE_VT, true);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_PEAK_DUTY_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.01f")); //fractional
  mp_chart->SetXAxisValueFormat(_T("%.01f"));
@@ -895,6 +897,7 @@ void CInjDriverTabDlg::OnHoldDutyTabSelCheck()
  mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetSerieVisibility(SERIE_PM, false);
  mp_chart->SetSerieVisibility(SERIE_PA, false);
+ mp_chart->SetSerieVisibility(SERIE_VT, true);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_HOLD_DUTY_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.01f")); //fractional
  mp_chart->SetXAxisValueFormat(_T("%.01f"));
@@ -931,6 +934,7 @@ void CInjDriverTabDlg::OnPeakFullTabSelCheck()
  mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetSerieVisibility(SERIE_PM, false);
  mp_chart->SetSerieVisibility(SERIE_PA, false);
+ mp_chart->SetSerieVisibility(SERIE_VT, true);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_PEAK_FULL_TIME_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.0f")); //integer
  mp_chart->SetXAxisValueFormat(_T("%.01f"));
@@ -967,6 +971,7 @@ void CInjDriverTabDlg::OnPthPauseTabSelCheck()
  mp_chart->SetSerieVisibility(SERIE_PP, true, true);
  mp_chart->SetSerieVisibility(SERIE_PM, false);
  mp_chart->SetSerieVisibility(SERIE_PA, false);
+ mp_chart->SetSerieVisibility(SERIE_VT, true);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_PTH_PAUSE_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.0f")); //integer
  mp_chart->SetXAxisValueFormat(_T("%.01f"));
@@ -1003,6 +1008,7 @@ void CInjDriverTabDlg::OnPWMulTabSelCheck()
  mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetSerieVisibility(SERIE_PM, true, true);
  mp_chart->SetSerieVisibility(SERIE_PA, false);
+ mp_chart->SetSerieVisibility(SERIE_VT, false);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_INJDRV_PWMUL_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.02f")); //float
  mp_chart->SetXAxisValueFormat(_T("%.0f"));  //integer
@@ -1039,6 +1045,7 @@ void CInjDriverTabDlg::OnPWAddTabSelCheck()
  mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetSerieVisibility(SERIE_PM, false);
  mp_chart->SetSerieVisibility(SERIE_PA, true, true);
+ mp_chart->SetSerieVisibility(SERIE_VT, false);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_INJDRV_PWADD_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.0f")); //integer
  mp_chart->SetXAxisValueFormat(_T("%.0f")); //integer
