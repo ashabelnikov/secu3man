@@ -796,6 +796,8 @@ const int INPAVNUM = 14;
   int hall_predict;
   float vtachom_mult;
   float grheat_time;
+  int add_i1_sub;
+  int add_i2_sub;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

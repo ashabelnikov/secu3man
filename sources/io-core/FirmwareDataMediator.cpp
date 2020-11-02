@@ -274,11 +274,13 @@ typedef struct
  _uchar hall_predict;
  _uint  vtachom_mult; //value * 8192
  _uint  grheat_time;
+ _uchar add_i1_sub;
+ _uchar add_i2_sub;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3976];
+ _uchar reserved[3974];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2436,6 +2438,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.vtachom_mult = 1.0f / ((float)vtachom_mult / 8192.0f); //1/x
 
  o_data.grheat_time = ((float)exd.grheat_time) / 6000.0f; //convert from 1/100 sec units to minutes
+ o_data.add_i1_sub = exd.add_i1_sub;
+ o_data.add_i2_sub = exd.add_i2_sub;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2473,4 +2477,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.hall_predict = i_data.hall_predict;
  exd.vtachom_mult = MathHelpers::Round((1.0f / i_data.vtachom_mult) * 8192.0f);
  exd.grheat_time = MathHelpers::Round(i_data.grheat_time * 6000.0f);
+ exd.add_i1_sub = i_data.add_i1_sub;
+ exd.add_i2_sub = i_data.add_i2_sub;
 }
