@@ -1897,6 +1897,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Send value of another input instead of ADD_I2"), _T(""), 0, 4, 1, 0, &d.add_i2_sub, _T("Select what firmware should send instead of ADD_I2 value. 0 - ADD_I2 input (default), 1 - ADD_I5 input, 2 - ADD_I6 input, 3 - ADD_I7 input, 4 - ADD_I8 input"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Зона оборотов подхвата УОЗ РХХ"), _T("мин-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("УОЗ РХХ будет активирован когда обороты опустятся ниже значения равного сумме целевых оборотов ХХ и зоны подхвата. Например целевые обороты ХХ = 900, зона подхвата = 200, значит регулятор начнет работать когда обороты двигателя опустятся ниже 1100."));
+ else
+  dfd.AppendItem(_T("Capture range of the ign.tim idling regulator"), _T("min-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("Ignition-based idling regulator will be activated when the RPM falls below a value equal to the sum of the target idling RPM and the pickup zone. For example, target RPM = 900, pick-up zone = 200, which means the regulator will start working when the RPM drops below 1100."));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);
