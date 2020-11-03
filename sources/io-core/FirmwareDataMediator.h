@@ -211,6 +211,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetGrHeatDutyMap(float* op_values, bool i_original = false);
   void SetGrHeatDutyMap(const float* i_values);
 
+  void GetPwmIacUCoefMap(float* op_values, bool i_original = false);
+  void SetPwmIacUCoefMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

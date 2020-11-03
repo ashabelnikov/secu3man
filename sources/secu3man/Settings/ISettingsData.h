@@ -126,6 +126,8 @@ struct WndSettings
  int m_GrtsCurveMapWnd_Y;
  int m_GrHeatDutyMapWnd_X;
  int m_GrHeatDutyMapWnd_Y;
+ int m_PwmIacUCoefMapWnd_X;
+ int m_PwmIacUCoefMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -227,6 +229,8 @@ struct WndSize
  int m_GrtsCurveMapWnd_H;
  int m_GrHeatDutyMapWnd_W;
  int m_GrHeatDutyMapWnd_H;
+ int m_PwmIacUCoefMapWnd_W;
+ int m_PwmIacUCoefMapWnd_H;
 };
 
 //Holds windows's state data
@@ -348,6 +352,7 @@ struct MapPtMovStep
  float m_knock_zone_map;
  float m_grts_curve_map;
  float m_grheat_duty_map;
+ float m_pwmiac_ucoef_map;
 };
 
 //Log file's fileds

@@ -52,4 +52,5 @@ static const float IT_MAPS_M_FACTOR = 2.0f;
 static const float BAROCORR_MAPS_M_FACTOR = 4096.0f;
 static const float BAROCORR_MAPSX_M_FACTOR = 64.0f;
 static const float TPSSWT_MAPS_M_FACTOR = 2.0f;
+static const float PWMIAC_UCOEF_MAPS_M_FACTOR = 4096.0f;
 };

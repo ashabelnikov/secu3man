@@ -908,6 +908,50 @@ void __cdecl CTablesSetPanel::OnWndActivationGrHeatDutyTable(void* i_param, long
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangePwmIacUCoefMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_PWMIAC_UCOEF);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnClosePwmIacUCoefMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_PWMIAC_UCOEF].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_PWMIAC_UCOEF].handle, TYPE_MAP_PWMIAC_UCOEF);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationPwmIacUCoefMap(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_PWMIAC_UCOEF].handle, cmd);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -921,8 +965,9 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_tmp2_curve_enabled(false)
 , m_grts_curve_enabled(false)
 , m_grheat_duty_enabled(false)
+, m_pwmiac_ucoef_enabled(false)
 {
- m_scrl_view = 845;
+ m_scrl_view = 865;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
@@ -966,6 +1011,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_KNOCK_ZONES_MAP, m_view_knock_zone_map_btn);
  DDX_Control(pDX, IDC_TD_GRTS_CURVE, m_view_grts_curve_map_btn);
  DDX_Control(pDX, IDC_TD_GRHEAT_DUTY_MAP, m_view_grheat_duty_map_btn);
+ DDX_Control(pDX, IDC_TD_PWMIAC_UCOEF_MAP, m_view_pwmiac_ucoef_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -990,6 +1036,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_KNOCK_ZONES_MAP, OnViewKnockZoneMap)
  ON_BN_CLICKED(IDC_TD_GRTS_CURVE, OnViewGrtsCurveMap)
  ON_BN_CLICKED(IDC_TD_GRHEAT_DUTY_MAP, OnViewGrHeatDutyMap)
+ ON_BN_CLICKED(IDC_TD_PWMIAC_UCOEF_MAP, OnViewPwmIacUCoefMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -1014,6 +1061,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_KNOCK_ZONES_MAP, OnUpdateViewKnockZoneMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GRTS_CURVE, OnUpdateViewGrtsCurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GRHEAT_DUTY_MAP, OnUpdateViewGrHeatDutyMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_PWMIAC_UCOEF_MAP, OnUpdateViewPwmIacUCoefMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -1058,6 +1106,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_knock_zone_map_btn, MLL::GetString(IDS_TD_VIEW_KNOCK_ZONE_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_grts_curve_map_btn, MLL::GetString(IDS_TD_GRTS_CURVE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_grheat_duty_map_btn, MLL::GetString(IDC_TD_GRHEAT_DUTY_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_pwmiac_ucoef_map_btn, MLL::GetString(IDC_TD_PWMIAC_UCOEF_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1220,6 +1269,14 @@ void CTablesSetPanel::OnUpdateViewGrHeatDutyMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_GRHEAT_DUTY].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewPwmIacUCoefMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_pwmiac_ucoef_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_PWMIAC_UCOEF].state) ? TRUE : FALSE );
+}
+
 void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
@@ -1276,6 +1333,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_GRHEAT_DUTY].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_GRHEAT_DUTY].handle, GetGrHeatDutyMap(true), GetGrHeatDutyMap(false));
+
+ if (m_md[TYPE_MAP_PWMIAC_UCOEF].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, GetPwmIacUCoefMap(true), GetPwmIacUCoefMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1348,6 +1408,15 @@ void CTablesSetPanel::EnableGrHeatDutyMap(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_GRHEAT_DUTY].state && ::IsWindow(m_md[TYPE_MAP_GRHEAT_DUTY].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_GRHEAT_DUTY].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnablePwmIacUCoefMap(bool enable)
+{
+ m_pwmiac_ucoef_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_PWMIAC_UCOEF].state && ::IsWindow(m_md[TYPE_MAP_PWMIAC_UCOEF].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -2019,6 +2088,42 @@ void CTablesSetPanel::OnViewGrHeatDutyMap()
  }
 }
 
+void CTablesSetPanel::OnViewPwmIacUCoefMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_pwmiac_ucoef_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_PWMIAC_UCOEF].handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_PWMIAC_UCOEF].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_PWMIAC_UCOEF].state = 1;
+  m_md[TYPE_MAP_PWMIAC_UCOEF].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetPwmIacUCoefMap(true),GetPwmIacUCoefMap(false), 0.0, 3.0, SECU3IO::voltage_map_slots, 16,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
+    MLL::GetString(IDS_PWMIAC_UCOEF_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, 1, _T("%.01f"));
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, _T("#0.000"));
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_PWMIAC_UCOEF].handle,OnChangePwmIacUCoefMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_PWMIAC_UCOEF].handle,OnClosePwmIacUCoefMap,this);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, OnWndActivationPwmIacUCoefMap, this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, m_md[TYPE_MAP_PWMIAC_UCOEF].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, TYPE_MAP_PWMIAC_UCOEF);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_PWMIAC_UCOEF].handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -2202,6 +2307,14 @@ float* CTablesSetPanel::GetKnockZoneMap(bool i_original)
   return m_md[TYPE_MAP_KNOCK_ZONE].original;
  else
   return m_md[TYPE_MAP_KNOCK_ZONE].active;
+}
+
+float* CTablesSetPanel::GetPwmIacUCoefMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_PWMIAC_UCOEF].original;
+ else
+  return m_md[TYPE_MAP_PWMIAC_UCOEF].active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)

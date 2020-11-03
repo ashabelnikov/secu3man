@@ -339,6 +339,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_GrHeatDutyMapWnd_W = rc.right - rc.left;
    sz.m_GrHeatDutyMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_PWMIAC_UCOEF:
+   ws.m_PwmIacUCoefMapWnd_X = rc.left;
+   ws.m_PwmIacUCoefMapWnd_Y = rc.top;
+   sz.m_PwmIacUCoefMapWnd_W = rc.right - rc.left;
+   sz.m_PwmIacUCoefMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -558,6 +564,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_GME_INJ_WND:
    X = ws.m_GridMapInjWnd_X, Y = ws.m_GridMapInjWnd_Y;
 //   W = sz.m_GridMapInjWnd_W, H = sz.m_GridMapInjWnd_H;
+   break;
+  case TYPE_MAP_PWMIAC_UCOEF:
+   X = ws.m_PwmIacUCoefMapWnd_X, Y = ws.m_PwmIacUCoefMapWnd_Y;
+   W = sz.m_PwmIacUCoefMapWnd_W, H = sz.m_PwmIacUCoefMapWnd_H;
    break;
 
   default:

@@ -808,6 +808,8 @@ const int INPAVNUM = 14;
  const float rigid_map_slots[8]  = {1,2,3,4,5,6,7,8};
  const float manigntim_map_slots[16]  = {.0f,0.33f,0.66f,1.00f,1.33f,1.66f,2.00f,2.33f,2.66f,3.00f,3.33f,3.66f,4.00f,4.33f,4.66f,5.0f};
 
+ const float voltage_map_slots[16] = {5.4f,6.2f,7.0f,7.8f,8.6f,9.4f,10.2f,11.0f,11.8f,12.6f,13.4f,14.2f,15.0f,15.8f,16.6f,17.4f};
+
  const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 32;
  //<bitnumber, name>
 #define _SD std::pair<int, TCHAR*>

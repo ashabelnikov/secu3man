@@ -280,6 +280,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_KNOCK_ZONE, mptms.m_knock_zone_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRTS_CURVE, mptms.m_grts_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRHEAT_DUTY, mptms.m_grheat_duty_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWMIAC_UCOEF, mptms.m_pwmiac_ucoef_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -949,6 +950,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableGrtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  bool en_for_gd = (CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
  mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && en_for_gd);
  mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
@@ -1135,6 +1137,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(false),false);
  mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(true),true);
+
+ mp_fwdm->GetPwmIacUCoefMap(mp_view->mp_TablesPanel->GetPwmIacUCoefMap(false),false);
+ mp_fwdm->GetPwmIacUCoefMap(mp_view->mp_TablesPanel->GetPwmIacUCoefMap(true),true);
  
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
@@ -1425,6 +1430,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_GRHEAT_DUTY:
    mp_fwdm->SetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(false));
+   break;
+  case TYPE_MAP_PWMIAC_UCOEF:
+   mp_fwdm->SetPwmIacUCoefMap(mp_view->mp_TablesPanel->GetPwmIacUCoefMap(false));
    break;
  }
 }
@@ -2125,6 +2133,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_knock_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_KNOCK_ZONE);
  mptms.m_grts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRTS_CURVE);
  mptms.m_grheat_duty_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRHEAT_DUTY);
+ mptms.m_pwmiac_ucoef_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWMIAC_UCOEF);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

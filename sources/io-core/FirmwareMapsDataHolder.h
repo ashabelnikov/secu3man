@@ -69,6 +69,7 @@
 #define INJ_GTS_CORR_SIZE      16
 #define INJ_GPS_CORR_SIZE      9
 #define INJ_ATS_CORR_SIZE      16
+#define PWMIAC_UCOEF_SIZE      16
 
 //количество наборов характеристик хранимых в памяти программ
 #define TABLES_NUMBER          4
@@ -219,6 +220,7 @@ struct FWMapsDataHolder
  float knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones vs rpm & tps
  float grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
  float grheat_duty[F_TMP_POINTS];
+ float pwmiac_ucoef[PWMIAC_UCOEF_SIZE];
  CESettingsData cesd;
 
  //default constructor
@@ -247,6 +249,7 @@ struct FWMapsDataHolder
   std::fill(knock_zone, knock_zone + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
   std::fill(grts_curve, grts_curve + THERMISTOR_LOOKUP_TABLE_SIZE + 2, .0f);
   std::fill(grheat_duty, grheat_duty + F_TMP_SLOTS, .0f);
+  std::fill(pwmiac_ucoef, pwmiac_ucoef + PWMIAC_UCOEF_SIZE, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

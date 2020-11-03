@@ -3440,11 +3440,11 @@ float* CButtonsPanel::GetCLTGrid(void)
 
 HWND CButtonsPanel::GetMapWindow(int wndType)
 {
-if (wndType >= TYPE_MAP_SET_START && wndType <= TYPE_MAP_SET_END)
+ if (wndType >= TYPE_MAP_SET_START && wndType <= TYPE_MAP_SET_END)
   return m_md[wndType].state ? m_md[wndType].handle : NULL;
-else if (wndType == TYPE_MAP_GME_IGN_WND) //pseudo map
+ else if (wndType == TYPE_MAP_GME_IGN_WND) //pseudo map
   return (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign) ? mp_gridModeEditorIgnDlg->m_hWnd : NULL; 
-else if (wndType == TYPE_MAP_GME_INJ_WND) //pseudo map
+ else if (wndType == TYPE_MAP_GME_INJ_WND) //pseudo map
   return (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj) ? mp_gridModeEditorInjDlg->m_hWnd : NULL; 
  else
   return NULL;
@@ -3805,7 +3805,7 @@ void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
   return;
  }
 
- for(int i = TYPE_MAP_ALL_START; i < TYPE_MAP_ALL_END - 2; ++i)
+ for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END - 2; ++i)
  {
   if (_this->m_md[i].state)
   {

@@ -477,3 +477,6 @@
 #define IDS_GRHEAT_DUTY_MAP             5831
 #define IDC_TD_GRHEAT_DUTY_MAP          5832
 #define IDC_TD_GRHEAT_DUTY_MAP_TT       5833
+#define IDC_TD_PWMIAC_UCOEF_MAP         5834
+#define IDC_TD_PWMIAC_UCOEF_MAP_TT      5835
+#define IDS_PWMIAC_UCOEF_MAP            5836

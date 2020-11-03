@@ -242,6 +242,9 @@ typedef struct
  //PWM duty for gas reducer's heater
  _uchar grheat_duty[F_TMP_POINTS];
 
+ //PWM IAC duty coefficient vs board voltage
+ _uint pwmiac_ucoef[PWMIAC_UCOEF_SIZE];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -280,7 +283,7 @@ typedef struct
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3974];
+ _uchar reserved[3942];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1382,6 +1385,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetCESettingsData(op_fwd->cesd);
  GetKnockZoneMap(op_fwd->knock_zone);
  GetGrHeatDutyMap(op_fwd->grheat_duty);
+ GetPwmIacUCoefMap(op_fwd->pwmiac_ucoef);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1453,6 +1457,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetCESettingsData(ip_fwd->cesd);
  SetKnockZoneMap(ip_fwd->knock_zone);
  SetGrHeatDutyMap(ip_fwd->grheat_duty);
+ SetPwmIacUCoefMap(ip_fwd->pwmiac_ucoef);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2085,6 +2090,24 @@ void CFirmwareDataMediator::SetGrHeatDutyMap(const float* ip_values)
 
  for(size_t i = 0; i < F_TMP_POINTS; i++)
   p_fd->exdata.grheat_duty[i] = (_uchar)MathHelpers::Round(ip_values[i] * 2.0);
+}
+
+void CFirmwareDataMediator::GetPwmIacUCoefMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
+ for (int i = 0; i < PWMIAC_UCOEF_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.pwmiac_ucoef[i]) / PWMIAC_UCOEF_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetPwmIacUCoefMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+ for (int i = 0; i < PWMIAC_UCOEF_SIZE; i++ )
+  p_fd->exdata.pwmiac_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
