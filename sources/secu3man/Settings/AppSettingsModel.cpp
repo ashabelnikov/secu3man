@@ -552,6 +552,9 @@ CAppSettingsModel::CAppSettingsModel()
  }
  m_AllowablePorts.push_back(_T("/dev/ttyUSB0"));
  m_AllowablePorts.push_back(_T("/dev/ttyUSB1"));
+ m_AllowablePorts.push_back(_T("/dev/rfcomm0")); //bluetooth (sudo rfcomm bind 0 MAC 1) MAC - MAC address of paired bluetooth device
+ m_AllowablePorts.push_back(_T("/dev/rfcomm1")); //bluetooth
+
 
  //get path where resides executable file of this proces
  HMODULE hModule = GetModuleHandle(NULL);
