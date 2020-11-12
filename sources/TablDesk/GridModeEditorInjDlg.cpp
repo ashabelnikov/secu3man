@@ -57,22 +57,24 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
 , m_ldaxMin(1.0f)
 , m_ldaxMax(16.0f)
 , m_ldaxNeedsUpdate(false)
+, m_ldaxUseTable(false)
 , m_baro_press(101.3f) //sea level atmospheric pressure by default
 , m_pwm1TabIdx(0)
+, mp_lodGrid(NULL)
 {
- work_map_load_slots.reserve(32);
- work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
+ m_work_map_load_slots.reserve(32);
+ m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16, true); //<--reverse order
 
  m_pVEPageDlg.reset(new CGMEInjVEDlg());
- m_pVEPageDlg->BindLoadGrid(&work_map_load_slots[0]);
+ m_pVEPageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
  m_pVEPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeVE));
 
  m_pAFRPageDlg.reset(new CGMEInjAFRDlg());
- m_pAFRPageDlg->BindLoadGrid(&work_map_load_slots[0]);
+ m_pAFRPageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
  m_pAFRPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeAFR));
 
  m_pITPageDlg.reset(new CGMEInjITDlg());
- m_pITPageDlg->BindLoadGrid(&work_map_load_slots[0]);
+ m_pITPageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
  m_pITPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIT));
 
  m_pIRegPageDlg.reset(new CGMEInjIRegDlg());
@@ -87,11 +89,11 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
  m_pOtherPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeOther));
 
  m_pPwm1PageDlg.reset(new CGMEInjPwm1Dlg());
- m_pPwm1PageDlg->BindLoadGrid(&work_map_load_slots[0]);
+ m_pPwm1PageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
  m_pPwm1PageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangePwm1));
 
  m_pPwm2PageDlg.reset(new CGMEInjPwm2Dlg());
- m_pPwm2PageDlg->BindLoadGrid(&work_map_load_slots[0]);
+ m_pPwm2PageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
  m_pPwm2PageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangePwm2));
 }
 
@@ -238,6 +240,16 @@ void CGridModeEditorInjDlg::BindCLTGrid(float* pGrid)
  m_pOtherPageDlg->BindCLTGrid(pGrid);
 }
 
+void CGridModeEditorInjDlg::BindLoadGrid(float* pGrid)
+{
+ m_pVEPageDlg->BindLoadGrid(pGrid);
+ m_pAFRPageDlg->BindLoadGrid(pGrid);
+ m_pITPageDlg->BindLoadGrid(pGrid);
+ m_pPwm1PageDlg->BindLoadGrid(pGrid);
+ m_pPwm2PageDlg->BindLoadGrid(pGrid);
+ mp_lodGrid = pGrid; //save to use later
+}
+
 void CGridModeEditorInjDlg::UpdateView(bool axisLabels /*= fasle*/)
 {
  if (::IsWindow(this->m_hWnd))
@@ -329,12 +341,13 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
  if (m_ldaxNeedsUpdate || ((m_baro_press != dv.baro_press) && useBaroMax))
  {
-  work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, 16);
-  m_pVEPageDlg->BindLoadGrid(&work_map_load_slots[0], true);
-  m_pAFRPageDlg->BindLoadGrid(&work_map_load_slots[0], true);
-  m_pITPageDlg->BindLoadGrid(&work_map_load_slots[0], true);
-  m_pPwm1PageDlg->BindLoadGrid(&work_map_load_slots[0], true);
-  m_pPwm2PageDlg->BindLoadGrid(&work_map_load_slots[0], true);
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, 16, true); //<-- reverse order
+  const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
+  m_pVEPageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pAFRPageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pITPageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pPwm1PageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pPwm2PageDlg->BindLoadGrid(pLoadGrid, true);
   m_ldaxNeedsUpdate = false;
  }
 
@@ -350,12 +363,13 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_pPwm2PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
 }
 
-void CGridModeEditorInjDlg::SetLoadAxisCfg(float minVal, float maxVal)
+void CGridModeEditorInjDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useTable)
 {
- if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal))
+ if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal) || (m_ldaxUseTable != useTable))
   m_ldaxNeedsUpdate = true;
  m_ldaxMin = minVal;
  m_ldaxMax = maxVal;
+ m_ldaxUseTable = useTable;
 }
 
 void CGridModeEditorInjDlg::SetITMode(int mode)

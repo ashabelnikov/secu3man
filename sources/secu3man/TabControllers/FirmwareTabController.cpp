@@ -1143,6 +1143,7 @@ void CFirmwareTabController::SetViewChartsValues(void)
  
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
+ mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
 
  if (m_current_funset_index==-1)
   return;
@@ -1655,6 +1656,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  {
   mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
   mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
+  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }

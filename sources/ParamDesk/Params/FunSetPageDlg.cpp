@@ -53,11 +53,12 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MAP_CALC_BUTTON, OnMapCalcButton)
  ON_BN_CLICKED(IDC_PD_MAP_CALC2_BUTTON, OnMap2CalcButton)
+ ON_BN_CLICKED(IDC_PD_FUNSET_USE_LDAX_GRID, OnChangeDataLdaxGrid)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_EDIT,OnUpdateControlsLower)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_SPIN,OnUpdateControlsLower)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_CAPTION,OnUpdateControlsLower)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_UNIT,OnUpdateControlsLower)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_EDIT,OnUpdateControlsUpper)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_SPIN,OnUpdateControlsUpper)
@@ -118,6 +119,8 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC2_BUTTON, OnUpdateControlsSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_USE_LDAX_GRID,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
@@ -148,6 +151,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
  m_params.uni_benzin = SECU3IO::UNI_OUTPUT_NUM; //disabled
  m_params.uni_gas = SECU3IO::UNI_OUTPUT_NUM; //disabled
  m_params.barocorr_type = 0; //disabled
+ m_params.use_load_grid = false;
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -184,6 +188,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_MAP_CALC2_BUTTON, m_calc_map2_btn);
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_UNIT, m_lolo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_UNIT, m_hilo_unit);
+ DDX_Control(pDX, IDC_PD_FUNSET_USE_LDAX_GRID, m_use_ldax_grid_check);
 
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
@@ -199,6 +204,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_CBIndex_int(pDX, IDC_PD_FUNSET_GAS_UNI_COMBO, m_params.uni_gas);
  DDX_CBIndex_int(pDX, IDC_PD_FUNSET_BENZIN_UNI_COMBO, m_params.uni_benzin);
  DDX_CBIndex_int(pDX, IDC_PD_FUNSET_BAROCORRTYPE_COMBO, m_params.barocorr_type);
+ DDX_Check_bool(pDX, IDC_PD_FUNSET_USE_LDAX_GRID, m_params.use_load_grid);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -210,9 +216,14 @@ void CFunSetPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
+void CFunSetPageDlg::OnUpdateControlsLower(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_use_ldax_grid_check.GetCheck()==BST_CHECKED);
+}
+
 void CFunSetPageDlg::OnUpdateControlsUpper(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && (m_params.load_src_cfg != 1)); //disabled if MAP(baro) selected as load type
+ pCmdUI->Enable(m_enabled && (m_params.load_src_cfg != 1) && !m_use_ldax_grid_check.GetCheck()==BST_CHECKED); //disabled if MAP(baro) selected as load type
 }
 
 void CFunSetPageDlg::OnUpdateControlsSECU3i(CCmdUI* pCmdUI)
@@ -281,11 +292,17 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_gas_uni_combo.AddString(_T("1"));
  m_gas_uni_combo.AddString(_T("2"));
  m_gas_uni_combo.AddString(_T("3"));
+ m_gas_uni_combo.AddString(_T("4"));
+ m_gas_uni_combo.AddString(_T("5"));
+ m_gas_uni_combo.AddString(_T("6"));
  m_gas_uni_combo.AddString(_T("--no--"));
 
  m_benzin_uni_combo.AddString(_T("1"));
  m_benzin_uni_combo.AddString(_T("2"));
  m_benzin_uni_combo.AddString(_T("3"));
+ m_benzin_uni_combo.AddString(_T("4"));
+ m_benzin_uni_combo.AddString(_T("5"));
+ m_benzin_uni_combo.AddString(_T("6"));
  m_benzin_uni_combo.AddString(_T("--no--"));
 
  m_barocorr_type_combo.AddString(MLL::LoadString(IDS_PD_FUNSET_BAROCORR_TYPE0));
@@ -329,6 +346,8 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_gas_uni_combo, MLL::GetString(IDS_PD_FUNSET_GAS_UNI_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_barocorr_type_combo, MLL::GetString(IDS_PD_FUNSET_BAROCORRTYPE_COMBO_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_use_ldax_grid_check, MLL::GetString(IDC_PD_FUNSET_USE_LDAX_GRID_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -348,6 +367,13 @@ void CFunSetPageDlg::OnDestroy()
 
 void CFunSetPageDlg::OnChangeData()
 {
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CFunSetPageDlg::OnChangeDataLdaxGrid()
+{
+ UpdateDialogControls(this, TRUE);
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }

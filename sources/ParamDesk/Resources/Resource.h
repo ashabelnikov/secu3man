@@ -1370,3 +1370,5 @@
 #define IDS_UNIOUT_COND_GRTS             1866
 #define IDS_UNIOUT_COND_MAP2             1867
 #define IDS_UNIOUT_COND_TMP2             1868
+#define IDC_PD_FUNSET_USE_LDAX_GRID      1869
+#define IDC_PD_FUNSET_USE_LDAX_GRID_TT   1870

@@ -2694,13 +2694,14 @@ void CButtonsPanel::OnGridModeEditingIgn()
   mp_gridModeEditorIgnDlg->BindMaps(m_md[TYPE_MAP_DA_START].active, m_md[TYPE_MAP_DA_IDLE].active, m_md[TYPE_MAP_DA_WORK].active, m_md[TYPE_MAP_DA_TEMP_CORR].active);
   mp_gridModeEditorIgnDlg->BindRPMGrid(GetRPMGrid());
   mp_gridModeEditorIgnDlg->BindCLTGrid(GetCLTGrid());
+  mp_gridModeEditorIgnDlg->BindLoadGrid(GetLoadGrid());
   mp_gridModeEditorIgnDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorIgnDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedIgn));
   mp_gridModeEditorIgnDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedIgn));
   mp_gridModeEditorIgnDlg->setOnOpenMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnOpenMapWnd));
   mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
   VERIFY(mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL));
-  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
   m_grid_map_state_ign = 1;
  }
@@ -2722,8 +2723,9 @@ void CButtonsPanel::OnGridModeEditingInj()
   {
    mp_autoTuneCntr->SetView(mp_gridModeEditorInjDlg.get());
    mp_autoTuneCntr->BindRPMGrid(GetRPMGrid());
+   mp_autoTuneCntr->BindLoadGrid(GetLoadGrid());
    mp_autoTuneCntr->BindMaps(GetVEMap(false), GetAFRMap(false));
-   mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+   mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
    mp_autoTuneCntr->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
    mp_autoTuneCntr->Init();
   }
@@ -2732,13 +2734,14 @@ void CButtonsPanel::OnGridModeEditingInj()
                                     GetCrnkMap(false), GetDeadMap(false), GetEGOCurveMap(false), GetIATCLTMap(false), GetTpsswtMap(false), GetAtscMap(false), GetGtscMap(false), GetGpscMap(false), GetPwm1Map(false), GetPwm2Map(false));
   mp_gridModeEditorInjDlg->BindRPMGrid(GetRPMGrid());
   mp_gridModeEditorInjDlg->BindCLTGrid(GetCLTGrid());
+  mp_gridModeEditorInjDlg->BindLoadGrid(GetLoadGrid());
   mp_gridModeEditorInjDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorInjDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));
   mp_gridModeEditorInjDlg->setOnOpenMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnOpenMapWnd));
   mp_gridModeEditorInjDlg->setOnChangeSettings(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnChangeSettingsGME));
   VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
-  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
   mp_gridModeEditorInjDlg->SetITMode(m_it_mode);
   mp_gridModeEditorInjDlg->SetSplitAngMode(m_splitAng); //splitting
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
@@ -3438,6 +3441,11 @@ float* CButtonsPanel::GetCLTGrid(void)
  return m_clt_grid_values;
 }
 
+float* CButtonsPanel::GetLoadGrid(void)
+{
+ return m_load_grid_values;
+}
+
 HWND CButtonsPanel::GetMapWindow(int wndType)
 {
  if (wndType >= TYPE_MAP_SET_START && wndType <= TYPE_MAP_SET_END)
@@ -3555,20 +3563,21 @@ void CButtonsPanel::OnSize( UINT nType, int cx, int cy )
   mp_scr->SetViewSize(cx, da.ScaleY(m_scrl_view));
 }
 
-void CButtonsPanel::SetLoadAxisCfg(float minVal, float maxVal, int loadSrc)
+void CButtonsPanel::SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable)
 {
  m_ldaxMinVal = minVal;
  m_ldaxMaxVal = maxVal;
  m_ldaxCfg = loadSrc;
+ m_ldaxUseTable = useTable;
 
  if (mp_gridModeEditorIgnDlg.get())
-  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
 
  if (mp_gridModeEditorInjDlg.get())
-  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
 
  if (mp_autoTuneCntr.get())
-  mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+  mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
 }
 
 float* CButtonsPanel::GetLamDelMap(int id)

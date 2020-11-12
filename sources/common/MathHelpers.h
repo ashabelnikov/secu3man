@@ -279,12 +279,21 @@ namespace MathHelpers
  }
 
  template <class T>
- std::vector<T> BuildGridFromRange(T begin, T end, size_t num)
+ std::vector<T> BuildGridFromRange(T begin, T end, size_t num, bool rev = false)
  {
+  ASSERT(num);
   std::vector<T> grid;
   grid.reserve(num);
+  if (rev)
+  {
+   for (int i = num - 1; i >= 0; --i)
+    grid.push_back(begin + ((end - begin) * i) / (num - 1));
+  }
+  else
+  {
    for (size_t i = 0; i < num; ++i)
     grid.push_back(begin + ((end - begin) * i) / (num - 1));
+  }
   return grid; 
  }
 
@@ -305,7 +314,7 @@ namespace MathHelpers
 
  //NOTE: this function uses inverted order of rows in function
  template<int ySize, int xSize>
- float static BilinearInterpolation(float x, float y, float (&function)[ySize][xSize], float* xBins, float* yBins)
+ float static BilinearInterpolation(float x, float y, float (&function)[ySize][xSize], const float* xBins, const float* yBins)
  {
   int xi, yi, xi1, yi1, j, j1;
 

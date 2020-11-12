@@ -89,6 +89,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetPwm2Map(bool i_original);
   float* GetRPMGrid(void);
   float* GetCLTGrid(void);
+  float* GetLoadGrid(void);
 
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);  
@@ -100,7 +101,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetDynamicValues(const TablDesk::DynVal& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal, int loadSrc);
+  void SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable);
 
   virtual void EnableFuelInjection(bool i_enable);
 
@@ -394,6 +395,7 @@ private:
   int m_grid_map_state_inj;
   float m_rpm_grid_values[16];
   float m_clt_grid_values[16];
+  float m_load_grid_values[16];
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;
   bool m_carb_afr;
@@ -410,6 +412,7 @@ protected:
   float m_ldaxMinVal;
   float m_ldaxMaxVal;
   int m_ldaxCfg;
+  bool m_ldaxUseTable;
 
   bool m_children_charts;
 

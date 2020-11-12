@@ -72,13 +72,14 @@ class CGridModeEditorIgnDlg : public CDialog
   void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp);
   void BindRPMGrid(float* pGrid);
   void BindCLTGrid(float* pGrid);
+  void BindLoadGrid(float* pGrid);
   void UpdateView(bool axisLabels = false);
 
   void EnableAdvanceAngleIndication(bool i_enable);
 
   void SetDynamicValues(const TablDesk::DynVal& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal);
+  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable);
 
  public:
   void setIsAllowed(EventResult IsFunction);
@@ -135,6 +136,7 @@ class CGridModeEditorIgnDlg : public CDialog
   float* mp_tempMap;
   float* mp_rpmGrid;
   float* mp_cltGrid;
+  float* mp_lodGrid;
   bool m_en_aa_indication;
   CFont m_font;
   CFont m_fieldFont;
@@ -142,8 +144,9 @@ class CGridModeEditorIgnDlg : public CDialog
 
   float m_ldaxMin;
   float m_ldaxMax;
+  bool m_ldaxUseTable;
   bool m_ldaxNeedsUpdate;
-  std::vector<float> work_map_load_slots;
+  std::vector<float> m_work_map_load_slots;
 
   std::auto_ptr<CLabel> mp_acronLink;
 };

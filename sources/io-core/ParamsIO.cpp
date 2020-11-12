@@ -148,6 +148,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     int uni_benzin = (p_in->uni_benzin==UNI_OUTPUT_NUM) ? 0xF : p_in->uni_benzin;
     p_params->mapsel_uni = MAKEBYTE(uni_gas, uni_benzin);
     p_params->barocorr_type = p_in->barocorr_type;
+    WRITEBIT8(p_params->func_flags, 0, p_in->use_load_grid);
    }
    break;
   case STARTR_PAR:
@@ -541,6 +542,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      if (p_out->uni_benzin == 0xF)
       p_out->uni_benzin = UNI_OUTPUT_NUM; //disabled
      p_out->barocorr_type = p_params->barocorr_type;
+     p_out->use_load_grid = CHECKBIT8(p_params->func_flags, 0);
     }
     break;
    case STARTR_PAR:

@@ -50,7 +50,9 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 
   void SetRange(float i_min, float i_max);
   void AttachMap(float* p_map);
-  void AttachLabels(const float* horizLabels, const float* vertLabels);
+
+  //vertRev - if true order of items will be reversed on saving vertLabels data
+  void AttachLabels(const float* horizLabels, const float* vertLabels, bool vertRev = false);
   void ShowLabels(bool horizShow, bool vertShow);
   void SetDecimalPlaces(int value, int horiz, int vert);
   void SetArguments(float i_arg, float j_arg);
@@ -102,6 +104,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   int _GetLabelWidth(void);
   int _GetLabelHeight(void);
   void _DrawMarker(CDC* pDC, int i, int j);
+  void _2DLookupH(float x, std::vector<int>& pt);
+  void _2DLookupV(float x, std::vector<int>& pt);
 
   void _SetItemTr(int i, int j, float value);
   float _GetItemTr(int i, int j);
@@ -120,6 +124,12 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
    ASSERT(p_array);
    int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
    p_array[(ii*m_cols)+j] = value;
+  }
+
+  inline float _GetVGrid(int i)
+  {
+   int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
+   return mp_vertLabels[ii];
   }
 
   int m_cur_i; //current row index

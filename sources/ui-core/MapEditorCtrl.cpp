@@ -648,7 +648,7 @@ void CMapEditorCtrl::setOnChange(EventHandler OnCB)
  m_OnChange = OnCB;
 }
 
-void CMapEditorCtrl::AttachLabels(const float* horizLabels, const float* vertLabels)
+void CMapEditorCtrl::AttachLabels(const float* horizLabels, const float* vertLabels, bool vertRev /*= false*/)
 {
  mp_horizLabels = const_cast<float*>(horizLabels);
  mp_vertLabels = const_cast<float*>(vertLabels);
@@ -666,8 +666,16 @@ void CMapEditorCtrl::AttachLabels(const float* horizLabels, const float* vertLab
  m_vertLabels.clear();
  if (mp_vertLabels)
  {
-  for (int i = 0; i < m_rows; ++i)
-   m_vertLabels.push_back(_FloatToStr(mp_vertLabels[i], m_decPlacesV));
+  if (vertRev)
+  { //save items in reserse direction
+   for (int i = m_rows-1; i >= 0; --i)
+    m_vertLabels.push_back(_FloatToStr(_GetVGrid(i), m_decPlacesV));
+  }
+  else
+  { //save items in normal direction (do not change order of items)
+   for (int i = 0; i < m_rows; ++i)
+    m_vertLabels.push_back(_FloatToStr(_GetVGrid(i), m_decPlacesV));
+  }
  }
 }
 
@@ -733,19 +741,40 @@ void CMapEditorCtrl::_DrawMarker(CDC* pDC, int i, int j)
  pDC->SelectObject(oldPen);
 }
 
-static void _2DLookup(float x, const float* grid, int ptNum, std::vector<int>& pt)
+void CMapEditorCtrl::_2DLookupH(float x, std::vector<int>& pt)
 {
  pt.clear();
- if (x <= grid[0]) { pt.push_back(0); return; }
- if (x >= grid[ptNum-1]) { pt.push_back(ptNum-1); return; }
+ if (x <= mp_horizLabels[0]) { pt.push_back(0); return; }
+ if (x >= mp_horizLabels[m_cols-1]) { pt.push_back(m_cols-1); return; }
 
- for(int i = 0; i < ptNum; ++i)
+ float dv = 5.0f;
+ for(int i = 1; i < m_cols; ++i)
  {
-  float d = grid[i] - grid[i-1];
-  if (x <= grid[i])
+  float d = mp_horizLabels[i] - mp_horizLabels[i-1];
+  if (x <= mp_horizLabels[i])
   {
-   if (x < (grid[i-1] + d/5)) pt.push_back(i-1);
-   else if (x > (grid[i] - d/5)) pt.push_back(i);
+   if (x < (mp_horizLabels[i-1] + d/dv)) pt.push_back(i-1);
+   else if (x > (mp_horizLabels[i] - d/dv)) pt.push_back(i);
+   else { pt.push_back(i-1); pt.push_back(i); }
+   break;
+  }
+ }
+}
+
+void CMapEditorCtrl::_2DLookupV(float x, std::vector<int>& pt)
+{
+ pt.clear();
+ if (x <= _GetVGrid(0)) { pt.push_back(0); return; }
+ if (x >= _GetVGrid(m_rows-1)) { pt.push_back(m_rows-1); return; }
+
+ float dv = 5.0f;
+ for(int i = 1; i < m_rows; ++i)
+ {
+  float d = _GetVGrid(i) - _GetVGrid(i-1);
+  if (x <= _GetVGrid(i))
+  {
+   if (x < (_GetVGrid(i-1) + d/dv)) pt.push_back(i-1);
+   else if (x > (_GetVGrid(i) - d/dv)) pt.push_back(i);
    else { pt.push_back(i-1); pt.push_back(i); }
    break;
   }
@@ -759,9 +788,9 @@ void CMapEditorCtrl::SetArguments(float i_arg, float j_arg)
 
  //find where we are for each argument
  if (mp_vertLabels)
-  _2DLookup(i_arg, mp_vertLabels, m_rows, pt_i);
+  _2DLookupV(i_arg, pt_i);
  if (mp_horizLabels)
-  _2DLookup(j_arg, mp_horizLabels, m_cols, pt_j);
+  _2DLookupH(j_arg, pt_j);
 
  //build list of cells to be marked
  if (mp_vertLabels && !mp_horizLabels)

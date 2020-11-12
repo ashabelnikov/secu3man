@@ -48,6 +48,7 @@ CAutoTuneController::CAutoTuneController()
 : mp_ve(NULL)
 , mp_afr(NULL)
 , mp_rpmGrid(NULL)
+, mp_lodGrid(NULL)
 , m_active(false)
 , m_ldaxMin(1.0f)
 , m_ldaxMax(16.0f)
@@ -67,8 +68,9 @@ CAutoTuneController::CAutoTuneController()
 , m_minTPS(0.0)
 , m_maxTPS(100.0)
 , m_cltThrd(70.0)
+, m_ldaxUseTable(false)
 {
- mp_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
+ m_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
 
  for (int l = 0; l < VEMAP_LOAD_SIZE; ++l){
   for (int r = 0; r < VEMAP_RPM_SIZE; ++r){
@@ -107,7 +109,10 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
  if (m_ldaxNeedsUpdate || (!MathHelpers::IsEqualFlt(m_baro_press, dv.baro_press, 0.01f) && useBaroMax))
  {
-  mp_loadGrid = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, VEMAP_LOAD_SIZE);
+  if (m_ldaxUseTable)
+   reverse_copy(mp_lodGrid, mp_lodGrid + VEMAP_LOAD_SIZE, m_loadGrid.begin()); //change order of items
+  else
+   m_loadGrid = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, VEMAP_LOAD_SIZE);
   m_ldaxNeedsUpdate = false;
  }
  m_baro_press = dv.baro_press;
@@ -169,7 +174,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  }
 
  //calculate correction factor using actual and target AFRs
- float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, &mp_loadGrid[0]);
+ float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, &m_loadGrid[0]);
  if (target_afr < 0.0001f)
  {
   SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::SetDynamicValues"));
@@ -192,7 +197,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
 
  //Add point to our map of scattered points
  int r_idx = _FindNearestGridPoint(e.rpm, mp_rpmGrid, VEMAP_RPM_SIZE);
- int l_idx = _FindNearestGridPoint(e.load, &mp_loadGrid[0], VEMAP_LOAD_SIZE);
+ int l_idx = _FindNearestGridPoint(e.load, &m_loadGrid[0], VEMAP_LOAD_SIZE);
 
  //if growing mode enabled, state depends on relationship of current and previous RPMs
  bool growing = (!m_growingMode || (((i+1) < m_logdata.size()) && e.rpm > m_logdata[i+1].rpm));
@@ -211,8 +216,8 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
   {
    for(size_t i = 0; i < node.size(); ++i)
    {
-    float d1 = MathHelpers::Distance(e.rpm, e.load, mp_rpmGrid[r_idx], mp_loadGrid[l_idx]); //distance to new point
-    float d2 = MathHelpers::Distance(node[i].rpm, node[i].load, mp_rpmGrid[r_idx], mp_loadGrid[l_idx]); //distance to the current point
+    float d1 = MathHelpers::Distance(e.rpm, e.load, mp_rpmGrid[r_idx], m_loadGrid[l_idx]); //distance to new point
+    float d2 = MathHelpers::Distance(node[i].rpm, node[i].load, mp_rpmGrid[r_idx], m_loadGrid[l_idx]); //distance to the current point
     if (d1 < d2)
     { //replace existing point if distance to new point is less
      node[i] = NodePoint(corrFactor, e.rpm, e.load);
@@ -243,7 +248,7 @@ bool CAutoTuneController::_ApplyCorrection(void)
    if (node.size() == m_statSize && false==m_blocked[l][r])
    { //apply correction to corresponding cell in the VE map and reset points accumulated for node
     float avdist = .0f;
-    float corr = _ShepardInterpolation(mp_rpmGrid[r], mp_loadGrid[l], node, 0.3, 0.01, avdist);
+    float corr = _ShepardInterpolation(mp_rpmGrid[r], m_loadGrid[l], node, 0.3, 0.01, avdist);
     if (avdist < m_avdists[l][r] || (m_afrhits[l][r] < m_MinDistThrd))
     {
      m_avdists[l][r] = avdist;
@@ -429,7 +434,7 @@ void CAutoTuneController::Smoothing(void)
  mp_view->UpdateView(); //Update our view
 }
 
-int CAutoTuneController::_FindNearestGridPoint(float arg, float *grid, int gSize)
+int CAutoTuneController::_FindNearestGridPoint(float arg, const float *grid, int gSize)
 {
  int i, i1;
  MathHelpers::AxisCellLookup(arg, grid, gSize, i, i1); //find two nearest points
@@ -539,17 +544,23 @@ void CAutoTuneController::setOnMapChanged(EventWithCode OnFunction)
  m_OnMapChanged = OnFunction;
 }
 
-void CAutoTuneController::SetLoadAxisCfg(float minVal, float maxVal)
+void CAutoTuneController::SetLoadAxisCfg(float minVal, float maxVal, bool useTable)
 {
- if (!MathHelpers::IsEqualFlt(m_ldaxMin, minVal, 0.01f) || !MathHelpers::IsEqualFlt(m_ldaxMax, maxVal, 0.01f))
+ if (!MathHelpers::IsEqualFlt(m_ldaxMin, minVal, 0.01f) || !MathHelpers::IsEqualFlt(m_ldaxMax, maxVal, 0.01f) || (m_ldaxUseTable != useTable))
   m_ldaxNeedsUpdate = true;
  m_ldaxMin = minVal;
  m_ldaxMax = maxVal;
+ m_ldaxUseTable = useTable;
 }
 
 void CAutoTuneController::BindRPMGrid(float* pGrid)
 {
  mp_rpmGrid = pGrid;
+}
+
+void CAutoTuneController::BindLoadGrid(const float* pGrid)
+{
+ mp_lodGrid = pGrid;
 }
 
 void CAutoTuneController::BindMaps(float* pVE, float* pAFR)

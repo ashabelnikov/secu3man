@@ -113,7 +113,7 @@ void CGMEInjPwm1Dlg::BindRPMGrid(float* pGrid)
  ASSERT(pGrid);
 }
 
-void CGMEInjPwm1Dlg::BindLoadGrid(float* pGrid, bool updateLabels /*= false*/)
+void CGMEInjPwm1Dlg::BindLoadGrid(const float* pGrid, bool updateLabels /*= false*/)
 {
  mp_loadGrid = pGrid;
  ASSERT(pGrid);

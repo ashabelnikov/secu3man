@@ -355,7 +355,7 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
    else
    {//save read parameters
     const FunSetPar* data = (const FunSetPar*)i_packet_data;
-    mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg);
+    mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg, data->use_load_grid);
     m_operation_state = 1;
    }
    break;
@@ -382,8 +382,19 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     m_operation_state = 3;
    }
    break;
+  case 3: //Read out load grid
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_LODGRD));
+   if (i_descriptor != LODGRD_PAR)
+    mp_comm->m_pControlApp->ChangeContext(LODGRD_PAR);
+   else
+   {//save load grid
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    memcpy(m_lodGrid, data->table_data, F_LOAD_SLOTS*sizeof(float)); //save load grid
+    m_operation_state = 4;
+   }
+   break;
 
-  case 3:
+  case 4:
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
    if (i_descriptor != EDITAB_PAR)
     mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR);
@@ -392,15 +403,15 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     _ClearAcquisitionFlags();
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
-    m_operation_state = 4;
+    m_operation_state = 5;
    }
    break;
 
-  case 4:
+  case 5:
    {
     if (i_descriptor != EDITAB_PAR)
     {
-     m_operation_state = 3;
+     m_operation_state = 4;
      break;
     }
 
@@ -740,6 +751,7 @@ void CPMTablesController::OnImportFromS3F(void)
  data.maps[0] = *m_maps; 
  std::copy(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, data.rpm_slots);
  std::copy(m_cltGrid, m_cltGrid + F_TMP_SLOTS, data.clt_slots);
+ std::copy(m_lodGrid, m_lodGrid + F_LOAD_SLOTS, data.load_slots);
 
  S3FImportController import(&data, false); //without separate maps
 
@@ -751,6 +763,7 @@ void CPMTablesController::OnImportFromS3F(void)
   _MoveMapsToCharts(true, &data.maps[0]);  //original
    mp_view->SetRPMGrid(m_rpmGrid);         //RPM grid
    mp_view->SetCLTGrid(m_cltGrid);         //CLT grid
+   mp_view->SetLoadGrid(m_lodGrid);        //load grid
   _SetTablesSetName(data.maps[0].name);    //name
   
   //Send updated set name to SECU-3
@@ -770,6 +783,7 @@ void CPMTablesController::OnImportFromS3F(void)
   *m_omaps = data.maps[0]; //original
   std::copy(data.rpm_slots, data.rpm_slots + F_RPM_SLOTS, m_rpmGrid);
   std::copy(data.clt_slots, data.clt_slots + F_TMP_SLOTS, m_cltGrid);
+  std::copy(data.load_slots, data.load_slots + F_LOAD_SLOTS, m_lodGrid);
 
   //update view and update modification flag if any of maps changed
   mp_view->UpdateOpenedCharts();
@@ -803,6 +817,7 @@ void CPMTablesController::OnExportToS3F(void)
  s3f_io.GetDataLeft().maps[0] = *m_maps; 
  std::copy(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, s3f_io.GetDataLeft().rpm_slots);
  std::copy(m_cltGrid, m_cltGrid + F_TMP_SLOTS, s3f_io.GetDataLeft().clt_slots);
+ std::copy(m_lodGrid, m_lodGrid + F_LOAD_SLOTS, s3f_io.GetDataLeft().load_slots);
 
  //saveto file
  if (save.DoModal()==IDOK)
@@ -823,6 +838,8 @@ void CPMTablesController::OnDataCollected(void)
  mp_view->SetRPMGrid(m_rpmGrid);
  //Set CLT grid read out from SECU-3
  mp_view->SetCLTGrid(m_cltGrid);
+ //Set load grid read out from SECU-3
+ mp_view->SetLoadGrid(m_lodGrid);
  mp_view->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->UpdateOpenedCharts();
  _SetTablesSetName(m_maps->name);
@@ -860,7 +877,7 @@ void CPMTablesController::OnSaveSettings()
 
 void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
 {
- mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg);
+ mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg, data->use_load_grid);
 }
 
 void CPMTablesController::OnChangeSettings(void)

@@ -105,7 +105,7 @@ void CGMEInjAFRDlg::BindRPMGrid(float* pGrid)
  ASSERT(pGrid);
 }
 
-void CGMEInjAFRDlg::BindLoadGrid(float* pGrid, bool updateLabels /*= false*/)
+void CGMEInjAFRDlg::BindLoadGrid(const float* pGrid, bool updateLabels /*= false*/)
 {
  mp_loadGrid = pGrid;
  ASSERT(pGrid);

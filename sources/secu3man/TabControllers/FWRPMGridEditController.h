@@ -56,5 +56,5 @@ class CFWRPMGridEditController
   //Variables
   CFirmwareDataMediator* mp_fwdm;
   std::auto_ptr<CRPMGridEditDlg> mp_view;
-  std::list<std::pair<size_t, _TSTRING> > m_errors[2];
+  std::list<std::pair<size_t, _TSTRING> > m_errors[3];
 };

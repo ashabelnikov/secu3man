@@ -276,10 +276,12 @@ typedef struct params_t
  _uint  ai8_adc_factor;                 // ADC error compensation factor for ADD_I8 input
  _long  ai8_adc_correction;             // ADC error compensation correction for ADD_I8 input
 
+ _uchar func_flags;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[190];
+ _uchar reserved[189];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

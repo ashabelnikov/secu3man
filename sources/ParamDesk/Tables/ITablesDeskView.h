@@ -54,6 +54,7 @@ class ITablesDeskView
   virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index) = 0; //Set names of read-only and read/write tables
   virtual void SetRPMGrid(const float* values) = 0;               //Set RPM grid for horizontal axis of tables
   virtual void SetCLTGrid(const float* values) = 0;               //Set CLT grid for horizontal axis of tables
+  virtual void SetLoadGrid(const float* values) = 0;              //Set load grid for vertical axis of tables
   virtual void CloseAllCharts(void) = 0;                          //close all charts' windows
 
   //events

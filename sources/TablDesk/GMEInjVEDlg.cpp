@@ -142,7 +142,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  {
   m_celwgt_map.SetRange(.0f, 255.0f);
   m_celwgt_map.AttachMap(mp_CelWgtMap);
-  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid, true); //<-- reverse load grid values because this map uses normal order
   m_celwgt_map.ShowLabels(true, true);
   m_celwgt_map.SetDecimalPlaces(2, 0, 0);
   m_celwgt_map.SetFont(&m_font);
@@ -210,14 +210,14 @@ void CGMEInjVEDlg::BindRPMGrid(float* pGrid)
  ASSERT(pGrid);
 }
 
-void CGMEInjVEDlg::BindLoadGrid(float* pGrid, bool updateLabels /*= false*/)
+void CGMEInjVEDlg::BindLoadGrid(const float* pGrid, bool updateLabels /*= false*/)
 {
  mp_loadGrid = pGrid;
  ASSERT(pGrid);
  if (updateLabels)
  {
   m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
-  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid, true); //<-- reverse load grid values because this map uses normal order
   if (m_ve_map.GetSafeHwnd())
    m_ve_map.UpdateDisplay(); 
   if (m_celwgt_map.GetSafeHwnd())

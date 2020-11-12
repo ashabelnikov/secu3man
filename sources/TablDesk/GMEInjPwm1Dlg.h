@@ -41,7 +41,7 @@ class CGMEInjPwm1Dlg : public CTabDialog
 
   void BindMaps(float* pAFR);
   void BindRPMGrid(float* pGrid);
-  void BindLoadGrid(float* pGrid, bool updateLabels = false);
+  void BindLoadGrid(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
   void UpdateView(bool axisLabels = false);
 
@@ -66,7 +66,7 @@ class CGMEInjPwm1Dlg : public CTabDialog
 
   float* mp_pwm1Map;
   float* mp_rpmGrid;
-  float* mp_loadGrid;
+  const float* mp_loadGrid;
  
   bool m_splitAng;
 };

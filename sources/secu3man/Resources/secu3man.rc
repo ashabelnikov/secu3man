@@ -538,6 +538,7 @@ BEGIN
     IDS_PM_WRITING_TABLES_NAME     "Запись имени..."
     IDS_PM_READING_RPMGRD          "Чтение сетки оборотов..."
     IDS_PM_READING_CLTGRD          "Чтение сетки температуры ОЖ..."
+    IDS_PM_READING_LODGRD          "Чтение сетки нагрузки..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1376,6 +1377,7 @@ BEGIN
     IDS_PM_READING_RPMGRD          "Reading RPM grid..."
     IDS_LOADING_LOG_FILE           "Opening and checking a log file..."
     IDS_PM_READING_CLTGRD          "Reading CLT grid..."
+    IDS_PM_READING_LODGRD          "Reading load grid..."
 END
 
 STRINGTABLE DISCARDABLE 

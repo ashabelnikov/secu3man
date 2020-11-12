@@ -166,6 +166,7 @@ namespace SECU3IO
   int uni_benzin;
   int uni_gas;
   int barocorr_type;
+  bool use_load_grid;
  };
 
  struct IdlRegPar
@@ -810,6 +811,8 @@ const int INPAVNUM = 14;
  const float manigntim_map_slots[16]  = {.0f,0.33f,0.66f,1.00f,1.33f,1.66f,2.00f,2.33f,2.66f,3.00f,3.33f,3.66f,4.00f,4.33f,4.66f,5.0f};
 
  const float voltage_map_slots[16] = {5.4f,6.2f,7.0f,7.8f,8.6f,9.4f,10.2f,11.0f,11.8f,12.6f,13.4f,14.2f,15.0f,15.8f,16.6f,17.4f};
+
+ const float work_map_lod_slots[16]  = {100,95,90,85,80,75,70,65,60,55,50,45,40,35,30,25}; //reverse order
 
  const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 32;
  //<bitnumber, name>

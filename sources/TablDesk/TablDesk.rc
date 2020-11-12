@@ -133,9 +133,9 @@ BEGIN
     LTEXT           "Сопротивление катушки (Ом)",IDC_STATIC,82,16,63,16
 END
 
-IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 120
+IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 172
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Редактирование сеток оборотов и температуры ОЖ"
+CAPTION "Редактирование сеток оборотов, нагрузки и температуры ОЖ"
 FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_RGE_EDIT_0,  5, 8,27,15,ES_AUTOHSCROLL
@@ -176,8 +176,27 @@ BEGIN
     PUSHBUTTON      "Вернуть стандартные значения",IDC_CGE_LOAD_DEF_VAL,185,82,115,14
     CTEXT           "",IDC_CGE_ERROR_MSG_TEXT,305,82,180,16
 
-    DEFPUSHBUTTON   "OK",IDOK,35,100,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,95,100,50,14
+    EDITTEXT        IDC_LGE_EDIT_0,  5, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_1, 35, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_2, 65, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_3, 95, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_4, 125,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_5, 155,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_6, 185,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_7, 215,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_8, 245,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_9, 275,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_10,305,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_11,335,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_12,365,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_13,395,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_14,425,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_15,455,112,27,15,ES_AUTOHSCROLL
+    PUSHBUTTON      "Вернуть стандартные значения",IDC_LGE_LOAD_DEF_VAL,185,134,115,14
+    CTEXT           "",IDC_LGE_ERROR_MSG_TEXT,305,134,180,16
+
+    DEFPUSHBUTTON   "OK",IDOK,35,152,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,95,152,50,14
 END
 
 IDD_GRID_MODE_EDITOR_IGN DIALOGEX 0, 0, 530, 344
@@ -645,6 +664,7 @@ BEGIN
     IDS_DWELL_CALC_I_EDIT_TT "Ток в конце времени накопления (на момент разрыва тока в первичной обмотке и начала искры). Чем больше ток, тем мощнее искра. Мы не советуем превышать рекомендуемое значение указанное в паспорте на вашу катушку."
     IDS_RGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки оборотов, которые используются по умолчанию"
     IDS_CGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки температуры, которые используются по умолчанию"
+    IDS_LGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки нагрузки, которые используются по умолчанию"
     IDS_TD_VIEW_START_MAP_TT "Таблица пускового УОЗ. Используется при запуске двигателя пока обороты не достигнут значения 'Обороты пер. с пуск. УОЗ'"
     IDS_TD_VIEW_IDLE_MAP_TT  "Таблица УОЗ на холостом ходу. Используется когда прошивка определяет, что дроссельная заслонка закрыта."
     IDS_TD_VIEW_WORK_MAP_TT  "Таблица УОЗ рабочего режима. Используется когда прошивка определяет, что дроссельная заслонка открыта."
@@ -857,9 +877,9 @@ BEGIN
     LTEXT           "Coil resistance (Ohm)",IDC_STATIC,82,16,63,16
 END
 
-IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 120
+IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 172
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Editing of RPM and CLT grids"
+CAPTION "Editing RPM, load and CLT grids"
 FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_RGE_EDIT_0,  5, 8,27,15,ES_AUTOHSCROLL
@@ -900,8 +920,27 @@ BEGIN
     PUSHBUTTON      "Load standard values",IDC_CGE_LOAD_DEF_VAL,185,82,115,14
     CTEXT           "",IDC_CGE_ERROR_MSG_TEXT,305,82,180,16
 
-    PUSHBUTTON      "Cancel",IDCANCEL,95,100,50,14
-    DEFPUSHBUTTON   "OK",IDOK,35,100,50,14
+    EDITTEXT        IDC_LGE_EDIT_0,  5, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_1, 35, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_2, 65, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_3, 95, 112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_4, 125,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_5, 155,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_6, 185,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_7, 215,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_8, 245,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_9, 275,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_10,305,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_11,335,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_12,365,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_13,395,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_14,425,112,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LGE_EDIT_15,455,112,27,15,ES_AUTOHSCROLL
+    PUSHBUTTON      "Load standard values",IDC_LGE_LOAD_DEF_VAL,185,134,115,14
+    CTEXT           "",IDC_LGE_ERROR_MSG_TEXT,305,134,180,16
+
+    PUSHBUTTON      "Cancel",IDCANCEL,95,152,50,14
+    DEFPUSHBUTTON   "OK",IDOK,35,152,50,14
 END
 
 IDD_GRID_MODE_EDITOR_IGN DIALOGEX 0, 0, 530, 344
@@ -1389,6 +1428,7 @@ BEGIN
     IDS_DWELL_CALC_I_EDIT_TT "The current at the end of accumulation time (at the time of current disruption in the primary winding and the beginning of the spark). The greater the current, the more powerful the spark. We do not recommend exceeding the recommended value indicated in the datasheet for your coil."
     IDS_RGE_LOAD_DEF_VAL_TT  "Return standard RPM grid values which are used by default"
     IDS_CGE_LOAD_DEF_VAL_TT  "Return standard temperature grid values which are used by default"
+    IDS_LGE_LOAD_DEF_VAL_TT  "Return standard load grid values which are used by default"
     IDS_TD_VIEW_START_MAP_TT "Look up table of ignition timing for cranking mode. It is used when starting the engine until RPM reaches the value of 'Switch from cranking ignition map RPM'"
     IDS_TD_VIEW_IDLE_MAP_TT  "Look up table of ignition timing for idle mode. Used when firmware determines that the throttle is closed."
     IDS_TD_VIEW_WORK_MAP_TT  "Look up table of ignition timing for working mode. Used when firmware determines that the throttle is open."

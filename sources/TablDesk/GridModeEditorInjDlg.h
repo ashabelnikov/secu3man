@@ -56,12 +56,13 @@ class CGridModeEditorInjDlg : public CDialog
   void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2);
   void BindRPMGrid(float* pGrid);
   void BindCLTGrid(float* pGrid);
+  void BindLoadGrid(float* pGrid);
   void UpdateView(bool axisLabels = false);
   void UpdateDialogControls(void);
 
   void SetDynamicValues(const TablDesk::DynVal& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal);
+  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable);
 
   void SetITMode(int mode);
   int GetITMode(void) const;
@@ -111,8 +112,10 @@ class CGridModeEditorInjDlg : public CDialog
   float m_ldaxMin;
   float m_ldaxMax;
   bool m_ldaxNeedsUpdate;
+  bool m_ldaxUseTable;
   float m_baro_press;
-  std::vector<float> work_map_load_slots;
+  std::vector<float> m_work_map_load_slots;
+  float* mp_lodGrid;
 
   friend class CAutoTuneController;
 

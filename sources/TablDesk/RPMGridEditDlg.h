@@ -44,8 +44,8 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
  ~CRPMGridEditDlg();
   static const UINT IDD;
 
-  void SetValues(int mode, const float* ip_values);
-  void GetValues(int mode, float* op_values);
+  void SetValues(int mode, const float* ip_values, bool rev = false);
+  void GetValues(int mode, float* op_values, bool rev = false);
   float GetValue(int mode, size_t index);
   void setOnChange(EventOnChange OnFunction);
   void setOnLoadDefVal(EventHandler OnFunction);
@@ -64,18 +64,20 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
   afx_msg void OnChangeEdit(UINT nID);
   afx_msg void OnChangeEdit1(UINT nID);
+  afx_msg void OnChangeEdit2(UINT nID);
   afx_msg void OnLoadDefValBtn();
   afx_msg void OnLoadDefValBtn1();
+  afx_msg void OnLoadDefValBtn2();
   afx_msg void OnUpdateOkButton(CCmdUI* pCmdUI);
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
   DECLARE_MESSAGE_MAP()
 
  private:
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
-  CStatic m_errMsg[2];
-  std::vector<CEditEx*> m_edits[2];
-  std::vector<float> m_values[2];
-  std::vector<bool> m_errflags[2];
+  CStatic m_errMsg[3];
+  std::vector<CEditEx*> m_edits[3];
+  std::vector<float> m_values[3];
+  std::vector<bool> m_errflags[3];
 
   EventOnChange m_onChange;
   EventHandler m_onLoadDefVal;

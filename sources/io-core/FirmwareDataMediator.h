@@ -137,6 +137,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);
   bool CheckRPMGridsCompatibility(const float* rpmGrid);
   bool CheckCLTGridsCompatibility(const float* rpmGrid);
+  bool CheckLoadGridsCompatibility(const float* rpmGrid);
 
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
@@ -167,6 +168,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 
   void GetCLTGridMap(float* op_values);
   void SetCLTGridMap(const float* i_values);
+
+  void GetLoadGridMap(float* op_values);
+  void SetLoadGridMap(const float* i_values);
 
   void GetATSAACMap(float* op_values, bool i_original = false);
   void SetATSAACMap(const float* i_values);

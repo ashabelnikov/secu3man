@@ -40,9 +40,10 @@ using namespace fastdelegate;
 
 static const size_t itemNumberRPM = 16;
 static const size_t itemNumberCLT = 16;
-static const float gridMinStep[2] = {100, 5};
-static const float gridMinValue[2] = {300, -40};
-static const float gridMaxValue[2] = {20000, 250};
+static const size_t itemNumberLod = 16;
+static const float gridMinStep[3] = {100, 5, 1};
+static const float gridMinValue[3] = {300, -40, 5};
+static const float gridMaxValue[3] = {20000, 250, 500};
 
 CFWRPMGridEditController::CFWRPMGridEditController()
 {
@@ -72,6 +73,9 @@ int CFWRPMGridEditController::Edit(void)
  float valuesCLT[itemNumberCLT] = {0};
  mp_fwdm->GetCLTGridMap(valuesCLT);
  mp_view->SetValues(1, valuesCLT);
+ float valuesLod[itemNumberLod] = {0};
+ mp_fwdm->GetLoadGridMap(valuesLod);
+ mp_view->SetValues(2, valuesLod, true); //reverse
 
  int result = mp_view->DoModal();
  if (result==IDOK)
@@ -80,6 +84,8 @@ int CFWRPMGridEditController::Edit(void)
   mp_fwdm->SetRPMGridMap(valuesRPM);
   mp_view->GetValues(1, valuesCLT);
   mp_fwdm->SetCLTGridMap(valuesCLT);
+  mp_view->GetValues(2, valuesLod, true); //reverse
+  mp_fwdm->SetLoadGridMap(valuesLod);
  }
  mp_view.reset();
  return result;
@@ -88,7 +94,19 @@ int CFWRPMGridEditController::Edit(void)
 bool CFWRPMGridEditController::_CheckItemForErrors(int mode, size_t itemIndex, float value, bool i_check_only /*= false*/)
 {
  bool error = true;
- size_t itemNumber = mode==0 ? itemNumberRPM : itemNumberCLT; 
+ size_t itemNumber = -1;
+ if (0==mode)
+  itemNumber = itemNumberRPM;
+ else if (1==mode)
+  itemNumber = itemNumberCLT;
+ else if (2==mode)
+  itemNumber = itemNumberLod;
+ else
+ {
+  ASSERT(0); //unexpected value
+  return false;
+ }
+
  if (value < gridMinValue[mode])
  {
   if (!i_check_only)
@@ -164,10 +182,29 @@ void CFWRPMGridEditController::OnItemChange(int mode, size_t itemIndex, float va
 
 void CFWRPMGridEditController::OnLoadDefVal(int mode)
 {
- size_t itemNumber = mode==0 ? itemNumberRPM : itemNumberCLT; 
+ size_t itemNumber = -1;
+ if (0==mode)
+  itemNumber = itemNumberRPM;
+ else if (1==mode)
+  itemNumber = itemNumberCLT;
+ else if (2==mode)
+  itemNumber = itemNumberLod;
+ else
+ {
+  ASSERT(0); //unexpected value
+  return;
+ }
+
  if (!mp_view.get())
   return;
- mp_view->SetValues(mode, mode==0 ? SECU3IO::work_map_rpm_slots : SECU3IO::temp_map_tmp_slots);
+
+ if (0==mode)
+  mp_view->SetValues(mode, SECU3IO::work_map_rpm_slots);
+ else if (1==mode)
+  mp_view->SetValues(mode, SECU3IO::temp_map_tmp_slots);
+ else if (2==mode)
+  mp_view->SetValues(mode, SECU3IO::work_map_lod_slots, true); //reverse
+
  mp_view->SetErrMessage(mode, _T(""));
  for(size_t i = 0; i < itemNumber; i++)
   mp_view->SetItemError(mode, i, false);

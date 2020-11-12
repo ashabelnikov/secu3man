@@ -171,6 +171,9 @@ void SECU3ImportController::OnOkPressed(void)
 
  //copy CLT grid table
  m_fwdm->GetCLTGridMap(mp_fwd->clt_slots);
+
+ //копируем таблицу сетки нагрузки
+ m_fwdm->GetLoadGridMap(mp_fwd->load_slots);
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -495,6 +498,10 @@ void SECU3ExportController::OnOkPressed(void)
  //проверяем совместимость и копируем таблицу сетки температуры
  if (m_fwdm->CheckCLTGridsCompatibility(mp_fwd->clt_slots))
   m_fwdm->SetCLTGridMap(mp_fwd->clt_slots);
+
+ //проверяем совместимость и копируем таблицу сетки нагрузки
+ if (m_fwdm->CheckLoadGridsCompatibility(mp_fwd->load_slots))
+  m_fwdm->SetLoadGridMap(mp_fwd->load_slots);
 
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);

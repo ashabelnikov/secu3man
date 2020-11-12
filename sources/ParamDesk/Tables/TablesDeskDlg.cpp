@@ -293,6 +293,12 @@ void CTablesDeskDlg::SetCLTGrid(const float* values)
   std::copy(values, values + 16, mp_ButtonsPanel->GetCLTGrid());
 }
 
+void CTablesDeskDlg::SetLoadGrid(const float* values)
+{
+ if (mp_ButtonsPanel.get())
+  std::copy(values, values + 16, mp_ButtonsPanel->GetLoadGrid());
+}
+
 void CTablesDeskDlg::CloseAllCharts(void)
 {
  HWND hwnd;

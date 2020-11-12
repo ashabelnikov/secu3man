@@ -43,7 +43,7 @@ class CGMEInjITDlg : public CTabDialog
 
   void BindMaps(float* pIT);
   void BindRPMGrid(float* pGrid);
-  void BindLoadGrid(float* pGrid, bool updateLabels = false);
+  void BindLoadGrid(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
   void setOnChangeSettings(EventHandler OnCB);
   void UpdateView(bool axisLabels = false);
@@ -80,7 +80,7 @@ class CGMEInjITDlg : public CTabDialog
 
   float* mp_ITMap;
   float* mp_rpmGrid;
-  float* mp_loadGrid;
+  const float* mp_loadGrid;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

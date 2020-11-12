@@ -66,10 +66,12 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnChangeData();
+  afx_msg void OnChangeDataLdaxGrid();
   afx_msg void OnChangeDataLoadSrc();
   afx_msg void OnMapCalcButton();
   afx_msg void OnMap2CalcButton();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsLower(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsUpper(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
@@ -103,6 +105,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CBitmapButton m_calc_map2_btn;
   CStatic m_lolo_unit;
   CStatic m_hilo_unit;
+  CButton m_use_ldax_grid_check;
 
   CSpinButtonCtrlEx m_map2_curve_offset_spin;
   CEditEx m_map2_curve_offset_edit;

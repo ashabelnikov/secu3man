@@ -80,7 +80,8 @@ class CAutoTuneController
 
  void BindMaps(float* pVE, float* pAFR);
  void BindRPMGrid(float* pGrid);
- void SetLoadAxisCfg(float minVal, float maxVal);
+ void BindLoadGrid(const float* pGrid);
+ void SetLoadAxisCfg(float minVal, float maxVal, bool useTable);
  void SetAFRError(float afrError);
  void SetStatSize(int statSize);
  void SetAutoBlockThrd(int thrd);
@@ -109,7 +110,7 @@ class CAutoTuneController
  void setOnMapChanged(EventWithCode OnFunction);
 
  private:
-  int _FindNearestGridPoint(float arg, float *grid, int gSize);
+  int _FindNearestGridPoint(float arg, const float *grid, int gSize);
   float _ShepardInterpolation(float rpm, float load, const ScatterItem_t& points, double power, double eps, float& o_avdist);
   bool _ApplyCorrection(void);
   float& _GetVEItem(int i, int j);
@@ -138,12 +139,14 @@ class CAutoTuneController
 
   bool m_active;
   float* mp_rpmGrid;
+  const float* mp_lodGrid;
 
   float m_ldaxMin;
   float m_ldaxMax;
   float m_baro_press;
   bool m_ldaxNeedsUpdate;
-  std::vector<float> mp_loadGrid;
+  bool m_ldaxUseTable;
+  std::vector<float> m_loadGrid;
   float m_afrerr;
 
   CGMEInjVEDlg* mp_view;

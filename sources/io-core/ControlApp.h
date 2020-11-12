@@ -197,6 +197,7 @@ class IOCORE_API CControlApp
   bool Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_LZIDBL_HS(const BYTE* raw_packet, size_t size);
   bool Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_LODGRD_PAR(const BYTE* raw_packet, size_t size);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);

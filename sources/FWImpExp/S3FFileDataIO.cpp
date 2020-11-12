@@ -241,8 +241,9 @@ struct S3FSepMaps
  //since v01.14
  s3f_int32_t grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //GRTS temperature sensor look up table, since v01.14 
  s3f_int32_t grheat_duty[F_TMP_POINTS];                       //temperature
+ s3f_int32_t load_slots[F_LOAD_SLOTS]; //load grid (appeared in version 01.14, reserved bytes were utilized); note: values are in reverse direction
 
- s3f_int32_t reserved[797];       //reserved bytes, = 0
+ s3f_int32_t reserved[781];       //reserved bytes, = 0
 };
 
 
@@ -488,6 +489,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  //convert CLT grid
  for(i = 0; i < F_TMP_SLOTS; ++i)
   p_sepMaps->clt_slots[i] = MathHelpers::Round(m_data.clt_slots[i] * INT_MULTIPLIER);
+ //convert load grid
+ for(i = 0; i < F_LOAD_SLOTS; ++i)
+  p_sepMaps->load_slots[i] = MathHelpers::Round(m_data.load_slots[i] * INT_MULTIPLIER);
 
  //CE settings
  p_sepMaps->cesd.map_v_min = MathHelpers::Round(m_data.cesd.map_v_min * INT_MULTIPLIER);
@@ -733,8 +737,20 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.clt_slots[i] = p_sepMaps->clt_slots[i] / INT_MULTIPLIER;
  }
 
+ //convert load grid
+ empty = true;
+ for(i = 0; i < F_LOAD_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->load_slots[i])
+   empty = false;
+  m_data.load_slots[i] = p_sepMaps->load_slots[i] / INT_MULTIPLIER;
+ }
+
  if (empty || (p_fileHdr->version < 0x0111)) //copy standard CLT grid if old version of S3F is being loaded
   std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
+
+ if (empty || (p_fileHdr->version < 0x0114)) //copy standard load grid if old version of S3F is being loaded
+  std::copy(SECU3IO::work_map_lod_slots, SECU3IO::work_map_lod_slots + F_LOAD_SLOTS, m_data.load_slots);
 
  if (p_fileHdr->version >= 0x0111) //CE settings appeared since v01.11
  {
@@ -865,6 +881,9 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
 
  //copy standard CLT grid when loading old format
  std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
+
+ //copy standard load grid when loading old format
+ std::copy(SECU3IO::work_map_lod_slots, SECU3IO::work_map_lod_slots + F_LOAD_SLOTS, m_data.load_slots);
 
  return true;
 }
