@@ -1437,6 +1437,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
   }
+  mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_ECF, _T("ECF"));
   mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_O2SH_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_O2SH_O, true);
   mp_view->EnableInversion(FWDM::IOS3I_O2SH_O, true);
@@ -1538,6 +1539,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
   }
+  mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_LAMBDA, _T("LAMBDA"));
   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_ADD_I3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I3, true); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I3, true);

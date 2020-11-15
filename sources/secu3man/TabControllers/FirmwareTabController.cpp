@@ -1890,14 +1890,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Timeout threshold of gas reducer's heater"), _T("min"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("Gas reducer's heating will be turned off after this time when engine is stopped. This should prevent over-discharge of the battery."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Передавать вместо ADD_I1 значение другого входа"), _T(""), 0, 4, 1, 0, &d.add_i1_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I1. 0 - вход ADD_I1 (по умолчанию), 1 - вход ADD_I5, 2 - вход ADD_I6, 3 - вход ADD_I7, 4 - вход ADD_I8"));
+  dfd.AppendItem(_T("Передавать вместо ADD_I1 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I1. 1 - вход ADD_I1 (по умолчанию), 2 - вход ADD_I2, 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
  else
-  dfd.AppendItem(_T("Send value of another input instead of ADD_I1"), _T(""), 0, 4, 1, 0, &d.add_i1_sub, _T("Select what firmware should send instead of ADD_I1 value. 0 - ADD_I1 input (default), 1 - ADD_I5 input, 2 - ADD_I6 input, 3 - ADD_I7 input, 4 - ADD_I8 input"));
+  dfd.AppendItem(_T("Send value of another input instead of ADD_I1"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Select what firmware should send instead of ADD_I1 value. 1 - ADD_I1 input (default), 2 - ADD_I2 input, 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Передавать вместо ADD_I2 значение другого входа"), _T(""), 0, 4, 1, 0, &d.add_i2_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I2. 0 - вход ADD_I2 (по умолчанию), 1 - вход ADD_I5, 2 - вход ADD_I6, 3 - вход ADD_I7, 4 - вход ADD_I8"));
+  dfd.AppendItem(_T("Передавать вместо ADD_I2 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I2. 1 - вход ADD_I1, 2 - вход ADD_I2 (по умолчанию), 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
  else
-  dfd.AppendItem(_T("Send value of another input instead of ADD_I2"), _T(""), 0, 4, 1, 0, &d.add_i2_sub, _T("Select what firmware should send instead of ADD_I2 value. 0 - ADD_I2 input (default), 1 - ADD_I5 input, 2 - ADD_I6 input, 3 - ADD_I7 input, 4 - ADD_I8 input"));
+  dfd.AppendItem(_T("Send value of another input instead of ADD_I2"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Select what firmware should send instead of ADD_I2 value. 1 - ADD_I1 input, 2 - ADD_I2 input (default), 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Зона оборотов подхвата УОЗ РХХ"), _T("мин-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("УОЗ РХХ будет активирован когда обороты опустятся ниже значения равного сумме целевых оборотов ХХ и зоны подхвата. Например целевые обороты ХХ = 900, зона подхвата = 200, значит регулятор начнет работать когда обороты двигателя опустятся ниже 1100."));
