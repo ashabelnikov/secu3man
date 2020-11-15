@@ -173,12 +173,16 @@ END_MESSAGE_MAP()
 int CMapEditorCtrl::m_gradSaturation = 120;
 int CMapEditorCtrl::m_gradBrightness = 255;
 bool CMapEditorCtrl::m_boldFont = false;
+bool CMapEditorCtrl::m_spotMarkers = true;
+float CMapEditorCtrl::m_spotMarkersSize = 1.0f;
  
-CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont)
+CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize)
 {
  CMapEditorCtrl::m_gradSaturation = gradSat;
  CMapEditorCtrl::m_gradBrightness = gradBrt;
  CMapEditorCtrl::m_boldFont = boldFont;
+ CMapEditorCtrl::m_spotMarkers = spotMarkers;
+ CMapEditorCtrl::m_spotMarkersSize = spotMarkersSize;
 }
 
 //if you create control via resource editor, you must specify this class name in the control's properties
@@ -219,6 +223,8 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_forceRedraw(true)
 , m_bgrdBrushColor(GetSysColor(COLOR_3DFACE))
 , m_bgrdBrush(GetSysColor(COLOR_3DFACE))
+, m_ballCoord(0,0)
+, m_ballBrush(GDIHelpers::InvColor(RGB(255, 64, 64)))
 {
  m_horizLabels.reserve(16);
  m_vertLabels.reserve(16);
@@ -428,11 +434,22 @@ void CMapEditorCtrl::_DrawMarkers(void)
  m_dcMark.FillRect(rc, &m_blackBrush);
 
  if (IsWindowEnabled() && m_showMarkers)
- {
+ { 
   if (mp_horizLabels || mp_vertLabels)
   {
-   for (size_t i = 0; i < m_markedItems.size(); ++i)
-    _DrawMarker(&m_dcMark, m_markedItems[i].x, m_markedItems[i].y);
+   if (m_spotMarkers)
+   {//ball
+    CRect rect = _GetItemRect(&m_dcMark, 0, 0);
+    int r = MathHelpers::Round((((float)rect.Height())/2)*m_spotMarkersSize);
+    CObject* oldBrush =  m_dcMark.SelectObject(&m_ballBrush); 
+    m_dcMark.Ellipse(m_ballCoord.x - r, m_ballCoord.y - r, m_ballCoord.x + r, m_ballCoord.y + r);
+    m_dcMark.SelectObject(oldBrush);
+   }
+   else
+   {//rectangle
+    for (size_t i = 0; i < m_markedItems.size(); ++i)
+     _DrawMarker(&m_dcMark, m_markedItems[i].x, m_markedItems[i].y);
+   }
   }
  }
 }
@@ -919,46 +936,99 @@ void CMapEditorCtrl::_2DLookupV(float x, std::vector<int>& pt)
 
 void CMapEditorCtrl::SetArguments(float i_arg, float j_arg)
 {
- std::vector<CPoint> marks;
- std::vector<int> pt_i, pt_j;
+ if (m_spotMarkers)
+ { //spot style markers
+  CPoint ball;  
+  if (mp_vertLabels)
+  { //look up through rows
+   int i;
+   if (i_arg <= _GetVGrid(0))
+    i_arg = _GetVGrid(0);  
+   if (i_arg >= _GetVGrid(m_rows-1))
+    i_arg = _GetVGrid(m_rows-1);
+   for(i = m_rows - 2; i >= 0; --i)
+    if (i_arg >= _GetVGrid(i)) break; 
+   int p1 = i; int p2 = i + 1;
 
- //find where we are for each argument
- if (mp_vertLabels)
-  _2DLookupV(i_arg, pt_i);
- if (mp_horizLabels)
-  _2DLookupH(j_arg, pt_j);
- 
- //build list of cells to be marked
- if (mp_vertLabels && !mp_horizLabels)
- {
-  for(size_t i = 0; i < pt_i.size(); ++i)
-   marks.push_back(CPoint(pt_i[i], 0));
- }
- else if (!mp_vertLabels && mp_horizLabels)
- {
-  for(size_t j = 0; j < pt_j.size(); ++j)
-   marks.push_back(CPoint(0, pt_j[j])); 
+   CClientDC dc(this);
+   CPoint cp1 = _GetItemRect(&dc, p1, 0).CenterPoint();
+   CPoint cp2 = _GetItemRect(&dc, p2, 0).CenterPoint();
+
+   if (!mp_horizLabels)
+    ball.x = cp1.x;
+   ball.y = (int)(cp1.y - (((i_arg - _GetVGrid(p1)) / (_GetVGrid(p2) - _GetVGrid(p1))) * (cp1.y - cp2.y)));
+  }
+  if (mp_horizLabels)
+  { //look up through columns
+   int j;
+   if (j_arg <= mp_horizLabels[0])
+    j_arg = mp_horizLabels[0];  
+   if (j_arg >= mp_horizLabels[m_cols-1])
+    j_arg = mp_horizLabels[m_cols-1];
+   for(j = m_cols - 2; j >= 0; --j)
+    if (j_arg >= mp_horizLabels[j]) break; 
+   int p1 = j; int p2 = j + 1;
+
+   CClientDC dc(this);
+   CPoint cp1 = _GetItemRect(&dc, 0, p1).CenterPoint();
+   CPoint cp2 = _GetItemRect(&dc, 0, p2).CenterPoint();
+
+   ball.x = (int)(cp1.x + (((j_arg - mp_horizLabels[p1]) / (mp_horizLabels[p2] - mp_horizLabels[p1])) * (cp2.x - cp1.x)));
+   if (!mp_vertLabels)
+    ball.y = cp1.y;
+  }
+
+  if (ball != m_ballCoord)
+  { //draw only if position of ball is changed
+   m_ballCoord = ball;
+   _DrawMarkers();
+   CClientDC dc(this);
+   _ShowImage(&dc);
+  }
  }
  else
- {
-  for(size_t i = 0; i < pt_i.size(); ++i)
+ { //rectangle style markers
+  std::vector<CPoint> marks;
+  std::vector<int> pt_i, pt_j;
+
+  //find where we are for each argument
+  if (mp_vertLabels)
+   _2DLookupV(i_arg, pt_i);
+  if (mp_horizLabels)
+   _2DLookupH(j_arg, pt_j);
+ 
+  //build list of cells to be marked
+  if (mp_vertLabels && !mp_horizLabels)
+  {
+   for(size_t i = 0; i < pt_i.size(); ++i)
+    marks.push_back(CPoint(pt_i[i], 0));
+  }
+  else if (!mp_vertLabels && mp_horizLabels)
   {
    for(size_t j = 0; j < pt_j.size(); ++j)
-    marks.push_back(CPoint(pt_i[i], pt_j[j]));
-  } 
- }
+    marks.push_back(CPoint(0, pt_j[j])); 
+  }
+  else
+  {
+   for(size_t i = 0; i < pt_i.size(); ++i)
+   {
+    for(size_t j = 0; j < pt_j.size(); ++j)
+     marks.push_back(CPoint(pt_i[i], pt_j[j]));
+   } 
+  }
 
- if (m_markedItems.size() != marks.size() || !std::equal(m_markedItems.begin(), m_markedItems.end(), marks.begin()))
- { //update only if changes are present
-  m_markedItems = marks;
+  if (m_markedItems.size() != marks.size() || !std::equal(m_markedItems.begin(), m_markedItems.end(), marks.begin()))
+  { //update only if changes are present
+   m_markedItems = marks;
 
-  CClientDC dc(this);
+   CClientDC dc(this);
 
-  //draw marker(s)
-  _DrawMarkers();
+   //draw marker(s)
+   _DrawMarkers();
 
-  //Draw all data onto memory DC
-  _ShowImage(&dc);
+   //Draw all data onto memory DC
+   _ShowImage(&dc);
+  }
  }
 }
 

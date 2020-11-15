@@ -3652,9 +3652,9 @@ void CButtonsPanel::SetCLTThrd(float clt)
   mp_autoTuneCntr->SetCLTThrd(clt);
 }
 
-void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold)
+void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bool spotMarkers, float spotMarkersSize)
 {
- CMapEditorCtrl::SetSettings(gradSat, gradBrt, bold);
+ CMapEditorCtrl::SetSettings(gradSat, gradBrt, bold, spotMarkers, spotMarkersSize);
 }
 
 void CButtonsPanel::MakeChartsChildren(bool children)

@@ -319,6 +319,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGradBrightness(_T("GradBrightness"))
 , m_optBoldFont(_T("BoldFont"))
 , m_optITEdMode(_T("InjTimEdMode"))
+, m_optSpotMarkers(_T("SpotMarkers"))
+, m_optSpotMarkersSize(_T("SpotMarkersSize"))
 //Splitters
 , m_Name_Splitters_Section(_T("Splitters"))
 , m_optParamMonVert(_T("ParamMonVert"))
@@ -967,6 +969,8 @@ bool CAppSettingsModel::ReadSettings(void)
  me.ReadInt(m_optGradBrightness, _T("255"), 0, 255);
  me.ReadInt(m_optBoldFont, _T("0"), 0, 1);
  me.ReadInt(m_optITEdMode, _T("0"), 0, 3);
+ me.ReadInt(m_optSpotMarkers, _T("1"), 0, 1);
+ me.ReadFlt(m_optSpotMarkersSize,_T("1.0"), 0.1f, 3.0f);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
@@ -2841,6 +2845,18 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   me.WriteComment(_T("Режим редактирования таблицы фазы впрыска. 0 - [0...720 до ВМТ], 1 - [0...720 после ВМТ], 2 - [-360...360 до ВМТ], 3 - [-360...360 после ВМТ]"));
  me.WriteInt(m_optITEdMode);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Use spot markers instead of rectangles in grid mode map eitors. 0 - use rectangles, 1 - use spots"));
+ else
+  me.WriteComment(_T("Использовать пятно для индикации рабочей точки вместо рамок в окнах табличного редактирования. 0 - использовать рамки, 1 - использовать пятно"));
+ me.WriteInt(m_optSpotMarkers);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Size of spot used for indication of working point in grid editors"));
+ else
+  me.WriteComment(_T("Размер пятна используемого для индикации рабочей точки в окнах табличного редактирования"));
+ me.WriteFlt(m_optSpotMarkersSize, 2);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
@@ -4899,4 +4915,14 @@ int CAppSettingsModel::GetIniEditorSyntax(void) const
 int CAppSettingsModel::GetGrtsAverage(void) const
 {
  return m_optGrtsAverage.value;
+}
+
+bool CAppSettingsModel::GetSpotMarkers(void) const
+{
+ return m_optSpotMarkers.value;
+}
+
+float CAppSettingsModel::GetSpotMarkersSize(void) const
+{
+ return m_optSpotMarkersSize.value;
 }

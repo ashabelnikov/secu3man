@@ -72,7 +72,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void setOnSelChange(EventHandler OnCB);
   void setOnValueTransform(EventHandler3 OnCB);
 
-  static SetSettings(int gradSat, int gradBrt, bool boldFont);
+  static SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize);
 
  protected:
   afx_msg void OnPaint();
@@ -186,6 +186,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   static int m_gradSaturation;
   static int m_gradBrightness;
   static bool m_boldFont;
+  static bool m_spotMarkers;
+  static float m_spotMarkersSize;
 
   CDC     m_dcGrid;
   CBitmap m_bmGrid;
@@ -199,4 +201,6 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   CBrush m_bgrdBrush;
   CRgn m_clipRgn;
   bool m_forceRedraw;
+  CPoint m_ballCoord;
+  CBrush m_ballBrush;
 };

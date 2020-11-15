@@ -112,7 +112,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve_map.AttachMap(mp_VEMap);
  m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_ve_map.ShowLabels(true, true);
- m_ve_map.SetDecimalPlaces(2, 0, 0);
+ m_ve_map.SetDecimalPlaces(3, 0, 0);
  m_ve_map.SetFont(&m_font);
  m_ve_map.EnableAbroadMove(false, false);
  m_ve_map.SetValueIncrement(0.01f);

@@ -240,6 +240,9 @@ class CAppSettingsModel : public ISettingsData
 
   virtual int GetToolTipTime(void) const;
 
+  virtual bool GetSpotMarkers(void) const;
+  virtual float GetSpotMarkersSize(void) const;
+
  private:
   bool _CheckAndCorrectLFCRs(void);
 
@@ -593,7 +596,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optGradBrightness;
   OptField_t<int> m_optBoldFont;
   OptField_t<int> m_optITEdMode;
-
+  OptField_t<int> m_optSpotMarkers;
+  OptField_t<float> m_optSpotMarkersSize;
+  
   //Splitters
   OptField_t<int> m_optParamMonVert;
   OptField_t<int> m_optLogPlayerVert;

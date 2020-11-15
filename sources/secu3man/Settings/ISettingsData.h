@@ -588,4 +588,7 @@ class ISettingsData
   virtual void SetWriteLogFields(bool value) = 0;
 
   virtual void GetFunctionality(Functionality& o_fnc) const = 0;
+
+  virtual bool GetSpotMarkers(void) const = 0;
+  virtual float GetSpotMarkersSize(void) const = 0;
 };
