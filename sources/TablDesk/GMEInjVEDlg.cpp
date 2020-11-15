@@ -57,9 +57,9 @@ END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 : Super(CGMEInjVEDlg::IDD, pParent)
-, m_ve_map(16, 16, true, NULL, 3)
-, m_lamdel_map(3, 3, true, NULL, 3)
-, m_celwgt_map(16, 16, false, NULL, 3, true) //read-only
+, m_ve_map(16, 16, true, true, NULL, 3) //inverted order of rows and vertical labels' data
+, m_lamdel_map(3, 3, true, true, NULL, 3) //inverted order of rows and vertical labels' data
+, m_celwgt_map(16, 16, false, true, NULL, 3, true) //normal order of rows, inverted order of vertical labels' data, read-only
 , mp_VEMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
@@ -142,7 +142,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  {
   m_celwgt_map.SetRange(.0f, 255.0f);
   m_celwgt_map.AttachMap(mp_CelWgtMap);
-  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid, true); //<-- reverse load grid values because this map uses normal order
+  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
   m_celwgt_map.ShowLabels(true, true);
   m_celwgt_map.SetDecimalPlaces(2, 0, 0);
   m_celwgt_map.SetFont(&m_font);
@@ -217,7 +217,7 @@ void CGMEInjVEDlg::BindLoadGrid(const float* pGrid, bool updateLabels /*= false*
  if (updateLabels)
  {
   m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
-  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid, true); //<-- reverse load grid values because this map uses normal order
+  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
   if (m_ve_map.GetSafeHwnd())
    m_ve_map.UpdateDisplay(); 
   if (m_celwgt_map.GetSafeHwnd())

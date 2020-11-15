@@ -1,6 +1,5 @@
 /* SECU-3  - An open source, free engine control unit
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
-   Original code written by Mark C. Malburg, USA, http://digitalmetrology.com
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,15 +31,15 @@
 // Enum types for altering of properties
 enum MeterMemberEnum
 {
- meter_title,   //заголовок (название прибора)
+ meter_title,   //title (name of gauge)
  meter_tlpane,  //top-left pane
  meter_trpane,  //top-right pane
- meter_needle,  //стрелка
- meter_grid,    //деления шкалы
- meter_value,   //числовое значение отображаемое внизу
- meter_labels,  //подписи напротив каждого деления
- meter_unit,    //единицы измерения
- meter_bground, //фон
+ meter_needle,  //arrow
+ meter_grid,    //ticks of grid
+ meter_value,   //digital value displayed at the bottom
+ meter_labels,  //tick labels
+ meter_unit,    //units
+ meter_bground, //background
 };
 
 // CAnalogMeter class
@@ -78,11 +77,10 @@ class AFX_EXT_CLASS CAnalogMeter
   void AddAlertZone(double start,double end, COLORREF color);
   void ResetAlertZones(void);
 
-  void    GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const;
-  void    GetState(enum MeterMemberEnum meter_member, bool* pState) const;
+  void GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const;
+  void GetState(enum MeterMemberEnum meter_member, bool* pState) const;
  
  protected:
-  bool m_boolUseBitmaps;
   bool m_boolForceRedraw;
 
  // Implementation
@@ -169,7 +167,7 @@ class AFX_EXT_CLASS CAnalogMeter
   CBitmap m_bitmapGrid;
   CBitmap *m_pbitmapOldGrid;
 
-  CDC     m_dcNeedle ;
+  CDC     m_dcNeedle;
   CBitmap m_bitmapNeedle;
   CBitmap *m_pbitmapOldNeedle;
 

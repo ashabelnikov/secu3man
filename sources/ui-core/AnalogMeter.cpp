@@ -1,6 +1,5 @@
 /* SECU-3  - An open source, free engine control unit
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
-   Original code written by Mark C. Malburg, USA, http://digitalmetrology.com
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -96,8 +95,6 @@ CAnalogMeter::CAnalogMeter()
  // draw the whole thing the first time
 , m_boolForceRedraw(true)
 , m_dRadiansPerValue(0.0)  // will be modified on first drawing
- // false if we are printing
-, m_boolUseBitmaps(true)
 {
  m_AlertZones.reserve(16);
  // set pen/brush colors
@@ -133,19 +130,10 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
   // first store the rectangle for the owner
   // and determine the rectangle to draw to
   m_rectOwner = rectBorder;
-  if (pDC->IsPrinting())
-  {
-   m_boolUseBitmaps = false;
-   m_rectDraw       = m_rectOwner;  // draw directly to the owner
-  }
-  else
-  {
-   m_boolUseBitmaps  = true;
-   m_rectDraw.left   = 0;           // draw to a bitmap rectangle
-   m_rectDraw.top    = 0;
-   m_rectDraw.right  = rectBorder.Width();
-   m_rectDraw.bottom = rectBorder.Height();
-  }
+  m_rectDraw.left   = 0;           // draw to a bitmap rectangle
+  m_rectDraw.top    = 0;
+  m_rectDraw.right  = rectBorder.Width();
+  m_rectDraw.bottom = rectBorder.Height();
   m_nRectWidth  = m_rectDraw.Width();
   m_nRectHeight = m_rectDraw.Height();
 
@@ -160,35 +148,23 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
    m_bitmapGrid.DeleteObject();
    m_bitmapNeedle.DeleteObject();
   }
-  if (m_boolUseBitmaps)
-  {
-   // create a memory based dc for drawing the grid
-   m_dcGrid.CreateCompatibleDC(pDC);
-   m_bitmapGrid.CreateCompatibleBitmap(pDC, m_nRectWidth, m_nRectHeight);
-   m_pbitmapOldGrid = m_dcGrid.SelectObject(&m_bitmapGrid);
-   // create a memory based dc for drawing the needle
-   m_dcNeedle.CreateCompatibleDC(pDC);
-   m_bitmapNeedle.CreateCompatibleBitmap(pDC, m_nRectWidth, m_nRectHeight);
-   m_pbitmapOldNeedle = m_dcNeedle.SelectObject(&m_bitmapNeedle);
-  }
-  else  // no bitmaps, draw to the destination
-  {
-   // use the destination dc for the grid
-   m_dcGrid.m_hDC = pDC->m_hDC;
-   m_dcGrid.m_hAttribDC = pDC->m_hAttribDC;
-   // use the destination dc for the grid
-   m_dcNeedle.m_hDC = pDC->m_hDC;
-   m_dcNeedle.m_hAttribDC = pDC->m_hAttribDC;
-  }
+  // create a memory based dc for drawing the grid
+  m_dcGrid.CreateCompatibleDC(pDC);
+  m_bitmapGrid.CreateCompatibleBitmap(pDC, m_nRectWidth, m_nRectHeight);
+  m_pbitmapOldGrid = m_dcGrid.SelectObject(&m_bitmapGrid);
+  // create a memory based dc for drawing the needle
+  m_dcNeedle.CreateCompatibleDC(pDC);
+  m_bitmapNeedle.CreateCompatibleBitmap(pDC, m_nRectWidth, m_nRectHeight);
+  m_pbitmapOldNeedle = m_dcNeedle.SelectObject(&m_bitmapNeedle);
 
   // draw the grid in to the "grid dc"
   DrawScale();
   // draw the needle in the "needle dc"
   DrawNeedle();
  }
+
  // display the new image, combining the needle with the grid
- if (m_boolUseBitmaps)
-  ShowMeterImage(pDC);
+ ShowMeterImage(pDC);
 }
 
 void CAnalogMeter::Update(CDC *pDC)
@@ -206,11 +182,6 @@ void CAnalogMeter::Update(CDC *pDC)
  if (m_strTRPane != m_strTRPane_n)
   m_strTRPane = m_strTRPane_n;
 
- // do not support updates if we are not working with
- // bitmaps images
- if (!m_boolUseBitmaps)
-  return;
-
  // must have created the grid if we are going to
  // update the needle (the needle locations are
  // calculateed based on the grid)
@@ -221,8 +192,7 @@ void CAnalogMeter::Update(CDC *pDC)
  DrawNeedle();
 
  // combine the needle with the grid and display the result
- if (m_boolUseBitmaps)
-  ShowMeterImage (pDC);
+ ShowMeterImage (pDC);
 }
 
 void CAnalogMeter::DrawScale()
@@ -592,26 +562,23 @@ void CAnalogMeter::DrawNeedle()
  if (!m_dcNeedle.GetSafeHdc())
   return;
 
- if(m_boolUseBitmaps)
- {
-  // new pen / brush
-  pPenOld   = NULL;
-  pBrushOld = NULL;
-  if(m_PenN_BGround.m_hObject)
-   pPenOld = m_dcNeedle.SelectObject(&m_PenN_BGround);
+ // new pen / brush
+ pPenOld   = NULL;
+ pBrushOld = NULL;
+ if(m_PenN_BGround.m_hObject)
+  pPenOld = m_dcNeedle.SelectObject(&m_PenN_BGround);
 
-  if(m_BrushN_BGround.m_hObject)
-   pBrushOld = m_dcNeedle.SelectObject(&m_BrushN_BGround);
+ if(m_BrushN_BGround.m_hObject)
+  pBrushOld = m_dcNeedle.SelectObject(&m_BrushN_BGround);
 
-  m_dcNeedle.Rectangle(m_rectDraw);
+ m_dcNeedle.Rectangle(m_rectDraw);
 
-  // old pen / brush
-  if(pPenOld)
-   m_dcGrid.SelectObject(pPenOld);
+ // old pen / brush
+ if(pPenOld)
+  m_dcGrid.SelectObject(pPenOld);
 
-  if(pBrushOld)
-   m_dcGrid.SelectObject(pBrushOld);
- }
+ if(pBrushOld)
+  m_dcGrid.SelectObject(pBrushOld);
 
  // check sizes
 
@@ -718,38 +685,25 @@ void CAnalogMeter::DrawNeedle()
 
 void CAnalogMeter::ShowMeterImage(CDC *pDC)
 {
- CDC memDC;
- CBitmap memBitmap;
- CBitmap* oldBitmap; // bitmap originally found in CMemDC
-
- // this function is only used when the needle and grid
- // have been drawn to bitmaps and they need to be combined
- // and sent to the destination
- if (!m_boolUseBitmaps)
+ if (!m_dcGrid.GetSafeHdc() || !m_dcNeedle.GetSafeHdc())
   return;
 
- // to avoid flicker, establish a memory dc, draw to it
- // and then BitBlt it to the destination "pDC"
+ CDC memDC;
+ CBitmap memBitmap;
+ CBitmap* oldBitmap;
+
  memDC.CreateCompatibleDC(pDC);
  memBitmap.CreateCompatibleBitmap(pDC, m_nRectWidth, m_nRectHeight);
  oldBitmap = (CBitmap *)memDC.SelectObject(&memBitmap);
 
- // make sure we have the bitmaps
- if (!m_dcGrid.GetSafeHdc())
-  return;
-
- if (!m_dcNeedle.GetSafeHdc())
-  return;
-
  if (memDC.GetSafeHdc() != NULL)
  {
-  // draw the inverted grid
+  //draw inverted grid
   memDC.BitBlt(0, 0, m_nRectWidth, m_nRectHeight, &m_dcGrid, 0, 0, NOTSRCCOPY);
-  // merge the needle image with the grid
+  //merge the needle image with the grid
   memDC.BitBlt(0, 0, m_nRectWidth, m_nRectHeight, &m_dcNeedle, 0, 0, SRCINVERT);
-  // copy the resulting bitmap to the destination
-  pDC->BitBlt(m_rectOwner.left, m_rectOwner.top, m_nRectWidth, m_nRectHeight,
-      &memDC, 0, 0, SRCCOPY);
+  //copy the resulting bitmap to the destination DC
+  pDC->BitBlt(m_rectOwner.left, m_rectOwner.top, m_nRectWidth, m_nRectHeight, &memDC, 0, 0, SRCCOPY);
  }
 
  memDC.SelectObject(oldBitmap);
@@ -887,7 +841,6 @@ void CAnalogMeter::SetColor(enum MeterMemberEnum meter_member, COLORREF Color)
 
 void CAnalogMeter::SetRange(double dMin, double dMax)
 {
- // function doesn't force the re-drawing of the meter.
  m_dMinScale   = dMin;
  m_dMaxScale   = dMax;
  m_boolForceRedraw = true;
@@ -937,7 +890,6 @@ void CAnalogMeter::SetFontScale(enum MeterMemberEnum meter_member, int nFontScal
 
 void CAnalogMeter::SetLabelsDecimals(int nLabelsDecimals)
 {
- // function doesn't force the re-drawing of the meter.
  if(nLabelsDecimals < 0)   nLabelsDecimals = 0;
  if(nLabelsDecimals > 100) nLabelsDecimals = 100;
  m_nLabelsDecimals = nLabelsDecimals;
@@ -946,7 +898,6 @@ void CAnalogMeter::SetLabelsDecimals(int nLabelsDecimals)
 
 void CAnalogMeter::SetValueDecimals(int nValueDecimals)
 {
- // function doesn't force the re-drawing of the meter.
  if(nValueDecimals < 0)   nValueDecimals = 0;
  if(nValueDecimals > 100) nValueDecimals = 100;
  m_nValueDecimals = nValueDecimals;
@@ -955,14 +906,12 @@ void CAnalogMeter::SetValueDecimals(int nValueDecimals)
 
 void CAnalogMeter::SetTitle(CString strTitle)
 {
- // function doesn't force the re-drawing of the meter.
  m_strTitle = strTitle;
  m_boolForceRedraw = true;
 }
 
 void CAnalogMeter::SetUnit(CString strUnit)
 {
- // function doesn't force the re-drawing of the meter.
  m_strUnit = strUnit;
  m_boolForceRedraw = true;
 }
@@ -1043,7 +992,7 @@ void CAnalogMeter::GetState(enum MeterMemberEnum meter_member, bool* pState) con
  }
 }
 
-//добавляет зону с заданными параметрами (диапазон и цвет)
+//Adds zone with specified parameters
 void CAnalogMeter::AddAlertZone(double start,double end, COLORREF color)
 {
  AlertZone* p_az  = new AlertZone;
@@ -1054,15 +1003,13 @@ void CAnalogMeter::AddAlertZone(double start,double end, COLORREF color)
  m_AlertZones.push_back(p_az);
 }
 
-//удаляет все зоны
+//deletes all zones
 void CAnalogMeter::ResetAlertZones(void)
 {
  std::vector<AlertZone*>::iterator it;
 
  for(it = m_AlertZones.begin(); it!=m_AlertZones.end(); ++it)
- {
   delete (*it);
- }
 
  m_AlertZones.clear();
 }

@@ -54,7 +54,7 @@ void CAnalogMeterCtrl::OnPaint()
  CRect rectClient ;
 
  GetClientRect (&rectClient);
- ShowMeter (&dc, rectClient) ;
+ ShowMeter(&dc, rectClient);
  // Do not call CStatic::OnPaint() for painting messages
 }
 

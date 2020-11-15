@@ -45,14 +45,13 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   typedef fastdelegate::FastDelegate2<AbroadDir, int> EventHandler2;
   typedef fastdelegate::FastDelegate2<float, int, float> EventHandler3; //param1, param2, retval
 
-  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0, bool readOnly = false, bool absGrad = false);
+  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, bool invDataVGridOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0, bool readOnly = false, bool absGrad = false);
   virtual ~CMapEditorCtrl();
 
   void SetRange(float i_min, float i_max);
   void AttachMap(float* p_map);
 
-  //vertRev - if true order of items will be reversed on saving vertLabels data
-  void AttachLabels(const float* horizLabels, const float* vertLabels, bool vertRev = false);
+  void AttachLabels(const float* horizLabels, const float* vertLabels);
   void ShowLabels(bool horizShow, bool vertShow);
   void SetDecimalPlaces(int value, int horiz, int vert);
   void SetArguments(float i_arg, float j_arg);
@@ -64,6 +63,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void SetValueIncrement(float inc);
   void SetGradientList(const std::vector<COLORREF>& colors);
   void SetItemColor(int i, int j, COLORREF color); // i - row, j - column
+  void Redraw(void); //does full redraw of control
 
   //Creates control dynamically
   BOOL Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id);
@@ -89,6 +89,11 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void OnEditChar(UINT nChar, CEditExCustomKeys*);
   void OnEditKill(CEditExCustomKeys*);
 
+  void _DrawGrid(int ii =-1, int jj =-1);
+  void _DrawLabels(void);
+  void _DrawMarkers(void);
+  void _ShowImage(CDC* pDC, CRect* p_rect = NULL);
+
   void _UpdateMinMaxElems(void);
   void _ActivateEdit(void);
   void _DeactivateEdit(void);
@@ -98,11 +103,11 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   int _GetGradIndex(float value);
   float _GetItem(int i, int j); // i - row, j - column
   void _SetItem(int i, int j, float value); // i - row, j - column
-  CRect _GetItemRect(int i , int j); // i - row, j - column
+  CRect _GetItemRect(CDC* pDC, int i , int j); // i - row, j - column
   CRect _GetMarkerRect(int i , int j, int inflate = 2);
   CString _FloatToStr(float value, int decPlaces); //used for drawing of items
-  int _GetLabelWidth(void);
-  int _GetLabelHeight(void);
+  int _GetLabelWidth(CDC* pDC);
+  int _GetLabelHeight(CDC* pDC);
   void _DrawMarker(CDC* pDC, int i, int j);
   void _2DLookupH(float x, std::vector<int>& pt);
   void _2DLookupV(float x, std::vector<int>& pt);
@@ -111,7 +116,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   float _GetItemTr(int i, int j);
 
   template <class T>
-  T _GetItem(T* p_array, int i, int j)
+  inline T _GetItem(T* p_array, int i, int j)
   {
    ASSERT(p_array);
    int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
@@ -119,7 +124,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   }
 
   template <class T>
-  void _SetItem(T* p_array, int i, int j, T value)
+  inline void _SetItem(T* p_array, int i, int j, T value)
   {
    ASSERT(p_array);
    int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
@@ -128,7 +133,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 
   inline float _GetVGrid(int i)
   {
-   int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
+   int ii = m_invDataVGridOrder ? (m_rows - 1) - i : i;   
    return mp_vertLabels[ii];
   }
 
@@ -167,7 +172,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   
   bool m_showMarkers;
   float m_increment;
-  bool m_invDataRowsOrder;
+  bool m_invDataRowsOrder; //true - if rows data is in inverted order
+  bool m_invDataVGridOrder; //true - if vertical labels data is in inverted order
   bool m_readOnly;
   bool m_absGrad;
   int m_minLabelWidthInChars;
@@ -180,4 +186,17 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   static int m_gradSaturation;
   static int m_gradBrightness;
   static bool m_boldFont;
+
+  CDC     m_dcGrid;
+  CBitmap m_bmGrid;
+  CBitmap *mp_bmOldGrid;
+  CDC     m_dcMark;
+  CBitmap m_bmMark;
+  CBitmap *mp_bmOldMark;
+
+  CBrush m_blackBrush;
+  COLORREF m_bgrdBrushColor;
+  CBrush m_bgrdBrush;
+  CRgn m_clipRgn;
+  bool m_forceRedraw;
 };

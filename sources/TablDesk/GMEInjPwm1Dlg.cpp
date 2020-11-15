@@ -42,7 +42,7 @@ END_MESSAGE_MAP()
 
 CGMEInjPwm1Dlg::CGMEInjPwm1Dlg(CWnd* pParent /*=NULL*/)
 : Super(CGMEInjPwm1Dlg::IDD, pParent)
-, m_pwm1_map(16, 16, true, NULL, 3)
+, m_pwm1_map(16, 16, true, true, NULL, 3)
 , mp_pwm1Map(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
