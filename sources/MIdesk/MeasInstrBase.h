@@ -245,6 +245,11 @@ class MeasInstrBase
    m_scope.ShowCursor(show);
   }
 
+  virtual ShowValue(bool show)
+  {
+   m_scope.ShowValue(show);
+  }
+
   bool isGraph(void)
   {
    return (m_scope.GetSafeHwnd() != NULL);

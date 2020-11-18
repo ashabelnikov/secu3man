@@ -81,6 +81,7 @@ class CDevDiagnostTabDlg : public CTabDialog
 
   void ResetOscilloscopes(void);
   void SetGraphShtPixels(int n);
+  void SetGraphShowValue(bool show);
 
   void FillTestChanCombo(bool secu3t);
   void SetTestParameters(int chan, float frq, float duty);

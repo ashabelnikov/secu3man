@@ -252,6 +252,7 @@ void CDevDiagnostTabController::OnActivate(void)
  mp_view->EnableOutputItem(-1, true); //all items are enabled
 
  mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
+ mp_view->SetGraphShowValue(mp_settings->GetGraphShowValue());
  mp_view->ResetOscilloscopes();
  m_comm_state = 0;
  m_diagnost_mode_active = false;

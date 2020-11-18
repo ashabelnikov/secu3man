@@ -514,6 +514,12 @@ void CDevDiagnostTabDlg::SetGraphShtPixels(int n)
  mp_OScopeCtrl2->SetShtPixels(n);
 }
 
+void CDevDiagnostTabDlg::SetGraphShowValue(bool show)
+{
+ mp_OScopeCtrl1->ShowValue(show);
+ mp_OScopeCtrl2->ShowValue(show);
+}
+
 void CDevDiagnostTabDlg::FillTestChanCombo(bool secu3t)
 {
  m_testch_combo.ResetContent();

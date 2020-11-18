@@ -102,6 +102,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optInjTimBAverage(_T("InjTimBAverage"))
 , m_optInjTimEAverage(_T("InjTimEAverage"))
 , m_optGraphShtPixels(_T("GraphShtPixels"))
+, m_optGraphShowValue(_T("GraphShowValue"))
 , m_optFuelConsumFAverage(_T("FuelConsumFAverage"))
 , m_optGrtsAverage(_T("GrtsAverage"))
 
@@ -694,6 +695,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optFFFConst, _T("16000"), 1000, 32000);
  fs.ReadInt(m_optShowGraphCursor, _T("1"), 0, 1);
  fs.ReadInt(m_optGraphShtPixels, _T("2"), 2, 10);
+ fs.ReadInt(m_optGraphShowValue, _T("0"), 0, 1);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -1539,6 +1541,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T(" ол-во пикселей, на которое сдвигаютс€ графики при добавлени новой выборки"));
  fs.WriteInt(m_optGraphShtPixels); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Show digital value on graphs. 0 - don't show value (default), 1 - show value"));
+ else
+  fs.WriteComment(_T("ѕоказывать числовые значени€ на графиках. 0 - не показывать (по умолчанию), 1 - показывать"));
+ fs.WriteInt(m_optGraphShowValue); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Size of the moving average filter used for fuel consumption values (Hz). Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
@@ -4900,6 +4908,11 @@ bool CAppSettingsModel::GetShowGraphsCursor(void)
 int CAppSettingsModel::GetGraphShtPixels(void)
 {
  return m_optGraphShtPixels.value;
+}
+
+int CAppSettingsModel::GetGraphShowValue(void)
+{
+ return m_optGraphShowValue.value;
 }
 
 int CAppSettingsModel::GetToolTipTime(void) const

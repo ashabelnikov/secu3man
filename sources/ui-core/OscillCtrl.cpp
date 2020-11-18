@@ -27,6 +27,7 @@
 #include "OscillCtrl.h"
 #include "common/MathHelpers.h"
 #include "common/GDIHelpers.h"
+#include "common/DPIAware.h"
 
 #undef min
 #undef max
@@ -62,8 +63,10 @@ COscillCtrl::COscillCtrl()
 , m_num_y_chars(0)                      //Number of reserved chars for width from the left
 , m_pBmpOldGrid(NULL) 
 , m_pBmpOldPlot(NULL)
+, m_pBmpOldValue(NULL)
 , m_cursBrush(RGB(255,0,0))
 , m_show_cursor(false)
+, m_show_value(false)
 {
  m_COLOR_3DFACE = GetSysColor(COLOR_3DFACE);
 }
@@ -114,7 +117,12 @@ void COscillCtrl::OnPaint()
  if (memDC.GetSafeHdc() != NULL)
  {
   memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcGrid, 0, 0, SRCCOPY);
-  memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(),&m_dcPlot, 0, 0, SRCPAINT);
+  memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcPlot, 0, 0, SRCPAINT);
+  if (m_show_value)
+  { //blend value's bitmap to resulting one
+   BLENDFUNCTION bf = {AC_SRC_OVER, 0, 128, AC_SRC_ALPHA};
+   memDC.AlphaBlend(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcValue, 0, 0, m_rcClient.Width(), m_rcClient.Height(), bf);
+  }
   dc.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &memDC, 0, 0, SRCCOPY);
  }
 
@@ -295,6 +303,34 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
   _DrawPoint(false, index);
  }
 
+ //Create DC, bitmap and font for displaying of value
+ if (m_show_value)
+ {
+  if (m_dcValue.GetSafeHdc() == NULL)
+   m_dcValue.CreateCompatibleDC(&dc);
+
+  if (m_dcValue.GetSafeHdc())
+  {
+   m_dcValue.SelectObject(m_pBmpOldValue);
+   m_bmpValue.DeleteObject();
+  }
+
+  if (m_bmpValue.GetSafeHandle() == NULL)
+  {
+   m_bmpValue.CreateCompatibleBitmap(&dc, m_rcClient.Width(), m_rcClient.Height());
+   m_pBmpOldValue = m_dcValue.SelectObject(&m_bmpValue);
+  }
+
+  m_dcValue.SetBkColor(RGB(0, 0, 0));
+  m_dcValue.FillRect(m_rcClient, &m_BlackBrush);
+
+  DPIAware dpi;
+  if (m_valueFont.GetSafeHandle())
+   m_valueFont.DeleteObject();
+  m_valueFont.CreateFont(dpi.FontHeight(m_rcPlot.Height()/3), 0, 0, 0, 300, FALSE, FALSE, 0, RUSSIAN_CHARSET,OUT_DEFAULT_PRECIS,
+                       CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, _T("Arial"));
+ }
+
  // finally, force the plot area to redraw
  if (invalidate)
   InvalidateRect(m_rcClient);
@@ -378,6 +414,7 @@ void COscillCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
   if (m_point_position > 0)
   {
    m_point_position--;
+   _DrawValue();
    _DrawCursor();
    return;
   }
@@ -396,6 +433,7 @@ void COscillCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
     InvalidateCtrl(false, true);  
    }
    m_point_position++;
+   _DrawValue();
    _DrawCursor();
    return;
   }
@@ -406,6 +444,7 @@ void COscillCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
    m_points.pop_back();
  }
 
+ _DrawValue();
  _DrawPoint(i_reverse);
  _DrawCursor(false);
  Invalidate();
@@ -535,4 +574,28 @@ void COscillCtrl::ShowCursor(bool show)
 void COscillCtrl::SetShtPixels(int n)
 {
  m_shtPixels = n;
+}
+
+void COscillCtrl::_DrawValue(void)
+{
+ if (!m_show_value || !m_dcValue.GetSafeHdc())
+  return;
+
+ if (m_points.size() > 0)
+ {
+  CFont* oldFont = m_dcValue.SelectObject(&m_valueFont);
+  m_dcValue.FillRect(m_rcPlot, &m_BlackBrush);
+  m_dcValue.SetTextColor(m_crGridColor);
+  m_dcValue.SetTextAlign(TA_RIGHT|TA_TOP);
+  CString str;
+  str.Format(_T("%.*lf"), m_decimalPlaces, m_points.at((m_points.size()-1)-m_point_position));
+  CSize s = m_dcValue.GetTextExtent(str);
+  m_dcValue.TextOut(m_rcPlot.CenterPoint().x + (s.cx/2), m_rcPlot.CenterPoint().y - (s.cy/2), str);
+  m_dcValue.SelectObject(&oldFont);
+ }
+}
+
+void COscillCtrl::ShowValue(bool show)
+{
+ m_show_value = show;
 }

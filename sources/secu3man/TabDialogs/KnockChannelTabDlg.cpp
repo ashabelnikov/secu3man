@@ -612,3 +612,8 @@ void CKnockChannelTabDlg::SetGraphShtPixels(int n)
 {
  mp_OScopeCtrl->SetShtPixels(n);
 }
+
+void CKnockChannelTabDlg::SetGraphShowValue(bool show)
+{
+ mp_OScopeCtrl->ShowValue(show);
+}

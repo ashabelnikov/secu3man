@@ -180,6 +180,7 @@ class CAppSettingsModel : public ISettingsData
 
   virtual bool GetShowGraphsCursor(void);
   virtual int GetGraphShtPixels(void);
+  virtual int GetGraphShowValue(void);
 
   //Debug features
   virtual bool GetUseDVFeatures(void) const;
@@ -342,6 +343,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optFFFConst;
   OptField_t<bool> m_optShowGraphCursor;
   OptField_t<int> m_optGraphShtPixels;
+  OptField_t<int> m_optGraphShowValue;
 
   //windows' positions
   OptField_t<POINT> m_optMainFrmWnd;

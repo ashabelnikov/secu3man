@@ -104,6 +104,7 @@ void CPMMonitorController::OnSettingsChanged(void)
 void CPMMonitorController::OnActivate(void)
 {
  mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
+ mp_view->SetGraphShowValue(mp_settings->GetGraphShowValue());
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->SetTemperatureMax(mp_settings->GetTemperatureMax());

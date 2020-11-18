@@ -258,25 +258,25 @@ void CAnalogMeter::DrawScale()
   //font for title
   m_nFontHeight = dpi.FontHeight((m_rectGfx.Height()*m_nFontScale)/1250);
   m_fontValue.DeleteObject();
-  if(!m_fontValue.CreateFont (m_nFontHeight, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
+  if(!m_fontValue.CreateFont(m_nFontHeight, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
    return;
   //font for values
   m_nFontHeightVal = dpi.FontHeight((m_rectGfx.Height()*m_nFontScaleVal)/1250);
   m_fontValueVal.DeleteObject();
-  if(!m_fontValueVal.CreateFont (m_nFontHeightVal, 0, 0, 0, 700, false, false, 0, RUSSIAN_CHARSET,
+  if(!m_fontValueVal.CreateFont(m_nFontHeightVal, 0, 0, 0, 700, false, false, 0, RUSSIAN_CHARSET,
        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
    return;
   //font for panes
   m_nFontHeightPane = dpi.FontHeight((m_rectGfx.Height()*m_nFontScalePane)/1250);
   m_fontValuePane.DeleteObject();
-  if(!m_fontValuePane.CreateFont (m_nFontHeightPane, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
+  if(!m_fontValuePane.CreateFont(m_nFontHeightPane, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
    return;
   //font for labels
   m_nFontHeightLabel = dpi.FontHeight((m_rectGfx.Height()*m_nFontScaleLabel)/1250);
   m_fontValueLabel.DeleteObject();
-  if(!m_fontValueLabel.CreateFont (m_nFontHeightLabel, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
+  if(!m_fontValueLabel.CreateFont(m_nFontHeightLabel, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
    return;
  }

@@ -64,6 +64,7 @@ class CKnockChannelTabDlg : public CTabDialog
   void AppendPoint(float value);
   void ResetOscilloscope(void);
   void SetGraphShtPixels(int n);
+  void SetGraphShowValue(bool show);
 
   //Установка значений функции для графика который показывает зависимость сигнала от оборотов
   void SetRPMKnockSignal(const std::vector<float> &i_values);

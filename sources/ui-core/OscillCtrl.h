@@ -56,7 +56,8 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void Reset();
   void ShowCursor(bool show);
   size_t GetMaxPtCount(void);
-  void SetShtPixels(int n); //n > 2
+  void SetShtPixels(int n); //n >= 2
+  void ShowValue(bool show);
 
  //Implementation
  protected:
@@ -75,17 +76,22 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   int _MapYValue(double);
   void _DrawPoint(bool i_reverse, int ptidx = -1);
   void _DrawCursor(bool i_invalidate = true);
+  void _DrawValue(void);
 
   CDC     m_dcGrid;
   CDC     m_dcPlot;
+  CDC     m_dcValue;
   CBitmap *m_pBmpOldGrid;
   CBitmap *m_pBmpOldPlot;
+  CBitmap *m_pBmpOldValue;
   CBitmap m_bmpGrid;
   CBitmap m_bmpPlot;
+  CBitmap m_bmpValue;
   CPen   m_penPlot;
   CBrush m_brushBack;          //background brush
   CBrush m_BlackBrush;         //black brush
   CBrush m_cursBrush;          //brush used for drawing of cursor
+  CFont m_valueFont;
 
   COLORREF m_COLOR_3DFACE;     // for testing of changing of system colors
   COLORREF m_crBackColor;      // background color
@@ -112,5 +118,6 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   double m_range;
   double m_vertFactor;
   int m_num_y_chars;
-  bool m_show_cursor;
+  bool m_show_cursor;  
+  bool m_show_value;
 };
