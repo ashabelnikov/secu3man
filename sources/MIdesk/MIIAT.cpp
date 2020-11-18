@@ -93,7 +93,7 @@ void CMIIATGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_IATGRAPH));
 
  // customize the control
- m_scope.SetRange(-40.0, 120, 0);
+ m_scope.SetRange(-40.0, 120, 0, 1);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_IATGRAPH_V_UNIT));
@@ -106,5 +106,5 @@ void CMIIATGraph::Create(CWnd* pParent)
 void CMIIATGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit, 0);
+ m_scope.SetRange(loLimit, upLimit, 0, 1);
 }

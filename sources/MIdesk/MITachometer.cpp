@@ -95,7 +95,7 @@ void CMITachometerGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_TACHOMETERGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 8000.0, 0);
+ m_scope.SetRange(0, 8000.0, 0, 0);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_TACHOMETER_V_UNIT));
@@ -108,5 +108,5 @@ void CMITachometerGraph::Create(CWnd* pParent)
 void CMITachometerGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(((int)(upLimit-loLimit)%1000) ? 10 : MathHelpers::Round((upLimit-loLimit)/1000.0));
- m_scope.SetRange(loLimit, upLimit, 0);
+ m_scope.SetRange(loLimit, upLimit, 0, 0);
 }

@@ -87,7 +87,7 @@ void CMIFuelConsumGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_FUELCONSUMGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 50, 0);
+ m_scope.SetRange(0, 50, 0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_FUELCONSUMGRAPH_V_UNIT));

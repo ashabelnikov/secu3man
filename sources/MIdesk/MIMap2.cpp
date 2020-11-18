@@ -82,7 +82,7 @@ void CMIMap2Graph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_MAP2GRAPH));
 
  // customize the control
- m_scope.SetRange(0, 400, 0);
+ m_scope.SetRange(0, 400, 0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_MAP2GRAPH_V_UNIT));

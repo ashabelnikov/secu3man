@@ -492,12 +492,13 @@ void COscillCtrl::ReserveCharsY(int num)
  m_num_y_chars = num;
 }
 
-void COscillCtrl::SetRange(double low, double upp, int decimalPlaces /*= 1*/)
+void COscillCtrl::SetRange(double low, double upp, int decimalPlaces /*= 1*/, int decimalPlacesV /*= 1*/)
 {
  ASSERT(upp > low);
  m_lowLimit = low;
  m_uppLimit = upp;
  m_decimalPlaces = decimalPlaces;
+ m_decimalPlacesV = decimalPlacesV;
  m_range = m_uppLimit - m_lowLimit;
  m_vertFactor = (double)m_rcPlot.Height() / m_range;
  InvalidateCtrl();
@@ -588,7 +589,7 @@ void COscillCtrl::_DrawValue(void)
   m_dcValue.SetTextColor(m_crGridColor);
   m_dcValue.SetTextAlign(TA_RIGHT|TA_TOP);
   CString str;
-  str.Format(_T("%.*lf"), m_decimalPlaces, m_points.at((m_points.size()-1)-m_point_position));
+  str.Format(_T("%.*lf"), m_decimalPlacesV, m_points.at((m_points.size()-1)-m_point_position));
   CSize s = m_dcValue.GetTextExtent(str);
   m_dcValue.TextOut(m_rcPlot.CenterPoint().x + (s.cx/2), m_rcPlot.CenterPoint().y - (s.cy/2), str);
   m_dcValue.SelectObject(&oldFont);

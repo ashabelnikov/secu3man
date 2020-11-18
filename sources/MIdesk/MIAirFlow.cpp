@@ -96,7 +96,7 @@ void CMIAirFlowGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_AIR_FLOWGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 16, 0);
+ m_scope.SetRange(0, 16, 0, 0);
  m_scope.SetGridNumberY(16);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_AIR_FLOWGRAPH_V_UNIT));

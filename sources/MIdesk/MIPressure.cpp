@@ -94,7 +94,7 @@ void CMIPressureGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_PRESSURE_GRAPH));
 
  // customize the control
- m_scope.SetRange(0, 110.0, 0);
+ m_scope.SetRange(0, 110.0, 0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_PRESSURE_V_UNIT));
@@ -107,5 +107,5 @@ void CMIPressureGraph::Create(CWnd* pParent)
 void CMIPressureGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(10);
- m_scope.SetRange(loLimit, upLimit, 0);
+ m_scope.SetRange(loLimit, upLimit, 0, 1);
 }

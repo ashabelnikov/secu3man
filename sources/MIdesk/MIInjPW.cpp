@@ -92,7 +92,7 @@ void CMIInjPWGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_INJ_PWGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 24, 0);
+ m_scope.SetRange(0, 24, 0, 2);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_INJ_PW_V_UNIT));
@@ -105,5 +105,5 @@ void CMIInjPWGraph::Create(CWnd* pParent)
 void CMIInjPWGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit, 0);
+ m_scope.SetRange(loLimit, upLimit, 0, 2);
 }

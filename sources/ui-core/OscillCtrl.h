@@ -46,7 +46,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void ReserveCharsY(int num);
   void SetGridNumberY(int ny); 
   void SetGridSizeX(int sx);
-  void SetRange(double low, double upp, int decimalPlaces = 1);
+  void SetRange(double low, double upp, int decimalPlaces = 1, int decimalPlacesV = 1);
   void SetPlotColor(COLORREF color);
   void SetGridColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);
@@ -108,6 +108,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
 
   int m_shtPixels;             //number of pixels bitmap will be shifted to for each point
   int m_decimalPlaces;         //number of decimal places
+  int m_decimalPlacesV;        //number of decimal places for digital value
   int m_gridNumY;
   int m_gridSizeX;
 

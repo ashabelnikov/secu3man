@@ -103,7 +103,7 @@ void CMIAddI1Graph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_ADD_I1GRAPH));
 
  // customize the control
- m_scope.SetRange(0, 5, 1);
+ m_scope.SetRange(0, 5, 1, 2);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_ADD_I1_V_UNIT));
@@ -134,7 +134,7 @@ void CMIAddI2Graph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_ADD_I2GRAPH));
 
  // customize the control
- m_scope.SetRange(0, 5, 1);
+ m_scope.SetRange(0, 5, 1, 2);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_ADD_I2_V_UNIT));
