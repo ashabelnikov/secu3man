@@ -189,10 +189,10 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_cranktoruntime_spin.SetRangeAndDelta(0.10f,99.00f, 0.01f);
  m_cranktoruntime_edit.SetRange(0.10f, 99.00f);
 
- m_aftstrstr_edit.SetLimitText(3);
+ m_aftstrstr_edit.SetLimitText(4);
  m_aftstrstr_spin.SetBuddy(&m_aftstrstr_edit);
- m_aftstrstr_spin.SetRangeAndDelta(1, 510, 2);  //strokes
- m_aftstrstr_edit.SetRange(1, 510);
+ m_aftstrstr_spin.SetRangeAndDelta(1, 1020, 4);  //strokes
+ m_aftstrstr_edit.SetRange(1, 1020);
 
  m_primecold_edit.SetLimitText(4);
  m_primecold_spin.SetBuddy(&m_primecold_edit);
