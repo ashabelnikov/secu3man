@@ -558,6 +558,7 @@ void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
         {
          _UpdateMinMaxElems();
          _DrawGrid();    //redraw grid because gradient should be updated
+         _DrawLabels();
          CClientDC dc(this);
          _ShowImage(&dc);
         }
@@ -627,6 +628,7 @@ void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
    {
     _UpdateMinMaxElems();
     _DrawGrid();     //redraw grid because gradient should be updated
+    _DrawLabels();
     CClientDC dc(this);
     _ShowImage(&dc);
    }
@@ -709,6 +711,7 @@ void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
    {
     _UpdateMinMaxElems();
     _DrawGrid();   //redraw grid because gradient should be updated
+    _DrawLabels();
     CClientDC dc(this);
     _ShowImage(&dc);
    }

@@ -1559,6 +1559,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
  }
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
  memset(m_clt_grid_values, 0, 16 * sizeof(float));
+ memset(m_load_grid_values, 0, 16 * sizeof(float));
 }
 
 CButtonsPanel::~CButtonsPanel()
