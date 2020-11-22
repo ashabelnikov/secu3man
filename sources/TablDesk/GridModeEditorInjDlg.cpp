@@ -242,12 +242,14 @@ void CGridModeEditorInjDlg::BindCLTGrid(float* pGrid)
 
 void CGridModeEditorInjDlg::BindLoadGrid(float* pGrid)
 {
- m_pVEPageDlg->BindLoadGrid(pGrid);
- m_pAFRPageDlg->BindLoadGrid(pGrid);
- m_pITPageDlg->BindLoadGrid(pGrid);
- m_pPwm1PageDlg->BindLoadGrid(pGrid);
- m_pPwm2PageDlg->BindLoadGrid(pGrid);
  mp_lodGrid = pGrid; //save to use later
+ m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
+ const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
+ m_pVEPageDlg->BindLoadGrid(pLoadGrid);
+ m_pAFRPageDlg->BindLoadGrid(pLoadGrid);
+ m_pITPageDlg->BindLoadGrid(pLoadGrid);
+ m_pPwm1PageDlg->BindLoadGrid(pLoadGrid);
+ m_pPwm2PageDlg->BindLoadGrid(pLoadGrid); 
 }
 
 void CGridModeEditorInjDlg::UpdateView(bool axisLabels /*= fasle*/)

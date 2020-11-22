@@ -1551,6 +1551,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , m_toggleMapWnd(false)
 , m_it_mode(0)
 , m_splitAng(false)
+, m_ldaxUseTable(false)
 {
  for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
  {
@@ -3079,7 +3080,7 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   mp_gridModeEditorIgnDlg->UpdateView(true);
  if (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj)
   mp_gridModeEditorInjDlg->UpdateView(true);
-}
+ }
 
 void CButtonsPanel::EnableAdvanceAngleIndication(bool i_enable)
 {
