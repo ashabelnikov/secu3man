@@ -365,13 +365,25 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_pPwm2PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
 }
 
-void CGridModeEditorInjDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useTable)
+void CGridModeEditorInjDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useTable, bool forceUpdate /*=false*/)
 {
  if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal) || (m_ldaxUseTable != useTable))
   m_ldaxNeedsUpdate = true;
  m_ldaxMin = minVal;
  m_ldaxMax = maxVal;
  m_ldaxUseTable = useTable;
+
+ if (m_ldaxNeedsUpdate && forceUpdate)
+ {
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
+  const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
+  m_pVEPageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pAFRPageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pITPageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pPwm1PageDlg->BindLoadGrid(pLoadGrid, true);
+  m_pPwm2PageDlg->BindLoadGrid(pLoadGrid, true); 
+  m_ldaxNeedsUpdate = false;
+ }
 }
 
 void CGridModeEditorInjDlg::SetITMode(int mode)

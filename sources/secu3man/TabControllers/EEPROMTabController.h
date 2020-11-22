@@ -85,6 +85,8 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   bool IsEEPROMOpened(void);
   void OnMapselNameChanged(void);
   void OnShowCEErrors();
+  bool IsLoadGridsAvailable();
+  void OnLoadGrids();
 
   void PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRING& i_file_name);
   bool CheckChangesAskAndSaveEEPROM(void);
@@ -117,4 +119,5 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   BYTE* mp_bl_data;
   std::auto_ptr<CEErrorIdStr> mp_errors_ids;
   bool m_active;
+  bool m_firmware_opened;
 };

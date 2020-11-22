@@ -31,11 +31,14 @@
 
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
+#include "FirmwareTabController.h"
 #include "MainFrame/StatusBarManager.h"
 #include "TabDialogs/EEPROMTabDlg.h"
 #include "Settings/ISettingsData.h"
 #include "io-core/EEPROMDataMediator.h"
+#include "io-core/FirmwareDataMediator.h"
 #include "FirmwareFileUtils.h"
+#include "TabControllersCommunicator.h"
 #include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/MapIds.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
@@ -65,6 +68,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 , m_blFinishOpCB(NULL)
 , MapWndScrPos(ip_settings)
 , m_active(false)
+, m_firmware_opened(false)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_epp = holder.GetEepromParameters();
@@ -85,7 +89,9 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  mp_view->setOnMapsetNameChanged(MakeDelegate(this, &CEEPROMTabController::OnMapselNameChanged));
  mp_view->setIsEEPROMOpened(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
  mp_view->setOnShowCEErrors(MakeDelegate(this, &CEEPROMTabController::OnShowCEErrors));
-
+ mp_view->setIsLoadGridsAvailable(MakeDelegate(this, &CEEPROMTabController::IsLoadGridsAvailable));
+ mp_view->setOnLoadGrids(MakeDelegate(this, &CEEPROMTabController::OnLoadGrids));
+ 
  mp_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CEEPROMTabController::OnParamDeskTabActivate));
  mp_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CEEPROMTabController::OnParamDeskChangeInTab));
 
@@ -186,6 +192,11 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
+
+ //disable "Load grids" menu item if firmware is not opened
+ CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
+ (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
+ m_firmware_opened = p_controller->IsFirmwareOpened();
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -524,6 +535,11 @@ void CEEPROMTabController::SetViewChartsValues(void)
  //Can't set RPM grid, because it is stored in the firmware
  //m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
 
+ //apply load axis's grid settings for all related maps
+ SECU3IO::FunSetPar params;
+ m_eedm->GetDefParamValues(FUNSET_PAR, &params);
+ mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+
  int funset_index = 0;
 
  m_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
@@ -760,6 +776,13 @@ void CEEPROMTabController::OnParamDeskChangeInTab(void)
  BYTE paramdata[256];
  mp_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);
  m_eedm->SetDefParamValues(descriptor,paramdata);
+
+ //update load axis's grids in all related maps
+ if (descriptor==FUNSET_PAR)
+ {
+  SECU3IO::FunSetPar &params = (SECU3IO::FunSetPar&)paramdata;
+  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true); //force update
+ }
 }
 
 void CEEPROMTabController::OnShowCEErrors()
@@ -990,4 +1013,27 @@ void CEEPROMTabController::OnChangeSettingsMapEd(void)
  mptms.m_pwm1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM1);
  mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
  mp_settings->SetMapPtMovStep(mptms);
+}
+
+bool CEEPROMTabController::IsLoadGridsAvailable(void)
+{
+ return m_firmware_opened;
+}
+
+void CEEPROMTabController::OnLoadGrids(void)
+{
+ CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
+ (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
+ CFirmwareDataMediator *p_fwdm = p_controller->GetFWDM();
+
+ p_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
+ p_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
+ p_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
+
+ //apply load axis's grid settings for all related maps
+ SECU3IO::FunSetPar params;
+ m_eedm->GetDefParamValues(FUNSET_PAR, &params);
+ mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+
+ mp_view->mp_TablesPanel->UpdateOpenedCharts();
 }

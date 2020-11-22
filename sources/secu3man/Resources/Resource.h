@@ -658,3 +658,5 @@
 #define IDS_ECUERROR_ADD_I7_SENSOR      4782
 #define IDS_ECUERROR_ADD_I8_SENSOR      4783
 #define IDS_PM_READING_LODGRD           4784
+#define IDM_EE_LOAD_GRIDS               4785
+#define IDS_EE_LOAD_GRIDS               4786

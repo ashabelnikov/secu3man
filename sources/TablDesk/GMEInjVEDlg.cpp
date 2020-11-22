@@ -220,7 +220,7 @@ void CGMEInjVEDlg::BindLoadGrid(const float* pGrid, bool updateLabels /*= false*
   m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
   if (m_ve_map.GetSafeHwnd())
    m_ve_map.UpdateDisplay(); 
-  if (m_celwgt_map.GetSafeHwnd())
+  if (mp_CelWgtMap && m_celwgt_map.GetSafeHwnd())
    m_celwgt_map.UpdateDisplay(); 
  }
 }

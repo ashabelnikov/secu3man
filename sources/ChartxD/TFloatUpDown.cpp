@@ -214,3 +214,9 @@ void __fastcall TFloatUpDown::SetFloatAssociate(TWinControl *ip_floatAssociate)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TFloatUpDown::SetDecimalPlaces(int dp)
+{
+ m_decimalPlaces = dp;
+}
+
+//---------------------------------------------------------------------------

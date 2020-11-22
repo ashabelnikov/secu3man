@@ -52,15 +52,18 @@ void CEEPROMContextMenuManager::Attach(CWnd* pWnd)
 void CEEPROMContextMenuManager::CreateContent(void)
 {
  m_ParentMenu.CreatePopupMenu();
- m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_READ_EEPROM,MLL::LoadString(IDS_EE_READ_EEPROM));
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_READ_EEPROM, MLL::LoadString(IDS_EE_READ_EEPROM));
  m_bl_menu_items_IDs.push_back(IDM_EE_READ_EEPROM);
 
- m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_WRITE_EEPROM,MLL::LoadString(IDS_EE_WRITE_EEPROM));
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_WRITE_EEPROM, MLL::LoadString(IDS_EE_WRITE_EEPROM));
  m_bl_menu_items_IDs.push_back(IDM_EE_WRITE_EEPROM);
 
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
- m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_OPEN_EEPROM,MLL::LoadString(IDS_EE_OPEN_EEPROM));
- m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_SAVE_EEPROM,MLL::LoadString(IDS_EE_SAVE_EEPROM));
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_OPEN_EEPROM, MLL::LoadString(IDS_EE_OPEN_EEPROM));
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_SAVE_EEPROM, MLL::LoadString(IDS_EE_SAVE_EEPROM));
+
+ m_ParentMenu.AppendMenu(MF_SEPARATOR);
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_LOAD_GRIDS, MLL::LoadString(IDS_EE_LOAD_GRIDS));
 }
 
 //показывает контекстное меню

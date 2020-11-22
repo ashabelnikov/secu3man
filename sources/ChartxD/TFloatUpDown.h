@@ -64,6 +64,8 @@ class TFloatUpDown : public TCustomUpDown
 
  public:
   __fastcall TFloatUpDown(TComponent* Owner);
+ 
+  void __fastcall SetDecimalPlaces(int dp);
 
  private:
   void __fastcall CustomUpDownClick(TObject *Sender, TUDBtnType Button);

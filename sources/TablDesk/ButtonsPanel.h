@@ -49,7 +49,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
   typedef fastdelegate::FastDelegate2<HWND, long> EventWithHWNDLong;
 
-  CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL, bool enableAutoTune = false);   // standard constructor
+  CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL, bool enableAutoTune = false, bool onlineMode = false);   // standard constructor
   /*static*/ const UINT IDD;
   ~CButtonsPanel();
 
@@ -101,7 +101,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetDynamicValues(const TablDesk::DynVal& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable);
+  void SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable, bool forceUpdate = false);
 
   virtual void EnableFuelInjection(bool i_enable);
 
@@ -421,4 +421,5 @@ protected:
   
   int m_it_mode;
   bool m_splitAng;
+  bool m_onlineMode;
 };

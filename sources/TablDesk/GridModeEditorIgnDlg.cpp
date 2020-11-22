@@ -344,13 +344,21 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  }
 }
 
-void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useTable)
+void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useTable, bool forceUpdate /*=false*/)
 {
  if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal) || (m_ldaxUseTable != useTable))
   m_ldaxNeedsUpdate = true;
  m_ldaxMin = minVal;
  m_ldaxMax = maxVal;
  m_ldaxUseTable = useTable;
+
+ if (m_ldaxNeedsUpdate && forceUpdate)
+ {
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
+  m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
+  m_work_map.UpdateDisplay(); 
+  m_ldaxNeedsUpdate = false;
+ }
 }
 
 void CGridModeEditorIgnDlg::setIsAllowed(EventResult IsFunction)

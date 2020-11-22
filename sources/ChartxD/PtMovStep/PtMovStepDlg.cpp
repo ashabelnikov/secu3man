@@ -43,7 +43,7 @@ TPtMovStepDlg *PtMovStepDlg;
 __fastcall TPtMovStepDlg::TPtMovStepDlg(TComponent* Owner)
 : TForm(Owner)
 , m_value(0)
-, m_valFmt("%0.2f")
+, m_valFmt("%0.3f")
 {
  //empty
 }
@@ -59,7 +59,8 @@ void __fastcall TPtMovStepDlg::FormCreate(TObject *Sender)
  as.sprintf(m_valFmt.c_str(), m_value);
  EditStep->Text = as;
 
- SpinStep->FloatMax = 100.0f; //TODO:
+ SpinStep->FloatMax = 100.0f;
+ SpinStep->SetDecimalPlaces(3);
 }
 
 //---------------------------------------------------------------------------

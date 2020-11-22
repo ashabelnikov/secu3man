@@ -726,6 +726,7 @@ BEGIN
     IDS_EE_SAVE_EEPROM              "Сохранить в файл..."
     IDS_EE_NO_CE_ERRORS             "Список ошибок пуст"
     IDS_EE_MB_RESET_CE_ERRORS       "Нажмите кнопку 'Yes(Да)' если вы хотите очистить все ошибки"
+    IDS_EE_LOAD_GRIDS               "Подгрузить сетки"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1579,6 +1580,7 @@ BEGIN
     IDS_EE_SAVE_EEPROM              "Save to a file..."
     IDS_EE_NO_CE_ERRORS             "Error's list is empty"
     IDS_EE_MB_RESET_CE_ERRORS       "Press 'Yes' button if you want to clear all errors"
+    IDS_EE_LOAD_GRIDS               "Load grids"
 END
 
 STRINGTABLE DISCARDABLE 

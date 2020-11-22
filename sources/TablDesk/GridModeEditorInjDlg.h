@@ -62,7 +62,7 @@ class CGridModeEditorInjDlg : public CDialog
 
   void SetDynamicValues(const TablDesk::DynVal& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable);
+  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable, bool forceUpdate = false);
 
   void SetITMode(int mode);
   int GetITMode(void) const;

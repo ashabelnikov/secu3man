@@ -91,6 +91,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_COMMAND(IDM_EE_SAVE_EEPROM, OnSaveEEPROMToFile)
  ON_COMMAND(IDM_EE_READ_EEPROM, OnReadEEPROMFromSECU)
  ON_COMMAND(IDM_EE_WRITE_EEPROM, OnWriteEEPROMToSECU)
+ ON_COMMAND(IDM_EE_LOAD_GRIDS, OnLoadGrids)
  ON_EN_CHANGE(IDC_EE_MAPSET_NAME, OnChangeMapsetName)
 
  ON_UPDATE_COMMAND_UI(IDM_EE_READ_EEPROM, OnUpdatePopupMenu_bl)
@@ -100,6 +101,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_EE_MAPSET_NAME, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_EE_CE_ERRORS_BTN, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_EE_GRID_WARNING, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDM_EE_LOAD_GRIDS, OnUpdatePopupMenu_grids)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -220,6 +222,15 @@ void CEEPROMTabDlg::OnUpdatePopupMenu_file1(CCmdUI* pCmdUI)
 {
  bool opened = IsEEPROMOpened();
  pCmdUI->Enable(opened ? TRUE : FALSE);
+ pCmdUI->SetCheck(FALSE);
+}
+
+void CEEPROMTabDlg::OnUpdatePopupMenu_grids(CCmdUI* pCmdUI)
+{
+ bool available = false;
+ if (m_IsLoadGridsAvailable)
+  available = m_IsLoadGridsAvailable();
+ pCmdUI->Enable(available ? TRUE : FALSE);
  pCmdUI->SetCheck(FALSE);
 }
 
@@ -363,8 +374,17 @@ void CEEPROMTabDlg::OnCEErrorsButton()
   m_OnShowCEErrors();
 }
 
+void CEEPROMTabDlg::OnLoadGrids()
+{
+ if (m_OnLoadGrids)
+  m_OnLoadGrids();
+}
+
 void CEEPROMTabDlg::setIsEEPROMOpened(EventResult IsFunction)
 {m_IsEEPROMOpened = IsFunction;}
+
+void CEEPROMTabDlg::setIsLoadGridsAvailable(EventResult IsFunction)
+{m_IsLoadGridsAvailable = IsFunction;}
 
 void CEEPROMTabDlg::setOnOpenEEPROMFromFile(EventHandler OnFunction)
 {m_OnOpenEEPROMFromFile = OnFunction;}
@@ -386,6 +406,9 @@ void CEEPROMTabDlg::setOnMapsetNameChanged(EventHandler OnFunction)
 
 void CEEPROMTabDlg::setOnShowCEErrors(EventHandler OnFunction)
 {m_OnShowCEErrors = OnFunction;}
+
+void CEEPROMTabDlg::setOnLoadGrids(EventHandler OnFunction)
+{m_OnLoadGrids = OnFunction;}
 
 void CEEPROMTabDlg::OnSize( UINT nType, int cx, int cy )
 {

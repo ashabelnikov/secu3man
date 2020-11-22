@@ -55,6 +55,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void SetAttenuatorMap(const float* i_values);
   void GetAttenuatorMap(float* o_values);
 
+  CFirmwareDataMediator* GetFWDM(void) {return mp_fwdm;}
+
  private:
   //from ITabController
   virtual void OnActivate(void);

@@ -50,7 +50,7 @@ CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
 , m_tsneb_readonly(false)
 , m_lock_enchange(false)
 , m_lock_killfocus(true)
-, mp_ButtonsPanel(new CButtonsPanel(0, NULL, true)) //with autotune
+, mp_ButtonsPanel(new CButtonsPanel(0, NULL, true, true)) //with autotune, online mode
 {
  //их надо создать только один раз
  mp_ButtonsPanel->setOnMapChanged(MakeDelegate(this, &CTablesDeskDlg::OnMapChanged));

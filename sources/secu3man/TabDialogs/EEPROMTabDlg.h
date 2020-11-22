@@ -59,6 +59,7 @@ class CEEPROMTabDlg : public CTabDialog
   bool IsBLItemsEnabled(void);
 
   void setIsEEPROMOpened(EventResult IsFunction);
+  void setIsLoadGridsAvailable(EventResult IsFunction);
   void setOnOpenEEPROMFromFile(EventHandler OnFunction);
   void setOnSaveEEPROMToFile(EventHandler OnFunction);
   void setOnReadEEPROMFromSECU(EventHandler OnFunction);
@@ -66,6 +67,7 @@ class CEEPROMTabDlg : public CTabDialog
   void setOnDropFile(EventString OnFunction);   //Drag and Drop
   void setOnMapsetNameChanged(EventHandler OnFunction);
   void setOnShowCEErrors(EventHandler OnFunction);
+  void setOnLoadGrids(EventHandler OnFunction);
 
   void EnableMakingChartsChildren(bool enable);
   void EnableToggleMapWnd(bool toggle);
@@ -89,6 +91,7 @@ class CEEPROMTabDlg : public CTabDialog
   afx_msg void OnUpdatePopupMenu_bl(CCmdUI* pCmdUI);
   afx_msg void OnUpdatePopupMenu_file(CCmdUI* pCmdUI);
   afx_msg void OnUpdatePopupMenu_file1(CCmdUI* pCmdUI);
+  afx_msg void OnUpdatePopupMenu_grids(CCmdUI* pCmdUI);
   afx_msg void OnOpenEEPROMFromFile();
   afx_msg void OnSaveEEPROMToFile();
   afx_msg void OnReadEEPROMFromSECU();
@@ -96,6 +99,7 @@ class CEEPROMTabDlg : public CTabDialog
   afx_msg void OnChangeMapsetName();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnCEErrorsButton();
+  afx_msg void OnLoadGrids();
   DECLARE_MESSAGE_MAP()
 
   bool IsEEPROMOpened(void);
@@ -127,4 +131,6 @@ class CEEPROMTabDlg : public CTabDialog
   EventHandler m_OnMapsetNameChanged;
   EventString  m_OnDropFile;
   EventHandler m_OnShowCEErrors;
+  EventHandler m_OnLoadGrids;
+  EventResult  m_IsLoadGridsAvailable;
 };

@@ -1145,6 +1145,11 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
 
+ //apply load axis's grid settings for all related maps
+ SECU3IO::FunSetPar params;
+ mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
+ mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+
  if (m_current_funset_index==-1)
   return;
  mp_fwdm->GetStartMap(m_current_funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
@@ -1542,8 +1547,14 @@ void CFirmwareTabController::OnParamDeskChangeInTab(void)
 {
  BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
- mp_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);
- mp_fwdm->SetDefParamValues(descriptor,paramdata);
+ mp_view->mp_ParamDeskDlg->GetValues(descriptor, paramdata);
+ mp_fwdm->SetDefParamValues(descriptor, paramdata);
+ //update load axis's grids in all related maps
+ if (descriptor==FUNSET_PAR)
+ {
+  SECU3IO::FunSetPar &params = (SECU3IO::FunSetPar&)paramdata;
+  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true); //force update
+ }
 }
 
 void CFirmwareTabController::OnImportMapsFromMPSZ(void)
@@ -1657,6 +1668,12 @@ void CFirmwareTabController::OnEditRPMGrid(void)
   mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
   mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
   mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
+
+  //apply load axis's grid settings for all related maps
+  SECU3IO::FunSetPar params;
+  mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
+  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
