@@ -651,12 +651,11 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
  return true;
 }
 
-
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& startrPar = m_recepted_packet.m_StartrPar;
- if (size != (mp_pdp->isHex() ? 26 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -677,7 +676,7 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  unsigned char aftstr_strokes = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_strokes))
   return false;
- startrPar.inj_aftstr_strokes = aftstr_strokes * 4;
+ startrPar.inj_aftstr_strokes[0] = aftstr_strokes * 4;
 
  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
  //prime pulse at -30C
@@ -702,9 +701,14 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
   return false;
  startrPar.inj_floodclear_tps = float(inj_floodclear_tps) / 2.0f;
 
+ //Time of afterstart enrichment in strokes (gas)
+ unsigned char aftstr_strokes1 = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_strokes1))
+  return false;
+ startrPar.inj_aftstr_strokes[1] = aftstr_strokes1 * 4;
+
  return true;
 }
-
 
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
@@ -3307,7 +3311,7 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->smap_abandon,m_outgoing_packet);
  int cranktorun_time = MathHelpers::Round(packet_data->inj_cranktorun_time * 100.0f);
  mp_pdp->Bin16ToHex(cranktorun_time, m_outgoing_packet);
- int inj_aftstr_strokes = MathHelpers::Round(packet_data->inj_aftstr_strokes / 4.0f);
+ int inj_aftstr_strokes = MathHelpers::Round(packet_data->inj_aftstr_strokes[0] / 4.0f);
  mp_pdp->Bin8ToHex(inj_aftstr_strokes, m_outgoing_packet);
  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
  int prime_cold = MathHelpers::Round((packet_data->inj_prime_cold * 1000.0f) / discrete);
@@ -3318,6 +3322,8 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin8ToHex(prime_delay, m_outgoing_packet);
  int inj_floodclear_tps = MathHelpers::Round(packet_data->inj_floodclear_tps * 2.0f);
  mp_pdp->Bin8ToHex(inj_floodclear_tps, m_outgoing_packet);
+ int inj_aftstr_strokes1 = MathHelpers::Round(packet_data->inj_aftstr_strokes[1] / 4.0f);
+ mp_pdp->Bin8ToHex(inj_aftstr_strokes1, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 

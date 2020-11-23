@@ -278,10 +278,12 @@ typedef struct params_t
 
  _uchar func_flags;
 
+ _uchar  inj_aftstr_strokes1;           // Number of engine strokes, during this time afterstart enrichment is applied (second fuel)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[189];
+ _uchar reserved[188];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

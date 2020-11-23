@@ -39,6 +39,7 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_CRANKTORUNTIME_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_AFTSTRSTR_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_AFTSTRSTR1_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_PRIMECOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_PRIMEHOT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_PRIMEDELAY_EDIT, OnChangeData)
@@ -63,6 +64,11 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateInjGasControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateInjGasControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_EDIT,OnUpdateInjGasControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR1_SPIN,OnUpdateInjGasControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR1_CAPTION,OnUpdateInjGasControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR1_UNIT,OnUpdateInjGasControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR1_EDIT,OnUpdateInjGasControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_SPIN,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_CAPTION,OnUpdateFuelInjectionControls)
@@ -94,17 +100,22 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT, true)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
 , m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
-, m_aftstrstr_edit(CEditEx::MODE_INT, true)
 , m_primecold_edit(CEditEx::MODE_FLOAT, true)
 , m_primehot_edit(CEditEx::MODE_FLOAT, true)
 , m_primedelay_edit(CEditEx::MODE_FLOAT, true)
 , m_fldclrtps_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 {
+ m_aftstrstr_edit[0].SetMode(CEditEx::MODE_INT);
+ m_aftstrstr_edit[0].SetOwnDDV(true);
+ m_aftstrstr_edit[1].SetMode(CEditEx::MODE_INT);
+ m_aftstrstr_edit[1].SetOwnDDV(true);
+
  m_params.starter_off  = 600;
  m_params.smap_abandon = 700;
  m_params.inj_cranktorun_time = 3.00f;
- m_params.inj_aftstr_strokes = 150;
+ m_params.inj_aftstr_strokes[0] = 150;
+ m_params.inj_aftstr_strokes[1] = 150;
  m_params.inj_prime_cold =6.0f;
  m_params.inj_prime_hot = 2.0f;
  m_params.inj_prime_delay = 2.0f;
@@ -125,8 +136,10 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_starter_off_rpm_edit);
  DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_cranktoruntime_edit);
  DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_SPIN, m_cranktoruntime_spin);
- DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_aftstrstr_edit);
- DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_SPIN, m_aftstrstr_spin);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_aftstrstr_edit[0]);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_SPIN, m_aftstrstr_spin[0]);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR1_EDIT, m_aftstrstr_edit[1]);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR1_SPIN, m_aftstrstr_spin[1]);
  DDX_Control(pDX, IDC_PD_STARTER_PRIMECOLD_EDIT, m_primecold_edit);
  DDX_Control(pDX, IDC_PD_STARTER_PRIMECOLD_SPIN, m_primecold_spin);
  DDX_Control(pDX, IDC_PD_STARTER_PRIMEHOT_EDIT, m_primehot_edit);
@@ -139,7 +152,8 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  m_starter_off_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
  m_smap_abandon_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
  m_cranktoruntime_edit.DDX_Value(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_params.inj_cranktorun_time);
- m_aftstrstr_edit.DDX_Value(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_params.inj_aftstr_strokes);
+ m_aftstrstr_edit[0].DDX_Value(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_params.inj_aftstr_strokes[0]);
+ m_aftstrstr_edit[1].DDX_Value(pDX, IDC_PD_STARTER_AFTSTRSTR1_EDIT, m_params.inj_aftstr_strokes[1]);
  m_primecold_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMECOLD_EDIT, m_params.inj_prime_cold);
  m_primehot_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMEHOT_EDIT, m_params.inj_prime_hot);
  m_primedelay_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMEDELAY_EDIT, m_params.inj_prime_delay);
@@ -189,10 +203,15 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_cranktoruntime_spin.SetRangeAndDelta(0.10f,99.00f, 0.01f);
  m_cranktoruntime_edit.SetRange(0.10f, 99.00f);
 
- m_aftstrstr_edit.SetLimitText(4);
- m_aftstrstr_spin.SetBuddy(&m_aftstrstr_edit);
- m_aftstrstr_spin.SetRangeAndDelta(1, 1020, 4);  //strokes
- m_aftstrstr_edit.SetRange(1, 1020);
+ m_aftstrstr_edit[0].SetLimitText(4);
+ m_aftstrstr_spin[0].SetBuddy(&m_aftstrstr_edit[0]);
+ m_aftstrstr_spin[0].SetRangeAndDelta(1, 1020, 4);  //strokes
+ m_aftstrstr_edit[0].SetRange(1, 1020);
+
+ m_aftstrstr_edit[1].SetLimitText(4);
+ m_aftstrstr_spin[1].SetBuddy(&m_aftstrstr_edit[1]);
+ m_aftstrstr_spin[1].SetRangeAndDelta(1, 1020, 4);  //strokes
+ m_aftstrstr_edit[1].SetRange(1, 1020);
 
  m_primecold_edit.SetLimitText(4);
  m_primecold_spin.SetBuddy(&m_primecold_edit);
@@ -234,8 +253,11 @@ BOOL CStarterPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_cranktoruntime_edit, MLL::GetString(IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_cranktoruntime_spin, MLL::GetString(IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_aftstrstr_edit, MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_aftstrstr_spin, MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_aftstrstr_edit[0], MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_aftstrstr_spin[0], MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_aftstrstr_edit[1], MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_aftstrstr_spin[1], MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_primecold_edit, MLL::GetString(IDS_PD_STARTER_PRIMECOLD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_primecold_spin, MLL::GetString(IDS_PD_STARTER_PRIMECOLD_EDIT_TT)));
