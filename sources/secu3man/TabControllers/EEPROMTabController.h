@@ -120,4 +120,5 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   std::auto_ptr<CEErrorIdStr> mp_errors_ids;
   bool m_active;
   bool m_firmware_opened;
+  std::vector<_TSTRING> m_funset_names;
 };

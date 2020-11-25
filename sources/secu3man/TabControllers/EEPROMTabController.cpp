@@ -638,11 +638,15 @@ void CEEPROMTabController::SetViewValues(void)
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
  mp_view->SetEEFileName(m_eedm->GetEEFileName());
 
- std::vector<_TSTRING> funset_names;
- funset_names.push_back(_T("firmware_set1")); //stub, because stored in the firmware
- funset_names.push_back(_T("firmware_set2")); //stub
- funset_names.push_back(_T("firmware_set3")); //stub
- funset_names.push_back(_T("firmware_set4")); //stub
+ std::vector<_TSTRING> funset_names = m_funset_names;
+
+ if (m_funset_names.empty())
+ {
+  funset_names.push_back(_T("firmware_set1")); //stub, because stored in the firmware
+  funset_names.push_back(_T("firmware_set2")); //stub
+  funset_names.push_back(_T("firmware_set3")); //stub
+  funset_names.push_back(_T("firmware_set4")); //stub
+ }
  funset_names.push_back(str[0]);
 
  mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
@@ -1022,6 +1026,8 @@ bool CEEPROMTabController::IsLoadGridsAvailable(void)
 
 void CEEPROMTabController::OnLoadGrids(void)
 {
+ AfxGetMainWnd()->BeginWaitCursor();
+ 
  CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
  (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
  CFirmwareDataMediator *p_fwdm = p_controller->GetFWDM();
@@ -1036,4 +1042,13 @@ void CEEPROMTabController::OnLoadGrids(void)
  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
 
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
+
+ //load functions' set names from firmware
+ std::vector<_TSTRING> funset_names = p_fwdm->GetFunctionsSetNames();
+ std::vector<_TSTRING> str = m_eedm->GetFunctionsSetNames();
+ m_funset_names = funset_names; //save for further use
+ funset_names.push_back(str[0]);
+ mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
+
+ AfxGetMainWnd()->EndWaitCursor();
 }
