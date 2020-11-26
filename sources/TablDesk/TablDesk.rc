@@ -112,6 +112,8 @@ BEGIN
     CONTROL         "Настр. крив. ДТГР",IDC_TD_GRTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,481,96,18
     CONTROL         "Скважн.нагр.газ.ред.",IDC_TD_GRHEAT_DUTY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,481,96,18
     CONTROL         "Коэфф.скважн. ШИМ РДВ",IDC_TD_PWMIAC_UCOEF_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,500,96,18
+    CONTROL         "Такты ОПП (бензин)",IDC_TD_AFTSTR_STRK0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,500,96,18
+    CONTROL         "Такты ОПП (газ)",IDC_TD_AFTSTR_STRK1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,519,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -687,6 +689,8 @@ BEGIN
     IDS_TD_VIEW_SPLIT_MAP  "Сплитинг УОЗ"
     IDS_GRHEAT_DUTY_MAP      "Скважность ШИМ нагревателя газового редуктора"
     IDS_PWMIAC_UCOEF_MAP      "Карта коэффициента скважности ШИМ РДВ от напряжения"
+    IDS_AFTSTR_STRK0_MAP     "Такты действия обогащения после пуска от температуры двигателя (бензин)"
+    IDS_AFTSTR_STRK1_MAP     "Такты действия обогащения после пуска от температуры двигателя (газ)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -713,8 +717,10 @@ BEGIN
     IDS_TD_CRANKING_TIME_MAP_TT "Время работы стартера после достижения оборотов блокировки в зависимости от температуры двигателя."    
     IDS_TD_SMAPABAN_THRD_MAP_TT "Обороты перехода с пусковой карты. Смотрите также параметр 'Обороты пер. с пуск УОЗ'"
     IDS_TD_GRTS_CURVE_TT      "Настройка зависимости температуры от напряжения для датчика температуры газового редуктора (ДТГР). Данная таблица необходима для правильного преобразования напряжения на датчике в значение температуры."      
-    IDC_TD_GRHEAT_DUTY_MAP_TT "Настройка зависимости скважности ШИМ нагревателя газового редуктора от температуры редуктора."      
-    IDC_TD_PWMIAC_UCOEF_MAP_TT "Настройка коэффициента скважности ШИМ РДВ. Коэффициент в таблице задан от напряжения бортовой сети. Данная таблица необходима чтобы РДВ не менял положение при изменении напряжения."      
+    IDS_TD_GRHEAT_DUTY_MAP_TT "Настройка зависимости скважности ШИМ нагревателя газового редуктора от температуры редуктора."      
+    IDS_TD_PWMIAC_UCOEF_MAP_TT "Настройка коэффициента скважности ШИМ РДВ. Коэффициент в таблице задан от напряжения бортовой сети. Данная таблица необходима чтобы РДВ не менял положение при изменении напряжения."      
+    IDS_TD_AFTSTR_STRK0_MAP_TT "Настройка таблицы времени действия обогащения после пуска от температуры двигателя. Используется для бензина (когда GAS_V=0). Смотрите также параметр 'Время обогащения после пуска в тактах' на вкладке параметров 'Пуск'."      
+    IDS_TD_AFTSTR_STRK1_MAP_TT "Настройка таблицы времени действия обогащения после пуска от температуры двигателя. Используется для газа (когда GAS_V=1). Смотрите также параметр 'Время обогащения после пуска в тактах' на вкладке параметров 'Пуск'."      
 END
 
 STRINGTABLE DISCARDABLE 
@@ -857,6 +863,8 @@ BEGIN
     CONTROL         "Tune GRTS curve",IDC_TD_GRTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,481,96,18
     CONTROL         "Gas red. heater duty",IDC_TD_GRHEAT_DUTY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,481,96,18
     CONTROL         "PWM IAC volt. coeff",IDC_TD_PWMIAC_UCOEF_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,500,96,18
+    CONTROL         "ASE strokes (petrol)",IDC_TD_AFTSTR_STRK0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,500,96,18
+    CONTROL         "ASE strokes (gas)",IDC_TD_AFTSTR_STRK1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,519,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1449,6 +1457,8 @@ BEGIN
     IDS_TD_VIEW_GPSC_MAP_TT  "Correction of the injection PW by gas pressure (LPG). It is also used to correct the position of the gas dispenser."
     IDS_GRHEAT_DUTY_MAP      "PWM duty of gas reducer's heater"
     IDS_PWMIAC_UCOEF_MAP      "PWM IAC duty coefficient vs board voltage"
+    IDS_AFTSTR_STRK0_MAP      "After start enrichment time in strokes vs coolant temperature (petrol)"
+    IDS_AFTSTR_STRK1_MAP      "After start enrichment time in strokes vs coolant temperature (gas)"
 END
 
 
@@ -1477,8 +1487,10 @@ BEGIN
     IDS_TD_CRANKING_TIME_MAP_TT "Time of working of starter after reaching blocking threshold vs engine temperature"    
     IDS_TD_SMAPABAN_THRD_MAP_TT "RPM of the cranking to run transition vs engine temperature. See also the parameter 'Switch from cranking ignition map'"
     IDS_TD_GRTS_CURVE_TT "Setting temperature versus voltage dependance for the gas reducer's temperature  sensor (GRTS). This table is necessary for the correct conversion of the voltage at the sensor to a temperature value."      
-    IDC_TD_GRHEAT_DUTY_MAP_TT "Setting dependence of the PWM duty cycle of the gas reducer's heater on the reducer's temperature."      
-    IDC_TD_PWMIAC_UCOEF_MAP_TT "Setting coefficient for duty of the PWM IAC. The coefficient in the table is set from the board voltage. This table is necessary so that the IAC does not change its position when the voltage changes."      
+    IDS_TD_GRHEAT_DUTY_MAP_TT "Setting dependence of the PWM duty cycle of the gas reducer's heater on the reducer's temperature."      
+    IDS_TD_PWMIAC_UCOEF_MAP_TT "Setting coefficient for duty of the PWM IAC. The coefficient in the table is set from the board voltage. This table is necessary so that the IAC does not change its position when the voltage changes."      
+    IDS_TD_AFTSTR_STRK0_MAP_TT "After start enrichment time in strokes vs coolant temperature. Used for petrol (when GAS_V=0) See also parameter 'Afterstart enrichment time in strokes' on the 'Start' tab of parameters."      
+    IDS_TD_AFTSTR_STRK1_MAP_TT "After start enrichment time in strokes vs coolant temperature. Used for gas (when GAS_V=1) See also parameter 'Afterstart enrichment time in strokes' on the 'Start' tab of parameters."      
 END
 
 

@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0114 //01.14
+#define CURRENT_VERSION 0x0115 //01.15
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -78,6 +78,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.12 - Fixed overflow bug in inj_iatclt_corr map (05.05.2020)
 // 01.13 - Added 3 new maps: pwm_duty1, pwm_duty2, knock_zone (15.09.2020)
 // 01.14 - Added CE settings for ADD_I5/6/7/8, GRTS curve map, GRHEAT map (28.10.2020-30.10.2020)
+// 01.15 - Added after start strokes maps: petrol and gas, PWM IAC voltage coeff. map (25.11.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -243,7 +244,12 @@ struct S3FSepMaps
  s3f_int32_t grheat_duty[F_TMP_POINTS];                       //temperature
  s3f_int32_t load_slots[F_LOAD_SLOTS]; //load grid (appeared in version 01.14, reserved bytes were utilized); note: values are in reverse direction
 
- s3f_int32_t reserved[781];       //reserved bytes, = 0
+ //since v01.15
+ s3f_int32_t pwmiac_ucoef[PWMIAC_UCOEF_SIZE];
+ s3f_int32_t aftstr_strk0[AFTSTR_STRK_SIZE];
+ s3f_int32_t aftstr_strk1[AFTSTR_STRK_SIZE];
+
+ s3f_int32_t reserved[733];       //reserved bytes, = 0
 };
 
 
@@ -482,6 +488,12 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->grts_curve[i] = MathHelpers::Round(m_data.grts_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
   p_sepMaps->grheat_duty[i] = MathHelpers::Round(m_data.grheat_duty[i] * INT_MULTIPLIER);
+ for(i = 0; i < PWMIAC_UCOEF_SIZE; ++i)
+  p_sepMaps->pwmiac_ucoef[i] = MathHelpers::Round(m_data.pwmiac_ucoef[i] * INT_MULTIPLIER);
+ for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
+  p_sepMaps->aftstr_strk0[i] = MathHelpers::Round(m_data.aftstr_strk0[i] * INT_MULTIPLIER);
+ for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
+  p_sepMaps->aftstr_strk1[i] = MathHelpers::Round(m_data.aftstr_strk1[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -723,6 +735,12 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < F_TMP_POINTS; ++i)
   m_data.grheat_duty[i] = p_sepMaps->grheat_duty[i] / INT_MULTIPLIER;
+ for(i = 0; i < PWMIAC_UCOEF_SIZE; ++i)
+  m_data.pwmiac_ucoef[i] = p_sepMaps->pwmiac_ucoef[i] / INT_MULTIPLIER;
+ for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
+  m_data.aftstr_strk0[i] = p_sepMaps->aftstr_strk0[i] / INT_MULTIPLIER;
+ for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
+  m_data.aftstr_strk1[i] = p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

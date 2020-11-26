@@ -476,9 +476,9 @@
 #define IDS_GRTS_CURVE_MAP              5830 
 #define IDS_GRHEAT_DUTY_MAP             5831
 #define IDC_TD_GRHEAT_DUTY_MAP          5832
-#define IDC_TD_GRHEAT_DUTY_MAP_TT       5833
+#define IDS_TD_GRHEAT_DUTY_MAP_TT       5833
 #define IDC_TD_PWMIAC_UCOEF_MAP         5834
-#define IDC_TD_PWMIAC_UCOEF_MAP_TT      5835
+#define IDS_TD_PWMIAC_UCOEF_MAP_TT      5835
 #define IDS_PWMIAC_UCOEF_MAP            5836
 #define IDC_LGE_EDIT_0                  5837
 #define IDC_LGE_EDIT_1                  5838
@@ -499,3 +499,9 @@
 #define IDC_LGE_LOAD_DEF_VAL            5853
 #define IDC_LGE_ERROR_MSG_TEXT          5854
 #define IDS_LGE_LOAD_DEF_VAL_TT         5855
+#define IDC_TD_AFTSTR_STRK0_MAP         5856
+#define IDC_TD_AFTSTR_STRK1_MAP         5857
+#define IDS_TD_AFTSTR_STRK0_MAP_TT      5858
+#define IDS_TD_AFTSTR_STRK1_MAP_TT      5859
+#define IDS_AFTSTR_STRK0_MAP            5860
+#define IDS_AFTSTR_STRK1_MAP            5861

@@ -345,6 +345,18 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_PwmIacUCoefMapWnd_W = rc.right - rc.left;
    sz.m_PwmIacUCoefMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_AFTSTR_STRK0:
+   ws.m_AftstrStrk0MapWnd_X = rc.left;
+   ws.m_AftstrStrk0MapWnd_Y = rc.top;
+   sz.m_AftstrStrk0MapWnd_W = rc.right - rc.left;
+   sz.m_AftstrStrk0MapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_AFTSTR_STRK1:
+   ws.m_AftstrStrk1MapWnd_X = rc.left;
+   ws.m_AftstrStrk1MapWnd_Y = rc.top;
+   sz.m_AftstrStrk1MapWnd_W = rc.right - rc.left;
+   sz.m_AftstrStrk1MapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -568,6 +580,14 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_PWMIAC_UCOEF:
    X = ws.m_PwmIacUCoefMapWnd_X, Y = ws.m_PwmIacUCoefMapWnd_Y;
    W = sz.m_PwmIacUCoefMapWnd_W, H = sz.m_PwmIacUCoefMapWnd_H;
+   break;
+  case TYPE_MAP_AFTSTR_STRK0:
+   X = ws.m_AftstrStrk0MapWnd_X, Y = ws.m_AftstrStrk0MapWnd_Y;
+   W = sz.m_AftstrStrk0MapWnd_W, H = sz.m_AftstrStrk0MapWnd_H;
+   break;
+  case TYPE_MAP_AFTSTR_STRK1:
+   X = ws.m_AftstrStrk1MapWnd_X, Y = ws.m_AftstrStrk1MapWnd_Y;
+   W = sz.m_AftstrStrk1MapWnd_W, H = sz.m_AftstrStrk1MapWnd_H;
    break;
 
   default:

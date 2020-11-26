@@ -166,6 +166,18 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
   m_fwdm->GetGrtsCurveMap(mp_fwd->grts_curve);
 
+ if (mp_view->GetFWDFlag(FLAG_GRHEAT_MAP))
+  m_fwdm->GetGrHeatDutyMap(mp_fwd->grheat_duty);
+
+ if (mp_view->GetFWDFlag(FLAG_IACUCOEF_MAP))
+  m_fwdm->GetPwmIacUCoefMap(mp_fwd->pwmiac_ucoef);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK0_MAP))
+  m_fwdm->GetAftstrStrk0Map(mp_fwd->aftstr_strk0);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
+  m_fwdm->GetAftstrStrk1Map(mp_fwd->aftstr_strk1);
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 
@@ -345,6 +357,10 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -490,6 +506,18 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
   m_fwdm->SetGrtsCurveMap(mp_fwd->grts_curve);
+
+ if (mp_view->GetFWDFlag(FLAG_GRHEAT_MAP))
+  m_fwdm->SetGrHeatDutyMap(mp_fwd->grheat_duty);
+
+ if (mp_view->GetFWDFlag(FLAG_IACUCOEF_MAP))
+  m_fwdm->SetPwmIacUCoefMap(mp_fwd->pwmiac_ucoef);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK0_MAP))
+  m_fwdm->SetAftstrStrk0Map(mp_fwd->aftstr_strk0);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
+  m_fwdm->SetAftstrStrk1Map(mp_fwd->aftstr_strk1);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -682,6 +710,10 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

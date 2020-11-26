@@ -179,6 +179,15 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_GRHEAT_MAP))
   memcpy(mp_fwd->grheat_duty, mp_s3f_io->GetData().grheat_duty, sizeof(float) * F_TMP_POINTS);
 
+ if (mp_view->GetFWDFlag(FLAG_IACUCOEF_MAP))
+  memcpy(mp_fwd->pwmiac_ucoef, mp_s3f_io->GetData().pwmiac_ucoef, sizeof(float) * PWMIAC_UCOEF_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK0_MAP))
+  memcpy(mp_fwd->aftstr_strk0, mp_s3f_io->GetData().aftstr_strk0, sizeof(float) * AFTSTR_STRK_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
+  memcpy(mp_fwd->aftstr_strk1, mp_s3f_io->GetData().aftstr_strk1, sizeof(float) * AFTSTR_STRK_SIZE);
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -331,6 +340,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0111 = (mp_s3f_io->GetVersion() > 0x0110);
  bool sv0113 = (mp_s3f_io->GetVersion() > 0x0112);
  bool sv0114 = (mp_s3f_io->GetVersion() > 0x0113);
+ bool sv0115 = (mp_s3f_io->GetVersion() > 0x0114);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -400,6 +410,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -418,6 +431,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, sv0113 && sepmap); //since v01.13
  mp_view->EnableFWDFlag(FLAG_GRTSCURVE_MAP, sv0114 && sepmap); //since v01.14
  mp_view->EnableFWDFlag(FLAG_GRHEAT_MAP, sv0114 && sepmap);    //since v01.14
+ mp_view->EnableFWDFlag(FLAG_IACUCOEF_MAP, sv0115 && sepmap);    //since v01.15
+ mp_view->EnableFWDFlag(FLAG_AFTSTRK0_MAP, sv0115 && sepmap);    //since v01.15
+ mp_view->EnableFWDFlag(FLAG_AFTSTRK1_MAP, sv0115 && sepmap);    //since v01.15
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -568,6 +584,15 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_GRHEAT_MAP))
   memcpy(mp_s3f_io->GetDataLeft().grheat_duty, mp_fwd->grheat_duty, sizeof(float) * F_TMP_POINTS);
+
+ if (mp_view->GetFWDFlag(FLAG_IACUCOEF_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().pwmiac_ucoef, mp_fwd->pwmiac_ucoef, sizeof(float) * PWMIAC_UCOEF_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK0_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().aftstr_strk0, mp_fwd->aftstr_strk0, sizeof(float) * AFTSTR_STRK_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().aftstr_strk1, mp_fwd->aftstr_strk1, sizeof(float) * AFTSTR_STRK_SIZE);
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -744,6 +769,9 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

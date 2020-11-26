@@ -166,6 +166,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGrtsCurveMapWnd(_T("GrtsCurveMapWnd"))
 , m_optGrHeatDutyMapWnd(_T("GrHeatDutyMapWnd"))
 , m_optPwmIacUCoefMapWnd(_T("PwmIacUCoefMapWnd"))
+, m_optAftstrStrk0MapWnd(_T("AftstrStrk0MapWnd"))
+, m_optAftstrStrk1MapWnd(_T("AftstrStrk1MapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -248,6 +250,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGrtsCurveMapWndSize(_T("GrtsCurveMapWnd"))
 , m_optGrHeatDutyMapWndSize(_T("GrHeatDutyMapWnd"))
 , m_optPwmIacUCoefMapWndSize(_T("PwmIacUCoefMapWnd"))
+, m_optAftstrStrk0MapWndSize(_T("AftstrStrk0MapWnd"))
+, m_optAftstrStrk1MapWndSize(_T("AftstrStrk1MapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -386,6 +390,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepGrtsCurveMap(_T("GrtsCurveMapWnd"))
 , m_optPtMovStepGrHeatDutyMap(_T("GrHeatDutyMapWnd"))
 , m_optPtMovStepPwmIacUCoefMap(_T("PwmIacUCoefMapWnd"))
+, m_optPtMovStepAftstrStrk0Map(_T("AftstrStrk0MapWnd"))
+, m_optPtMovStepAftstrStrk1Map(_T("AftstrStrk1MapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -749,6 +755,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optGrtsCurveMapWnd);
  ws.ReadWndPos(m_optGrHeatDutyMapWnd);
  ws.ReadWndPos(m_optPwmIacUCoefMapWnd);
+ ws.ReadWndPos(m_optAftstrStrk0MapWnd);
+ ws.ReadWndPos(m_optAftstrStrk1MapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -834,6 +842,9 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optGrtsCurveMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optGrHeatDutyMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optPwmIacUCoefMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAftstrStrk0MapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAftstrStrk1MapWndSize, 0, 10000);
+
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  sz1.ReadWndPos(m_optStrtMapWndSize1);
@@ -1040,6 +1051,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepGrtsCurveMap, _T("0.25"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepGrHeatDutyMap, _T("5.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepPwmIacUCoefMap, _T("0.01"), 0.001f, 1.0f);
+ ms.ReadFlt(m_optPtMovStepAftstrStrk0Map, _T("0.01"), 0.001f, 1.0f);
+ ms.ReadFlt(m_optPtMovStepAftstrStrk1Map, _T("0.01"), 0.001f, 1.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1812,6 +1825,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optPwmIacUCoefMapWnd, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAftstrStrk0MapWnd, _T("After start enrichment strokes vs coolant temperature (petrol)"));
+ else
+  ws.WriteWndPos(m_optAftstrStrk0MapWnd, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAftstrStrk1MapWnd, _T("After start enrichment strokes vs coolant temperature (gas)"));
+ else
+  ws.WriteWndPos(m_optAftstrStrk1MapWnd, _T("Число тактов обогащения после пуска от температуры двигателя (gas)"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2217,6 +2240,16 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optPwmIacUCoefMapWndSize, _T("PWM IAC duty coefficient vs voltage"));
  else
   sz.WriteWndPos(m_optPwmIacUCoefMapWndSize, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAftstrStrk0MapWndSize, _T("After start enrichment strokes vs coolant temperature (petrol)"));
+ else
+  sz.WriteWndPos(m_optAftstrStrk0MapWndSize, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAftstrStrk1MapWndSize, _T("After start enrichment strokes vs coolant temperature (gas)"));
+ else
+  sz.WriteWndPos(m_optAftstrStrk1MapWndSize, _T("Число тактов обогащения после пуска от температуры двигателя (газ)"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3179,6 +3212,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepPwmIacUCoefMap, 3, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAftstrStrk0Map, 3, _T("After start enrichment strokes vs coolant temperature (petrol)"));
+ else
+  ms.WriteFlt(m_optPtMovStepAftstrStrk0Map, 3, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAftstrStrk1Map, 3, _T("After start enrichment strokes vs coolant temperature (gas)"));
+ else
+  ms.WriteFlt(m_optPtMovStepAftstrStrk1Map, 3, _T("Число тактов обогащения после пуска от температуры двигателя (газ)"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -3457,6 +3500,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optGrHeatDutyMapWnd.value.y = i_wndSettings.m_GrHeatDutyMapWnd_Y;
  m_optPwmIacUCoefMapWnd.value.x = i_wndSettings.m_PwmIacUCoefMapWnd_X;
  m_optPwmIacUCoefMapWnd.value.y = i_wndSettings.m_PwmIacUCoefMapWnd_Y;
+ m_optAftstrStrk0MapWnd.value.x = i_wndSettings.m_AftstrStrk0MapWnd_X;
+ m_optAftstrStrk0MapWnd.value.y = i_wndSettings.m_AftstrStrk0MapWnd_Y;
+ m_optAftstrStrk1MapWnd.value.x = i_wndSettings.m_AftstrStrk1MapWnd_X;
+ m_optAftstrStrk1MapWnd.value.y = i_wndSettings.m_AftstrStrk1MapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3559,6 +3606,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_GrHeatDutyMapWnd_Y = m_optGrHeatDutyMapWnd.value.y;
  o_wndSettings.m_PwmIacUCoefMapWnd_X = m_optPwmIacUCoefMapWnd.value.x;
  o_wndSettings.m_PwmIacUCoefMapWnd_Y = m_optPwmIacUCoefMapWnd.value.y;
+ o_wndSettings.m_AftstrStrk0MapWnd_X = m_optAftstrStrk0MapWnd.value.x;
+ o_wndSettings.m_AftstrStrk0MapWnd_Y = m_optAftstrStrk0MapWnd.value.y;
+ o_wndSettings.m_AftstrStrk1MapWnd_X = m_optAftstrStrk1MapWnd.value.x;
+ o_wndSettings.m_AftstrStrk1MapWnd_Y = m_optAftstrStrk1MapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -3785,6 +3836,10 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optGrHeatDutyMapWndSize.value.y = i_wndSize.m_GrHeatDutyMapWnd_H;
  m_optPwmIacUCoefMapWndSize.value.x = i_wndSize.m_PwmIacUCoefMapWnd_W;
  m_optPwmIacUCoefMapWndSize.value.y = i_wndSize.m_PwmIacUCoefMapWnd_H;
+ m_optAftstrStrk0MapWndSize.value.x = i_wndSize.m_AftstrStrk0MapWnd_W;
+ m_optAftstrStrk0MapWndSize.value.y = i_wndSize.m_AftstrStrk0MapWnd_H;
+ m_optAftstrStrk1MapWndSize.value.x = i_wndSize.m_AftstrStrk1MapWnd_W;
+ m_optAftstrStrk1MapWndSize.value.y = i_wndSize.m_AftstrStrk1MapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -3887,6 +3942,10 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_GrHeatDutyMapWnd_H = m_optGrHeatDutyMapWndSize.value.y;
  o_wndSize.m_PwmIacUCoefMapWnd_W = m_optPwmIacUCoefMapWndSize.value.x;
  o_wndSize.m_PwmIacUCoefMapWnd_H = m_optPwmIacUCoefMapWndSize.value.y;
+ o_wndSize.m_AftstrStrk0MapWnd_W = m_optAftstrStrk0MapWndSize.value.x;
+ o_wndSize.m_AftstrStrk0MapWnd_H = m_optAftstrStrk0MapWndSize.value.y;
+ o_wndSize.m_AftstrStrk1MapWnd_W = m_optAftstrStrk1MapWndSize.value.x;
+ o_wndSize.m_AftstrStrk1MapWnd_H = m_optAftstrStrk1MapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4711,6 +4770,8 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepGrtsCurveMap.value = i_ptMovStep.m_grts_curve_map;
  m_optPtMovStepGrHeatDutyMap.value = i_ptMovStep.m_grheat_duty_map;
  m_optPtMovStepPwmIacUCoefMap.value = i_ptMovStep.m_pwmiac_ucoef_map;
+ m_optPtMovStepAftstrStrk0Map.value = i_ptMovStep.m_aftstr_strk0_map;
+ m_optPtMovStepAftstrStrk1Map.value = i_ptMovStep.m_aftstr_strk1_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -4761,6 +4822,8 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_grts_curve_map = m_optPtMovStepGrtsCurveMap.value;
  o_ptMovStep.m_grheat_duty_map = m_optPtMovStepGrHeatDutyMap.value;
  o_ptMovStep.m_pwmiac_ucoef_map = m_optPtMovStepPwmIacUCoefMap.value;
+ o_ptMovStep.m_aftstr_strk0_map = m_optPtMovStepAftstrStrk0Map.value;
+ o_ptMovStep.m_aftstr_strk1_map = m_optPtMovStepAftstrStrk1Map.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

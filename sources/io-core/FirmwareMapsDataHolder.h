@@ -50,6 +50,8 @@
 #define CRANK_THRD_SIZE        16
 #define CRANK_TIME_SIZE        16
 #define SMAPABAN_THRD_SIZE     16
+#define AFTSTR_STRK_SIZE       16
+#define KNKZONE_TPS_SIZE       16
 
 #define INJ_VE_POINTS_L        16
 #define INJ_VE_POINTS_F        16
@@ -223,6 +225,9 @@ struct FWMapsDataHolder
  float grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
  float grheat_duty[F_TMP_POINTS];
  float pwmiac_ucoef[PWMIAC_UCOEF_SIZE];
+ float aftstr_strk0[AFTSTR_STRK_SIZE];
+ float aftstr_strk1[AFTSTR_STRK_SIZE];
+
  CESettingsData cesd;
 
  //default constructor
@@ -253,6 +258,8 @@ struct FWMapsDataHolder
   std::fill(grts_curve, grts_curve + THERMISTOR_LOOKUP_TABLE_SIZE + 2, .0f);
   std::fill(grheat_duty, grheat_duty + F_TMP_SLOTS, .0f);
   std::fill(pwmiac_ucoef, pwmiac_ucoef + PWMIAC_UCOEF_SIZE, .0f);
+  std::fill(aftstr_strk0, aftstr_strk0 + AFTSTR_STRK_SIZE, .0f);
+  std::fill(aftstr_strk1, aftstr_strk1 + AFTSTR_STRK_SIZE, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

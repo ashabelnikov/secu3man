@@ -218,6 +218,12 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetPwmIacUCoefMap(float* op_values, bool i_original = false);
   void SetPwmIacUCoefMap(const float* i_values);
 
+  void GetAftstrStrk0Map(float* op_values, bool i_original = false);
+  void SetAftstrStrk0Map(const float* i_values);
+
+  void GetAftstrStrk1Map(float* op_values, bool i_original = false);
+  void SetAftstrStrk1Map(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

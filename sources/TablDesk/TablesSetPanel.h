@@ -72,6 +72,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetGrtsCurveMap(bool i_original);
   float* GetGrHeatDutyMap(bool i_original);
   float* GetPwmIacUCoefMap(bool i_original);
+  float* GetAftstrStrk0Map(bool i_original);
+  float* GetAftstrStrk1Map(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -87,6 +89,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableGrtsCurve(bool enable);
   void EnableGrHeatDutyMap(bool enable);
   void EnablePwmIacUCoefMap(bool enable);
+  void EnableAftstrStrkMap(bool enable);
 
   virtual void CloseCharts(void);
 
@@ -128,6 +131,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewGrtsCurveMap();
   afx_msg void OnViewGrHeatDutyMap();
   afx_msg void OnViewPwmIacUCoefMap();
+  afx_msg void OnViewAftstrStrk0Map();
+  afx_msg void OnViewAftstrStrk1Map();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -147,6 +152,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewGrtsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGrHeatDutyMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewPwmIacUCoefMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewAftstrStrk0Map(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewAftstrStrk1Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -175,6 +182,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_grts_curve_map_btn;
   CButton   m_view_grheat_duty_map_btn;
   CButton   m_view_pwmiac_ucoef_map_btn;
+  CButton   m_view_aftstr_strk0_map_btn;
+  CButton   m_view_aftstr_strk1_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
@@ -268,12 +277,21 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnClosePwmIacUCoefMap(void* i_param);
   static void __cdecl OnWndActivationPwmIacUCoefMap(void* i_param, long cmd);
 
+  static void __cdecl OnChangeAftstrStrk0Map(void* i_param);
+  static void __cdecl OnCloseAftstrStrk0Map(void* i_param);
+  static void __cdecl OnWndActivationAftstrStrk0Map(void* i_param, long cmd);
+
+  static void __cdecl OnChangeAftstrStrk1Map(void* i_param);
+  static void __cdecl OnCloseAftstrStrk1Map(void* i_param);
+  static void __cdecl OnWndActivationAftstrStrk1Map(void* i_param, long cmd);
+
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
   bool m_tmp2_curve_enabled;
   bool m_grts_curve_enabled;
   bool m_grheat_duty_enabled;
   bool m_pwmiac_ucoef_enabled;
+  bool m_aftstr_strk_enabled;
 
   float m_attenuator_table_slots[128];
   float m_cts_curve_x_axis_limits[2];

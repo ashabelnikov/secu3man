@@ -205,13 +205,13 @@ BOOL CStarterPageDlg::OnInitDialog()
 
  m_aftstrstr_edit[0].SetLimitText(4);
  m_aftstrstr_spin[0].SetBuddy(&m_aftstrstr_edit[0]);
- m_aftstrstr_spin[0].SetRangeAndDelta(1, 1020, 4);  //strokes
- m_aftstrstr_edit[0].SetRange(1, 1020);
+ m_aftstrstr_spin[0].SetRangeAndDelta(0, 1020, 4);  //strokes
+ m_aftstrstr_edit[0].SetRange(0, 1020);
 
  m_aftstrstr_edit[1].SetLimitText(4);
  m_aftstrstr_spin[1].SetBuddy(&m_aftstrstr_edit[1]);
- m_aftstrstr_spin[1].SetRangeAndDelta(1, 1020, 4);  //strokes
- m_aftstrstr_edit[1].SetRange(1, 1020);
+ m_aftstrstr_spin[1].SetRangeAndDelta(0, 1020, 4);  //strokes
+ m_aftstrstr_edit[1].SetRange(0, 1020);
 
  m_primecold_edit.SetLimitText(4);
  m_primecold_spin.SetBuddy(&m_primecold_edit);

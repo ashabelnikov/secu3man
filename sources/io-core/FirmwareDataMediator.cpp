@@ -43,24 +43,6 @@
 using namespace SECU3IO;
 using namespace SECU3IO::SECU3Types;
 
-#define KC_ATTENUATOR_LOOKUP_TABLE_SIZE  128
-#define FW_SIGNATURE_INFO_SIZE           48
-#define COIL_ON_TIME_LOOKUP_TABLE_SIZE   32
-#define THERMISTOR_LOOKUP_TABLE_SIZE     16
-#define ATS_CORR_LOOKUP_TABLE_SIZE       16
-#define RPM_GRID_SIZE                    16
-#define CLT_GRID_SIZE                    16
-#define LOAD_GRID_SIZE                   16
-#define GASDOSE_POS_RPM_SIZE             16
-#define GASDOSE_POS_TPS_SIZE             16
-#define BAROCORR_SIZE                    9
-#define PA4_LOOKUP_TABLE_SIZE            16
-#define CTS_CRKCORR_SIZE                 16
-#define CRANK_THRD_SIZE                  16
-#define CRANK_TIME_SIZE                  16
-#define SMAPABAN_THRD_SIZE               16
-#define KNKZONE_TPS_SIZE                 16
-
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
 //--------------------------------------------------------------------------
@@ -196,9 +178,9 @@ typedef struct
  _char ats_corr[ATS_CORR_LOOKUP_TABLE_SIZE];
 
  //Points of the RPM grid
- _int rpm_grid_points[RPM_GRID_SIZE];
+ _int rpm_grid_points[F_RPM_SLOTS];
  //Sizes of cells in RPM grid (so, we don't need to calculate them at the runtime)
- _int rpm_grid_sizes[RPM_GRID_SIZE-1];
+ _int rpm_grid_sizes[F_RPM_SLOTS-1];
 
  //gas dosator position vs TPS,RPM
  _uchar gasdose_pos[GASDOSE_POS_TPS_SIZE][GASDOSE_POS_RPM_SIZE];
@@ -231,9 +213,9 @@ typedef struct
  _uchar smapaban_thrd[SMAPABAN_THRD_SIZE];
 
  //Points of the CLT grid
- _int clt_grid_points[CLT_GRID_SIZE];
+ _int clt_grid_points[F_TMP_SLOTS];
  //Sizes of cells in CLT grid (so, we don't need to calculate them at the runtime)
- _int clt_grid_sizes[CLT_GRID_SIZE-1];
+ _int clt_grid_sizes[F_TMP_SLOTS-1];
 
  _uint knock_zone[KNKZONE_TPS_SIZE];
 
@@ -247,9 +229,12 @@ typedef struct
  _uint pwmiac_ucoef[PWMIAC_UCOEF_SIZE];
 
  //Points of the load grid
- _int load_grid_points[LOAD_GRID_SIZE];
+ _int load_grid_points[F_LOAD_SLOTS];
  //Sizes of cells in load grid (so, we don't need to calculate them at the runtime)
- _int load_grid_sizes[LOAD_GRID_SIZE-1];
+ _int load_grid_sizes[F_LOAD_SLOTS-1];
+
+ _uint inj_aftstr_strk0[AFTSTR_STRK_SIZE];
+ _uint inj_aftstr_strk1[AFTSTR_STRK_SIZE];
 
  //firmware constants:
  _int evap_clt;
@@ -290,7 +275,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3878];
+ _uchar reserved[3814];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1393,6 +1378,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetKnockZoneMap(op_fwd->knock_zone);
  GetGrHeatDutyMap(op_fwd->grheat_duty);
  GetPwmIacUCoefMap(op_fwd->pwmiac_ucoef);
+ GetAftstrStrk0Map(op_fwd->aftstr_strk0);
+ GetAftstrStrk1Map(op_fwd->aftstr_strk1);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1470,6 +1457,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetKnockZoneMap(ip_fwd->knock_zone);
  SetGrHeatDutyMap(ip_fwd->grheat_duty);
  SetPwmIacUCoefMap(ip_fwd->pwmiac_ucoef);
+ SetAftstrStrk0Map(ip_fwd->aftstr_strk0);
+ SetAftstrStrk1Map(ip_fwd->aftstr_strk1);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -1697,7 +1686,7 @@ void CFirmwareDataMediator::GetRPMGridMap(float* op_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
- for(size_t i = 0; i < RPM_GRID_SIZE; i++)
+ for(size_t i = 0; i < F_RPM_SLOTS; i++)
   op_values[i] = p_fd->exdata.rpm_grid_points[i];
 }
 
@@ -1711,11 +1700,11 @@ void CFirmwareDataMediator::SetRPMGridMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
  //store grid points
- for(size_t i = 0; i < RPM_GRID_SIZE; i++)
+ for(size_t i = 0; i < F_RPM_SLOTS; i++)
   p_fd->exdata.rpm_grid_points[i] = MathHelpers::Round(ip_values[i]);
 
  //calculate sizes
- for(size_t i = 0; i < RPM_GRID_SIZE-1; i++)
+ for(size_t i = 0; i < F_RPM_SLOTS-1; i++)
   p_fd->exdata.rpm_grid_sizes[i] = p_fd->exdata.rpm_grid_points[i+1] - p_fd->exdata.rpm_grid_points[i];
 }
 
@@ -1728,7 +1717,7 @@ void CFirmwareDataMediator::GetCLTGridMap(float* op_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
- for(size_t i = 0; i < CLT_GRID_SIZE; i++)
+ for(size_t i = 0; i < F_TMP_SLOTS; i++)
   op_values[i] = ((float)p_fd->exdata.clt_grid_points[i]) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
@@ -1742,11 +1731,11 @@ void CFirmwareDataMediator::SetCLTGridMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
  //store grid points
- for(size_t i = 0; i < CLT_GRID_SIZE; i++)
+ for(size_t i = 0; i < F_TMP_SLOTS; i++)
   p_fd->exdata.clt_grid_points[i] = MathHelpers::Round(ip_values[i] * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  //calculate sizes
- for(size_t i = 0; i < CLT_GRID_SIZE-1; i++)
+ for(size_t i = 0; i < F_TMP_SLOTS-1; i++)
   p_fd->exdata.clt_grid_sizes[i] = p_fd->exdata.clt_grid_points[i+1] - p_fd->exdata.clt_grid_points[i];
 }
 
@@ -1759,7 +1748,7 @@ void CFirmwareDataMediator::GetLoadGridMap(float* op_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
- for(size_t i = 0; i < LOAD_GRID_SIZE; i++)
+ for(size_t i = 0; i < F_LOAD_SLOTS; i++)
   op_values[i] = ((float)p_fd->exdata.load_grid_points[i]) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
@@ -1773,11 +1762,11 @@ void CFirmwareDataMediator::SetLoadGridMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
  //store grid points
- for(size_t i = 0; i < LOAD_GRID_SIZE; i++)
+ for(size_t i = 0; i < F_LOAD_SLOTS; i++)
   p_fd->exdata.load_grid_points[i] = MathHelpers::Round(ip_values[i] * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  //calculate sizes (note: reverse order)
- for(size_t i = 0; i < LOAD_GRID_SIZE-1; i++)
+ for(size_t i = 0; i < F_LOAD_SLOTS-1; i++)
   p_fd->exdata.load_grid_sizes[i] = p_fd->exdata.load_grid_points[i] - p_fd->exdata.load_grid_points[i+1];
 }
 
@@ -2168,6 +2157,43 @@ void CFirmwareDataMediator::SetPwmIacUCoefMap(const float* ip_values)
   p_fd->exdata.pwmiac_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
 }
 
+void CFirmwareDataMediator::GetAftstrStrk0Map(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
+  op_values[i] = p_fd->exdata.inj_aftstr_strk0[i];
+}
+
+void CFirmwareDataMediator::SetAftstrStrk0Map(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
+  p_fd->exdata.inj_aftstr_strk0[i] = MathHelpers::Round(ip_values[i]);
+}
+
+void CFirmwareDataMediator::GetAftstrStrk1Map(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
+  op_values[i] = p_fd->exdata.inj_aftstr_strk1[i];
+}
+
+void CFirmwareDataMediator::SetAftstrStrk1Map(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
+  p_fd->exdata.inj_aftstr_strk1[i] = MathHelpers::Round(ip_values[i]);
+}
+
+//--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
  if (!mp_cddata)
