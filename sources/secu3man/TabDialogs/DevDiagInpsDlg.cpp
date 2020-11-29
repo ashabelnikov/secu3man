@@ -43,12 +43,12 @@ const UINT CDevDiagInpsDlg::IDD = IDD_DEVDIAG_INPUTS;
 const UINT InputsTextStart = IDC_DEV_DIAG_VOLTAGE;
 const UINT InputsTextEnd = IDC_DEV_DIAG_DE;
 const UINT InputsTextStart1 = IDC_DEV_DIAG_VOLTAGE;            //secu-3i
-const UINT InputsTextEnd1 = IDC_DEV_DIAG_ADD_I4;               //secu-3i
+const UINT InputsTextEnd1 = IDC_DEV_DIAG_ADD_I8;               //secu-3i
 
 const UINT InputsCaptionStart = IDC_DEV_DIAG_VOLTAGE_CAPTION;
 const UINT InputsCaptionEnd = IDC_DEV_DIAG_DE_CAPTION;
 const UINT InputsCaptionStart1 = IDC_DEV_DIAG_VOLTAGE_CAPTION; //secu-3i
-const UINT InputsCaptionEnd1 = IDC_DEV_DIAG_ADD_I4_CAPTION;    //secu-3i
+const UINT InputsCaptionEnd1 = IDC_DEV_DIAG_ADD_I8_CAPTION;    //secu-3i
 
 BEGIN_MESSAGE_MAP(CDevDiagInpsDlg, Super)
  ON_WM_DESTROY()
@@ -95,6 +95,10 @@ void CDevDiagInpsDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_IGN_I, m_inputValues.ign_i, _T("%d"));
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_COND_I, m_inputValues.cond_i, _T("%d"));
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_EPAS_I, m_inputValues.epas_i, _T("%d"));
+  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I5, m_inputValues.add_i5, _T("%.3f"));
+  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I6, m_inputValues.add_i6, _T("%.3f"));
+  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I7, m_inputValues.add_i7, _T("%.3f"));
+  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I8, m_inputValues.add_i8, _T("%.3f"));
  }
 }
 
@@ -135,6 +139,15 @@ void CDevDiagInpsDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
 {
  switch(pCmdUI->m_nID)
  {
+ case IDC_DEV_DIAG_ADD_I5:
+ case IDC_DEV_DIAG_ADD_I5_CAPTION:
+ case IDC_DEV_DIAG_ADD_I6:
+ case IDC_DEV_DIAG_ADD_I6_CAPTION:
+ case IDC_DEV_DIAG_ADD_I7:
+ case IDC_DEV_DIAG_ADD_I7_CAPTION:
+ case IDC_DEV_DIAG_ADD_I8:
+ case IDC_DEV_DIAG_ADD_I8_CAPTION:
+
  case IDC_DEV_DIAG_ADD_I3:
  case IDC_DEV_DIAG_IGN_I:
  case IDC_DEV_DIAG_COND_I:
@@ -180,6 +193,14 @@ void CDevDiagInpsDlg::EnableSECU3TFeatures(bool i_enable)
 
  _UpdateScrlViewSize();
 
+ GetDlgItem(IDC_DEV_DIAG_ADD_I5)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_ADD_I5_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_ADD_I6)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_ADD_I6_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_ADD_I7)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_ADD_I7_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_ADD_I8)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_ADD_I8_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I3)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I4)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_IGN_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
@@ -219,7 +240,7 @@ void CDevDiagInpsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(250) : da.ScaleY(360));
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(250) : da.ScaleY(440));
 }
 
 void CDevDiagInpsDlg::OnSize( UINT nType, int cx, int cy )

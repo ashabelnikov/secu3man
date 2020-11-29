@@ -406,6 +406,10 @@ namespace SECU3IO
   float add_i2;                         //additional input 2 (analog)
   float add_i3;                         //additional input 3 (analog)
   float add_i4;                         //additional input 4 (analog, available only in firwares with TPIC8101 support)
+  float add_i5;                         //MCP3204
+  float add_i6;
+  float add_i7;
+  float add_i8;
   float carb;                           //carburetor switch, throttle position sensor (analog)
   int gas;                              //gas valve state (digital)
   int ckps;                             //CKP sensor (digital)

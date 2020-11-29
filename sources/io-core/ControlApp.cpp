@@ -1937,7 +1937,7 @@ bool CControlApp::Parse_LODGRD_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& diagInpDat = m_recepted_packet.m_DiagInpDat;
- if (size != (mp_pdp->isHex() ? 46 : 23))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 62 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //flags variable
@@ -1987,6 +1987,31 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i4))
   return false;
  diagInpDat.add_i4 = ((float)add_i4) * m_adc_discrete;
+
+
+ //дополнительный I5 (SECU-3i & MCP3204)
+ int add_i5 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i5))
+  return false;
+ diagInpDat.add_i5 = ((float)add_i5) * m_adc_discrete;
+
+ //дополнительный I6 (SECU-3i & MCP3204)
+ int add_i6 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i6))
+  return false;
+ diagInpDat.add_i6 = ((float)add_i6) * m_adc_discrete;
+
+ //дополнительный I7 (SECU-3i & MCP3204)
+ int add_i7 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i7))
+  return false;
+ diagInpDat.add_i7 = ((float)add_i7) * m_adc_discrete;
+
+ //дополнительный I8 (SECU-3i & MCP3204)
+ int add_i8 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i8))
+  return false;
+ diagInpDat.add_i8 = ((float)add_i8) * m_adc_discrete;
 
  //датчик положения дроссельной заслонки (концевик карбюратора)
  int carb = 0;
