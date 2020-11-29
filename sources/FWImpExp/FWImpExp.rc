@@ -193,9 +193,9 @@ BEGIN
     IDS_FWM_HEX_FILE_STRUCTURE_ERROR "Неожиданный символ или структура HEX-файла нарушена. Операция прервана."
     IDS_FWM_WRONG_FW_FILE_SIZE "Неправильный размер файла прошивки. Размер должен быть %s байт."
 
-    IDS_FWM_INPINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией входов драйвера"
-    IDS_FWM_FLBINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов рекуперации"       
-    IDS_FWM_PWMINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов ШИМ"
+    IDS_FWM_INPINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией входов драйвера. Установите эту галочку если подключаете к блоку ЭСУД внешний драйвер (например SECU-LZID8) вместо форсунок. Не устанавливайте эту галочку для драйвера в блоке SECU-3i TBZ."
+    IDS_FWM_FLBINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов рекуперации. Используйте эту галочку только если схемотехника вашего драйвера нестандартная."       
+    IDS_FWM_PWMINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов ШИМ. Используйте эту галочку только если схемотехника вашего драйвера нестандартная."
     IDS_FWM_PWCORR_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с коррекциями длит. впрыска"
     IDS_FWM_SAVE_BTN_TT      "Сохранить на диск"
     IDS_FWM_LOAD_BTN_TT      "Прошить процессор"
@@ -401,9 +401,9 @@ BEGIN
     IDS_FWM_HEX_FILE_STRUCTURE_ERROR "Unexpected symbol or structure of HEX-file is damaged. Operation aborted."
     IDS_FWM_WRONG_FW_FILE_SIZE "Wrong size of firmware file. Size must be %s bytes."
 
-    IDS_FWM_INPINV_CHECK_TT  "Set this check if you need firmware with inverted inputs"
-    IDS_FWM_FLBINV_CHECK_TT  "Set this check if you need firmware with inverted flyback outputs"       
-    IDS_FWM_PWMINV_CHECK_TT  "Set this check if you need firmware with inverted PWM outputs"
+    IDS_FWM_INPINV_CHECK_TT  "Set this check if you need firmware with inverted inputs. Check this box if you are connecting to ECU an external driver (for example SECU-LZID8) instead of injectors."
+    IDS_FWM_FLBINV_CHECK_TT  "Set this check if you need firmware with inverted flyback outputs. Use this check only if circuit design of your driver is non-standard."       
+    IDS_FWM_PWMINV_CHECK_TT  "Set this check if you need firmware with inverted PWM outputs. Use this check only if circuit design of your driver is non-standard."
     IDS_FWM_PWCORR_CHECK_TT  "Set this check if you need firmware with corrections of inj. PW"
 
     IDS_FWM_SAVE_BTN_TT      "Save firmware on disk"

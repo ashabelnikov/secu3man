@@ -68,6 +68,7 @@ class CEEPROMTabDlg : public CTabDialog
   void setOnMapsetNameChanged(EventHandler OnFunction);
   void setOnShowCEErrors(EventHandler OnFunction);
   void setOnLoadGrids(EventHandler OnFunction);
+  void setOnResetEeprom(EventHandler OnFunction);
 
   void EnableMakingChartsChildren(bool enable);
   void EnableToggleMapWnd(bool toggle);
@@ -100,6 +101,7 @@ class CEEPROMTabDlg : public CTabDialog
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnCEErrorsButton();
   afx_msg void OnLoadGrids();
+  afx_msg void OnResetEeprom();
   DECLARE_MESSAGE_MAP()
 
   bool IsEEPROMOpened(void);
@@ -133,4 +135,5 @@ class CEEPROMTabDlg : public CTabDialog
   EventHandler m_OnShowCEErrors;
   EventHandler m_OnLoadGrids;
   EventResult  m_IsLoadGridsAvailable;
+  EventHandler m_OnResetEeprom;
 };

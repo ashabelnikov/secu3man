@@ -69,6 +69,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 , MapWndScrPos(ip_settings)
 , m_active(false)
 , m_firmware_opened(false)
+, m_clear_sbar_txt_on_conn(false)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_epp = holder.GetEepromParameters();
@@ -91,6 +92,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  mp_view->setOnShowCEErrors(MakeDelegate(this, &CEEPROMTabController::OnShowCEErrors));
  mp_view->setIsLoadGridsAvailable(MakeDelegate(this, &CEEPROMTabController::IsLoadGridsAvailable));
  mp_view->setOnLoadGrids(MakeDelegate(this, &CEEPROMTabController::OnLoadGrids));
+ mp_view->setOnResetEeprom(MakeDelegate(this, &CEEPROMTabController::OnResetEeprom));
  
  mp_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CEEPROMTabController::OnParamDeskTabActivate));
  mp_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CEEPROMTabController::OnParamDeskChangeInTab));
@@ -249,6 +251,13 @@ void CEEPROMTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SE
      }
     }
     return;
+   case SECU3IO::OPCODE_RESET_EEPROM:     //начался процесс сброса EEPROM
+    if (p_ndata->opdata == 0x55)
+    {
+     mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_RESET_EEPROM_STARTED));
+     m_clear_sbar_txt_on_conn = true;
+    }
+    return;
   }
  }
  else if (i_descriptor == INJDRV_PAR)
@@ -266,6 +275,11 @@ void CEEPROMTabController::OnConnection(const bool i_online)
 
   //в онлайне элементы меню связанные с бутлоадером всегда разрешены
   mp_view->EnableBLItems(true);
+  if (m_clear_sbar_txt_on_conn)
+  {
+   mp_sbar->SetInformationText(_T(""));
+   m_clear_sbar_txt_on_conn = false;
+  }
  }
  else
  {
@@ -1051,4 +1065,15 @@ void CEEPROMTabController::OnLoadGrids(void)
  mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
 
  AfxGetMainWnd()->EndWaitCursor();
+}
+
+void CEEPROMTabController::OnResetEeprom(void)
+{
+ if (IDYES==SECUMessageBox(MLL::GetString(IDS_RESET_EEPROM_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
+ {
+  SECU3IO::OPCompNc packet_data;
+  packet_data.opcode = SECU3IO::OPCODE_RESET_EEPROM;
+  packet_data.opdata = 0xAA;
+  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ }
 }

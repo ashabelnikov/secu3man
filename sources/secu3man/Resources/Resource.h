@@ -668,3 +668,4 @@
 #define IDS_PM_READING_LODGRD           4789
 #define IDM_EE_LOAD_GRIDS               4790
 #define IDS_EE_LOAD_GRIDS               4791
+#define IDM_EE_RESET_EEPROM             4792

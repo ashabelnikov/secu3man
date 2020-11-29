@@ -92,6 +92,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_COMMAND(IDM_EE_READ_EEPROM, OnReadEEPROMFromSECU)
  ON_COMMAND(IDM_EE_WRITE_EEPROM, OnWriteEEPROMToSECU)
  ON_COMMAND(IDM_EE_LOAD_GRIDS, OnLoadGrids)
+ ON_COMMAND(IDM_EE_RESET_EEPROM, OnResetEeprom)
  ON_EN_CHANGE(IDC_EE_MAPSET_NAME, OnChangeMapsetName)
 
  ON_UPDATE_COMMAND_UI(IDM_EE_READ_EEPROM, OnUpdatePopupMenu_bl)
@@ -102,6 +103,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_EE_CE_ERRORS_BTN, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_EE_GRID_WARNING, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDM_EE_LOAD_GRIDS, OnUpdatePopupMenu_grids)
+ ON_UPDATE_COMMAND_UI(IDM_EE_RESET_EEPROM, OnUpdatePopupMenu_bl)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -410,7 +412,10 @@ void CEEPROMTabDlg::setOnShowCEErrors(EventHandler OnFunction)
 void CEEPROMTabDlg::setOnLoadGrids(EventHandler OnFunction)
 {m_OnLoadGrids = OnFunction;}
 
-void CEEPROMTabDlg::OnSize( UINT nType, int cx, int cy )
+void CEEPROMTabDlg::setOnResetEeprom(EventHandler OnFunction)
+{m_OnResetEeprom = OnFunction; }
+
+void CEEPROMTabDlg::OnSize(UINT nType, int cx, int cy)
 {
  if (m_initialized)
  {
@@ -456,4 +461,17 @@ void CEEPROMTabDlg::OnEeContLinkClick(void)
 void CEEPROMTabDlg::OnEeUsingLinkClick(void)
 {
  SECUMessageBox(IDS_WHEN_TO_USE_EEPROM, MB_OK | MB_ICONINFORMATION);
+}
+
+void CEEPROMTabDlg::OnResetEeprom()
+{
+ //=================================================================
+ if (!CheckAppTitle(AfxGetMainWnd()))
+  return;
+ if (!CheckAppLogo())
+  return;
+ //=================================================================
+
+ if (m_OnResetEeprom)
+  m_OnResetEeprom();
 }

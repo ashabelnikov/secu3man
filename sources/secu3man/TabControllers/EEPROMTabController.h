@@ -80,6 +80,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   void OnReadEEPROMFromSECU(void);
   void OnWriteEEPROMToSECU(void);
   void OnDropFile(_TSTRING fileName);
+  void OnResetEeprom(void);
 
   void OnMapChanged(int i_type);
   bool IsEEPROMOpened(void);
@@ -121,4 +122,5 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   bool m_active;
   bool m_firmware_opened;
   std::vector<_TSTRING> m_funset_names;
+  bool m_clear_sbar_txt_on_conn;
 };

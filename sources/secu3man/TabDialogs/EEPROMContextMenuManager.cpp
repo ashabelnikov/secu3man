@@ -64,6 +64,9 @@ void CEEPROMContextMenuManager::CreateContent(void)
 
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
  m_ParentMenu.AppendMenu(MF_STRING,IDM_EE_LOAD_GRIDS, MLL::LoadString(IDS_EE_LOAD_GRIDS));
+
+ m_ParentMenu.AppendMenu(MF_STRING, IDM_EE_RESET_EEPROM, MLL::LoadString(IDS_RESET_EEPROM));
+ m_bl_menu_items_IDs.push_back(IDM_EE_RESET_EEPROM);
 }
 
 //показывает контекстное меню
