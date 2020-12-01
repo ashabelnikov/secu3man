@@ -270,7 +270,10 @@ void CParamMonTabDlg::OnMouseMove(UINT nFlags, CPoint point)
  CRect captRect(pd_rc.right, pd_rc.top, ce_rc.left, ce_rc.bottom);
 
  if (captRect.PtInRect(point))
-  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, 0, 0, LR_SHARED));
+ {
+  DPIAware dpi;
+  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, dpi.ScaleX(24), dpi.ScaleY(24), LR_SHARED));
+ }
 
  if (m_moveSplitter)
  {
@@ -293,7 +296,8 @@ void CParamMonTabDlg::OnLButtonDown(UINT nFlags, CPoint point)
 
  if (captRect.PtInRect(point))
  {
-  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, 0, 0, LR_SHARED));
+  DPIAware dpi;
+  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, dpi.ScaleX(24), dpi.ScaleY(24), LR_SHARED));
   m_moveSplitter = true;
   m_moveStart = point;
   m_moveStrtWidthPD = pd_rc.Width();

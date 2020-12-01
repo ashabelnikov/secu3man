@@ -74,12 +74,14 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
   return false;      // fail to create
  }
 
- //подгружаем из ресурсов иконки и строки
- m_ConnIcons[0] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_CONNECTED), IMAGE_ICON, 0, 0, LR_SHARED);
- m_ConnIcons[1] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_DISCONNECTED), IMAGE_ICON, 0, 0, LR_SHARED);
- m_ConnIcons[2] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_BOOTLOADER), IMAGE_ICON, 0, 0, LR_SHARED);
- m_ConnIcons[3] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_HANDSHAKE), IMAGE_ICON, 0, 0, LR_SHARED);
- m_LogWrIcon = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_LOGWR_WRITE), IMAGE_ICON, 0, 0, LR_SHARED);
+ //Load icons and strings from the resources
+
+ CSize s(16,16);
+ m_ConnIcons[0] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_CONNECTED), IMAGE_ICON, s.cx, s.cy, LR_SHARED);
+ m_ConnIcons[1] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_DISCONNECTED), IMAGE_ICON, s.cx, s.cy, LR_SHARED);
+ m_ConnIcons[2] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_BOOTLOADER), IMAGE_ICON, s.cx, s.cy, LR_SHARED);
+ m_ConnIcons[3] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_HANDSHAKE), IMAGE_ICON, s.cx, s.cy, LR_SHARED);
+ m_LogWrIcon = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_LOGWR_WRITE), IMAGE_ICON, s.cx, s.cy, LR_SHARED);
 
  m_ConnStrings[0].LoadString(IDS_CONN_CONNECTED);
  m_ConnStrings[1].LoadString(IDS_CONN_DISCONNECTED);
