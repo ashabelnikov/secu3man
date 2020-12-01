@@ -27,6 +27,7 @@
 #include "TabController.h"
 #include "TabDialog.h"
 #include "ITabControllerEvent.h"
+#include "common/MathHelpers.h"
 
 enum tcOrient
 {
@@ -325,7 +326,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
  CRect rect = lpDrawItemStruct->rcItem;
  rect.DeflateRect(GetTCOrientation()!=TCO_RIGHT ? ::GetSystemMetrics(SM_CXEDGE) : 0,
   GetTCOrientation()==TCO_TOP ? ::GetSystemMetrics(SM_CYEDGE) : 0,
-  ::GetSystemMetrics(SM_CXEDGE), 0);
+  ::GetSystemMetrics(SM_CXEDGE), GetTCOrientation()==TCO_BOTTOM ? ::GetSystemMetrics(SM_CYEDGE) : 0);
 
  int tab_index = lpDrawItemStruct->itemID;
  if(tab_index < 0)
@@ -352,7 +353,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
  int save_dc = p_dc->SaveDC();
 
  p_dc->SetBkMode(TRANSPARENT);
- p_dc->FillSolidRect(&lpDrawItemStruct->rcItem, ::GetSysColor(COLOR_BTNFACE));
+ p_dc->FillSolidRect(&rect, ::GetSysColor(COLOR_BTNFACE));
 
  //Add a space frpm left (or top) side
  if (TCO_TOP==GetTCOrientation() || TCO_BOTTOM==GetTCOrientation())
@@ -367,7 +368,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   IMAGEINFO info;
   p_imagelist->GetImageInfo(item.iImage,&info);
   CRect image_rect(info.rcImage);
-  int y_pos = rect.top;
+  int y_pos = (TCO_BOTTOM==GetTCOrientation() && !selected) ? (rect.CenterPoint().y - MathHelpers::Round(((float)image_rect.Height())/2.0f)) : rect.top;
   int x_pos = rect.left;
 
   if (TCO_RIGHT==GetTCOrientation())
