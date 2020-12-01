@@ -176,7 +176,7 @@ bool CMapEditorCtrl::m_boldFont = false;
 bool CMapEditorCtrl::m_spotMarkers = true;
 float CMapEditorCtrl::m_spotMarkersSize = 1.0f;
  
-CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize)
+void CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize)
 {
  CMapEditorCtrl::m_gradSaturation = gradSat;
  CMapEditorCtrl::m_gradBrightness = gradBrt;
@@ -1102,7 +1102,7 @@ void CMapEditorCtrl::OnEnable(BOOL bEnable)
  Redraw(); //redraw all elements
 }
 
-void CMapEditorCtrl::ShowMarkers(bool show, bool invalidate /*=true*/)
+void CMapEditorCtrl::ShowMarkers(bool show, bool redraw /*=true*/)
 {
  if (m_showMarkers == show)
   return;
@@ -1110,8 +1110,12 @@ void CMapEditorCtrl::ShowMarkers(bool show, bool invalidate /*=true*/)
 
  _DrawMarkers(); //draw marker(s)
 
- if (invalidate)
-  Invalidate();
+ if (redraw)
+ {
+  _DrawMarkers();
+  CClientDC dc(this);
+  _ShowImage(&dc);
+ }
 }
 
 void CMapEditorCtrl::SetValueIncrement(float inc)
@@ -1179,3 +1183,9 @@ void CMapEditorCtrl::Redraw(void)
  m_forceRedraw = true;
  Invalidate();
 }
+
+bool CMapEditorCtrl::GetSpotMarkers(void)
+{
+ return m_spotMarkers;
+}
+

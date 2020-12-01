@@ -59,7 +59,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   std::pair<int, int> GetSelection(void); // first - row, second - column
   void EnableAbroadMove(bool up, bool down);
   void UpdateDisplay(int i = -1, int j = -1); //call if data changed outside control and thus control should be updated
-  void ShowMarkers(bool show, bool invalidate = true);
+  void ShowMarkers(bool show, bool redraw = true);
   void SetValueIncrement(float inc);
   void SetGradientList(const std::vector<COLORREF>& colors);
   void SetItemColor(int i, int j, COLORREF color); // i - row, j - column
@@ -72,7 +72,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void setOnSelChange(EventHandler OnCB);
   void setOnValueTransform(EventHandler3 OnCB);
 
-  static SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize);
+  static void SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize);
+  static bool GetSpotMarkers(void);
 
  protected:
   afx_msg void OnPaint();

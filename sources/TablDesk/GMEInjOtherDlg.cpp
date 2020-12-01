@@ -315,12 +315,22 @@ void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, floa
 
  if (m_dead0_map.GetSafeHwnd())
  {
-  m_dead0_map.ShowMarkers(voltage < mp_deadGrid[16]-(mp_deadGrid[1]-mp_deadGrid[0]) / 5, false);
+  bool use_markers;
+  if (CMapEditorCtrl::GetSpotMarkers())
+   use_markers = voltage < mp_deadGrid[15]+(mp_deadGrid[1]-mp_deadGrid[0]) / 2;
+  else
+   use_markers = voltage < mp_deadGrid[16]-(mp_deadGrid[1]-mp_deadGrid[0]) / 3;
+  m_dead0_map.ShowMarkers(use_markers, true);
   m_dead0_map.SetArguments(0, voltage);
  }
  if (m_dead1_map.GetSafeHwnd())
  {
-  m_dead1_map.ShowMarkers(voltage > mp_deadGrid[15]+(mp_deadGrid[1]-mp_deadGrid[0]) / 5, false);
+  bool use_markers;
+  if (CMapEditorCtrl::GetSpotMarkers())
+   use_markers = voltage >= mp_deadGrid[15]+(mp_deadGrid[1]-mp_deadGrid[0]) / 2;
+  else
+   use_markers = voltage > mp_deadGrid[15]+(mp_deadGrid[1]-mp_deadGrid[0]) / 3;
+  m_dead1_map.ShowMarkers(use_markers, true);
   m_dead1_map.SetArguments(0, voltage);
  }
 
