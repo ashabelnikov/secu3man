@@ -42,6 +42,8 @@
 #include "ui-core/Label.h"
 #include "ui-core/MsgBox.h"
 
+#define FWD_TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
+
 const int TIMER_ID = 1;
 
 const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;
@@ -71,16 +73,33 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 , m_initialized(false)
 , mp_eeresetLink(new CLabel)
 , mp_noanswerLink(new CLabel)
+, m_pImgList(NULL)
 {
  mp_ContextMenuManager->CreateContent();
  //create list of tabs
  m_tabs.insert(std::make_pair(PSTID_DEF_PARAMETERS, std::make_pair(mp_ParamDeskDlg.get(), MLL::GetString(IDS_FW_DEF_PARAMETR))));
  m_tabs.insert(std::make_pair(PSTID_IO_REMAPPING, std::make_pair(mp_IORemappingDlg.get(), MLL::GetString(IDS_FW_IO_REMAPPING))));
 
+ //Init image list
+ m_pImgList = new CImageList();
+ m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
+ CBitmap bitmap;
+ bitmap.LoadBitmap((LPCTSTR)IDB_FWD_TAB_CTRL_BITMAPS);
+ m_pImgList->Add(&bitmap, FWD_TAB_CTRL_BITMAPS_COLOR_MASK);
+
  //=================================================================
  if (!CheckBitmaps() || !CheckAppMenu() || !CheckAppLogo() || !CheckAbout())
   delete this;
  //=================================================================
+}
+
+CFirmwareTabDlg::~CFirmwareTabDlg()
+{
+ if (m_pImgList)
+ {
+  delete m_pImgList;
+  m_pImgList = NULL;
+ }
 }
 
 void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -182,11 +201,13 @@ END_MESSAGE_MAP()
 BOOL CFirmwareTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+ m_param_sel_tab.SetImageList(m_pImgList);
 
  //Prepare and tune tab control (See PSTabId enum)
  std::map<int, std::pair<IDeskView*, _TSTRING> >::const_iterator it;
- for(it = m_tabs.begin(); it != m_tabs.end(); ++it)
-  m_param_sel_tab.AddPage(it->second.second.c_str(), NULL);
+ int i = 0;
+ for(it = m_tabs.begin(); it != m_tabs.end(); ++it, ++i)
+  m_param_sel_tab.AddPage(it->second.second.c_str(), NULL, i);
  m_param_sel_tab.SetEventListener(this);
  m_param_sel_tab.EnableItem(-1, false);
 

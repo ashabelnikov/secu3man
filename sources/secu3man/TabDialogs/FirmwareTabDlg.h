@@ -53,6 +53,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
 
  public:
   CFirmwareTabDlg(CWnd* pParent = NULL);   // standard constructor
+ ~CFirmwareTabDlg();
 
   static const UINT IDD;
 
@@ -232,4 +233,5 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   CFont m_tab_selection_fnt;
   std::auto_ptr<CLabel> mp_eeresetLink;
   std::auto_ptr<CLabel> mp_noanswerLink;
+  CImageList* m_pImgList;
 };

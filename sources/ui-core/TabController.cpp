@@ -215,22 +215,25 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
 
  pPageData->is_enabled = true; //by default - item has been enabled
 
- //создание шаблона диалога
- HRSRC hrsrc  = FindResource(_GetResourceModule(), pPageDlg->GetDialogID(), RT_DIALOG);
- if (NULL==hrsrc)
+ if (pPageDlg) //our control is able to work without dialogs
  {
-  AfxMessageBox(_T("Resource not found!"));
-  return -1; //error
- }
+  //создание шаблона диалога
+  HRSRC hrsrc  = FindResource(_GetResourceModule(), pPageDlg->GetDialogID(), RT_DIALOG);
+  if (NULL==hrsrc)
+  {
+   AfxMessageBox(_T("Resource not found!"));
+   return -1; //error
+  }
 
- HGLOBAL hglb = LoadResource(_GetResourceModule(), hrsrc);
- if (NULL==hglb)
- {
-  AfxMessageBox(_T("Resource load failed!"));
-  return -1; //error
- }
+  HGLOBAL hglb = LoadResource(_GetResourceModule(), hrsrc);
+  if (NULL==hglb)
+  {
+   AfxMessageBox(_T("Resource load failed!"));
+   return -1; //error
+  }
 
- pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb);
+  pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb);
+ }
 
  //добавление непосредственно вкладки
  InsertItem(TCIF_TEXT|TCIF_PARAM|TCIF_IMAGE,m_tab_item_index,name,nImage,(LPARAM)pPageData);
@@ -372,7 +375,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   int x_pos = rect.left;
 
   if (TCO_RIGHT==GetTCOrientation())
-   x_pos = rect.right-image_rect.Width();
+   x_pos = rect.right - image_rect.Width();
 
   //рисуем картинку в зависимости от текущего состояния
   if (GetItemData(tab_index)->is_enabled)
@@ -385,7 +388,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   if (TCO_TOP==GetTCOrientation() || TCO_BOTTOM==GetTCOrientation())
    rect.left += image_rect.Width();
   else
-   rect.top += image_rect.Height();
+   rect.top += (image_rect.Height() + 1);
  }
 
  //Select vertical font if orientation is vertical
