@@ -133,7 +133,7 @@ void CGMEInjAFRDlg::SetArguments(int rpm, int air_flow, bool strt_use, float loa
 {
  if (m_afr_map.GetSafeHwnd())
  {
-  m_afr_map.ShowMarkers(!strt_use, false);
+  m_afr_map.ShowMarkers(!strt_use, true);
   m_afr_map.SetArguments(load, (float)rpm);
  }
 }

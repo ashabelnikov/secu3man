@@ -72,6 +72,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
    return p_maps->f_wrk;
   case TYPE_MAP_DA_TEMP_CORR:
    return p_maps->f_tmp;
+  case TYPE_MAP_DA_TEMPI_CORR:
+   return p_maps->f_tmp_idl;
   //fuel injection
   case TYPE_MAP_INJ_VE:
    return p_maps->inj_ve;
@@ -135,6 +137,8 @@ size_t _GetMapSize(int i_mapType)
   case TYPE_MAP_DA_WORK:
    return F_WRK_POINTS_L * F_WRK_POINTS_F;
   case TYPE_MAP_DA_TEMP_CORR:
+   return F_TMP_POINTS;
+  case TYPE_MAP_DA_TEMPI_CORR:
    return F_TMP_POINTS;
   //fuel injection maps
   case TYPE_MAP_INJ_VE:
@@ -304,6 +308,7 @@ void CPMTablesController::OnActivate(void)
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_IDLE, mptms.m_idle_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_WORK, mptms.m_work_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
+ mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMPI_CORR, mptms.m_tempi_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
@@ -494,8 +499,11 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
   case ETMT_WORK_MAP: //work map
    UpdateMap(m_maps->f_wrk, m_maps_flags->f_wrk, data);
    break;
-  case ETMT_TEMP_MAP: //temp. corr. map
+  case ETMT_TEMP_MAP: //temp. corr. map (working)
    UpdateMap(m_maps->f_tmp, m_maps_flags->f_tmp, data);
+   break;
+  case ETMT_TEMPI_MAP: //temp. corr. map (idling)
+   UpdateMap(m_maps->f_tmp_idl, m_maps_flags->f_tmp_idl, data);
    break;
   //fuel injection maps
   case ETMT_VE_MAP: //ve map
@@ -889,6 +897,7 @@ void CPMTablesController::OnChangeSettings(void)
  mptms.m_idle_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_IDLE);
  mptms.m_work_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_WORK);
  mptms.m_temp_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
+ mptms.m_tempi_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMPI_CORR);
  mptms.m_ve_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
  mptms.m_afr_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
  mptms.m_crnk_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);

@@ -40,6 +40,8 @@ struct WndSettings
  int m_WorkMapWnd_Y;
  int m_TempMapWnd_X;
  int m_TempMapWnd_Y;
+ int m_TempIdlMapWnd_X;
+ int m_TempIdlMapWnd_Y;
  int m_AttenuatorMapWnd_X;
  int m_AttenuatorMapWnd_Y;
  int m_DwellCntrlMapWnd_X;
@@ -147,6 +149,8 @@ struct WndSize
  int m_WorkMapWnd_H;
  int m_TempMapWnd_W;
  int m_TempMapWnd_H;
+ int m_TempIdlMapWnd_W;
+ int m_TempIdlMapWnd_H;
  int m_AttenuatorMapWnd_W;
  int m_AttenuatorMapWnd_H;
  int m_DwellCntrlMapWnd_W;
@@ -316,6 +320,7 @@ struct MapPtMovStep
 {
  float m_work_map;
  float m_temp_map;
+ float m_tempi_map;
  float m_start_map;
  float m_idle_map;
  float m_ve_map;

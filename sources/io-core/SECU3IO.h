@@ -110,6 +110,8 @@ namespace SECU3IO
   bool  rigid_use;
 
   int rxlaf;                            //RxL air flow
+
+  bool aftstr_enr;                      //flag, indicates that after start enrichment is active
  };
 
  struct DbgvarDat
@@ -388,6 +390,7 @@ namespace SECU3IO
  const int ETMT_ATSC_MAP = 25;          //Inj. PW correction coefficient vs air temperature
  const int ETMT_PWM1_MAP = 26;          //PWM1 duty
  const int ETMT_PWM2_MAP = 27;          //PWM2 duty
+ const int ETMT_TEMPI_MAP = 28;         //temp.corr. map (idling)
 
  struct SepTabPar
  {

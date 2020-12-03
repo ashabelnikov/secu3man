@@ -54,36 +54,37 @@ enum EMapTypes
  TYPE_MAP_INJ_ATSC      = 25, //must be = 25
  TYPE_MAP_PWM1          = 26, //must be = 26
  TYPE_MAP_PWM2          = 27, //must be = 27
+ TYPE_MAP_DA_TEMPI_CORR = 28, //must be = 28
 
  //separate maps
- TYPE_MAP_ATTENUATOR    = 28, //
- TYPE_MAP_DWELLCNTRL    = 29, //
- TYPE_MAP_CTS_CURVE     = 30, //
- TYPE_MAP_ATS_CURVE     = 31, //
- TYPE_MAP_ATS_CORR      = 32, //
- TYPE_MAP_GASDOSE       = 33, //
- TYPE_MAP_BAROCORR      = 34, //
- TYPE_MAP_MANIGNTIM     = 35, //
- TYPE_MAP_TMP2_CURVE    = 36, //
- TYPE_MAP_CRKCLT_CORR   = 37, //
- TYPE_MAP_EH_PAUSE      = 38, //
- TYPE_MAP_CRANKING_THRD = 39, //
- TYPE_MAP_CRANKING_TIME = 40, //
- TYPE_MAP_SMAPABAN_THRD = 41, //
- TYPE_MAP_KNOCK_ZONE    = 42, //
- TYPE_MAP_GRTS_CURVE    = 43, //
- TYPE_MAP_GRHEAT_DUTY   = 44, //
- TYPE_MAP_PWMIAC_UCOEF  = 45, //
- TYPE_MAP_AFTSTR_STRK0  = 46, //
- TYPE_MAP_AFTSTR_STRK1  = 47, //
+ TYPE_MAP_ATTENUATOR    = 29, //
+ TYPE_MAP_DWELLCNTRL    = 30, //
+ TYPE_MAP_CTS_CURVE     = 31, //
+ TYPE_MAP_ATS_CURVE     = 32, //
+ TYPE_MAP_ATS_CORR      = 33, //
+ TYPE_MAP_GASDOSE       = 34, //
+ TYPE_MAP_BAROCORR      = 35, //
+ TYPE_MAP_MANIGNTIM     = 36, //
+ TYPE_MAP_TMP2_CURVE    = 37, //
+ TYPE_MAP_CRKCLT_CORR   = 38, //
+ TYPE_MAP_EH_PAUSE      = 39, //
+ TYPE_MAP_CRANKING_THRD = 40, //
+ TYPE_MAP_CRANKING_TIME = 41, //
+ TYPE_MAP_SMAPABAN_THRD = 42, //
+ TYPE_MAP_KNOCK_ZONE    = 43, //
+ TYPE_MAP_GRTS_CURVE    = 44, //
+ TYPE_MAP_GRHEAT_DUTY   = 45, //
+ TYPE_MAP_PWMIAC_UCOEF  = 46, //
+ TYPE_MAP_AFTSTR_STRK0  = 47, //
+ TYPE_MAP_AFTSTR_STRK1  = 48, //
 
- TYPE_MAP_GME_IGN_WND   = 48, //pseudo map, grid mode editing window for ignition maps
- TYPE_MAP_GME_INJ_WND   = 49, //pseudo map, grid mode editing window for injection maps
+ TYPE_MAP_GME_IGN_WND   = 49, //pseudo map, grid mode editing window for ignition maps
+ TYPE_MAP_GME_INJ_WND   = 50, //pseudo map, grid mode editing window for injection maps
 
  TYPE_MAP_SET_START     = 1,
- TYPE_MAP_SET_END       = 27,
+ TYPE_MAP_SET_END       = 28,
  TYPE_MAP_ALL_START     = 1,
- TYPE_MAP_ALL_END       = 49,
- TYPE_MAP_SEP_START     = 28,
- TYPE_MAP_SEP_END       = 47
+ TYPE_MAP_ALL_END       = 50,
+ TYPE_MAP_SEP_START     = 29,
+ TYPE_MAP_SEP_END       = 48
 };

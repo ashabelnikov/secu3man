@@ -159,7 +159,7 @@ void CGMEInjITDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load
 {
  if (m_it_map.GetSafeHwnd())
  {
-  m_it_map.ShowMarkers(!strt_use, false);
+  m_it_map.ShowMarkers(!strt_use, true);
   m_it_map.SetArguments(load, (float)rpm);
  }
 }

@@ -184,29 +184,29 @@ void CGMEInjEnrDlg::UpdateView(bool axisLabels /*= false*/)
 }
 
 
-void CGMEInjEnrDlg::SetArguments(bool strt_use, float clt, int tpsdot, int rpm)
-{/*
- if (m_aftstr_map.GetSafeHwnd())
+void CGMEInjEnrDlg::SetArguments(bool strt_use, float clt, int tpsdot, int rpm, bool aftstr_enr)
+{
+ if (m_wrmp_map.GetSafeHwnd())
  {
-  m_aftstr_map.ShowMarkers(!strt_use, false);
+  m_aftstr_map.ShowMarkers(aftstr_enr, true);
   m_aftstr_map.SetArguments(0, clt);
- }*/
+ }
 
  if (m_wrmp_map.GetSafeHwnd())
  {
-  m_wrmp_map.ShowMarkers(!strt_use, false);
+  m_wrmp_map.ShowMarkers(!strt_use, true);
   m_wrmp_map.SetArguments(0, clt);
  }
 
  if (m_aetps_map.GetSafeHwnd())
  {
-  m_aetps_map.ShowMarkers(!strt_use, false);
+  m_aetps_map.ShowMarkers(!strt_use, true);
   m_aetps_map.SetArguments(0, (float)tpsdot);
  }
 
  if (m_aerpm_map.GetSafeHwnd())
  {
-  m_aerpm_map.ShowMarkers(!strt_use, false);
+  m_aerpm_map.ShowMarkers(!strt_use, true);
   m_aerpm_map.SetArguments(0, (float)rpm);
  }
 }

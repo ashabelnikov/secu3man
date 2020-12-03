@@ -85,6 +85,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetWorkMap(int i_index, const float* i_values);
   void GetTempMap(int i_index, float* op_values, bool i_original = false);
   void SetTempMap(int i_index, const float* i_values);
+  void GetTempIdlMap(int i_index, float* op_values, bool i_original = false);
+  void SetTempIdlMap(int i_index, const float* i_values);
   //fuel injection
   void GetVEMap(int i_index, float* op_values, bool i_original = false);
   void SetVEMap(int i_index, const float* i_values);

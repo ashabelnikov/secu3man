@@ -214,6 +214,28 @@ void EEPROMDataMediator::SetTempMap(int i_index,const float* ip_values)
   p_maps[i_index].f_tmp[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
+void EEPROMDataMediator::GetTempIdlMap(int i_index, float* o_values, bool i_original/* = false*/)
+{
+ ASSERT(o_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < F_TMP_POINTS; i++ )
+  o_values[i] = ((float)p_maps[i_index].f_tmp_idl[i]) / AA_MAPS_M_FACTOR;
+}
+
+void EEPROMDataMediator::SetTempIdlMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < F_TMP_POINTS; i++ )
+  p_maps[i_index].f_tmp_idl[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
+}
+
 void EEPROMDataMediator::GetVEMap(int i_index, float* op_values, bool i_original /* = false*/)
 {
  ASSERT(op_values);

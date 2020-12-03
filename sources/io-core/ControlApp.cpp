@@ -351,6 +351,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  sensorDat.ign_i        = CHECKBIT16(flags, 11);
  sensorDat.cond_i       = CHECKBIT16(flags, 12);
  sensorDat.epas_i       = CHECKBIT16(flags, 13);
+ sensorDat.aftstr_enr   = CHECKBIT16(flags, 14);
 
  //TPS sensor
  unsigned char tps = 0;
@@ -1643,7 +1644,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.tab_id != ETMT_EGOCRV_MAP && editTabPar.tab_id != ETMT_IACC_MAP && editTabPar.tab_id != ETMT_IACCW_MAP &&
      editTabPar.tab_id != ETMT_IATCLT_MAP && editTabPar.tab_id != ETMT_TPSSWT_MAP && editTabPar.tab_id != ETMT_GTSC_MAP &&
      editTabPar.tab_id != ETMT_GPSC_MAP && editTabPar.tab_id != ETMT_ATSC_MAP && editTabPar.tab_id != ETMT_PWM1_MAP &&
-     editTabPar.tab_id != ETMT_PWM2_MAP)
+     editTabPar.tab_id != ETMT_PWM2_MAP && editTabPar.tab_id != ETMT_TEMPI_MAP)
   return false;
 
  //check for 16-byte packets

@@ -121,6 +121,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optIdleMapWnd(_T("IdleMapWnd"))
 , m_optWorkMapWnd(_T("WorkMapWnd"))
 , m_optTempMapWnd(_T("TempMapWnd"))
+, m_optTempIdlMapWnd(_T("TempIdlMapWnd"))
 , m_optAttenMapWnd(_T("AttenMapWnd"))
 , m_optMainFrmWnd(_T("MainFrmWnd"))
 , m_optDwellCntrlMapWnd(_T("DwellCntrlMapWnd"))
@@ -174,6 +175,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optIdleMapWnd1(_T("IdleMapWnd"))
 , m_optWorkMapWnd1(_T("WorkMapWnd"))
 , m_optTempMapWnd1(_T("TempMapWnd"))
+, m_optTempIdlMapWnd1(_T("TempIdlMapWnd"))
 , m_optGridMapIgnWnd1(_T("GridMapIgnWnd"))
 , m_optGridMapInjWnd1(_T("GridMapInjWnd"))
 , m_optVEMapWnd1(_T("VEMapWnd"))
@@ -206,6 +208,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optIdleMapWndSize(_T("IdleMapWnd"))
 , m_optWorkMapWndSize(_T("WorkMapWnd"))
 , m_optTempMapWndSize(_T("TempMapWnd"))
+, m_optTempIdlMapWndSize(_T("TempIdlMapWnd"))
 , m_optAttenMapWndSize(_T("AttenMapWnd"))
 , m_optDwellCntrlMapWndSize(_T("DwellCntrlMapWnd"))
 , m_optCTSCurveMapWndSize(_T("CTSCurveMapWnd"))
@@ -258,6 +261,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optIdleMapWndSize1(_T("IdleMapWnd"))
 , m_optWorkMapWndSize1(_T("WorkMapWnd"))
 , m_optTempMapWndSize1(_T("TempMapWnd"))
+, m_optTempIdlMapWndSize1(_T("TempIdlMapWnd"))
 //, m_optGridMapIgnWnd1(_T("GridMapIgnWnd"))
 //, m_optGridMapInjWnd1(_T("GridMapInjWnd"))
 , m_optVEMapWndSize1(_T("VEMapWnd"))
@@ -346,6 +350,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_MapPtMovStep_Section(_T("MapPtMovStep"))
 , m_optPtMovStepWorkMap(_T("WorkMapWnd"))
 , m_optPtMovStepTempMap(_T("TempMapWnd"))
+, m_optPtMovStepTempIdlMap(_T("TempIdlMapWnd"))
 , m_optPtMovStepStartMap(_T("StrtMapWnd"))
 , m_optPtMovStepIdleMap(_T("IdleMapWnd"))
 , m_optPtMovStepVeMap(_T("VEMapWnd"))
@@ -710,6 +715,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optIdleMapWnd);
  ws.ReadWndPos(m_optWorkMapWnd);
  ws.ReadWndPos(m_optTempMapWnd);
+ ws.ReadWndPos(m_optTempIdlMapWnd);
  ws.ReadWndPos(m_optAttenMapWnd); 
  ws.ReadWndPos(m_optMainFrmWnd); //Main frame window
  ws.ReadWndPos(m_optDwellCntrlMapWnd);
@@ -765,6 +771,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optIdleMapWnd1);
  ws1.ReadWndPos(m_optWorkMapWnd1);
  ws1.ReadWndPos(m_optTempMapWnd1);
+ ws1.ReadWndPos(m_optTempIdlMapWnd1);
  ws1.ReadWndPos(m_optGridMapIgnWnd1);
  ws1.ReadWndPos(m_optGridMapInjWnd1);
  ws1.ReadWndPos(m_optVEMapWnd1);
@@ -798,6 +805,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optIdleMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optWorkMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optTempMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optTempIdlMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAttenMapWndSize, 0, 10000); 
  sz.ReadWndPos(m_optDwellCntrlMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optCTSCurveMapWndSize, 0, 10000);
@@ -851,6 +859,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optIdleMapWndSize1);
  sz1.ReadWndPos(m_optWorkMapWndSize1);
  sz1.ReadWndPos(m_optTempMapWndSize1);
+ sz1.ReadWndPos(m_optTempIdlMapWndSize1);
 //sz1.ReadWndPos(m_optGridMapIgnWndSize1);
 //sz1.ReadWndPos(m_optGridMapInjWndSize1);
  sz1.ReadWndPos(m_optVEMapWndSize1);
@@ -1007,6 +1016,7 @@ bool CAppSettingsModel::ReadSettings(void)
  IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
  ms.ReadFlt(m_optPtMovStepWorkMap,  _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepTempMap,  _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepTempIdlMap,  _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepStartMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepIdleMap,  _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepVeMap,   _T("0.05"), 0.0f, 10.0f);
@@ -1606,6 +1616,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optTempMapWnd, _T("Коррекция УОЗ по ДТОЖ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optTempIdlMapWnd, _T("Ign. timing vs CLT correction map (idling)"));
+ else
+  ws.WriteWndPos(m_optTempIdlMapWnd, _T("Коррекция УОЗ по ДТОЖ (для ХХ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ws.WriteWndPos(m_optGridMapIgnWnd, _T("Grid editing window for ign.timing maps"));
  else
   ws.WriteWndPos(m_optGridMapIgnWnd, _T("Редактирование в виде таблиц (зажигание)"));
@@ -1864,6 +1879,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optTempMapWnd1, _T("Коррекция УОЗ по ДТОЖ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optTempIdlMapWnd1, _T("Ign. timing vs CLT correction map (idling)"));
+ else
+  ws1.WriteWndPos(m_optTempIdlMapWnd1, _T("Коррекция УОЗ по ДТОЖ (для ХХ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ws1.WriteWndPos(m_optGridMapIgnWnd1, _T("Grid editing window for ign.timing maps"));
  else
   ws1.WriteWndPos(m_optGridMapIgnWnd1, _T("Редактирование в виде таблиц (зажигание)"));
@@ -2020,6 +2040,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optTempMapWndSize, _T("Ign. timing vs CLT correction map"));
  else
   sz.WriteWndPos(m_optTempMapWndSize, _T("Коррекция УОЗ по ДТОЖ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optTempIdlMapWndSize, _T("Ign. timing vs CLT correction map (idling)"));
+ else
+  sz.WriteWndPos(m_optTempIdlMapWndSize, _T("Коррекция УОЗ по ДТОЖ (для ХХ)"));
 
 // if (m_optInterfaceLang.value == IL_ENGLISH)
 //  sz.WriteWndPos(m_optGridMapIgnWndSize, _T("Grid editing window for ign.timing maps"));
@@ -2278,6 +2303,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optTempMapWndSize1, _T("Ign. timing vs CLT correction map"));
  else
   sz1.WriteWndPos(m_optTempMapWndSize1, _T("Коррекция УОЗ по ДТОЖ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optTempIdlMapWndSize1, _T("Ign. timing vs CLT correction map (idling)"));
+ else
+  sz1.WriteWndPos(m_optTempIdlMapWndSize1, _T("Коррекция УОЗ по ДТОЖ (для ХХ)"));
 
 // if (m_optInterfaceLang.value == IL_ENGLISH)
 //  sz1.WriteWndPos(m_optGridMapIgnWndSize1, _T("Grid editing window for ign.timing maps"));
@@ -2997,6 +3027,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepTempMap, 3, _T("Коррекция УОЗ по ДТОЖ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepTempIdlMap, 3, _T("Ign. timing vs CLT correction map (idling)"));
+ else
+  ms.WriteFlt(m_optPtMovStepTempIdlMap, 3, _T("Коррекция УОЗ по ДТОЖ (для ХХ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepStartMap, 3, _T("Cranking ignition timing map"));
  else
   ms.WriteFlt(m_optPtMovStepStartMap, 3, _T("Таблица УОЗ на пуске"));
@@ -3410,6 +3445,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optWorkMapWnd.value.y = i_wndSettings.m_WorkMapWnd_Y;
  m_optTempMapWnd.value.x = i_wndSettings.m_TempMapWnd_X;
  m_optTempMapWnd.value.y = i_wndSettings.m_TempMapWnd_Y;
+ m_optTempIdlMapWnd.value.x = i_wndSettings.m_TempIdlMapWnd_X;
+ m_optTempIdlMapWnd.value.y = i_wndSettings.m_TempIdlMapWnd_Y;
  m_optAttenMapWnd.value.x = i_wndSettings.m_AttenuatorMapWnd_X;
  m_optAttenMapWnd.value.y = i_wndSettings.m_AttenuatorMapWnd_Y;
  m_optMainFrmWnd.value.x = i_wndSettings.m_MainFrmWnd_X;
@@ -3516,6 +3553,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_WorkMapWnd_Y = m_optWorkMapWnd.value.y;
  o_wndSettings.m_TempMapWnd_X = m_optTempMapWnd.value.x;
  o_wndSettings.m_TempMapWnd_Y = m_optTempMapWnd.value.y;
+ o_wndSettings.m_TempIdlMapWnd_X = m_optTempIdlMapWnd.value.x;
+ o_wndSettings.m_TempIdlMapWnd_Y = m_optTempIdlMapWnd.value.y;
  o_wndSettings.m_AttenuatorMapWnd_X = m_optAttenMapWnd.value.x;
  o_wndSettings.m_AttenuatorMapWnd_Y = m_optAttenMapWnd.value.y;
  o_wndSettings.m_MainFrmWnd_X = m_optMainFrmWnd.value.x;
@@ -3622,6 +3661,8 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optWorkMapWnd1.value.y = i_wndSettings.m_WorkMapWnd_Y;
  m_optTempMapWnd1.value.x = i_wndSettings.m_TempMapWnd_X;
  m_optTempMapWnd1.value.y = i_wndSettings.m_TempMapWnd_Y;
+ m_optTempIdlMapWnd1.value.x = i_wndSettings.m_TempIdlMapWnd_X;
+ m_optTempIdlMapWnd1.value.y = i_wndSettings.m_TempIdlMapWnd_Y;
  m_optGridMapIgnWnd1.value.x = i_wndSettings.m_GridMapIgnWnd_X;
  m_optGridMapIgnWnd1.value.y = i_wndSettings.m_GridMapIgnWnd_Y;
  m_optGridMapInjWnd1.value.x = i_wndSettings.m_GridMapInjWnd_X;
@@ -3684,6 +3725,8 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_WorkMapWnd_Y = m_optWorkMapWnd1.value.y;
  o_wndSettings.m_TempMapWnd_X = m_optTempMapWnd1.value.x;
  o_wndSettings.m_TempMapWnd_Y = m_optTempMapWnd1.value.y;
+ o_wndSettings.m_TempIdlMapWnd_X = m_optTempIdlMapWnd1.value.x;
+ o_wndSettings.m_TempIdlMapWnd_Y = m_optTempIdlMapWnd1.value.y;
  o_wndSettings.m_GridMapIgnWnd_X = m_optGridMapIgnWnd1.value.x;
  o_wndSettings.m_GridMapIgnWnd_Y = m_optGridMapIgnWnd1.value.y;
  o_wndSettings.m_GridMapInjWnd_X = m_optGridMapInjWnd1.value.x;
@@ -3748,6 +3791,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optWorkMapWndSize.value.y = i_wndSize.m_WorkMapWnd_H;
  m_optTempMapWndSize.value.x = i_wndSize.m_TempMapWnd_W;
  m_optTempMapWndSize.value.y = i_wndSize.m_TempMapWnd_H;
+ m_optTempIdlMapWndSize.value.x = i_wndSize.m_TempIdlMapWnd_W;
+ m_optTempIdlMapWndSize.value.y = i_wndSize.m_TempIdlMapWnd_H;
  m_optAttenMapWndSize.value.x = i_wndSize.m_AttenuatorMapWnd_W;
  m_optAttenMapWndSize.value.y = i_wndSize.m_AttenuatorMapWnd_H;
  m_optDwellCntrlMapWndSize.value.x = i_wndSize.m_DwellCntrlMapWnd_W;
@@ -3854,6 +3899,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_WorkMapWnd_H = m_optWorkMapWndSize.value.y;
  o_wndSize.m_TempMapWnd_W = m_optTempMapWndSize.value.x;
  o_wndSize.m_TempMapWnd_H = m_optTempMapWndSize.value.y;
+ o_wndSize.m_TempIdlMapWnd_W = m_optTempIdlMapWndSize.value.x;
+ o_wndSize.m_TempIdlMapWnd_H = m_optTempIdlMapWndSize.value.y;
  o_wndSize.m_AttenuatorMapWnd_W = m_optAttenMapWndSize.value.x;
  o_wndSize.m_AttenuatorMapWnd_H = m_optAttenMapWndSize.value.y;
  o_wndSize.m_DwellCntrlMapWnd_W = m_optDwellCntrlMapWndSize.value.x;
@@ -3958,6 +4005,8 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optWorkMapWndSize1.value.y = i_wndSize.m_WorkMapWnd_H;
  m_optTempMapWndSize1.value.x = i_wndSize.m_TempMapWnd_W;
  m_optTempMapWndSize1.value.y = i_wndSize.m_TempMapWnd_H;
+ m_optTempIdlMapWndSize1.value.x = i_wndSize.m_TempIdlMapWnd_W;
+ m_optTempIdlMapWndSize1.value.y = i_wndSize.m_TempIdlMapWnd_H;
 // m_optGridMapIgnWndSize1.value.x = i_wndSize.m_GridMapIgnWnd_W;
 // m_optGridMapIgnWndSize1.value.y = i_wndSize.m_GridMapIgnWnd_H;
 // m_optGridMapInjWndSize1.value.x = i_wndSize.m_GridMapInjWnd_W;
@@ -4020,6 +4069,8 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_WorkMapWnd_H = m_optWorkMapWndSize1.value.y;
  o_wndSize.m_TempMapWnd_W = m_optTempMapWndSize1.value.x;
  o_wndSize.m_TempMapWnd_H = m_optTempMapWndSize1.value.y;
+ o_wndSize.m_TempIdlMapWnd_W = m_optTempIdlMapWndSize1.value.x;
+ o_wndSize.m_TempIdlMapWnd_H = m_optTempIdlMapWndSize1.value.y;
 // o_wndSize.m_GridMapIgnWnd_W = m_optGridMapIgnWndSize1.value.x;
 // o_wndSize.m_GridMapIgnWnd_H = m_optGridMapIgnWndSize1.value.y;
 // o_wndSize.m_GridMapInjWnd_W = m_optGridMapInjWndSize1.value.x;
@@ -4726,6 +4777,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
 {
  m_optPtMovStepWorkMap.value = i_ptMovStep.m_work_map;
  m_optPtMovStepTempMap.value = i_ptMovStep.m_temp_map;
+ m_optPtMovStepTempIdlMap.value = i_ptMovStep.m_tempi_map;
  m_optPtMovStepStartMap.value = i_ptMovStep.m_start_map;
  m_optPtMovStepIdleMap.value = i_ptMovStep.m_idle_map;
  m_optPtMovStepVeMap.value = i_ptMovStep.m_ve_map;
@@ -4778,6 +4830,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
 {
  o_ptMovStep.m_work_map = m_optPtMovStepWorkMap.value;
  o_ptMovStep.m_temp_map = m_optPtMovStepTempMap.value;
+ o_ptMovStep.m_tempi_map = m_optPtMovStepTempIdlMap.value;
  o_ptMovStep.m_start_map = m_optPtMovStepStartMap.value;
  o_ptMovStep.m_idle_map = m_optPtMovStepIdleMap.value;
  o_ptMovStep.m_ve_map = m_optPtMovStepVeMap.value;

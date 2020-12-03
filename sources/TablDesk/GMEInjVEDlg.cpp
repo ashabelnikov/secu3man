@@ -249,17 +249,17 @@ void CGMEInjVEDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load
 {
  if (m_ve_map.GetSafeHwnd() && m_ve_map.IsWindowVisible())
  {
-  m_ve_map.ShowMarkers(!strt_use, false);
+  m_ve_map.ShowMarkers(!strt_use, true);
   m_ve_map.SetArguments(load, (float)rpm);
  }
  if (m_lamdel_map.GetSafeHwnd() && m_lamdel_map.IsWindowVisible())
  {
-  m_lamdel_map.ShowMarkers(true, false);
+  m_lamdel_map.ShowMarkers(true, true);
   m_lamdel_map.SetArguments(load, (float)rpm);
  }
  if (m_celwgt_map.GetSafeHwnd() && m_celwgt_map.IsWindowVisible())
  {
-  m_celwgt_map.ShowMarkers(true, false);
+  m_celwgt_map.ShowMarkers(true, true);
   m_celwgt_map.SetArguments(load, (float)rpm);
  }
 }

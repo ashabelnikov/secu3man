@@ -69,6 +69,7 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void GetIdleMap(int i_index,  float* o_values, bool i_original = false);
   void GetWorkMap(int i_index, float* o_values, bool i_original = false);
   void GetTempMap(int i_index, float* o_values, bool i_original = false);
+  void GetTempIdlMap(int i_index, float* o_values, bool i_original = false);
 
   void GetVEMap(int i_index, float* o_values, bool i_original = false);
   void GetAFRMap(int i_index, float* o_values, bool i_original = false);
@@ -103,6 +104,7 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void SetIdleMap(int i_index, const float* i_values);
   void SetWorkMap(int i_index, const float* i_values);
   void SetTempMap(int i_index, const float* i_values);
+  void SetTempIdlMap(int i_index, const float* i_values);
   //fuel injection
   void SetVEMap(int i_index, const float* i_values);
   void SetAFRMap(int i_index, const float* i_values);

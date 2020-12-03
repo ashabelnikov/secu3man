@@ -50,6 +50,7 @@ BEGIN
     CONTROL         "Корр.плотн.возд.",IDC_TD_VIEW_ATSC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,481,96,18
     CONTROL         "Скважность ШИМ1",IDC_TD_VIEW_PWM1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,500,96,18
     CONTROL         "Скважность ШИМ2",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,519,96,18
+    CONTROL         "Темпер. коррекция ХХ",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,538,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -89,6 +90,7 @@ BEGIN
     CONTROL         "Корр.плотн.возд.",IDC_TD_VIEW_ATSC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,281,96,18
     CONTROL         "Скважность ШИМ1",IDC_TD_VIEW_PWM1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,281,96,18
     CONTROL         "Скважность ШИМ2",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,300,96,18
+    CONTROL         "Темпер. коррекция ХХ",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,300,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,3,330,16,18
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,329,96,18
@@ -215,6 +217,8 @@ BEGIN
 
     CTEXT           "Tкор", IDC_GME_TMP_TITLE, 5, 262, 17, 12
     CONTROL         "temp map",IDC_GME_IGN_TMP,"MFCMapEditorCtrl",WS_TABSTOP,24,262,489,25,WS_EX_STATICEDGE
+    CONTROL         "ХХ",IDC_GME_IGN_CLTSEL,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,513,262,16,15
+    CONTROL         "Idl. temp map",IDC_GME_IGN_TMPI,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,24,262,489,25,WS_EX_STATICEDGE
 
     CTEXT           "Пуск", IDC_GME_STR_TITLE, 5, 290, 18, 12
     CONTROL         "start map",IDC_GME_IGN_STR,"MFCMapEditorCtrl",WS_TABSTOP,24,290,489,25,WS_EX_STATICEDGE
@@ -601,7 +605,8 @@ BEGIN
     IDS_AERPM_MAP           "Обогащение в зависимости от оборотов двигателя"
     IDS_ITRPM_MAP           "Обороты ХХ (closed loop)"
     IDS_RIGID_MAP           "Функция жесткости регулятора"
-    IDS_TEMPCORR_MAP        "Карта коррекции УОЗ по температуре охлаждающей жидкости"
+    IDS_TEMPCORR_MAP        "Карта коррекции УОЗ по температуре охлаждающей жидкости (раб.реж.)"
+    IDS_TEMPCORRI_MAP       "Карта коррекции УОЗ по температуре охлаждающей жидкости (для ХХ)"
     IDS_ATSCORR_MAP         "Карта коррекции УОЗ по температуре вохдуха"
     IDS_MAPS_TEMPERATURE_UNIT "Температура °C"
     IDS_MAPS_ATTENUATOR_GAIN_UNIT "Константа коэфф. усиления"
@@ -670,7 +675,7 @@ BEGIN
     IDS_TD_VIEW_START_MAP_TT "Таблица пускового УОЗ. Используется при запуске двигателя пока обороты не достигнут значения 'Обороты пер. с пуск. УОЗ'"
     IDS_TD_VIEW_IDLE_MAP_TT  "Таблица УОЗ на холостом ходу. Используется когда прошивка определяет, что дроссельная заслонка закрыта."
     IDS_TD_VIEW_WORK_MAP_TT  "Таблица УОЗ рабочего режима. Используется когда прошивка определяет, что дроссельная заслонка открыта."
-    IDS_TD_VIEW_TEMP_MAP_TT  "Таблица коррекции УОЗ по температуре двигателя. Значение из таблицы прибавляется к УОЗ в рабочем режиме и режиме холостого хода. Для коррекции на пуске используется отдельная таблица."
+    IDS_TD_VIEW_TEMP_MAP_TT  "Таблица коррекции УОЗ по температуре двигателя (раб.реж.). Значение из таблицы прибавляется к УОЗ в рабочем режиме. Для коррекции на пуске используется отдельная таблица."
     IDS_TD_VIEW_CRKTEMP_MAP_TT "Таблица коррекции УОЗ по температуре двигателя на пуске. Используется для коррекции УОЗ в пусковом режиме."
     IDS_TD_VIEW_ATTENUATOR_MAP_TT "Таблица коэффициентов усиления, используемая для настройки процессора детектирования детонации (HIP9011/TPIC8101)."
     IDS_TD_VIEW_CRNK_MAP_TT "Длительность впрыска на пуске. Используется также для задания положения газового дозатора на пуске (значение 10мс соответсвует положению газового дозатора = 100%, например 1мс это 10%)."
@@ -691,6 +696,7 @@ BEGIN
     IDS_PWMIAC_UCOEF_MAP      "Карта коэффициента скважности ШИМ РДВ от напряжения"
     IDS_AFTSTR_STRK0_MAP     "Такты действия обогащения после пуска от температуры двигателя (бензин)"
     IDS_AFTSTR_STRK1_MAP     "Такты действия обогащения после пуска от температуры двигателя (газ)"
+    IDS_TD_VIEW_TEMPI_MAP_TT "Таблица коррекции УОЗ по температуре двигателя (ХХ). Значение из таблицы прибавляется к УОЗ в режиме холостого хода. Для коррекции на пуске используется отдельная таблица."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -754,6 +760,7 @@ BEGIN
     IDS_KNOCK_ZONE_MAP       "Зоны контроля детонации"
     IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Задает зоны контроля детонации. Используйте значения 0 (нет контроля детонации) и 1 (есть контроль детонации). Зона начинается со значений оборотов и нагрузки где стоит 1 и заканчивается в следующем узле сетки (в сторону возрастания) если там стоит 0."
     IDS_SPLIT_ANGLE_MAP     "Сплитинг УОЗ"
+    IDS_GME_IGN_CLTSEL_TT   "Редактированть таблицу для ХХ"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -774,9 +781,9 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Grid view (ignition)",IDC_TD_GME_IGN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,0,96,12
     CONTROL         "Grid view (injection)",IDC_TD_GME_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,12,96,12
-    CONTROL         "Start angle map",IDC_TD_VIEW_START_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,25,96,18
-    CONTROL         "Idle angle map",IDC_TD_VIEW_IDLE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,44,96,18
-    CONTROL         "Work angle map",IDC_TD_VIEW_WORK_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,63,96,18
+    CONTROL         "Start angle map",IDC_TD_VIEW_START_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,25,96,18
+    CONTROL         "Idle angle map",IDC_TD_VIEW_IDLE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,44,96,18
+    CONTROL         "Work angle map",IDC_TD_VIEW_WORK_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,63,96,18
     CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,82,96,18
     CONTROL         "VE",IDC_TD_VIEW_VE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,101,96,18
     CONTROL         "AFR",IDC_TD_VIEW_AFR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,120,96,18
@@ -801,6 +808,7 @@ BEGIN
     CONTROL         "Air density corr.",IDC_TD_VIEW_ATSC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,481,96,18
     CONTROL         "PWM1 duty",IDC_TD_VIEW_PWM1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,500,96,18
     CONTROL         "PWM2 duty",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,519,96,18
+    CONTROL         "Coolant temper.corr.idl",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,538,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -840,6 +848,7 @@ BEGIN
     CONTROL         "Air density corr.",IDC_TD_VIEW_ATSC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,281,96,18
     CONTROL         "PWM1 duty",IDC_TD_VIEW_PWM1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,281,96,18
     CONTROL         "PWM2 duty",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,300,96,18
+    CONTROL         "Coolant temper.corr.idl",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,300,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,3,330,16,18
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,329,96,18
@@ -965,6 +974,8 @@ BEGIN
 
     CTEXT           "Tcorr", IDC_GME_TMP_TITLE, 5, 262, 17, 12
     CONTROL         "temp map",IDC_GME_IGN_TMP,"MFCMapEditorCtrl",WS_TABSTOP,24,262,489,25,WS_EX_STATICEDGE
+    CONTROL         "Idl",IDC_GME_IGN_CLTSEL,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,513,262,16,15
+    CONTROL         "temp map",IDC_GME_IGN_TMPI,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,24,262,489,25,WS_EX_STATICEDGE
 
     CTEXT           "Start", IDC_GME_STR_TITLE, 5, 290, 18, 12
     CONTROL         "start map",IDC_GME_IGN_STR,"MFCMapEditorCtrl",WS_TABSTOP,24,290,489,25,WS_EX_STATICEDGE
@@ -1371,7 +1382,8 @@ BEGIN
     IDS_AERPM_MAP           "Enrichment vs engine speed"
     IDS_ITRPM_MAP           "Idling RPM (closed loop)"
     IDS_RIGID_MAP           "Idling regulator's rigidity function"
-    IDS_TEMPCORR_MAP        "Coolant temperature angle's correction map"
+    IDS_TEMPCORR_MAP        "Coolant temperature angle's correction map (work mode)"
+    IDS_TEMPCORRI_MAP       "Coolant temperature angle's correction map (idling mode)"
     IDS_ATSCORR_MAP         "Intake air temperature angle's correction map"
     IDS_MAPS_TEMPERATURE_UNIT "Temperature °C"
     IDS_MAPS_ATTENUATOR_GAIN_UNIT "Gain factor constant"
@@ -1440,7 +1452,7 @@ BEGIN
     IDS_TD_VIEW_START_MAP_TT "Look up table of ignition timing for cranking mode. It is used when starting the engine until RPM reaches the value of 'Switch from cranking ignition map RPM'"
     IDS_TD_VIEW_IDLE_MAP_TT  "Look up table of ignition timing for idle mode. Used when firmware determines that the throttle is closed."
     IDS_TD_VIEW_WORK_MAP_TT  "Look up table of ignition timing for working mode. Used when firmware determines that the throttle is open."
-    IDS_TD_VIEW_TEMP_MAP_TT  "Look up table of ignition timing correction vs coolant temperature. The value from table is added to the ignition timing in the working mode and idle mode. For correction at cranking mode, a separate table is used."
+    IDS_TD_VIEW_TEMP_MAP_TT  "Look up table of ignition timing correction vs coolant temperature (work mode). The value from table is added to the ignition timing in the working mode. For correction at cranking mode, a separate table is used."
     IDS_TD_VIEW_CRKTEMP_MAP_TT "Look up table of ignition timing correction vs coolant temperature for cranking mode. The value from table is added to the ignition timing during cranking."
     IDS_TD_VIEW_ATTENUATOR_MAP_TT "Table containong gain coefficients used to configure the knock detection processor (HIP9011 / TPIC8101)."
     IDS_TD_VIEW_CRNK_MAP_TT "Defines PW of injection on cranking. It is also used to set the position of the gas dispenser on cranking (value 10ms corresponds to the position of the gas dispenser = 100%, for example 1ms is 10%)."
@@ -1459,6 +1471,7 @@ BEGIN
     IDS_PWMIAC_UCOEF_MAP      "PWM IAC duty coefficient vs board voltage"
     IDS_AFTSTR_STRK0_MAP      "After start enrichment time in strokes vs coolant temperature (petrol)"
     IDS_AFTSTR_STRK1_MAP      "After start enrichment time in strokes vs coolant temperature (gas)"
+    IDS_TD_VIEW_TEMPI_MAP_TT "Look up table of ignition timing correction vs coolant temperature (idling). The value from table is added to the ignition timing in the idling mode. For correction at cranking mode, a separate table is used."
 END
 
 
@@ -1527,6 +1540,7 @@ BEGIN
     IDS_SPLIT_ANGLE_MAP     "Splitting angle (rotary engines)"
     IDS_TD_VIEW_PWM1_MAP   "PWM1 duty"
     IDS_TD_VIEW_SPLIT_MAP  "Split angle"
+    IDS_GME_IGN_CLTSEL_TT   "Edit table for idling"
 END
 
 /////////////////////////////////////////////////////////////////////////////

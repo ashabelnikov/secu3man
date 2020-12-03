@@ -225,6 +225,9 @@ void SECU3ImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   m_fwdm->GetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
 
+ if (mp_view->GetFWDFlag(FLAG_TEMPI_MAP))
+  m_fwdm->GetTempIdlMap(other_sel, mp_fwd->maps[current_sel].f_tmp_idl);
+
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
   m_fwdm->GetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
 
@@ -315,6 +318,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TEMPI_MAP, true);
  //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
@@ -668,6 +672,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TEMPI_MAP, true);
  //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);

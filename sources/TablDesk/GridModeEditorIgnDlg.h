@@ -36,6 +36,7 @@
 #undef max
 
 class CLabel;
+class CToolTipCtrlEx;
 
 class CStaticDisp : public CStatic
 {
@@ -69,7 +70,7 @@ class CGridModeEditorIgnDlg : public CDialog
  ~CGridModeEditorIgnDlg();
   static const UINT IDD;
 
-  void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp);
+  void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp, float* pTempIdl);
   void BindRPMGrid(float* pGrid);
   void BindCLTGrid(float* pGrid);
   void BindLoadGrid(float* pGrid);
@@ -93,6 +94,7 @@ class CGridModeEditorIgnDlg : public CDialog
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateAAControls(CCmdUI* pCmdUI);
+  afx_msg void OnSelectCLTMap();
   afx_msg void OnClose();
   DECLARE_MESSAGE_MAP()
 
@@ -110,16 +112,19 @@ class CGridModeEditorIgnDlg : public CDialog
   void OnChangeIdle(void);
   void OnChangeWork(void);
   void OnChangeTemp(void);
+  void OnChangeTempIdl(void);
 
   void OnAbroadMoveStart(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveIdle(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveWork(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveTemp(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveTempIdl(CMapEditorCtrl::AbroadDir direction, int column);
 
   CMapEditorCtrl m_start_map;
   CMapEditorCtrl m_idle_map;
   CMapEditorCtrl m_work_map;
   CMapEditorCtrl m_temp_map;
+  CMapEditorCtrl m_tempi_map;
 
   CStaticDisp m_aa_value;
   CStaticDisp m_wm_value;
@@ -129,11 +134,14 @@ class CGridModeEditorIgnDlg : public CDialog
   CStaticDisp m_im_value;
   CStaticDisp m_ic_value;
   CStaticDisp m_ac_value;
+  CButton m_cltmap_sel;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
   float* mp_startMap;
   float* mp_idleMap;
   float* mp_workMap;
   float* mp_tempMap;
+  float* mp_tempIdlMap;
   float* mp_rpmGrid;
   float* mp_cltGrid;
   float* mp_lodGrid;

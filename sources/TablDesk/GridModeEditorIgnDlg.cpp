@@ -33,6 +33,7 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/Label.h"
 #include "ui-core/MsgBox.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 
@@ -41,10 +42,13 @@ const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 
 BEGIN_MESSAGE_MAP(CGridModeEditorIgnDlg, Super)
  ON_WM_CLOSE()
+ ON_BN_CLICKED(IDC_GME_IGN_CLTSEL, OnSelectCLTMap)
  ON_UPDATE_COMMAND_UI(IDC_GME_IGN_STR, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_IGN_IDL, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_IGN_WRK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_IGN_TMP, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IGN_TMPI, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IGN_CLTSEL, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_AA_CAPTION, OnUpdateAAControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_WM_CAPTION, OnUpdateAAControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_OC_CAPTION, OnUpdateAAControls)
@@ -80,11 +84,13 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , mp_rpmGrid(NULL)
 , mp_cltGrid(NULL)
 , mp_lodGrid(NULL)
+, mp_tempIdlMap(NULL)
 , m_en_aa_indication(false)
 , m_start_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_idle_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_work_map(16, 16, true, true, DLL::GetModuleHandle(), 3)
 , m_temp_map(1, 16, false, false, DLL::GetModuleHandle())
+, m_tempi_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_ldaxMin(1.0f)
 , m_ldaxMax(16.0f)
 , m_ldaxNeedsUpdate(false)
@@ -110,7 +116,9 @@ void CGridModeEditorIgnDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_IGN_WRK, m_work_map);
  DDX_Control(pDX, IDC_GME_IGN_IDL, m_idle_map);
  DDX_Control(pDX, IDC_GME_IGN_TMP, m_temp_map);
+ DDX_Control(pDX, IDC_GME_IGN_TMPI, m_tempi_map);
  DDX_Control(pDX, IDC_GME_IGN_STR, m_start_map);
+ DDX_Control(pDX, IDC_GME_IGN_CLTSEL, m_cltmap_sel);
 
  //Advance angle indication controls
  DDX_Control(pDX, IDC_GME_AA_VALUE, m_aa_value);
@@ -178,6 +186,17 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_temp_map.EnableAbroadMove(true, true);
  m_temp_map.SetValueIncrement(0.5f);
 
+ //temp (idling)
+ m_tempi_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeTempIdl));
+ m_tempi_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveTempIdl));
+ m_tempi_map.SetRange(-15.0f, 25.0f);
+ m_tempi_map.AttachMap(mp_tempIdlMap);
+ m_tempi_map.AttachLabels(mp_cltGrid, NULL);
+ m_tempi_map.ShowLabels(true, false);
+ m_tempi_map.SetFont(&m_font);
+ m_tempi_map.EnableAbroadMove(true, true);
+ m_tempi_map.SetValueIncrement(0.5f);
+
  //work
  m_work_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeWork));
  m_work_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveWork));
@@ -201,6 +220,13 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  mp_acronLink->SetFontUnderline(true);
  mp_acronLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
  mp_acronLink->SetOnClick(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnAcronymsLinkClick));
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_cltmap_sel, MLL::GetString(IDS_GME_IGN_CLTSEL_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -243,12 +269,13 @@ void CGridModeEditorIgnDlg::OnClose()
  DestroyWindow();
 }
 
-void CGridModeEditorIgnDlg::BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp)
+void CGridModeEditorIgnDlg::BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp, float* pTempIdl)
 {
  mp_startMap = pStart;
  mp_idleMap = pIdle;
  mp_workMap = pWork;
  mp_tempMap = pTemp;
+ mp_tempIdlMap = pTempIdl;
 }
 
 void CGridModeEditorIgnDlg::BindRPMGrid(float* pGrid)
@@ -275,11 +302,13 @@ void CGridModeEditorIgnDlg::UpdateView(bool axisLabels /*= false*/)
    m_idle_map.AttachLabels(mp_rpmGrid, NULL);
    m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
    m_temp_map.AttachLabels(mp_cltGrid, NULL);
+   m_tempi_map.AttachLabels(mp_cltGrid, NULL);
   }
   m_start_map.UpdateDisplay();
   m_idle_map.UpdateDisplay();
   m_work_map.UpdateDisplay();
   m_temp_map.UpdateDisplay();
+  m_tempi_map.UpdateDisplay();
  }
 }
 
@@ -321,16 +350,19 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  UpdateDialogControls(this, true);  //todo: check it for perfomance issues
 
  //updating work points:
- m_start_map.ShowMarkers(dv.strt_use, false);
+ m_start_map.ShowMarkers(dv.strt_use, true);
  m_start_map.SetArguments(0, (float)dv.rpm);
 
- m_idle_map.ShowMarkers(dv.idle_use, false);
+ m_idle_map.ShowMarkers(dv.idle_use, true);
  m_idle_map.SetArguments(0, (float)dv.rpm);
 
- m_temp_map.ShowMarkers(dv.temp_use, false);
+ m_temp_map.ShowMarkers(dv.temp_use && !dv.strt_use && !dv.idlreg_use, true);
  m_temp_map.SetArguments(0, dv.temp);
 
- m_work_map.ShowMarkers(dv.work_use && dv.air_flow, false);
+ m_tempi_map.ShowMarkers(dv.temp_use && !dv.strt_use && dv.idlreg_use, true);
+ m_tempi_map.SetArguments(0, dv.temp);
+
+ m_work_map.ShowMarkers(dv.work_use && dv.air_flow, true);
  m_work_map.SetArguments(dv.load, (float)dv.rpm);
 
  //Update vertical axis of work map
@@ -393,10 +425,20 @@ void CGridModeEditorIgnDlg::OnChangeTemp(void)
  m_OnMapChanged(TYPE_MAP_DA_TEMP_CORR);
 }
 
+void CGridModeEditorIgnDlg::OnChangeTempIdl(void)
+{
+ m_OnMapChanged(TYPE_MAP_DA_TEMPI_CORR);
+}
+
 void CGridModeEditorIgnDlg::OnAbroadMoveStart(CMapEditorCtrl::AbroadDir direction, int column)
 {
  if (direction==CMapEditorCtrl::ABROAD_UP)
-  m_temp_map.SetSelection(0, column);
+ {
+  if (m_cltmap_sel.GetCheck()==BST_CHECKED)
+   m_tempi_map.SetSelection(0, column);
+  else
+   m_temp_map.SetSelection(0, column);
+ }
 }
 
 void CGridModeEditorIgnDlg::OnAbroadMoveIdle(CMapEditorCtrl::AbroadDir direction, int column)
@@ -404,7 +446,12 @@ void CGridModeEditorIgnDlg::OnAbroadMoveIdle(CMapEditorCtrl::AbroadDir direction
  if (direction==CMapEditorCtrl::ABROAD_UP)
   m_work_map.SetSelection(0, column);
  if (direction==CMapEditorCtrl::ABROAD_DOWN)
-  m_temp_map.SetSelection(0, column);
+ {
+  if (m_cltmap_sel.GetCheck()==BST_CHECKED)
+   m_tempi_map.SetSelection(0, column);
+  else
+   m_temp_map.SetSelection(0, column);
+ }
 }
 
 void CGridModeEditorIgnDlg::OnAbroadMoveWork(CMapEditorCtrl::AbroadDir direction, int column)
@@ -421,7 +468,22 @@ void CGridModeEditorIgnDlg::OnAbroadMoveTemp(CMapEditorCtrl::AbroadDir direction
   m_start_map.SetSelection(0, column);
 }
 
+void CGridModeEditorIgnDlg::OnAbroadMoveTempIdl(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_UP)
+  m_idle_map.SetSelection(0, column);
+ if (direction==CMapEditorCtrl::ABROAD_DOWN)
+  m_start_map.SetSelection(0, column);
+}
+
 void CGridModeEditorIgnDlg::OnAcronymsLinkClick()
 {
  SECUMessageBox(IDS_GME_DESCR_ABBREV, MB_OK | MB_ICONINFORMATION);
+}
+
+void CGridModeEditorIgnDlg::OnSelectCLTMap()
+{
+ bool idl = m_cltmap_sel.GetCheck()==BST_CHECKED;
+ m_temp_map.ShowWindow(idl ? SW_HIDE : SW_SHOW);
+ m_tempi_map.ShowWindow(idl ? SW_SHOW : SW_HIDE);
 }

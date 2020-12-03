@@ -733,6 +733,28 @@ void CFirmwareDataMediator::SetTempMap(int i_index,const float* ip_values)
   p_fd->tables[i_index].f_tmp[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
+void CFirmwareDataMediator::GetTempIdlMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < F_TMP_POINTS; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].f_tmp_idl[i]) / AA_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetTempIdlMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < F_TMP_POINTS; i++ )
+  p_fd->tables[i_index].f_tmp_idl[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
+}
+
 void CFirmwareDataMediator::GetVEMap(int i_index, float* op_values, bool i_original /* = false*/)
 {
  ASSERT(op_values);
@@ -1329,6 +1351,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetIdleMap(i,op_fwd->maps[i].f_idl);
   GetWorkMap(i,op_fwd->maps[i].f_wrk);
   GetTempMap(i,op_fwd->maps[i].f_tmp);
+  GetTempIdlMap(i,op_fwd->maps[i].f_tmp_idl);
   //fuel injection
   GetVEMap(i,op_fwd->maps[i].inj_ve);
   GetAFRMap(i,op_fwd->maps[i].inj_afr);
@@ -1408,6 +1431,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetIdleMap(i,ip_fwd->maps[i].f_idl);
   SetWorkMap(i,ip_fwd->maps[i].f_wrk);
   SetTempMap(i,ip_fwd->maps[i].f_tmp);
+  SetTempIdlMap(i,ip_fwd->maps[i].f_tmp_idl);
   //fuel injection
   SetVEMap(i,ip_fwd->maps[i].inj_ve);
   SetAFRMap(i,ip_fwd->maps[i].inj_afr);

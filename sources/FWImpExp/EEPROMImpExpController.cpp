@@ -146,6 +146,9 @@ void EEPROMImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   m_eedm->GetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
 
+ if (mp_view->GetFWDFlag(FLAG_TEMPI_MAP))
+  m_eedm->GetTempIdlMap(other_sel, mp_fwd->maps[current_sel].f_tmp_idl);
+
  //fuel injection
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
   m_eedm->GetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
@@ -237,6 +240,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TEMPI_MAP, true);
  //fuel injection map flags
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);

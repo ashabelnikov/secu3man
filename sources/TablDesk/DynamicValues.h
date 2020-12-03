@@ -73,5 +73,6 @@ namespace TablDesk
   float map2;  //gas pressure sensor
 
   int rxlaf;
+  bool aftstr_enr;
  };
 }

@@ -64,6 +64,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetIdleMap(bool i_original);
   float* GetWorkMap(bool i_original);
   float* GetTempMap(bool i_original);
+  float* GetTempIdlMap(bool i_original);
   float* GetVEMap(bool i_original);
   float* GetAFRMap(bool i_original);
   float* GetCrnkMap(bool i_original);
@@ -161,6 +162,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewIdleMap();
   afx_msg void OnViewWorkMap();
   afx_msg void OnViewTempMap();
+  afx_msg void OnViewTempIdlMap();
   afx_msg void OnViewVEMap();
   afx_msg void OnViewAFRMap();
   afx_msg void OnViewCrnkMap();
@@ -190,6 +192,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewIdleMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewWorkMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewTempMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewTempIdlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewVEMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAFRMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCrnkMap(CCmdUI* pCmdUI);
@@ -241,6 +244,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   CButton m_view_work_map_btn;
   CButton m_view_temp_map_btn;
+  CButton m_view_tempi_map_btn;
   CButton m_view_start_map_btn;
   CButton m_view_idle_map_btn;
   CButton m_view_ve_map_btn;
@@ -284,6 +288,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnChangeTempMap(void* i_param);
   static void __cdecl OnCloseTempMap(void* i_param);
   static float __cdecl OnValueTransformITMap(void* i_param, float source, int direction);
+  static void __cdecl OnChangeTempIdlMap(void* i_param);
+  static void __cdecl OnCloseTempIdlMap(void* i_param);
 protected:
   struct MapData
   {
@@ -306,6 +312,7 @@ private:
   static void __cdecl OnWndActivationIdleMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationWorkMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationTempMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationTempIdlMap(void* i_param, long cmd);
 
   static void __cdecl OnChangeVEMap(void* i_param);
   static void __cdecl OnCloseVEMap(void* i_param);

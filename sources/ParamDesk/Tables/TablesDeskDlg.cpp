@@ -375,6 +375,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   case TYPE_MAP_DA_TEMP_CORR:
    return mp_ButtonsPanel->GetTempMap(i_original);
 
+  case TYPE_MAP_DA_TEMPI_CORR:
+   return mp_ButtonsPanel->GetTempIdlMap(i_original);
+
   case TYPE_MAP_INJ_VE:
    return mp_ButtonsPanel->GetVEMap(i_original);
 
@@ -452,7 +455,8 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
 void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,
  float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
  float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use, float tps, float iac_pos,
- int tpsdot, float voltage, float add_i1, float tmp2, float baro_press, float load, float afr, bool acceleration, bool ie, float air_temp, float rigid_arg, bool rigid_use, float map2, int rxlaf)
+ int tpsdot, float voltage, float add_i1, float tmp2, float baro_press, float load, float afr, bool acceleration, bool ie,
+ float air_temp, float rigid_arg, bool rigid_use, float map2, int rxlaf, bool aftstr_enr)
 {
  if (!mp_ButtonsPanel.get()) return;
  TablDesk::DynVal dv;
@@ -492,6 +496,7 @@ void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float a
  dv.rigid_use = rigid_use;
  dv.map2 = map2; //GPS
  dv.rxlaf = rxlaf; //RxL air flow
+ dv.aftstr_enr = aftstr_enr;
  mp_ButtonsPanel->SetDynamicValues(dv);
 }
 

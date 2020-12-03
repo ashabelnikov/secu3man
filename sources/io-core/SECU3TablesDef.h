@@ -81,7 +81,9 @@ typedef struct
  _uchar map_mode;
  _uchar pwm_duty2[F_WRK_POINTS_L][F_WRK_POINTS_F];     //Duty for PWM2 channel
 
- _uchar reserved[511];                                 // reserved bytes - for compatibility
+ _char f_tmp_idl[F_TMP_POINTS];                        // ignition timing correction vs CLT (idling)
+
+ _uchar reserved[495];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 static int w12GetCell(BYTE* data, int cellOffset)

@@ -156,6 +156,8 @@ void MPSZImportController::OnViewActivate(void)
  //ignition
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_TEMPI_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_TEMPI_MAP, false);
  //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_VE_MAP, false);
@@ -414,6 +416,8 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);     //absent in MPSZ
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_TEMPI_MAP, false);     //absent in MPSZ
+ mp_view->EnableFWDFlag(FLAG_TEMPI_MAP, false);
  //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_VE_MAP, false);

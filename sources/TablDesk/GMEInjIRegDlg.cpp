@@ -236,37 +236,37 @@ void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac
 {
  if (m_idlc_map.GetSafeHwnd())
  {
-  m_idlc_map.ShowMarkers(strt_use, false);
+  m_idlc_map.ShowMarkers(strt_use, true);
   m_idlc_map.SetArguments(0, clt);
  }
 
  if (m_idlr_map.GetSafeHwnd())
  {
-  m_idlr_map.ShowMarkers(!strt_use, false);
+  m_idlr_map.ShowMarkers(!strt_use, true);
   m_idlr_map.SetArguments(0, clt);
  }
 
  if (m_iacc_map.GetSafeHwnd())
  {
-  m_iacc_map.ShowMarkers(!strt_use, false);
+  m_iacc_map.ShowMarkers(!strt_use, true);
   m_iacc_map.SetArguments(0, iac_pos);
  }
 
  if (m_iaccw_map.GetSafeHwnd())
  {
-  m_iaccw_map.ShowMarkers(!strt_use, false);
+  m_iaccw_map.ShowMarkers(!strt_use, true);
   m_iaccw_map.SetArguments(0, tps);
  }
 
  if (m_rigid_map.GetSafeHwnd())
  {
-  m_rigid_map.ShowMarkers(rigid_use, false);
+  m_rigid_map.ShowMarkers(rigid_use, true);
   m_rigid_map.SetArguments(0, rigid_arg);
  }
 
  if (m_itrpm_map.GetSafeHwnd())
  {
-  m_itrpm_map.ShowMarkers(rigid_use, false);
+  m_itrpm_map.ShowMarkers(rigid_use, true);
   m_itrpm_map.SetArguments(0, clt);
  }
 }

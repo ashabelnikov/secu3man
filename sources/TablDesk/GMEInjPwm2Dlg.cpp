@@ -133,7 +133,7 @@ void CGMEInjPwm2Dlg::SetArguments(int rpm, int air_flow, bool strt_use, float lo
 {
  if (m_pwm2_map.GetSafeHwnd())
  {
-  m_pwm2_map.ShowMarkers(!strt_use, false);
+  m_pwm2_map.ShowMarkers(!strt_use, true);
   m_pwm2_map.SetArguments(load, (float)rpm);
  }
 }

@@ -505,3 +505,9 @@
 #define IDS_TD_AFTSTR_STRK1_MAP_TT      5859
 #define IDS_AFTSTR_STRK0_MAP            5860
 #define IDS_AFTSTR_STRK1_MAP            5861
+#define IDC_TD_VIEW_TEMPI_MAP           5862
+#define IDS_TD_VIEW_TEMPI_MAP_TT        5863
+#define IDS_TEMPCORRI_MAP               5864
+#define IDC_GME_IGN_CLTSEL              5865
+#define IDS_GME_IGN_CLTSEL_TT           5866
+#define IDC_GME_IGN_TMPI                5867

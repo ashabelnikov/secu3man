@@ -87,6 +87,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_TempMapWnd_W = rc.right - rc.left;
    sz.m_TempMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_DA_TEMPI_CORR:
+   ws.m_TempIdlMapWnd_X = rc.left;
+   ws.m_TempIdlMapWnd_Y = rc.top;
+   sz.m_TempIdlMapWnd_W = rc.right - rc.left;
+   sz.m_TempIdlMapWnd_H = rc.bottom - rc.top;
+   break;
   case TYPE_MAP_ATTENUATOR:
    ws.m_AttenuatorMapWnd_X = rc.left;
    ws.m_AttenuatorMapWnd_Y = rc.top;
@@ -408,6 +414,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_DA_TEMP_CORR:
    X = ws.m_TempMapWnd_X, Y = ws.m_TempMapWnd_Y;
    W = sz.m_TempMapWnd_W, H = sz.m_TempMapWnd_H;
+   break;
+  case TYPE_MAP_DA_TEMPI_CORR:
+   X = ws.m_TempIdlMapWnd_X, Y = ws.m_TempIdlMapWnd_Y;
+   W = sz.m_TempIdlMapWnd_W, H = sz.m_TempIdlMapWnd_H;
    break;
   case TYPE_MAP_ATTENUATOR:
    X = ws.m_AttenuatorMapWnd_X, Y = ws.m_AttenuatorMapWnd_Y;

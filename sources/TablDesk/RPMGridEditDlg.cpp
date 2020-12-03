@@ -266,7 +266,7 @@ void CRPMGridEditDlg::GetValues(int mode, float* op_values, bool rev /*=false*/)
   return;
  if (rev)
  { //reverse
-  int num = m_values[mode].size();
+  size_t num = m_values[mode].size();
   for(size_t i = 0; i < num; ++i)
    op_values[i] = m_values[mode][(num-1)-i];
  }

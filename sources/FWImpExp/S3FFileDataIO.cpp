@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0115 //01.15
+#define CURRENT_VERSION 0x0116 //01.16
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -79,6 +79,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.13 - Added 3 new maps: pwm_duty1, pwm_duty2, knock_zone (15.09.2020)
 // 01.14 - Added CE settings for ADD_I5/6/7/8, GRTS curve map, GRHEAT map (28.10.2020-30.10.2020)
 // 01.15 - Added after start strokes maps: petrol and gas, PWM IAC voltage coeff. map (25.11.2020)
+// 01.16 - Added ignition timing vs CLT correction (idling) map (03.12.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -133,8 +134,10 @@ struct S3FMapSetItem
  //since v01.13
  s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty
  s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty
+ //since v01.16
+ s3f_int32_t f_tmp_idl[F_TMP_POINTS];                      //temperature (idling)
 
- s3f_int32_t reserved[117]; //reserved bytes, = 0
+ s3f_int32_t reserved[101]; //reserved bytes, = 0
 };
 
 
@@ -382,6 +385,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].f_wrk[i] = MathHelpers::Round(m_data.maps[s].f_wrk[i] * INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
    p_setItem[s].f_tmp[i] = MathHelpers::Round(m_data.maps[s].f_tmp[i] * INT_MULTIPLIER);
+  for(i = 0; i < F_TMP_POINTS; ++i)
+   p_setItem[s].f_tmp_idl[i] = MathHelpers::Round(m_data.maps[s].f_tmp_idl[i] * INT_MULTIPLIER);
   //fuel injection
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
    p_setItem[s].inj_ve[i] = MathHelpers::Round(m_data.maps[s].inj_ve[i] * INT_MULTIPLIER);
@@ -627,6 +632,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
    m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_TMP_POINTS; ++i)
+   m_data.maps[s].f_tmp_idl[i] = p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER;
   //fuel injection
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
    m_data.maps[s].inj_ve[i] = p_setItem[s].inj_ve[i] / INT_MULTIPLIER;

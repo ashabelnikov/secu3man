@@ -351,6 +351,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optIdleMapWnd;
   OptField_t<POINT> m_optWorkMapWnd;
   OptField_t<POINT> m_optTempMapWnd;
+  OptField_t<POINT> m_optTempIdlMapWnd;
   OptField_t<POINT> m_optAttenMapWnd;
   OptField_t<POINT> m_optDwellCntrlMapWnd;
   OptField_t<POINT> m_optCTSCurveMapWnd;
@@ -403,6 +404,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optIdleMapWnd1;
   OptField_t<POINT> m_optWorkMapWnd1;
   OptField_t<POINT> m_optTempMapWnd1;
+  OptField_t<POINT> m_optTempIdlMapWnd1;
   OptField_t<POINT> m_optGridMapIgnWnd1;
   OptField_t<POINT> m_optGridMapInjWnd1;
   OptField_t<POINT> m_optVEMapWnd1;
@@ -435,6 +437,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optIdleMapWndSize;
   OptField_t<POINT> m_optWorkMapWndSize;
   OptField_t<POINT> m_optTempMapWndSize;
+  OptField_t<POINT> m_optTempIdlMapWndSize;
   OptField_t<POINT> m_optAttenMapWndSize;
   OptField_t<POINT> m_optDwellCntrlMapWndSize;
   OptField_t<POINT> m_optCTSCurveMapWndSize;
@@ -487,6 +490,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optIdleMapWndSize1;
   OptField_t<POINT> m_optWorkMapWndSize1;
   OptField_t<POINT> m_optTempMapWndSize1;
+  OptField_t<POINT> m_optTempIdlMapWndSize1;
 //OptField_t<POINT> m_optGridMapIgnWndSize1;
 //OptField_t<POINT> m_optGridMapInjWndSize1;
   OptField_t<POINT> m_optVEMapWndSize1;
@@ -624,6 +628,7 @@ class CAppSettingsModel : public ISettingsData
   //Points's moving step in map editor windows
   OptField_t<float> m_optPtMovStepWorkMap;
   OptField_t<float> m_optPtMovStepTempMap;
+  OptField_t<float> m_optPtMovStepTempIdlMap;
   OptField_t<float> m_optPtMovStepStartMap;
   OptField_t<float> m_optPtMovStepIdleMap;
   OptField_t<float> m_optPtMovStepVeMap;

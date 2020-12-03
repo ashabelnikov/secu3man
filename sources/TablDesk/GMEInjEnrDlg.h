@@ -44,7 +44,7 @@ class CGMEInjEnrDlg : public CTabDialog
   void setOnChange(EventWithCode OnCB);
   void UpdateView(bool axisLabels = false);
 
-  void SetArguments(bool strt_use, float clt, int tpsdot, int rpm);
+  void SetArguments(bool strt_use, float clt, int tpsdot, int rpm, bool aftstr_enr);
 
  public:
 
