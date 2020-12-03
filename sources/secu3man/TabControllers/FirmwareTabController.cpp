@@ -1944,6 +1944,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Capture range of the ign.tim idling regulator"), _T("min-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("Ignition-based idling regulator will be activated when the RPM falls below a value equal to the sum of the target idling RPM and the pickup zone. For example, target RPM = 900, pick-up zone = 200, which means the regulator will start working when the RPM drops below 1100."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Применять ручную октан коррецию в режиме ХХ"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - не применять ручную октан коррекцию на холостом ходу (коррекция будет применяться только в рабочем режиме), 1 - разрешить применение ручной октан коррекции на холостом ходу"));
+ else
+  dfd.AppendItem(_T("Apply manual ignition timing correction on idling"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);

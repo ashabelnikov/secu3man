@@ -271,11 +271,12 @@ typedef struct
  _uchar add_i1_sub;
  _uchar add_i2_sub;
  _uint  idlreg_captrange;
+ _uchar manigntim_idl;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3814];
+ _uchar reserved[3813];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2572,6 +2573,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.add_i1_sub = exd.add_i1_sub;
  o_data.add_i2_sub = exd.add_i2_sub;
  o_data.idlreg_captrange = exd.idlreg_captrange;
+ o_data.manigntim_idl = exd.manigntim_idl;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2612,4 +2614,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.add_i1_sub = i_data.add_i1_sub;
  exd.add_i2_sub = i_data.add_i2_sub;
  exd.idlreg_captrange = i_data.idlreg_captrange;
+ exd.manigntim_idl = i_data.manigntim_idl;
 }

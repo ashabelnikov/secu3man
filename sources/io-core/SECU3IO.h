@@ -807,6 +807,7 @@ const int INPAVNUM = 14;
   int add_i1_sub;
   int add_i2_sub;
   int idlreg_captrange;
+  int manigntim_idl;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
