@@ -1708,97 +1708,12 @@ void CFirmwareTabController::OnEditFwConsts(void)
  SECU3IO::FwConstsData d;
  mp_fwdm->GetFwConstsData(d);
 
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Длит. плавного входа в ПХХ"), _T("такт"), 0, 255, 1, 1, &d.fi_enter_strokes, _T("Длительность плавного входа в ПХХ в тактах двигателя. Впрыск топлива отключится не сразу, а будет постепенно убывать на протяжении указанного кол-ва тактов."));
- else
-  dfd.AppendItem(_T("Smoothing of forced idle entering"), _T("str"), 0, 255, 1, 1, &d.fi_enter_strokes, _T("Smoothing of forced idle entering in engine strokes. Fuel injection will not turn off immediately, but will gradually decrease over the specified number of strokes."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Длит. плавного выхода из ПХХ"), _T("такт"), 0, 255, 1, 1, &d.fi_leave_strokes, _T("Длительность плавного выхода из ПХХ в тактах двигателя. Впрыск топлива включится не сразу, а будет постепенно возрастать на протяжении указанного кол-ва тактов."));
- else
-  dfd.AppendItem(_T("Smoothing of forced idle leaving"), _T("str"), 0, 255, 1, 1, &d.fi_leave_strokes, _T("Smoothing of forced idle entering in engine strokes. Fuel injection will not turn on immediately, but will gradually increase over the specified number of strokes."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Добавка к РДВ при вкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Мин.положение РДВ' увеличивается на это значение при включении кондиционера"));
- else
-  dfd.AppendItem(_T("Add. to IAC pos on turn on of air cond. "), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Minimum IAC position' increases by this value when the air conditioner is turned on"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Максимальная длительность впрыска"), _T("мс"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw, _T("Ограничение максимальной длительности впрыска. Длительность импульсов впрыска не может быть больше этого значения."));
- else
-  dfd.AppendItem(_T("Max. injection pulse width"), _T("ms"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw, _T("Limitting the maximum injection pulse width. The width of injection pulses can not be above this value."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог ДТОЖ вкл. кондиционера"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt, _T("Кондиционер включится только если температура двигателя выше этого порога, иначе запросы на включение будут игнорироваться."));
- else
-  dfd.AppendItem(_T("CLT threshold for turn on of air cond."), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt, _T("Air conditioner will turn on only if the engine temperature is above this threshold, otherwise requests for switching on will be ignored."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог ДПДЗ выкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("Компрессор кондиционера не будет включаться (или будет выключаться) если положение дроссельной заслогки превышает указанное значение."));
- else
-  dfd.AppendItem(_T("TPS threshold for turning off air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("The compressor of air conditioner will not turn on (or it will turn off) if throttle position exceeds specified value."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Наполнение на ХХ для бенз. (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для бензина (GAS_V = 0)."));
- else
-  dfd.AppendItem(_T("VE on idling for petrol (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for petrol (GAS_V = 0)."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Наполнение на ХХ для газа (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для газа (GAS_V = 1)."));
- else
-  dfd.AppendItem(_T("VE on idling for gas (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for LPG (GAS_V = 1)."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог ДТОЖ вкл. продувки адсорбера"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.evap_clt, _T("Продувка адсорбера будет включаться только если температура двигателя выше этого порога."));
- else
-  dfd.AppendItem(_T("CLT threshold for turning on of the canister purge valve"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.evap_clt, _T("The canister purge valve will work only if engine's temperature is above this threshold."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Нижн. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_lo, _T("Продувка адсорбера не будет включаться если положение дроссельной заслонки ниже или равно этому порогу. Продувка не должна работать на ХХ."));
- else
-  dfd.AppendItem(_T("Low TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_lo, _T("The canister purge valve will not turn on if throttle position is lower or equal to this threshold. Purge should not work on idling."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Верх. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("Продувка адсорбера не будет включаться если положение дроссельной заслонки выше этого порога. Продувка не должна работать в режимах полных нагрузок."));
- else
-  dfd.AppendItem(_T("Hi TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("The canister purge valve will not turn on if throttle position is above this threshold. Purge should not work in full load conditions."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Абсол. давление в топливной рампе"), _T("кПа"), 0.0f, 1000.0f, 0.1f, 1, &d.frap, _T("Абсолютное давление в топливной рампе. Установите значение больше 0, если хотите чтобы время впрыска корректировалось по разности давлений во впускном коллекторе и топливной рампе. Предполагается, что производительность форсунок указана для давления 3 бара."));
- else
-  dfd.AppendItem(_T("Absolute pressure in the fuel rail"), _T("kPa"), 0.0f, 1000.0f, 0.1f, 1, &d.frap, _T("Absolute pressure in the fuel rail. Set value greater than 0 if you want the injection PW to be corrected for the pressure difference in the intake manifold and the fuel rail. It is assumed that injectors' flow rate is indicated for a pressure of 3 bars."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Таймер блокировки стартера"), _T("такт"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Количество тактов от момента достижения порога оборотов блокировки стартера до момента его фактического выключения. Установите значение 0, если хотите чтобы использовалась таблица вместо этой простой константы."));
- else
-  dfd.AppendItem(_T("Starter's blocking timer"), _T("str"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Тumber of strokes from the moment the starter's blocking threshold is reached until starter is actually turned off. Set the value to 0 if you want the table to be used instead of this simple constant."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог контроля детонации"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.knkclt_thrd, _T("Контроль детонации включится только после того, как температура двигателя превысит это значение."));
- else
-  dfd.AppendItem(_T("Knock control threshold"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.knkclt_thrd, _T("Control of knock will be activated only after the temperature of engine exceeds this value."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог выключения подогрева коллектора"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.heating_t_off, _T("Подогрев впускного коллектора будет выключен после того как температура двигателя достигнет указанного значения. Управление подогревом осуществляется посредством выхода переназначенного как INTK_HEAT."));
- else
-  dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.heating_t_off, _T("Intake manifold heating will be turned off after the temperature of engine reaches the specified value. The heating control is carried out by means of the output reassigned as INTK_HEAT."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Макс. время работы подогрева коллектора"), _T("мин"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time, _T("Подгрев впускного коллектора будет выключен по истечении этого времени даже если температурный порог еще не достигнут. Это должно предотвратить чрезмерный разряд аккумулятора."));
- else
-  dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("min"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time, _T("Intake manifold heating will be turned off after this time, even if the temperature threshold has not yet been reached. This should prevent over-discharge of the battery."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Шаг уменьшения добавки после выхода РХХ"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_en, _T("Значение добавки после выхода уменьшается на это значение каждые 100мс если дроссель закрыт и обороты двигателя находятся между 1-м и 2-м порогами переходных режимов (пороги пер. режимов задаются соответствующими коэффициентами на вкладке параметров '3:ХХ', там же задается значение добавки после выхода)"));
- else
-  dfd.AppendItem(_T("Decrease step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_en, _T("Value of the IAC add after exit decreases by this value every 100ms if the throttle is closed and the engine speed is between the 1st and 2nd transient thresholds (transient thresholds are set by the corresponding coefficients on the '3:Idling' parameters' tab, value of the 'IAC add after exit' is also set there)"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Шаг увеличения добавки после выхода РХХ"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le, _T("Значение добавки после выхода увеличивается на это значение каждые 100мс если дроссель открыт и обороты двигателя находятся выше 2-го порога переходных режимов (значение добавки после выхода и пороги пер. режимов задаются соответствующими коэффициентами на вкладке параметров '3:ХХ', там же задается значение добавки после выхода)"));
- else
-  dfd.AppendItem(_T("Increase step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le, _T("Value of the IAC add after exit increases by this value every 100ms if the throttle is open and the engine speed is above the 2nd transient threshold (transient thresholds are set by the corresponding coefficients on the '3:Idling' parameters' tab, value of the 'IAC add after exit' is also set there)"));
-
  //Sizes of averaging circular buffers
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размеры буферов усреднения входов:"));
+ else
+  dfd.AppendItem(_T("Sizes of inputs' averaging buffers:"));
+
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Размер буфера усреднения оборотов"), _T(""), 1, 8, 1, 0, &d.inpavnum[0], _T("Размер буфера усреднения оборотов. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
@@ -1845,66 +1760,6 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("size of averaging buffer for ADD_I4"), _T(""), 1, 8, 1, 0, &d.inpavnum[9], _T("Size of averaging buffer for ADD_I4. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения скорости"), _T(""), 1, 8, 1, 0, &d.inpavnum[7], _T("Размер буфера усреднения скорости автомобиля. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
- else
-  dfd.AppendItem(_T("size of averaging buffer for VSS"), _T(""), 1, 8, 1, 0, &d.inpavnum[7], _T("Size of averaging buffer for vehicle speed. The more averaging value, the greater smoothing, but at the same time the delay increases."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Задержка включения вентилятора"), _T("сек"), 0.00f, 2.5f, 0.01f, 2, &d.vent_delay, _T("Используется для включения вентилятора с задержкой чтобы РХХ успел за это время поднять обороты двигателя (актуально только для прошивок с впрыском топлива)."));
- else
-  dfd.AppendItem(_T("Cooling fan's turn on delay"), _T("sec"), 0.00f, 2.5f, 0.01f, 2, &d.vent_delay, _T("It is used to turn on the fan with delay so that the IAC has time to increase the engine speed during this time (relevant only for firmware with fuel injection)."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Смещение РХХ при включении вентилятора"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff, _T("Это значение будет прибавлено к положению РХХ при поступлении запроса на включение вентилятора. В режиме closed loop смещение один раз прибавляется к положению РХХ. В режиме open loop смещение прибавляется при включении вентилятора и вычитается при выключении вентилятора"));
- else
-  dfd.AppendItem(_T("Displacement of IAC on turn on of cooling fan"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff, _T("This value will be added to the IAC position when a request to turn on the fan is received. In closed loop mode, the offset is added once to the IAC position. In open loop mode, the displacement value is added when the fan is turned on and subtracted when the fan is turned off"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Смещение РХХ при включении усилителя руля"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff, _T("Это значение прибавляется к положению РХХ при поступлении запроса включения усилителя руля (вход EPAS_I). В режиме closed loop смещение один раз прибавляется к положению РХХ. В режиме open loop смещение прибавляется при включении услилителя руля и вычитается при его выключении"));
- else
-  dfd.AppendItem(_T("Displacement of IAC on turn on of EPAS"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff, _T("This value will be added to the IAC position when a request to turn on the EPAS is received (EPAS_I input). In closed loop mode, the offset is added once to the IAC position. In open loop mode, the displacement value is added when the EPAS is turned on and subtracted when the EPAS is turned off"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Число дискрет ШИМ вентилятора"), _T("N"), 4, 64, 1, 1, &d.vent_pwmsteps, _T("Число шагов ШИМ вентилятора. Чем больше число шагов, тем шире зона температуры и тем более плавно вентилятор меняет скорость и наоборот, чем меньше число шагов, тем уже диапазон температуры и тем менее плавно вентилятор меняет скорость."));
- else
-  dfd.AppendItem(_T("Number of cooling fan's PWM discretes"), _T("N"), 4, 64, 1, 1, &d.vent_pwmsteps, _T("Number of cooling fan's PWM steps. The larger number of steps, the wider the temperature band and fan changes speed more smoothly and vice versa, the smaller number of steps, the narrower the temperature band and fan changes speed less smoothly."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Нижняя мертвая зона ШИМ вентилятора"), _T("N"), 0, 60, 1, 1, &d.vent_minband, _T("Если текущий номер шага меньше этого значения, то вентилятор полностью выключается (или не включается). Это нужно для того, чтобы ШИМ зря не 'мучил' щетки вентилятора когда скважности не хватает для создания достаточного крутящего момента чтобы вал вращался."));
- else
-  dfd.AppendItem(_T("Low dead band for cooling fan's PWM"), _T("N"), 0, 60, 1, 1, &d.vent_minband, _T("If the current step number (duty) is less than this value, the fan turns off completely (or does not turn on). This is necessary so that the PWM in vain does not 'torment' the fan's brushes when duty cycle is not enough to create torque to rotate the shaft."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Alpha-N: умножать время впрыска на ДПДЗ"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("Выбор на что умножать базовое время впрыска при работе в режиме Alpha-N: на ДАД или ДПДЗ. Если установить 0, то прошивка производит умножение на ДАД, если установить 1, то прошивка производит умножение на ДПДЗ. Если установить 2, то прошивка производит умножение на 101.3"));
- else
-  dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("The choice of what to multiply the base injection PW when working in Alpha-N mode: by MAP or TPS. If you set 0, then the firmware multiplies by MAP, if you set 1, then the firmware multiplies by TPS. If you set it to 2, then firmware multiplies by 101.3 constant"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Всегда использовать карту УОЗ рабочего режима"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("Если установить в 1, то рабочая карта УОЗ будет использоваться не только для рабочего режима, но и для режима ХХ. Установите в 0 для работы в обычном режиме (для ХХ своя карта УОЗ)"));
- else
-  dfd.AppendItem(_T("Always use working mode's ignition timing map"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("If set to 1, then working ignition timing map will be used also for idling mode. Set ot 0 for working in default mode (seperate map will be used on idling)"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("УОЗ при переключении передач"), _T("°"), -15.0f, 55.0f, 0.1f, 1, &d.shift_igntim, _T("Значение УОЗ используемое при переключени передач (пока на входе AUTO_I присутствует сигнал)"));
- else
-  dfd.AppendItem(_T("Ignition timing when shifting gears"), _T("°"), -15.0f, 55.0f, 0.1f, 1, &d.shift_igntim, _T("Value of ignition timing used when shifting gears (while signal is present at the AUTO_I input)"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Разрешить запуск при продувке двигателя"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."));
- else
-  dfd.AppendItem(_T("Allow engine start in flood clear mode"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Алгоритм прогнозирования положения коленвала для ДХ"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Выбор алгоритма прогнозирования положения коленвала в прошивках с синхронизацией от ДХ (Nзуб=Nцил). 0 - последний интервал. 1 - Первая производная"));
- else
-  dfd.AppendItem(_T("Algorithm of crankshaft position prediction for hall"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Selection of algorithm of crankshaft position prediction for firmwares with synchronization from a Hall sensor (Nteeth=Ncyl). 0 - Last interval. 1 - First derivative."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Множитель частоты импульсов на выходе для тахометра (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("Данный множитель определяет соотношение оборотов и частоты импульсов для тахометра выдаваемых на выход VTACHOM. Например, 1.000 означает, что за один оборот коленвала выдается 1 импульс. Чем выше значение множителя, тем выше частота."));
- else
-  dfd.AppendItem(_T("Frequency multiplier for tachometer output (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("This multiplier specify ratio of RPM and frequency of pulses produced at VTACHOM output. For example, 1.000 means that for 1 revolution of crankshaft 1 pulse is produced. The higher the value of multiplier, the higher the frequency."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Размер буфера усреднения ADD_I5"), _T(""), 1, 8, 1, 0, &d.inpavnum[10], _T("Размер буфера усреднения ADD_I5. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
   dfd.AppendItem(_T("size of averaging buffer for ADD_I5"), _T(""), 1, 8, 1, 0, &d.inpavnum[10], _T("Size of averaging buffer for ADD_I5. The more averaging value, the greater smoothing, but at the same time the delay increases."));
@@ -1925,9 +1780,217 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("size of averaging buffer for ADD_I8"), _T(""), 1, 8, 1, 0, &d.inpavnum[13], _T("Size of averaging buffer for ADD_I8. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения скорости"), _T(""), 1, 8, 1, 0, &d.inpavnum[7], _T("Размер буфера усреднения скорости автомобиля. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+ else
+  dfd.AppendItem(_T("size of averaging buffer for VSS"), _T(""), 1, 8, 1, 0, &d.inpavnum[7], _T("Size of averaging buffer for vehicle speed. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+
+ //idling regulator
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Регулятор холостого хода:"));
+ else
+  dfd.AppendItem(_T("Idling regulator:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Зона оборотов подхвата УОЗ РХХ"), _T("мин-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("УОЗ РХХ будет активирован когда обороты опустятся ниже значения равного сумме целевых оборотов ХХ и зоны подхвата. Например целевые обороты ХХ = 900, зона подхвата = 200, значит регулятор начнет работать когда обороты двигателя опустятся ниже 1100."));
+ else
+  dfd.AppendItem(_T("Capture range of the ign.tim idling regulator"), _T("min-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("Ignition-based idling regulator will be activated when the RPM falls below a value equal to the sum of the target idling RPM and the pickup zone. For example, target RPM = 900, pick-up zone = 200, which means the regulator will start working when the RPM drops below 1100."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Смещение РХХ при включении вентилятора"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff, _T("Это значение будет прибавлено к положению РХХ при поступлении запроса на включение вентилятора. В режиме closed loop смещение один раз прибавляется к положению РХХ. В режиме open loop смещение прибавляется при включении вентилятора и вычитается при выключении вентилятора"));
+ else
+  dfd.AppendItem(_T("Displacement of IAC on turn on of cooling fan"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff, _T("This value will be added to the IAC position when a request to turn on the fan is received. In closed loop mode, the offset is added once to the IAC position. In open loop mode, the displacement value is added when the fan is turned on and subtracted when the fan is turned off"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Смещение РХХ при включении усилителя руля"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff, _T("Это значение прибавляется к положению РХХ при поступлении запроса включения усилителя руля (вход EPAS_I). В режиме closed loop смещение один раз прибавляется к положению РХХ. В режиме open loop смещение прибавляется при включении услилителя руля и вычитается при его выключении"));
+ else
+  dfd.AppendItem(_T("Displacement of IAC on turn on of EPAS"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff, _T("This value will be added to the IAC position when a request to turn on the EPAS is received (EPAS_I input). In closed loop mode, the offset is added once to the IAC position. In open loop mode, the displacement value is added when the EPAS is turned on and subtracted when the EPAS is turned off"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Добавка к РДВ при вкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Мин.положение РДВ' увеличивается на это значение при включении кондиционера"));
+ else
+  dfd.AppendItem(_T("Add. to IAC pos on turn on of air cond. "), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Minimum IAC position' increases by this value when the air conditioner is turned on"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Шаг уменьшения добавки после выхода РХХ"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_en, _T("Значение добавки после выхода уменьшается на это значение каждые 100мс если дроссель закрыт и обороты двигателя находятся между 1-м и 2-м порогами переходных режимов (пороги пер. режимов задаются соответствующими коэффициентами на вкладке параметров '3:ХХ', там же задается значение добавки после выхода)"));
+ else
+  dfd.AppendItem(_T("Decrease step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_en, _T("Value of the IAC add after exit decreases by this value every 100ms if the throttle is closed and the engine speed is between the 1st and 2nd transient thresholds (transient thresholds are set by the corresponding coefficients on the '3:Idling' parameters' tab, value of the 'IAC add after exit' is also set there)"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Шаг увеличения добавки после выхода РХХ"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le, _T("Значение добавки после выхода увеличивается на это значение каждые 100мс если дроссель открыт и обороты двигателя находятся выше 2-го порога переходных режимов (значение добавки после выхода и пороги пер. режимов задаются соответствующими коэффициентами на вкладке параметров '3:ХХ', там же задается значение добавки после выхода)"));
+ else
+  dfd.AppendItem(_T("Increase step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le, _T("Value of the IAC add after exit increases by this value every 100ms if the throttle is open and the engine speed is above the 2nd transient threshold (transient thresholds are set by the corresponding coefficients on the '3:Idling' parameters' tab, value of the 'IAC add after exit' is also set there)"));
+
+ //ignition timing
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Управление зажиганием:"));
+ else
+  dfd.AppendItem(_T("Ignition control:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Всегда использовать карту УОЗ рабочего режима"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("Если установить в 1, то рабочая карта УОЗ будет использоваться не только для рабочего режима, но и для режима ХХ. Установите в 0 для работы в обычном режиме (для ХХ своя карта УОЗ)"));
+ else
+  dfd.AppendItem(_T("Always use working mode's ignition timing map"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("If set to 1, then working ignition timing map will be used also for idling mode. Set ot 0 for working in default mode (seperate map will be used on idling)"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Применять ручную октан коррецию в режиме ХХ"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - не применять ручную октан коррекцию на холостом ходу (коррекция будет применяться только в рабочем режиме), 1 - разрешить применение ручной октан коррекции на холостом ходу"));
+ else
+  dfd.AppendItem(_T("Apply manual ignition timing correction on idling"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("УОЗ при переключении передач"), _T("°"), -15.0f, 55.0f, 0.1f, 1, &d.shift_igntim, _T("Значение УОЗ используемое при переключени передач (пока на входе AUTO_I присутствует сигнал)"));
+ else
+  dfd.AppendItem(_T("Ignition timing when shifting gears"), _T("°"), -15.0f, 55.0f, 0.1f, 1, &d.shift_igntim, _T("Value of ignition timing used when shifting gears (while signal is present at the AUTO_I input)"));
+
+ //injection
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Впрыск топлива:"));
+ else
+  dfd.AppendItem(_T("Fuel injection:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длит. плавного входа в ПХХ"), _T("такт"), 0, 255, 1, 1, &d.fi_enter_strokes, _T("Длительность плавного входа в ПХХ в тактах двигателя. Впрыск топлива отключится не сразу, а будет постепенно убывать на протяжении указанного кол-ва тактов."));
+ else
+  dfd.AppendItem(_T("Smoothing of forced idle entering"), _T("str"), 0, 255, 1, 1, &d.fi_enter_strokes, _T("Smoothing of forced idle entering in engine strokes. Fuel injection will not turn off immediately, but will gradually decrease over the specified number of strokes."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длит. плавного выхода из ПХХ"), _T("такт"), 0, 255, 1, 1, &d.fi_leave_strokes, _T("Длительность плавного выхода из ПХХ в тактах двигателя. Впрыск топлива включится не сразу, а будет постепенно возрастать на протяжении указанного кол-ва тактов."));
+ else
+  dfd.AppendItem(_T("Smoothing of forced idle leaving"), _T("str"), 0, 255, 1, 1, &d.fi_leave_strokes, _T("Smoothing of forced idle entering in engine strokes. Fuel injection will not turn on immediately, but will gradually increase over the specified number of strokes."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Наполнение на ХХ для бенз. (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для бензина (GAS_V = 0)."));
+ else
+  dfd.AppendItem(_T("VE on idling for petrol (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for petrol (GAS_V = 0)."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Наполнение на ХХ для газа (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для газа (GAS_V = 1)."));
+ else
+  dfd.AppendItem(_T("VE on idling for gas (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for LPG (GAS_V = 1)."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Максимальная длительность впрыска"), _T("мс"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw, _T("Ограничение максимальной длительности впрыска. Длительность импульсов впрыска не может быть больше этого значения."));
+ else
+  dfd.AppendItem(_T("Max. injection pulse width"), _T("ms"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw, _T("Limitting the maximum injection pulse width. The width of injection pulses can not be above this value."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Alpha-N: умножать время впрыска на ДПДЗ"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("Выбор на что умножать базовое время впрыска при работе в режиме Alpha-N: на ДАД или ДПДЗ. Если установить 0, то прошивка производит умножение на ДАД, если установить 1, то прошивка производит умножение на ДПДЗ. Если установить 2, то прошивка производит умножение на 101.3"));
+ else
+  dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("The choice of what to multiply the base injection PW when working in Alpha-N mode: by MAP or TPS. If you set 0, then the firmware multiplies by MAP, if you set 1, then the firmware multiplies by TPS. If you set it to 2, then firmware multiplies by 101.3 constant"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Абсол. давление в топливной рампе"), _T("кПа"), 0.0f, 1000.0f, 0.1f, 1, &d.frap, _T("Абсолютное давление в топливной рампе. Установите значение больше 0, если хотите чтобы время впрыска корректировалось по разности давлений во впускном коллекторе и топливной рампе. Предполагается, что производительность форсунок указана для давления 3 бара."));
+ else
+  dfd.AppendItem(_T("Absolute pressure in the fuel rail"), _T("kPa"), 0.0f, 1000.0f, 0.1f, 1, &d.frap, _T("Absolute pressure in the fuel rail. Set value greater than 0 if you want the injection PW to be corrected for the pressure difference in the intake manifold and the fuel rail. It is assumed that injectors' flow rate is indicated for a pressure of 3 bars."));
+
+ //air conditioner
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Кондиционер:"));
+ else
+  dfd.AppendItem(_T("Air conditioner:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДТОЖ вкл. кондиционера"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt, _T("Кондиционер включится только если температура двигателя выше этого порога, иначе запросы на включение будут игнорироваться."));
+ else
+  dfd.AppendItem(_T("CLT threshold for turn on of air cond."), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt, _T("Air conditioner will turn on only if the engine temperature is above this threshold, otherwise requests for switching on will be ignored."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДПДЗ выкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("Компрессор кондиционера не будет включаться (или будет выключаться) если положение дроссельной заслогки превышает указанное значение."));
+ else
+  dfd.AppendItem(_T("TPS threshold for turning off air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("The compressor of air conditioner will not turn on (or it will turn off) if throttle position exceeds specified value."));
+
+ //canister purge valve
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Управление адсорбером:"));
+ else
+  dfd.AppendItem(_T("Canister purge valve:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДТОЖ вкл. продувки адсорбера"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.evap_clt, _T("Продувка адсорбера будет включаться только если температура двигателя выше этого порога."));
+ else
+  dfd.AppendItem(_T("CLT threshold for turning on of the canister purge valve"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.evap_clt, _T("The canister purge valve will work only if engine's temperature is above this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Нижн. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_lo, _T("Продувка адсорбера не будет включаться если положение дроссельной заслонки ниже или равно этому порогу. Продувка не должна работать на ХХ."));
+ else
+  dfd.AppendItem(_T("Low TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_lo, _T("The canister purge valve will not turn on if throttle position is lower or equal to this threshold. Purge should not work on idling."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Верх. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("Продувка адсорбера не будет включаться если положение дроссельной заслонки выше этого порога. Продувка не должна работать в режимах полных нагрузок."));
+ else
+  dfd.AppendItem(_T("Hi TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("The canister purge valve will not turn on if throttle position is above this threshold. Purge should not work in full load conditions."));
+
+ //heating control
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Управление подогревом:"));
+ else
+  dfd.AppendItem(_T("Control of heaters:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог выключения подогрева коллектора"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.heating_t_off, _T("Подогрев впускного коллектора будет выключен после того как температура двигателя достигнет указанного значения. Управление подогревом осуществляется посредством выхода переназначенного как INTK_HEAT."));
+ else
+  dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.heating_t_off, _T("Intake manifold heating will be turned off after the temperature of engine reaches the specified value. The heating control is carried out by means of the output reassigned as INTK_HEAT."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Макс. время работы подогрева коллектора"), _T("мин"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time, _T("Подгрев впускного коллектора будет выключен по истечении этого времени даже если температурный порог еще не достигнут. Это должно предотвратить чрезмерный разряд аккумулятора."));
+ else
+  dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("min"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time, _T("Intake manifold heating will be turned off after this time, even if the temperature threshold has not yet been reached. This should prevent over-discharge of the battery."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Макс. время работы подогрева газового редуктора"), _T("мин"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("Подгрев впускного коллектора будет выключен по истечении этого времени когда двигатель остановлен. Это должно предотвратить чрезмерный разряд аккумулятора."));
  else
   dfd.AppendItem(_T("Timeout threshold of gas reducer's heater"), _T("min"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("Gas reducer's heating will be turned off after this time when engine is stopped. This should prevent over-discharge of the battery."));
+
+ //cooling fan
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Управление вентилятором:"));
+ else
+  dfd.AppendItem(_T("Cooling fan's control:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Задержка включения вентилятора"), _T("сек"), 0.00f, 2.5f, 0.01f, 2, &d.vent_delay, _T("Используется для включения вентилятора с задержкой чтобы РХХ успел за это время поднять обороты двигателя (актуально только для прошивок с впрыском топлива)."));
+ else
+  dfd.AppendItem(_T("Cooling fan's turn on delay"), _T("sec"), 0.00f, 2.5f, 0.01f, 2, &d.vent_delay, _T("It is used to turn on the fan with delay so that the IAC has time to increase the engine speed during this time (relevant only for firmware with fuel injection)."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Число дискрет ШИМ вентилятора"), _T("N"), 4, 64, 1, 1, &d.vent_pwmsteps, _T("Число шагов ШИМ вентилятора. Чем больше число шагов, тем шире зона температуры и тем более плавно вентилятор меняет скорость и наоборот, чем меньше число шагов, тем уже диапазон температуры и тем менее плавно вентилятор меняет скорость."));
+ else
+  dfd.AppendItem(_T("Number of cooling fan's PWM discretes"), _T("N"), 4, 64, 1, 1, &d.vent_pwmsteps, _T("Number of cooling fan's PWM steps. The larger number of steps, the wider the temperature band and fan changes speed more smoothly and vice versa, the smaller number of steps, the narrower the temperature band and fan changes speed less smoothly."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Нижняя мертвая зона ШИМ вентилятора"), _T("N"), 0, 60, 1, 1, &d.vent_minband, _T("Если текущий номер шага меньше этого значения, то вентилятор полностью выключается (или не включается). Это нужно для того, чтобы ШИМ зря не 'мучил' щетки вентилятора когда скважности не хватает для создания достаточного крутящего момента чтобы вал вращался."));
+ else
+  dfd.AppendItem(_T("Low dead band for cooling fan's PWM"), _T("N"), 0, 60, 1, 1, &d.vent_minband, _T("If the current step number (duty) is less than this value, the fan turns off completely (or does not turn on). This is necessary so that the PWM in vain does not 'torment' the fan's brushes when duty cycle is not enough to create torque to rotate the shaft."));
+
+ //miscellaneous
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Прочие константы:"));
+ else
+  dfd.AppendItem(_T("Other constants:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Разрешить запуск при продувке двигателя"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."));
+ else
+  dfd.AppendItem(_T("Allow engine start in flood clear mode"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Таймер блокировки стартера"), _T("такт"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Количество тактов от момента достижения порога оборотов блокировки стартера до момента его фактического выключения. Установите значение 0, если хотите чтобы использовалась таблица вместо этой простой константы."));
+ else
+  dfd.AppendItem(_T("Starter's blocking timer"), _T("str"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Тumber of strokes from the moment the starter's blocking threshold is reached until starter is actually turned off. Set the value to 0 if you want the table to be used instead of this simple constant."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог контроля детонации"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.knkclt_thrd, _T("Контроль детонации включится только после того, как температура двигателя превысит это значение."));
+ else
+  dfd.AppendItem(_T("Knock control threshold"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.knkclt_thrd, _T("Control of knock will be activated only after the temperature of engine exceeds this value."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Алгоритм прогнозирования положения коленвала для ДХ"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Выбор алгоритма прогнозирования положения коленвала в прошивках с синхронизацией от ДХ (Nзуб=Nцил). 0 - последний интервал. 1 - Первая производная"));
+ else
+  dfd.AppendItem(_T("Algorithm of crankshaft position prediction for hall"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Selection of algorithm of crankshaft position prediction for firmwares with synchronization from a Hall sensor (Nteeth=Ncyl). 0 - Last interval. 1 - First derivative."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Множитель частоты импульсов на выходе для тахометра (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("Данный множитель определяет соотношение оборотов и частоты импульсов для тахометра выдаваемых на выход VTACHOM. Например, 1.000 означает, что за один оборот коленвала выдается 1 импульс. Чем выше значение множителя, тем выше частота."));
+ else
+  dfd.AppendItem(_T("Frequency multiplier for tachometer output (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("This multiplier specify ratio of RPM and frequency of pulses produced at VTACHOM output. For example, 1.000 means that for 1 revolution of crankshaft 1 pulse is produced. The higher the value of multiplier, the higher the frequency."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Передавать вместо ADD_I1 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I1. 1 - вход ADD_I1 (по умолчанию), 2 - вход ADD_I2, 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
@@ -1938,16 +2001,6 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Передавать вместо ADD_I2 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I2. 1 - вход ADD_I1, 2 - вход ADD_I2 (по умолчанию), 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
  else
   dfd.AppendItem(_T("Send value of another input instead of ADD_I2"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Select what firmware should send instead of ADD_I2 value. 1 - ADD_I1 input, 2 - ADD_I2 input (default), 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Зона оборотов подхвата УОЗ РХХ"), _T("мин-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("УОЗ РХХ будет активирован когда обороты опустятся ниже значения равного сумме целевых оборотов ХХ и зоны подхвата. Например целевые обороты ХХ = 900, зона подхвата = 200, значит регулятор начнет работать когда обороты двигателя опустятся ниже 1100."));
- else
-  dfd.AppendItem(_T("Capture range of the ign.tim idling regulator"), _T("min-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("Ignition-based idling regulator will be activated when the RPM falls below a value equal to the sum of the target idling RPM and the pickup zone. For example, target RPM = 900, pick-up zone = 200, which means the regulator will start working when the RPM drops below 1100."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Применять ручную октан коррецию в режиме ХХ"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - не применять ручную октан коррекцию на холостом ходу (коррекция будет применяться только в рабочем режиме), 1 - разрешить применение ручной октан коррекции на холостом ходу"));
- else
-  dfd.AppendItem(_T("Apply manual ignition timing correction on idling"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"));
 
  if (dfd.DoModal()==IDOK)
  {

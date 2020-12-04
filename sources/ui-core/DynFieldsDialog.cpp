@@ -30,6 +30,7 @@
 #include "common/GDIHelpers.h"
 #include "ui-core/WndScroller.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/fnt_helpers.h"
 
 // Child dialog
 int CDynFieldsDialog::ItemData::idCntr = IDC_DYNFLDDLG_START;
@@ -75,6 +76,9 @@ BOOL CDynFieldsDialog::OnInitDialog()
   it->Create(this);
 
  Super::OnInitDialog();
+
+ //Set bold font
+ CloneWndFont(this, &m_boldDlgFont, -1, true);
  
  //calculate and store vertical size of dialog
  CRect lr;
@@ -94,6 +98,11 @@ BOOL CDynFieldsDialog::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  for(std::list<ItemData>::iterator it = m_fl.begin(); it != m_fl.end(); ++it)
  {
+  if (it->separator)
+  {
+   it->p_capt->SetFont(&m_boldDlgFont);
+   continue;
+  }
   VERIFY(mp_ttc->AddWindow(it->p_edit, (LPCTSTR)it->tooltip));
   VERIFY(mp_ttc->AddWindow(it->p_spin, (LPCTSTR)it->tooltip));
  }
@@ -140,6 +149,7 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.fltVal = NULL;
  id.intVal = p_value;
  id.tooltip = tooltip.c_str();
+ id.separator = false;
  m_fl.push_back(id);
  return true;
 }
@@ -156,6 +166,16 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.fltVal = p_value;
  id.intVal = NULL;
  id.tooltip = tooltip.c_str();
+ id.separator = false;
+ m_fl.push_back(id);
+ return true;
+}
+
+bool CDynFieldsDialog::AppendItem(const _TSTRING& caption)
+{
+ ItemData id;
+ id.caption = caption.c_str();
+ id.separator = true; //item is separator
  m_fl.push_back(id);
  return true;
 }
@@ -169,7 +189,7 @@ void CDynFieldsDialog::OnChangeData(UINT nID)
 {
  for(std::list<ItemData>::iterator it = m_fl.begin(); it != m_fl.end(); ++it)
  {
-  if (nID == it->p_edit->GetDlgCtrlID())
+  if (!it->separator && nID == it->p_edit->GetDlgCtrlID())
    UpdateData();
  }
 }
@@ -293,6 +313,11 @@ bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const _TSTRING& un
 bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip)
 {
  return m_dlg.AppendItem(caption, unit, vMin, vMax, vStp, decPls, p_value, tooltip);
+}
+
+bool CDynFieldsContainer::AppendItem(const _TSTRING& caption)
+{
+ return m_dlg.AppendItem(caption); //add separator
 }
 
 void CDynFieldsContainer::OnOK()

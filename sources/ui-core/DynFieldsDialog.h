@@ -47,6 +47,8 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip);
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip);
+  bool AppendItem(const _TSTRING& caption); //adds separator
+
   void AllowToolTips(bool allowToolTips);
   void Apply(void);
   int GetContentHeight(void);
@@ -65,7 +67,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
   struct ItemData
   {
    ItemData()
-   : p_edit(NULL), p_spin(NULL), p_capt(NULL), p_unit(NULL), intVal(NULL), fltVal(NULL)
+   : p_edit(NULL), p_spin(NULL), p_capt(NULL), p_unit(NULL), intVal(NULL), fltVal(NULL), separator(false)
    {
    }
 
@@ -79,6 +81,12 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
    bool Init(void)
    {
+    if (separator)
+    {
+     p_capt = new CStatic;
+     return true;
+    }
+
     if (intVal)
     {
      p_edit = new CEditEx(CEditEx::MODE_INT, true);
@@ -105,15 +113,32 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
     //NOTE: values are in dialog units (not screen pixels)
     int leftOffset = 5;
-    int topOffset = 5;
     int groupHeight = 16;
+    int vertClearance = 3;
+
+    if (separator)
+    { //simple case: adding a separator only
+     int topOffset = 8;
+     int captWidth = 200;
+     //define coordinates
+     CRect captRect(leftOffset, topOffset+(groupIdx*(groupHeight+vertClearance)), leftOffset+captWidth, topOffset+(groupIdx*(groupHeight+vertClearance))+groupHeight);
+     //caption
+     ::MapDialogRect(parent->GetSafeHwnd(), &captRect);
+     VERIFY(p_capt->Create(caption,WS_CHILD | WS_VISIBLE, captRect, parent, idCntr++));
+     p_capt->SetWindowText(caption);
+     p_capt->SetFont(parent->GetFont());     
+     groupIdx++;  //increment group index
+     return true;
+    }
+    
+    //adding a group of controls (caption, edit, spin, unit)
+    int topOffset = 5;
     int captWidth = 125;
     int editWidth = 38;
     int spinWidth = 13;
     int unitWidth = 20;
-    int vertClearance = 3;
     //define coordinates
-    CRect captRect(leftOffset, topOffset+(groupIdx*(groupHeight+vertClearance)), leftOffset+captWidth, topOffset+(groupIdx*(groupHeight+vertClearance))+groupHeight);
+    CRect captRect(leftOffset, topOffset+(groupIdx*(groupHeight+vertClearance)), leftOffset+captWidth, topOffset+(groupIdx*(groupHeight+vertClearance))+groupHeight);    
     CRect editRect(captRect.right, captRect.top, captRect.right + editWidth, captRect.bottom);
     CRect spinRect(editRect.right+1, editRect.top, editRect.right + spinWidth, captRect.bottom);
     CRect unitRect(spinRect.right+1, spinRect.top, spinRect.right + unitWidth, captRect.bottom);
@@ -151,6 +176,8 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
    void DDX_Value(CDataExchange* pDX)
    {
+    if (separator)
+     return;
     if (intVal)
      p_edit->DDX_Value(pDX, p_edit->GetDlgCtrlID(), intValm);
     else if (fltVal)
@@ -160,6 +187,8 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
    void Apply(void)
    {
+    if (separator)
+     return;
     if (intVal)
      *intVal = intValm;
     if (fltVal)
@@ -178,6 +207,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
    float* fltVal;
    int   intValm;
    float fltValm;
+   bool separator;
 
    float vMin;
    float vMax;
@@ -195,6 +225,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
   int m_contentHeight;
   bool m_initialized;
   bool m_allowToolTips;
+  CFont m_boldDlgFont;
 };
 
 //Modal dialog container
@@ -208,6 +239,7 @@ class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
 
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip = _TSTRING());
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip = _TSTRING());
+  bool AppendItem(const _TSTRING& caption); //adds separator
 
   virtual INT_PTR DoModal();
 
