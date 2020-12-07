@@ -42,7 +42,7 @@ static const size_t itemNumberRPM = 16;
 static const size_t itemNumberCLT = 16;
 static const size_t itemNumberLod = 16;
 static const float gridMinStep[3] = {100, 5, 1};
-static const float gridMinValue[3] = {300, -40, 5};
+static const float gridMinValue[3] = {300, -40, 0};
 static const float gridMaxValue[3] = {20000, 250, 500};
 
 CFWRPMGridEditController::CFWRPMGridEditController()
