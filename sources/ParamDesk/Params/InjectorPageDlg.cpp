@@ -151,9 +151,9 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
   //controls
   m_flowrate_edit[i].SetMode(CEditEx::MODE_FLOAT);
   m_flowrate_edit[i].SetOwnDDV(true);
-  m_inj_timing_edit[i].SetMode(CEditEx::MODE_FLOAT);
+  m_inj_timing_edit[i].SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
   m_inj_timing_edit[i].SetOwnDDV(true);
-  m_inj_timing_crk_edit[i].SetMode(CEditEx::MODE_FLOAT);
+  m_inj_timing_crk_edit[i].SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
   m_inj_timing_crk_edit[i].SetOwnDDV(true);
   m_min_pw_edit[i].SetMode(CEditEx::MODE_FLOAT);
   m_min_pw_edit[i].SetOwnDDV(true);

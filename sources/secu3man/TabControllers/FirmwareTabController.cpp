@@ -1793,7 +1793,12 @@ void CFirmwareTabController::OnEditFwConsts(void)
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Зона оборотов подхвата УОЗ РХХ"), _T("мин-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("УОЗ РХХ будет активирован когда обороты опустятся ниже значения равного сумме целевых оборотов ХХ и зоны подхвата. Например целевые обороты ХХ = 900, зона подхвата = 200, значит регулятор начнет работать когда обороты двигателя опустятся ниже 1100."));
  else
-  dfd.AppendItem(_T("Capture range of the ign.tim idling regulator"), _T("min-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("Ignition-based idling regulator will be activated when the RPM falls below a value equal to the sum of the target idling RPM and the pickup zone. For example, target RPM = 900, pick-up zone = 200, which means the regulator will start working when the RPM drops below 1100."));
+  dfd.AppendItem(_T("Capture range of the ign. tim. idling regulator"), _T("min-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("Ignition-based idling regulator will be activated when the RPM falls below a value equal to the sum of the target idling RPM and the pickup zone. For example, target RPM = 900, pick-up zone = 200, which means the regulator will start working when the RPM drops below 1100."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Задержка включения УОЗ РХХ"), _T("сек"), 0.01, 2.5, 0.01, 2, &d.idlent_timval, _T("После наступления всех необходимых условий УОЗ РХХ включится с задержкой определяемой этим параметром"));
+ else
+  dfd.AppendItem(_T("Ign. tim. idling regulator's turn on delay"), _T("sec"), 0.01, 2.5, 0.01, 2, &d.idlent_timval, _T("Ign. tim. idling regulator will be turned on with delay specified by this parameter"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Смещение РХХ при включении вентилятора"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff, _T("Это значение будет прибавлено к положению РХХ при поступлении запроса на включение вентилятора. В режиме closed loop смещение один раз прибавляется к положению РХХ. В режиме open loop смещение прибавляется при включении вентилятора и вычитается при выключении вентилятора"));
