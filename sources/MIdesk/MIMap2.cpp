@@ -48,7 +48,7 @@ void CMIMap2::Create(CWnd* pParent)
 
  m_meter.SetRange (0.0, 400.0);
  m_meter.SetLabelsDecimals(0);
- m_meter.SetValueDecimals(0);
+ m_meter.SetValueDecimals(2);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_MAP2_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
