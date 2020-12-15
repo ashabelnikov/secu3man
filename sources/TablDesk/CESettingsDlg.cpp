@@ -573,6 +573,117 @@ BOOL CCESettingsDlg::OnInitDialog()
  m_add_i8_v_em_edit.SetLimitText(6);
  m_add_i8_v_em_edit.SetDecimalPlaces(3);
 
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+
+ VERIFY(mp_ttc->AddWindow(&m_map_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_vbat_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vbat_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vbat_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vbat_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vbat_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vbat_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vbat_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_cts_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cts_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cts_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cts_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cts_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cts_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cts_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_ks_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ks_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ks_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ks_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ks_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ks_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ks_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_tps_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i1_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i1_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i1_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i1_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i1_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i1_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i1_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i2_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i2_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i2_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i2_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i2_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i2_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i2_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i3_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i3_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i3_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i3_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i3_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i3_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i3_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i4_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i4_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i4_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i4_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i4_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i4_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i4_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i5_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i5_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i5_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i5_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i5_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i5_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i5_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i6_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i6_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i6_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i6_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i6_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i6_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i6_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i7_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i7_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i7_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i7_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i7_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i7_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i7_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_add_i8_v_min_edit, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i8_v_min_spin, MLL::GetString(IDS_CESETT_MAP_V_MIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i8_v_max_edit, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i8_v_max_spin, MLL::GetString(IDS_CESETT_MAP_V_MAX_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i8_v_em_edit, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i8_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_add_i8_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
+
  //initialize window scroller
  mp_scr->Init(this);
  _UpdateScrlViewSize();

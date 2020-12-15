@@ -284,6 +284,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWMIAC_UCOEF, mptms.m_pwmiac_ucoef_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK0, mptms.m_aftstr_strk0_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK1, mptms.m_aftstr_strk1_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRVDELAY, mptms.m_grvaldel_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -1151,6 +1152,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetAftstrStrk1Map(mp_view->mp_TablesPanel->GetAftstrStrk1Map(false),false);
  mp_fwdm->GetAftstrStrk1Map(mp_view->mp_TablesPanel->GetAftstrStrk1Map(true),true);
 
+ mp_fwdm->GetGrValDelMap(mp_view->mp_TablesPanel->GetGrValDelMap(false),false);
+ mp_fwdm->GetGrValDelMap(mp_view->mp_TablesPanel->GetGrValDelMap(true),true);
+
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
@@ -1462,6 +1466,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_AFTSTR_STRK1:
    mp_fwdm->SetAftstrStrk1Map(mp_view->mp_TablesPanel->GetAftstrStrk1Map(false));
+   break;
+  case TYPE_MAP_GRVDELAY:
+   mp_fwdm->SetGrValDelMap(mp_view->mp_TablesPanel->GetGrValDelMap(false));
    break;
  }
 }
@@ -1796,9 +1803,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Capture range of the ign. tim. idling regulator"), _T("min-1"), 0, 1000, 1, 0, &d.idlreg_captrange, _T("Ignition-based idling regulator will be activated when the RPM falls below a value equal to the sum of the target idling RPM and the pickup zone. For example, target RPM = 900, pick-up zone = 200, which means the regulator will start working when the RPM drops below 1100."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Задержка включения УОЗ РХХ"), _T("сек"), 0.01, 2.5, 0.01, 2, &d.idlent_timval, _T("После наступления всех необходимых условий УОЗ РХХ включится с задержкой определяемой этим параметром"));
+  dfd.AppendItem(_T("Задержка включения УОЗ РХХ"), _T("сек"), 0.01f, 2.5f, 0.01f, 2, &d.idlent_timval, _T("После наступления всех необходимых условий УОЗ РХХ включится с задержкой определяемой этим параметром"));
  else
-  dfd.AppendItem(_T("Ign. tim. idling regulator's turn on delay"), _T("sec"), 0.01, 2.5, 0.01, 2, &d.idlent_timval, _T("Ign. tim. idling regulator will be turned on with delay specified by this parameter"));
+  dfd.AppendItem(_T("Ign. tim. idling regulator's turn on delay"), _T("sec"), 0.01f, 2.5f, 0.01f, 2, &d.idlent_timval, _T("Ign. tim. idling regulator will be turned on with delay specified by this parameter"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Смещение РХХ при включении вентилятора"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff, _T("Это значение будет прибавлено к положению РХХ при поступлении запроса на включение вентилятора. В режиме closed loop смещение один раз прибавляется к положению РХХ. В режиме open loop смещение прибавляется при включении вентилятора и вычитается при выключении вентилятора"));
@@ -2006,6 +2013,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Передавать вместо ADD_I2 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I2. 1 - вход ADD_I1, 2 - вход ADD_I2 (по умолчанию), 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
  else
   dfd.AppendItem(_T("Send value of another input instead of ADD_I2"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Select what firmware should send instead of ADD_I2 value. 1 - ADD_I1 input, 2 - ADD_I2 input (default), 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Время открытого газового клапана на не запущенном двигателе"), _T("сек"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("Время на протяжении которого выход управляющий газовым клапаном (GASVAL_O) будет включен на не запущеном двигателе."));
+ else
+  dfd.AppendItem(_T("Time of opened gas valve on stopped engine"), _T("sec"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("During this time output which controls gas valve (GASVAL_O) will be turned on when engine is stopped."));
 
  if (dfd.DoModal()==IDOK)
  {
@@ -2247,6 +2259,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_pwmiac_ucoef_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWMIAC_UCOEF);
  mptms.m_aftstr_strk0_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK0);
  mptms.m_aftstr_strk1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK1);
+ mptms.m_grvaldel_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRVDELAY);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

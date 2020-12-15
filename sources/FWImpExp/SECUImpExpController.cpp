@@ -178,6 +178,9 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
   m_fwdm->GetAftstrStrk1Map(mp_fwd->aftstr_strk1);
 
+ if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
+  m_fwdm->GetGrValDelMap(mp_fwd->grv_delay);
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 
@@ -365,6 +368,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -522,6 +526,9 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
   m_fwdm->SetAftstrStrk1Map(mp_fwd->aftstr_strk1);
+
+ if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
+  m_fwdm->SetGrValDelMap(mp_fwd->grv_delay);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -719,6 +726,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

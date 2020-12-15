@@ -226,6 +226,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetAftstrStrk1Map(float* op_values, bool i_original = false);
   void SetAftstrStrk1Map(const float* i_values);
 
+  void GetGrValDelMap(float* op_values, bool i_original = false);
+  void SetGrValDelMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {
@@ -328,11 +331,11 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_VTACHOM    =  85,     // VTACHOM   (output)
    IOP3I_GRTEMP     =  86,     // GRTEMP    (input)
    IOP3I_GRHEAT     =  87,     // GRHEAT    (output)
-// IOP3I_RESERVED22 =  88,     // Reserved    ()
+   IOP3I_GASVAL_O   =  88,     // GASVAL_O  (output)
 // IOP3I_RESERVED23 =  89,     // Reserved    ()
 // IOP3I_RESERVED24 =  90,     // Reserved    ()
 // IOP3I_RESERVED25 =  91,     // Reserved    ()
-   IOP3I_COUNT      =  88,     //DON'T forget to update this value
+   IOP3I_COUNT      =  89,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -556,7 +559,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V30 = 0x30,           //V3.0  New reserved slots and plugs were added
    IOV_V31 = 0x31,           //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5, VTACHOM)
    IOV_V32 = 0x32,           //V3.2  New slots were added (ADD_I5,6,7,8, GRTEMP, GRHEAT)
-   IOV_V33 = 0x33            //V3.3  New slots were added (added possibility to remap ADD_I5/7 as MAP2)
+   IOV_V33 = 0x33            //V3.3  New slots were added (added possibility to remap ADD_I5/7 as MAP2, GASVAL_O plug added)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

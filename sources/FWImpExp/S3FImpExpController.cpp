@@ -188,6 +188,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
   memcpy(mp_fwd->aftstr_strk1, mp_s3f_io->GetData().aftstr_strk1, sizeof(float) * AFTSTR_STRK_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
+  memcpy(mp_fwd->grv_delay, mp_s3f_io->GetData().grv_delay, sizeof(float) * F_TMP_POINTS);
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -419,6 +422,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -437,9 +441,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, sv0113 && sepmap); //since v01.13
  mp_view->EnableFWDFlag(FLAG_GRTSCURVE_MAP, sv0114 && sepmap); //since v01.14
  mp_view->EnableFWDFlag(FLAG_GRHEAT_MAP, sv0114 && sepmap);    //since v01.14
- mp_view->EnableFWDFlag(FLAG_IACUCOEF_MAP, sv0115 && sepmap);    //since v01.15
- mp_view->EnableFWDFlag(FLAG_AFTSTRK0_MAP, sv0115 && sepmap);    //since v01.15
- mp_view->EnableFWDFlag(FLAG_AFTSTRK1_MAP, sv0115 && sepmap);    //since v01.15
+ mp_view->EnableFWDFlag(FLAG_IACUCOEF_MAP, sv0115 && sepmap);  //since v01.15
+ mp_view->EnableFWDFlag(FLAG_AFTSTRK0_MAP, sv0115 && sepmap);  //since v01.15
+ mp_view->EnableFWDFlag(FLAG_AFTSTRK1_MAP, sv0115 && sepmap);  //since v01.15
+ mp_view->EnableFWDFlag(FLAG_GRVDELAY_MAP, sv0116 && sepmap);  //since v01.16
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -599,6 +604,9 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
   memcpy(mp_s3f_io->GetDataLeft().aftstr_strk1, mp_fwd->aftstr_strk1, sizeof(float) * AFTSTR_STRK_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().grv_delay, mp_fwd->grv_delay, sizeof(float) * F_TMP_POINTS);
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -782,6 +790,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

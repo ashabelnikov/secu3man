@@ -363,6 +363,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_AftstrStrk1MapWnd_W = rc.right - rc.left;
    sz.m_AftstrStrk1MapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_GRVDELAY:
+   ws.m_GrValDelMapWnd_X = rc.left;
+   ws.m_GrValDelMapWnd_Y = rc.top;
+   sz.m_GrValDelMapWnd_W = rc.right - rc.left;
+   sz.m_GrValDelMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -598,6 +604,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_AFTSTR_STRK1:
    X = ws.m_AftstrStrk1MapWnd_X, Y = ws.m_AftstrStrk1MapWnd_Y;
    W = sz.m_AftstrStrk1MapWnd_W, H = sz.m_AftstrStrk1MapWnd_H;
+   break;
+  case TYPE_MAP_GRVDELAY:
+   X = ws.m_GrValDelMapWnd_X, Y = ws.m_GrValDelMapWnd_Y;
+   W = sz.m_GrValDelMapWnd_W, H = sz.m_GrValDelMapWnd_H;
    break;
 
   default:

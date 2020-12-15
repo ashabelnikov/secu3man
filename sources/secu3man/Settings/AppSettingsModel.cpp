@@ -169,6 +169,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwmIacUCoefMapWnd(_T("PwmIacUCoefMapWnd"))
 , m_optAftstrStrk0MapWnd(_T("AftstrStrk0MapWnd"))
 , m_optAftstrStrk1MapWnd(_T("AftstrStrk1MapWnd"))
+, m_optGrValDelMapWnd(_T("GasValDelMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -255,6 +256,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwmIacUCoefMapWndSize(_T("PwmIacUCoefMapWnd"))
 , m_optAftstrStrk0MapWndSize(_T("AftstrStrk0MapWnd"))
 , m_optAftstrStrk1MapWndSize(_T("AftstrStrk1MapWnd"))
+, m_optGrValDelMapWndSize(_T("GasValDelMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -397,6 +399,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepPwmIacUCoefMap(_T("PwmIacUCoefMapWnd"))
 , m_optPtMovStepAftstrStrk0Map(_T("AftstrStrk0MapWnd"))
 , m_optPtMovStepAftstrStrk1Map(_T("AftstrStrk1MapWnd"))
+, m_optPtMovStepGrValDelMap(_T("GasValDelMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -763,6 +766,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optPwmIacUCoefMapWnd);
  ws.ReadWndPos(m_optAftstrStrk0MapWnd);
  ws.ReadWndPos(m_optAftstrStrk1MapWnd);
+ ws.ReadWndPos(m_optGrValDelMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -852,6 +856,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optPwmIacUCoefMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAftstrStrk0MapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAftstrStrk1MapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optGrValDelMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1063,6 +1068,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepPwmIacUCoefMap, _T("0.01"), 0.001f, 1.0f);
  ms.ReadFlt(m_optPtMovStepAftstrStrk0Map, _T("0.01"), 0.001f, 1.0f);
  ms.ReadFlt(m_optPtMovStepAftstrStrk1Map, _T("0.01"), 0.001f, 1.0f);
+ ms.ReadFlt(m_optPtMovStepGrValDelMap, _T("0.1"), 0.0f, 10.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1850,6 +1856,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optAftstrStrk1MapWnd, _T("Число тактов обогащения после пуска от температуры двигателя (gas)"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optGrValDelMapWnd, _T("Gas valve opening delay vs gas reducer's temperature map"));
+ else
+  ws.WriteWndPos(m_optGrValDelMapWnd, _T("Задержка включения газового клапана от температуры газового редуктора"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2275,6 +2286,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optAftstrStrk1MapWndSize, _T("After start enrichment strokes vs coolant temperature (gas)"));
  else
   sz.WriteWndPos(m_optAftstrStrk1MapWndSize, _T("Число тактов обогащения после пуска от температуры двигателя (газ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optGrValDelMapWndSize, _T("Gas valve opening delay vs gas reducer's temperature map"));
+ else
+  sz.WriteWndPos(m_optGrValDelMapWndSize, _T("Задержка включения газового клапана от температуры газового редуктора"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3257,6 +3273,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepAftstrStrk1Map, 3, _T("Число тактов обогащения после пуска от температуры двигателя (газ)"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepGrValDelMap, 2, _T("Gas valve opening delay vs gas reducer's temperature map"));
+ else
+  ms.WriteFlt(m_optPtMovStepGrValDelMap, 2, _T("Задержка включения газового клапана от температуры газового редуктора"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -3541,6 +3562,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optAftstrStrk0MapWnd.value.y = i_wndSettings.m_AftstrStrk0MapWnd_Y;
  m_optAftstrStrk1MapWnd.value.x = i_wndSettings.m_AftstrStrk1MapWnd_X;
  m_optAftstrStrk1MapWnd.value.y = i_wndSettings.m_AftstrStrk1MapWnd_Y;
+ m_optGrValDelMapWnd.value.x = i_wndSettings.m_GrValDelMapWnd_X;
+ m_optGrValDelMapWnd.value.y = i_wndSettings.m_GrValDelMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3649,6 +3672,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_AftstrStrk0MapWnd_Y = m_optAftstrStrk0MapWnd.value.y;
  o_wndSettings.m_AftstrStrk1MapWnd_X = m_optAftstrStrk1MapWnd.value.x;
  o_wndSettings.m_AftstrStrk1MapWnd_Y = m_optAftstrStrk1MapWnd.value.y;
+ o_wndSettings.m_GrValDelMapWnd_X = m_optGrValDelMapWnd.value.x;
+ o_wndSettings.m_GrValDelMapWnd_Y = m_optGrValDelMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -3885,6 +3910,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optAftstrStrk0MapWndSize.value.y = i_wndSize.m_AftstrStrk0MapWnd_H;
  m_optAftstrStrk1MapWndSize.value.x = i_wndSize.m_AftstrStrk1MapWnd_W;
  m_optAftstrStrk1MapWndSize.value.y = i_wndSize.m_AftstrStrk1MapWnd_H;
+ m_optGrValDelMapWndSize.value.x = i_wndSize.m_GrValDelMapWnd_W;
+ m_optGrValDelMapWndSize.value.y = i_wndSize.m_GrValDelMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -3993,6 +4020,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_AftstrStrk0MapWnd_H = m_optAftstrStrk0MapWndSize.value.y;
  o_wndSize.m_AftstrStrk1MapWnd_W = m_optAftstrStrk1MapWndSize.value.x;
  o_wndSize.m_AftstrStrk1MapWnd_H = m_optAftstrStrk1MapWndSize.value.y;
+ o_wndSize.m_GrValDelMapWnd_W = m_optGrValDelMapWndSize.value.x;
+ o_wndSize.m_GrValDelMapWnd_H = m_optGrValDelMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4824,6 +4853,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepPwmIacUCoefMap.value = i_ptMovStep.m_pwmiac_ucoef_map;
  m_optPtMovStepAftstrStrk0Map.value = i_ptMovStep.m_aftstr_strk0_map;
  m_optPtMovStepAftstrStrk1Map.value = i_ptMovStep.m_aftstr_strk1_map;
+ m_optPtMovStepGrValDelMap.value = i_ptMovStep.m_grvaldel_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -4877,6 +4907,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_pwmiac_ucoef_map = m_optPtMovStepPwmIacUCoefMap.value;
  o_ptMovStep.m_aftstr_strk0_map = m_optPtMovStepAftstrStrk0Map.value;
  o_ptMovStep.m_aftstr_strk1_map = m_optPtMovStepAftstrStrk1Map.value;
+ o_ptMovStep.m_grvaldel_map = m_optPtMovStepGrValDelMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

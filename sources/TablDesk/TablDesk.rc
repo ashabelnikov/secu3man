@@ -116,6 +116,7 @@ BEGIN
     CONTROL         "Коэфф.скважн. ШИМ РДВ",IDC_TD_PWMIAC_UCOEF_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,500,96,18
     CONTROL         "Такты ОПП (бензин)",IDC_TD_AFTSTR_STRK0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,500,96,18
     CONTROL         "Такты ОПП (газ)",IDC_TD_AFTSTR_STRK1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,519,96,18
+    CONTROL         "Задержка газов. клап.",IDC_TD_GRVDELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,519,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -764,6 +765,13 @@ BEGIN
     IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Задает зоны контроля детонации. Используйте значения 0 (нет контроля детонации) и 1 (есть контроль детонации). Зона начинается со значений оборотов и нагрузки где стоит 1 и заканчивается в следующем узле сетки (в сторону возрастания) если там стоит 0."
     IDS_SPLIT_ANGLE_MAP     "Сплитинг УОЗ"
     IDS_GME_IGN_CLTSEL_TT   "Редактированть таблицу для ХХ"
+    IDS_MAPS_GRVDELAY_UNIT  "Задержка (сек.)"
+    IDS_GRVDELAY_MAP        "Задержка включения газового клапана"
+    IDS_TD_GRVDELAY_MAP_TT  "Задержка включения газового клапана от температуры газового редуктора. Используется для управления газовым клапаном посредством выхода GASVAL_O"
+    IDS_CESETT_MAP_V_MIN_EDIT_TT    "Нижний порог ошибки. Если значение меньше этого порога, то будет установлен соответствующий флаг ошибки, при этом, если установлена галочка, то будет использовано резервное значение вместо значения с датчика."
+    IDS_CESETT_MAP_V_MAX_EDIT_TT    "Верхний порог ошибки. Если значение больше этого порога, то будет установлен соответствующий флаг ошибки, при этом, если установлена галочка, то будет использовано резервное значение вместо значения с датчика."
+    IDS_CESETT_MAP_V_EM_EDIT_TT     "Резервное значение. Данное значение будет использовано вместо значения с датчика в случае ошибки если разрешено галочкой."
+    IDS_CESETT_MAP_V_USEEM_CHECK_TT "Использовать резервное значение в случае ошибки."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -877,6 +885,7 @@ BEGIN
     CONTROL         "PWM IAC volt. coeff",IDC_TD_PWMIAC_UCOEF_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,500,96,18
     CONTROL         "ASE strokes (petrol)",IDC_TD_AFTSTR_STRK0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,500,96,18
     CONTROL         "ASE strokes (gas)",IDC_TD_AFTSTR_STRK1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,519,96,18
+    CONTROL         "Gas valve delay",IDC_TD_GRVDELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,519,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1547,6 +1556,13 @@ BEGIN
     IDS_TD_VIEW_PWM1_MAP   "PWM1 duty"
     IDS_TD_VIEW_SPLIT_MAP  "Split angle"
     IDS_GME_IGN_CLTSEL_TT   "Edit table for idling"
+    IDS_MAPS_GRVDELAY_UNIT  "Delay (sec.)"
+    IDS_GRVDELAY_MAP        "Gas valve's turn on delay"
+    IDS_TD_GRVDELAY_MAP_TT  "Gas valve's turn on delay vs gas reducer's temperature. Used to control gas valve by means of GASVAL_O output."
+    IDS_CESETT_MAP_V_MIN_EDIT_TT    "Lower error threshold. If the value is less than this threshold, then the corresponding error flag will be set, while if the checkbox is checked, then the reserve value will be used instead of the value from the sensor."
+    IDS_CESETT_MAP_V_MAX_EDIT_TT    "Upper error threshold. If the value is greater than this threshold, then the corresponding error flag will be set, while if the checkbox is checked, then the reserve value will be used instead of the value from the sensor."
+    IDS_CESETT_MAP_V_EM_EDIT_TT     "Reserve value. This value will be used instead of the value from the sensor in case of an error if enabled with a check mark."
+    IDS_CESETT_MAP_V_USEEM_CHECK_TT "Use reserve value in case of error."
 END
 
 /////////////////////////////////////////////////////////////////////////////

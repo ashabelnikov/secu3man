@@ -236,6 +236,8 @@ typedef struct
  _uint inj_aftstr_strk0[AFTSTR_STRK_SIZE];
  _uint inj_aftstr_strk1[AFTSTR_STRK_SIZE];
 
+ _uint grv_delay[F_TMP_POINTS];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -273,11 +275,12 @@ typedef struct
  _uint  idlreg_captrange;
  _uchar manigntim_idl;
  _uchar idlent_timval;
+ _uint  gasval_ontime;
 
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3812];
+ _uchar reserved[3778];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1405,6 +1408,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetPwmIacUCoefMap(op_fwd->pwmiac_ucoef);
  GetAftstrStrk0Map(op_fwd->aftstr_strk0);
  GetAftstrStrk1Map(op_fwd->aftstr_strk1);
+ GetGrValDelMap(op_fwd->grv_delay);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1485,6 +1489,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetPwmIacUCoefMap(ip_fwd->pwmiac_ucoef);
  SetAftstrStrk0Map(ip_fwd->aftstr_strk0);
  SetAftstrStrk1Map(ip_fwd->aftstr_strk1);
+ SetGrValDelMap(ip_fwd->grv_delay);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2219,6 +2224,24 @@ void CFirmwareDataMediator::SetAftstrStrk1Map(const float* ip_values)
   p_fd->exdata.inj_aftstr_strk1[i] = MathHelpers::Round(ip_values[i]);
 }
 
+void CFirmwareDataMediator::GetGrValDelMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < F_TMP_POINTS; i++)
+  op_values[i] = ((float)p_fd->exdata.grv_delay[i]) / 100.0f;
+}
+
+void CFirmwareDataMediator::SetGrValDelMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < F_TMP_POINTS; i++)
+  p_fd->exdata.grv_delay[i] = MathHelpers::Round(ip_values[i]*100.0f);
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -2576,6 +2599,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.idlreg_captrange = exd.idlreg_captrange;
  o_data.manigntim_idl = exd.manigntim_idl;
  o_data.idlent_timval = ((float)exd.idlent_timval) / 100.0f; //convert to sec;
+ o_data.gasval_ontime = ((float)exd.gasval_ontime) / 100.0f; //convert to sec;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2618,4 +2642,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.idlreg_captrange = i_data.idlreg_captrange;
  exd.manigntim_idl = i_data.manigntim_idl;
  exd.idlent_timval = MathHelpers::Round(i_data.idlent_timval * 100.0f);
+ exd.gasval_ontime = MathHelpers::Round(i_data.gasval_ontime * 100.0f);
 }

@@ -252,7 +252,10 @@ struct S3FSepMaps
  s3f_int32_t aftstr_strk0[AFTSTR_STRK_SIZE];
  s3f_int32_t aftstr_strk1[AFTSTR_STRK_SIZE];
 
- s3f_int32_t reserved[733];       //reserved bytes, = 0
+ //since v01.16
+ s3f_int32_t grv_delay[F_TMP_POINTS];
+
+ s3f_int32_t reserved[717];       //reserved bytes, = 0
 };
 
 
@@ -499,6 +502,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->aftstr_strk0[i] = MathHelpers::Round(m_data.aftstr_strk0[i] * INT_MULTIPLIER);
  for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
   p_sepMaps->aftstr_strk1[i] = MathHelpers::Round(m_data.aftstr_strk1[i] * INT_MULTIPLIER);
+ for(i = 0; i < F_TMP_POINTS; ++i)
+  p_sepMaps->grv_delay[i] = MathHelpers::Round(m_data.grv_delay[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -748,6 +753,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.aftstr_strk0[i] = p_sepMaps->aftstr_strk0[i] / INT_MULTIPLIER;
  for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
   m_data.aftstr_strk1[i] = p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER;
+ for(i = 0; i < F_TMP_POINTS; ++i)
+  m_data.grv_delay[i] = p_sepMaps->grv_delay[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

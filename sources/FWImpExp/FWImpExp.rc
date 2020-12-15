@@ -133,6 +133,7 @@ BEGIN
     CONTROL         "Коэфф.скв.ШИМ РДВ",IDC_MAP_IMPEXP_IACUCOEF_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,272,90,8
     CONTROL         "Такты ОПП (бензин)",IDC_MAP_IMPEXP_AFTSTRK0_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,286,90,8
     CONTROL         "Такты ОПП (газ)",IDC_MAP_IMPEXP_AFTSTRK1_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,300,90,8
+    CONTROL         "Задерж. газов. клап.",IDC_MAP_IMPEXP_GRVDELAY_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,314,90,8
 
     LTEXT           "Выберите по одному элементу в каждом из списков и нажмите кнопку расположенную между ними",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 
@@ -343,6 +344,7 @@ BEGIN
     CONTROL         "PWM IAC volt. coeff",IDC_MAP_IMPEXP_IACUCOEF_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,272,90,8
     CONTROL         "ASE strokes (petrol)",IDC_MAP_IMPEXP_AFTSTRK0_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,286,90,8
     CONTROL         "ASE strokes (gas)",IDC_MAP_IMPEXP_AFTSTRK1_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,300,90,8
+    CONTROL         "Gas valve delay",IDC_MAP_IMPEXP_GRVDELAY_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,314,90,8
 
     LTEXT           "\nSelect one item in each list and click button located between them",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 

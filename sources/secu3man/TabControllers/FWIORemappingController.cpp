@@ -1347,6 +1347,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_STBL_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
   }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_STBL_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
+  }
   mp_view->AddItem(FWDM::IOS3I_STBL_O, FWDM::IOP3I_STBL_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_STBL_O, true);
   mp_view->EnableInversion(FWDM::IOS3I_STBL_O, true);
@@ -1364,6 +1367,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_CEL_O, FWDM::IOP3I_FE, _T("FE"));
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_CEL_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
+  }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_CEL_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
   }
   mp_view->AddItem(FWDM::IOS3I_CEL_O, FWDM::IOP3I_CEL_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_CEL_O, true);
@@ -1383,6 +1389,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_FPMP_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
   }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_FPMP_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
+  }
   mp_view->AddItem(FWDM::IOS3I_FPMP_O, FWDM::IOP3I_FPMP_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_FPMP_O, true);
   mp_view->EnableInversion(FWDM::IOS3I_FPMP_O, true);
@@ -1400,6 +1409,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_FE, _T("FE"));
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
+  }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
   }
   mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_PWRR_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_PWRR_O, true);
@@ -1419,6 +1431,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_EVAP_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
   }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_EVAP_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
+  }
   mp_view->AddItem(FWDM::IOS3I_EVAP_O, FWDM::IOP3I_EVAP_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_EVAP_O, true);
   mp_view->EnableInversion(FWDM::IOS3I_EVAP_O, true);
@@ -1436,6 +1451,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_FE, _T("FE"));
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
+  }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
   }
   mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_ECF, _T("ECF"));
   mp_view->AddItem(FWDM::IOS3I_O2SH_O, FWDM::IOP3I_O2SH_O, _T("NONE"));
@@ -1456,6 +1474,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_COND_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
   }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_COND_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
+  }
   mp_view->AddItem(FWDM::IOS3I_COND_O, FWDM::IOP3I_COND_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_COND_O, true);
   mp_view->EnableInversion(FWDM::IOS3I_COND_O, true);
@@ -1474,6 +1495,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_ECF, _T("ECF"));
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
+  }
+  if (iov >= FWDM::IOV_V33) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_ADD_O2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_O2, true);

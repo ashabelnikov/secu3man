@@ -228,6 +228,7 @@ struct FWMapsDataHolder
  float pwmiac_ucoef[PWMIAC_UCOEF_SIZE];
  float aftstr_strk0[AFTSTR_STRK_SIZE];
  float aftstr_strk1[AFTSTR_STRK_SIZE];
+ float grv_delay[F_TMP_POINTS];
 
  CESettingsData cesd;
 
@@ -261,6 +262,7 @@ struct FWMapsDataHolder
   std::fill(pwmiac_ucoef, pwmiac_ucoef + PWMIAC_UCOEF_SIZE, .0f);
   std::fill(aftstr_strk0, aftstr_strk0 + AFTSTR_STRK_SIZE, .0f);
   std::fill(aftstr_strk1, aftstr_strk1 + AFTSTR_STRK_SIZE, .0f);
+  std::fill(grv_delay, grv_delay + F_TMP_POINTS, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

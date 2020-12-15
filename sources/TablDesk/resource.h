@@ -511,3 +511,11 @@
 #define IDC_GME_IGN_CLTSEL              5865
 #define IDS_GME_IGN_CLTSEL_TT           5866
 #define IDC_GME_IGN_TMPI                5867
+#define IDC_TD_GRVDELAY_MAP             5868
+#define IDS_MAPS_GRVDELAY_UNIT          5869
+#define IDS_GRVDELAY_MAP                5870
+#define IDS_TD_GRVDELAY_MAP_TT          5871
+#define IDS_CESETT_MAP_V_MIN_EDIT_TT    5872
+#define IDS_CESETT_MAP_V_MAX_EDIT_TT    5873
+#define IDS_CESETT_MAP_V_EM_EDIT_TT     5874
+#define IDS_CESETT_MAP_V_USEEM_CHECK_TT 5875

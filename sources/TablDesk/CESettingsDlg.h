@@ -34,6 +34,7 @@
 #include "ui-core/UpdatableDialog.h"
 
 class CWndScroller;
+class CToolTipCtrlEx;
 
 struct CESettingsData;
 
@@ -174,6 +175,8 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
   CEditEx m_add_i8_v_em_edit;
   CSpinButtonCtrlEx m_add_i8_v_em_spin;
   CButton m_add_i8_v_useem_check;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
 
 
