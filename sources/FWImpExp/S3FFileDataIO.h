@@ -49,6 +49,7 @@ class AFX_EXT_CLASS S3FFileDataIO
  private:  
   bool _ReadData(const BYTE*, const S3FFileHdr*);
   bool _ReadData_v0102(const BYTE*, const S3FFileHdr*); //used for reading of versions <= 1.02
+  bool _ReadData_v0115(const BYTE*, const S3FFileHdr*); //used for reading of versions <= 1.15
 
   FWMapsDataHolder m_data;
   bool m_file_crc_ok;        //indicates that CRC of the loaded file is Ok

@@ -984,7 +984,7 @@ void __cdecl CButtonsPanel::OnChangeGpscXAxisEdit(void* i_param, int i_type, flo
   ASSERT(0);
  }
  else
-  _this->GetGpscMap(false)[9 + i_type] = i_value;
+  _this->GetGpscMap(false)[17 + i_type] = i_value;
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_GPSC);
@@ -2647,7 +2647,7 @@ void CButtonsPanel::OnViewGpscMap()
  if ((!m_md[TYPE_MAP_INJ_GPSC].state)&&(DLL::Chart2DCreate))
  {
   m_md[TYPE_MAP_INJ_GPSC].state = 1;
-  m_md[TYPE_MAP_INJ_GPSC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGpscMap(true), GetGpscMap(false), 0.00f, 1.99f, NULL, 9,
+  m_md[TYPE_MAP_INJ_GPSC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGpscMap(true), GetGpscMap(false), 0.00f, 1.99f, NULL, 17,
     MLL::GetString(IDS_MAPS_PRESS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_GPSC_MAP).c_str(), false);
@@ -2660,7 +2660,7 @@ void CButtonsPanel::OnViewGpscMap()
   DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_GPSC].handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_GPSC].handle, OnCloseGpscMap, this);
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GPSC].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_GPSC].handle, 1, GetGpscMap(false)[9], GetGpscMap(false)[9+1]);
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_GPSC].handle, 1, GetGpscMap(false)[17], GetGpscMap(false)[17+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(m_md[TYPE_MAP_INJ_GPSC].handle, TYPE_MAP_INJ_GPSC);
@@ -3168,7 +3168,7 @@ void CButtonsPanel::UpdateOpenedCharts(void)
  if (m_md[TYPE_MAP_INJ_GPSC].state)
  {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GPSC].handle, GetGpscMap(true), GetGpscMap(false));
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_GPSC].handle, 1, GetGpscMap(false)[9], GetGpscMap(false)[9+1]);
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_GPSC].handle, 1, GetGpscMap(false)[17], GetGpscMap(false)[17+1]);
  }
  if (m_md[TYPE_MAP_INJ_ATSC].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ATSC].handle, GetAtscMap(true), GetAtscMap(false));

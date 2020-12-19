@@ -329,6 +329,14 @@ namespace MathHelpers
   return f1 + ((f2 - f1) * (y - yBins[yi])) / (yBins[yi1] - yBins[yi]);
  }
 
+ template<int xSize>
+ float static LinearInterpolation(float x, float (&function)[xSize], const float* xBins)
+ {
+  int xi, xi1;
+  AxisCellLookup(x, xBins, xSize, xi, xi1);
+  return (function[xi] + ((function[xi1] - function[xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]));
+ }
+
  template <class T>
  static T Distance(T x, T y, T x0, T y0)
  {

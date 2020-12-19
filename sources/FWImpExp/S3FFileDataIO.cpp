@@ -40,7 +40,7 @@
 
 #define INT_MULTIPLIER 10000.0f
 #define MIN_OPTDATA_SIZE 1024
-#define MIN_NOFSETS TABLES_NUMBER
+#define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
 #define CURRENT_VERSION 0x0116 //01.16
 
@@ -61,7 +61,7 @@ typedef unsigned char s3f_uint8_t;
 //  \_______________________________/
 //
 
-// S3F Version history
+// S3F Version history:
 // 01.00 - initial version
 // 01.01 - Choke opening map added (24.05.2013)
 // 01.02 - RPM grid added (29.04.2014)
@@ -79,7 +79,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.13 - Added 3 new maps: pwm_duty1, pwm_duty2, knock_zone (15.09.2020)
 // 01.14 - Added CE settings for ADD_I5/6/7/8, GRTS curve map, GRHEAT map (28.10.2020-30.10.2020)
 // 01.15 - Added after start strokes maps: petrol and gas, PWM IAC voltage coeff. map (25.11.2020)
-// 01.16 - Added ignition timing vs CLT correction (idling) map (03.12.2020)
+// 01.16 - Added ignition timing vs CLT correction (idling) map (03.12.2020), changed file size (18.12.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -130,6 +130,170 @@ struct S3FMapSetItem
  s3f_int32_t inj_tpsswt[INJ_TPSSWT_SIZE];                  // MAP/TPS switch point vs RPM
  s3f_int32_t inj_gts_corr[INJ_GTS_CORR_SIZE];              // PW correction vs gas temperature
  s3f_int32_t inj_gps_corr[INJ_GPS_CORR_SIZE+2];            // PW correction vs gas pressure
+ s3f_int32_t inj_ats_corr[INJ_ATS_CORR_SIZE];              // PW correction vs air temperature
+ //since v01.13
+ s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty
+ s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty
+ //since v01.16
+ s3f_int32_t f_tmp_idl[F_TMP_POINTS];                      //temperature (idling)
+
+ s3f_int32_t reserved[2048]; //reserved bytes, = 0
+};
+
+
+//CE settings
+typedef struct
+{
+ s3f_int32_t map_v_min;                //minimum correct value
+ s3f_int32_t map_v_max;                //maximum correct value
+ s3f_int32_t map_v_em;                 //emergency value, used in case of error
+ s3f_int32_t map_v_flg;
+
+ s3f_int32_t vbat_v_min;
+ s3f_int32_t vbat_v_max;
+ s3f_int32_t vbat_v_em;
+ s3f_int32_t vbat_v_flg;
+
+ s3f_int32_t cts_v_min;
+ s3f_int32_t cts_v_max;
+ s3f_int32_t cts_v_em;
+ s3f_int32_t cts_v_flg;
+
+ s3f_int32_t ks_v_min;
+ s3f_int32_t ks_v_max;
+ s3f_int32_t ks_v_em;
+ s3f_int32_t ks_v_flg;
+
+ s3f_int32_t tps_v_min;
+ s3f_int32_t tps_v_max;
+ s3f_int32_t tps_v_em;
+ s3f_int32_t tps_v_flg;
+
+ s3f_int32_t add_i1_v_min;
+ s3f_int32_t add_i1_v_max;
+ s3f_int32_t add_i1_v_em;
+ s3f_int32_t add_i1_v_flg;
+
+ s3f_int32_t add_i2_v_min;
+ s3f_int32_t add_i2_v_max;
+ s3f_int32_t add_i2_v_em;
+ s3f_int32_t add_i2_v_flg;
+
+ s3f_int32_t add_i3_v_min;
+ s3f_int32_t add_i3_v_max;
+ s3f_int32_t add_i3_v_em;
+ s3f_int32_t add_i3_v_flg;
+
+ s3f_int32_t add_i4_v_min;
+ s3f_int32_t add_i4_v_max;
+ s3f_int32_t add_i4_v_em;
+ s3f_int32_t add_i4_v_flg;
+
+ //since v01.14
+ s3f_int32_t add_i5_v_min;
+ s3f_int32_t add_i5_v_max;
+ s3f_int32_t add_i5_v_em;
+ s3f_int32_t add_i5_v_flg;
+
+ s3f_int32_t add_i6_v_min;
+ s3f_int32_t add_i6_v_max;
+ s3f_int32_t add_i6_v_em;
+ s3f_int32_t add_i6_v_flg;
+
+ s3f_int32_t add_i7_v_min;
+ s3f_int32_t add_i7_v_max;
+ s3f_int32_t add_i7_v_em;
+ s3f_int32_t add_i7_v_flg;
+
+ s3f_int32_t add_i8_v_min;
+ s3f_int32_t add_i8_v_max;
+ s3f_int32_t add_i8_v_em;
+ s3f_int32_t add_i8_v_flg;
+
+ s3f_int32_t reserved[1046];
+}s3f_ce_sett_t;
+
+
+//Separate maps
+struct S3FSepMaps
+{
+ s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
+ s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
+ s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
+ s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
+ s3f_int32_t choke_op_table[16]; //choke opening map (appeared in version 1.01, abandoned 02 Feb 2018 and left for compatibility reasons)
+ s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
+ s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
+ s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
+ s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
+ s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map
+ s3f_int32_t tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //TEMP2 temperature sensor look up table, since v01.07
+ //since v01.09
+ s3f_int32_t barocorr_table[BAROCORR_SIZE+2]; //barometric correction
+ s3f_int32_t pa4_igntim_corr[PA4_LOOKUP_TABLE_SIZE];
+ s3f_int32_t ctscrk_corr[CTS_CRKCORR_SIZE];
+ s3f_int32_t eh_pause_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+ //since v01.10
+ s3f_int32_t cranking_thrd[CRANK_THRD_SIZE];
+ s3f_int32_t cranking_time[CRANK_TIME_SIZE];
+ s3f_int32_t smapaban_thrd[SMAPABAN_THRD_SIZE];
+ //since v01.11
+ s3f_int32_t clt_slots[F_TMP_SLOTS]; //CLT grid (appeared in version 01.11, reserved bytes were utilized)
+ s3f_ce_sett_t cesd; //CE settings' data
+ //since v01.13
+ s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map
+ //since v01.14
+ s3f_int32_t grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //GRTS temperature sensor look up table, since v01.14 
+ s3f_int32_t grheat_duty[F_TMP_POINTS];                       //temperature
+ s3f_int32_t load_slots[F_LOAD_SLOTS]; //load grid (appeared in version 01.14, reserved bytes were utilized); note: values are in reverse direction
+
+ //since v01.15
+ s3f_int32_t pwmiac_ucoef[PWMIAC_UCOEF_SIZE];
+ s3f_int32_t aftstr_strk0[AFTSTR_STRK_SIZE];
+ s3f_int32_t aftstr_strk1[AFTSTR_STRK_SIZE];
+
+ //since v01.16
+ s3f_int32_t grv_delay[F_TMP_POINTS];
+
+ s3f_int32_t reserved[4096];       //reserved bytes, = 0
+};
+
+
+//**************************************************************************************************
+
+//One entry of map sets array
+struct S3FMapSetItem_v0115
+{
+ s3f_uint8_t name[F_NAME_SIZE];   // associated name (name of set of maps)
+ //ignition
+ s3f_int32_t f_str[F_STR_POINTS];                          //start
+ s3f_int32_t f_idl[F_IDL_POINTS];                          //idle 
+ s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F];       //work
+ s3f_int32_t f_tmp[F_TMP_POINTS];                          //temperature
+ //fuel injection, since v01.03
+ s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];    // VE
+ s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // AFR
+ s3f_int32_t inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE]; // Cranking PW
+ s3f_int32_t inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];     // Warmup enrichment
+ s3f_int32_t inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];      // Injector's dead time
+ s3f_int32_t inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];      // IAC/PWM position on run
+ s3f_int32_t inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];    // IAC/PWM position on cranking
+ s3f_int32_t inj_ae_tps[INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2]; // AE TPS (values and horizontal axis bins)
+ s3f_int32_t inj_ae_rpm[INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2]; // AE RPM (values and horizontal axis bins)
+ s3f_int32_t inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE];     // Afterstart enrichment
+ //injection timing and EGO curve, since v01.05
+ s3f_int32_t inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F];// Injection timing
+ s3f_int32_t inj_ego_curve[INJ_EGO_CURVE_SIZE+2];          // EGO curve
+ //since v01.06
+ s3f_int32_t inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE];    // Target RPM
+ s3f_int32_t inj_idl_rigidity[INJ_IDL_RIGIDITY_TABLE_SIZE];// Idling regulator's rigidity
+ s3f_int32_t inj_iac_corr_w[INJ_IAC_CORR_W_SIZE+2];        // IAC correction weight lookup table
+ s3f_int32_t inj_iac_corr[INJ_IAC_CORR_SIZE+2];            // IAC correction lookup table
+ s3f_int32_t inj_iatclt_corr[INJ_IATCLT_CORR_SIZE+2];      // IAT/CLT correction vs air flow
+ //since v01.09
+ s3f_int32_t inj_tpsswt[INJ_TPSSWT_SIZE];                  // MAP/TPS switch point vs RPM
+ s3f_int32_t inj_gts_corr[INJ_GTS_CORR_SIZE];              // PW correction vs gas temperature
+ s3f_int32_t inj_gps_corr[9+2];                            // PW correction vs gas pressure
  s3f_int32_t inj_ats_corr[INJ_ATS_CORR_SIZE];              // PW correction vs air temperature
  //since v01.13
  s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty
@@ -211,11 +375,11 @@ typedef struct
  s3f_int32_t add_i8_v_flg;
 
  s3f_int32_t reserved[496];
-}s3f_ce_sett_t;
+}s3f_ce_sett_t_v0115;
 
 
 //Separate maps
-struct S3FSepMaps
+struct S3FSepMaps_v0115
 {
  s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
@@ -239,7 +403,7 @@ struct S3FSepMaps
  s3f_int32_t smapaban_thrd[SMAPABAN_THRD_SIZE];
  //since v01.11
  s3f_int32_t clt_slots[F_TMP_SLOTS]; //CLT grid (appeared in version 01.11, reserved bytes were utilized)
- s3f_ce_sett_t cesd; //CE settings' data
+ s3f_ce_sett_t_v0115 cesd; //CE settings' data
  //since v01.13
  s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map
  //since v01.14
@@ -257,6 +421,8 @@ struct S3FSepMaps
 
  s3f_int32_t reserved[717];       //reserved bytes, = 0
 };
+
+//**************************************************************************************************
 
 
 //One entry of map sets array
@@ -313,9 +479,10 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  //read the file into memory
  size_t filesize = (size_t)file.GetLength();
  size_t minFileSize = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem) * 1) + sizeof(S3FSepMaps) + MIN_OPTDATA_SIZE;
- size_t minFileSize_v0106 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem) * MIN_NOFSETS) + sizeof(S3FSepMaps) + MIN_OPTDATA_SIZE;
+ size_t minFileSize_v0115 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem_v0115) * 1) + sizeof(S3FSepMaps_v0115) + MIN_OPTDATA_SIZE;
+ size_t minFileSize_v0106 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem_v0115) * MIN_NOFSETS) + sizeof(S3FSepMaps_v0115) + MIN_OPTDATA_SIZE;
  size_t minFileSize_v0102 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem_v0102) * MIN_NOFSETS) + sizeof(S3FSepMaps_v0102) + MIN_OPTDATA_SIZE;
- if ((filesize > 1048576) || ((filesize < minFileSize) && (filesize < minFileSize_v0102) && (filesize < minFileSize_v0106)))
+ if ((filesize > 1048576) || ((filesize < minFileSize) && (filesize < minFileSize_v0102) && (filesize < minFileSize_v0106) && (filesize < minFileSize_v0115)))
  {
   file.Close();
   return false; //некорректный размер файла
@@ -343,6 +510,10 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  if (p_fileHdr->version <= 0x0102)
  {
   return _ReadData_v0102(&rawdata[0], p_fileHdr);
+ }
+ else if (p_fileHdr->version <= 0x0115)
+ {
+  return _ReadData_v0115(&rawdata[0], p_fileHdr);
  }
  else
   return _ReadData(&rawdata[0], p_fileHdr);
@@ -621,10 +792,244 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  //resize container to hold all map sets
  m_data = FWMapsDataHolder(p_fileHdr->nofsets);
 
+ //convert sets of tables
+ const S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
+ for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
+ {
+  size_t i;
+  //ignition
+  for(i = 0; i < F_STR_POINTS; ++i)
+   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_IDL_POINTS; ++i)
+   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_TMP_POINTS; ++i)
+   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_TMP_POINTS; ++i)
+   m_data.maps[s].f_tmp_idl[i] = p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER;
+  //fuel injection
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   m_data.maps[s].inj_ve[i] = p_setItem[s].inj_ve[i] / INT_MULTIPLIER;
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   m_data.maps[s].inj_afr[i] = p_setItem[s].inj_afr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_cranking[i] = p_setItem[s].inj_cranking[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_warmup[i] = p_setItem[s].inj_warmup[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_dead_time[i] = p_setItem[s].inj_dead_time[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_iac_run_pos[i] = p_setItem[s].inj_iac_run_pos[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_iac_crank_pos[i] = p_setItem[s].inj_iac_crank_pos[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
+   m_data.maps[s].inj_ae_tps[i] = p_setItem[s].inj_ae_tps[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; ++i)
+   m_data.maps[s].inj_ae_rpm[i] = p_setItem[s].inj_ae_rpm[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_aftstr[i] = p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER;
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   m_data.maps[s].inj_timing[i] = p_setItem[s].inj_timing[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
+   m_data.maps[s].inj_ego_curve[i] = p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_target_rpm[i] = p_setItem[s].inj_target_rpm[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_idl_rigidity[i] = p_setItem[s].inj_idl_rigidity[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_CORR_W_SIZE+2; ++i)
+   m_data.maps[s].inj_iac_corr_w[i] = p_setItem[s].inj_iac_corr_w[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_CORR_SIZE+2; ++i)
+   m_data.maps[s].inj_iac_corr[i] = p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
+  {
+   if (i < INJ_IATCLT_CORR_SIZE)
+    m_data.maps[s].inj_iatclt_corr[i] = p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER;
+   else
+    m_data.maps[s].inj_iatclt_corr[i] = (float)p_setItem[s].inj_iatclt_corr[i]; //do not use INT_MULTIPLIER
+  }
+  for(i = 0; i < INJ_TPSSWT_SIZE; ++i)
+   m_data.maps[s].inj_tpsswt[i] = p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
+   m_data.maps[s].inj_gts_corr[i] = p_setItem[s].inj_gts_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_GPS_CORR_SIZE+2; ++i)
+   m_data.maps[s].inj_gps_corr[i] = p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
+   m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   m_data.maps[s].pwm_duty1[i] = p_setItem[s].pwm_duty1[i] / INT_MULTIPLIER;
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   m_data.maps[s].pwm_duty2[i] = p_setItem[s].pwm_duty2[i] / INT_MULTIPLIER;
+
+  //convert name
+  char raw_string[F_NAME_SIZE + 1];
+  memset(raw_string, 0, F_NAME_SIZE + 1);
+  memcpy(raw_string, p_setItem[s].name, F_NAME_SIZE);
+  TCHAR string[128];
+  OemToChar(raw_string, string);
+  m_data.maps[s].name = _TSTRING(string);
+ }
+
+ //convert separate maps
+ const S3FSepMaps* p_sepMaps = (S3FSepMaps*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
+ size_t i;
+ for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
+  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < 2; ++i)
+  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.atscurve_table[i] = p_sepMaps->atscurve_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < 2; ++i)
+  m_data.atscurve_vlimits[i] = p_sepMaps->atscurve_vlimits[i] / INT_MULTIPLIER;
+ for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
+  m_data.gasdose_pos_table[i] = p_sepMaps->gasdose_pos_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.tmp2_curve[i] = p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER;
+ for(i = 0; i < BAROCORR_SIZE+2; ++i)
+  m_data.barocorr_table[i] = p_sepMaps->barocorr_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < PA4_LOOKUP_TABLE_SIZE; ++i)
+  m_data.pa4_igntim_corr[i] = p_sepMaps->pa4_igntim_corr[i] / INT_MULTIPLIER;
+ for(i = 0; i < CTS_CRKCORR_SIZE; ++i)
+  m_data.ctscrk_corr[i] = p_sepMaps->ctscrk_corr[i] / INT_MULTIPLIER;
+ for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
+  m_data.eh_pause_table[i] = p_sepMaps->eh_pause_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < CRANK_THRD_SIZE; ++i)
+  m_data.cranking_thrd[i] = p_sepMaps->cranking_thrd[i] / INT_MULTIPLIER;
+ for(i = 0; i < CRANK_TIME_SIZE; ++i)
+  m_data.cranking_time[i] = p_sepMaps->cranking_time[i] / INT_MULTIPLIER;
+ for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
+  m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
+ for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+  m_data.knock_zone[i] = p_sepMaps->knock_zone[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
+ for(i = 0; i < F_TMP_POINTS; ++i)
+  m_data.grheat_duty[i] = p_sepMaps->grheat_duty[i] / INT_MULTIPLIER;
+ for(i = 0; i < PWMIAC_UCOEF_SIZE; ++i)
+  m_data.pwmiac_ucoef[i] = p_sepMaps->pwmiac_ucoef[i] / INT_MULTIPLIER;
+ for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
+  m_data.aftstr_strk0[i] = p_sepMaps->aftstr_strk0[i] / INT_MULTIPLIER;
+ for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
+  m_data.aftstr_strk1[i] = p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER;
+ for(i = 0; i < F_TMP_POINTS; ++i)
+  m_data.grv_delay[i] = p_sepMaps->grv_delay[i] / INT_MULTIPLIER;
+
+ //convert RPM grid
+ for(i = 0; i < F_RPM_SLOTS; ++i)
+  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
+
+ //convert CLT grid
+ bool empty = true;
+ for(i = 0; i < F_TMP_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->clt_slots[i])
+   empty = false;
+  m_data.clt_slots[i] = p_sepMaps->clt_slots[i] / INT_MULTIPLIER;
+ }
+
+ //convert load grid
+ empty = true;
+ for(i = 0; i < F_LOAD_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->load_slots[i])
+   empty = false;
+  m_data.load_slots[i] = p_sepMaps->load_slots[i] / INT_MULTIPLIER;
+ }
+
+ if (empty) //copy standard CLT grid if source is empty
+  std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
+
+ if (empty) //copy standard load grid if source is empty
+  std::copy(SECU3IO::work_map_lod_slots, SECU3IO::work_map_lod_slots + F_LOAD_SLOTS, m_data.load_slots);
+
+  //CE settings
+ m_data.cesd.map_v_min = p_sepMaps->cesd.map_v_min / INT_MULTIPLIER;
+ m_data.cesd.map_v_max = p_sepMaps->cesd.map_v_max / INT_MULTIPLIER;
+ m_data.cesd.map_v_em = p_sepMaps->cesd.map_v_em / INT_MULTIPLIER;
+ m_data.cesd.map_v_useem = CHECKBIT8(p_sepMaps->cesd.map_v_flg, 0);
+
+ m_data.cesd.vbat_v_min = p_sepMaps->cesd.vbat_v_min / INT_MULTIPLIER;
+ m_data.cesd.vbat_v_max = p_sepMaps->cesd.vbat_v_max / INT_MULTIPLIER;
+ m_data.cesd.vbat_v_em = p_sepMaps->cesd.vbat_v_em / INT_MULTIPLIER;
+ m_data.cesd.vbat_v_useem = CHECKBIT8(p_sepMaps->cesd.vbat_v_flg, 0);
+
+ m_data.cesd.cts_v_min = p_sepMaps->cesd.cts_v_min / INT_MULTIPLIER;
+ m_data.cesd.cts_v_max = p_sepMaps->cesd.cts_v_max / INT_MULTIPLIER;
+ m_data.cesd.cts_v_em = p_sepMaps->cesd.cts_v_em / INT_MULTIPLIER;
+ m_data.cesd.cts_v_useem = CHECKBIT8(p_sepMaps->cesd.cts_v_flg, 0);
+
+ m_data.cesd.ks_v_min = p_sepMaps->cesd.ks_v_min / INT_MULTIPLIER;
+ m_data.cesd.ks_v_max = p_sepMaps->cesd.ks_v_max / INT_MULTIPLIER;
+ m_data.cesd.ks_v_em = p_sepMaps->cesd.ks_v_em / INT_MULTIPLIER;
+ m_data.cesd.ks_v_useem = CHECKBIT8(p_sepMaps->cesd.ks_v_flg, 0);
+
+ m_data.cesd.tps_v_min = p_sepMaps->cesd.tps_v_min / INT_MULTIPLIER;
+ m_data.cesd.tps_v_max = p_sepMaps->cesd.tps_v_max / INT_MULTIPLIER;
+ m_data.cesd.tps_v_em = p_sepMaps->cesd.tps_v_em / INT_MULTIPLIER;
+ m_data.cesd.tps_v_useem = CHECKBIT8(p_sepMaps->cesd.tps_v_flg, 0);
+
+ m_data.cesd.add_i1_v_min = p_sepMaps->cesd.add_i1_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i1_v_max = p_sepMaps->cesd.add_i1_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i1_v_em = p_sepMaps->cesd.add_i1_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i1_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i1_v_flg, 0);
+
+ m_data.cesd.add_i2_v_min = p_sepMaps->cesd.add_i2_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i2_v_max = p_sepMaps->cesd.add_i2_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i2_v_em = p_sepMaps->cesd.add_i2_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i2_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i2_v_flg, 0);
+
+ m_data.cesd.add_i3_v_min = p_sepMaps->cesd.add_i3_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i3_v_max = p_sepMaps->cesd.add_i3_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i3_v_em = p_sepMaps->cesd.add_i3_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i3_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i3_v_flg, 0);
+
+ m_data.cesd.add_i4_v_min = p_sepMaps->cesd.add_i4_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i4_v_max = p_sepMaps->cesd.add_i4_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i4_v_em = p_sepMaps->cesd.add_i4_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i4_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i4_v_flg, 0);
+
+ m_data.cesd.add_i5_v_min = p_sepMaps->cesd.add_i5_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i5_v_max = p_sepMaps->cesd.add_i5_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i5_v_em = p_sepMaps->cesd.add_i5_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i5_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i5_v_flg, 0);
+
+ m_data.cesd.add_i6_v_min = p_sepMaps->cesd.add_i6_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i6_v_max = p_sepMaps->cesd.add_i6_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i6_v_em = p_sepMaps->cesd.add_i6_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i6_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i6_v_flg, 0);
+
+ m_data.cesd.add_i7_v_min = p_sepMaps->cesd.add_i7_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i7_v_max = p_sepMaps->cesd.add_i7_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i7_v_em = p_sepMaps->cesd.add_i7_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i7_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i7_v_flg, 0);
+
+ m_data.cesd.add_i8_v_min = p_sepMaps->cesd.add_i8_v_min / INT_MULTIPLIER;
+ m_data.cesd.add_i8_v_max = p_sepMaps->cesd.add_i8_v_max / INT_MULTIPLIER;
+ m_data.cesd.add_i8_v_em = p_sepMaps->cesd.add_i8_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i8_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i8_v_flg, 0);
+
+ return true;
+}
+
+//Function for reading data from older formats (ver <= 0115)
+bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
+{
+ //Size of a whole array of map sets
+ size_t mapSetArrSize = sizeof(S3FMapSetItem_v0115) * p_fileHdr->nofsets;
+
+ //resize container to hold all map sets
+ m_data = FWMapsDataHolder(p_fileHdr->nofsets);
+
  bool wrong_iatclt_corr_x_grid = (p_fileHdr->version < 0x0112);
 
  //convert sets of tables
- const S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
+ const S3FMapSetItem_v0115* p_setItem = (S3FMapSetItem_v0115*)(&rawdata[sizeof(S3FFileHdr)]);
  for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
  {
   size_t i;
@@ -688,8 +1093,37 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_tpsswt[i] = p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
    m_data.maps[s].inj_gts_corr[i] = p_setItem[s].inj_gts_corr[i] / INT_MULTIPLIER;
-  for(i = 0; i < INJ_GPS_CORR_SIZE+2; ++i)
-   m_data.maps[s].inj_gps_corr[i] = p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER;
+
+  //--------------------------------------------------------------------
+  //Fill array of destination function using interpolation because GPS map has different size in 
+  //new version of software (size increased from 9 to 17)
+  //copy values of min. and max. bins:
+  float xmin = m_data.maps[s].inj_gps_corr[INJ_GPS_CORR_SIZE] = p_setItem[s].inj_gps_corr[9] / INT_MULTIPLIER; 
+  float xmax = m_data.maps[s].inj_gps_corr[INJ_GPS_CORR_SIZE+1] = p_setItem[s].inj_gps_corr[10] / INT_MULTIPLIER; 
+  const int srcSize = 9;
+  //prepare arrays source function's points:
+  float srcY[srcSize], srcX[srcSize]; 
+  for(i = 0; i < srcSize; ++i)
+  {
+   srcX[i] = ((xmax - xmin) * i) / (srcSize-1);
+   srcY[i] = p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER;
+  }
+  //Build destination function:
+  if ((xmin != 0 && xmax != 0) && (xmin != xmax))
+  {
+   for(i = 0; i < INJ_GPS_CORR_SIZE; ++i)
+   {
+    float destX = ((xmax - xmin) * i) / (INJ_GPS_CORR_SIZE-1);
+    m_data.maps[s].inj_gps_corr[i] = MathHelpers::LinearInterpolation<srcSize>(destX, srcY, srcX);
+   }
+  }
+  else
+  {
+   for(i = 0; i < INJ_GPS_CORR_SIZE; ++i)
+    m_data.maps[s].inj_gps_corr[i] = 0;
+  }
+  //--------------------------------------------------------------------
+
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
@@ -707,7 +1141,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  }
 
  //convert separate maps
- const S3FSepMaps* p_sepMaps = (S3FSepMaps*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
+ const S3FSepMaps_v0115* p_sepMaps = (S3FSepMaps_v0115*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
   m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
@@ -856,7 +1290,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  return true;
 }
 
-//Function for reading data from older formats
+//Function for reading data from older formats (ver <= 0102)
 bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
 {
  //Size of a whole array of map sets

@@ -70,7 +70,7 @@
 #define INJ_IATCLT_CORR_SIZE   8
 #define INJ_TPSSWT_SIZE        16
 #define INJ_GTS_CORR_SIZE      16
-#define INJ_GPS_CORR_SIZE      9
+#define INJ_GPS_CORR_SIZE      17
 #define INJ_ATS_CORR_SIZE      16
 #define PWMIAC_UCOEF_SIZE      16
 
