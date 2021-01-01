@@ -1066,8 +1066,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepGrtsCurveMap, _T("0.25"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepGrHeatDutyMap, _T("5.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepPwmIacUCoefMap, _T("0.01"), 0.001f, 1.0f);
- ms.ReadFlt(m_optPtMovStepAftstrStrk0Map, _T("0.01"), 0.001f, 1.0f);
- ms.ReadFlt(m_optPtMovStepAftstrStrk1Map, _T("0.01"), 0.001f, 1.0f);
+ ms.ReadFlt(m_optPtMovStepAftstrStrk0Map, _T("10"), 1.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepAftstrStrk1Map, _T("10"), 1.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepGrValDelMap, _T("0.1"), 0.0f, 10.0f);
 
  //Log file's fileds
