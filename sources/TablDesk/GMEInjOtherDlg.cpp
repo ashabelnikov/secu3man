@@ -57,7 +57,7 @@ CGMEInjOtherDlg::CGMEInjOtherDlg(CWnd* pParent /*=NULL*/)
 , m_tpsswt_map(1, 16)
 , m_atsc_map(1, 16)
 , m_gtsc_map(1, 16)
-, m_gpsc_map(1, 9)
+, m_gpsc_map(1, 17)
 , mp_CrnkMap(NULL)
 , mp_DeadMap(NULL)
 , mp_EGOCrvMap(NULL)
@@ -423,7 +423,7 @@ void CGMEInjOtherDlg::_UpdateDynamicGrids(void)
 {
  m_egocrvGrid = MathHelpers::BuildGridFromRange(mp_EGOCrvMap[16], mp_EGOCrvMap[16+1], 16);
  m_iatcltGrid = MathHelpers::BuildGridFromRange(mp_IATCLTMap[8], mp_IATCLTMap[8+1], 8);
- m_gpscGrid = MathHelpers::BuildGridFromRange(mp_GpscMap[9], mp_GpscMap[9+1], 9);
+ m_gpscGrid = MathHelpers::BuildGridFromRange(mp_GpscMap[17], mp_GpscMap[17+1], 17);
 }
 
 void CGMEInjOtherDlg::OnAbroadMoveCrnk(CMapEditorCtrl::AbroadDir direction, int column)
