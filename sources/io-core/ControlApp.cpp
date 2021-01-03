@@ -1648,7 +1648,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //check for 16-byte packets
- if ((editTabPar.tab_id != ETMT_VE_MAP) && (editTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
+ if ((editTabPar.tab_id != ETMT_GPSC_MAP) && (editTabPar.tab_id != ETMT_VE_MAP) && (editTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
