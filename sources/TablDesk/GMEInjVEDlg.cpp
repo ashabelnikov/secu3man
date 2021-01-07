@@ -58,7 +58,7 @@ END_MESSAGE_MAP()
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 : Super(CGMEInjVEDlg::IDD, pParent)
 , m_ve_map(16, 16, true, true, NULL, 3) //inverted order of rows and vertical labels' data
-, m_lamdel_map(3, 3, true, true, NULL, 3) //inverted order of rows and vertical labels' data
+, m_lamdel_map(3, 3, true, false, NULL, 3) //inverted order of rows
 , m_celwgt_map(16, 16, false, true, NULL, 3, true) //normal order of rows, inverted order of vertical labels' data, read-only
 , mp_VEMap(NULL)
 , mp_rpmGrid(NULL)
