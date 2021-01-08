@@ -2339,21 +2339,21 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  int  inj_begin_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle, true))
   return false;
- injctrPar.inj_timing[0] = ((float)inj_begin_angle) / m_angle_multiplier;
+ injctrPar.inj_timing[0] = ((float)inj_begin_angle) / PARINJTIM_MULT;
  //second fuel:
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle, true))
   return false;
- injctrPar.inj_timing[1] = ((float)inj_begin_angle) / m_angle_multiplier;
+ injctrPar.inj_timing[1] = ((float)inj_begin_angle) / PARINJTIM_MULT;
 
  //injection timing (phase) on cranking
  int  inj_begin_angle_crk;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle_crk, true))
   return false;
- injctrPar.inj_timing_crk[0] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
+ injctrPar.inj_timing_crk[0] = ((float)inj_begin_angle_crk) / PARINJTIM_MULT;
  //second fuel:
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle_crk, true))
   return false;
- injctrPar.inj_timing_crk[1] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
+ injctrPar.inj_timing_crk[1] = ((float)inj_begin_angle_crk) / PARINJTIM_MULT;
 
  //inj.pulse origin
  unsigned char anglespec = 0;
@@ -3942,14 +3942,14 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 
  mp_pdp->Bin8ToHex(0, m_outgoing_packet); //stub for cyl_num
 
- int inj_begin_angle = MathHelpers::Round(packet_data->inj_timing[0] * m_angle_multiplier);
+ int inj_begin_angle = MathHelpers::Round(packet_data->inj_timing[0] * PARINJTIM_MULT);
  mp_pdp->Bin16ToHex(inj_begin_angle, m_outgoing_packet);
- inj_begin_angle = MathHelpers::Round(packet_data->inj_timing[1] * m_angle_multiplier);
+ inj_begin_angle = MathHelpers::Round(packet_data->inj_timing[1] * PARINJTIM_MULT);
  mp_pdp->Bin16ToHex(inj_begin_angle, m_outgoing_packet);
 
- int inj_begin_angle_crk = MathHelpers::Round(packet_data->inj_timing_crk[0] * m_angle_multiplier);
+ int inj_begin_angle_crk = MathHelpers::Round(packet_data->inj_timing_crk[0] * PARINJTIM_MULT);
  mp_pdp->Bin16ToHex(inj_begin_angle_crk, m_outgoing_packet);
- inj_begin_angle_crk = MathHelpers::Round(packet_data->inj_timing_crk[1] * m_angle_multiplier);
+ inj_begin_angle_crk = MathHelpers::Round(packet_data->inj_timing_crk[1] * PARINJTIM_MULT);
  mp_pdp->Bin16ToHex(inj_begin_angle_crk, m_outgoing_packet);
 
  unsigned char inj_anglespec = MAKEBYTE(packet_data->inj_anglespec[1], packet_data->inj_anglespec[0]);
