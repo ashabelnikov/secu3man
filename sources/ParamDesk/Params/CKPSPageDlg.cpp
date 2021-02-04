@@ -64,8 +64,8 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_POSFRONT_RADIOBOX, OnUpdateControls_REF_S_Front)
  ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_NEGFRONT_RADIOBOX, OnUpdateControls_REF_S_Front)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION, OnUpdateCogsBTDC)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnUpdateCogsBTDC)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_CAPTION, OnUpdateCylNumber)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnUpdateCylNumber)
 
@@ -109,6 +109,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , m_rising_spark_enabled(false)
 , m_hallwndwidth_enabled(false)
 , m_usecamref_enabled(false)
+, m_cogs_btdc_enabled(false)
 , m_max_cylinders(8)
 , mp_scr(new CWndScroller)
 {
@@ -184,7 +185,6 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CCKPSPageDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_ckps_enabled);
@@ -228,6 +228,11 @@ void CCKPSPageDlg::OnUpdateRisingSpark(CCmdUI* pCmdUI)
 void CCKPSPageDlg::OnUpdateUseCamRef(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_usecamref_enabled && m_params.ckps_miss_num == 0 && m_ckps_enabled);
+}
+
+void CCKPSPageDlg::OnUpdateCogsBTDC(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_ckps_enabled && m_cogs_btdc_enabled);
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -513,6 +518,15 @@ void CCKPSPageDlg::EnableUseCamRef(bool enable)
  if (m_usecamref_enabled == enable)
   return; //already has needed state
  m_usecamref_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CCKPSPageDlg::EnableCogsBTDC(bool enable)
+{
+ if (m_cogs_btdc_enabled == enable)
+  return; //already has needed state
+ m_cogs_btdc_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

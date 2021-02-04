@@ -113,6 +113,7 @@ void FirmwareMasterCntr::OnViewActivate(void)
  mp_view->SetFwmFlag(FWM_OBD, false);
  mp_view->SetFwmFlag(FWM_CAFR, false);
  mp_view->SetFwmFlag(FWM_SPLIT, false);
+ mp_view->SetFwmFlag(FWM_ODDF, false);
 
  mp_view->EnableFwmFlag(FWM_TPIC, false);
 }
@@ -120,8 +121,20 @@ void FirmwareMasterCntr::OnViewActivate(void)
 void FirmwareMasterCntr::OnChangeFwmCheck(int id)
 {
  bool state = mp_view->GetFwmFlag((FwmFlag)id);
+ 
+ //new state: unchecked
  if (!state)
-  return; //new state: unchecked
+ {
+  switch(id)
+  {
+   case FWM_DWELL: 
+    mp_view->SetFwmFlag(FWM_ODDF, false);
+    break;
+  }
+  return;
+ }
+
+ //new state: checked
  switch(id)
  {
   case FWM_PHIGN: 
@@ -130,6 +143,7 @@ void FirmwareMasterCntr::OnChangeFwmCheck(int id)
   case FWM_2CHIG:
    mp_view->SetFwmFlag(FWM_PHIGN, false);
    mp_view->SetFwmFlag(FWM_DWELL, false);
+   mp_view->SetFwmFlag(FWM_ODDF, false);
    break;
   case FWM_INJ:
    mp_view->SetFwmFlag(FWM_CAFR, false);
@@ -139,6 +153,10 @@ void FirmwareMasterCntr::OnChangeFwmCheck(int id)
    break;
   case FWM_DWELL:
    mp_view->SetFwmFlag(FWM_2CHIG, false);
+   break;
+  case FWM_ODDF:
+   mp_view->SetFwmFlag(FWM_2CHIG, false);
+   mp_view->SetFwmFlag(FWM_DWELL, true);
    break;
  }
 }
@@ -184,11 +202,14 @@ void FirmwareMasterCntr::OnChangeSync(void)
   mp_view->SetFwmFlag(FWM_PHIGN, false);
   mp_view->EnableFwmFlag(FWM_SPLIT, false); //disable splitting
   mp_view->SetFwmFlag(FWM_SPLIT, false);
+  mp_view->SetFwmFlag(FWM_ODDF, false);  
+  mp_view->EnableFwmFlag(FWM_ODDF, false); //disable odd-fire
  }
  else
  {
   mp_view->EnableFwmFlag(FWM_PHIGN, true);
   mp_view->EnableFwmFlag(FWM_SPLIT, true); //enable splitting
+  mp_view->EnableFwmFlag(FWM_ODDF, true);  //enable odd-fire
  }
 }
 
@@ -257,6 +278,8 @@ void FirmwareMasterCntr::_BuildOptList(std::set<_TSTRING> &opts)
   opts.insert(_T("cafr"));
  if (mp_view->GetFwmFlag(FWM_SPLIT))
   opts.insert(_T("split"));
+ if (mp_view->GetFwmFlag(FWM_ODDF))
+  opts.insert(_T("oddf"));
 }
 
 
@@ -313,10 +336,21 @@ bool FirmwareMasterCntr::_LoadFirmware(const std::set<_TSTRING>& opts)
  allocTempImp = g_Alloc;
 
  _TSTRING fnstr;
- if (mp_view->GetFwmFlag(FWM_SPLIT))
-  fnstr = _T("secu3app-") + m_procStr + _T("-split") + _T(".7z");
+
+ if (mp_view->GetFwmFlag(FWM_ODDF))
+ {
+  if (mp_view->GetFwmFlag(FWM_SPLIT))
+   fnstr = _T("secu3app-") + m_procStr + _T("-split") + _T("-oddf") + _T(".7z");
+  else
+   fnstr = _T("secu3app-") + m_procStr + _T("-oddf") + _T(".7z");
+ }
  else
-  fnstr = _T("secu3app-") + m_procStr + _T(".7z");
+ {
+  if (mp_view->GetFwmFlag(FWM_SPLIT))
+   fnstr = _T("secu3app-") + m_procStr + _T("-split") + _T(".7z");
+  else
+   fnstr = _T("secu3app-") + m_procStr + _T(".7z");
+ }
 
  //get current directory
  HMODULE hModule = GetModuleHandle(NULL);

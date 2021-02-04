@@ -294,8 +294,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->uart_period_t_ms = p_in->period_ms / 10;
     p_params->ign_cutoff = p_in->ign_cutoff;
     p_params->ign_cutoff_thrd = p_in->ign_cutoff_thrd;
-    p_params->hop_start_cogs = p_in->hop_start_cogs;
-    p_params->hop_durat_cogs = p_in->hop_durat_cogs;
+    p_params->hop_start_ang = MathHelpers::Round(p_in->hop_start_ang * 32.0f);
+    p_params->hop_durat_ang = MathHelpers::Round(p_in->hop_durat_ang * 32.0f);
     WRITEBIT8(p_params->flpmp_flags, 0, p_in->flpmp_offongas);
     WRITEBIT8(p_params->flpmp_flags, 1, p_in->inj_offongas);
     WRITEBIT8(p_params->flpmp_flags, 2, p_in->inj_offonpet);
@@ -729,8 +729,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->period_ms = p_params->uart_period_t_ms * 10;
      p_out->ign_cutoff = p_params->ign_cutoff;
      p_out->ign_cutoff_thrd = p_params->ign_cutoff_thrd;
-     p_out->hop_start_cogs = p_params->hop_start_cogs;
-     p_out->hop_durat_cogs = p_params->hop_durat_cogs;
+     p_out->hop_start_ang = ((float)p_params->hop_start_ang) / ANGLE_MULTIPLIER;
+     p_out->hop_durat_ang = ((float)p_params->hop_durat_ang) / ANGLE_MULTIPLIER;
      p_out->flpmp_offongas = CHECKBIT8(p_params->flpmp_flags, 0);
      p_out->inj_offongas = CHECKBIT8(p_params->flpmp_flags, 1);
      p_out->inj_offonpet = CHECKBIT8(p_params->flpmp_flags, 2);

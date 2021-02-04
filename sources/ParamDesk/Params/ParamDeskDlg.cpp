@@ -698,7 +698,12 @@ void CParamDeskDlg::EnableRisingSpark(bool i_enable)
 void CParamDeskDlg::EnableUseCamRef(bool enable)
 {
  m_pCKPSPageDlg->EnableUseCamRef(enable);
-};
+}
+
+void CParamDeskDlg::EnableCogsBTDC(bool enable)
+{
+ m_pCKPSPageDlg->EnableCogsBTDC(enable);
+}
 
 void CParamDeskDlg::EnableFuelInjection(bool i_enable)
 {

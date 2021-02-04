@@ -122,8 +122,8 @@ typedef struct params_t
  _uchar ign_cutoff;                     // Cutoff ignition when RPM reaches specified threshold
  _uint  ign_cutoff_thrd;                // Cutoff threshold (RPM)
 
- _char  hop_start_cogs;                 // Hall output: start of pulse in teeth relatively to TDC 
- _uchar hop_durat_cogs;                 // Hall output: duration of pulse in teeth
+ _int  hop_start_ang;                   // Hall output: start of pulse in degrees relatively to TDC 
+ _uint hop_durat_ang;                   // Hall output: duration of pulse in degrees
 
  _uint  uart_divisor;                   // делитель для соответствующей скорости UART-a
  _uchar uart_period_t_ms;               // период посылки пакетов в десятках миллисекунд
@@ -283,7 +283,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[188];
+ _uchar reserved[186];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

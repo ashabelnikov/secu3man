@@ -1540,7 +1540,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& miscPar = m_recepted_packet.m_MiscelPar;
- if (size != (mp_pdp->isHex() ? 35 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 39 : 20))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1571,18 +1571,18 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &miscPar.ign_cutoff_thrd, true))
   return false;
 
- //Выход ДХ: Начало импульса в зубьях шкива относительно ВМТ
+ //Hall out: start of pulse in degrees BTDC
  signed int start = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &start))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &start, true))
   return false;
 
- miscPar.hop_start_cogs = start;
+ miscPar.hop_start_ang = ((float)start) / ANGLE_MULTIPLIER;
 
- //Выход ДХ: Длительность импульса в зубьях шкива
- unsigned char duration = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &duration))
+ //Hall out: width of pulse in degrees
+ int duration = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &duration))
   return false;
- miscPar.hop_durat_cogs = duration;
+ miscPar.hop_durat_ang = ((float)duration) / ANGLE_MULTIPLIER;
 
  //Fuel pump flags
  unsigned char flpmp_flags = 0;
@@ -3579,8 +3579,10 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  mp_pdp->Bin8ToHex(perid_ms, m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->ign_cutoff, m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
- mp_pdp->Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
- mp_pdp->Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
+ int hop_start_ang = MathHelpers::Round(packet_data->hop_start_ang * ANGLE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(hop_start_ang, m_outgoing_packet);
+ int hop_durat_ang = MathHelpers::Round(packet_data->hop_durat_ang * ANGLE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(hop_durat_ang, m_outgoing_packet);
 
  unsigned char fpf_flags = 0;
  WRITEBIT8(fpf_flags, 0, packet_data->flpmp_offongas);

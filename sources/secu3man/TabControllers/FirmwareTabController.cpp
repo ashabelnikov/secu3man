@@ -983,7 +983,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
  mp_view->mp_ParamDeskDlg->EnableRisingSpark(CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
  mp_view->mp_ParamDeskDlg->EnableUseCamRef(CHECKBIT32(opt, SECU3IO::COPT_PHASE_SENSOR));
-
+ mp_view->mp_ParamDeskDlg->EnableCogsBTDC(!CHECKBIT32(opt, SECU3IO::COPT_ODDFIRE_ALGO));
  mp_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
  mp_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)));
  mp_view->mp_ParamDeskDlg->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)); //GD
@@ -2018,6 +2018,66 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Время открытого газового клапана на не запущенном двигателе"), _T("сек"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("Время на протяжении которого выход управляющий газовым клапаном (GASVAL_O) будет включен на не запущеном двигателе."));
  else
   dfd.AppendItem(_T("Time of opened gas valve on stopped engine"), _T("sec"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("During this time output which controls gas valve (GASVAL_O) will be turned on when engine is stopped."));
+
+ //Crankshaft position settings
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Положение коленвала (нов.алгор.)"));
+ else
+  dfd.AppendItem(_T("Crankshaft position (new algor.):"));
+
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 1"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[0], _T("Положение ВМТ 1-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 1 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[0], _T("TDC position of 1 cylinder relatively to the first tooth of trigger wheel"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 2"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[1], _T("Положение ВМТ 2-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 2 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[1], _T("TDC position of 2 cylinder relatively to the first tooth of trigger wheel"));
+
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 3"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[2], _T("Положение ВМТ 3-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 3 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[2], _T("TDC position of 3 cylinder relatively to the first tooth of trigger wheel"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 4"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[3], _T("Положение ВМТ 4-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 4 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[3], _T("TDC position of 4 cylinder relatively to the first tooth of trigger wheel"));
+
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 5"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[4], _T("Положение ВМТ 5-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 5 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[4], _T("TDC position of 5 cylinder relatively to the first tooth of trigger wheel"));
+
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 6"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[5], _T("Положение ВМТ 6-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 6 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[5], _T("TDC position of 6 cylinder relatively to the first tooth of trigger wheel"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 7"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[6], _T("Положение ВМТ 7-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 7 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[6], _T("TDC position of 7 cylinder relatively to the first tooth of trigger wheel"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("ВМТ цилиндра 8"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[7], _T("Положение ВМТ 8-го цилиндра относительно первого зуба диска синхронизации"));
+ else
+  dfd.AppendItem(_T("TDC of the 8 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[7], _T("TDC position of 8 cylinder relatively to the first tooth of trigger wheel"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Угол опроса датчиков (до ВМТ)"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.smp_angle, _T("Угол начала опроса датчиков (запуск АЦП) относительно ВМТ (угол до ВМТ)"));
+ else
+  dfd.AppendItem(_T("Angle of sensors' polling (BTDC)"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.smp_angle, _T("Angle of sensors' polling (start of ADC) relatively to TDC (angle before TDC)"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Время между искрой и началом накопления"), _T("мс"), 0.10f, 5.00f, 0.01f, 2, &d.dwl_dead_time, _T("Данный параметр ограничивает длительность импульса нокопления чтобы последнее не начиналось пока горит искра."));
+ else
+  dfd.AppendItem(_T("Time between spark and start of dwell"), _T("ms"), 0.10f, 5.00f, 0.01f, 2, &d.dwl_dead_time, _T("This parameter limits pulse width of dwell so that the latter does not start while the spark is on"));
 
  if (dfd.DoModal()==IDOK)
  {

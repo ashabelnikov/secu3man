@@ -114,8 +114,8 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 , m_uart_speed_cb_index(0)
 , m_packet_period_edit(CEditEx::MODE_INT, true)
 , m_igncutoff_rpm_edit(CEditEx::MODE_INT, true)
-, m_hop_start_edit(CEditEx::MODE_INT, true)
-, m_hop_durat_edit(CEditEx::MODE_INT, true)
+, m_hop_start_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_hop_durat_edit(CEditEx::MODE_FLOAT, true)
 , m_evap_afbegin_edit(CEditEx::MODE_INT, true)
 , m_evap_afend_edit(CEditEx::MODE_INT, true)
 , m_fp_timeout_strt_edit(CEditEx::MODE_FLOAT, true)
@@ -127,8 +127,8 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
  m_params.period_ms = 0;
  m_params.ign_cutoff = 0;
  m_params.ign_cutoff_thrd = 0;
- m_params.hop_start_cogs = 0;
- m_params.hop_durat_cogs = 0;
+ m_params.hop_start_ang = 0;
+ m_params.hop_durat_ang = 60.0f;
  m_params.flpmp_offongas = true;
  m_params.inj_offongas = false;
  m_params.evap_afbegin = 5000;
@@ -201,8 +201,8 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_CBIndex(pDX, IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_cb_index);
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
  m_igncutoff_rpm_edit.DDX_Value(pDX, IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, m_params.ign_cutoff_thrd);
- m_hop_start_edit.DDX_Value(pDX, IDC_PD_MISC_HALL_OUTPUT_START_EDIT, m_params.hop_start_cogs);
- m_hop_durat_edit.DDX_Value(pDX, IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, m_params.hop_durat_cogs);
+ m_hop_start_edit.DDX_Value(pDX, IDC_PD_MISC_HALL_OUTPUT_START_EDIT, m_params.hop_start_ang);
+ m_hop_durat_edit.DDX_Value(pDX, IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, m_params.hop_durat_ang);
  DDX_Check_UCHAR(pDX, IDC_PD_MISC_IGNCUTOFF_CHECK, m_params.ign_cutoff);
  DDX_Check_bool(pDX, IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, m_params.flpmp_offongas);
  DDX_Check_bool(pDX, IDC_PD_MISC_INJ_OFFONGAS_CHECK, m_params.inj_offongas);
@@ -297,17 +297,17 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_igncutoff_rpm_spin.SetRangeAndDelta(1000, 30000, 10);
  m_igncutoff_rpm_edit.SetRange(1000, 30000);
 
- m_hop_start_edit.SetLimitText(3);
- m_hop_start_edit.SetDecimalPlaces(3);
+ m_hop_start_edit.SetLimitText(4);
+ m_hop_start_edit.SetDecimalPlaces(0);
  m_hop_start_spin.SetBuddy(&m_hop_start_edit);
- m_hop_start_spin.SetRangeAndDelta(-6, 12, 1);
- m_hop_start_edit.SetRange(-6, 12);
+ m_hop_start_spin.SetRangeAndDelta(-36.0f, 72.0f, 1);
+ m_hop_start_edit.SetRange(-36.0f, 72.0f);
 
- m_hop_durat_edit.SetLimitText(3);
- m_hop_durat_edit.SetDecimalPlaces(3);
+ m_hop_durat_edit.SetLimitText(4);
+ m_hop_durat_edit.SetDecimalPlaces(0);
  m_hop_durat_spin.SetBuddy(&m_hop_durat_edit);
- m_hop_durat_spin.SetRangeAndDelta(1, 30, 1);
- m_hop_durat_edit.SetRange(1, 30);
+ m_hop_durat_spin.SetRangeAndDelta(6.0f, 180.0f, 1);
+ m_hop_durat_edit.SetRange(6.0f, 180.0f);
 
  m_evap_afbegin_edit.SetLimitText(7);
  m_evap_afbegin_edit.SetDecimalPlaces(7);

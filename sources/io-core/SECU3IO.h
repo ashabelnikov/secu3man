@@ -339,8 +339,8 @@ namespace SECU3IO
   int period_ms;                        //период посылки пакетов мс.
   unsigned char ign_cutoff;             //признак использования отсечки зажигания
   int ign_cutoff_thrd;                  //обороты отсечки зажигания
-  int hop_start_cogs;                   //Выход ДХ: Начало испульса в зубьях шкива относ. ВМТ 
-  int hop_durat_cogs;                   //Выход ДХ: Длительность импульса в зубьях шкива
+  float hop_start_ang;                  //Выход ДХ: Начало испульса в градусах относ. ВМТ 
+  float hop_durat_ang;                  //Выход ДХ: Длительность импульса в градусах
   bool flpmp_offongas;                  //Flag. Turn off or not fuel pump when fuel type is gas
   bool inj_offongas;                    //Turn off injector(s) on gas
   bool inj_offonpet;                    //Turn off injector(s) on petrol
@@ -810,6 +810,9 @@ const int INPAVNUM = 14;
   int manigntim_idl;
   float idlent_timval;
   float gasval_ontime;
+  float tdc_angle[8];
+  float smp_angle;
+  float dwl_dead_time;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
@@ -831,7 +834,7 @@ const int INPAVNUM = 14;
  {
   _SD(0,  _T("COPT_OBD_SUPPORT")),
   _SD(1,  _T("COPT_ATMEGA1284")),
-  _SD(2,  _T("COPT_ATMEGA64")),
+  _SD(2,  _T("COPT_ODDFIRE_ALGO")),
   _SD(3,  _T("COPT_ATMEGA128")),
   _SD(4,  _T("COPT_SPLIT_ANGLE")),
   _SD(5,  _T("COPT_TPIC8101")),
@@ -856,7 +859,7 @@ const int INPAVNUM = 14;
   _SD(24, _T("COPT_HALL_SYNC")),
   _SD(25, _T("COPT_UART_BINARY")),
   _SD(26, _T("COPT_CKPS_2CHIGN")),
-  _SD(27, _T("COPT_ATMEGA644")),
+  _SD(27, _T("COPT_ATMEGA644")),    //obsolete, left for compatibility
   _SD(28, _T("COPT_FUEL_INJECT")),
   _SD(29, _T("COPT_GD_CONTROL")),
   _SD(30, _T("COPT_CARB_AFR")),
@@ -866,7 +869,7 @@ const int INPAVNUM = 14;
 
  const int COPT_OBD_SUPPORT = 0;
  const int COPT_ATMEGA1284 = 1;
- const int COPT_ATMEGA64 = 2;
+ const int COPT_ODDFIRE_ALGO = 2;
  const int COPT_ATMEGA128 = 3;
  const int COPT_SPLIT_ANGLE = 4;
  const int COPT_TPIC8101 = 5;
@@ -891,7 +894,7 @@ const int INPAVNUM = 14;
  const int COPT_HALL_SYNC = 24;
  const int COPT_UART_BINARY = 25;
  const int COPT_CKPS_2CHIGN = 26;
- const int COPT_ATMEGA644 = 27;
+ const int COPT_ATMEGA644 = 27;     //obsolete, left for compatibility
  const int COPT_FUEL_INJECT = 28;
  const int COPT_GD_CONTROL = 29;
  const int COPT_CARB_AFR = 30;

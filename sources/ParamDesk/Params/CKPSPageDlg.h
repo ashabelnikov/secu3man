@@ -60,6 +60,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void EnableHallWndWidth(bool enable);
   void EnableRisingSpark(bool enable);
   void EnableUseCamRef(bool enable);
+  void EnableCogsBTDC(bool enable);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -77,6 +78,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnClickedPdNegFrontRadio2();
   afx_msg void OnChangeUseCKPSInput();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateCogsBTDC(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI);
   afx_msg void OnUpdateIgnitionCogs(CCmdUI* pCmdUI);
   afx_msg void OnUpdateHallWndWidth(CCmdUI* pCmdUI);
@@ -113,6 +115,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_rising_spark_enabled;
   bool m_hallwndwidth_enabled;
   bool m_usecamref_enabled;
+  bool m_cogs_btdc_enabled;
   int m_max_cylinders;
 
   CStatic m_ckps_front_groupbox;

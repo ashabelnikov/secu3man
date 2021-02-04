@@ -92,6 +92,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableChokeCtrls(bool i_enable);
   virtual void EnableHallWndWidth(bool enable);
   virtual void EnableUseCamRef(bool enable);
+  virtual void EnableCogsBTDC(bool enable);
 
   virtual BYTE GetCurrentDescriptor(void);
 

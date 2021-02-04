@@ -47,10 +47,10 @@ enum UnitId
 //See CFirmwareMasterDlg::FillSyncCombo()
 enum SyncId
 {
- SYNC_TRWLCRAN = 0,
- SYNC_TRWLCAMS,
- SYNC_DISTHALL,
- SYNC_NP1CRAN
+ SYNC_TRWLCRAN = 0,   //trigger wheel on crankshaft
+ SYNC_TRWLCAMS,       //trigger wheel on camshaft
+ SYNC_DISTHALL,       //distributor with hall sensor
+ SYNC_NP1CRAN         //N+1 trigger wheel
 };
 
 //constants for check boxes
@@ -65,7 +65,8 @@ enum FwmFlag
   FWM_OBD = 6,
   FWM_CAFR = 7,
   FWM_SPLIT = 8,
-  FWM_NR_OF_FLAGS = 9
+  FWM_ODDF = 9,
+  FWM_NR_OF_FLAGS = 10
 };
 
 //view

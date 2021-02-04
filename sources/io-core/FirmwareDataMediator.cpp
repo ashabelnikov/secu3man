@@ -276,11 +276,14 @@ typedef struct
  _uchar manigntim_idl;
  _uchar idlent_timval;
  _uint  gasval_ontime;
-
+ _uint  tdc_angle[8];
+ _uint  smp_angle;
+ _uint  dwl_dead_time;
+ 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3778];
+ _uchar reserved[3758];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2600,6 +2603,13 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.manigntim_idl = exd.manigntim_idl;
  o_data.idlent_timval = ((float)exd.idlent_timval) / 100.0f; //convert to sec;
  o_data.gasval_ontime = ((float)exd.gasval_ontime) / 100.0f; //convert to sec;
+
+ for(int i = 0; i < 8; ++i)
+  o_data.tdc_angle[i] = ((float)exd.tdc_angle[i]) / ANGLE_MULTIPLIER;
+ o_data.smp_angle = ((float)exd.smp_angle) / ANGLE_MULTIPLIER;
+
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega1284 discrete = 3.2uS, for others - 4.0uS
+ o_data.dwl_dead_time = (((float)exd.dwl_dead_time) * discrete) / 1000.0f; // convert to ms
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2643,4 +2653,11 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.manigntim_idl = i_data.manigntim_idl;
  exd.idlent_timval = MathHelpers::Round(i_data.idlent_timval * 100.0f);
  exd.gasval_ontime = MathHelpers::Round(i_data.gasval_ontime * 100.0f);
+
+ for(int i = 0; i < 8; ++i)
+  exd.tdc_angle[i] = MathHelpers::Round(i_data.tdc_angle[i] * ANGLE_MULTIPLIER);
+ exd.smp_angle = MathHelpers::Round(i_data.smp_angle * ANGLE_MULTIPLIER);
+
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega1284 discrete = 3.2uS, for others - 4.0uS
+ exd.dwl_dead_time = (_uint)MathHelpers::Round((i_data.dwl_dead_time * 1000.0) / discrete);
 }
