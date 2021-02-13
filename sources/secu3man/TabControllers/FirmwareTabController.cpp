@@ -1870,6 +1870,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Smoothing of forced idle leaving"), _T("str"), 0, 255, 1, 1, &d.fi_leave_strokes, _T("Smoothing of forced idle entering in engine strokes. Fuel injection will not turn on immediately, but will gradually increase over the specified number of strokes."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДПДЗ резкого выхода из режима ПХХ"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.sfc_tps_thrd, _T("Выход из режима ПХХ будет резким, а не плавным, если ДПДЗ выше установленного порога"));
+ else
+  dfd.AppendItem(_T("TPS threshold for immediate exit from fuel cut mode"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.sfc_tps_thrd, _T("Exiting from fuel cut mode will be immediate (not smooth) if TPS greater than this threshold"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Наполнение на ХХ для бенз. (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для бензина (GAS_V = 0)."));
  else
   dfd.AppendItem(_T("VE on idling for petrol (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for petrol (GAS_V = 0)."));
