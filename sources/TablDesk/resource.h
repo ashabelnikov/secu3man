@@ -519,3 +519,8 @@
 #define IDS_CESETT_MAP_V_MAX_EDIT_TT    5873
 #define IDS_CESETT_MAP_V_EM_EDIT_TT     5874
 #define IDS_CESETT_MAP_V_USEEM_CHECK_TT 5875
+#define IDC_TD_VIEW_IACMAT_MAP          5876
+#define IDS_TD_VIEW_IACMAT_MAP_TT       5877
+#define IDC_GME_INJ_IACMAT              5878
+#define IDS_MAPS_CORR_UNIT              5879
+#define IDS_IACMAT_MAP                  5880

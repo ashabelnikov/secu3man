@@ -1100,7 +1100,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_pwmiac_ucoef_enabled(false)
 , m_aftstr_strk_enabled(false)
 {
- m_scrl_view = 895;
+ m_scrl_view = 925;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {

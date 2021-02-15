@@ -83,7 +83,9 @@ typedef struct
 
  _char f_tmp_idl[F_TMP_POINTS];                        // ignition timing correction vs CLT (idling)
 
- _uchar reserved[487];                                 // reserved bytes - for compatibility
+ _char iac_mat_corr[INJ_ATS_CORR_SIZE];                // IAC position's correction vs MAT
+
+ _uchar reserved[471];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 static int w12GetCell(BYTE* data, int cellOffset)

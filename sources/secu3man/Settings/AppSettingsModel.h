@@ -399,6 +399,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAftstrStrk0MapWnd;
   OptField_t<POINT> m_optAftstrStrk1MapWnd;
   OptField_t<POINT> m_optGrValDelMapWnd;
+  OptField_t<POINT> m_optIACMATMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -431,6 +432,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAtscMapWnd1;
   OptField_t<POINT> m_optPwm1MapWnd1;
   OptField_t<POINT> m_optPwm2MapWnd1;
+  OptField_t<POINT> m_optIACMATMapWnd1;
 
   //window's sizes
   OptField_t<POINT> m_optMainFrmWndSize;
@@ -486,6 +488,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAftstrStrk0MapWndSize;
   OptField_t<POINT> m_optAftstrStrk1MapWndSize;
   OptField_t<POINT> m_optGrValDelMapWndSize;
+  OptField_t<POINT> m_optIACMATMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -518,6 +521,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAtscMapWndSize1;
   OptField_t<POINT> m_optPwm1MapWndSize1;
   OptField_t<POINT> m_optPwm2MapWndSize1;
+  OptField_t<POINT> m_optIACMATMapWndSize1;
 
   //window state
   OptField_t<int> m_optMainFrmWndState;
@@ -656,6 +660,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepAtscMap;
   OptField_t<float> m_optPtMovStepPwm1Map;
   OptField_t<float> m_optPtMovStepPwm2Map;
+  OptField_t<float> m_optPtMovStepIACMATMap;
   //separate
   OptField_t<float> m_optPtMovStepCrkTempMap;
   OptField_t<float> m_optPtMovStepEHPauseMap;

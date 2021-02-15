@@ -218,6 +218,9 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
   m_eedm->GetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
+
+ if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
+  m_eedm->GetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
 }
 
 //Modal window has been activated - perform its initialization
@@ -265,6 +268,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);

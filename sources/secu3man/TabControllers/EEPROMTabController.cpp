@@ -195,6 +195,7 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
 
  //disable "Load grids" menu item if firmware is not opened
  CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
@@ -642,6 +643,9 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  m_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
  m_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
+
+ m_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(false),false);
+ m_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(true),true);
 }
 
 
@@ -770,6 +774,9 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_PWM2:
    m_eedm->SetPwm2Map(funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
+   break;
+  case TYPE_MAP_INJ_IACMAT:
+   m_eedm->SetIACMATMap(funset_index, mp_view->mp_TablesPanel->GetIACMATMap(false));
    break;
  }
 }
@@ -1039,6 +1046,7 @@ void CEEPROMTabController::OnChangeSettingsMapEd(void)
  mptms.m_atsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
  mptms.m_pwm1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM1);
  mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
+ mptms.m_iacmat_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
  mp_settings->SetMapPtMovStep(mptms);
 }
 

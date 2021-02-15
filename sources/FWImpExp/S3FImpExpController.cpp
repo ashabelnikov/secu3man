@@ -307,6 +307,9 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
   memcpy(mp_fwd->maps[current_sel].pwm_duty2, mp_s3f_io->GetData().maps[other_sel].pwm_duty2, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
+  memcpy(mp_fwd->maps[current_sel].iac_mat_corr, mp_s3f_io->GetData().maps[other_sel].iac_mat_corr, sizeof(float) * INJ_ATS_CORR_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -348,6 +351,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0114 = (mp_s3f_io->GetVersion() > 0x0113);
  bool sv0115 = (mp_s3f_io->GetVersion() > 0x0114);
  bool sv0116 = (mp_s3f_io->GetVersion() > 0x0115);
+ bool sv0117 = (mp_s3f_io->GetVersion() > 0x0116);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -400,6 +404,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_PWM2_MAP, sv0113);      //since v01.13
  mp_view->SetFWDFlag(FLAG_TEMPI_MAP, sv0116);        //since v01.16
  mp_view->EnableFWDFlag(FLAG_TEMPI_MAP, sv0116);     //since v01.16
+ mp_view->SetFWDFlag(FLAG_IACMAT_MAP, sv0117);       //since v01.17
+ mp_view->EnableFWDFlag(FLAG_IACMAT_MAP, sv0117);    //since v01.17
+
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -721,6 +728,9 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].pwm_duty2, mp_fwd->maps[current_sel].pwm_duty2, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].iac_mat_corr, mp_fwd->maps[current_sel].iac_mat_corr, sizeof(float) * INJ_ATS_CORR_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -768,6 +778,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

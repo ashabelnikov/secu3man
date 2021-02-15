@@ -447,6 +447,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   case TYPE_MAP_PWM2:
    return mp_ButtonsPanel->GetPwm2Map(i_original);
 
+  case TYPE_MAP_INJ_IACMAT:
+   return mp_ButtonsPanel->GetIACMATMap(i_original);
+
   default:
   return NULL;
  }

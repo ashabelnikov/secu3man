@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0116 //01.16
+#define CURRENT_VERSION 0x0117 //01.17
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -80,6 +80,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.14 - Added CE settings for ADD_I5/6/7/8, GRTS curve map, GRHEAT map (28.10.2020-30.10.2020)
 // 01.15 - Added after start strokes maps: petrol and gas, PWM IAC voltage coeff. map (25.11.2020)
 // 01.16 - Added ignition timing vs CLT correction (idling) map (03.12.2020), changed file size (18.12.2020)
+// 01.17 - Added IAC position's vs MAT map (14.02.2021)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -136,8 +137,10 @@ struct S3FMapSetItem
  s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty
  //since v01.16
  s3f_int32_t f_tmp_idl[F_TMP_POINTS];                      //temperature (idling)
+ //since v01.17
+ s3f_int32_t iac_mat_corr[INJ_ATS_CORR_SIZE];              // IAC position's correction vs MAT
 
- s3f_int32_t reserved[2048]; //reserved bytes, = 0
+ s3f_int32_t reserved[2032]; //reserved bytes, = 0
 };
 
 
@@ -613,6 +616,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].pwm_duty1[i] = MathHelpers::Round(m_data.maps[s].pwm_duty1[i] * INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
    p_setItem[s].pwm_duty2[i] = MathHelpers::Round(m_data.maps[s].pwm_duty2[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
+   p_setItem[s].iac_mat_corr[i] = MathHelpers::Round(m_data.maps[s].iac_mat_corr[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -860,6 +865,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].pwm_duty1[i] = p_setItem[s].pwm_duty1[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
    m_data.maps[s].pwm_duty2[i] = p_setItem[s].pwm_duty2[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
+   m_data.maps[s].iac_mat_corr[i] = p_setItem[s].iac_mat_corr[i] / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];

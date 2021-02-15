@@ -205,6 +205,8 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_PWM1_MAP, false);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, false);
  mp_view->EnableFWDFlag(FLAG_PWM2_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IACMAT_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IACMAT_MAP, false);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
@@ -467,6 +469,8 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_PWM1_MAP, false);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, false);
  mp_view->EnableFWDFlag(FLAG_PWM2_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IACMAT_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IACMAT_MAP, false);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);

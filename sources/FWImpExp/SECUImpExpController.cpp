@@ -299,6 +299,9 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
   m_fwdm->GetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
+
+ if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
+  m_fwdm->GetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -346,6 +349,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
  //separate maps
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -657,6 +661,9 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
   m_fwdm->SetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
+
+ if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
+  m_fwdm->SetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -704,6 +711,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
+
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CGMEInjIRegDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_RIGID, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IACC, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IACCW, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IACMAT, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
@@ -54,13 +55,16 @@ CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
 , m_rigid_map(1, 8)
 , m_iacc_map(1, 8)
 , m_iaccw_map(1, 16)
+, m_iacmat_map(1, 16)
 , mp_IdlcMap(NULL)
 , mp_IdlrMap(NULL)
 , mp_ITRPMMap(NULL)
 , mp_RigidMap(NULL)
 , mp_IACCMap(NULL)
 , mp_IACCWMap(NULL)
+, mp_IACMATMap(NULL)
 , mp_cltGrid(NULL)
+, mp_temperGrid(NULL)
 {
  m_tpsGrid.reserve(32);
  m_iacGrid.reserve(32);
@@ -70,6 +74,7 @@ CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
  m_rigid_map.SetDecimalPlaces(2, 0, 0);
  m_iacc_map.SetDecimalPlaces(2, 2, 0);
  m_iaccw_map.SetDecimalPlaces(2, 2, 0);
+ m_iacmat_map.SetDecimalPlaces(2, 2, 0);
 }
 
 CGMEInjIRegDlg::~CGMEInjIRegDlg()
@@ -87,11 +92,11 @@ void CGMEInjIRegDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_RIGID, m_rigid_map);
  DDX_Control(pDX, IDC_GME_INJ_IACC, m_iacc_map);
  DDX_Control(pDX, IDC_GME_INJ_IACCW, m_iaccw_map);
-
+ DDX_Control(pDX, IDC_GME_INJ_IACMAT, m_iacmat_map);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CGMEInjVEDlg message handlers
+// CGMEInjIRegDlg message handlers
 
 BOOL CGMEInjIRegDlg::OnInitDialog()
 {
@@ -159,8 +164,18 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_iaccw_map.AttachLabels(&m_iacGrid[0], NULL);
  m_iaccw_map.ShowLabels(true, false);
  m_iaccw_map.SetFont(&m_font);
- m_iaccw_map.EnableAbroadMove(true, false);
+ m_iaccw_map.EnableAbroadMove(true, true);
  m_iaccw_map.SetValueIncrement(0.01f);
+
+ m_iacmat_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeIACMAT));
+ m_iacmat_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIACMAT));
+ m_iacmat_map.SetRange(-25.0f, 25.00f);
+ m_iacmat_map.AttachMap(mp_IACMATMap);
+ m_iacmat_map.AttachLabels(&mp_temperGrid[0], NULL);
+ m_iacmat_map.ShowLabels(true, false);
+ m_iacmat_map.SetFont(&m_font);
+ m_iacmat_map.EnableAbroadMove(true, false);
+ m_iacmat_map.SetValueIncrement(0.25f);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -177,7 +192,7 @@ LPCTSTR CGMEInjIRegDlg::GetDialogID(void) const
  return (LPCTSTR)IDD;
 }
 
-void CGMEInjIRegDlg::BindMaps(float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW)
+void CGMEInjIRegDlg::BindMaps(float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT)
 {
  ASSERT(pIdlc);
  mp_IdlcMap = pIdlc;
@@ -196,7 +211,17 @@ void CGMEInjIRegDlg::BindMaps(float* pIdlc, float* pIdlr, float* pITRPM, float* 
 
  ASSERT(pIACCW);
  mp_IACCWMap = pIACCW;
+
+ ASSERT(pIACMAT);
+ mp_IACMATMap = pIACMAT;
+
  _UpdateDynamicGrids();
+}
+
+void CGMEInjIRegDlg::BindTemperGrid(float* pGrid)
+{
+ mp_temperGrid = pGrid;
+ ASSERT(pGrid);
 }
 
 void CGMEInjIRegDlg::BindCLTGrid(float* pGrid)
@@ -230,9 +255,10 @@ void CGMEInjIRegDlg::UpdateView(bool axisLabels /*= false*/)
  m_rigid_map.UpdateDisplay();
  m_iacc_map.UpdateDisplay();
  m_iaccw_map.UpdateDisplay();
+ m_iacmat_map.UpdateDisplay();
 }
 
-void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac_pos, float rigid_arg, bool rigid_use)
+void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac_pos, float rigid_arg, bool rigid_use, float iat)
 {
  if (m_idlc_map.GetSafeHwnd())
  {
@@ -268,6 +294,12 @@ void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac
  {
   m_itrpm_map.ShowMarkers(rigid_use, true);
   m_itrpm_map.SetArguments(0, clt);
+ }
+
+ if (m_iacmat_map.GetSafeHwnd())
+ {
+  m_iacmat_map.ShowMarkers(true, true);
+  m_iacmat_map.SetArguments(0, iat);
  }
 }
 
@@ -305,6 +337,12 @@ void CGMEInjIRegDlg::OnChangeIACCW(void)
 {
  if (m_OnChange)
   m_OnChange(TYPE_MAP_INJ_IACCW);
+}
+
+void CGMEInjIRegDlg::OnChangeIACMAT(void)
+{
+ if (m_OnChange)
+  m_OnChange(TYPE_MAP_INJ_IACMAT);
 }
 
 void CGMEInjIRegDlg::_UpdateDynamicGrids(void)
@@ -355,4 +393,12 @@ void CGMEInjIRegDlg::OnAbroadMoveIACCW(CMapEditorCtrl::AbroadDir direction, int 
 {
  if (direction==CMapEditorCtrl::ABROAD_UP)
   m_iacc_map.SetSelection(0, column);
+ if (direction==CMapEditorCtrl::ABROAD_DOWN)
+  m_iacmat_map.SetSelection(0, column);
+}
+
+void CGMEInjIRegDlg::OnAbroadMoveIACMAT(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_UP)
+  m_iaccw_map.SetSelection(0, column);
 }

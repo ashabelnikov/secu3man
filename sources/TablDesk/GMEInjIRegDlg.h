@@ -39,12 +39,13 @@ class CGMEInjIRegDlg : public CTabDialog
  ~CGMEInjIRegDlg();
   static const UINT IDD;
 
-  void BindMaps(float* pIdlc, float* pIdlr, float* pITPRM, float* pRigid, float* pIACC, float* pIACCW);
+  void BindMaps(float* pIdlc, float* pIdlr, float* pITPRM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT);
+  void BindTemperGrid(float* pGrid); //rest temperature
   void BindCLTGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
   void UpdateView(bool axisLabels = false);
 
-  void SetArguments(bool strt_use, float clt, float tps, float iac_pos, float rigid_arg, bool rigid_use);
+  void SetArguments(bool strt_use, float clt, float tps, float iac_pos, float rigid_arg, bool rigid_use, float iat);
 
  public:
 
@@ -63,6 +64,7 @@ class CGMEInjIRegDlg : public CTabDialog
   void OnChangeRigid(void);
   void OnChangeIACC(void);
   void OnChangeIACCW(void);
+  void OnChangeIACMAT(void);
 
   void OnAbroadMoveIdlc(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveIdlr(CMapEditorCtrl::AbroadDir direction, int column);
@@ -70,6 +72,7 @@ class CGMEInjIRegDlg : public CTabDialog
   void OnAbroadMoveRigid(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveIACC(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveIACCW(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveIACMAT(CMapEditorCtrl::AbroadDir direction, int column);
 
  private:
   void _UpdateDynamicGrids(void);
@@ -80,6 +83,7 @@ class CGMEInjIRegDlg : public CTabDialog
   CMapEditorCtrl m_rigid_map;
   CMapEditorCtrl m_iacc_map;
   CMapEditorCtrl m_iaccw_map;
+  CMapEditorCtrl m_iacmat_map;
 
   float* mp_IdlcMap;
   float* mp_IdlrMap;
@@ -87,7 +91,9 @@ class CGMEInjIRegDlg : public CTabDialog
   float* mp_RigidMap;
   float* mp_IACCMap;
   float* mp_IACCWMap;
+  float* mp_IACMATMap;
 
+  float* mp_temperGrid;
   float* mp_cltGrid;
   std::vector<float> m_tpsGrid;
   std::vector<float> m_iacGrid;

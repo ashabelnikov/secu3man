@@ -99,6 +99,8 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void SetGpscMap(int i_index, const float* i_values);
   void GetAtscMap(int i_index, float* op_values, bool i_original = false);
   void SetAtscMap(int i_index, const float* i_values);
+  void GetIACMATMap(int i_index, float* op_values, bool i_original = false);
+  void SetIACMATMap(int i_index, const float* i_values);
 
   void SetStartMap(int i_index,const float* i_values);
   void SetIdleMap(int i_index, const float* i_values);

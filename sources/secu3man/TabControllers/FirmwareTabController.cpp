@@ -263,6 +263,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
  //separate
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_ATTENUATOR, mptms.m_attenuator_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DWELLCNTRL, mptms.m_dwellcntrl_map);
@@ -1250,6 +1251,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
  mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
+
+ mp_fwdm->GetIACMATMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACMATMap(false),false);
+ mp_fwdm->GetIACMATMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACMATMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1404,6 +1408,10 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_PWM2:
    ASSERT(m_current_funset_index!=-1);
    mp_fwdm->SetPwm2Map(m_current_funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
+   break;
+  case TYPE_MAP_INJ_IACMAT:
+   ASSERT(m_current_funset_index!=-1);
+   mp_fwdm->SetIACMATMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIACMATMap(false));
    break;
 
    //separate maps
@@ -2302,6 +2310,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_atsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
  mptms.m_pwm1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM1);
  mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
+ mptms.m_iacmat_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
 
  //separate
  mptms.m_attenuator_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_ATTENUATOR);

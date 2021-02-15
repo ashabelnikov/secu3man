@@ -369,6 +369,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_GrValDelMapWnd_W = rc.right - rc.left;
    sz.m_GrValDelMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_INJ_IACMAT:
+   ws.m_IACMATMapWnd_X = rc.left;
+   ws.m_IACMATMapWnd_Y = rc.top;
+   sz.m_IACMATMapWnd_W = rc.right - rc.left;
+   sz.m_IACMATMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -608,6 +614,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_GRVDELAY:
    X = ws.m_GrValDelMapWnd_X, Y = ws.m_GrValDelMapWnd_Y;
    W = sz.m_GrValDelMapWnd_W, H = sz.m_GrValDelMapWnd_H;
+   break;
+  case TYPE_MAP_INJ_IACMAT:
+   X = ws.m_IACMATMapWnd_X, Y = ws.m_IACMATMapWnd_Y;
+   W = sz.m_IACMATMapWnd_W, H = sz.m_IACMATMapWnd_H;
    break;
 
   default:

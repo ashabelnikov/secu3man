@@ -945,3 +945,25 @@ bool EEPROMDataMediator::GetSplitAngMode(int i_index)
 
  return (p_maps[i_index].map_mode != 0);
 }
+
+void EEPROMDataMediator::GetIACMATMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  op_values[i] = ((float)p_maps->iac_mat_corr[i]) / 4.0f;
+}
+
+void EEPROMDataMediator::SetIACMATMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  p_maps->iac_mat_corr[i] = MathHelpers::Round((ip_values[i]*4.0f));
+}

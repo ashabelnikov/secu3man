@@ -78,6 +78,7 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
  m_pITPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIT));
 
  m_pIRegPageDlg.reset(new CGMEInjIRegDlg());
+ m_pIRegPageDlg->BindTemperGrid(const_cast<float*>(SECU3IO::temp_map_tmp_slots));
  m_pIRegPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIReg));
 
  m_pEnrPageDlg.reset(new CGMEInjEnrDlg());
@@ -211,12 +212,12 @@ void CGridModeEditorInjDlg::OnClose()
  DestroyWindow();
 }
 
-void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2)
+void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT)
 {
  m_pVEPageDlg->BindMaps(pVE);
  m_pAFRPageDlg->BindMaps(pAFR);
  m_pITPageDlg->BindMaps(pIT);
- m_pIRegPageDlg->BindMaps(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW);
+ m_pIRegPageDlg->BindMaps(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW, pIACMAT);
  m_pEnrPageDlg->BindMaps(pAftstr, pWrmp, pAETPS, pAERPM);
  m_pOtherPageDlg->BindMaps(pCrnk, pDead, pEGOCrv, pIATCLT, pTpsswt, pAtsc, pGtsc, pGpsc);
  m_pPwm1PageDlg->BindMaps(pPwm1);
@@ -358,7 +359,7 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_pVEPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pAFRPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pITPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
- m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos, dv.rigid_arg, dv.rigid_use);
+ m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos, dv.rigid_arg, dv.rigid_use, dv.air_temp);
  m_pEnrPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tpsdot, dv.rpm, dv.aftstr_enr);
  m_pOtherPageDlg->SetArguments(dv.strt_use, dv.temp, dv.voltage, dv.add_i1, dv.rpm, dv.tmp2, dv.air_temp, dv.map2, dv.rxlaf);
  m_pPwm1PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);

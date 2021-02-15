@@ -1335,6 +1335,28 @@ void CFirmwareDataMediator::SetAtscMap(int i_index,const float* ip_values)
   p_fd->tables[i_index].inj_ats_corr[i] = MathHelpers::Round((ip_values[i]*128.0f));
 }
 
+void CFirmwareDataMediator::GetIACMATMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].iac_mat_corr[i]) / 4.0f;
+}
+
+void CFirmwareDataMediator::SetIACMATMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  p_fd->tables[i_index].iac_mat_corr[i] = MathHelpers::Round((ip_values[i]*4.0f));
+}
+
 //////////////////////////////////////////////////////////////////////////////////////
 SECU3IO::params_t* CFirmwareDataMediator::GetParamsPtr(void)
 {
@@ -1385,6 +1407,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetIATCLTMap(i, op_fwd->maps[i].inj_iatclt_corr);
   GetPwm1Map(i,op_fwd->maps[i].pwm_duty1);
   GetPwm2Map(i,op_fwd->maps[i].pwm_duty2);
+  GetIACMATMap(i, op_fwd->maps[i].iac_mat_corr);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1466,6 +1489,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetIATCLTMap(i, ip_fwd->maps[i].inj_iatclt_corr);
   SetPwm1Map(i,ip_fwd->maps[i].pwm_duty1);
   SetPwm2Map(i,ip_fwd->maps[i].pwm_duty2);
+  SetIACMATMap(i, ip_fwd->maps[i].iac_mat_corr);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);

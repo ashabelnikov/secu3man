@@ -134,6 +134,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetPwm1Map(int i_index, const float* i_values);
   void GetPwm2Map(int i_index, float* op_values, bool i_original = false);
   void SetPwm2Map(int i_index, const float* i_values);
+  void SetIACMATMap(int i_index, const float* i_values);
+  void GetIACMATMap(int i_index, float* op_values, bool i_original = false);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);

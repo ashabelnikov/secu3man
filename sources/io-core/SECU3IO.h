@@ -391,6 +391,7 @@ namespace SECU3IO
  const int ETMT_PWM1_MAP = 26;          //PWM1 duty
  const int ETMT_PWM2_MAP = 27;          //PWM2 duty
  const int ETMT_TEMPI_MAP = 28;         //temp.corr. map (idling)
+ const int ETMT_IACMAT_MAP = 29;        //IAC position's correction vs MAT
 
  struct SepTabPar
  {

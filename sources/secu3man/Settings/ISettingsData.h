@@ -136,6 +136,8 @@ struct WndSettings
  int m_AftstrStrk1MapWnd_Y;
  int m_GrValDelMapWnd_X;
  int m_GrValDelMapWnd_Y;
+ int m_IACMATMapWnd_X;
+ int m_IACMATMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -247,6 +249,8 @@ struct WndSize
  int m_AftstrStrk1MapWnd_H;
  int m_GrValDelMapWnd_W;
  int m_GrValDelMapWnd_H;
+ int m_IACMATMapWnd_W;
+ int m_IACMATMapWnd_H;
 };
 
 //Holds windows's state data
@@ -350,6 +354,7 @@ struct MapPtMovStep
  float m_atsc_map;
  float m_pwm1_map;
  float m_pwm2_map;
+ float m_iacmat_map;
  //separate
  float m_attenuator_map;
  float m_dwellcntrl_map;
