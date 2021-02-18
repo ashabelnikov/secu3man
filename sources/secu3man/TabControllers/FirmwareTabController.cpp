@@ -1944,6 +1944,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Hi TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi, _T("The canister purge valve will not turn on if throttle position is above this threshold. Purge should not work in full load conditions."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Абсол. давление выключения продувки адсорбера"), _T("кПа"), 0.0f, 500.0f, 1.0f, 1, &d.evap_map_thrd, _T("Порог абсолютного давления на впуске, при превышении которого клапан продувки будет выключен."));
+ else
+  dfd.AppendItem(_T("Absolute pressure threshold for valve's turn off"), _T("kPa"), 0.0f, 500.0f, 1.0f, 1, &d.evap_map_thrd, _T("Manifold absolute pressure threshold, above which canister purge valve will be turned off."));
+
  //heating control
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Управление подогревом:"));

@@ -233,6 +233,7 @@ void FirmwareMasterCntr::_BuildOptList(std::set<_TSTRING> &opts)
  m_allopts.insert(_T("obd"));
  m_allopts.insert(_T("cafr"));
  m_allopts.insert(_T("split"));
+ m_allopts.insert(_T("oddf"));
 
  //fill list, which will contain only options selected by user:
  opts.clear();

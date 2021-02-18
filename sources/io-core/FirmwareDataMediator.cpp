@@ -280,11 +280,12 @@ typedef struct
  _uint  smp_angle;
  _uint  dwl_dead_time;
  _uchar sfc_tps_thrd;
+ _uint evap_map_thrd;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3757];
+ _uchar reserved[3755];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2637,6 +2638,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.dwl_dead_time = (((float)exd.dwl_dead_time) * discrete) / 1000.0f; // convert to ms
 
  o_data.sfc_tps_thrd = ((float)exd.sfc_tps_thrd) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.evap_map_thrd = ((float)exd.evap_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2689,4 +2691,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.dwl_dead_time = (_uint)MathHelpers::Round((i_data.dwl_dead_time * 1000.0) / discrete);
 
  exd.sfc_tps_thrd = MathHelpers::Round(i_data.sfc_tps_thrd * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.evap_map_thrd = MathHelpers::Round(i_data.evap_map_thrd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 }
