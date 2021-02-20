@@ -281,11 +281,12 @@ typedef struct
  _uint  dwl_dead_time;
  _uchar sfc_tps_thrd;
  _uint evap_map_thrd;
+ _uint ckps_skip_trig;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3755];
+ _uchar reserved[3753];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2639,6 +2640,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.sfc_tps_thrd = ((float)exd.sfc_tps_thrd) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.evap_map_thrd = ((float)exd.evap_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.ckps_skip_trig = exd.ckps_skip_trig;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2692,4 +2694,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.sfc_tps_thrd = MathHelpers::Round(i_data.sfc_tps_thrd * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.evap_map_thrd = MathHelpers::Round(i_data.evap_map_thrd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.ckps_skip_trig = i_data.ckps_skip_trig;
 }

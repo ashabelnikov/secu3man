@@ -2097,6 +2097,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Time between spark and start of dwell"), _T("ms"), 0.10f, 5.00f, 0.01f, 2, &d.dwl_dead_time, _T("This parameter limits pulse width of dwell so that the latter does not start while the spark is on"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Число зубьев пропускаемое перед пуском"), _T("N"), 0, 500, 1, 1, &d.ckps_skip_trig, _T("Число зубьев, которое система проигнорирует перед поиском синхрометки в начале пуска двигателя."));
+ else
+  dfd.AppendItem(_T("Number of teeth to skip at the beginning of cranking"), _T("N"), 0, 500, 1, 1, &d.ckps_skip_trig, _T("Number of teeth, system will ignore before looking for missing tooth at the beginning of cranking"));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);
