@@ -53,10 +53,10 @@ class CGridModeEditorInjDlg : public CDialog
  ~CGridModeEditorInjDlg();
   static const UINT IDD;
 
-  void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT);
+  void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2);
   void BindRPMGrid(float* pGrid);
   void BindCLTGrid(float* pGrid);
-  void BindLoadGrid(float* pGrid);
+  void BindLoadGrid(float* pGrid, float* pGrid2);
   void UpdateView(bool axisLabels = false);
   void UpdateDialogControls(void);
 
@@ -86,6 +86,7 @@ class CGridModeEditorInjDlg : public CDialog
 
  private:
   void OnChangeVE(void);
+  void OnChangeVE2(void);
   void OnChangeAFR(void);
   void OnChangeIT(void);
   void OnChangeIReg(int mapId);
@@ -115,6 +116,7 @@ class CGridModeEditorInjDlg : public CDialog
   bool m_ldaxUseTable;
   float m_baro_press;
   std::vector<float> m_work_map_load_slots;
+  std::vector<float> m_ve2_map_load_slots;
   float* mp_lodGrid;
 
   friend class CAutoTuneController;

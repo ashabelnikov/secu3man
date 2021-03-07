@@ -62,36 +62,37 @@ enum EFWDFlags
  FLAG_PWM2_MAP      = 26,    //
  FLAG_TEMPI_MAP     = 27,    //-ign
  FLAG_IACMAT_MAP    = 28,    //inj
+ FLAG_VE2_MAP       = 29,    //inj
 
- FLAG_DWLCNTR_MAP   = 29,    //separate
- FLAG_ATTEN_MAP     = 30,    //separate
- FLAG_CTS_MAP       = 31,    //separate
- FLAG_ATS_MAP       = 32,    //separate
- FLAG_ATSAAC_MAP    = 33,    //separate
- FLAG_GASDOSE_MAP   = 34,    //separate
- FLAG_BAROCORR_MAP  = 35,    //separate
- FLAG_MANIT_MAP     = 36,    //separate
- FLAG_TMP2CURVE_MAP = 37,    //separate
- FLAG_CRKTEMP_MAP   = 38,    //separate
- FLAG_EHPAUSE_MAP   = 39,    //separate
- FLAG_CRNKTHRD_MAP  = 40,    //separate
- FLAG_CRNKTIME_MAP  = 41,    //separate
- FLAG_ABANTHRD_MAP  = 42,    //separate
- FLAG_KNOCKZONE_MAP = 43,    //separate
- FLAG_CESETT_DAT    = 44,    //separate (pseudomap)
- FLAG_GRTSCURVE_MAP = 45,    //separate
- FLAG_GRHEAT_MAP    = 46,    //separate
- FLAG_IACUCOEF_MAP  = 47,    //separate
- FLAG_AFTSTRK0_MAP  = 48,    //separate
- FLAG_AFTSTRK1_MAP  = 49,    //separate
- FLAG_GRVDELAY_MAP  = 50,    //separate
+ FLAG_DWLCNTR_MAP   = 30,    //separate
+ FLAG_ATTEN_MAP     = 31,    //separate
+ FLAG_CTS_MAP       = 32,    //separate
+ FLAG_ATS_MAP       = 33,    //separate
+ FLAG_ATSAAC_MAP    = 34,    //separate
+ FLAG_GASDOSE_MAP   = 35,    //separate
+ FLAG_BAROCORR_MAP  = 36,    //separate
+ FLAG_MANIT_MAP     = 37,    //separate
+ FLAG_TMP2CURVE_MAP = 38,    //separate
+ FLAG_CRKTEMP_MAP   = 39,    //separate
+ FLAG_EHPAUSE_MAP   = 40,    //separate
+ FLAG_CRNKTHRD_MAP  = 41,    //separate
+ FLAG_CRNKTIME_MAP  = 42,    //separate
+ FLAG_ABANTHRD_MAP  = 43,    //separate
+ FLAG_KNOCKZONE_MAP = 44,    //separate
+ FLAG_CESETT_DAT    = 45,    //separate (pseudomap)
+ FLAG_GRTSCURVE_MAP = 46,    //separate
+ FLAG_GRHEAT_MAP    = 47,    //separate
+ FLAG_IACUCOEF_MAP  = 48,    //separate
+ FLAG_AFTSTRK0_MAP  = 49,    //separate
+ FLAG_AFTSTRK1_MAP  = 50,    //separate
+ FLAG_GRVDELAY_MAP  = 51,    //separate
 
- FLAG_NR_OF_FLAGS   = 51,    //total number of flags
+ FLAG_NR_OF_FLAGS   = 52,    //total number of flags
 
  FLAG_SET_START     = 0,
- FLAG_SET_END       = 28,
- FLAG_SEP_START     = 29,
- FLAG_SEP_END       = 50,
+ FLAG_SET_END       = 29,
+ FLAG_SEP_START     = 30,
+ FLAG_SEP_END       = 51,
 };
 
 class CToolTipCtrlEx;

@@ -77,6 +77,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
   //fuel injection
   case TYPE_MAP_INJ_VE:
    return p_maps->inj_ve;
+  case TYPE_MAP_INJ_VE2:
+   return p_maps->inj_ve2;
   case TYPE_MAP_INJ_AFR:
    return p_maps->inj_afr;
   case TYPE_MAP_INJ_CRNK:
@@ -144,6 +146,8 @@ size_t _GetMapSize(int i_mapType)
    return F_TMP_POINTS;
   //fuel injection maps
   case TYPE_MAP_INJ_VE:
+   return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
+  case TYPE_MAP_INJ_VE2:
    return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
   case TYPE_MAP_INJ_AFR:
    return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
@@ -314,6 +318,7 @@ void CPMTablesController::OnActivate(void)
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMPI_CORR, mptms.m_tempi_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
+ mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_VE2, mptms.m_ve2_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_WRMP, mptms.m_wrmp_map);
@@ -366,6 +371,7 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
    {//save read parameters
     const FunSetPar* data = (const FunSetPar*)i_packet_data;
     mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg, data->use_load_grid);
+    mp_view->mp_ButtonsPanel->SetVE2MapFunc(data->ve2_map_func);
     m_operation_state = 1;
    }
    break;
@@ -513,6 +519,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
   //fuel injection maps
   case ETMT_VE_MAP: //ve map
    UpdateMap(m_maps->inj_ve, m_maps_flags->inj_ve, data);
+   break;
+  case ETMT_VE2_MAP: //ve map
+   UpdateMap(m_maps->inj_ve2, m_maps_flags->inj_ve2, data);
    break;
   case ETMT_AFR_MAP: //afr map
    UpdateMap(m_maps->inj_afr, m_maps_flags->inj_afr, data);
@@ -894,6 +903,7 @@ void CPMTablesController::OnSaveSettings()
 void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
 {
  mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg, data->use_load_grid);
+ mp_view->mp_ButtonsPanel->SetVE2MapFunc(data->ve2_map_func);
 }
 
 void CPMTablesController::OnChangeSettings(void)
@@ -907,6 +917,7 @@ void CPMTablesController::OnChangeSettings(void)
  mptms.m_temp_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
  mptms.m_tempi_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMPI_CORR);
  mptms.m_ve_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
+ mptms.m_ve2_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_VE2);
  mptms.m_afr_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
  mptms.m_crnk_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);
  mptms.m_wrmp_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_WRMP);

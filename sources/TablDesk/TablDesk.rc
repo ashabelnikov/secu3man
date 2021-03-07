@@ -52,6 +52,7 @@ BEGIN
     CONTROL         "Скважность ШИМ2",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,519,96,18
     CONTROL         "Темпер. коррекция ХХ",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,538,96,18
     CONTROL         "Корр. РДВ от ДТВ",IDC_TD_VIEW_IACMAT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,557,96,18
+    CONTROL         "Коэфф. наполн.2",IDC_TD_VIEW_VE2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,576,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -93,6 +94,7 @@ BEGIN
     CONTROL         "Скважность ШИМ2",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,300,96,18
     CONTROL         "Темпер. коррекция ХХ",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,300,96,18
     CONTROL         "Корр. РДВ от ДТВ",IDC_TD_VIEW_IACMAT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,319,96,18
+    CONTROL         "Коэфф. наполн.2",IDC_TD_VIEW_VE2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,319,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,3,350,16,18
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,349,96,18
@@ -275,8 +277,11 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "VE map",IDC_GME_INJ_VE,"MFCMapEditorCtrl",WS_TABSTOP,5,10,510,250,WS_EX_STATICEDGE
+    CONTROL         "VE map2",IDC_GME_INJ_VE2,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
     CONTROL         "Lambda delay",IDC_GME_INJ_LAMDEL_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,150,100,WS_EX_STATICEDGE
     CONTROL         "Cell weighting",IDC_GME_INJ_CELWGT_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
+    CONTROL         "VE1",IDC_GME_INJ_VE1_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,300,260,50,10
+    CONTROL         "VE2",IDC_GME_INJ_VE2_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,360,260,50,10
     GROUPBOX        "Управление автонастройкой",IDC_GME_AUTOTUNE_GROUPBOX,10,267,490,50
     CONTROL         "Задержка лямбды",IDC_GME_INJ_LAMDEL_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,281,70,20
     CONTROL         "Вес ячеек",IDC_GME_INJ_CELWGT_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,100,281,70,20
@@ -603,6 +608,7 @@ BEGIN
     IDS_GDP_MAP             "Положение газового дозатора от ДПДЗ и оборотов"
     IDS_IT_MAP              "Фаза впрыска"
     IDS_VE_MAP              "Коэффициент наполнения (Объёмный КПД двигателя)"
+    IDS_VE2_MAP             "Коэффициент наполнения (Объёмный КПД двигателя) 2"
     IDS_AFR_MAP             "Соотношение воздух/топливо в зависимости от оборотов и нагрузки"
     IDS_CRNK_MAP            "Длительность впрыска на пуске"
     IDS_WRMP_MAP            "Обогащение при прогреве"
@@ -691,7 +697,8 @@ BEGIN
     IDS_TD_VIEW_ATTENUATOR_MAP_TT "Таблица коэффициентов усиления, используемая для настройки процессора детектирования детонации (HIP9011/TPIC8101)."
     IDS_TD_VIEW_CRNK_MAP_TT "Длительность впрыска на пуске. Используется также для задания положения газового дозатора на пуске (значение 10мс соответсвует положению газового дозатора = 100%, например 1мс это 10%)."
     IDS_TD_VIEW_GDP_MAP_TT "Задает базовое положение газового дозатора. Все последующие коррекции накладываются на это значение."
-    IDS_TD_VIEW_VE_MAP_TT  "Используется при вычисления длительности впрыска и для коррекции положения газового дозатора"
+    IDS_TD_VIEW_VE_MAP_TT  "Используется при вычислении длительности впрыска и для коррекции положения газового дозатора"
+    IDS_TD_VIEW_VE2_MAP_TT  "2-я таблица наполнения. Используется при вычислении длительности впрыска"
     IDS_TD_VIEW_AFR_MAP_TT "Используется при вычисления длительности впрыска и для коррекции положения газового дозатора"
     IDS_TD_VIEW_WRMP_MAP_TT "Используется для коррекции длительности впрыска от температуры двигателя. Данная таблица также используется для коррекции положения газового дозатора. Длительность впрыска умножается на значение этой коррекции."
     IDS_TD_VIEW_ATSC_MAP_TT "Коррекция длительности впрыска по температуре воздуха (плотность воздуха меняется с изменением температуры). Данная таблица также используется для коррекции положения дозатора газа и воздушной заслонки карбюратора."
@@ -780,6 +787,8 @@ BEGIN
     IDS_CESETT_MAP_V_MAX_EDIT_TT    "Верхний порог ошибки. Если значение больше этого порога, то будет установлен соответствующий флаг ошибки, при этом, если установлена галочка, то будет использовано резервное значение вместо значения с датчика."
     IDS_CESETT_MAP_V_EM_EDIT_TT     "Резервное значение. Данное значение будет использовано вместо значения с датчика в случае ошибки если разрешено галочкой."
     IDS_CESETT_MAP_V_USEEM_CHECK_TT "Использовать резервное значение в случае ошибки."
+    IDS_GME_INJ_VE1_RADIOBOX_TT "Выбрать таблицу наполнения 1 для редактирования/автонастройки"
+    IDS_GME_INJ_VE2_RADIOBOX_TT "Выбрать таблицу наполнения 2 для редактирования/автонастройки"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -829,6 +838,7 @@ BEGIN
     CONTROL         "PWM2 duty",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,519,96,18
     CONTROL         "Coolant temper.corr.idl",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,538,96,18
     CONTROL         "IAC pos. corr. vs MAT",IDC_TD_VIEW_IACMAT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,557,96,18
+    CONTROL         "VE 2",IDC_TD_VIEW_VE2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,576,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -870,6 +880,7 @@ BEGIN
     CONTROL         "PWM2 duty",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,300,96,18
     CONTROL         "Coolant temper.corr.idl",IDC_TD_VIEW_TEMPI_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,300,96,18
     CONTROL         "IAC pos. corr. vs MAT",IDC_TD_VIEW_IACMAT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,319,96,18
+    CONTROL         "VE 2",IDC_TD_VIEW_VE2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,319,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,3,350,16,18
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,349,96,18
@@ -1050,8 +1061,11 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "VE map",IDC_GME_INJ_VE,"MFCMapEditorCtrl",WS_TABSTOP,5,10,510,250,WS_EX_STATICEDGE
+    CONTROL         "VE map2",IDC_GME_INJ_VE2,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
     CONTROL         "Lambda delay",IDC_GME_INJ_LAMDEL_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,150,100,WS_EX_STATICEDGE
     CONTROL         "Cell weighting",IDC_GME_INJ_CELWGT_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
+    CONTROL         "VE1",IDC_GME_INJ_VE1_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,300,260,50,10
+    CONTROL         "VE2",IDC_GME_INJ_VE2_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,360,260,50,10
     GROUPBOX        "Autotune control",IDC_GME_AUTOTUNE_GROUPBOX,10,267,490,50
     CONTROL         "Lambda delay",IDC_GME_INJ_LAMDEL_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,281,70,20
     CONTROL         "Cell weighting",IDC_GME_INJ_CELWGT_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,100,281,70,20
@@ -1399,6 +1413,7 @@ BEGIN
     IDS_GDP_MAP             "Gas dosator position vs TPS and RPM"
     IDS_IT_MAP              "Injection timing"
     IDS_VE_MAP              "Volumetric efficiency"
+    IDS_VE2_MAP             "Volumetric efficiency 2"
     IDS_AFR_MAP             "Air/fuel ratio vs RPM and Load"
     IDS_CRNK_MAP            "Injection pulse width on cranking"
     IDS_WRMP_MAP            "Warmup enrichment vs coolant temperature"
@@ -1488,6 +1503,7 @@ BEGIN
     IDS_TD_VIEW_CRNK_MAP_TT "Defines PW of injection on cranking. It is also used to set the position of the gas dispenser on cranking (value 10ms corresponds to the position of the gas dispenser = 100%, for example 1ms is 10%)."
     IDS_TD_VIEW_GDP_MAP_TT "Sets base position of the gas dispenser. All subsequent corrections are superimposed on this value."
     IDS_TD_VIEW_VE_MAP_TT  "Used to calculate injection PW and for correction of gas dispenser's position."
+    IDS_TD_VIEW_VE2_MAP_TT  "Secondary VE map. Used for calculation of injection PW"
     IDS_TD_VIEW_AFR_MAP_TT "Used to calculate injection PW and for correction of gas dispenser's position."
     IDS_TD_VIEW_WRMP_MAP_TT "Used to correct injection PW vs CLT. This table is also used to correct the position of gas dispenser. Injection PW is multiplied by this correction."
     IDS_TD_VIEW_ATSC_MAP_TT "Correction of injection PW vs intake air temperature (air density changes with temperature). This table is also used to correct the position of gas dispenser and carburetor's choke."
@@ -1579,6 +1595,8 @@ BEGIN
     IDS_CESETT_MAP_V_MAX_EDIT_TT    "Upper error threshold. If the value is greater than this threshold, then the corresponding error flag will be set, while if the checkbox is checked, then the reserve value will be used instead of the value from the sensor."
     IDS_CESETT_MAP_V_EM_EDIT_TT     "Reserve value. This value will be used instead of the value from the sensor in case of an error if enabled with a check mark."
     IDS_CESETT_MAP_V_USEEM_CHECK_TT "Use reserve value in case of error."
+    IDS_GME_INJ_VE1_RADIOBOX_TT "Select VE map 1 for editing/automatic tuning"
+    IDS_GME_INJ_VE2_RADIOBOX_TT "Select VE map 2 for editing/automatic tuning"
 END
 
 /////////////////////////////////////////////////////////////////////////////

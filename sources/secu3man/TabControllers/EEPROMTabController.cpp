@@ -173,6 +173,7 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_TEMPI_CORR, mptms.m_tempi_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_VE2, mptms.m_ve2_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_WRMP, mptms.m_wrmp_map);
@@ -578,6 +579,9 @@ void CEEPROMTabController::SetViewChartsValues(void)
  m_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(false),false);
  m_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(true),true);
 
+ m_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(false),false);
+ m_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(true),true);
+
  m_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(false),false);
  m_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(true),true);
 
@@ -708,6 +712,9 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    //fuel injection maps
   case TYPE_MAP_INJ_VE:
    m_eedm->SetVEMap(funset_index, mp_view->mp_TablesPanel->GetVEMap(false));
+   break;
+  case TYPE_MAP_INJ_VE2:
+   m_eedm->SetVE2Map(funset_index, mp_view->mp_TablesPanel->GetVE2Map(false));
    break;
   case TYPE_MAP_INJ_AFR:
    m_eedm->SetAFRMap(funset_index, mp_view->mp_TablesPanel->GetAFRMap(false));
@@ -1024,6 +1031,7 @@ void CEEPROMTabController::OnChangeSettingsMapEd(void)
  mptms.m_temp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
  mptms.m_tempi_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_TEMPI_CORR);
  mptms.m_ve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
+ mptms.m_ve2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_VE2);
  mptms.m_afr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
  mptms.m_crnk_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);
  mptms.m_wrmp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_WRMP);

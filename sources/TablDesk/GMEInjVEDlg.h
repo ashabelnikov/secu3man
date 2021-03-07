@@ -36,19 +36,22 @@ class CGMEInjVEDlg : public CTabDialog
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
   CGMEInjVEDlg(CWnd* pParent = NULL);   // standard constructor
  ~CGMEInjVEDlg();
   static const UINT IDD;
 
-  void BindMaps(float* pVE);
+  void BindMaps(float* pVE, float* pVE2);
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(const float* pGrid, bool updateLabels = false);
+  void BindLoadGrid2(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
+  void setOnChange2(EventHandler OnCB);
   void UpdateView(bool axisLabels = false);
 
-  void SetArguments(int rpm, int air_flow, bool strt_use, float load);
+  void SetArguments(int rpm, int air_flow, bool strt_use, float load, float tps);
 
   //Used by CAutoTuneController:
   void BindLamDelMap(float* p_LamDelMap, float* p_rpmGridLD, float* p_loadGridLD);
@@ -67,6 +70,7 @@ class CGMEInjVEDlg : public CTabDialog
   bool GetFinishCheck(void);
   bool GetRstAllCheck(void);
   std::pair<int, int> GetVESelection(void);
+  void setOnSelectVEMap(EventWithCode OnCB);
 
  public:
 
@@ -78,18 +82,23 @@ class CGMEInjVEDlg : public CTabDialog
   afx_msg void OnUpdateControlsAutoTune(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune1(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune2(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsAutoTune3(CCmdUI* pCmdUI);
   afx_msg void OnLamDelButton();
   afx_msg void OnCelWgtButton();
   afx_msg void OnStrStpButton();
   afx_msg void OnRstSttButton();
   afx_msg void OnCelBlkButton();
   afx_msg void OnSmoothButton();
+  afx_msg void OnVE1Button();
+  afx_msg void OnVE2Button();
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
 
   void OnChangeLamDel(void);
   void OnSelChangeVE(void);
+  CMapEditorCtrl& GetVECtrl(void);
+  void UpdateBlockColor(CMapEditorCtrl& ve_map);
 
  private:
   CButton m_lamdel_button;
@@ -101,18 +110,23 @@ class CGMEInjVEDlg : public CTabDialog
   CButton m_rstall_check;
   CButton m_blkall_check;
   CButton m_finish_check;
+  CButton m_ve1_radio;
+  CButton m_ve2_radio;
 
   CStatic m_status_text;
   _TSTRING m_status_cache;
 
   CMapEditorCtrl m_ve_map;
+  CMapEditorCtrl m_ve2_map;
   CMapEditorCtrl m_lamdel_map;
   CMapEditorCtrl m_celwgt_map;
   CFont m_font;
 
   float* mp_VEMap;
+  float* mp_VEMap2;
   float* mp_rpmGrid;
   const float* mp_loadGrid;
+  const float* mp_loadGrid2;
 
   float* mp_LamDelMap;
   float* mp_rpmGridLD;
@@ -126,6 +140,7 @@ class CGMEInjVEDlg : public CTabDialog
   EventHandler m_OnChangeLamDel;
   EventResult  m_IsReady; //if this CB is not initialized all autotune related controls will be disabled
   EventHandler m_OnSmooth;
+  EventWithCode m_OnSelectVEMap;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

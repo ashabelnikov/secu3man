@@ -68,6 +68,7 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_TEMPI_MAP] = FALSE;
  //fuel injection
  m_fwd_flags[FLAG_VE_MAP] = FALSE;
+ m_fwd_flags[FLAG_VE2_MAP] = FALSE;
  m_fwd_flags[FLAG_AFR_MAP] = FALSE;
  m_fwd_flags[FLAG_CRNK_MAP] = FALSE;
  m_fwd_flags[FLAG_WRMP_MAP] = FALSE;
@@ -132,6 +133,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_TEMPIMAP_FLAG, m_fwd_flags[FLAG_TEMPI_MAP]);
  //fuel injection
  DDX_Check(pDX, IDC_MAP_IMPEXP_VEMAP_FLAG, m_fwd_flags[FLAG_VE_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_VEMAP2_FLAG, m_fwd_flags[FLAG_VE2_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_AFRMAP_FLAG, m_fwd_flags[FLAG_AFR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_CRNKMAP_FLAG, m_fwd_flags[FLAG_CRNK_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_WRMPMAP_FLAG, m_fwd_flags[FLAG_WRMP_MAP]);
@@ -186,6 +188,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_TEMPIMAP_FLAG, m_fwd_flags_buttons[FLAG_TEMPI_MAP]);
  //fuel injection
  DDX_Control(pDX, IDC_MAP_IMPEXP_VEMAP_FLAG, m_fwd_flags_buttons[FLAG_VE_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_VEMAP2_FLAG, m_fwd_flags_buttons[FLAG_VE2_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_AFRMAP_FLAG, m_fwd_flags_buttons[FLAG_AFR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CRNKMAP_FLAG, m_fwd_flags_buttons[FLAG_CRNK_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_WRMPMAP_FLAG, m_fwd_flags_buttons[FLAG_WRMP_MAP]);
@@ -466,6 +469,7 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_TEMPI_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  //fuel injection
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_VE_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_VE2_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_AFR_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CRNK_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_WRMP_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));

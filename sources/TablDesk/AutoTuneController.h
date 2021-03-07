@@ -78,10 +78,11 @@ class CAutoTuneController
 
  void SetDynamicValues(const TablDesk::DynVal& dv);
 
- void BindMaps(float* pVE, float* pAFR);
+ void BindMaps(float* pVE, float* pAFR, float* pVE2);
  void BindRPMGrid(float* pGrid);
- void BindLoadGrid(const float* pGrid);
+ void BindLoadGrid(const float* pGrid, const float* pGrid2);
  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable);
+ void SetVE2MapFunc(int func); // 0 - 1st map, 1 - mult, 2 - add
  void SetAFRError(float afrError);
  void SetStatSize(int statSize);
  void SetAutoBlockThrd(int thrd);
@@ -113,11 +114,15 @@ class CAutoTuneController
   int _FindNearestGridPoint(float arg, const float *grid, int gSize);
   float _ShepardInterpolation(float rpm, float load, const ScatterItem_t& points, double power, double eps, float& o_avdist);
   bool _ApplyCorrection(void);
-  float& _GetVEItem(int i, int j);
+  float& _GetVEItem(int i, int j, int vemap = -1);
+  float* _GetVEMap(int vemap = -1);
   void OnChangeLamDel(void);
   void OnViewActivate(void);
   size_t _CalcFIFOSize(void);
   void OnTimer(void);
+  void OnSelectVEMap(int vemap); //0 - 1st, 1 - 2nd
+  int _GetActiveVEMapId(void);
+  std::vector<float>& _GetLoadGrid(int grid = -1);
 
  private:
   CObjectTimer<CAutoTuneController> m_timer;
@@ -128,6 +133,7 @@ class CAutoTuneController
   float m_lamDelayRPMBins[LAMDEL_RPM_SIZE];
 
   float* mp_ve;
+  float* mp_ve2;
   float* mp_afr;
 
   //contains statistics (scattered points)
@@ -147,6 +153,7 @@ class CAutoTuneController
   bool m_ldaxNeedsUpdate;
   bool m_ldaxUseTable;
   std::vector<float> m_loadGrid;
+  std::vector<float> m_loadGrid2;
   float m_afrerr;
 
   CGMEInjVEDlg* mp_view;
@@ -164,4 +171,6 @@ class CAutoTuneController
   float m_maxTPS;
  
   float m_cltThrd;
+  int m_ve2mf;
+  int m_active_ve;
 };

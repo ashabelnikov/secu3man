@@ -240,7 +240,10 @@ void S3FImportController::OnExchangePressed(void)
 
  //fuel injection
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
-  memcpy(mp_fwd->maps[current_sel].inj_ve, mp_s3f_io->GetData().maps[other_sel].inj_ve,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+  memcpy(mp_fwd->maps[current_sel].inj_ve, mp_s3f_io->GetData().maps[other_sel].inj_ve, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_ve2, mp_s3f_io->GetData().maps[other_sel].inj_ve2, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_afr, mp_s3f_io->GetData().maps[other_sel].inj_afr,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
@@ -352,6 +355,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0115 = (mp_s3f_io->GetVersion() > 0x0114);
  bool sv0116 = (mp_s3f_io->GetVersion() > 0x0115);
  bool sv0117 = (mp_s3f_io->GetVersion() > 0x0116);
+ bool sv0118 = (mp_s3f_io->GetVersion() > 0x0117);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -406,7 +410,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_TEMPI_MAP, sv0116);     //since v01.16
  mp_view->SetFWDFlag(FLAG_IACMAT_MAP, sv0117);       //since v01.17
  mp_view->EnableFWDFlag(FLAG_IACMAT_MAP, sv0117);    //since v01.17
-
+ mp_view->SetFWDFlag(FLAG_VE2_MAP, sv0118);          //since v01.18
+ mp_view->EnableFWDFlag(FLAG_VE2_MAP, sv0118);       //since v01.18
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -663,6 +668,9 @@ void S3FExportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ve, mp_fwd->maps[current_sel].inj_ve, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
+ if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ve2, mp_fwd->maps[current_sel].inj_ve2, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_afr, mp_fwd->maps[current_sel].inj_afr, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
@@ -756,6 +764,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_TEMPI_MAP, true);
  //injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_VE2_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
  mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
  mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);

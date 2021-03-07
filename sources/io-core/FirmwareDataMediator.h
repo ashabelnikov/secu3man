@@ -90,6 +90,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   //fuel injection
   void GetVEMap(int i_index, float* op_values, bool i_original = false);
   void SetVEMap(int i_index, const float* i_values);
+  void GetVE2Map(int i_index, float* op_values, bool i_original = false);
+  void SetVE2Map(int i_index, const float* i_values);
   void GetAFRMap(int i_index, float* op_values, bool i_original = false);
   void SetAFRMap(int i_index, const float* i_values);
   void GetCrnkMap(int i_index, float* op_values, bool i_original = false);

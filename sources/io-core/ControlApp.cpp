@@ -759,7 +759,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 43 : 22))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 45 : 23))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -843,6 +843,12 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &func_flags))
   return false;
  funSetPar.use_load_grid = CHECKBIT8(func_flags, 0);
+
+ //VE2 map function
+ BYTE ve2_map_func = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ve2_map_func))
+  return false;
+ funSetPar.ve2_map_func = ve2_map_func;
 
  return true;
 }
@@ -1644,11 +1650,12 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.tab_id != ETMT_EGOCRV_MAP && editTabPar.tab_id != ETMT_IACC_MAP && editTabPar.tab_id != ETMT_IACCW_MAP &&
      editTabPar.tab_id != ETMT_IATCLT_MAP && editTabPar.tab_id != ETMT_TPSSWT_MAP && editTabPar.tab_id != ETMT_GTSC_MAP &&
      editTabPar.tab_id != ETMT_GPSC_MAP && editTabPar.tab_id != ETMT_ATSC_MAP && editTabPar.tab_id != ETMT_PWM1_MAP &&
-     editTabPar.tab_id != ETMT_PWM2_MAP && editTabPar.tab_id != ETMT_TEMPI_MAP && editTabPar.tab_id != ETMT_IACMAT_MAP)
+     editTabPar.tab_id != ETMT_PWM2_MAP && editTabPar.tab_id != ETMT_TEMPI_MAP && editTabPar.tab_id != ETMT_IACMAT_MAP && 
+     editTabPar.tab_id != ETMT_VE2_MAP)
   return false;
 
  //check for 16-byte packets
- if ((editTabPar.tab_id != ETMT_GPSC_MAP) && (editTabPar.tab_id != ETMT_VE_MAP) && (editTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
+ if ((editTabPar.tab_id != ETMT_GPSC_MAP) && (editTabPar.tab_id != ETMT_VE_MAP) && (editTabPar.tab_id != ETMT_VE2_MAP) && (editTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1696,7 +1703,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    if (size % div) // 1 byte in HEX is 2 symbols
     return false;
 
-   if (editTabPar.tab_id == ETMT_VE_MAP) //volumetric efficiency map
+   if (editTabPar.tab_id == ETMT_VE_MAP || editTabPar.tab_id == ETMT_VE2_MAP) //volumetric efficiency maps
    { //VE
     BYTE buff[32]; unsigned char value;
     for(size_t i = 0; i < size / div; ++i)
@@ -3425,6 +3432,8 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  unsigned char flags = 0;
  WRITEBIT8(flags, 0, packet_data->use_load_grid);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+ unsigned char ve2_map_func = packet_data->ve2_map_func;
+ mp_pdp->Bin8ToHex(ve2_map_func, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -3613,7 +3622,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->tab_id, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->address, m_outgoing_packet);
 
- if (packet_data->tab_id == ETMT_VE_MAP) //Volumetric efficiency map
+ if (packet_data->tab_id == ETMT_VE_MAP || packet_data->tab_id == ETMT_VE2_MAP) //Volumetric efficiency map
  {
   BYTE buff[64];  
   int byte_idx_start = packet_data->address & 0x1;

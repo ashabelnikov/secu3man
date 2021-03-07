@@ -169,6 +169,7 @@ namespace SECU3IO
   int uni_gas;
   int barocorr_type;
   bool use_load_grid;
+  int ve2_map_func;
  };
 
  struct IdlRegPar
@@ -392,6 +393,7 @@ namespace SECU3IO
  const int ETMT_PWM2_MAP = 27;          //PWM2 duty
  const int ETMT_TEMPI_MAP = 28;         //temp.corr. map (idling)
  const int ETMT_IACMAT_MAP = 29;        //IAC position's correction vs MAT
+ const int ETMT_VE2_MAP = 30;           //Secondary VE map
 
  struct SepTabPar
  {

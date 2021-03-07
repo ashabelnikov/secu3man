@@ -54,6 +54,8 @@ struct WndSettings
  int m_GridMapInjWnd_Y;
  int m_VEMapWnd_X;
  int m_VEMapWnd_Y;
+ int m_VE2MapWnd_X;
+ int m_VE2MapWnd_Y;
  int m_AFRMapWnd_X;
  int m_AFRMapWnd_Y;
  int m_CrnkMapWnd_X;
@@ -167,6 +169,8 @@ struct WndSize
  //int m_GridMapInjWnd_H;
  int m_VEMapWnd_W;
  int m_VEMapWnd_H;
+ int m_VE2MapWnd_W;
+ int m_VE2MapWnd_H;
  int m_AFRMapWnd_W;
  int m_AFRMapWnd_H;
  int m_CrnkMapWnd_W;
@@ -332,6 +336,7 @@ struct MapPtMovStep
  float m_start_map;
  float m_idle_map;
  float m_ve_map;
+ float m_ve2_map;
  float m_afr_map;
  float m_crnk_map;
  float m_wrmp_map;

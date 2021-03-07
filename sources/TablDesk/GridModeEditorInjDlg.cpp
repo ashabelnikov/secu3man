@@ -64,10 +64,14 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
 {
  m_work_map_load_slots.reserve(32);
  m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16, true); //<--reverse order
+ m_ve2_map_load_slots.reserve(32);
+ m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16, true); //<--reverse order
 
  m_pVEPageDlg.reset(new CGMEInjVEDlg());
  m_pVEPageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
+ m_pVEPageDlg->BindLoadGrid2(&m_ve2_map_load_slots[0]);
  m_pVEPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeVE));
+ m_pVEPageDlg->setOnChange2(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeVE2));
 
  m_pAFRPageDlg.reset(new CGMEInjAFRDlg());
  m_pAFRPageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
@@ -212,9 +216,9 @@ void CGridModeEditorInjDlg::OnClose()
  DestroyWindow();
 }
 
-void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT)
+void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2)
 {
- m_pVEPageDlg->BindMaps(pVE);
+ m_pVEPageDlg->BindMaps(pVE, pVE2);
  m_pAFRPageDlg->BindMaps(pAFR);
  m_pITPageDlg->BindMaps(pIT);
  m_pIRegPageDlg->BindMaps(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW, pIACMAT);
@@ -241,12 +245,13 @@ void CGridModeEditorInjDlg::BindCLTGrid(float* pGrid)
  m_pOtherPageDlg->BindCLTGrid(pGrid);
 }
 
-void CGridModeEditorInjDlg::BindLoadGrid(float* pGrid)
+void CGridModeEditorInjDlg::BindLoadGrid(float* pGrid, float* pGrid2)
 {
  mp_lodGrid = pGrid; //save to use later
  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
  const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
  m_pVEPageDlg->BindLoadGrid(pLoadGrid);
+ m_pVEPageDlg->BindLoadGrid(pGrid2);
  m_pAFRPageDlg->BindLoadGrid(pLoadGrid);
  m_pITPageDlg->BindLoadGrid(pLoadGrid);
  m_pPwm1PageDlg->BindLoadGrid(pLoadGrid);
@@ -280,6 +285,12 @@ void CGridModeEditorInjDlg::OnChangeVE(void)
 {
  if (m_OnMapChanged)
   m_OnMapChanged(TYPE_MAP_INJ_VE);
+}
+
+void CGridModeEditorInjDlg::OnChangeVE2(void)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(TYPE_MAP_INJ_VE2);
 }
 
 void CGridModeEditorInjDlg::OnChangeAFR(void)
@@ -356,7 +367,7 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
 
  m_baro_press = dv.baro_press;
 
- m_pVEPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
+ m_pVEPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load, dv.tps);
  m_pAFRPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pITPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos, dv.rigid_arg, dv.rigid_use, dv.air_temp);

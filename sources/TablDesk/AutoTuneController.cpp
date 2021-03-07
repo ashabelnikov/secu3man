@@ -46,6 +46,7 @@
 
 CAutoTuneController::CAutoTuneController()
 : mp_ve(NULL)
+, mp_ve2(NULL)
 , mp_afr(NULL)
 , mp_rpmGrid(NULL)
 , mp_lodGrid(NULL)
@@ -69,8 +70,11 @@ CAutoTuneController::CAutoTuneController()
 , m_maxTPS(100.0)
 , m_cltThrd(70.0)
 , m_ldaxUseTable(false)
+, m_ve2mf(0) //use 1st VE map (neither mul or add)
+, m_active_ve(0) //1st VE map is active by default
 {
  m_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
+ m_loadGrid2 = MathHelpers::BuildGridFromRange(0.0f, 100.0f, VEMAP_LOAD_SIZE);
 
  for (int l = 0; l < VEMAP_LOAD_SIZE; ++l){
   for (int r = 0; r < VEMAP_RPM_SIZE; ++r){
@@ -110,9 +114,9 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  if (m_ldaxNeedsUpdate || (!MathHelpers::IsEqualFlt(m_baro_press, dv.baro_press, 0.01f) && useBaroMax))
  {
   if (m_ldaxUseTable)
-   reverse_copy(mp_lodGrid, mp_lodGrid + VEMAP_LOAD_SIZE, m_loadGrid.begin()); //change order of items
+   reverse_copy(mp_lodGrid, mp_lodGrid + VEMAP_LOAD_SIZE, _GetLoadGrid(0).begin()); //change order of items
   else
-   m_loadGrid = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, VEMAP_LOAD_SIZE);
+   _GetLoadGrid(0) = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, VEMAP_LOAD_SIZE);
   m_ldaxNeedsUpdate = false;
  }
  m_baro_press = dv.baro_press;
@@ -174,7 +178,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  }
 
  //calculate correction factor using actual and target AFRs
- float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, &m_loadGrid[0]);
+ float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, &_GetLoadGrid(0)[0]);
  if (target_afr < 0.0001f)
  {
   SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::SetDynamicValues"));
@@ -195,9 +199,11 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  else
   mp_view->SetStatusText(_T(""));
 
+ float e_load = (0==m_active_ve) ? e.load : e.tps;
+
  //Add point to our map of scattered points
  int r_idx = _FindNearestGridPoint(e.rpm, mp_rpmGrid, VEMAP_RPM_SIZE);
- int l_idx = _FindNearestGridPoint(e.load, &m_loadGrid[0], VEMAP_LOAD_SIZE);
+ int l_idx = _FindNearestGridPoint(e_load, &_GetLoadGrid()[0], VEMAP_LOAD_SIZE);
 
  //if growing mode enabled, state depends on relationship of current and previous RPMs
  bool growing = (!m_growingMode || (((i+1) < m_logdata.size()) && e.rpm > m_logdata[i+1].rpm));
@@ -211,16 +217,16 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
   if (node.size() < (size_t)m_statSize)
-   node.push_back(NodePoint(corrFactor, e.rpm, e.load));
+   node.push_back(NodePoint(corrFactor, e.rpm, e_load));
   else
   {
    for(size_t i = 0; i < node.size(); ++i)
    {
-    float d1 = MathHelpers::Distance(e.rpm, e.load, mp_rpmGrid[r_idx], m_loadGrid[l_idx]); //distance to new point
-    float d2 = MathHelpers::Distance(node[i].rpm, node[i].load, mp_rpmGrid[r_idx], m_loadGrid[l_idx]); //distance to the current point
+    float d1 = MathHelpers::Distance(e.rpm, e_load, mp_rpmGrid[r_idx], _GetLoadGrid()[l_idx]); //distance to new point
+    float d2 = MathHelpers::Distance(node[i].rpm, node[i].load, mp_rpmGrid[r_idx], _GetLoadGrid()[l_idx]); //distance to the current point
     if (d1 < d2)
     { //replace existing point if distance to new point is less
-     node[i] = NodePoint(corrFactor, e.rpm, e.load);
+     node[i] = NodePoint(corrFactor, e.rpm, e_load);
      break;
     }
    }
@@ -248,16 +254,35 @@ bool CAutoTuneController::_ApplyCorrection(void)
    if (node.size() == m_statSize && false==m_blocked[l][r])
    { //apply correction to corresponding cell in the VE map and reset points accumulated for node
     float avdist = .0f;
-    float corr = _ShepardInterpolation(mp_rpmGrid[r], m_loadGrid[l], node, 0.3, 0.01, avdist);
+    float corr = _ShepardInterpolation(mp_rpmGrid[r], _GetLoadGrid()[l], node, 0.3, 0.01, avdist);
     if (avdist < m_avdists[l][r] || (m_afrhits[l][r] < m_MinDistThrd))
     {
      m_avdists[l][r] = avdist;
-     float& ve = _GetVEItem(l, r);
-     ve*= corr;  //change VE cell
-     if (ve > 1.99f)
-      ve = 1.99f;
-     if (ve < 0.01f)
-      ve = 0.01f; //do not let value to reach zero, because after that result of any further correction will always be zero...
+
+     //Apply correction depending on the selected function
+     if (0==m_ve2mf || 1==m_ve2mf) //VE1 or VE1*VE2
+     {
+      float& ve = _GetVEItem(l, r);
+      ve = ve * corr;  //change VE cell
+      //do not let value to reach zero, because after that result of any further correction will always be zero...
+      ve = MathHelpers::RestrictValue<float>(ve, 0.01f, 1.99f);
+     }
+     else if (2==m_ve2mf)  //VE1+VE2
+     {
+      float& ve1 = _GetVEItem(l, r, 0);
+      float& ve2 = _GetVEItem(l, r, 1);
+      float ve = ve1 + ve2;      
+      if (0==m_active_ve)
+      { //tunung 1st map
+       ve1 = (ve * corr) - ve2;  //change VE cell of 1st map
+       ve1 = MathHelpers::RestrictValue<float>(ve1, 0.01f, 1.99f);
+      }
+      else
+      { //tuning 2nd map
+       ve2 = (ve * corr) - ve1;  //change VE cell of 2nd map
+       ve2 = MathHelpers::RestrictValue<float>(ve2, 0.00f, 1.99f);
+      }
+     }
      m_lastchg[l][r] = 0xFFFFFFFF;
      node.clear();
      any_change = true;
@@ -279,7 +304,7 @@ void CAutoTuneController::OnTimer(void)
  {
   //Update views and send data to SECU. This call plocks execution thread for relatively long time
   if (m_OnMapChanged)
-   m_OnMapChanged(TYPE_MAP_INJ_VE);
+   m_OnMapChanged(_GetActiveVEMapId());
 
   //assign time to associated changed VE cells
   for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
@@ -412,18 +437,17 @@ void CAutoTuneController::Smoothing(void)
 
  float orig[VEMAP_LOAD_SIZE*VEMAP_RPM_SIZE] = {0};
  float modif[VEMAP_LOAD_SIZE*VEMAP_RPM_SIZE] = {0};
- std::copy(mp_ve, mp_ve + (VEMAP_LOAD_SIZE * VEMAP_RPM_SIZE), orig);
+ std::copy(_GetVEMap(), _GetVEMap() + (VEMAP_LOAD_SIZE * VEMAP_RPM_SIZE), orig);
 
  bool result = MathHelpers::SigmaFilter2D(orig, modif, VEMAP_LOAD_SIZE, VEMAP_RPM_SIZE, 3, true); //use median filter
 
  if (!result)
   return;
 
- //bool result1 = MathHelpers::Smooth2D(modif, mp_ve, VEMAP_LOAD_SIZE, VEMAP_RPM_SIZE, 3);
- std::copy(modif, modif + (VEMAP_LOAD_SIZE * VEMAP_RPM_SIZE), mp_ve);
+ std::copy(modif, modif + (VEMAP_LOAD_SIZE * VEMAP_RPM_SIZE), _GetVEMap());
 
  if (m_OnMapChanged) //Update views and send data to SECU. This call blocks execution thread for relatively long time
-  m_OnMapChanged(TYPE_MAP_INJ_VE);
+  m_OnMapChanged(_GetActiveVEMapId());
 
  //assign time to associated changed VE cells
  for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
@@ -477,11 +501,28 @@ float CAutoTuneController::_ShepardInterpolation(float rpm, float load, const Sc
  return (float)(f / ws);
 }
 
-float& CAutoTuneController::_GetVEItem(int i, int j)
+float& CAutoTuneController::_GetVEItem(int i, int j, int vemap /*=-1*/)
 {
  ASSERT(mp_ve);
  int ii = (VEMAP_LOAD_SIZE - 1) - i;
- return mp_ve[(ii*VEMAP_RPM_SIZE)+j];
+ if (vemap==-1)
+  vemap = m_active_ve;
+ if (0==vemap) //1st
+  return mp_ve[(ii*VEMAP_RPM_SIZE)+j];
+ else          //2nd
+  return mp_ve2[(ii*VEMAP_RPM_SIZE)+j];
+}
+
+float* CAutoTuneController::_GetVEMap(int vemap /*=-1*/)
+{
+ ASSERT(mp_ve);
+ ASSERT(mp_ve2);
+ if (vemap==-1)
+  vemap = m_active_ve;
+ if (0==vemap) //1st
+  return mp_ve;
+ else          //2nd
+  return mp_ve2;
 }
 
 float* CAutoTuneController::GetLamDelMap(int id)
@@ -496,6 +537,18 @@ float* CAutoTuneController::GetLamDelMap(int id)
  return NULL; //big bang!
 }
 
+int CAutoTuneController::_GetActiveVEMapId(void)
+{
+ return (0==m_active_ve) ? TYPE_MAP_INJ_VE : TYPE_MAP_INJ_VE2;
+}
+
+std::vector<float>& CAutoTuneController::_GetLoadGrid(int grid /* = -1*/)
+{
+ if (grid == -1)
+  grid = m_active_ve;
+ return (0==grid) ? m_loadGrid : m_loadGrid2;
+}
+
 void CAutoTuneController::Init(void)
 {
  mp_view->BindLamDelMap(&m_lamDelay[0][0], m_lamDelayRPMBins, m_lamDelayLoadBins);
@@ -506,8 +559,8 @@ void CAutoTuneController::Init(void)
  mp_view->setIsReady(fastdelegate::MakeDelegate(this, CAutoTuneController::isFIFOReady));
  mp_view->setOnViewActivate(fastdelegate::MakeDelegate(this, CAutoTuneController::OnViewActivate));
  mp_view->setOnSmooth(fastdelegate::MakeDelegate(this, CAutoTuneController::Smoothing));
-
  mp_view->setOnChangeLamDel(fastdelegate::MakeDelegate(this, CAutoTuneController::OnChangeLamDel));
+ mp_view->setOnSelectVEMap(fastdelegate::MakeDelegate(this, CAutoTuneController::OnSelectVEMap)); 
 }
 
 void CAutoTuneController::OnChangeLamDel(void)
@@ -558,15 +611,17 @@ void CAutoTuneController::BindRPMGrid(float* pGrid)
  mp_rpmGrid = pGrid;
 }
 
-void CAutoTuneController::BindLoadGrid(const float* pGrid)
+void CAutoTuneController::BindLoadGrid(const float* pGrid, const float* pGrid2)
 {
  mp_lodGrid = pGrid;
+ reverse_copy(pGrid2, pGrid2 + VEMAP_LOAD_SIZE, m_loadGrid2.begin()); //change order of items while copying
 }
 
-void CAutoTuneController::BindMaps(float* pVE, float* pAFR)
+void CAutoTuneController::BindMaps(float* pVE, float* pAFR, float* pVE2)
 {
  mp_ve = pVE;
  mp_afr = pAFR;
+ mp_ve2 = pVE2;
 }
 
 bool* CAutoTuneController::GetBlockedCells(void)
@@ -617,4 +672,14 @@ void CAutoTuneController::SetMaxTPS(float tps)
 void CAutoTuneController::SetCLTThrd(float clt)
 {
  m_cltThrd = clt;
+}
+
+void CAutoTuneController::SetVE2MapFunc(int func)
+{
+ m_ve2mf = func;
+}
+
+void CAutoTuneController::OnSelectVEMap(int vemap) //event from view
+{
+ m_active_ve = vemap;
 }

@@ -381,6 +381,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   case TYPE_MAP_INJ_VE:
    return mp_ButtonsPanel->GetVEMap(i_original);
 
+  case TYPE_MAP_INJ_VE2:
+   return mp_ButtonsPanel->GetVE2Map(i_original);
+
   case TYPE_MAP_INJ_AFR:
    return mp_ButtonsPanel->GetAFRMap(i_original);
 

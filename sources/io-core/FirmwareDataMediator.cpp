@@ -794,6 +794,34 @@ void CFirmwareDataMediator::SetVEMap(int i_index, const float* ip_values)
  }
 }
 
+void CFirmwareDataMediator::GetVE2Map(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].inj_ve2[0][0]);
+  op_values[i] = ((float)w12GetCell(p, i)) / VE_MAPS_M_FACTOR;
+ }
+}
+
+void CFirmwareDataMediator::SetVE2Map(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].inj_ve2[0][0]);
+  w12SetCell(p, i, MathHelpers::Round(ip_values[i]*VE_MAPS_M_FACTOR));
+ }
+}
+
 void CFirmwareDataMediator::GetAFRMap(int i_index, float* op_values, bool i_original /* = false*/)
 {
  ASSERT(op_values);
@@ -1387,6 +1415,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetTempIdlMap(i,op_fwd->maps[i].f_tmp_idl);
   //fuel injection
   GetVEMap(i,op_fwd->maps[i].inj_ve);
+  GetVE2Map(i,op_fwd->maps[i].inj_ve2);
   GetAFRMap(i,op_fwd->maps[i].inj_afr);
   GetCrnkMap(i,op_fwd->maps[i].inj_cranking);
   GetWrmpMap(i,op_fwd->maps[i].inj_warmup);
@@ -1469,6 +1498,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetTempIdlMap(i,ip_fwd->maps[i].f_tmp_idl);
   //fuel injection
   SetVEMap(i,ip_fwd->maps[i].inj_ve);
+  SetVE2Map(i,ip_fwd->maps[i].inj_ve2);
   SetAFRMap(i,ip_fwd->maps[i].inj_afr);
   SetCrnkMap(i,ip_fwd->maps[i].inj_cranking);
   SetWrmpMap(i,ip_fwd->maps[i].inj_warmup);

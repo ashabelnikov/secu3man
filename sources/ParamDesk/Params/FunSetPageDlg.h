@@ -50,6 +50,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool IsEnabled(void);
   //true - SECU-3T, false - SECU-3i
   void EnableSECU3TItems(bool i_enable);
+  void EnableFuelInjection(bool i_enable);
 
   void FillCBByFunNames(void);
   std::vector<_TSTRING>& AccessFunNames(void);
@@ -70,10 +71,12 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeDataLoadSrc();
   afx_msg void OnMapCalcButton();
   afx_msg void OnMap2CalcButton();
+  afx_msg void OnChangeVE2MF();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsLower(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsUpper(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsFuelInject(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -82,6 +85,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   std::vector<_TSTRING> m_fun_names;
   bool m_enabled;
   bool m_enable_secu3t_features;
+  bool m_fuel_injection;
 
   CComboBox m_gas_maps_combo;
   CComboBox m_benzin_maps_combo;
@@ -89,6 +93,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CComboBox m_gas_uni_combo;
   CComboBox m_benzin_uni_combo;
   CComboBox m_barocorr_type_combo;
+  CComboBox m_ve2mf_combo;
   CSpinButtonCtrlEx m_press_swing_spin;
   CEditEx m_press_swing_edit;
   CSpinButtonCtrlEx m_map_grad_spin;

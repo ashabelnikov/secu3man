@@ -280,10 +280,12 @@ typedef struct params_t
 
  _uchar  inj_aftstr_strokes1;           // Number of engine strokes, during this time afterstart enrichment is applied (second fuel)
 
+ _uchar  ve2_map_func;                  //(0) - VE = VE1; (1) - VE = VE1 * VE2; (2) - VE = VE1 + VE2
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[186];
+ _uchar reserved[185];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

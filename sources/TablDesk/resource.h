@@ -524,3 +524,11 @@
 #define IDC_GME_INJ_IACMAT              5878
 #define IDS_MAPS_CORR_UNIT              5879
 #define IDS_IACMAT_MAP                  5880
+#define IDS_TD_VIEW_VE2_MAP_TT          5881
+#define IDS_VE2_MAP                     5882
+#define IDC_TD_VIEW_VE2_MAP             5883
+#define IDC_GME_INJ_VE1_RADIOBOX        5884
+#define IDC_GME_INJ_VE2_RADIOBOX        5885
+#define IDS_GME_INJ_VE1_RADIOBOX_TT     5886
+#define IDS_GME_INJ_VE2_RADIOBOX_TT     5887
+#define IDC_GME_INJ_VE2                 5888

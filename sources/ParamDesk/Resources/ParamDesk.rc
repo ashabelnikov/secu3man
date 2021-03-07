@@ -202,6 +202,9 @@ BEGIN
     LTEXT           "кПа/В",IDC_PD_FUNSET_CURVE_GRADIENT2_UNIT,118,281,24,11
 
     CONTROL         "",IDC_PD_MAP_CALC2_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,278,15,18
+
+    LTEXT           "Функция 2-й табл. наполн.",IDC_PD_FUNSET_VE2MF_CAPTION,2,305,95,8
+    COMBOBOX        IDC_PD_FUNSET_VE2MF_COMBO,98,303,58,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -1779,6 +1782,7 @@ BEGIN
     IDS_PD_MISC_PWM1_FRQ_EDIT_TT  "Частота ШИМ на выходе PWM1 (Гц)"
     IDS_PD_MISC_PWM2_FRQ_EDIT_TT  "Частота ШИМ на выходе PWM2 (Гц)"
     IDC_PD_FUNSET_USE_LDAX_GRID_TT "Выбор метода задания сетки по оси нагрузки в 3D таблицах. Если галочка не установлена, то сетка вычисляется на основе 2 значений (по умолчанию). Если галочка установлена, то сетка задается таблицей (таблица редактируется на вкладке 'Данные прошивки')"
+    IDC_PD_FUNSET_VE2MF_COMBO_TT "Выбор функции 2-й таблицы наполнения. Если выбрано умножение (*), то VE=VE1*VE2. Если выбрано сложение (+), то VE=VE1+VE2."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1980,6 +1984,9 @@ BEGIN
     LTEXT           "kPa/V",IDC_PD_FUNSET_CURVE_GRADIENT2_UNIT,118,281,24,11
 
     CONTROL         "",IDC_PD_MAP_CALC2_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,278,15,18
+
+    LTEXT           "Function of 2nd VE map",IDC_PD_FUNSET_VE2MF_CAPTION,2,305,83,8
+    COMBOBOX        IDC_PD_FUNSET_VE2MF_COMBO,85,303,58,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -3602,6 +3609,7 @@ BEGIN
     IDS_PD_MISC_PWM1_FRQ_EDIT_TT  "Frequency of PWM on the PWM1 output (Hz)"
     IDS_PD_MISC_PWM2_FRQ_EDIT_TT  "Frequency of PWM on the PWM2 output (Hz)"
     IDC_PD_FUNSET_USE_LDAX_GRID_TT "Select a method how load axis grid is defined. If check mark is unchecked grid will be calculated using two values (default). If check mark is checked, grid table will be used (available for editing on the 'Firmware data' tab)"
+    IDC_PD_FUNSET_VE2MF_COMBO_TT "Selection of 2nd VE map's function. If selected multiplication (*), then VE=VE1*VE2. If selected addition (+), then VE=VE1+VE2."
 END
 
 /////////////////////////////////////////////////////////////////////////////

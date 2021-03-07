@@ -85,7 +85,9 @@ typedef struct
 
  _char iac_mat_corr[INJ_ATS_CORR_SIZE];                // IAC position's correction vs MAT
 
- _uchar reserved[471];                                 // reserved bytes - for compatibility
+ _uchar inj_ve2[INJ_VE_POINTS_L][(INJ_VE_POINTS_F*3)/2];// secondary VE (12 bit per cell, 16 rows, 24 bytes per row)
+
+ _uchar reserved[87];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 static int w12GetCell(BYTE* data, int cellOffset)

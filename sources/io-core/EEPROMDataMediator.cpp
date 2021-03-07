@@ -263,6 +263,33 @@ void EEPROMDataMediator::SetVEMap(int i_index, const float* ip_values)
  }
 }
 
+void EEPROMDataMediator::GetVE2Map(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_maps[i_index].inj_ve2[0][0]);
+  op_values[i] = ((float)w12GetCell(p, i)) / VE_MAPS_M_FACTOR;
+ }
+}
+
+void EEPROMDataMediator::SetVE2Map(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_maps[i_index].inj_ve2[0][0]);
+  w12SetCell(p, i, MathHelpers::Round(ip_values[i]*VE_MAPS_M_FACTOR));
+ }
+}
+
 void EEPROMDataMediator::GetAFRMap(int i_index, float* op_values, bool i_original /* = false*/)
 {
  ASSERT(op_values);

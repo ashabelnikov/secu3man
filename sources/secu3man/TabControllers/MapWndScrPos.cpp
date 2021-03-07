@@ -117,6 +117,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_VEMapWnd_W = rc.right - rc.left;
    sz.m_VEMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_INJ_VE2:
+   ws.m_VE2MapWnd_X = rc.left;
+   ws.m_VE2MapWnd_Y = rc.top;
+   sz.m_VE2MapWnd_W = rc.right - rc.left;
+   sz.m_VE2MapWnd_H = rc.bottom - rc.top;
+   break;
   case TYPE_MAP_INJ_AFR:
    ws.m_AFRMapWnd_X = rc.left;
    ws.m_AFRMapWnd_Y = rc.top;
@@ -446,6 +452,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_INJ_VE:
    X = ws.m_VEMapWnd_X, Y = ws.m_VEMapWnd_Y;
    W = sz.m_VEMapWnd_W, H = sz.m_VEMapWnd_H;
+   break;
+  case TYPE_MAP_INJ_VE2:
+   X = ws.m_VE2MapWnd_X, Y = ws.m_VE2MapWnd_Y;
+   W = sz.m_VE2MapWnd_W, H = sz.m_VE2MapWnd_H;
    break;
   case TYPE_MAP_INJ_AFR:
    X = ws.m_AFRMapWnd_X, Y = ws.m_AFRMapWnd_Y;
