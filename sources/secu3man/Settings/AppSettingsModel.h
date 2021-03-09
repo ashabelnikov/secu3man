@@ -102,6 +102,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetExistingPorts(void) const;
   virtual void SetToggleMapWnd(bool toggle);
   virtual int GetIniEditorSyntax(void) const;
+  virtual int GetBldrEEPROMBlocks(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -297,6 +298,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optExistingPorts;
   OptField_t<int> m_optToolTipTime;
   OptField_t<bool> m_optIniEdSyntax;
+  OptField_t<bool> m_optBldrEEPROMBlocks;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;

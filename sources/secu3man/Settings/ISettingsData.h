@@ -486,6 +486,7 @@ class ISettingsData
   virtual bool GetExistingPorts(void) const = 0;
   virtual int GetToolTipTime(void) const = 0;
   virtual int GetIniEditorSyntax(void) const = 0;
+  virtual int GetBldrEEPROMBlocks(void) const = 0;
 
   //Fixtures's customization settings
   virtual int GetTachometerMax(void) const = 0;

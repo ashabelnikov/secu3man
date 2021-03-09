@@ -67,6 +67,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optExistingPorts(_T("ExistingPorts"))
 , m_optToolTipTime(_T("ToolTipTime"))
 , m_optIniEdSyntax(_T("IniEditorSyntax"))
+, m_optBldrEEPROMBlocks(_T("BldrEEPROMBlocks"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -670,6 +671,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optExistingPorts, _T("1"), 0, 1);
  os.ReadInt(m_optToolTipTime, _T("5000"), 1000, 60000);
  os.ReadInt(m_optIniEdSyntax, _T("1"), 0, 1);
+ os.ReadInt(m_optBldrEEPROMBlocks, _T("1"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -1331,6 +1333,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("”правление подсветкой синтаксиса в редакторе файла настроек программы. 0 - не подсвечивать, 1 - подсвечивать."));
  os.WriteInt(m_optIniEdSyntax); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Use block data transfer mode for communication with boot loader when reading/writing EEPROM. 0 - don't use block data transfer, 1 - use block data transfer."));
+ else
+  os.WriteComment(_T("»спользовать блочный режим обмена данными с загрузчиком при чтении/записи EEPROM. 0 - не использовать блочный режим, 1 - использовать блочный режим."));
+ os.WriteInt(m_optBldrEEPROMBlocks); 
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section); 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -5191,4 +5199,9 @@ bool CAppSettingsModel::GetSpotMarkers(void) const
 float CAppSettingsModel::GetSpotMarkersSize(void) const
 {
  return m_optSpotMarkersSize.value;
+}
+
+int CAppSettingsModel::GetBldrEEPROMBlocks(void) const
+{
+ return m_optBldrEEPROMBlocks.value;
 }

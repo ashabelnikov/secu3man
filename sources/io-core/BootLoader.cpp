@@ -29,8 +29,9 @@
 #include "common/MathHelpers.h"
 #include "NumericConv.h"
 
-#define EEPROM_RD_BLOCKS 8   //количество блоков чтения EEPROM,число должно быть степенью двойки
-#define EEPROM_WR_BLOCKS 16  //количество блоков записи EEPROM,число должно быть степенью двойки
+#define EEPROM_RD_BLOCKS 32  //number of blocks for reading EEPROM (must be power of two)
+#define EEPROM_WR_BLOCKS 64  //number of blocks for writing EEPROM (must be power of two)
+#define EEPROM_BLOCK_SIZE 32 //Size of block in bytes (must be power of two)
 
 
 #define FLASH_PAGE_SIZE (m_ppf.m_page_size)
@@ -49,6 +50,7 @@ CBootLoader::CBootLoader()
 , m_uart_speed(CBR_9600)
 , m_current_pending_data_index(0)
 , mp_csection(NULL)
+, m_ee_blop(false)
 {
  mp_csection = new CSECTION;
  InitializeCriticalSection(GetSyncObject());
@@ -330,6 +332,98 @@ next_attempt:
 }
 
 //-----------------------------------------------------------------------
+//Helper function for reading of EEPROM (this version receives data using small blocks)
+bool CBootLoader::EEPROM_Read_B(BYTE* o_buf, int total_size, int* current)
+{
+ BYTE raw[1024];
+ int i, block_size = EEPROM_BLOCK_SIZE*2;
+ 
+ int blockNum = m_ppe.m_size / EEPROM_BLOCK_SIZE;
+ for(i = 0; i < blockNum; i++) //receive data with blocks
+ {
+  BYTE* blockPtr = o_buf + (i * EEPROM_BLOCK_SIZE);
+  int current_s = *current;
+  for(int attempt = 0; attempt < 3; ++attempt) //try several times
+  {
+   if (attempt > 0)
+    Sleep(1000); //deleay 1000ms after errors
+
+   int index = 0;
+   BYTE symbol = 0;
+   raw[index++] = '!';	//!Y
+   raw[index++] = 'Y';
+
+   CNumericConv::Bin8ToHex(i, &raw[index]); //append block's number NN
+   index+=2;
+   raw[index++] = 0;
+
+   m_p_port->SendASCII((char*)raw); //read command has been sent
+
+   if (!m_p_port->RecvByte(&symbol))
+   {
+    m_ErrorCode = BL_ERROR_NOANSWER;
+    continue; //error, try one more time
+   }
+   if (symbol!='<')
+   {
+    m_ErrorCode = BL_ERROR_WRONG_DATA;
+    continue; //error, try one more time
+   }
+
+   int current_s = *current;
+   (*current)+=1+2+1;
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);
+
+   if (!m_p_port->RecvBlock(raw, block_size))  //receive the data
+   {
+    m_ErrorCode = BL_ERROR_NOANSWER;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   if (!CNumericConv::HexArrayToBin(raw, blockPtr, EEPROM_BLOCK_SIZE))
+   {
+    m_ErrorCode = BL_ERROR_WRONG_DATA;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+   *current+=block_size;
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);
+
+   if (!m_p_port->RecvBlock(raw, 2))  //CS
+   {
+    m_ErrorCode = BL_ERROR_NOANSWER;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   if (!CNumericConv::Hex8ToBin(raw, &symbol))
+   {
+    m_ErrorCode = BL_ERROR_WRONG_DATA;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   if (CNumericConv::CheckSum_8_xor(blockPtr, EEPROM_BLOCK_SIZE) != symbol)
+   {
+    m_ErrorCode = BL_ERROR_CHKSUM;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   *current+=2;
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);
+   break; //successful
+  }
+  if (attempt >= 3)
+   return false; //errors and all attempts were used
+ }//for
+
+ m_ErrorCode = 0;
+ return true; //all is Ok
+}
+
+//-----------------------------------------------------------------------
 //Helper function for writing of EEPROM
 bool CBootLoader::EEPROM_Write(BYTE* i_buf, int total_size, int* current)
 {
@@ -406,6 +500,95 @@ bool CBootLoader::EEPROM_Write(BYTE* i_buf, int total_size, int* current)
   return true; //all is Ok
  }
  return false; //errors and all attempts were used
+}
+
+//-----------------------------------------------------------------------
+//Helper function for writing of EEPROM (this version sends data using small blocks)
+bool CBootLoader::EEPROM_Write_B(BYTE* i_buf, int total_size, int* current)
+{
+ BYTE raw[1024];
+ int i, block_size = EEPROM_BLOCK_SIZE*2;
+ 
+ int blockNum = m_ppe.m_size / EEPROM_BLOCK_SIZE;
+ for(i = 0; i < blockNum; i++) //send data with blocks
+ {
+  BYTE* blockPtr = i_buf + (i * EEPROM_BLOCK_SIZE);
+  int current_s = *current;
+  for(int attempt = 0; attempt < 3; ++attempt) //try several times
+  {
+   if (attempt > 0)
+    Sleep(1000); //deleay 1000ms after errors
+
+   int index = 0;
+   BYTE symbol = 0;
+   raw[index++] = '!';	//!Z
+   raw[index++] = 'Z';
+
+   CNumericConv::Bin8ToHex(i, &raw[index]); //append block's number NN
+   index+=2;
+   raw[index++] = 0;
+
+   m_p_port->SendASCII((char*)raw); //write command has been sent
+
+   //convert bytes to HEX-symbols (raw will contain HEX-symbols)
+   CNumericConv::BinToHexArray(blockPtr , raw, EEPROM_BLOCK_SIZE);
+   raw[block_size] = 0; //terminate string
+
+   m_p_port->SendASCII((char*)raw); //send data of block
+
+   Sleep((EEPROM_WR_DELAY_MULTIPLIER_B * EEPROM_BLOCK_SIZE));
+
+   *current+=(block_size + 1 + 2); //Z + NN + data
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);
+
+   //принимаем ответ
+   if (!m_p_port->RecvByte(&symbol))
+   {
+    m_ErrorCode = BL_ERROR_NOANSWER;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   if (symbol!='<')  //symbol is not 'signaling'
+   {
+    m_ErrorCode = BL_ERROR_WRONG_DATA;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));
+
+   if (!m_p_port->RecvBlock(raw, 2))  //CS
+   {
+    m_ErrorCode = BL_ERROR_NOANSWER;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   if (!CNumericConv::Hex8ToBin(raw, &symbol))
+   {
+    m_ErrorCode = BL_ERROR_WRONG_DATA;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   if (CNumericConv::CheckSum_8_xor(blockPtr, EEPROM_BLOCK_SIZE) != symbol)
+   {
+    m_ErrorCode = BL_ERROR_CHKSUM;
+    *current = current_s;
+    continue; //error, try one more time
+   }
+
+   *current+=2;
+   EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);
+   break; //successful
+  }
+  if (attempt >= 3)
+   return false; //errors and all attempts were used
+ }//for
+
+ m_ErrorCode = 0;
+ return true; //all is Ok
 }
 
 //-----------------------------------------------------------------------
@@ -613,32 +796,80 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
    //=========================================================================================
    case BL_OP_READ_EEPROM:    //read EEPROM
-    p_boot->m_ErrorCode = 0;  //перед выполнением новой команды необходимо сбросить ошибки
-    total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
-    current = 0;
+    if (p_boot->m_ee_blop) //Use blocks
+    {
+     p_boot->m_ErrorCode = 0;   //it is necessary to clear error code before starting a new command
+     total_size = (EEPROM_SIZE_S*2)+((1+2+1+2)*(EEPROM_SIZE_S / EEPROM_BLOCK_SIZE));   //(1 byte - 'Y' + 2 bytes NN + 1 byte - '<' + 2 bytes - CS) * N of blocks
+     current = 0;
 
-    p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
-    p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
+     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
+     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
 
-    p_boot->EEPROM_Read(p_boot->m_opdata.data, total_size, &current);
+     //first try "blocks" method, if it fail try "classic" method
+     if (false==p_boot->EEPROM_Read_B(p_boot->m_opdata.data, total_size, &current))
+     {
+      p_boot->m_ErrorCode = 0;
+      total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
+      current = 0;
+      p_boot->EEPROM_Read(p_boot->m_opdata.data, total_size, &current);
+     }
 
-    p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
-    p_boot->m_opdata.opcode = 0;
+     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
+     p_boot->m_opdata.opcode = 0; //сброс кода операции
+    }
+    else
+    {
+     p_boot->m_ErrorCode = 0;  //перед выполнением новой команды необходимо сбросить ошибки
+     total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
+     current = 0;
+
+     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
+     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
+
+     p_boot->EEPROM_Read(p_boot->m_opdata.data, total_size, &current);
+
+     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
+     p_boot->m_opdata.opcode = 0;
+    }
     break;
 
    //=========================================================================================
-   case BL_OP_WRITE_EEPROM:    //запись EEPROM
-    p_boot->m_ErrorCode = 0;   //перед выполнение новой команды необходимо сбросить ошибки
-    total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
-    current = 0;
+   case BL_OP_WRITE_EEPROM:    //Write to EEPROM
+    if (p_boot->m_ee_blop) //Use blocks
+    {
+     p_boot->m_ErrorCode = 0;   //перед выполнение новой команды необходимо сбросить ошибки
+     total_size = (EEPROM_SIZE_S*2)+((1+2+1+2)*(EEPROM_SIZE_S / EEPROM_BLOCK_SIZE));   //(1 byte - 'Z' + 1 byte - '<' + 2 bytes NN + 2 bytes - CS) * N of blocks
+     current = 0;
 
-    p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
-    p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
+     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
+     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
 
-    p_boot->EEPROM_Write(p_boot->m_opdata.data, total_size, &current);
+     //first try "blocks" method, if it fail try "classic" method
+     if (false==p_boot->EEPROM_Write_B(p_boot->m_opdata.data, total_size, &current))
+     {
+      p_boot->m_ErrorCode = 0;
+      total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
+      current = 0;
+      p_boot->EEPROM_Write(p_boot->m_opdata.data, total_size, &current);
+     }
 
-    p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
-    p_boot->m_opdata.opcode = 0; //сброс кода операции
+     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
+     p_boot->m_opdata.opcode = 0; //сброс кода операции
+    }
+    else
+    {
+     p_boot->m_ErrorCode = 0;   //перед выполнение новой команды необходимо сбросить ошибки
+     total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
+     current = 0;
+
+     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode, true);
+     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);
+
+     p_boot->EEPROM_Write(p_boot->m_opdata.data, total_size, &current);
+    
+     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode, p_boot->Status());
+     p_boot->m_opdata.opcode = 0; //сброс кода операции
+    }
     break;
 
    //=========================================================================================
@@ -946,6 +1177,12 @@ inline void CBootLoader::EnterCriticalSection(void) const
 inline void CBootLoader::LeaveCriticalSection(void) const
 {
  ::LeaveCriticalSection(GetSyncObject());
+}
+
+//-----------------------------------------------------------------------
+void CBootLoader::EnableBlockedEEPROMOps(bool blop)
+{
+ m_ee_blop = blop;
 }
 
 //-----------------------------------------------------------------------

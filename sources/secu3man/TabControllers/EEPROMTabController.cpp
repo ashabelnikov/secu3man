@@ -138,6 +138,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CEEPROMTabController::OnActivate(void)
 {
+ mp_comm->m_pBootLoader->EnableBlockedEEPROMOps(mp_settings->GetBldrEEPROMBlocks());
  m_active = true;
  mp_view->mp_TablesPanel->ShowOpenedCharts(true);
  //выбираем ранее выбранную вкладку на панели параметров

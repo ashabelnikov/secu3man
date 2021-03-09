@@ -81,6 +81,8 @@ class AFX_EXT_CLASS CBootLoader
 
   bool Terminate(void);
 
+  void EnableBlockedEEPROMOps(bool blop);
+
   //starts the specified operation
   //!!! i_addr используется только при чтении FLASH
   bool StartOperation(const int opcode,BYTE* io_data,int i_size,int i_addr = 0);
@@ -103,6 +105,7 @@ class AFX_EXT_CLASS CBootLoader
 
   enum {BL_SIGNATURE_STR_LEN = 24};
   enum {EEPROM_WR_DELAY_MULTIPLIER = 8};
+  enum {EEPROM_WR_DELAY_MULTIPLIER_B = 4}; //3.4ms for 1 byte
   enum {FLASH_PG_ERASE_DELAY = 30};
 
   enum //список поддерживаемых команд
@@ -136,6 +139,7 @@ class AFX_EXT_CLASS CBootLoader
   DWORD     m_ThreadId;
   bool      m_ThreadBusy;
   int       m_ErrorCode;
+  bool      m_ee_blop;
 
   volatile bool m_is_thread_must_exit;
   bool      m_work_state;
@@ -163,7 +167,9 @@ class AFX_EXT_CLASS CBootLoader
   bool FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int* current);
   bool FLASH_WriteOnePage(int n_page, BYTE* i_buf, int total_size, int* current);
   bool EEPROM_Read(BYTE* o_buf, int total_size, int* current);
+  bool EEPROM_Read_B(BYTE* o_buf, int total_size, int* current);
   bool EEPROM_Write(BYTE* i_buf, int total_size, int* current);
+  bool EEPROM_Write_B(BYTE* i_buf, int total_size, int* current);
   bool ReadSignature(BYTE* o_buf, int total_size, int* current);
   bool ExitBootLoader(int total_size, int* current);
 
