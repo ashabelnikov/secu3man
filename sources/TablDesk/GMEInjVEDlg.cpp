@@ -121,6 +121,9 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  if (!m_font.GetSafeHandle())
   CloneWndFont(this, &m_font, -1, false);
 
+ m_ve1_radio.SetCheck(BST_CHECKED);
+ m_ve2_radio.SetCheck(BST_UNCHECKED);
+
  m_ve_map.SetRange(.0f, 1.99f);
  m_ve_map.AttachMap(mp_VEMap);
  m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
@@ -130,8 +133,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve_map.EnableAbroadMove(false, false);
  m_ve_map.SetValueIncrement(0.01f);
  m_ve_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
-
- m_ve1_radio.SetCheck(BST_CHECKED);
+ m_ve_map.SetSelection(0,0);
 
  m_ve2_map.SetRange(.0f, 1.99f);
  m_ve2_map.AttachMap(mp_VEMap2);
@@ -142,8 +144,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve2_map.EnableAbroadMove(false, false);
  m_ve2_map.SetValueIncrement(0.01f);
  m_ve2_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
-
- m_ve2_radio.SetCheck(BST_UNCHECKED);
+ m_ve2_map.SetSelection(0,0);
 
  if (m_OnSelectVEMap)
   m_OnSelectVEMap(0); //notify controller about selection of 1st VE map
@@ -222,7 +223,10 @@ void CGMEInjVEDlg::OnUpdateControlsAutoTune2(CCmdUI* pCmdUI)
 
 void CGMEInjVEDlg::OnUpdateControlsAutoTune3(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(IsWindowEnabled() && (m_IsReady && !m_IsReady()) && !m_celwgt_button.GetCheck()==BST_CHECKED && !m_lamdel_button.GetCheck()==BST_CHECKED);
+ bool not_tuning_now = true;
+ if (m_IsReady)
+  not_tuning_now = !m_IsReady();
+ pCmdUI->Enable(not_tuning_now && IsWindowEnabled() && !m_celwgt_button.GetCheck()==BST_CHECKED && !m_lamdel_button.GetCheck()==BST_CHECKED);
 }
 
 LPCTSTR CGMEInjVEDlg::GetDialogID(void) const
