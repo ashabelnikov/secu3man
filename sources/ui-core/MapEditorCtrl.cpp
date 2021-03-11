@@ -745,7 +745,7 @@ void CMapEditorCtrl::OnKillFocus(CWnd* pNewWnd)
  Super::OnKillFocus(pNewWnd);
 }
 
-void CMapEditorCtrl::_ActivateEdit(void)
+void CMapEditorCtrl::_ActivateEdit(bool onselchange /*= true*/)
 { 
  if (m_readOnly) return;
  CDC* pDC = GetDC();
@@ -761,7 +761,7 @@ void CMapEditorCtrl::_ActivateEdit(void)
  mp_edit->SetSel(0, -1); //select all text
  mp_edit->SetFont(GetFont(), TRUE);
 
- if (m_OnSelChange)
+ if (m_OnSelChange && onselchange)
   m_OnSelChange();
 }
 
@@ -1041,7 +1041,7 @@ void CMapEditorCtrl::ShowLabels(bool horizShow, bool vertShow)
  m_vertShow = vertShow;
 }
 
-void CMapEditorCtrl::SetSelection(int i, int j)
+void CMapEditorCtrl::SetSelection(int i, int j, bool onselchange /*= true*/)
 {
  _DeactivateEdit();
  
@@ -1053,7 +1053,7 @@ void CMapEditorCtrl::SetSelection(int i, int j)
   j = m_cols-1;
  m_cur_j = j;
 
- _ActivateEdit();
+ _ActivateEdit(onselchange);
 }
 
 std::pair<int, int> CMapEditorCtrl::GetSelection(void)

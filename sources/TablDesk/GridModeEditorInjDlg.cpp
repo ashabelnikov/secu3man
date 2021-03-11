@@ -408,9 +408,20 @@ int CGridModeEditorInjDlg::GetITMode(void) const
  return m_pITPageDlg->GetITMode();
 }
 
+void CGridModeEditorInjDlg::SetActiveVEMap(int vemapid)
+{
+ m_pVEPageDlg->SetActiveVEMap(vemapid);
+}
+
+int CGridModeEditorInjDlg::GetActiveVEMap(void) const
+{
+ return m_pVEPageDlg->GetActiveVEMap();
+}
+
 void CGridModeEditorInjDlg::setOnChangeSettings(EventHandler OnCB)
 {
  m_pITPageDlg->setOnChangeSettings(OnCB);
+ m_pVEPageDlg->setOnChangeSettings(OnCB);
 }
 
 void CGridModeEditorInjDlg::SetSplitAngMode(bool mode)

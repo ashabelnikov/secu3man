@@ -49,6 +49,7 @@ class CGMEInjVEDlg : public CTabDialog
   void BindLoadGrid2(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
   void setOnChange2(EventHandler OnCB);
+  void setOnChangeSettings(EventHandler OnCB);
   void UpdateView(bool axisLabels = false);
 
   void SetArguments(int rpm, int air_flow, bool strt_use, float load, float tps);
@@ -71,6 +72,9 @@ class CGMEInjVEDlg : public CTabDialog
   bool GetRstAllCheck(void);
   std::pair<int, int> GetVESelection(void);
   void setOnSelectVEMap(EventWithCode OnCB);
+
+  void SetActiveVEMap(int vemapid);
+  int GetActiveVEMap(void) const;
 
  public:
 
@@ -141,6 +145,8 @@ class CGMEInjVEDlg : public CTabDialog
   EventResult  m_IsReady; //if this CB is not initialized all autotune related controls will be disabled
   EventHandler m_OnSmooth;
   EventWithCode m_OnSelectVEMap;
+  EventHandler m_on_change_sett;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  int m_active_ve;
 };

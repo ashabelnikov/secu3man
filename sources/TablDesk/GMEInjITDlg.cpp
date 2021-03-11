@@ -188,8 +188,8 @@ void CGMEInjITDlg::OnChangeITMode()
  m_it_map.SetRange(y1, y2);
  _TransformValues(); //apply possible changes to map
  m_it_map.UpdateDisplay();
-if (m_on_change_sett)
- m_on_change_sett();
+ if (m_on_change_sett)
+  m_on_change_sett();
 }
 
 float CGMEInjITDlg::OnValueTransform(float source, int direction)

@@ -77,6 +77,7 @@ CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 , mp_rpmGridLD(NULL)
 , mp_loadGridLD(NULL)
 , mp_CelBlkMap(NULL)
+, m_active_ve(0) //VE1 is active byt default
 {
  //empty
 }
@@ -121,8 +122,16 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  if (!m_font.GetSafeHandle())
   CloneWndFont(this, &m_font, -1, false);
 
- m_ve1_radio.SetCheck(BST_CHECKED);
- m_ve2_radio.SetCheck(BST_UNCHECKED);
+ if (0==m_active_ve)
+ { //VE1
+  m_ve1_radio.SetCheck(BST_CHECKED);
+  m_ve2_radio.SetCheck(BST_UNCHECKED);
+ }
+ else
+ { //VE2
+  m_ve1_radio.SetCheck(BST_UNCHECKED);
+  m_ve2_radio.SetCheck(BST_CHECKED);
+ }
 
  m_ve_map.SetRange(.0f, 1.99f);
  m_ve_map.AttachMap(mp_VEMap);
@@ -133,7 +142,10 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve_map.EnableAbroadMove(false, false);
  m_ve_map.SetValueIncrement(0.01f);
  m_ve_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
- m_ve_map.SetSelection(0,0);
+ m_ve_map.SetSelection(0, 0, false);
+
+ if (0==m_active_ve)
+  m_ve_map.ShowWindow(SW_SHOW); //show 1st map
 
  m_ve2_map.SetRange(.0f, 1.99f);
  m_ve2_map.AttachMap(mp_VEMap2);
@@ -144,12 +156,15 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve2_map.EnableAbroadMove(false, false);
  m_ve2_map.SetValueIncrement(0.01f);
  m_ve2_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
- m_ve2_map.SetSelection(0,0);
+ m_ve2_map.SetSelection(0, 0, false);
+
+ if (1==m_active_ve)
+  m_ve2_map.ShowWindow(SW_SHOW); //show 2nd map
 
  if (m_OnSelectVEMap)
-  m_OnSelectVEMap(0); //notify controller about selection of 1st VE map
+  m_OnSelectVEMap(m_active_ve); //notify controller about selection of certain VE map
 
- UpdateBlockColor(m_ve_map); //update 1st VE map
+ UpdateBlockColor(GetVECtrl()); //update current VE map
 
  if (mp_LamDelMap)
  {
@@ -168,7 +183,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  {
   m_celwgt_map.SetRange(.0f, 255.0f);
   m_celwgt_map.AttachMap(mp_CelWgtMap);
-  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+  m_celwgt_map.AttachLabels(mp_rpmGrid, (0==m_active_ve ? mp_loadGrid : mp_loadGrid2));
   m_celwgt_map.ShowLabels(true, true);
   m_celwgt_map.SetDecimalPlaces(2, 0, 0);
   m_celwgt_map.SetFont(&m_font);
@@ -521,6 +536,11 @@ void CGMEInjVEDlg::OnVE1Button()
 
  if (m_OnSelectVEMap)
   m_OnSelectVEMap(0); //notify controller about selection of 1st VE map
+
+ m_active_ve = 0;
+
+ if (m_on_change_sett)
+  m_on_change_sett();
 }
 
 void CGMEInjVEDlg::OnVE2Button()
@@ -538,6 +558,11 @@ void CGMEInjVEDlg::OnVE2Button()
 
  if (m_OnSelectVEMap)
   m_OnSelectVEMap(1); //notify controller about selection of 2nd VE map
+
+ m_active_ve = 1;
+
+ if (m_on_change_sett)
+  m_on_change_sett();
 }
 
 CMapEditorCtrl& CGMEInjVEDlg::GetVECtrl(void)
@@ -566,4 +591,34 @@ void CGMEInjVEDlg::UpdateBlockColor(CMapEditorCtrl& ve_map)
 void CGMEInjVEDlg::setOnSelectVEMap(EventWithCode OnCB)
 {
  m_OnSelectVEMap = OnCB;
+}
+
+void CGMEInjVEDlg::SetActiveVEMap(int vemapid)
+{
+ m_active_ve = vemapid;
+ if (!GetSafeHwnd())
+  return;
+
+ if (0==m_active_ve)
+ { //VE1
+  m_ve1_radio.SetCheck(BST_CHECKED);
+  m_ve2_radio.SetCheck(BST_UNCHECKED);
+  OnVE1Button();
+ }
+ else
+ { //VE2
+  m_ve1_radio.SetCheck(BST_UNCHECKED);
+  m_ve2_radio.SetCheck(BST_CHECKED);
+  OnVE2Button();
+ }
+}
+
+int CGMEInjVEDlg::GetActiveVEMap(void) const
+{
+ return m_active_ve;
+}
+
+void CGMEInjVEDlg::setOnChangeSettings(EventHandler OnCB)
+{
+ m_on_change_sett = OnCB;
 }

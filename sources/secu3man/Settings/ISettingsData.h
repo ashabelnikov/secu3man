@@ -597,6 +597,8 @@ class ISettingsData
   virtual int GetBoldFont(void) = 0;
   virtual int GetITEdMode(void) const = 0;
   virtual void SetITEdMode(int mode) = 0;
+  virtual int GetActiveVEMap(void) const = 0;
+  virtual void SetActiveVEMap(int id) = 0;
 
   //Inj.driver
   virtual bool GetInjDrvTabActive(void) const = 0;

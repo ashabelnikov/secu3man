@@ -135,6 +135,9 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void SetITEdMode(int mode);
   int GetITEdMode(void) const;
 
+  void SetActiveVEMap(int id);
+  int GetActiveVEMap(void) const;
+
   virtual void MakeChartsChildren(bool children);
 
   void EnableToggleMapWnd(bool toggle);
@@ -442,6 +445,7 @@ protected:
   bool m_toggleMapWnd;
   
   int m_it_mode;
+  int m_active_ve;
   bool m_splitAng;
   bool m_onlineMode;
   int m_ve2_map_func;

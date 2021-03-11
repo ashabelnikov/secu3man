@@ -286,6 +286,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->mp_ButtonsPanel->SetCLTThrd(mp_settings->GetCLTThrd());
  mp_view->mp_ButtonsPanel->SetMapEditorSettings(mp_settings->GetGradSaturation(), mp_settings->GetGradBrightness(), mp_settings->GetBoldFont(), mp_settings->GetSpotMarkers(), mp_settings->GetSpotMarkersSize());
  mp_view->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 }
 
 CPMTablesController::~CPMTablesController()
@@ -309,6 +310,7 @@ void CPMTablesController::OnActivate(void)
  m_td_changes_timer.SetTimer(this, &CPMTablesController::OnTableDeskChangesTimer, 250);
 
  mp_view->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
@@ -909,6 +911,8 @@ void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
 void CPMTablesController::OnChangeSettings(void)
 {
  mp_settings->SetITEdMode(mp_view->mp_ButtonsPanel->GetITEdMode());
+ mp_settings->SetActiveVEMap(mp_view->mp_ButtonsPanel->GetActiveVEMap());
+
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
  mptms.m_start_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_START);

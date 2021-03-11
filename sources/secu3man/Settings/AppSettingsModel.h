@@ -217,6 +217,8 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetBoldFont(void);
   virtual int GetITEdMode(void) const;
   virtual void SetITEdMode(int mode);
+  virtual int GetActiveVEMap(void) const;
+  virtual void SetActiveVEMap(int id);
 
   virtual bool GetInjDrvTabActive(void) const;
   virtual COLORREF GetVoltLineColor(void) const;
@@ -620,6 +622,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optITEdMode;
   OptField_t<int> m_optSpotMarkers;
   OptField_t<float> m_optSpotMarkersSize;
+  OptField_t<int> m_optActiveVEMap;
   
   //Splitters
   OptField_t<int> m_optParamMonVert;

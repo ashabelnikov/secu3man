@@ -67,6 +67,9 @@ class CGridModeEditorInjDlg : public CDialog
   void SetITMode(int mode);
   int GetITMode(void) const;
 
+  void SetActiveVEMap(int vemapid);
+  int GetActiveVEMap(void) const;
+
   void SetSplitAngMode(bool mode);
 
  public:

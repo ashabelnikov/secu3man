@@ -55,7 +55,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void ShowLabels(bool horizShow, bool vertShow);
   void SetDecimalPlaces(int value, int horiz, int vert);
   void SetArguments(float i_arg, float j_arg);
-  void SetSelection(int i, int j); // i - row, j - column
+  void SetSelection(int i, int j, bool onselchange = true); // i - row, j - column, onselchange - call OnSelChange event
   std::pair<int, int> GetSelection(void); // first - row, second - column
   void EnableAbroadMove(bool up, bool down);
   void UpdateDisplay(int i = -1, int j = -1); //call if data changed outside control and thus control should be updated
@@ -96,7 +96,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void _ShowImage(CDC* pDC, CRect* p_rect = NULL);
 
   void _UpdateMinMaxElems(void);
-  void _ActivateEdit(void);
+  void _ActivateEdit(bool onselchange = true);
   void _DeactivateEdit(void);
   bool _ValidateItem(CEditExCustomKeys* pItem, float* p_value = NULL);
   bool _RegisterWindowClass(HMODULE hMod = NULL);

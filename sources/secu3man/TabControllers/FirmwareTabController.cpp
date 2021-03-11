@@ -195,6 +195,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
  mp_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 }
 
 void CFirmwareTabController::OnActivate(void)
@@ -233,6 +234,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
@@ -2298,6 +2300,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
 {
  mp_settings->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
  mp_view->mp_ParamDeskDlg->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
+ mp_settings->SetActiveVEMap(mp_view->mp_TablesPanel->GetActiveVEMap());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);

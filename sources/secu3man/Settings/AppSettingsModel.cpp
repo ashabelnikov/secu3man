@@ -341,6 +341,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optITEdMode(_T("InjTimEdMode"))
 , m_optSpotMarkers(_T("SpotMarkers"))
 , m_optSpotMarkersSize(_T("SpotMarkersSize"))
+, m_optActiveVEMap(_T("ActiveVEMap"))
 //Splitters
 , m_Name_Splitters_Section(_T("Splitters"))
 , m_optParamMonVert(_T("ParamMonVert"))
@@ -1018,6 +1019,7 @@ bool CAppSettingsModel::ReadSettings(void)
  me.ReadInt(m_optITEdMode, _T("0"), 0, 3);
  me.ReadInt(m_optSpotMarkers, _T("1"), 0, 1);
  me.ReadFlt(m_optSpotMarkersSize,_T("1.0"), 0.1f, 3.0f);
+ me.ReadInt(m_optActiveVEMap, _T("0"), 0, 1);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
@@ -3013,6 +3015,12 @@ bool CAppSettingsModel::WriteSettings(void)
   me.WriteComment(_T("Размер пятна используемого для индикации рабочей точки в окнах табличного редактирования"));
  me.WriteFlt(m_optSpotMarkersSize, 2);
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Current VE map selected for editing in the grid mode map editor's window. 0 - VE1, 1 - VE2"));
+ else
+  me.WriteComment(_T("Таблица наполнения, которая выбрана для редактирования в окне табличного редактирования карт. 0 - VE1, 1 - VE2"));
+ me.WriteInt(m_optActiveVEMap);
+
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -4910,6 +4918,16 @@ int CAppSettingsModel::GetITEdMode(void) const
 void CAppSettingsModel::SetITEdMode(int mode)
 {
  m_optITEdMode.value = mode;
+}
+
+int CAppSettingsModel::GetActiveVEMap(void) const
+{
+ return m_optActiveVEMap.value;
+}
+
+void CAppSettingsModel::SetActiveVEMap(int id)
+{
+ m_optActiveVEMap.value = id;
 }
 
 void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)

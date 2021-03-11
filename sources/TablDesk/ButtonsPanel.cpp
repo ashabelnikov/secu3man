@@ -1695,6 +1695,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , m_openedChart(NULL)
 , m_toggleMapWnd(false)
 , m_it_mode(0)
+, m_active_ve(0)
 , m_splitAng(false)
 , m_ldaxUseTable(false)
 , m_ldaxMinVal(0)
@@ -3015,6 +3016,7 @@ void CButtonsPanel::OnGridModeEditingInj()
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));
   mp_gridModeEditorInjDlg->setOnOpenMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnOpenMapWnd));
   mp_gridModeEditorInjDlg->setOnChangeSettings(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnChangeSettingsGME));
+  mp_gridModeEditorInjDlg->SetActiveVEMap(m_active_ve); 
   VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
   mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable, false==m_onlineMode); //force update in offline mode
   mp_gridModeEditorInjDlg->SetITMode(m_it_mode);
@@ -4130,6 +4132,18 @@ int CButtonsPanel::GetITEdMode(void) const
  return m_it_mode;
 }
 
+void CButtonsPanel::SetActiveVEMap(int id)
+{
+ m_active_ve = id;
+ if (mp_gridModeEditorInjDlg.get())
+  mp_gridModeEditorInjDlg->SetActiveVEMap(id); 
+}
+
+int CButtonsPanel::GetActiveVEMap(void) const
+{
+ return m_active_ve;
+}
+
 void CButtonsPanel::setOnChangeSettings(EventHandler OnCB)
 {
  m_OnChangeSettings = OnCB;
@@ -4147,6 +4161,8 @@ void CButtonsPanel::OnChangeSettingsGME(void)
   DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, GetITMap(true), GetITMap(false));
   DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_INJ_IT].handle, 1, MLL::GetString((m_it_mode == 1 || m_it_mode == 3) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
  }
+
+ m_active_ve = mp_gridModeEditorInjDlg->GetActiveVEMap();
 
  if (m_OnChangeSettings)
   m_OnChangeSettings();
