@@ -898,7 +898,8 @@ void CParamDeskDlg::OnSize( UINT nType, int cx, int cy )
   if (wndRectTab.right <= wndRectTab.left)
    wndRectTab.right = wndRectTab.left + 1; //prevent zero width
   wndRectTab.bottom = wndRectDlg.bottom - m_tabLRMargin.cy;
-  m_tab_control.MoveWindow(wndRectTab);
+  m_tab_control.MoveWindow(wndRectTab);  
+  m_tab_control.UpdateWindow();
  }
 }
 

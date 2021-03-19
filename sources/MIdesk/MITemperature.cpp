@@ -97,7 +97,7 @@ void CMITemperatureGraph::Create(CWnd* pParent)
 {
  // create the window of control
  CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_TEMPERATUREGRAPH));
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TEMPERATUREGRAPH));
 
  // customize the control
  m_scope.SetRange(-40.0, 120, 0, 1);

@@ -91,7 +91,7 @@ void CMIChokePosBaseGraph::Create(CWnd* pParent, UINT id)
 {
  // create the window of control
  CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, id));
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, id));
 
  // customize the control
  m_scope.SetRange(0, 100, 0, 1);

@@ -88,7 +88,7 @@ void CMIKnockGraph::Create(CWnd* pParent)
 {
  // create the window of control
  CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_KNOCKGRAPH));
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_KNOCKGRAPH));
 
  // customize the control
  m_scope.SetRange(0, 5.0, 1, 2);

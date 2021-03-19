@@ -47,6 +47,7 @@ void CRSDeskDlg::Input::Scale(float Xf, float Yf)
   CRect rc = rect[i];
   GDIHelpers::ScaleRect(rc, Xf, Yf);
   ctrl[i].MoveWindow(rc);
+  ctrl[i].Invalidate();
  }
 }
 
@@ -361,7 +362,7 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
  m_add_i7_inp.Scale(Xf, Yf);
  m_add_i8_inp.Scale(Xf, Yf); 
 
- RedrawWindow();
+ UpdateWindow();
 }
 
 void CRSDeskDlg::updateScrollerSize(void)

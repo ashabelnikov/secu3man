@@ -81,7 +81,7 @@ void CMIDwellAngleGraph::Create(CWnd* pParent)
 {
  // create the window of control
  CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_DWELLANGLEGRAPH));
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_DWELLANGLEGRAPH));
 
  // customize the control
  m_scope.SetRange(-15, 65, 0, 1);

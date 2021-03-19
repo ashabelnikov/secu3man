@@ -70,7 +70,10 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
 {
  Super::OnSize(nType, cx, cy);
  if (::IsWindow(m_tab_control.m_hWnd))
+ {
   m_tab_control.MoveWindow(0,0, cx, cy); //resize tab control
+  m_tab_control.UpdateWindow();
+ }
 }
 
 //Creates dialog from template stored in memory

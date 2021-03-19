@@ -368,4 +368,6 @@ void CParamMonTabDlg::_MoveSplitter(int x, int start_x)
 
  rc = GDIHelpers::GetChildWndRect(mp_RSDeskDlg.get());
  mp_RSDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
+
+ UpdateWindow();
 }

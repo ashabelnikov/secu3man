@@ -84,7 +84,7 @@ void CMIVehicleSpeedGraph::Create(CWnd* pParent)
 {
  // create the window of control
  CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_VSSGRAPH));
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_VSSGRAPH));
 
  // customize the control
  m_scope.SetRange(0.0, 220, 0, 1);

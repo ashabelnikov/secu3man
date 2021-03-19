@@ -64,7 +64,7 @@ class MeasInstrBase
   virtual void Create(CWnd* pParent, UINT id)
   {
    CRect rect(0,0,10,10);
-   VERIFY(m_meter.CreateEx(0, _T("Static"), _T(""), WS_CHILD | WS_VISIBLE | SS_NOTIFY, rect, pParent, id));
+   VERIFY(m_meter.CreateEx(0, _T("Static"), _T(""), WS_CHILD | WS_VISIBLE | SS_NOTIFY | WS_CLIPSIBLINGS, rect, pParent, id));
   }
 
   virtual void Resize(const CRect& rect, bool redraw = true)

@@ -273,4 +273,6 @@ void CLogPlayerTabDlg::_MoveSplitter(int x, int start_x)
  mp_MIDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
 
  mp_CEDeskDlg->SetWindowPos(NULL, m_moveStrtRectMI.left + dx, ce_rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+ UpdateWindow();
 }
