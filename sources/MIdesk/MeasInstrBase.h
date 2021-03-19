@@ -70,9 +70,15 @@ class MeasInstrBase
   virtual void Resize(const CRect& rect, bool redraw = true)
   {
    if (m_meter.GetSafeHwnd())
+   {
     m_meter.MoveWindow(rect, redraw);
+    m_meter.Redraw();
+   }
    else if (m_scope.GetSafeHwnd())
+   {
     m_scope.MoveWindow(rect, redraw);
+    m_scope.InvalidateCtrl(false, false, true);
+   }
   }
 
   virtual void SetValues(void)

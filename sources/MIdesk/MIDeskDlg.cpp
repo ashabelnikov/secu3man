@@ -591,8 +591,9 @@ void CMIDeskDlg::_Resize(void)
 
   //Indicators
   m_leds.MoveWindow(_GetGaugesRect(false), redraw);
+  m_leds.Invalidate();
 
-  RedrawWindow();
+  RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ALLCHILDREN); //avoid flickering when redrawing a window
  }
 }
 
