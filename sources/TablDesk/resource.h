@@ -532,3 +532,23 @@
 #define IDS_GME_INJ_VE1_RADIOBOX_TT     5886
 #define IDS_GME_INJ_VE2_RADIOBOX_TT     5887
 #define IDC_GME_INJ_VE2                 5888
+#define IDC_GME_INJ_IDLC_TEXT           5889
+#define IDC_GME_INJ_IDLR_TEXT           5890
+#define IDC_GME_INJ_ITRPM_TEXT          5891
+#define IDC_GME_INJ_RIGID_TEXT          5892
+#define IDC_GME_INJ_IACC_TEXT           5893
+#define IDC_GME_INJ_IACCW_TEXT          5894
+#define IDC_GME_INJ_IACMAT_TEXT         5895
+#define IDC_GME_INJ_AFTSTR_TEXT         5896 
+#define IDC_GME_INJ_WRMP_TEXT           5897
+#define IDC_GME_INJ_AETPS_TEXT          5898
+#define IDC_GME_INJ_AERPM_TEXT          5899
+#define IDC_GME_INJ_CRNK_TEXT           5900      
+#define IDC_GME_INJ_DEAD_TEXT           5901
+#define IDC_GME_INJ_EGOCRV_TEXT         5902
+#define IDC_GME_INJ_IATCLT_TEXT         5903
+#define IDC_GME_INJ_TPSSWT_TEXT         5904
+#define IDC_GME_INJ_ATSC_TEXT           5905
+#define IDC_GME_INJ_GTSC_TEXT           5906
+#define IDC_GME_INJ_GPSC_TEXT           5907
+

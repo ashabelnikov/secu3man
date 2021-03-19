@@ -29,8 +29,12 @@
 #include "MapIds.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/CtrlScaler.h"
 
 const UINT CGMEInjEnrDlg::IDD = IDD_GME_INJ_ENR;
+
+static const UINT StaticCtrlBegin = IDC_GME_INJ_AFTSTR_TEXT;
+static const UINT StaticCtrlEnd = IDC_GME_INJ_AERPM_TEXT;
 
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjEnrDlg dialog
@@ -40,6 +44,8 @@ BEGIN_MESSAGE_MAP(CGMEInjEnrDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_WRMP, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_AETPS, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_AERPM, OnUpdateControls)
+ ON_WM_SIZE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 CGMEInjEnrDlg::CGMEInjEnrDlg(CWnd* pParent /*=NULL*/)
@@ -53,6 +59,8 @@ CGMEInjEnrDlg::CGMEInjEnrDlg(CWnd* pParent /*=NULL*/)
 , mp_AETPSMap(NULL)
 , mp_AERPMMap(NULL)
 , mp_cltGrid(NULL)
+, mp_cscl(new CtrlScaler)
+, m_initialized(false)
 {
  m_aftstr_map.SetDecimalPlaces(1, 0, 0);
  m_wrmp_map.SetDecimalPlaces(1, 0, 0);
@@ -73,6 +81,8 @@ void CGMEInjEnrDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_WRMP, m_wrmp_map);
  DDX_Control(pDX, IDC_GME_INJ_AETPS, m_aetps_map);
  DDX_Control(pDX, IDC_GME_INJ_AERPM, m_aerpm_map);
+ for(int i = StaticCtrlBegin; i <= StaticCtrlEnd; ++i)
+  DDX_Control(pDX, i, m_ctrls[i-StaticCtrlBegin]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -124,6 +134,16 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_aerpm_map.SetFont(&m_font);
  m_aerpm_map.EnableAbroadMove(true, false);
  m_aerpm_map.SetValueIncrement(1.0f);
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_aftstr_map);
+ mp_cscl->Add(&m_wrmp_map);
+ mp_cscl->Add(&m_aetps_map);
+ mp_cscl->Add(&m_aerpm_map);
+ mp_cscl->Add(m_ctrls, (StaticCtrlEnd - StaticCtrlBegin) + 1);
+
+ m_initialized = true;
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -261,4 +281,19 @@ void CGMEInjEnrDlg::OnAbroadMoveAERPM(CMapEditorCtrl::AbroadDir direction, int c
 {
  if (direction==CMapEditorCtrl::ABROAD_UP)
   m_aetps_map.SetSelection(0, column);
+}
+
+void CGMEInjEnrDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGMEInjEnrDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }

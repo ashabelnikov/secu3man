@@ -163,10 +163,10 @@ struct WndSize
  int m_DwellCntrlMapWnd_H;
  int m_CTSCurveMapWnd_W;
  int m_CTSCurveMapWnd_H;
- //int m_GridMapIgnWnd_W;
- //int m_GridMapIgnWnd_H;
- //int m_GridMapInjWnd_W;
- //int m_GridMapInjWnd_H;
+ int m_GridMapIgnWnd_W;
+ int m_GridMapIgnWnd_H;
+ int m_GridMapInjWnd_W;
+ int m_GridMapInjWnd_H;
  int m_VEMapWnd_W;
  int m_VEMapWnd_H;
  int m_VE2MapWnd_W;

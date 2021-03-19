@@ -254,6 +254,7 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_WM_ENABLE()
  ON_MESSAGE(WM_SETFONT, OnWMSetFont)
  ON_MESSAGE(WM_GETFONT, OnWMGetFont)
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 BOOL CMapEditorCtrl::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
@@ -1189,3 +1190,36 @@ bool CMapEditorCtrl::GetSpotMarkers(void)
  return m_spotMarkers;
 }
 
+void CMapEditorCtrl::OnSize(UINT nType, int cx, int cy)
+{
+ Super::OnSize(nType, cx, cy);
+
+ //make program to recreate bitmaps because new size may differ
+ if (mp_bmOldGrid && m_dcGrid.GetSafeHdc())
+ {
+  m_dcGrid.SelectObject(mp_bmOldGrid);
+  m_bmGrid.DeleteObject();
+ }
+
+ if (mp_bmOldMark && m_dcMark.GetSafeHdc())
+ {
+  m_dcMark.SelectObject(mp_bmOldMark);
+  m_bmMark.DeleteObject();
+ }
+
+ //update position of edit if it is active
+ if (mp_edit.get())
+ {
+  CDC* pDC = GetDC();
+  CRect rect = _GetItemRect(pDC, m_cur_i, m_cur_j);
+  ReleaseDC(pDC);
+
+  if (NULL!=m_clipRgn.GetSafeHandle())
+   m_clipRgn.DeleteObject();
+  m_clipRgn.CreateRectRgn(rect.left, rect.top, rect.right, rect.bottom);
+
+  mp_edit->MoveWindow(&rect);
+ }
+
+ Redraw();
+}

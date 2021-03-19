@@ -27,6 +27,7 @@
 #include "resource.h"
 #include "GridModeEditorInjDlg.h"
 #include "common/Dll.h"
+#include "common/DPIAware.h"
 #include "MapIds.h"
 #include "GMEInjVEDlg.h"
 #include "GMEInjAFRDlg.h"
@@ -48,8 +49,10 @@ const UINT CGridModeEditorInjDlg::IDD = IDD_GRID_MODE_EDITOR_INJ;
 // CGridModeEditorInjDlg dialog
 
 BEGIN_MESSAGE_MAP(CGridModeEditorInjDlg, Super)
+ ON_WM_GETMINMAXINFO()
  ON_WM_CLOSE()
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_TAB_CTRL, OnUpdateControls)
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
@@ -61,6 +64,7 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
 , m_baro_press(101.3f) //sea level atmospheric pressure by default
 , m_pwm1TabIdx(0)
 , mp_lodGrid(NULL)
+, m_initialized(false)
 {
  m_work_map_load_slots.reserve(32);
  m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16, true); //<--reverse order
@@ -135,10 +139,12 @@ BOOL CGridModeEditorInjDlg::OnInitDialog()
 
  m_tab_control.SetCurSel(0);
 
+ SetIcon((HICON)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH), IMAGE_ICON, 0, 0, LR_SHARED), TRUE);
+
+ m_initialized = true;
+
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_INJ_WND);
-
- SetIcon((HICON)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH), IMAGE_ICON, 0, 0, LR_SHARED), TRUE);
 
  Super::UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -434,5 +440,28 @@ void CGridModeEditorInjDlg::SetSplitAngMode(bool mode)
    m_tab_control.SetPageCaption(m_pwm1TabIdx, MLL::LoadString(IDS_GME_INJ_SPLIT_TAB)); //split angle
   else
    m_tab_control.SetPageCaption(m_pwm1TabIdx, MLL::LoadString(IDS_GME_INJ_PWM1_TAB));  //PWM duty
+ }
+}
+
+void CGridModeEditorInjDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  if (m_tab_control.GetSafeHwnd())
+  {
+   DPIAware dpi;
+   m_tab_control.SetWindowPos(NULL, 0,0, cx - dpi.ScaleX(10), cy - dpi.ScaleY(10), SWP_NOMOVE | SWP_NOZORDER);
+  }
+ }
+}
+
+void CGridModeEditorInjDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+ if (m_initialized)
+ {
+  DPIAware dpi;
+  lpMMI->ptMinTrackSize.x = dpi.ScaleX(600);
+  lpMMI->ptMinTrackSize.y = dpi.ScaleY(450);
  }
 }

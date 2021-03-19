@@ -29,8 +29,12 @@
 #include "MapIds.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/CtrlScaler.h"
 
 const UINT CGMEInjOtherDlg::IDD = IDD_GME_INJ_OTHER;
+
+static const UINT StaticCtrlBegin = IDC_GME_INJ_CRNK_TEXT;
+static const UINT StaticCtrlEnd = IDC_GME_INJ_GPSC_TEXT;
 
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjOtherDlg dialog
@@ -45,6 +49,8 @@ BEGIN_MESSAGE_MAP(CGMEInjOtherDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_ATSC, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_GTSC, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_GPSC, OnUpdateControls)
+ ON_WM_SIZE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 CGMEInjOtherDlg::CGMEInjOtherDlg(CWnd* pParent /*=NULL*/)
@@ -70,6 +76,8 @@ CGMEInjOtherDlg::CGMEInjOtherDlg(CWnd* pParent /*=NULL*/)
 , mp_deadGrid(NULL)
 , mp_rpmGrid(NULL)
 , mp_cltGrid(NULL)
+, mp_cscl(new CtrlScaler)
+, m_initialized(false)
 {
  m_egocrvGrid.reserve(32);
  m_iatcltGrid.reserve(32);
@@ -103,6 +111,8 @@ void CGMEInjOtherDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_ATSC, m_atsc_map);
  DDX_Control(pDX, IDC_GME_INJ_GTSC, m_gtsc_map);
  DDX_Control(pDX, IDC_GME_INJ_GPSC, m_gpsc_map);
+ for(int i = StaticCtrlBegin; i <= StaticCtrlEnd; ++i)
+  DDX_Control(pDX, i, m_ctrls[i-StaticCtrlBegin]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -206,6 +216,21 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_gpsc_map.SetFont(&m_font);
  m_gpsc_map.EnableAbroadMove(true, false);
  m_gpsc_map.SetValueIncrement(0.01f);
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_crnk_map);
+ mp_cscl->Add(&m_dead0_map);
+ mp_cscl->Add(&m_dead1_map);
+ mp_cscl->Add(&m_egocrv_map);
+ mp_cscl->Add(&m_iatclt_map);
+ mp_cscl->Add(&m_tpsswt_map);
+ mp_cscl->Add(&m_atsc_map);
+ mp_cscl->Add(&m_gtsc_map);
+ mp_cscl->Add(&m_gpsc_map);
+ mp_cscl->Add(m_ctrls, (StaticCtrlEnd - StaticCtrlBegin) + 1);
+
+ m_initialized = true;
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -492,4 +517,19 @@ void CGMEInjOtherDlg::OnAbroadMoveGpsc(CMapEditorCtrl::AbroadDir direction, int 
 {
  if (direction==CMapEditorCtrl::ABROAD_UP)
   m_gtsc_map.SetSelection(0, column);
+}
+
+void CGMEInjOtherDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGMEInjOtherDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }

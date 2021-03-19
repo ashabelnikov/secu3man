@@ -27,6 +27,7 @@
 #include "resource.h"
 #include "GMEInjAFRDlg.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/CtrlScaler.h"
 
 const UINT CGMEInjAFRDlg::IDD = IDD_GME_INJ_AFR;
 
@@ -35,6 +36,8 @@ const UINT CGMEInjAFRDlg::IDD = IDD_GME_INJ_AFR;
 
 BEGIN_MESSAGE_MAP(CGMEInjAFRDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_AFR, OnUpdateControls)
+ ON_WM_SIZE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 CGMEInjAFRDlg::CGMEInjAFRDlg(CWnd* pParent /*=NULL*/)
@@ -43,6 +46,8 @@ CGMEInjAFRDlg::CGMEInjAFRDlg(CWnd* pParent /*=NULL*/)
 , mp_AFRMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
+, mp_cscl(new CtrlScaler)
+, m_initialized(false)
 {
  //empty
 }
@@ -77,6 +82,12 @@ BOOL CGMEInjAFRDlg::OnInitDialog()
  m_afr_map.SetFont(&m_font);
  m_afr_map.EnableAbroadMove(false, false);
  m_afr_map.SetValueIncrement(0.1f);
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_afr_map);
+
+ m_initialized = true;
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -136,4 +147,19 @@ void CGMEInjAFRDlg::SetArguments(int rpm, int air_flow, bool strt_use, float loa
   m_afr_map.ShowMarkers(!strt_use, true);
   m_afr_map.SetArguments(load, (float)rpm);
  }
+}
+
+void CGMEInjAFRDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGMEInjAFRDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }

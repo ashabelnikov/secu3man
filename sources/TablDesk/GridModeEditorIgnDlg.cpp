@@ -27,6 +27,8 @@
 #include "resource.h"
 #include "common/Dll.h"
 #include "common/MathHelpers.h"
+#include "common/DPIAware.h"
+#include "common/GDIHelpers.h"
 #include "GridModeEditorIgnDlg.h"
 #include "io-core/SECU3IO.h"
 #include "MapIds.h"
@@ -34,6 +36,7 @@
 #include "ui-core/Label.h"
 #include "ui-core/MsgBox.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/CtrlScaler.h"
 
 const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 
@@ -41,6 +44,8 @@ const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 // CGridModeEditorIgnDlg dialog
 
 BEGIN_MESSAGE_MAP(CGridModeEditorIgnDlg, Super)
+ ON_WM_GETMINMAXINFO()
+ ON_WM_SIZE()
  ON_WM_CLOSE()
  ON_BN_CLICKED(IDC_GME_IGN_CLTSEL, OnSelectCLTMap)
  ON_UPDATE_COMMAND_UI(IDC_GME_IGN_STR, OnUpdateControls)
@@ -96,6 +101,8 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , m_ldaxNeedsUpdate(false)
 , m_ldaxUseTable(false)
 , mp_acronLink(new CLabel)
+, m_initialized(false)
+, mp_cscl(new CtrlScaler)
 {
  _ResetUseFlags();
  m_work_map_load_slots.reserve(32);
@@ -131,6 +138,26 @@ void CGridModeEditorIgnDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_AC_VALUE, m_ac_value);
 
  DDX_Control(pDX, IDC_GME_ACRONYMS_LINK, *mp_acronLink);
+
+ DDX_Control(pDX, IDC_GME_IDL_TITLE, m_ctrls[0]);
+ DDX_Control(pDX, IDC_GME_STR_TITLE, m_ctrls[1]);
+ DDX_Control(pDX, IDC_GME_TMP_TITLE, m_ctrls[2]);
+ DDX_Control(pDX, IDC_GME_AA_CAPTION, m_ctrls[3]);
+ DDX_Control(pDX, IDC_GME_WM_CAPTION, m_ctrls[4]);
+ DDX_Control(pDX, IDC_GME_OC_CAPTION, m_ctrls[5]); 
+ DDX_Control(pDX, IDC_GME_TC_CAPTION, m_ctrls[6]);
+ DDX_Control(pDX, IDC_GME_KC_CAPTION, m_ctrls[7]);
+ DDX_Control(pDX, IDC_GME_IM_CAPTION, m_ctrls[8]);
+ DDX_Control(pDX, IDC_GME_IC_CAPTION, m_ctrls[9]);
+ DDX_Control(pDX, IDC_GME_AC_CAPTION, m_ctrls[10]);
+ DDX_Control(pDX, IDC_GME_AAE_TEXT, m_ctrls[11]);
+ DDX_Control(pDX, IDC_GME_WMP_TEXT, m_ctrls[12]);
+ DDX_Control(pDX, IDC_GME_OCP_TEXT, m_ctrls[13]);
+ DDX_Control(pDX, IDC_GME_TCP_TEXT, m_ctrls[14]);
+ DDX_Control(pDX, IDC_GME_KCP_TEXT, m_ctrls[15]);
+ DDX_Control(pDX, IDC_GME_IMP_TEXT, m_ctrls[16]);
+ DDX_Control(pDX, IDC_GME_ICP_TEXT, m_ctrls[17]);
+ DDX_Control(pDX, IDC_GME_AA_UNIT, m_ctrls[18]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -209,9 +236,6 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_work_map.EnableAbroadMove(false, true);
  m_work_map.SetValueIncrement(0.5f);
 
- if (m_OnOpenMapWnd)
-  m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
-
  SetIcon((HICON)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH), IMAGE_ICON, 0, 0, LR_SHARED), TRUE);
 
  //init HTTP links:
@@ -227,6 +251,31 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_cltmap_sel, MLL::GetString(IDS_GME_IGN_CLTSEL_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ m_initialized = true;
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_work_map);
+ mp_cscl->Add(&m_idle_map);
+ mp_cscl->Add(&m_temp_map);
+ mp_cscl->Add(&m_tempi_map);
+ mp_cscl->Add(&m_start_map);
+ mp_cscl->Add(&m_cltmap_sel);
+ mp_cscl->Add(&m_aa_value);
+ mp_cscl->Add(&m_wm_value);
+ mp_cscl->Add(&m_oc_value);
+ mp_cscl->Add(&m_tc_value);
+ mp_cscl->Add(&m_kc_value);
+ mp_cscl->Add(&m_im_value);
+ mp_cscl->Add(&m_ic_value);
+ mp_cscl->Add(&m_ac_value);
+ mp_cscl->Add(mp_acronLink.get());
+ for(int i = 0; i < 19; ++i)
+  mp_cscl->Add(&m_ctrls[i]);
+
+ if (m_OnOpenMapWnd)
+  m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -486,4 +535,23 @@ void CGridModeEditorIgnDlg::OnSelectCLTMap()
  bool idl = m_cltmap_sel.GetCheck()==BST_CHECKED;
  m_temp_map.ShowWindow(idl ? SW_HIDE : SW_SHOW);
  m_tempi_map.ShowWindow(idl ? SW_SHOW : SW_HIDE);
+}
+
+void CGridModeEditorIgnDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGridModeEditorIgnDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+ if (m_initialized)
+ {
+  DPIAware dpi;
+  lpMMI->ptMinTrackSize.x = dpi.ScaleX(600);
+  lpMMI->ptMinTrackSize.y = dpi.ScaleY(450);
+ }
 }

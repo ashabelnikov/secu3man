@@ -63,6 +63,7 @@ set(HEADERS
   ListCtrlEx.h
   FileDialogEx.h
   MsgBox.h
+  CtrlScaler.h
   )
 
 set(SOURCES
@@ -102,6 +103,7 @@ set(SOURCES
   ListCtrlEx.cpp
   FileDialogEx.cpp
   MsgBox.cpp
+  CtrlScaler.cpp
   uicore.cpp
   uicore.rc
   )

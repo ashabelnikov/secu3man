@@ -218,8 +218,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAttenMapWndSize(_T("AttenMapWnd"))
 , m_optDwellCntrlMapWndSize(_T("DwellCntrlMapWnd"))
 , m_optCTSCurveMapWndSize(_T("CTSCurveMapWnd"))
-//, m_optGridMapIgnWndSize(_T("GridMapIgnWnd"))
-//, m_optGridMapInjWndSize(_T("GridMapInjWnd"))
+, m_optGridMapIgnWndSize(_T("GridMapIgnWnd"))
+, m_optGridMapInjWndSize(_T("GridMapInjWnd"))
 , m_optVEMapWndSize(_T("VEMapWnd"))
 , m_optVE2MapWndSize(_T("VE2MapWnd"))
 , m_optAFRMapWndSize(_T("AFRMapWnd"))
@@ -271,8 +271,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optWorkMapWndSize1(_T("WorkMapWnd"))
 , m_optTempMapWndSize1(_T("TempMapWnd"))
 , m_optTempIdlMapWndSize1(_T("TempIdlMapWnd"))
-//, m_optGridMapIgnWnd1(_T("GridMapIgnWnd"))
-//, m_optGridMapInjWnd1(_T("GridMapInjWnd"))
+, m_optGridMapIgnWndSize1(_T("GridMapIgnWnd"))
+, m_optGridMapInjWndSize1(_T("GridMapInjWnd"))
 , m_optVEMapWndSize1(_T("VEMapWnd"))
 , m_optVE2MapWndSize1(_T("VE2MapWnd"))
 , m_optAFRMapWndSize1(_T("AFRMapWnd"))
@@ -830,8 +830,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optAttenMapWndSize, 0, 10000); 
  sz.ReadWndPos(m_optDwellCntrlMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optCTSCurveMapWndSize, 0, 10000);
-//sz.ReadWndPos(m_optGridMapIgnWndSize, 0, 10000);
-//sz.ReadWndPos(m_optGridMapInjWndSize, 0, 10000);
+ sz.ReadWndPos(m_optGridMapIgnWndSize, 0, 10000);
+ sz.ReadWndPos(m_optGridMapInjWndSize, 0, 10000);
  sz.ReadWndPos(m_optVEMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optVE2MapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAFRMapWndSize, 0, 10000);
@@ -884,8 +884,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optWorkMapWndSize1);
  sz1.ReadWndPos(m_optTempMapWndSize1);
  sz1.ReadWndPos(m_optTempIdlMapWndSize1);
-//sz1.ReadWndPos(m_optGridMapIgnWndSize1);
-//sz1.ReadWndPos(m_optGridMapInjWndSize1);
+ sz1.ReadWndPos(m_optGridMapIgnWndSize1);
+ sz1.ReadWndPos(m_optGridMapInjWndSize1);
  sz1.ReadWndPos(m_optVEMapWndSize1);
  sz1.ReadWndPos(m_optVE2MapWndSize1);
  sz1.ReadWndPos(m_optAFRMapWndSize1);
@@ -2107,15 +2107,15 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   sz.WriteWndPos(m_optTempIdlMapWndSize, _T("Коррекция УОЗ по ДТОЖ (для ХХ)"));
 
-// if (m_optInterfaceLang.value == IL_ENGLISH)
-//  sz.WriteWndPos(m_optGridMapIgnWndSize, _T("Grid editing window for ign.timing maps"));
-// else
-//  sz.WriteWndPos(m_optGridMapIgnWndSize, _T("Редактирование в виде таблиц (зажигание)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optGridMapIgnWndSize, _T("Grid editing window for ign.timing maps"));
+ else
+  sz.WriteWndPos(m_optGridMapIgnWndSize, _T("Редактирование в виде таблиц (зажигание)"));
 
-// if (m_optInterfaceLang.value == IL_ENGLISH)
-//  sz.WriteWndPos(m_optGridMapInjWndSize, _T("Grid editing window for injection maps"));
-// else
-//  sz.WriteWndPos(m_optGridMapInjWndSize, _T("Редактирование в виде таблиц (впрыск)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optGridMapInjWndSize, _T("Grid editing window for injection maps"));
+ else
+  sz.WriteWndPos(m_optGridMapInjWndSize, _T("Редактирование в виде таблиц (впрыск)"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz.WriteWndPos(m_optAttenMapWndSize, _T("Attenuator's curve of amplification"));
@@ -2385,15 +2385,15 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   sz1.WriteWndPos(m_optTempIdlMapWndSize1, _T("Коррекция УОЗ по ДТОЖ (для ХХ)"));
 
-// if (m_optInterfaceLang.value == IL_ENGLISH)
-//  sz1.WriteWndPos(m_optGridMapIgnWndSize1, _T("Grid editing window for ign.timing maps"));
-// else
-//  sz1.WriteWndPos(m_optGridMapIgnWndSize1, _T("Редактирование в виде таблиц (зажигание)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optGridMapIgnWndSize1, _T("Grid editing window for ign.timing maps"));
+ else
+  sz1.WriteWndPos(m_optGridMapIgnWndSize1, _T("Редактирование в виде таблиц (зажигание)"));
 
-// if (m_optInterfaceLang.value == IL_ENGLISH)
-//  sz1.WriteWndPos(m_optGridMapInjWndSize1, _T("Grid editing window for injection maps"));
-// else
-//  sz1.WriteWndPos(m_optGridMapInjWndSize1, _T("Редактирование в виде таблиц (впрыск)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optGridMapInjWndSize1, _T("Grid editing window for injection maps"));
+ else
+  sz1.WriteWndPos(m_optGridMapInjWndSize1, _T("Редактирование в виде таблиц (впрыск)"));
  
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz1.WriteWndPos(m_optVEMapWndSize1, _T("VE map"));
@@ -3926,10 +3926,10 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optDwellCntrlMapWndSize.value.y = i_wndSize.m_DwellCntrlMapWnd_H;
  m_optCTSCurveMapWndSize.value.x = i_wndSize.m_CTSCurveMapWnd_W;
  m_optCTSCurveMapWndSize.value.y = i_wndSize.m_CTSCurveMapWnd_H;
-// m_optGridMapIgnWndSize.value.x = i_wndSize.m_GridMapIgnWnd_W;
- //m_optGridMapIgnWndSize.value.y = i_wndSize.m_GridMapIgnWnd_H;
- //m_optGridMapInjWndSize.value.x = i_wndSize.m_GridMapInjWnd_W;
- //m_optGridMapInjWndSize.value.y = i_wndSize.m_GridMapInjWnd_H;
+ m_optGridMapIgnWndSize.value.x = i_wndSize.m_GridMapIgnWnd_W;
+ m_optGridMapIgnWndSize.value.y = i_wndSize.m_GridMapIgnWnd_H;
+ m_optGridMapInjWndSize.value.x = i_wndSize.m_GridMapInjWnd_W;
+ m_optGridMapInjWndSize.value.y = i_wndSize.m_GridMapInjWnd_H;
  m_optVEMapWndSize.value.x = i_wndSize.m_VEMapWnd_W;
  m_optVEMapWndSize.value.y = i_wndSize.m_VEMapWnd_H;
  m_optVE2MapWndSize.value.x = i_wndSize.m_VE2MapWnd_W;
@@ -4040,10 +4040,10 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_DwellCntrlMapWnd_H = m_optDwellCntrlMapWndSize.value.y;
  o_wndSize.m_CTSCurveMapWnd_W = m_optCTSCurveMapWndSize.value.x;
  o_wndSize.m_CTSCurveMapWnd_H = m_optCTSCurveMapWndSize.value.y;
- //o_wndSize.m_GridMapIgnWnd_W = m_optGridMapIgnWndSize.value.x;
- //o_wndSize.m_GridMapIgnWnd_H = m_optGridMapIgnWndSize.value.y;
- //o_wndSize.m_GridMapInjWnd_W = m_optGridMapInjWndSize.value.x;
- //o_wndSize.m_GridMapInjWnd_H = m_optGridMapInjWndSize.value.y;
+ o_wndSize.m_GridMapIgnWnd_W = m_optGridMapIgnWndSize.value.x;
+ o_wndSize.m_GridMapIgnWnd_H = m_optGridMapIgnWndSize.value.y;
+ o_wndSize.m_GridMapInjWnd_W = m_optGridMapInjWndSize.value.x;
+ o_wndSize.m_GridMapInjWnd_H = m_optGridMapInjWndSize.value.y;
  o_wndSize.m_VEMapWnd_W = m_optVEMapWndSize.value.x;
  o_wndSize.m_VEMapWnd_H = m_optVEMapWndSize.value.y;
  o_wndSize.m_VE2MapWnd_W = m_optVE2MapWndSize.value.x;
@@ -4146,10 +4146,10 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optTempMapWndSize1.value.y = i_wndSize.m_TempMapWnd_H;
  m_optTempIdlMapWndSize1.value.x = i_wndSize.m_TempIdlMapWnd_W;
  m_optTempIdlMapWndSize1.value.y = i_wndSize.m_TempIdlMapWnd_H;
-// m_optGridMapIgnWndSize1.value.x = i_wndSize.m_GridMapIgnWnd_W;
-// m_optGridMapIgnWndSize1.value.y = i_wndSize.m_GridMapIgnWnd_H;
-// m_optGridMapInjWndSize1.value.x = i_wndSize.m_GridMapInjWnd_W;
-// m_optGridMapInjWndSize1.value.y = i_wndSize.m_GridMapInjWnd_H;
+ m_optGridMapIgnWndSize1.value.x = i_wndSize.m_GridMapIgnWnd_W;
+ m_optGridMapIgnWndSize1.value.y = i_wndSize.m_GridMapIgnWnd_H;
+ m_optGridMapInjWndSize1.value.x = i_wndSize.m_GridMapInjWnd_W;
+ m_optGridMapInjWndSize1.value.y = i_wndSize.m_GridMapInjWnd_H;
  m_optVEMapWndSize1.value.x = i_wndSize.m_VEMapWnd_W;
  m_optVEMapWndSize1.value.y = i_wndSize.m_VEMapWnd_H;
  m_optVE2MapWndSize1.value.x = i_wndSize.m_VE2MapWnd_W;
@@ -4214,10 +4214,10 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_TempMapWnd_H = m_optTempMapWndSize1.value.y;
  o_wndSize.m_TempIdlMapWnd_W = m_optTempIdlMapWndSize1.value.x;
  o_wndSize.m_TempIdlMapWnd_H = m_optTempIdlMapWndSize1.value.y;
-// o_wndSize.m_GridMapIgnWnd_W = m_optGridMapIgnWndSize1.value.x;
-// o_wndSize.m_GridMapIgnWnd_H = m_optGridMapIgnWndSize1.value.y;
-// o_wndSize.m_GridMapInjWnd_W = m_optGridMapInjWndSize1.value.x;
-// o_wndSize.m_GridMapInjWnd_H = m_optGridMapInjWndSize1.value.y;
+ o_wndSize.m_GridMapIgnWnd_W = m_optGridMapIgnWndSize1.value.x;
+ o_wndSize.m_GridMapIgnWnd_H = m_optGridMapIgnWndSize1.value.y;
+ o_wndSize.m_GridMapInjWnd_W = m_optGridMapInjWndSize1.value.x;
+ o_wndSize.m_GridMapInjWnd_H = m_optGridMapInjWndSize1.value.y;
  o_wndSize.m_VEMapWnd_W = m_optVEMapWndSize1.value.x;
  o_wndSize.m_VEMapWnd_H = m_optVEMapWndSize1.value.y;
  o_wndSize.m_VE2MapWnd_W = m_optVE2MapWndSize1.value.x;

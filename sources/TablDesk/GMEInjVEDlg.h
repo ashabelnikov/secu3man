@@ -30,6 +30,7 @@
 #include "ui-core/MapEditorCtrl.h"
 
 class CToolTipCtrlEx;
+class CtrlScaler;
 
 class CGMEInjVEDlg : public CTabDialog
 {
@@ -82,6 +83,8 @@ class CGMEInjVEDlg : public CTabDialog
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune1(CCmdUI* pCmdUI);
@@ -116,6 +119,7 @@ class CGMEInjVEDlg : public CTabDialog
   CButton m_finish_check;
   CButton m_ve1_radio;
   CButton m_ve2_radio;
+  CStatic m_atgroup;
 
   CStatic m_status_text;
   _TSTRING m_status_cache;
@@ -148,5 +152,7 @@ class CGMEInjVEDlg : public CTabDialog
   EventHandler m_on_change_sett;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CtrlScaler> mp_cscl;
   int m_active_ve;
+  bool m_initialized;
 };

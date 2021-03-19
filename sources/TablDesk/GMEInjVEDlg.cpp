@@ -29,6 +29,7 @@
 #include "common/fastdelegate.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/CtrlScaler.h"
 
 const UINT CGMEInjVEDlg::IDD = IDD_GME_INJ_VE;
 
@@ -59,6 +60,8 @@ BEGIN_MESSAGE_MAP(CGMEInjVEDlg, Super)
  ON_BN_CLICKED(IDC_GME_INJ_VE2_RADIOBOX, OnVE2Button)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_VE1_RADIOBOX, OnUpdateControlsAutoTune3)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_VE2_RADIOBOX, OnUpdateControlsAutoTune3)
+ ON_WM_SIZE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
@@ -78,6 +81,8 @@ CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 , mp_loadGridLD(NULL)
 , mp_CelBlkMap(NULL)
 , m_active_ve(0) //VE1 is active byt default
+, mp_cscl(new CtrlScaler)
+, m_initialized(false)
 {
  //empty
 }
@@ -110,6 +115,8 @@ void CGMEInjVEDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_GME_INJ_VE1_RADIOBOX, m_ve1_radio);
  DDX_Control(pDX, IDC_GME_INJ_VE2_RADIOBOX, m_ve2_radio);
+
+ DDX_Control(pDX, IDC_GME_AUTOTUNE_GROUPBOX, m_atgroup);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -210,6 +217,28 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_ve2_radio, MLL::GetString(IDS_GME_INJ_VE2_RADIOBOX_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_ve_map);
+ mp_cscl->Add(&m_ve2_map);
+ mp_cscl->Add(&m_lamdel_map);
+ mp_cscl->Add(&m_celwgt_map);
+ mp_cscl->Add(&m_lamdel_button);
+ mp_cscl->Add(&m_celwgt_button);
+ mp_cscl->Add(&m_strstp_button);
+ mp_cscl->Add(&m_rststt_button);
+ mp_cscl->Add(&m_celblk_button);
+ mp_cscl->Add(&m_smooth_button);
+ mp_cscl->Add(&m_blkall_check);
+ mp_cscl->Add(&m_finish_check);
+ mp_cscl->Add(&m_rstall_check);
+ mp_cscl->Add(&m_status_text);
+ mp_cscl->Add(&m_ve1_radio);
+ mp_cscl->Add(&m_ve2_radio);
+ mp_cscl->Add(&m_atgroup);
+
+ m_initialized = true;
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -621,4 +650,19 @@ int CGMEInjVEDlg::GetActiveVEMap(void) const
 void CGMEInjVEDlg::setOnChangeSettings(EventHandler OnCB)
 {
  m_on_change_sett = OnCB;
+}
+
+void CGMEInjVEDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGMEInjVEDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }

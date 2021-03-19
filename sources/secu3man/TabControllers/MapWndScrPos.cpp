@@ -330,14 +330,14 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_GME_IGN_WND: //pseudo map
    ws.m_GridMapIgnWnd_X = rc.left;
    ws.m_GridMapIgnWnd_Y = rc.top;
-// sz.m_GridMapIgnWnd_W = rc.right - rc.left;
-// sz.m_GridMapIgnWnd_H = rc.bottom - rc.top;
+   sz.m_GridMapIgnWnd_W = rc.right - rc.left;
+   sz.m_GridMapIgnWnd_H = rc.bottom - rc.top;
    break;
   case TYPE_MAP_GME_INJ_WND: //pseudo map
    ws.m_GridMapInjWnd_X = rc.left;
    ws.m_GridMapInjWnd_Y = rc.top;
-// sz.m_GridMapInjWnd_W = rc.right - rc.left;
-// sz.m_GridMapInjWnd_H = rc.bottom - rc.top;
+   sz.m_GridMapInjWnd_W = rc.right - rc.left;
+   sz.m_GridMapInjWnd_H = rc.bottom - rc.top;
    break;
   case TYPE_MAP_KNOCK_ZONE:
    ws.m_KnockZoneMapWnd_X = rc.left;
@@ -603,11 +603,11 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_GME_IGN_WND:
    X = ws.m_GridMapIgnWnd_X, Y = ws.m_GridMapIgnWnd_Y;
-// W = sz.m_GridMapIgnWnd_W, H = sz.m_GridMapIgnWnd_H;
+   W = sz.m_GridMapIgnWnd_W, H = sz.m_GridMapIgnWnd_H;
    break;
   case TYPE_MAP_GME_INJ_WND:
    X = ws.m_GridMapInjWnd_X, Y = ws.m_GridMapInjWnd_Y;
-//   W = sz.m_GridMapInjWnd_W, H = sz.m_GridMapInjWnd_H;
+   W = sz.m_GridMapInjWnd_W, H = sz.m_GridMapInjWnd_H;
    break;
   case TYPE_MAP_PWMIAC_UCOEF:
    X = ws.m_PwmIacUCoefMapWnd_X, Y = ws.m_PwmIacUCoefMapWnd_Y;

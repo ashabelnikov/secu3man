@@ -29,10 +29,14 @@
 #include "MapIds.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/CtrlScaler.h"
 
 const UINT CGMEInjIRegDlg::IDD = IDD_GME_INJ_IREG;
 
 const float RigidGrid[8] = {1,2,3,4,5,6,7,8};
+
+static const UINT StaticCtrlBegin = IDC_GME_INJ_IDLC_TEXT;
+static const UINT StaticCtrlEnd = IDC_GME_INJ_IACMAT_TEXT;
 
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjVEDlg dialog
@@ -45,6 +49,8 @@ BEGIN_MESSAGE_MAP(CGMEInjIRegDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IACC, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IACCW, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IACMAT, OnUpdateControls)
+ ON_WM_SIZE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
@@ -65,6 +71,8 @@ CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
 , mp_IACMATMap(NULL)
 , mp_cltGrid(NULL)
 , mp_temperGrid(NULL)
+, mp_cscl(new CtrlScaler)
+, m_initialized(false)
 {
  m_tpsGrid.reserve(32);
  m_iacGrid.reserve(32);
@@ -93,6 +101,8 @@ void CGMEInjIRegDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_IACC, m_iacc_map);
  DDX_Control(pDX, IDC_GME_INJ_IACCW, m_iaccw_map);
  DDX_Control(pDX, IDC_GME_INJ_IACMAT, m_iacmat_map);
+ for(int i = StaticCtrlBegin; i <= StaticCtrlEnd; ++i)
+  DDX_Control(pDX, i, m_ctrls[i-StaticCtrlBegin]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -176,6 +186,19 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_iacmat_map.SetFont(&m_font);
  m_iacmat_map.EnableAbroadMove(true, false);
  m_iacmat_map.SetValueIncrement(0.25f);
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_idlc_map);
+ mp_cscl->Add(&m_idlr_map);
+ mp_cscl->Add(&m_itrpm_map);
+ mp_cscl->Add(&m_rigid_map);
+ mp_cscl->Add(&m_iacc_map);
+ mp_cscl->Add(&m_iaccw_map);
+ mp_cscl->Add(&m_iacmat_map);
+ mp_cscl->Add(m_ctrls, (StaticCtrlEnd - StaticCtrlBegin) + 1);
+
+ m_initialized = true;
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -401,4 +424,19 @@ void CGMEInjIRegDlg::OnAbroadMoveIACMAT(CMapEditorCtrl::AbroadDir direction, int
 {
  if (direction==CMapEditorCtrl::ABROAD_UP)
   m_iaccw_map.SetSelection(0, column);
+}
+
+void CGMEInjIRegDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGMEInjIRegDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }

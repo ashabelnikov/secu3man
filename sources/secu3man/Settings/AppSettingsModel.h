@@ -450,8 +450,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAttenMapWndSize;
   OptField_t<POINT> m_optDwellCntrlMapWndSize;
   OptField_t<POINT> m_optCTSCurveMapWndSize;
-//OptField_t<POINT> m_optGridMapIgnWndSize;
-//OptField_t<POINT> m_optGridMapInjWndSize;
+  OptField_t<POINT> m_optGridMapIgnWndSize;
+  OptField_t<POINT> m_optGridMapInjWndSize;
   OptField_t<POINT> m_optVEMapWndSize;
   OptField_t<POINT> m_optVE2MapWndSize;
   OptField_t<POINT> m_optAFRMapWndSize;
@@ -503,8 +503,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optWorkMapWndSize1;
   OptField_t<POINT> m_optTempMapWndSize1;
   OptField_t<POINT> m_optTempIdlMapWndSize1;
-//OptField_t<POINT> m_optGridMapIgnWndSize1;
-//OptField_t<POINT> m_optGridMapInjWndSize1;
+  OptField_t<POINT> m_optGridMapIgnWndSize1;
+  OptField_t<POINT> m_optGridMapInjWndSize1;
   OptField_t<POINT> m_optVEMapWndSize1;
   OptField_t<POINT> m_optVE2MapWndSize1;
   OptField_t<POINT> m_optAFRMapWndSize1;

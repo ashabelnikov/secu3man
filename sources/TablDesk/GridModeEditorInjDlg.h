@@ -85,6 +85,8 @@ class CGridModeEditorInjDlg : public CDialog
   virtual BOOL OnInitDialog();
   afx_msg void OnClose();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -125,4 +127,5 @@ class CGridModeEditorInjDlg : public CDialog
   friend class CAutoTuneController;
 
   int m_pwm1TabIdx;
+  bool m_initialized;
 };

@@ -29,6 +29,7 @@
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/CtrlScaler.h"
 
 const UINT CGMEInjITDlg::IDD = IDD_GME_INJ_IT;
 
@@ -39,6 +40,8 @@ BEGIN_MESSAGE_MAP(CGMEInjITDlg, Super)
  ON_CBN_SELCHANGE(IDC_GME_IT_MODE_COMBO, OnChangeITMode)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_IT_MODE_COMBO, OnUpdateControls)
+ ON_WM_SIZE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 CGMEInjITDlg::CGMEInjITDlg(CWnd* pParent /*=NULL*/)
@@ -48,6 +51,8 @@ CGMEInjITDlg::CGMEInjITDlg(CWnd* pParent /*=NULL*/)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
 , m_it_mode_val(0)
+, mp_cscl(new CtrlScaler)
+, m_initialized(false)
 {
  m_it_map.setOnValueTransform(fastdelegate::MakeDelegate(this, &CGMEInjITDlg::OnValueTransform));
 }
@@ -98,6 +103,13 @@ BOOL CGMEInjITDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_it_mode, MLL::GetString(IDS_GME_IT_MODE_COMBO_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_it_map);
+ mp_cscl->Add(&m_it_mode);
+
+ m_initialized = true;
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -207,4 +219,19 @@ void CGMEInjITDlg::_TransformValues(void)
 {
  for (int i = 0; i < 16*16; ++i)
   mp_ITMap[i] = OnValueTransform(OnValueTransform(mp_ITMap[i], 0), 1);
+}
+
+void CGMEInjITDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGMEInjITDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }

@@ -29,6 +29,8 @@
 #include "ui-core/TabDialog.h"
 #include "ui-core/MapEditorCtrl.h"
 
+class CtrlScaler;
+
 class CToolTipCtrlEx;
 
 class CGMEInjITDlg : public CTabDialog
@@ -60,8 +62,10 @@ class CGMEInjITDlg : public CTabDialog
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeITMode();
+  afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
@@ -83,4 +87,6 @@ class CGMEInjITDlg : public CTabDialog
   const float* mp_loadGrid;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CtrlScaler> mp_cscl;
+  bool m_initialized;
 };

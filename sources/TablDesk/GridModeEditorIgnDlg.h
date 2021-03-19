@@ -37,6 +37,7 @@
 
 class CLabel;
 class CToolTipCtrlEx;
+class CtrlScaler;
 
 class CStaticDisp : public CStatic
 {
@@ -96,6 +97,8 @@ class CGridModeEditorIgnDlg : public CDialog
   afx_msg void OnUpdateAAControls(CCmdUI* pCmdUI);
   afx_msg void OnSelectCLTMap();
   afx_msg void OnClose();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
   DECLARE_MESSAGE_MAP()
 
   EventResult   m_IsAllowed;
@@ -157,4 +160,8 @@ class CGridModeEditorIgnDlg : public CDialog
   std::vector<float> m_work_map_load_slots;
 
   std::auto_ptr<CLabel> mp_acronLink;
+  bool m_initialized;
+
+  std::auto_ptr<CtrlScaler> mp_cscl;
+  CStatic m_ctrls[19];
 };

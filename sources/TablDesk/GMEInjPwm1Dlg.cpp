@@ -27,6 +27,7 @@
 #include "resource.h"
 #include "GMEInjPwm1Dlg.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/CtrlScaler.h"
 
 static const float splitAngMin = -20.0f;
 static const float splitAngMax =  20.0f;
@@ -38,6 +39,8 @@ const UINT CGMEInjPwm1Dlg::IDD = IDD_GME_INJ_PWM1;
 
 BEGIN_MESSAGE_MAP(CGMEInjPwm1Dlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_PWM1, OnUpdateControls)
+ ON_WM_SIZE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 CGMEInjPwm1Dlg::CGMEInjPwm1Dlg(CWnd* pParent /*=NULL*/)
@@ -47,6 +50,8 @@ CGMEInjPwm1Dlg::CGMEInjPwm1Dlg(CWnd* pParent /*=NULL*/)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
 , m_splitAng(false)
+, mp_cscl(new CtrlScaler)
+, m_initialized(false)
 {
  //empty
 }
@@ -85,6 +90,12 @@ BOOL CGMEInjPwm1Dlg::OnInitDialog()
  m_pwm1_map.SetFont(&m_font);
  m_pwm1_map.EnableAbroadMove(false, false);
  m_pwm1_map.SetValueIncrement(0.1f);
+
+ //initialize scaler
+ mp_cscl->Init(this);
+ mp_cscl->Add(&m_pwm1_map);
+
+ m_initialized = true;
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -156,4 +167,19 @@ void CGMEInjPwm1Dlg::SetSplitAngMode(bool mode)
   else
    m_pwm1_map.SetRange(0.0f, 100.0f);  //PWM duty
  }
+}
+
+void CGMEInjPwm1Dlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_initialized)
+ {
+  mp_cscl->Scale();
+ }
+}
+
+void CGMEInjPwm1Dlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }
