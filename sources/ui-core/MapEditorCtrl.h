@@ -85,6 +85,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   afx_msg LRESULT OnWMSetFont(WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnWMGetFont(WPARAM wParam, LPARAM lParam);
   afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg BOOL OnEraseBkgnd(CDC* pDC);
   DECLARE_MESSAGE_MAP()
 
  private:

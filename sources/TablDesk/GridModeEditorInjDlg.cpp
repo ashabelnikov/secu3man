@@ -452,6 +452,7 @@ void CGridModeEditorInjDlg::OnSize( UINT nType, int cx, int cy )
   {
    DPIAware dpi;
    m_tab_control.SetWindowPos(NULL, 0,0, cx - dpi.ScaleX(10), cy - dpi.ScaleY(10), SWP_NOMOVE | SWP_NOZORDER);
+   m_tab_control.UpdateWindow();
   }
  }
 }

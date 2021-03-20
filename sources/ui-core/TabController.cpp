@@ -43,9 +43,9 @@ class CTabController::TabPageData
   bool is_enabled;  //определяет текущее состояние Item-a
 };
 
-IMPLEMENT_DYNAMIC(CTabController, CTabCtrl)
+IMPLEMENT_DYNAMIC(CTabController, Super)
 
-BEGIN_MESSAGE_MAP(CTabController, CTabCtrl)
+BEGIN_MESSAGE_MAP(CTabController, Super)
  ON_NOTIFY_REFLECT(TCN_SELCHANGE, OnSelchangeTabctl)
  ON_NOTIFY_REFLECT(TCN_SELCHANGING, OnSelchangingTabctl)
  ON_WM_SIZE()
@@ -81,7 +81,7 @@ CTabController::TabPageData* CTabController::GetItemData(int item) const
 
 void CTabController::CalculatePageRect(int nItem, CRect& o_rect)
 {
- DWORD style = CTabCtrl::GetStyle();
+ DWORD style = Super::GetStyle();
 
  RECT c_rc, i_rc;
 
@@ -122,7 +122,7 @@ void CTabController::CalculatePageRect(int nItem, CRect& o_rect)
 
 int CTabController::GetTCOrientation(void)
 {
- DWORD style = CTabCtrl::GetStyle();
+ DWORD style = Super::GetStyle();
  if ((style & TCS_BOTTOM) && !(style & TCS_VERTICAL)) //bottom
   return TCO_BOTTOM;
  if (!(style & TCS_BOTTOM) && (style & TCS_VERTICAL)) //left
@@ -287,7 +287,7 @@ void CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
 void CTabController::OnSize( UINT nType, int cx, int cy )
 {
  //позволяем родительскому классу тоже изменить размер
- CTabCtrl::OnSize(nType, cx, cy);
+ Super::OnSize(nType, cx, cy);
 
  CRect rect(0,0,0,0);
 
@@ -307,7 +307,7 @@ void CTabController::OnSize( UINT nType, int cx, int cy )
 
 void CTabController::OnDestroy()
 {
- int item_count = CTabCtrl::GetItemCount();
+ int item_count = Super::GetItemCount();
 
  //удаляем объекты ассоциированные с вкладками Tab-контролом
  for(int i = 0; i < item_count; ++i)
@@ -320,7 +320,7 @@ void CTabController::OnDestroy()
   delete pItemData;
  }
 
- CTabCtrl::OnDestroy();
+ Super::OnDestroy();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -465,7 +465,7 @@ BOOL CTabController::PreTranslateMessage(MSG* pMsg)
    return TRUE;
   }
  }
- return CTabCtrl::PreTranslateMessage(pMsg);
+ return Super::PreTranslateMessage(pMsg);
 }
 
 // Return the index of the next enabled tab after a given index, or -1 if none (0 = first tab).
@@ -520,7 +520,7 @@ bool CTabController::SetCurSel(UINT iNewTab)
   DestroyTabPage(); //удаление предыдущей вкладки
  }
 
- CTabCtrl::SetCurSel(iNewTab); //выбор новой вкладки
+ Super::SetCurSel(iNewTab); //выбор новой вкладки
  CreateTabPage(); //отображение новой - выбранной вкладки
 
  //=====================================================================

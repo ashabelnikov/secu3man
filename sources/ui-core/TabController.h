@@ -37,6 +37,7 @@ class ITabControllerEvent;
 class AFX_EXT_CLASS CTabController : public CTabCtrl
 {
   DECLARE_DYNAMIC(CTabController)
+  typedef CTabCtrl Super;
 
  public:
   CTabController();

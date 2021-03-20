@@ -246,6 +246,7 @@ CMapEditorCtrl::~CMapEditorCtrl()
 }
 
 BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
+ ON_WM_ERASEBKGND()
  ON_WM_PAINT()
  ON_WM_DESTROY()
  ON_WM_LBUTTONDOWN()
@@ -1222,4 +1223,9 @@ void CMapEditorCtrl::OnSize(UINT nType, int cx, int cy)
  }
 
  Redraw();
+}
+
+BOOL CMapEditorCtrl::OnEraseBkgnd(CDC* pDC) 
+{
+ return TRUE; //prevent flickering
 }
