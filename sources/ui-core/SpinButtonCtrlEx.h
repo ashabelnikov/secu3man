@@ -25,10 +25,11 @@
 
 #pragma once
 
-// Внимание! control должет быть со стилем UDS_AUTOBUDDY и без стиля UDS_SETBUDDYINT !
+// Note! control must be with UDS_AUTOBUDDY style and without UDS_SETBUDDYINT style!
 
 class AFX_EXT_CLASS CSpinButtonCtrlEx : public CSpinButtonCtrl
 {
+  typedef CSpinButtonCtrl Super;
  public:
   CSpinButtonCtrlEx();
   virtual ~CSpinButtonCtrlEx();
@@ -48,6 +49,7 @@ class AFX_EXT_CLASS CSpinButtonCtrlEx : public CSpinButtonCtrl
   virtual void PreSubclassWindow();
   afx_msg BOOL OnDeltapos (NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg BOOL OnEraseBkgnd(CDC* pDC);
   DECLARE_MESSAGE_MAP()
 
  private:

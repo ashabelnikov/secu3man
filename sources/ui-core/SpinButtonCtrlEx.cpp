@@ -47,13 +47,14 @@ CSpinButtonCtrlEx::~CSpinButtonCtrlEx()
 }
 
 //-------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CSpinButtonCtrlEx, CSpinButtonCtrl)
+BEGIN_MESSAGE_MAP(CSpinButtonCtrlEx, Super)
  ON_NOTIFY_REFLECT_EX(UDN_DELTAPOS, OnDeltapos)
  ON_WM_CREATE()
+ ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 //-------------------------------------------------------------
-void CSpinButtonCtrlEx::SetBuddyValue (double val)
+void CSpinButtonCtrlEx::SetBuddyValue(double val)
 {
  CEditEx*	p_edit = static_cast<CEditEx*>(GetBuddy());
  ASSERT(p_edit);
@@ -105,7 +106,7 @@ void CSpinButtonCtrlEx::SetRangeAndDelta(double lower, double upper, double delt
   m_IntRange = UD_MAXVAL;
  else
   m_IntRange = (int) range;
- CSpinButtonCtrl::SetRange32 (0, m_IntRange);
+ Super::SetRange32 (0, m_IntRange);
 
  // Set integer position
  SetIntegerPos (GetPos());
@@ -130,7 +131,7 @@ void CSpinButtonCtrlEx::SetIntegerPos (double pos)
   double pos_in_range = (pos - m_MinVal) / (m_MaxVal - m_MinVal);
   int_pos = (int)(m_IntRange * pos_in_range + 0.5);
  }
- CSpinButtonCtrl::SetPos (int_pos);
+ Super::SetPos (int_pos);
 }
 
 //-------------------------------------------------------------
@@ -187,14 +188,14 @@ BOOL CSpinButtonCtrlEx::OnDeltapos(NMHDR* pNMHDR, LRESULT* pResult)
 //-------------------------------------------------------------
 void CSpinButtonCtrlEx::PreSubclassWindow()
 {
- CSpinButtonCtrl::PreSubclassWindow();
+ Super::PreSubclassWindow();
  InitSpinButtonCtrl();
 }
 
 //-------------------------------------------------------------
 int CSpinButtonCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
- if (CSpinButtonCtrl::OnCreate(lpCreateStruct) == -1)
+ if (Super::OnCreate(lpCreateStruct) == -1)
   return -1;
  InitSpinButtonCtrl();
  return 0;
@@ -205,6 +206,12 @@ void CSpinButtonCtrlEx::InitSpinButtonCtrl()
 {
  ASSERT ((GetStyle () & UDS_SETBUDDYINT) != UDS_SETBUDDYINT); // Otherwise control won't work properly!
  SetRangeAndDelta (m_MinVal, m_MaxVal, m_Delta); // set default values
+}
+
+//-------------------------------------------------------------
+BOOL CSpinButtonCtrlEx::OnEraseBkgnd(CDC* pDC) 
+{
+ return TRUE; //prevent flickering
 }
 
 //-------------------------------------------------------------
