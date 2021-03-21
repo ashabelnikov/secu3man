@@ -498,7 +498,7 @@ void CDevDiagnostTabDlg::OnSize( UINT nType, int cx, int cy )
   rc2 = GDIHelpers::GetChildWndRect(&m_inputs_group);
   mp_OScopeCtrl2->SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleY(8), rc1.Height(), SWP_NOMOVE | SWP_NOZORDER);
 
-  RedrawWindow(NULL, NULL, RDW_INVALIDATE); 
+  RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN); 
  }
 
  Super::OnSize(nType, cx, cy);
