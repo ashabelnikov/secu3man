@@ -79,5 +79,5 @@ void CtrlScaler::Scale(bool invalidate /*= true*/)
  }
 
  if (invalidate)
-  mp_parent->RedrawWindow(NULL, NULL, RDW_INVALIDATE); 
+  mp_parent->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_ERASE); 
 }
