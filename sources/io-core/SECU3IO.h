@@ -112,6 +112,10 @@ namespace SECU3IO
   int rxlaf;                            //RxL air flow
 
   bool aftstr_enr;                      //flag, indicates that after start enrichment is active
+
+  float ftls;                           //level of fuel in the fuel tank
+  float egts;                           //exhaust gas temperature
+  float ops;                            //oil pressure
  };
 
  struct DbgvarDat

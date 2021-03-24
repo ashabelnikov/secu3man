@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0118 //01.18
+#define CURRENT_VERSION 0x0119 //01.19
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -82,6 +82,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.16 - Added ignition timing vs CLT correction (idling) map (03.12.2020), changed file size (18.12.2020)
 // 01.17 - Added IAC position's vs MAT map (14.02.2021)
 // 01.18 - Added secondary VE map (28.02.2021)
+// 01.19 - Added 3 maps for sensors: Fuel Tank Level, Exhaust Gas Temperature, Oil Pressure
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -261,7 +262,12 @@ struct S3FSepMaps
  //since v01.16
  s3f_int32_t grv_delay[F_TMP_POINTS];
 
- s3f_int32_t reserved[4096];       //reserved bytes, = 0
+ //since v01.19
+ s3f_int32_t ftls_curve[FTLS_LOOKUP_TABLE_SIZE+2];      //Fuel tank level sensor look up table, since v01.19
+ s3f_int32_t egts_curve[EGTS_LOOKUP_TABLE_SIZE+2];      //Exhaust gas temperature sensor look up table, since v01.19
+ s3f_int32_t ops_curve[OPS_LOOKUP_TABLE_SIZE+2];        //Oil pressure sensor look up table, since v01.19
+
+ s3f_int32_t reserved[4039];       //reserved bytes, = 0
 };
 
 
@@ -685,6 +691,12 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->aftstr_strk1[i] = MathHelpers::Round(m_data.aftstr_strk1[i] * INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
   p_sepMaps->grv_delay[i] = MathHelpers::Round(m_data.grv_delay[i] * INT_MULTIPLIER);
+ for(i = 0; i < FTLS_LOOKUP_TABLE_SIZE+2; ++i)
+  p_sepMaps->ftls_curve[i] = MathHelpers::Round(m_data.ftls_curve[i] * INT_MULTIPLIER);
+ for(i = 0; i < EGTS_LOOKUP_TABLE_SIZE+2; ++i)
+  p_sepMaps->egts_curve[i] = MathHelpers::Round(m_data.egts_curve[i] * INT_MULTIPLIER);
+ for(i = 0; i < OPS_LOOKUP_TABLE_SIZE+2; ++i)
+  p_sepMaps->ops_curve[i] = MathHelpers::Round(m_data.ops_curve[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -933,6 +945,12 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.aftstr_strk1[i] = p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER;
  for(i = 0; i < F_TMP_POINTS; ++i)
   m_data.grv_delay[i] = p_sepMaps->grv_delay[i] / INT_MULTIPLIER;
+ for(i = 0; i < FTLS_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.ftls_curve[i] = p_sepMaps->ftls_curve[i] / INT_MULTIPLIER;
+ for(i = 0; i < EGTS_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.egts_curve[i] = p_sepMaps->egts_curve[i] / INT_MULTIPLIER;
+ for(i = 0; i < OPS_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.ops_curve[i] = p_sepMaps->ops_curve[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

@@ -282,7 +282,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 148 : 74))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 160 : 80))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -594,6 +594,24 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &rxlaf))
   return false;
  sensorDat.rxlaf = rxlaf * 32;
+
+ //level of fuel in the fuel tank
+ int ftls = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ftls, true))
+  return false;
+ sensorDat.ftls = ((float)ftls) / FTLS_MULT;
+
+ //exhaust gas temperature
+ int egts = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &egts, true))
+  return false;
+ sensorDat.egts = ((float)egts) / EGTS_MULT;
+
+ //oil pressure 
+ int ops = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ops, true))
+  return false;
+ sensorDat.ops = ((float)ops) / OPS_MULT;
 
  return true;
 }

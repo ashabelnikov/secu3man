@@ -551,4 +551,14 @@
 #define IDC_GME_INJ_ATSC_TEXT           5905
 #define IDC_GME_INJ_GTSC_TEXT           5906
 #define IDC_GME_INJ_GPSC_TEXT           5907
-
+#define IDC_TD_FTLS_CURVE               5908
+#define IDC_TD_EGTS_CURVE               5909
+#define IDC_TD_OPS_CURVE                5910
+#define IDS_TD_FTLS_CURVE_TT            5911
+#define IDS_TD_EGTS_CURVE_TT            5912
+#define IDS_TD_OPS_CURVE_TT             5913
+#define IDS_FTLS_CURVE_MAP              5914
+#define IDS_EGTS_CURVE_MAP              5915
+#define IDS_OPS_CURVE_MAP               5916
+#define IDS_MAPS_FUELTANK_UNIT          5917
+#define IDS_MAPS_PRESSUREKG_UNIT        5918

@@ -381,6 +381,24 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_IACMATMapWnd_W = rc.right - rc.left;
    sz.m_IACMATMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_FTLS_CURVE:
+   ws.m_FtlsCurveMapWnd_X = rc.left;
+   ws.m_FtlsCurveMapWnd_Y = rc.top;
+   sz.m_FtlsCurveMapWnd_W = rc.right - rc.left;
+   sz.m_FtlsCurveMapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_EGTS_CURVE:
+   ws.m_EgtsCurveMapWnd_X = rc.left;
+   ws.m_EgtsCurveMapWnd_Y = rc.top;
+   sz.m_EgtsCurveMapWnd_W = rc.right - rc.left;
+   sz.m_EgtsCurveMapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_OPS_CURVE:
+   ws.m_OpsCurveMapWnd_X = rc.left;
+   ws.m_OpsCurveMapWnd_Y = rc.top;
+   sz.m_OpsCurveMapWnd_W = rc.right - rc.left;
+   sz.m_OpsCurveMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -628,6 +646,18 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_INJ_IACMAT:
    X = ws.m_IACMATMapWnd_X, Y = ws.m_IACMATMapWnd_Y;
    W = sz.m_IACMATMapWnd_W, H = sz.m_IACMATMapWnd_H;
+   break;
+  case TYPE_MAP_FTLS_CURVE:
+   X = ws.m_FtlsCurveMapWnd_X, Y = ws.m_FtlsCurveMapWnd_Y;
+   W = sz.m_FtlsCurveMapWnd_W, H = sz.m_FtlsCurveMapWnd_H;
+   break;
+  case TYPE_MAP_EGTS_CURVE:
+   X = ws.m_EgtsCurveMapWnd_X, Y = ws.m_EgtsCurveMapWnd_Y;
+   W = sz.m_EgtsCurveMapWnd_W, H = sz.m_EgtsCurveMapWnd_H;
+   break;
+  case TYPE_MAP_OPS_CURVE:
+   X = ws.m_OpsCurveMapWnd_X, Y = ws.m_OpsCurveMapWnd_Y;
+   W = sz.m_OpsCurveMapWnd_W, H = sz.m_OpsCurveMapWnd_H;
    break;
 
   default:

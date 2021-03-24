@@ -75,6 +75,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetAftstrStrk0Map(bool i_original);
   float* GetAftstrStrk1Map(bool i_original);
   float* GetGrValDelMap(bool i_original);
+  float* GetFtlsCurveMap(bool i_original);
+  float* GetEgtsCurveMap(bool i_original);
+  float* GetOpsCurveMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -91,6 +94,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableGrHeatDutyMap(bool enable);
   void EnablePwmIacUCoefMap(bool enable);
   void EnableAftstrStrkMap(bool enable);
+  void EnableFtlsCurve(bool enable);
+  void EnableEgtsCurve(bool enable);
+  void EnableOpsCurve(bool enable);
 
   virtual void CloseCharts(void);
 
@@ -135,6 +141,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewAftstrStrk0Map();
   afx_msg void OnViewAftstrStrk1Map();
   afx_msg void OnViewGrValDelMap();
+  afx_msg void OnViewEgtsCurveMap();
+  afx_msg void OnViewFtlsCurveMap();
+  afx_msg void OnViewOpsCurveMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -157,6 +166,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewAftstrStrk0Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAftstrStrk1Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGrValDelMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewFtlsCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewEgtsCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewOpsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -188,6 +200,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_aftstr_strk0_map_btn;
   CButton   m_view_aftstr_strk1_map_btn;
   CButton   m_view_grvaldel_map_btn;
+  CButton   m_view_ftls_curve_map_btn;
+  CButton   m_view_egts_curve_map_btn;
+  CButton   m_view_ops_curve_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
@@ -293,6 +308,21 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseGrValDelMap(void* i_param);
   static void __cdecl OnWndActivationGrValDelMap(void* i_param, long cmd);
 
+  static void __cdecl OnChangeFtlsCurveTable(void* i_param);
+  static void __cdecl OnCloseFtlsCurveTable(void* i_param);
+  static void __cdecl OnChangeFtlsCurveXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnWndActivationFtlsCurveTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeEgtsCurveTable(void* i_param);
+  static void __cdecl OnCloseEgtsCurveTable(void* i_param);
+  static void __cdecl OnChangeEgtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnWndActivationEgtsCurveTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeOpsCurveTable(void* i_param);
+  static void __cdecl OnCloseOpsCurveTable(void* i_param);
+  static void __cdecl OnChangeOpsCurveXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnWndActivationOpsCurveTable(void* i_param, long cmd);
+
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
   bool m_tmp2_curve_enabled;
@@ -300,6 +330,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   bool m_grheat_duty_enabled;
   bool m_pwmiac_ucoef_enabled;
   bool m_aftstr_strk_enabled;
+  bool m_ftls_curve_enabled;
+  bool m_egts_curve_enabled;
+  bool m_ops_curve_enabled;
 
   float m_attenuator_table_slots[128];
   float m_cts_curve_x_axis_limits[2];

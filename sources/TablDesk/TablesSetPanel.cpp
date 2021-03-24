@@ -1084,6 +1084,201 @@ void __cdecl CTablesSetPanel::OnWndActivationGrValDelMap(void* i_param, long cmd
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeFtlsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_FTLS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseFtlsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_FTLS_CURVE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_FTLS_CURVE].handle, TYPE_MAP_FTLS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeFtlsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetFtlsCurveMap(false)[17 + i_type] = i_value;
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_FTLS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationFtlsCurveTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_FTLS_CURVE].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeEgtsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_EGTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseEgtsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_EGTS_CURVE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_EGTS_CURVE].handle, TYPE_MAP_EGTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeEgtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetEgtsCurveMap(false)[17 + i_type] = i_value;
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_EGTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationEgtsCurveTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_EGTS_CURVE].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeOpsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_OPS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseOpsCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_OPS_CURVE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_OPS_CURVE].handle, TYPE_MAP_OPS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeOpsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetOpsCurveMap(false)[17 + i_type] = i_value;
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_OPS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationOpsCurveTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_OPS_CURVE].handle, cmd);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -1099,8 +1294,11 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_grheat_duty_enabled(false)
 , m_pwmiac_ucoef_enabled(false)
 , m_aftstr_strk_enabled(false)
+, m_ftls_curve_enabled(false)
+, m_egts_curve_enabled(false)
+, m_ops_curve_enabled(false)
 {
- m_scrl_view = 925;
+ m_scrl_view = 985;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
@@ -1148,6 +1346,9 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_AFTSTR_STRK0_MAP, m_view_aftstr_strk0_map_btn);
  DDX_Control(pDX, IDC_TD_AFTSTR_STRK1_MAP, m_view_aftstr_strk1_map_btn);
  DDX_Control(pDX, IDC_TD_GRVDELAY_MAP, m_view_grvaldel_map_btn);
+ DDX_Control(pDX, IDC_TD_FTLS_CURVE, m_view_ftls_curve_map_btn);
+ DDX_Control(pDX, IDC_TD_EGTS_CURVE, m_view_egts_curve_map_btn);
+ DDX_Control(pDX, IDC_TD_OPS_CURVE, m_view_ops_curve_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -1176,6 +1377,9 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_AFTSTR_STRK0_MAP, OnViewAftstrStrk0Map)
  ON_BN_CLICKED(IDC_TD_AFTSTR_STRK1_MAP, OnViewAftstrStrk1Map)
  ON_BN_CLICKED(IDC_TD_GRVDELAY_MAP, OnViewGrValDelMap)
+ ON_BN_CLICKED(IDC_TD_FTLS_CURVE, OnViewFtlsCurveMap)
+ ON_BN_CLICKED(IDC_TD_EGTS_CURVE, OnViewEgtsCurveMap)
+ ON_BN_CLICKED(IDC_TD_OPS_CURVE, OnViewOpsCurveMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -1204,6 +1408,9 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_AFTSTR_STRK0_MAP, OnUpdateViewAftstrStrk0Map)
  ON_UPDATE_COMMAND_UI(IDC_TD_AFTSTR_STRK1_MAP, OnUpdateViewAftstrStrk1Map)
  ON_UPDATE_COMMAND_UI(IDC_TD_GRVDELAY_MAP, OnUpdateViewGrValDelMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_FTLS_CURVE, OnUpdateViewFtlsCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_EGTS_CURVE, OnUpdateViewEgtsCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_OPS_CURVE, OnUpdateViewOpsCurveMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -1252,6 +1459,9 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_aftstr_strk0_map_btn, MLL::GetString(IDS_TD_AFTSTR_STRK0_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_aftstr_strk1_map_btn, MLL::GetString(IDS_TD_AFTSTR_STRK1_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_grvaldel_map_btn, MLL::GetString(IDS_TD_GRVDELAY_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_ftls_curve_map_btn, MLL::GetString(IDS_TD_FTLS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_egts_curve_map_btn, MLL::GetString(IDS_TD_EGTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_ops_curve_map_btn, MLL::GetString(IDS_TD_OPS_CURVE_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1446,6 +1656,30 @@ void CTablesSetPanel::OnUpdateViewGrValDelMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_GRVDELAY].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewFtlsCurveMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_ftls_curve_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_FTLS_CURVE].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewEgtsCurveMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_egts_curve_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_EGTS_CURVE].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewOpsCurveMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_ops_curve_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_OPS_CURVE].state) ? TRUE : FALSE );
+}
+
 void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
@@ -1514,6 +1748,15 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_GRVDELAY].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_GRVDELAY].handle, GetGrValDelMap(true), GetGrValDelMap(false));
+
+ if (m_md[TYPE_MAP_FTLS_CURVE].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_FTLS_CURVE].handle, GetFtlsCurveMap(true), GetFtlsCurveMap(false));
+
+ if (m_md[TYPE_MAP_EGTS_CURVE].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_EGTS_CURVE].handle, GetEgtsCurveMap(true), GetEgtsCurveMap(false));
+
+ if (m_md[TYPE_MAP_OPS_CURVE].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_OPS_CURVE].handle, GetOpsCurveMap(true), GetOpsCurveMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1608,6 +1851,33 @@ void CTablesSetPanel::EnableAftstrStrkMap(bool enable)
   DLL::Chart2DEnable(m_md[TYPE_MAP_AFTSTR_STRK0].handle, enable && Super::IsAllowed());
  if (m_md[TYPE_MAP_AFTSTR_STRK1].state && ::IsWindow(m_md[TYPE_MAP_AFTSTR_STRK1].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_AFTSTR_STRK1].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableFtlsCurve(bool enable)
+{
+ m_ftls_curve_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_FTLS_CURVE].state && ::IsWindow(m_md[TYPE_MAP_FTLS_CURVE].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_FTLS_CURVE].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableEgtsCurve(bool enable)
+{
+ m_egts_curve_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_EGTS_CURVE].state && ::IsWindow(m_md[TYPE_MAP_EGTS_CURVE].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_EGTS_CURVE].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableOpsCurve(bool enable)
+{
+ m_ops_curve_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_OPS_CURVE].state && ::IsWindow(m_md[TYPE_MAP_OPS_CURVE].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_OPS_CURVE].handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -2424,6 +2694,123 @@ void CTablesSetPanel::OnViewGrValDelMap()
  }
 }
 
+void CTablesSetPanel::OnViewFtlsCurveMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_ftls_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_FTLS_CURVE].handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_FTLS_CURVE].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_FTLS_CURVE].state = 1;
+  m_md[TYPE_MAP_FTLS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetFtlsCurveMap(true), GetFtlsCurveMap(false), 0.0, 100.0, NULL, 17,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_FUELTANK_UNIT).c_str(),
+    MLL::GetString(IDS_FTLS_CURVE_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_FTLS_CURVE].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_FTLS_CURVE].handle, m_md[TYPE_MAP_FTLS_CURVE].ptMovStep);
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeFtlsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_FTLS_CURVE].handle, OnChangeFtlsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_FTLS_CURVE].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_FTLS_CURVE].handle, OnCloseFtlsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_FTLS_CURVE].handle, OnWndActivationFtlsCurveTable, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_FTLS_CURVE].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, GetFtlsCurveMap(false)[17], GetFtlsCurveMap(false)[17+1]);
+
+  //allow controller to detect closing of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_FTLS_CURVE].handle, TYPE_MAP_FTLS_CURVE);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_FTLS_CURVE].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_FTLS_CURVE].handle);
+ }
+}
+
+void CTablesSetPanel::OnViewEgtsCurveMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_egts_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_EGTS_CURVE].handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_EGTS_CURVE].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_EGTS_CURVE].state = 1;
+  m_md[TYPE_MAP_EGTS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEgtsCurveMap(true), GetEgtsCurveMap(false), 0.0, 1100.0, NULL, 17,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_EGTS_CURVE_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_EGTS_CURVE].handle, _T("#0.0"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_EGTS_CURVE].handle, m_md[TYPE_MAP_EGTS_CURVE].ptMovStep);
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeEgtsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_EGTS_CURVE].handle, OnChangeEgtsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_EGTS_CURVE].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_EGTS_CURVE].handle, OnCloseEgtsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_EGTS_CURVE].handle, OnWndActivationEgtsCurveTable, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_EGTS_CURVE].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, GetEgtsCurveMap(false)[17], GetEgtsCurveMap(false)[17+1]);
+
+  //allow controller to detect closing of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_EGTS_CURVE].handle, TYPE_MAP_EGTS_CURVE);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_EGTS_CURVE].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_EGTS_CURVE].handle);
+ }
+}
+
+void CTablesSetPanel::OnViewOpsCurveMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_ops_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_OPS_CURVE].handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_OPS_CURVE].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_OPS_CURVE].state = 1;
+  m_md[TYPE_MAP_OPS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetOpsCurveMap(true), GetOpsCurveMap(false), 0.0, 6.0, NULL, 17,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_PRESSUREKG_UNIT).c_str(),
+    MLL::GetString(IDS_OPS_CURVE_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_OPS_CURVE].handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_OPS_CURVE].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_OPS_CURVE].handle, m_md[TYPE_MAP_OPS_CURVE].ptMovStep);
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_OPS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeOpsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_OPS_CURVE].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_OPS_CURVE].handle, OnChangeOpsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_OPS_CURVE].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_OPS_CURVE].handle, OnCloseOpsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_OPS_CURVE].handle, OnWndActivationOpsCurveTable, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_OPS_CURVE].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_OPS_CURVE].handle, 1, GetOpsCurveMap(false)[17], GetOpsCurveMap(false)[17+1]);
+
+  //allow controller to detect closing of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_OPS_CURVE].handle, TYPE_MAP_OPS_CURVE);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_OPS_CURVE].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_OPS_CURVE].handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -2639,6 +3026,30 @@ float* CTablesSetPanel::GetGrValDelMap(bool i_original)
   return m_md[TYPE_MAP_GRVDELAY].original;
  else
   return m_md[TYPE_MAP_GRVDELAY].active;
+}
+
+float* CTablesSetPanel::GetFtlsCurveMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_FTLS_CURVE].original;
+ else
+  return m_md[TYPE_MAP_FTLS_CURVE].active;
+}
+
+float* CTablesSetPanel::GetEgtsCurveMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_EGTS_CURVE].original;
+ else
+  return m_md[TYPE_MAP_EGTS_CURVE].active;
+}
+
+float* CTablesSetPanel::GetOpsCurveMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_OPS_CURVE].original;
+ else
+  return m_md[TYPE_MAP_OPS_CURVE].active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)

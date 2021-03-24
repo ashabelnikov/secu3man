@@ -140,6 +140,12 @@ struct WndSettings
  int m_GrValDelMapWnd_Y;
  int m_IACMATMapWnd_X;
  int m_IACMATMapWnd_Y;
+ int m_FtlsCurveMapWnd_X;
+ int m_FtlsCurveMapWnd_Y;
+ int m_EgtsCurveMapWnd_X;
+ int m_EgtsCurveMapWnd_Y;
+ int m_OpsCurveMapWnd_X;
+ int m_OpsCurveMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -255,6 +261,12 @@ struct WndSize
  int m_GrValDelMapWnd_H;
  int m_IACMATMapWnd_W;
  int m_IACMATMapWnd_H;
+ int m_FtlsCurveMapWnd_W;
+ int m_FtlsCurveMapWnd_H;
+ int m_EgtsCurveMapWnd_W;
+ int m_EgtsCurveMapWnd_H;
+ int m_OpsCurveMapWnd_W;
+ int m_OpsCurveMapWnd_H;
 };
 
 //Holds windows's state data
@@ -383,6 +395,9 @@ struct MapPtMovStep
  float m_aftstr_strk0_map;
  float m_aftstr_strk1_map;
  float m_grvaldel_map;
+ float m_ftls_curve_map;
+ float m_egts_curve_map;
+ float m_ops_curve_map;
 };
 
 //Log file's fileds
@@ -442,6 +457,9 @@ struct LogFileFields
  _TSTRING m_fldLogMarks;
  _TSTRING m_fldCECodes;
  _TSTRING m_fldGrts;
+ _TSTRING m_fldFtls;
+ _TSTRING m_fldEgts;
+ _TSTRING m_fldOps;
 };
 
 //Functionality

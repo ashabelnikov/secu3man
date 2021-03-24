@@ -121,6 +121,9 @@ BEGIN
     CONTROL         "Такты ОПП (бензин)",IDC_TD_AFTSTR_STRK0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,520,96,18
     CONTROL         "Такты ОПП (газ)",IDC_TD_AFTSTR_STRK1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,539,96,18
     CONTROL         "Задержка газов. клап.",IDC_TD_GRVDELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,539,96,18
+    CONTROL         "Настр. крив. ДУТ",IDC_TD_FTLS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,558,96,18
+    CONTROL         "Настр. крив. ДТВГ",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,558,96,18
+    CONTROL         "Настр. крив. ДДМ",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,577,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -716,6 +719,11 @@ BEGIN
     IDS_AFTSTR_STRK1_MAP     "Такты действия обогащения после пуска от температуры двигателя (газ)"
     IDS_TD_VIEW_TEMPI_MAP_TT "Таблица коррекции УОЗ по температуре двигателя (ХХ). Значение из таблицы прибавляется к УОЗ в режиме холостого хода. Для коррекции на пуске используется отдельная таблица."
     IDS_TD_VIEW_IACMAT_MAP_TT "Таблица коррекции положения РДВ от температуры воздуха. Значение из таблицы прибавляется к положению клапана РДВ."
+    IDS_FTLS_CURVE_MAP      "Настройка кривой датчика уровня топлива в баке (ДУТ)"
+    IDS_EGTS_CURVE_MAP      "Настройка кривой датчика температуры выхлопных газов (ДТВГ)"
+    IDS_OPS_CURVE_MAP       "Настройка кривой датчика давления масла (ДДМ)"
+    IDS_MAPS_FUELTANK_UNIT  "Уровень топлива (Л)"
+    IDS_MAPS_PRESSUREKG_UNIT "Давление (кг/см2)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -746,6 +754,9 @@ BEGIN
     IDS_TD_PWMIAC_UCOEF_MAP_TT "Настройка коэффициента скважности ШИМ РДВ. Коэффициент в таблице задан от напряжения бортовой сети. Данная таблица необходима чтобы РДВ не менял положение при изменении напряжения."      
     IDS_TD_AFTSTR_STRK0_MAP_TT "Настройка таблицы времени действия обогащения после пуска от температуры двигателя. Используется для бензина (когда GAS_V=0). Смотрите также параметр 'Время обогащения после пуска в тактах' на вкладке параметров 'Пуск'."      
     IDS_TD_AFTSTR_STRK1_MAP_TT "Настройка таблицы времени действия обогащения после пуска от температуры двигателя. Используется для газа (когда GAS_V=1). Смотрите также параметр 'Время обогащения после пуска в тактах' на вкладке параметров 'Пуск'."      
+    IDS_TD_FTLS_CURVE_TT       "Настройка зависимости уровня топлива в баке от напряжения для ДУТ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение уровня топлива (Л)."
+    IDS_TD_EGTS_CURVE_TT       "Настройка зависимости температуры выхлопных газов от напряжения для ДТВГ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение температуры выхлопных газов (°С)."
+    IDS_TD_OPS_CURVE_TT        "Настройка зависимости давления масла от напряжения для ДДМ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение давления масла в двигателе (кг/см2)."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -907,6 +918,9 @@ BEGIN
     CONTROL         "ASE strokes (petrol)",IDC_TD_AFTSTR_STRK0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,520,96,18
     CONTROL         "ASE strokes (gas)",IDC_TD_AFTSTR_STRK1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,539,96,18
     CONTROL         "Gas valve delay",IDC_TD_GRVDELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,539,96,18
+    CONTROL         "Tune FTLS curve",IDC_TD_FTLS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,558,96,18
+    CONTROL         "Tune EGTS curve",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,558,96,18
+    CONTROL         "Tune OPS curve",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,577,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1519,6 +1533,11 @@ BEGIN
     IDS_AFTSTR_STRK1_MAP      "After start enrichment time in strokes vs coolant temperature (gas)"
     IDS_TD_VIEW_TEMPI_MAP_TT "Look up table of ignition timing correction vs coolant temperature (idling). The value from table is added to the ignition timing in the idling mode. For correction at cranking mode, a separate table is used."
     IDS_TD_VIEW_IACMAT_MAP_TT "Look up table of IAC position's vs MAT. Value from this table is added to position of IAC valve."
+    IDS_FTLS_CURVE_MAP      "Tune fuel tank level sensor's curve (FTLS)"
+    IDS_EGTS_CURVE_MAP      "Tune exhaust gas temperature sensor's curve (EGTS)"
+    IDS_OPS_CURVE_MAP       "Tune oil pressure sensor's curve (OPS)"
+    IDS_MAPS_FUELTANK_UNIT  "Level of fuel (L)"
+    IDS_MAPS_PRESSUREKG_UNIT "Pressure (kg/cm2)"
 END
 
 
@@ -1597,6 +1616,9 @@ BEGIN
     IDS_CESETT_MAP_V_USEEM_CHECK_TT "Use reserve value in case of error."
     IDS_GME_INJ_VE1_RADIOBOX_TT "Select VE map 1 for editing/automatic tuning"
     IDS_GME_INJ_VE2_RADIOBOX_TT "Select VE map 2 for editing/automatic tuning"
+    IDS_TD_FTLS_CURVE_TT       "Setting level of fuel versus voltage dependance for the FTLS. This table is necessary for the correct conversion of the voltage (V) at the sensor to the level of fuel in fuel tank (L)."
+    IDS_TD_EGTS_CURVE_TT       "Setting exhaust gas temperature versus voltage dependance for the EGTS. This table is necessary for the correct conversion of the voltage (V) at the sensor to exhaust gas temperature (°C)."
+    IDS_TD_OPS_CURVE_TT        "Setting oil pressure versus voltage dependance for the OPS. This table is necessary for the correct conversion of the voltage (V) at the sensor to pressure of oil in the engine (kg/cm2)."
 END
 
 /////////////////////////////////////////////////////////////////////////////

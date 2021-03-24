@@ -36,6 +36,9 @@ static const int GD_PHYSICAL_MAGNITUDE_MULTIPLIER = 2;
 static const int AFR_PHYSICAL_MAGNITUDE_MULTIPLIER = 128;
 static const int LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER = 64;
 static const float PARINJTIM_MULT = 16.0f;
+static const float FTLS_MULT = 64.0f;
+static const float EGTS_MULT = 4.0f;
+static const float OPS_MULT = 256.0f;
 
 static const float AA_MAPS_M_FACTOR = 2.0f; //scale factor for adv. angle maps (they are stored in integer format)
 static const float VE_MAPS_M_FACTOR = 2048.0f;

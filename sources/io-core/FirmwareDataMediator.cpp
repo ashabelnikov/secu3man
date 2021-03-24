@@ -238,6 +238,15 @@ typedef struct
 
  _uint grv_delay[F_TMP_POINTS];
 
+ // Fuel tank level vs voltage. 16 points of function, plus two values for setting of x-axis range
+ _int ftls_curve[FTLS_LOOKUP_TABLE_SIZE+2];
+
+ // Exhaust gas temperature vs voltage. 16 points of function, plus two values for setting of x-axis range
+ _int egts_curve[EGTS_LOOKUP_TABLE_SIZE+2];
+
+ // Oil pressure vs voltage. 16 points of function, plus two values for setting of x-axis range
+ _int ops_curve[OPS_LOOKUP_TABLE_SIZE+2];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -286,7 +295,7 @@ typedef struct
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3753];
+ _uchar reserved[3639];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1467,6 +1476,9 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetAftstrStrk0Map(op_fwd->aftstr_strk0);
  GetAftstrStrk1Map(op_fwd->aftstr_strk1);
  GetGrValDelMap(op_fwd->grv_delay);
+ GetFtlsCurveMap(op_fwd->ftls_curve);
+ GetEgtsCurveMap(op_fwd->egts_curve);
+ GetOpsCurveMap(op_fwd->ops_curve);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1550,6 +1562,9 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetAftstrStrk0Map(ip_fwd->aftstr_strk0);
  SetAftstrStrk1Map(ip_fwd->aftstr_strk1);
  SetGrValDelMap(ip_fwd->grv_delay);
+ SetFtlsCurveMap(ip_fwd->ftls_curve);
+ SetEgtsCurveMap(ip_fwd->egts_curve);
+ SetOpsCurveMap(ip_fwd->ops_curve);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2301,6 +2316,94 @@ void CFirmwareDataMediator::SetGrValDelMap(const float* ip_values)
  for(size_t i = 0; i < F_TMP_POINTS; i++)
   p_fd->exdata.grv_delay[i] = MathHelpers::Round(ip_values[i]*100.0f);
 }
+
+void CFirmwareDataMediator::GetFtlsCurveMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < FTLS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.ftls_curve[i]) / 64.0f;
+
+ for (; i < FTLS_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->exdata.ftls_curve[i]) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetFtlsCurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < FTLS_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->exdata.ftls_curve[i] = MathHelpers::Round(ip_values[i] * 64.0f);
+ for (; i < FTLS_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->exdata.ftls_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
+void CFirmwareDataMediator::GetEgtsCurveMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < EGTS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.egts_curve[i]) / 4.0f;
+
+ for (; i < EGTS_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->exdata.egts_curve[i]) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetEgtsCurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < EGTS_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->exdata.egts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+ for (; i < EGTS_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->exdata.egts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
+void CFirmwareDataMediator::GetOpsCurveMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < OPS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.ops_curve[i]) / 256.0f;
+
+ for (; i < OPS_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->exdata.ops_curve[i]) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetOpsCurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < OPS_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->exdata.ops_curve[i] = MathHelpers::Round(ip_values[i] * 256.0f);
+ for (; i < OPS_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->exdata.ops_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
 
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

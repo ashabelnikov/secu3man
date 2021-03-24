@@ -191,6 +191,15 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
   memcpy(mp_fwd->grv_delay, mp_s3f_io->GetData().grv_delay, sizeof(float) * F_TMP_POINTS);
 
+ if (mp_view->GetFWDFlag(FLAG_FTLSCURVE_MAP))
+  memcpy(mp_fwd->ftls_curve, mp_s3f_io->GetData().ftls_curve, sizeof(float) * (FTLS_LOOKUP_TABLE_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_EGTSCURVE_MAP))
+  memcpy(mp_fwd->egts_curve, mp_s3f_io->GetData().egts_curve, sizeof(float) * (EGTS_LOOKUP_TABLE_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_OPSCURVE_MAP))
+  memcpy(mp_fwd->ops_curve, mp_s3f_io->GetData().ops_curve, sizeof(float) * (OPS_LOOKUP_TABLE_SIZE+2));
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -356,6 +365,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0116 = (mp_s3f_io->GetVersion() > 0x0115);
  bool sv0117 = (mp_s3f_io->GetVersion() > 0x0116);
  bool sv0118 = (mp_s3f_io->GetVersion() > 0x0117);
+ bool sv0119 = (mp_s3f_io->GetVersion() > 0x0118);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -435,6 +445,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_OPSCURVE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -457,6 +470,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AFTSTRK0_MAP, sv0115 && sepmap);  //since v01.15
  mp_view->EnableFWDFlag(FLAG_AFTSTRK1_MAP, sv0115 && sepmap);  //since v01.15
  mp_view->EnableFWDFlag(FLAG_GRVDELAY_MAP, sv0116 && sepmap);  //since v01.16
+ mp_view->EnableFWDFlag(FLAG_FTLSCURVE_MAP, sv0119 && sepmap); //since v01.19
+ mp_view->EnableFWDFlag(FLAG_EGTSCURVE_MAP, sv0119 && sepmap); //since v01.19
+ mp_view->EnableFWDFlag(FLAG_OPSCURVE_MAP, sv0119 && sepmap);  //since v01.19
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -619,6 +635,15 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
   memcpy(mp_s3f_io->GetDataLeft().grv_delay, mp_fwd->grv_delay, sizeof(float) * F_TMP_POINTS);
+
+ if (mp_view->GetFWDFlag(FLAG_FTLSCURVE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().ftls_curve, mp_fwd->ftls_curve, sizeof(float) * (FTLS_LOOKUP_TABLE_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_EGTSCURVE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().egts_curve, mp_fwd->egts_curve, sizeof(float) * (EGTS_LOOKUP_TABLE_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_OPSCURVE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().ops_curve, mp_fwd->ops_curve, sizeof(float) * (OPS_LOOKUP_TABLE_SIZE+2));
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -811,6 +836,9 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_OPSCURVE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

@@ -73,10 +73,13 @@
 #define INJ_GPS_CORR_SIZE      17
 #define INJ_ATS_CORR_SIZE      16
 #define PWMIAC_UCOEF_SIZE      16
+#define FTLS_LOOKUP_TABLE_SIZE 17          // Size of "fuel tank level vs voltage" map
+#define EGTS_LOOKUP_TABLE_SIZE 17          // Size of "exhaust gas temperature vs voltage" map
+#define OPS_LOOKUP_TABLE_SIZE  17          // Size of "oil pressure vs voltage" map
 
-//количество наборов характеристик хранимых в памяти программ
+//Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
-//количество наборов характеристик хранимых в EEPROM
+//Number of set of maps stored in EEPROM
 #define TUNABLE_TABLES_NUMBER  1
 
 struct CESettingsData
@@ -231,6 +234,9 @@ struct FWMapsDataHolder
  float aftstr_strk0[AFTSTR_STRK_SIZE];
  float aftstr_strk1[AFTSTR_STRK_SIZE];
  float grv_delay[F_TMP_POINTS];
+ float ftls_curve[FTLS_LOOKUP_TABLE_SIZE+2];
+ float egts_curve[EGTS_LOOKUP_TABLE_SIZE+2];
+ float ops_curve[OPS_LOOKUP_TABLE_SIZE+2];
 
  CESettingsData cesd;
 
@@ -265,6 +271,9 @@ struct FWMapsDataHolder
   std::fill(aftstr_strk0, aftstr_strk0 + AFTSTR_STRK_SIZE, .0f);
   std::fill(aftstr_strk1, aftstr_strk1 + AFTSTR_STRK_SIZE, .0f);
   std::fill(grv_delay, grv_delay + F_TMP_POINTS, .0f);
+  std::fill(ftls_curve, ftls_curve + FTLS_LOOKUP_TABLE_SIZE + 2, .0f);
+  std::fill(egts_curve, egts_curve + EGTS_LOOKUP_TABLE_SIZE + 2, .0f);
+  std::fill(ops_curve, ops_curve + OPS_LOOKUP_TABLE_SIZE + 2, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

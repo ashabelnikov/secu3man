@@ -254,6 +254,12 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AFTSTRK1_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
  mp_view->EnableFWDFlag(FLAG_GRVDELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_OPSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_OPSCURVE_MAP, false);
 
  mp_view->SetExchangeButtonCaption(_T("<"));
  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_MPSZ_TABLES));
@@ -520,7 +526,13 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AFTSTRK1_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
  mp_view->EnableFWDFlag(FLAG_GRVDELAY_MAP, false);
- 
+ mp_view->SetFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_OPSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_OPSCURVE_MAP, false);
+
  mp_view->SetExchangeButtonCaption(_T(">"));
  mp_view->SetWindowText(MLL::LoadString(IDS_EXPORT_MPSZ_TABLES));
 

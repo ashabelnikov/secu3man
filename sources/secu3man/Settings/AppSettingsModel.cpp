@@ -173,6 +173,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAftstrStrk1MapWnd(_T("AftstrStrk1MapWnd"))
 , m_optGrValDelMapWnd(_T("GasValDelMapWnd"))
 , m_optIACMATMapWnd(_T("IACMATCorrMapWnd"))
+, m_optFtlsCurveMapWnd(_T("FtlsCurveMapWnd"))
+, m_optEgtsCurveMapWnd(_T("EgtsCurveMapWnd"))
+, m_optOpsCurveMapWnd(_T("OpsCurveMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -264,6 +267,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAftstrStrk1MapWndSize(_T("AftstrStrk1MapWnd"))
 , m_optGrValDelMapWndSize(_T("GasValDelMapWnd"))
 , m_optIACMATMapWndSize(_T("IACMATCorrMapWnd"))
+, m_optFtlsCurveMapWndSize(_T("FtlsCurveMapWnd"))
+, m_optEgtsCurveMapWndSize(_T("EgtsCurveMapWnd"))
+, m_optOpsCurveMapWndSize(_T("OpsCurveMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -412,6 +418,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepAftstrStrk0Map(_T("AftstrStrk0MapWnd"))
 , m_optPtMovStepAftstrStrk1Map(_T("AftstrStrk1MapWnd"))
 , m_optPtMovStepGrValDelMap(_T("GasValDelMapWnd"))
+, m_optPtMovStepFtlsCurveMap(_T("FtlsCurveMapWnd"))
+, m_optPtMovStepEgtsCurveMap(_T("EgtsCurveMapWnd"))
+, m_optPtMovStepOpsCurveMap(_T("OpsCurveMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -469,6 +478,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldLogMarks(_T("LogMarks"))
 , m_optLogFieldCECodes(_T("CECodes"))
 , m_optLogFieldGrts(_T("GRTS"))
+, m_optLogFieldFtls(_T("FTLS"))
+, m_optLogFieldEgts(_T("EGTS"))
+, m_optLogFieldOps(_T("OPS"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -782,6 +794,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optAftstrStrk1MapWnd);
  ws.ReadWndPos(m_optGrValDelMapWnd);
  ws.ReadWndPos(m_optIACMATMapWnd);
+ ws.ReadWndPos(m_optFtlsCurveMapWnd);
+ ws.ReadWndPos(m_optEgtsCurveMapWnd);
+ ws.ReadWndPos(m_optOpsCurveMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -876,6 +891,9 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optAftstrStrk1MapWndSize, 0, 10000);
  sz.ReadWndPos(m_optGrValDelMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optIACMATMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optFtlsCurveMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optEgtsCurveMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optOpsCurveMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1093,6 +1111,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepAftstrStrk0Map, _T("10"), 1.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepAftstrStrk1Map, _T("10"), 1.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepGrValDelMap, _T("0.1"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepFtlsCurveMap, _T("0.1"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepEgtsCurveMap, _T("5.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepOpsCurveMap, _T("0.1"), 0.0f, 1.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1151,6 +1172,9 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldLogMarks, _T("LogMarks"));
  lf.ReadString(m_optLogFieldCECodes, _T("CECodes"));
  lf.ReadString(m_optLogFieldGrts, _T("GRTS"));
+ lf.ReadString(m_optLogFieldFtls, _T("FTLS"));
+ lf.ReadString(m_optLogFieldEgts, _T("EGTS"));
+ lf.ReadString(m_optLogFieldOps, _T("OPS"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -1901,6 +1925,21 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optIACMATMapWnd, _T("Коррекция положения РДВ от температуры воздуха"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optFtlsCurveMapWnd, _T("Fuel tank level sensor's table"));
+ else
+  ws.WriteWndPos(m_optFtlsCurveMapWnd, _T("Кривая датчика уровня топлива (ДУТ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optEgtsCurveMapWnd, _T("Exhaust gas temperature sensor's table"));
+ else
+  ws.WriteWndPos(m_optEgtsCurveMapWnd, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optOpsCurveMapWnd, _T("Oil pressure sensor's table"));
+ else
+  ws.WriteWndPos(m_optOpsCurveMapWnd, _T("Кривая датчика давления масла (ДДМ)"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2351,6 +2390,21 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optIACMATMapWndSize, _T("IAC position's correction vs MAT map"));
  else
   sz.WriteWndPos(m_optIACMATMapWndSize, _T("Коррекция положения РДВ от температуры воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optFtlsCurveMapWndSize, _T("Fuel tank level sensor's table"));
+ else
+  sz.WriteWndPos(m_optFtlsCurveMapWndSize, _T("Кривая датчика уровня топлива (ДУТ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optEgtsCurveMapWndSize, _T("Exhaust gas temperature sensor's table"));
+ else
+  sz.WriteWndPos(m_optEgtsCurveMapWndSize, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optOpsCurveMapWndSize, _T("Oil pressure sensor's table"));
+ else
+  sz.WriteWndPos(m_optOpsCurveMapWndSize, _T("Кривая датчика давления масла (ДДМ)"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3364,6 +3418,21 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepGrValDelMap, 2, _T("Задержка включения газового клапана от температуры газового редуктора"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepFtlsCurveMap, 2, _T("Fuel tank level sensor's table"));
+ else
+  ms.WriteFlt(m_optPtMovStepFtlsCurveMap, 2, _T("Кривая датчика уровня топлива (ДУТ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepEgtsCurveMap, 1, _T("Exhaust gas temperature sensor's table"));
+ else
+  ms.WriteFlt(m_optPtMovStepEgtsCurveMap, 1, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepOpsCurveMap, 2, _T("Oil pressure sensor's table"));
+ else
+  ms.WriteFlt(m_optPtMovStepOpsCurveMap, 2, _T("Кривая датчика давления масла (ДДМ)"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -3430,7 +3499,9 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldCECodes);
  lf.WriteString(m_optLogFieldGrts);
-
+ lf.WriteString(m_optLogFieldFlts);
+ lf.WriteString(m_optLogFieldEgts);
+ lf.WriteString(m_optLogFieldOps);
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -3654,6 +3725,12 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optGrValDelMapWnd.value.y = i_wndSettings.m_GrValDelMapWnd_Y;
  m_optIACMATMapWnd.value.x = i_wndSettings.m_IACMATMapWnd_X;
  m_optIACMATMapWnd.value.y = i_wndSettings.m_IACMATMapWnd_Y;
+ m_optFtlsCurveMapWnd.value.x = i_wndSettings.m_FtlsCurveMapWnd_X;
+ m_optFtlsCurveMapWnd.value.y = i_wndSettings.m_FtlsCurveMapWnd_Y; 
+ m_optEgtsCurveMapWnd.value.x = i_wndSettings.m_EgtsCurveMapWnd_X;
+ m_optEgtsCurveMapWnd.value.y = i_wndSettings.m_EgtsCurveMapWnd_Y; 
+ m_optOpsCurveMapWnd.value.x = i_wndSettings.m_OpsCurveMapWnd_X;
+ m_optOpsCurveMapWnd.value.y = i_wndSettings.m_OpsCurveMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3768,6 +3845,12 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_GrValDelMapWnd_Y = m_optGrValDelMapWnd.value.y;
  o_wndSettings.m_IACMATMapWnd_X = m_optIACMATMapWnd.value.x;
  o_wndSettings.m_IACMATMapWnd_Y = m_optIACMATMapWnd.value.y;
+ o_wndSettings.m_FtlsCurveMapWnd_X = m_optFtlsCurveMapWnd.value.x;
+ o_wndSettings.m_FtlsCurveMapWnd_Y = m_optFtlsCurveMapWnd.value.y;
+ o_wndSettings.m_EgtsCurveMapWnd_X = m_optEgtsCurveMapWnd.value.x;
+ o_wndSettings.m_EgtsCurveMapWnd_Y = m_optEgtsCurveMapWnd.value.y;
+ o_wndSettings.m_OpsCurveMapWnd_X = m_optOpsCurveMapWnd.value.x;
+ o_wndSettings.m_OpsCurveMapWnd_Y = m_optOpsCurveMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4018,6 +4101,12 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optGrValDelMapWndSize.value.y = i_wndSize.m_GrValDelMapWnd_H;
  m_optIACMATMapWndSize.value.x = i_wndSize.m_IACMATMapWnd_W;
  m_optIACMATMapWndSize.value.y = i_wndSize.m_IACMATMapWnd_H;
+ m_optFtlsCurveMapWndSize.value.x = i_wndSize.m_FtlsCurveMapWnd_W;
+ m_optFtlsCurveMapWndSize.value.y = i_wndSize.m_FtlsCurveMapWnd_H; 
+ m_optEgtsCurveMapWndSize.value.x = i_wndSize.m_EgtsCurveMapWnd_W;
+ m_optEgtsCurveMapWndSize.value.y = i_wndSize.m_EgtsCurveMapWnd_H; 
+ m_optOpsCurveMapWndSize.value.x = i_wndSize.m_OpsCurveMapWnd_W;
+ m_optOpsCurveMapWndSize.value.y = i_wndSize.m_OpsCurveMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4132,6 +4221,12 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_GrValDelMapWnd_H = m_optGrValDelMapWndSize.value.y;
  o_wndSize.m_IACMATMapWnd_W = m_optIACMATMapWndSize.value.x;
  o_wndSize.m_IACMATMapWnd_H = m_optIACMATMapWndSize.value.y;
+ o_wndSize.m_FtlsCurveMapWnd_W = m_optFtlsCurveMapWndSize.value.x;
+ o_wndSize.m_FtlsCurveMapWnd_H = m_optFtlsCurveMapWndSize.value.y;
+ o_wndSize.m_EgtsCurveMapWnd_W = m_optEgtsCurveMapWndSize.value.x;
+ o_wndSize.m_EgtsCurveMapWnd_H = m_optEgtsCurveMapWndSize.value.y;
+ o_wndSize.m_OpsCurveMapWnd_W = m_optOpsCurveMapWndSize.value.x;
+ o_wndSize.m_OpsCurveMapWnd_H = m_optOpsCurveMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4984,6 +5079,9 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepAftstrStrk0Map.value = i_ptMovStep.m_aftstr_strk0_map;
  m_optPtMovStepAftstrStrk1Map.value = i_ptMovStep.m_aftstr_strk1_map;
  m_optPtMovStepGrValDelMap.value = i_ptMovStep.m_grvaldel_map;
+ m_optPtMovStepFtlsCurveMap.value = i_ptMovStep.m_ftls_curve_map;
+ m_optPtMovStepEgtsCurveMap.value = i_ptMovStep.m_egts_curve_map;
+ m_optPtMovStepOpsCurveMap.value = i_ptMovStep.m_ops_curve_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -5040,6 +5138,9 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_aftstr_strk0_map = m_optPtMovStepAftstrStrk0Map.value;
  o_ptMovStep.m_aftstr_strk1_map = m_optPtMovStepAftstrStrk1Map.value;
  o_ptMovStep.m_grvaldel_map = m_optPtMovStepGrValDelMap.value;
+ o_ptMovStep.m_ftls_curve_map = m_optPtMovStepFtlsCurveMap.value;
+ o_ptMovStep.m_egts_curve_map = m_optPtMovStepEgtsCurveMap.value;
+ o_ptMovStep.m_ops_curve_map = m_optPtMovStepOpsCurveMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
@@ -5098,6 +5199,9 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldLogMarks.value = i_flds.m_fldLogMarks;
  m_optLogFieldCECodes.value = i_flds.m_fldCECodes;
  m_optLogFieldGrts.value = i_flds.m_fldGrts;
+ m_optLogFieldFtls.value = i_flds.m_fldFtls;
+ m_optLogFieldEgts.value = i_flds.m_fldEgts;
+ m_optLogFieldOps.value = i_flds.m_fldOps;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -5156,6 +5260,9 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldLogMarks = m_optLogFieldLogMarks.value;
  o_flds.m_fldCECodes = m_optLogFieldCECodes.value;
  o_flds.m_fldGrts = m_optLogFieldGrts.value;
+ o_flds.m_fldFtls = m_optLogFieldFtls.value;
+ o_flds.m_fldEgts = m_optLogFieldEgts.value;
+ o_flds.m_fldOps = m_optLogFieldOps.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const
