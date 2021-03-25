@@ -106,6 +106,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGraphShowValue(_T("GraphShowValue"))
 , m_optFuelConsumFAverage(_T("FuelConsumFAverage"))
 , m_optGrtsAverage(_T("GrtsAverage"))
+, m_optFtlsAverage(_T("FtlsAverage"))
+, m_optEgtsAverage(_T("EgtsAverage"))
+, m_optOpsAverage(_T("OpsAverage"))
 
 , m_optTitleFontSize(_T("TitleFontSize"))
 , m_optValueFontSize(_T("ValueFontSize"))
@@ -571,6 +574,12 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetFuelConsumF[i][1].name = _T("GrhFuelConsumF");
   m_optMetGrts[i][0].name = _T("MetGrts");
   m_optMetGrts[i][1].name = _T("GrhGrts");
+  m_optMetFtls[i][0].name = _T("MetFtls");
+  m_optMetFtls[i][1].name = _T("GrhFtls");
+  m_optMetEgts[i][0].name = _T("MetEgts");
+  m_optMetEgts[i][1].name = _T("GrhEgts");
+  m_optMetOps[i][0].name = _T("MetOps");
+  m_optMetOps[i][1].name = _T("GrhOps");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -718,6 +727,9 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optInjTimEAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optFuelConsumFAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optGrtsAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optFtlsAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optEgtsAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optOpsAverage, _T("4"), 0, 16);
 
  fs.ReadInt(m_optTachometerMax, _T("8000"), 0, 15000);
  fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
@@ -973,8 +985,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColEpas_i,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][28*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][31*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -1009,6 +1021,9 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetInjTimE[i][g],metDef[i][d++], 0, 32, true);
    mm.ReadInt(m_optMetFuelConsumF[i][g],metDef[i][d++], 0, 32, true);
    mm.ReadInt(m_optMetGrts[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetFtls[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetEgts[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetOps[i][g], metDef[i][d++], 0, 32, true);
   }
  }
 
@@ -1642,6 +1657,24 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений температуры газового редуктора. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optGrtsAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for FTLS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДУТ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optFtlsAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for EGTS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДТВГ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optEgtsAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for OPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДДМ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optOpsAverage); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -2929,6 +2962,21 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetGrts[i][g], _T("GRTEMP sensor"));
   else
    mm.WriteInt(m_optMetGrts[i][g], _T("Датчик GRTEMP"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetFtls[i][g], _T("Fuel tank level"));
+  else
+   mm.WriteInt(m_optMetFtls[i][g], _T("Датчик уровня топлива"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetEgts[i][g], _T("Exhaust gas temperature"));
+  else
+   mm.WriteInt(m_optMetEgts[i][g], _T("Температура выхлопных газов"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetOps[i][g], _T("Oil pressure"));
+  else
+   mm.WriteInt(m_optMetOps[i][g], _T("Давление масла"));
   }
  }
 
@@ -3499,7 +3547,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldCECodes);
  lf.WriteString(m_optLogFieldGrts);
- lf.WriteString(m_optLogFieldFlts);
+ lf.WriteString(m_optLogFieldFtls);
  lf.WriteString(m_optLogFieldEgts);
  lf.WriteString(m_optLogFieldOps);
  //Functionality
@@ -4708,6 +4756,9 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetGrts, &m_optMetGrts[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetFtls, &m_optMetFtls[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
  }
 }
 
@@ -4744,6 +4795,9 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetGrts, &m_optMetGrts[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetFtls, &m_optMetFtls[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
  }
 }
 
@@ -5314,6 +5368,21 @@ int CAppSettingsModel::GetIniEditorSyntax(void) const
 int CAppSettingsModel::GetGrtsAverage(void) const
 {
  return m_optGrtsAverage.value;
+}
+
+int CAppSettingsModel::GetFtlsAverage(void) const
+{
+ return m_optFtlsAverage.value;
+}
+
+int CAppSettingsModel::GetEgtsAverage(void) const
+{
+ return m_optEgtsAverage.value;
+}
+
+int CAppSettingsModel::GetOpsAverage(void) const
+{
+ return m_optOpsAverage.value;
 }
 
 bool CAppSettingsModel::GetSpotMarkers(void) const

@@ -52,10 +52,10 @@ void CMITemperature::Create(CWnd* pParent)
  m_tlpUnit = _T("%%");
  m_trpUnit = _T("%%");
 
- m_meter.SetRange (-40.0, 120.0) ;
- m_meter.SetLabelsDecimals(1) ;
- m_meter.SetValueDecimals(1) ;
- m_meter.SetTitle(MLL::LoadString(IDS_MI_TEMPERATURE_TITLE)) ;
+ m_meter.SetRange (-40.0, 120.0);
+ m_meter.SetLabelsDecimals(1);
+ m_meter.SetValueDecimals(1);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_TEMPERATURE_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));

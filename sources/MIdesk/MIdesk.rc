@@ -212,6 +212,9 @@ BEGIN
     IDS_MI_INJTIME_TITLE     "Фаза конца впрыска"
     IDS_MI_FUELCONSUMF_TITLE "Расход топлива (Гц)"
     IDS_MI_FUELCONSUMF_UNIT  "Гц"
+    IDS_MI_FTLS_TITLE        "Уровень топлива"
+    IDS_MI_EGTS_TITLE        "Темп.выхл.газов"
+    IDS_MI_OPS_TITLE         "Давление масла"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -245,6 +248,11 @@ BEGIN
     IDS_MI_VSSGRAPH_V_UNIT    "км/ч"
     IDS_MI_TPSDOTGRAPH_V_UNIT "Скор.ДЗ,%/сек"
     IDS_MI_FUELCONSUMFGRAPH_V_UNIT "Расход топл,Гц"
+    IDS_MI_FTLS_UNIT          "Л"
+    IDS_MI_OPS_UNIT           "кг/см2"
+    IDS_MI_FTLSGRAPH_V_UNIT   "Уровень топл,Л"
+    IDS_MI_OPSGRAPH_V_UNIT    "Масло,кг/см2"
+    IDS_MI_EGTSGRAPH_V_UNIT   "Темп.выхлопа,°C"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -493,6 +501,11 @@ BEGIN
     IDS_MI_INJTIME_TITLE     "End inj. phase"
     IDS_MI_FUELCONSUMF_TITLE "Fuel consumption (Hz)"
     IDS_MI_FUELCONSUMF_UNIT  "Hz"
+    IDS_MI_FTLS_TITLE        "Fuel level"
+    IDS_MI_EGTS_TITLE        "Exhaust gas temp."
+    IDS_MI_OPS_TITLE         "Oil pressure"
+    IDS_MI_FTLS_UNIT         "L"
+    IDS_MI_OPS_UNIT          "kg/cm2"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -526,6 +539,9 @@ BEGIN
     IDS_MI_VSSGRAPH_V_UNIT    "км/ч"
     IDS_MI_TPSDOTGRAPH_V_UNIT "TPSdot,%/sec"
     IDS_MI_FUELCONSUMFGRAPH_V_UNIT "Fuel consum,Hz"
+    IDS_MI_FTLSGRAPH_V_UNIT   "Fuel level,L"
+    IDS_MI_OPSGRAPH_V_UNIT    "Oil pres,kg/cm2"
+    IDS_MI_EGTSGRAPH_V_UNIT   "Exhaust gas,°C"
 END
 
 STRINGTABLE DISCARDABLE 

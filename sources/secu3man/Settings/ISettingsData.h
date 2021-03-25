@@ -326,6 +326,9 @@ struct MetersCfg
  int m_optMetInjTimE[2];
  int m_optMetFuelConsumF[2];
  int m_optMetGrts[2];
+ int m_optMetFtls[2];
+ int m_optMetEgts[2];
+ int m_optMetOps[2];
 };
 
 typedef enum EInterLang
@@ -540,6 +543,9 @@ class ISettingsData
   virtual int GetInjTimBAverage(void) const = 0;
   virtual int GetInjTimEAverage(void) const = 0;
   virtual int GetGrtsAverage(void) const = 0;
+  virtual int GetFtlsAverage(void) const = 0;
+  virtual int GetEgtsAverage(void) const = 0;
+  virtual int GetOpsAverage(void) const = 0;
 
   virtual int GetTitleFontSize(void) const = 0;
   virtual int GetValueFontSize(void) const = 0;
