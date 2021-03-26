@@ -333,7 +333,7 @@ void CAutoTuneController::OnTimer(void)
   }
  }
 
- if (update_view)
+ if (update_view && mp_view->GetSafeHwnd())
   mp_view->UpdateView(); //Update our view
 }
 

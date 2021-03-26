@@ -361,7 +361,7 @@ void CGMEInjVEDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load
  if (m_celwgt_map.GetSafeHwnd() && m_celwgt_map.IsWindowVisible())
  {
   m_celwgt_map.ShowMarkers(true, true);
-  m_celwgt_map.SetArguments(load, (float)rpm);
+  m_celwgt_map.SetArguments(0==m_active_ve ? load : tps, (float)rpm);
  }
 }
 

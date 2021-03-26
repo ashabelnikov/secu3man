@@ -303,6 +303,8 @@ void CMapEditorCtrl::OnDestroy()
 
  if (NULL!=m_clipRgn.GetSafeHandle())
   m_clipRgn.DeleteObject(); 
+
+ m_forceRedraw = true;
 }
 
 void CMapEditorCtrl::OnPaint()
@@ -458,7 +460,7 @@ void CMapEditorCtrl::_DrawMarkers(void)
 
 void CMapEditorCtrl::_ShowImage(CDC* pDC, CRect* p_rect /*=NULL*/)
 {
- if (NULL==pDC || NULL==pDC->GetSafeHdc())
+ if (NULL==pDC || NULL==pDC->GetSafeHdc() || NULL==m_dcGrid.GetSafeHdc() || NULL==m_dcMark.GetSafeHdc())
   return;
  CDC memDC;
  CBitmap memBmp;
@@ -1093,7 +1095,8 @@ void CMapEditorCtrl::UpdateDisplay(int i /*=-1*/, int j /*=-1*/)
  else
  { //update specified cell only
   _DrawGrid(i, j);
-  _ShowImage(&dc, &_GetItemRect(&m_dcGrid, i, j));
+  if (m_dcGrid.GetSafeHdc())
+   _ShowImage(&dc, &_GetItemRect(&m_dcGrid, i, j));
  }
 }
 
