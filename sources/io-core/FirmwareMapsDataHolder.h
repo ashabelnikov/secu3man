@@ -76,6 +76,7 @@
 #define FTLS_LOOKUP_TABLE_SIZE 17          // Size of "fuel tank level vs voltage" map
 #define EGTS_LOOKUP_TABLE_SIZE 17          // Size of "exhaust gas temperature vs voltage" map
 #define OPS_LOOKUP_TABLE_SIZE  17          // Size of "oil pressure vs voltage" map
+#define INJPWCOEF_LUT_SIZE     17
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -237,6 +238,7 @@ struct FWMapsDataHolder
  float ftls_curve[FTLS_LOOKUP_TABLE_SIZE+2];
  float egts_curve[EGTS_LOOKUP_TABLE_SIZE+2];
  float ops_curve[OPS_LOOKUP_TABLE_SIZE+2];
+ float injpw_coef[INJPWCOEF_LUT_SIZE];
 
  CESettingsData cesd;
 
@@ -274,6 +276,7 @@ struct FWMapsDataHolder
   std::fill(ftls_curve, ftls_curve + FTLS_LOOKUP_TABLE_SIZE + 2, .0f);
   std::fill(egts_curve, egts_curve + EGTS_LOOKUP_TABLE_SIZE + 2, .0f);
   std::fill(ops_curve, ops_curve + OPS_LOOKUP_TABLE_SIZE + 2, .0f);
+  std::fill(injpw_coef, injpw_coef + INJPWCOEF_LUT_SIZE, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

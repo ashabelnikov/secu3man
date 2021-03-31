@@ -47,7 +47,7 @@ using namespace SECU3IO::SECU3Types;
 
 //--------------------------------------------------------------------------
 #define IOREM_SLOTS 49           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 92           // Number of plugs used in I/O remapping
+#define IOREM_PLUGS 100          // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
@@ -247,6 +247,9 @@ typedef struct
  // Oil pressure vs voltage. 16 points of function, plus two values for setting of x-axis range
  _int ops_curve[OPS_LOOKUP_TABLE_SIZE+2];
 
+ //injection PW coefficient vs voltage
+ _int injpw_coef[INJPWCOEF_LUT_SIZE];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -291,11 +294,12 @@ typedef struct
  _uchar sfc_tps_thrd;
  _uint evap_map_thrd;
  _uint ckps_skip_trig;
+ _uchar maninjpw_idl;
  
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3639];
+ _uchar reserved[3572];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1479,6 +1483,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetFtlsCurveMap(op_fwd->ftls_curve);
  GetEgtsCurveMap(op_fwd->egts_curve);
  GetOpsCurveMap(op_fwd->ops_curve);
+ GetManInjPwcMap(op_fwd->injpw_coef);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1565,6 +1570,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetFtlsCurveMap(ip_fwd->ftls_curve);
  SetEgtsCurveMap(ip_fwd->egts_curve);
  SetOpsCurveMap(ip_fwd->ops_curve);
+ SetManInjPwcMap(ip_fwd->injpw_coef);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2404,6 +2410,27 @@ void CFirmwareDataMediator::SetOpsCurveMap(const float* ip_values)
   p_fd->exdata.ops_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
+void CFirmwareDataMediator::GetManInjPwcMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //get address of the beginning of set of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJPWCOEF_LUT_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.injpw_coef[i]) / INJPWCOEF_MULT;
+}
+
+void CFirmwareDataMediator::SetManInjPwcMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //get address of the beginning of set of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJPWCOEF_LUT_SIZE; i++ )
+  p_fd->exdata.injpw_coef[i] = MathHelpers::Round((ip_values[i]*INJPWCOEF_MULT));
+}
 
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
@@ -2774,6 +2801,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.sfc_tps_thrd = ((float)exd.sfc_tps_thrd) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.evap_map_thrd = ((float)exd.evap_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.ckps_skip_trig = exd.ckps_skip_trig;
+ o_data.maninjpw_idl = exd.maninjpw_idl;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2828,4 +2856,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.sfc_tps_thrd = MathHelpers::Round(i_data.sfc_tps_thrd * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.evap_map_thrd = MathHelpers::Round(i_data.evap_map_thrd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.ckps_skip_trig = i_data.ckps_skip_trig;
+ exd.maninjpw_idl = i_data.maninjpw_idl;
 }

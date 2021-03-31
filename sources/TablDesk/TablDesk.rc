@@ -124,6 +124,7 @@ BEGIN
     CONTROL         "Настр. крив. ДУТ",IDC_TD_FTLS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,558,96,18
     CONTROL         "Настр. крив. ДТВГ",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,558,96,18
     CONTROL         "Настр. крив. ДДМ",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,577,96,18
+    CONTROL         "Ручн.корр.впрыска",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,577,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -800,6 +801,8 @@ BEGIN
     IDS_CESETT_MAP_V_USEEM_CHECK_TT "Использовать резервное значение в случае ошибки."
     IDS_GME_INJ_VE1_RADIOBOX_TT "Выбрать таблицу наполнения 1 для редактирования/автонастройки"
     IDS_GME_INJ_VE2_RADIOBOX_TT "Выбрать таблицу наполнения 2 для редактирования/автонастройки"
+    IDS_TD_MANINJPWC_MAP_TT  "Таблица зависимости коэффициента ручной коррекции длительности впрыска от напряжения на входе INJPWC_I"
+    IDS_MANINJPWC_MAP "Коэффициент ручной коррекции длительности впрыска"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -921,6 +924,7 @@ BEGIN
     CONTROL         "Tune FTLS curve",IDC_TD_FTLS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,558,96,18
     CONTROL         "Tune EGTS curve",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,558,96,18
     CONTROL         "Tune OPS curve",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,577,96,18
+    CONTROL         "Manual inj.PW corr.",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,577,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1619,6 +1623,8 @@ BEGIN
     IDS_TD_FTLS_CURVE_TT       "Setting level of fuel versus voltage dependance for the FTLS. This table is necessary for the correct conversion of the voltage (V) at the sensor to the level of fuel in fuel tank (L)."
     IDS_TD_EGTS_CURVE_TT       "Setting exhaust gas temperature versus voltage dependance for the EGTS. This table is necessary for the correct conversion of the voltage (V) at the sensor to exhaust gas temperature (°C)."
     IDS_TD_OPS_CURVE_TT        "Setting oil pressure versus voltage dependance for the OPS. This table is necessary for the correct conversion of the voltage (V) at the sensor to pressure of oil in the engine (kg/cm2)."
+    IDS_TD_MANINJPWC_MAP_TT  "Table of the coefficient of manual correction of the injection PW vs voltage at the input INJPWC_I"
+    IDS_MANINJPWC_MAP "Coefficient of manual inj.PW correction"
 END
 
 /////////////////////////////////////////////////////////////////////////////

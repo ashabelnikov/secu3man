@@ -242,6 +242,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetOpsCurveMap(float* op_values, bool i_original = false);
   void SetOpsCurveMap(const float* i_values);
 
+  void GetManInjPwcMap(float* op_values, bool i_original = false);
+  void SetManInjPwcMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {
@@ -348,7 +351,15 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_FTLS_I     =  89,     // FTLS_I    (input)
    IOP3I_EGTS_I     =  90,     // EGTS_I    (input)
    IOP3I_OPS_I      =  91,     // OPS_I     (input)
-   IOP3I_COUNT      =  92,     //DON'T forget to update this value
+   IOP3I_INJPWC_I   =  92,     // INJPWC_I  (input)
+// IOP3I_RESERVED40 =  93,     // Reserved  ()
+// IOP3I_RESERVED41 =  94,     // Reserved  ()
+// IOP3I_RESERVED42 =  95,     // Reserved  ()
+// IOP3I_RESERVED43 =  96,     // Reserved  ()
+// IOP3I_RESERVED44 =  97,     // Reserved  ()
+// IOP3I_RESERVED45 =  98,     // Reserved  ()
+// IOP3I_RESERVED46 =  99,     // Reserved  ()
+   IOP3I_COUNT      =  93,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -440,10 +451,18 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_AUTO_I     =  85,     // AUTO_I      (input)
    IOP_VTACHOM    =  86,     // VTACHOM     (output)
 // IOP_RESERVED30 =  87,     // Reserved    ()
-// IOP_RESERVED30 =  88,     // Reserved    ()
-// IOP_RESERVED30 =  89,     // Reserved    ()
-// IOP_RESERVED30 =  90,     // Reserved    ()
-// IOP_RESERVED30 =  91,     // Reserved    ()
+// IOP_RESERVED31 =  88,     // Reserved    ()
+// IOP_RESERVED32 =  89,     // Reserved    ()
+// IOP_RESERVED33 =  90,     // Reserved    ()
+// IOP_RESERVED34 =  91,     // Reserved    ()
+// IOP_RESERVED35 =  92,     // Reserved    ()
+// IOP_RESERVED36 =  93,     // Reserved    ()
+// IOP_RESERVED37 =  94,     // Reserved    ()
+// IOP_RESERVED38 =  95,     // Reserved    ()
+// IOP_RESERVED39 =  96,     // Reserved    ()
+// IOP_RESERVED40 =  97,     // Reserved    ()
+// IOP_RESERVED41 =  98,     // Reserved    ()
+// IOP_RESERVED42 =  99,     // Reserved    ()
    IOP_COUNT      =  87,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
@@ -573,7 +592,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V31 = 0x31,           //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5, VTACHOM)
    IOV_V32 = 0x32,           //V3.2  New slots were added (ADD_I5,6,7,8, GRTEMP, GRHEAT)
    IOV_V33 = 0x33,           //V3.3  New slots were added (added possibility to remap ADD_I5/7 as MAP2, GASVAL_O plug added)
-   IOV_V34 = 0x34            //V3.4  New plugs: FTLS_I, EGTS_I, OPS_I
+   IOV_V34 = 0x34            //V3.4  New plugs: FTLS_I, EGTS_I, OPS_I, INJPWC_I; Plus extra reserved plugs
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

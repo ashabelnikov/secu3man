@@ -179,6 +179,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFtlsCurveMapWnd(_T("FtlsCurveMapWnd"))
 , m_optEgtsCurveMapWnd(_T("EgtsCurveMapWnd"))
 , m_optOpsCurveMapWnd(_T("OpsCurveMapWnd"))
+, m_optManInjPwcMapWnd(_T("ManInjPwcMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -273,6 +274,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFtlsCurveMapWndSize(_T("FtlsCurveMapWnd"))
 , m_optEgtsCurveMapWndSize(_T("EgtsCurveMapWnd"))
 , m_optOpsCurveMapWndSize(_T("OpsCurveMapWnd"))
+, m_optManInjPwcMapWndSize(_T("ManInjPwcMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -424,6 +426,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepFtlsCurveMap(_T("FtlsCurveMapWnd"))
 , m_optPtMovStepEgtsCurveMap(_T("EgtsCurveMapWnd"))
 , m_optPtMovStepOpsCurveMap(_T("OpsCurveMapWnd"))
+, m_optPtMovStepManInjPwcMap(_T("ManInjPwcMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -809,6 +812,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optFtlsCurveMapWnd);
  ws.ReadWndPos(m_optEgtsCurveMapWnd);
  ws.ReadWndPos(m_optOpsCurveMapWnd);
+ ws.ReadWndPos(m_optManInjPwcMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -906,7 +910,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optFtlsCurveMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optEgtsCurveMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optOpsCurveMapWndSize, 0, 10000);
-
+ sz.ReadWndPos(m_optManInjPwcMapWndSize, 0, 10000);
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  sz1.ReadWndPos(m_optStrtMapWndSize1);
@@ -1129,6 +1133,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepFtlsCurveMap, _T("0.1"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepEgtsCurveMap, _T("5.0"), 0.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepOpsCurveMap, _T("0.1"), 0.0f, 1.0f);
+ ms.ReadFlt(m_optPtMovStepManInjPwcMap, _T("0.01"), 0.0f, 0.1f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1973,6 +1978,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optOpsCurveMapWnd, _T("Кривая датчика давления масла (ДДМ)"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optManInjPwcMapWnd, _T("Map for manual correction of injection PW"));
+ else
+  ws.WriteWndPos(m_optManInjPwcMapWnd, _T("Таблица для ручной коррекции длительности впрыска"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2438,6 +2448,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optOpsCurveMapWndSize, _T("Oil pressure sensor's table"));
  else
   sz.WriteWndPos(m_optOpsCurveMapWndSize, _T("Кривая датчика давления масла (ДДМ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optManInjPwcMapWndSize, _T("Map for manual correction of injection PW"));
+ else
+  sz.WriteWndPos(m_optManInjPwcMapWndSize, _T("Таблица для ручной коррекции длительности впрыска"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3481,6 +3496,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepOpsCurveMap, 2, _T("Кривая датчика давления масла (ДДМ)"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepManInjPwcMap, 3, _T("Map for manual correction of injection PW"));
+ else
+  ms.WriteFlt(m_optPtMovStepManInjPwcMap, 3, _T("Таблица для ручной коррекции длительности впрыска"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -3779,6 +3799,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optEgtsCurveMapWnd.value.y = i_wndSettings.m_EgtsCurveMapWnd_Y; 
  m_optOpsCurveMapWnd.value.x = i_wndSettings.m_OpsCurveMapWnd_X;
  m_optOpsCurveMapWnd.value.y = i_wndSettings.m_OpsCurveMapWnd_Y;
+ m_optManInjPwcMapWnd.value.x = i_wndSettings.m_ManInjPwcMapWnd_X;
+ m_optManInjPwcMapWnd.value.y = i_wndSettings.m_ManInjPwcMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3899,6 +3921,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_EgtsCurveMapWnd_Y = m_optEgtsCurveMapWnd.value.y;
  o_wndSettings.m_OpsCurveMapWnd_X = m_optOpsCurveMapWnd.value.x;
  o_wndSettings.m_OpsCurveMapWnd_Y = m_optOpsCurveMapWnd.value.y;
+ o_wndSettings.m_ManInjPwcMapWnd_X = m_optManInjPwcMapWnd.value.x;
+ o_wndSettings.m_ManInjPwcMapWnd_Y = m_optManInjPwcMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4155,6 +4179,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optEgtsCurveMapWndSize.value.y = i_wndSize.m_EgtsCurveMapWnd_H; 
  m_optOpsCurveMapWndSize.value.x = i_wndSize.m_OpsCurveMapWnd_W;
  m_optOpsCurveMapWndSize.value.y = i_wndSize.m_OpsCurveMapWnd_H; 
+ m_optManInjPwcMapWndSize.value.x = i_wndSize.m_ManInjPwcMapWnd_W;
+ m_optManInjPwcMapWndSize.value.y = i_wndSize.m_ManInjPwcMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4275,6 +4301,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_EgtsCurveMapWnd_H = m_optEgtsCurveMapWndSize.value.y;
  o_wndSize.m_OpsCurveMapWnd_W = m_optOpsCurveMapWndSize.value.x;
  o_wndSize.m_OpsCurveMapWnd_H = m_optOpsCurveMapWndSize.value.y;
+ o_wndSize.m_ManInjPwcMapWnd_W = m_optManInjPwcMapWndSize.value.x;
+ o_wndSize.m_ManInjPwcMapWnd_H = m_optManInjPwcMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -5136,6 +5164,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepFtlsCurveMap.value = i_ptMovStep.m_ftls_curve_map;
  m_optPtMovStepEgtsCurveMap.value = i_ptMovStep.m_egts_curve_map;
  m_optPtMovStepOpsCurveMap.value = i_ptMovStep.m_ops_curve_map;
+ m_optPtMovStepManInjPwcMap.value = i_ptMovStep.m_maninjpwc_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -5195,6 +5224,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_ftls_curve_map = m_optPtMovStepFtlsCurveMap.value;
  o_ptMovStep.m_egts_curve_map = m_optPtMovStepEgtsCurveMap.value;
  o_ptMovStep.m_ops_curve_map = m_optPtMovStepOpsCurveMap.value;
+ o_ptMovStep.m_maninjpwc_map = m_optPtMovStepManInjPwcMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

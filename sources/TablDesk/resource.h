@@ -562,3 +562,6 @@
 #define IDS_OPS_CURVE_MAP               5916
 #define IDS_MAPS_FUELTANK_UNIT          5917
 #define IDS_MAPS_PRESSUREKG_UNIT        5918
+#define IDC_TD_MANINJPWC_MAP            5919
+#define IDS_TD_MANINJPWC_MAP_TT         5920
+#define IDS_MANINJPWC_MAP               5921

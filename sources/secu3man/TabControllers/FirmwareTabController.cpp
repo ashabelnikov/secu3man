@@ -293,6 +293,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTLS_CURVE, mptms.m_ftls_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_EGTS_CURVE, mptms.m_egts_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_OPS_CURVE, mptms.m_ops_curve_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MANINJPWC, mptms.m_maninjpwc_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -964,6 +965,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->EnableFtlsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableEgtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
  mp_view->mp_TablesPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  mp_view->mp_TablesPanel->EnableAftstrStrkMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
@@ -1174,6 +1176,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetOpsCurveMap(mp_view->mp_TablesPanel->GetOpsCurveMap(false),false);
  mp_fwdm->GetOpsCurveMap(mp_view->mp_TablesPanel->GetOpsCurveMap(true),true);
+
+ mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(false),false);
+ mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(true),true);
 
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
@@ -1512,6 +1517,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_GRVDELAY:
    mp_fwdm->SetGrValDelMap(mp_view->mp_TablesPanel->GetGrValDelMap(false));
+   break;
+  case TYPE_MAP_MANINJPWC:
+   mp_fwdm->SetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(false));
    break;
  }
 }
@@ -1942,6 +1950,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Absolute pressure in the fuel rail"), _T("kPa"), 0.0f, 1000.0f, 0.1f, 1, &d.frap, _T("Absolute pressure in the fuel rail. Set value greater than 0 if you want the injection PW to be corrected for the pressure difference in the intake manifold and the fuel rail. It is assumed that injectors' flow rate is indicated for a pressure of 3 bars."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Использовать ручную корр. впрыска на ХХ"), _T(""), 0, 1, 1, 1, &d.maninjpw_idl, _T("Установите в 0, если не хотите чтобы ручная коррекция длительности впрыска работала на ХХ. Установите в 1 и коррекция будет работать не только в режиме под нагрузкой, но и в режиме ХХ."));
+ else
+  dfd.AppendItem(_T("Use manual inj. PW correction on idling"), _T(""), 0, 1, 1, 1, &d.maninjpw_idl, _T("Set to 0 if you don't want the manual inj.PW correction to work at idling. Set to 1 and correction will work not only in load mode, but also in idling mode."));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));
@@ -2089,7 +2102,6 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("TDC of the 2 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[1], _T("TDC position of 2 cylinder relatively to the first tooth of trigger wheel"));
 
-
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("ВМТ цилиндра 3"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[2], _T("Положение ВМТ 3-го цилиндра относительно первого зуба диска синхронизации"));
  else
@@ -2100,12 +2112,10 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("TDC of the 4 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[3], _T("TDC position of 4 cylinder relatively to the first tooth of trigger wheel"));
 
-
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("ВМТ цилиндра 5"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[4], _T("Положение ВМТ 5-го цилиндра относительно первого зуба диска синхронизации"));
  else
   dfd.AppendItem(_T("TDC of the 5 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[4], _T("TDC position of 5 cylinder relatively to the first tooth of trigger wheel"));
-
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("ВМТ цилиндра 6"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[5], _T("Положение ВМТ 6-го цилиндра относительно первого зуба диска синхронизации"));
@@ -2384,7 +2394,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_ftls_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTLS_CURVE);
  mptms.m_egts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_EGTS_CURVE);
  mptms.m_ops_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_OPS_CURVE);
-
+ mptms.m_maninjpwc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MANINJPWC);
  mp_settings->SetMapPtMovStep(mptms);
 }
 

@@ -1279,6 +1279,50 @@ void __cdecl CTablesSetPanel::OnWndActivationOpsCurveTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeManInjPwcTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_MANINJPWC);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseManInjPwcTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_MANINJPWC].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_MANINJPWC].handle, TYPE_MAP_MANINJPWC);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationManInjPwcTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_MANINJPWC].handle, cmd);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -1297,6 +1341,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_ftls_curve_enabled(false)
 , m_egts_curve_enabled(false)
 , m_ops_curve_enabled(false)
+, m_maninjpwc_enabled(false)
 {
  m_scrl_view = 985;
 
@@ -1349,6 +1394,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_FTLS_CURVE, m_view_ftls_curve_map_btn);
  DDX_Control(pDX, IDC_TD_EGTS_CURVE, m_view_egts_curve_map_btn);
  DDX_Control(pDX, IDC_TD_OPS_CURVE, m_view_ops_curve_map_btn);
+ DDX_Control(pDX, IDC_TD_MANINJPWC_MAP, m_view_maninjpwc_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -1380,6 +1426,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_FTLS_CURVE, OnViewFtlsCurveMap)
  ON_BN_CLICKED(IDC_TD_EGTS_CURVE, OnViewEgtsCurveMap)
  ON_BN_CLICKED(IDC_TD_OPS_CURVE, OnViewOpsCurveMap)
+ ON_BN_CLICKED(IDC_TD_MANINJPWC_MAP, OnViewManInjPwcMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -1411,6 +1458,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_FTLS_CURVE, OnUpdateViewFtlsCurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_EGTS_CURVE, OnUpdateViewEgtsCurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_OPS_CURVE, OnUpdateViewOpsCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_MANINJPWC_MAP, OnUpdateViewManInjPwcMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -1462,6 +1510,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_ftls_curve_map_btn, MLL::GetString(IDS_TD_FTLS_CURVE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_egts_curve_map_btn, MLL::GetString(IDS_TD_EGTS_CURVE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_ops_curve_map_btn, MLL::GetString(IDS_TD_OPS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_maninjpwc_map_btn, MLL::GetString(IDS_TD_MANINJPWC_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1680,6 +1729,14 @@ void CTablesSetPanel::OnUpdateViewOpsCurveMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_OPS_CURVE].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewManInjPwcMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_maninjpwc_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_MANINJPWC].state) ? TRUE : FALSE );
+}
+
 void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
@@ -1878,6 +1935,15 @@ void CTablesSetPanel::EnableOpsCurve(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_OPS_CURVE].state && ::IsWindow(m_md[TYPE_MAP_OPS_CURVE].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_OPS_CURVE].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableManInjPwc(bool enable)
+{
+ m_maninjpwc_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_MANINJPWC].state && ::IsWindow(m_md[TYPE_MAP_MANINJPWC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_MANINJPWC].handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -2262,7 +2328,6 @@ void CTablesSetPanel::OnViewGrtsCurveMap()
   ::SetFocus(m_md[TYPE_MAP_GRTS_CURVE].handle);
  }
 }
-
 
 void CTablesSetPanel::OnViewManIgntimMap()
 {
@@ -2811,6 +2876,42 @@ void CTablesSetPanel::OnViewOpsCurveMap()
  }
 }
 
+void CTablesSetPanel::OnViewManInjPwcMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_maninjpwc_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_MANINJPWC].handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_MANINJPWC].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_MANINJPWC].state = 1;
+  m_md[TYPE_MAP_MANINJPWC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetManInjPwcMap(true),GetManInjPwcMap(false),0.5,1.5,SECU3IO::maninjpwc_map_slots,17,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
+    MLL::GetString(IDS_MANINJPWC_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_MANINJPWC].handle, 1, _T("%.03f"));
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_MANINJPWC].handle, _T("#0.000"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_MANINJPWC].handle, m_md[TYPE_MAP_MANINJPWC].ptMovStep);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_MANINJPWC].handle,OnChangeManInjPwcTable,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_MANINJPWC].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_MANINJPWC].handle,OnCloseManInjPwcTable,this);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_MANINJPWC].handle, OnWndActivationManInjPwcTable, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_MANINJPWC].handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_MANINJPWC].handle, TYPE_MAP_MANINJPWC);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_MANINJPWC].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_MANINJPWC].handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -3050,6 +3151,14 @@ float* CTablesSetPanel::GetOpsCurveMap(bool i_original)
   return m_md[TYPE_MAP_OPS_CURVE].original;
  else
   return m_md[TYPE_MAP_OPS_CURVE].active;
+}
+
+float* CTablesSetPanel::GetManInjPwcMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_MANINJPWC].original;
+ else
+  return m_md[TYPE_MAP_MANINJPWC].active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)

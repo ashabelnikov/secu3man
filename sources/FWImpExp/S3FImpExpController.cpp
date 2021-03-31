@@ -200,6 +200,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_OPSCURVE_MAP))
   memcpy(mp_fwd->ops_curve, mp_s3f_io->GetData().ops_curve, sizeof(float) * (OPS_LOOKUP_TABLE_SIZE+2));
 
+ if (mp_view->GetFWDFlag(FLAG_MANINJPWC_MAP))
+  memcpy(mp_fwd->injpw_coef, mp_s3f_io->GetData().injpw_coef, sizeof(float) * (INJPWCOEF_LUT_SIZE));
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -448,6 +451,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FTLSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_OPSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_MANINJPWC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -473,6 +477,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_FTLSCURVE_MAP, sv0119 && sepmap); //since v01.19
  mp_view->EnableFWDFlag(FLAG_EGTSCURVE_MAP, sv0119 && sepmap); //since v01.19
  mp_view->EnableFWDFlag(FLAG_OPSCURVE_MAP, sv0119 && sepmap);  //since v01.19
+ mp_view->EnableFWDFlag(FLAG_MANINJPWC_MAP, sv0119 && sepmap); //since v01.19
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -644,6 +649,9 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_OPSCURVE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().ops_curve, mp_fwd->ops_curve, sizeof(float) * (OPS_LOOKUP_TABLE_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_MANINJPWC_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().injpw_coef, mp_fwd->injpw_coef, sizeof(float) * (INJPWCOEF_LUT_SIZE));
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -839,6 +847,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FTLSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_OPSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_MANINJPWC_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)
