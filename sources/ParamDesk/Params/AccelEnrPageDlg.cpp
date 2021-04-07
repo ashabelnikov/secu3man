@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "AccelEnrPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/ddx_helpers.h"
 
 const UINT CAccelEnrPageDlg::IDD = IDD_PD_ACCELENR_PAGE;
 
@@ -34,6 +35,8 @@ BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ACCELENR_TPSTHRD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ACCELENR_MULTCOLDENR_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ACCELENR_DECAYTIME_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_ACCELENR_AETIME_EDIT, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_ACCELENR_AETYPE_COMBO, OnChangeDataAEType)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_SPIN,OnUpdateControls)
@@ -49,6 +52,15 @@ BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_DECAYTIME_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_DECAYTIME_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_DECAYTIME_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_AETYPE_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_AETYPE_CAPTION,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_AETIME_EDIT,OnUpdateControlsAET)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_AETIME_SPIN,OnUpdateControlsAET)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_AETIME_CAPTION,OnUpdateControlsAET)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_AETIME_UNIT,OnUpdateControlsAET)
+
 END_MESSAGE_MAP()
 
 CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
@@ -58,10 +70,13 @@ CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
 , m_tpsdot_thrd_edit(CEditEx::MODE_FLOAT, true)
 , m_coldacc_mult_edit(CEditEx::MODE_FLOAT, true)
 , m_decaytime_edit(CEditEx::MODE_INT, true)
+, m_aetime_edit(CEditEx::MODE_INT, true)
 {
  m_params.ae_tpsdot_thrd = 50.0f;   //50%/sec
  m_params.ae_coldacc_mult = 150.0f; //*150% at -30°C
  m_params.ae_decay_time = 50; //strokes
+ m_params.ae_type = 0; //accel.pump
+ m_params.ae_time = 30; //30 strokes
 }
 
 LPCTSTR CAccelEnrPageDlg::GetDialogID(void) const
@@ -79,16 +94,27 @@ void CAccelEnrPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_ACCELENR_MULTCOLDENR_SPIN, m_coldacc_mult_spin);
  DDX_Control(pDX,IDC_PD_ACCELENR_DECAYTIME_EDIT, m_decaytime_edit);
  DDX_Control(pDX,IDC_PD_ACCELENR_DECAYTIME_SPIN, m_decaytime_spin);
+ DDX_Control(pDX,IDC_PD_ACCELENR_AETYPE_COMBO, m_aetype_combo);
+ DDX_Control(pDX,IDC_PD_ACCELENR_AETIME_EDIT, m_aetime_edit);
+ DDX_Control(pDX,IDC_PD_ACCELENR_AETIME_SPIN, m_aetime_spin);
 
  m_tpsdot_thrd_edit.DDX_Value(pDX, IDC_PD_ACCELENR_TPSTHRD_EDIT, m_params.ae_tpsdot_thrd);
  m_coldacc_mult_edit.DDX_Value(pDX, IDC_PD_ACCELENR_MULTCOLDENR_EDIT, m_params.ae_coldacc_mult);
  m_decaytime_edit.DDX_Value(pDX, IDC_PD_ACCELENR_DECAYTIME_EDIT, m_params.ae_decay_time);
+ DDX_CBIndex_int(pDX, IDC_PD_ACCELENR_AETYPE_COMBO, m_params.ae_type);
+ m_aetime_edit.DDX_Value(pDX, IDC_PD_ACCELENR_AETIME_EDIT, m_params.ae_time);
 }
 
 void CAccelEnrPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
 }
+
+void CAccelEnrPageDlg::OnUpdateControlsAET(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.ae_type==1 && m_fuel_injection);
+}
+
 /*
 void CAccelEnrPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
 {
@@ -120,6 +146,15 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
  m_decaytime_spin.SetRangeAndDelta(1, 255, 1);
  m_decaytime_edit.SetRange(1, 255);
 
+ m_aetime_spin.SetBuddy(&m_aetime_edit);
+ m_aetime_edit.SetLimitText(3);
+ m_aetime_edit.SetDecimalPlaces(3);
+ m_aetime_spin.SetRangeAndDelta(1, 255, 1);
+ m_aetime_edit.SetRange(1, 255);
+
+ m_aetype_combo.AddString(MLL::LoadString(IDS_PD_ACCELENR_AETYPE_ACCLPUMP));
+ m_aetype_combo.AddString(MLL::LoadString(IDS_PD_ACCELENR_AETYPE_TIMEBASE));
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -129,6 +164,9 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_coldacc_mult_spin, MLL::GetString(IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_decaytime_edit, MLL::GetString(IDS_PD_ACCELENR_DECAYTIME_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_decaytime_spin, MLL::GetString(IDS_PD_ACCELENR_DECAYTIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_aetype_combo, MLL::GetString(IDS_PD_ACCELENR_AETYPE_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_aetime_edit, MLL::GetString(IDS_PD_ACCELENR_AETIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_aetime_spin, MLL::GetString(IDS_PD_ACCELENR_AETIME_EDIT_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -140,6 +178,13 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
 void CAccelEnrPageDlg::OnChangeData()
 {
  UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CAccelEnrPageDlg::OnChangeDataAEType()
+{
+ UpdateData();
+ UpdateDialogControls(this, TRUE);
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 

@@ -786,7 +786,7 @@ BEGIN
     COMBOBOX        IDC_PD_UNIOUT_12_LOGFUN_COMBO,36,99,50,65,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 
     GROUPBOX        "Выход 2",IDC_PD_UNIOUT_2_GROUP,2,116,156,91,0,WS_EX_TRANSPARENT
-    COMBOBOX        IDC_PD_UNIOUT_2_COND1_COMBO,5,125,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_UNIOUT_2_COND1_COMBO,5,126,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     CONTROL         "инверсия",IDC_PD_UNIOUT_2_COND1_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,126,45,10
     EDITTEXT        IDC_PD_UNIOUT_2_COND1_ON_EDIT,5,140,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_2_COND1_OFF_EDIT,80,140,30,16,ES_AUTOHSCROLL
@@ -805,7 +805,7 @@ BEGIN
     LTEXT           "выкл.",IDC_PD_UNIOUT_2_COND2_OFF_CAPTION,125,189,26,8
 
     GROUPBOX        "Выход 3",IDC_PD_UNIOUT_3_GROUP,2,209,156,91,0,WS_EX_TRANSPARENT
-    COMBOBOX        IDC_PD_UNIOUT_3_COND1_COMBO,5,218,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_UNIOUT_3_COND1_COMBO,5,219,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     CONTROL         "инверсия",IDC_PD_UNIOUT_3_COND1_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,219,45,10
     EDITTEXT        IDC_PD_UNIOUT_3_COND1_ON_EDIT,5,233,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_3_COND1_OFF_EDIT,80,233,30,16,ES_AUTOHSCROLL
@@ -824,7 +824,7 @@ BEGIN
     LTEXT           "выкл.",IDC_PD_UNIOUT_3_COND2_OFF_CAPTION,125,282,26,8
 
     GROUPBOX        "Выход 4",IDC_PD_UNIOUT_4_GROUP,2,302,156,91,0,WS_EX_TRANSPARENT
-    COMBOBOX        IDC_PD_UNIOUT_4_COND1_COMBO,5,311,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_UNIOUT_4_COND1_COMBO,5,312,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     CONTROL         "инверсия",IDC_PD_UNIOUT_4_COND1_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,312,45,10
     EDITTEXT        IDC_PD_UNIOUT_4_COND1_ON_EDIT,5,326,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_4_COND1_OFF_EDIT,80,326,30,16,ES_AUTOHSCROLL
@@ -1089,6 +1089,14 @@ BEGIN
     CONTROL         "",IDC_PD_ACCELENR_DECAYTIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,50,13,17
     LTEXT           "Время затухания",IDC_PD_ACCELENR_DECAYTIME_CAPTION,3,51,94,10
     LTEXT           "т",IDC_PD_ACCELENR_DECAYTIME_UNIT,146,51,30,10
+
+    LTEXT           "Тип обогащения:",IDC_PD_ACCELENR_AETYPE_CAPTION,3,74,75,10
+    COMBOBOX        IDC_PD_ACCELENR_AETYPE_COMBO,80,73,70,30,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
+
+    EDITTEXT        IDC_PD_ACCELENR_AETIME_EDIT,98,93,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_AETIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,93,13,17
+    LTEXT           "Длительность обогащения",IDC_PD_ACCELENR_AETIME_CAPTION,3,94,94,10
+    LTEXT           "т",IDC_PD_ACCELENR_AETIME_UNIT,146,94,30,10
 END
 
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
@@ -1691,7 +1699,7 @@ BEGIN
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Время, на которое включится бензонасос после включения зажигания"
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "Если разрешено, то когда GAS_V=0 будут работать выходы впрыска 1-4, а когда GAS_V=1 будут работать выходы впрыска 5-8"
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Коэффициент коррекции обогащения при ускорении по температуре двигателя. Полное значение при температуре -30°С, плавно убывает до температуры 70°С. 100% соответствует коэффициенту 1.0."
-    IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Время затухания в тактах. Затухание начинается когда скорость ДЗ опускается до порога (стартует от значения обогащения соответствующего порогу и заканчивается 0)."
+    IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Время затухания в тактах.\nДля алгоритма 'Ускорительный насос': Затухание начинается когда скорость ДЗ опускается до порога (стартует от значения обогащения соответствующего порогу и заканчивается 0).\nДля алгоритма 'По времени': Затухание начинается в процессе действия обогащения после истечения времени 'Длительность обогащения'."
     IDS_PD_STARTER_FLDCLRTPS_EDIT_TT "Если перед запуском двигателя нажать педаль газа чтобы дроссель открылся больше этого порога, то система войдет в режим продувки двигателя. Выход из режима произойдет автоматически после запуска двигателя. Укажите 0, если хотите запретить режим продувки."
     IDS_PD_IDLREG_USECLOSEDLOOP_CHECK_TT "Включить для клапана РДВ режим управления с замкнутой петлёй обратной связи. Система будет стараться поддерживать обороты ХХ, которые заданы в таблице открывая и закрывая клапан РХХ."
     IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "Это значение будет добавлено к положению РДВ при нажатии на педаль газа когда произойдет переход из режима ХХ в режим нагрузок."
@@ -1783,6 +1791,10 @@ BEGIN
     IDS_PD_MISC_PWM2_FRQ_EDIT_TT  "Частота ШИМ на выходе PWM2 (Гц)"
     IDC_PD_FUNSET_USE_LDAX_GRID_TT "Выбор метода задания сетки по оси нагрузки в 3D таблицах. Если галочка не установлена, то сетка вычисляется на основе 2 значений (по умолчанию). Если галочка установлена, то сетка задается таблицей (таблица редактируется на вкладке 'Данные прошивки')"
     IDC_PD_FUNSET_VE2MF_COMBO_TT "Выбор функции 2-й таблицы наполнения. Если выбрано умножение (*), то VE=VE1*VE2. Если выбрано сложение (+), то VE=VE1+VE2."
+    IDS_PD_ACCELENR_AETYPE_ACCLPUMP "Ускорит. насос"
+    IDS_PD_ACCELENR_AETYPE_TIMEBASE "По времени"
+    IDS_PD_ACCELENR_AETYPE_COMBO_TT "Выбор типа обогащения при ускорении. Обогащение 'Ускорительный насос' работает аналогично механическому ускорительному насосу в карбюраторе. Обогащение 'По времени' включается на заданное время и затем плавно затухает на протяжении заданного времени."
+    IDS_PD_ACCELENR_AETIME_EDIT_TT "Длительность обогащения (такты)."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2568,22 +2580,17 @@ BEGIN
                     CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 
     GROUPBOX        "Output 2",IDC_PD_UNIOUT_2_GROUP,2,116,155,91,0,WS_EX_TRANSPARENT
-    COMBOBOX        IDC_PD_UNIOUT_2_COND1_COMBO,5,125,98,120,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "inversion",IDC_PD_UNIOUT_2_COND1_INV_CHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,126,45,10
+    COMBOBOX        IDC_PD_UNIOUT_2_COND1_COMBO,5,126,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "inversion",IDC_PD_UNIOUT_2_COND1_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,126,45,10
     EDITTEXT        IDC_PD_UNIOUT_2_COND1_ON_EDIT,5,140,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_2_COND1_OFF_EDIT,80,140,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_UNIOUT_2_COND1_ON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,36,140,13,16
     CONTROL         "",IDC_PD_UNIOUT_2_COND1_OFF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,110,140,13,16
     LTEXT           "ON",IDC_PD_UNIOUT_2_COND1_ON_CAPTION,51,142,26,8
     LTEXT           "OFF",IDC_PD_UNIOUT_2_COND1_OFF_CAPTION,125,142,26,8
-    COMBOBOX        IDC_PD_UNIOUT_2_LOGFUN_COMBO,36,158,50,65,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_PD_UNIOUT_2_COND2_COMBO,5,172,98,120,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "inversion",IDC_PD_UNIOUT_2_COND2_INV_CHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,173,45,10
+    COMBOBOX        IDC_PD_UNIOUT_2_LOGFUN_COMBO,36,158,50,65,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_UNIOUT_2_COND2_COMBO,5,172,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "inversion",IDC_PD_UNIOUT_2_COND2_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,173,45,10
     EDITTEXT        IDC_PD_UNIOUT_2_COND2_ON_EDIT,5,187,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_2_COND2_OFF_EDIT,80,187,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_UNIOUT_2_COND2_ON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,36,187,13,16
@@ -2592,22 +2599,17 @@ BEGIN
     LTEXT           "OFF",IDC_PD_UNIOUT_2_COND2_OFF_CAPTION,125,189,26,8
 
     GROUPBOX        "Output 3",IDC_PD_UNIOUT_3_GROUP,2,209,155,91,0,WS_EX_TRANSPARENT
-    COMBOBOX        IDC_PD_UNIOUT_3_COND1_COMBO,5,218,98,120,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "inversion",IDC_PD_UNIOUT_3_COND1_INV_CHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,219,45,10
+    COMBOBOX        IDC_PD_UNIOUT_3_COND1_COMBO,5,219,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "inversion",IDC_PD_UNIOUT_3_COND1_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,219,45,10
     EDITTEXT        IDC_PD_UNIOUT_3_COND1_ON_EDIT,5,233,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_3_COND1_OFF_EDIT,80,233,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_UNIOUT_3_COND1_ON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,36,233,13,16
     CONTROL         "",IDC_PD_UNIOUT_3_COND1_OFF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,110,233,13,16
     LTEXT           "ON",IDC_PD_UNIOUT_3_COND1_ON_CAPTION,51,235,26,8
     LTEXT           "OFF",IDC_PD_UNIOUT_3_COND1_OFF_CAPTION,125,235,26,8
-    COMBOBOX        IDC_PD_UNIOUT_3_LOGFUN_COMBO,36,251,50,65,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_PD_UNIOUT_3_COND2_COMBO,5,265,98,120,
-                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "inversion",IDC_PD_UNIOUT_3_COND2_INV_CHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,266,45,10
+    COMBOBOX        IDC_PD_UNIOUT_3_LOGFUN_COMBO,36,251,50,65,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_UNIOUT_3_COND2_COMBO,5,265,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "inversion",IDC_PD_UNIOUT_3_COND2_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,266,45,10
     EDITTEXT        IDC_PD_UNIOUT_3_COND2_ON_EDIT,5,280,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_3_COND2_OFF_EDIT,80,280,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_UNIOUT_3_COND2_ON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,36,280,13,16
@@ -2616,7 +2618,7 @@ BEGIN
     LTEXT           "OFF",IDC_PD_UNIOUT_3_COND2_OFF_CAPTION,125,282,26,8
 
     GROUPBOX        "Output 4",IDC_PD_UNIOUT_4_GROUP,2,302,156,91,0,WS_EX_TRANSPARENT
-    COMBOBOX        IDC_PD_UNIOUT_4_COND1_COMBO,5,311,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_UNIOUT_4_COND1_COMBO,5,312,98,120,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     CONTROL         "inversion",IDC_PD_UNIOUT_4_COND1_INV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,312,45,10
     EDITTEXT        IDC_PD_UNIOUT_4_COND1_ON_EDIT,5,326,30,16,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_UNIOUT_4_COND1_OFF_EDIT,80,326,30,16,ES_AUTOHSCROLL
@@ -2882,6 +2884,14 @@ BEGIN
     CONTROL         "",IDC_PD_ACCELENR_DECAYTIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,50,13,17
     LTEXT           "AE Decay time",IDC_PD_ACCELENR_DECAYTIME_CAPTION,3,51,94,10
     LTEXT           "str.",IDC_PD_ACCELENR_DECAYTIME_UNIT,146,51,30,10
+
+    LTEXT           "AE type:",IDC_PD_ACCELENR_AETYPE_CAPTION,3,74,75,10
+    COMBOBOX        IDC_PD_ACCELENR_AETYPE_COMBO,80,73,70,30,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
+
+    EDITTEXT        IDC_PD_ACCELENR_AETIME_EDIT,98,93,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_AETIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,93,13,17
+    LTEXT           "AE time",IDC_PD_ACCELENR_AETIME_CAPTION,3,94,94,10
+    LTEXT           "str.",IDC_PD_ACCELENR_AETIME_UNIT,146,94,30,10
 END
 
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
@@ -3508,7 +3518,7 @@ BEGIN
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Fuel pump will work during this time after turning on of ignition"
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "If enabled, when GAS_V=0 inj.outputs 1-4 will work, and when GAS_V=1 inj.outputs 5-8 will work."
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Correction coefficient of acceleration enrichment vs coolant temperature. Full value at -30°C, smoothly decreases till 70°C. 100% corresponds to coefficient = 1.0."
-    IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Decay time in engine strokes. Decay begin when TPS speed drops to threshold (starts from the AE value corresponding to set threshold and ends with 0)."
+    IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Decay time in engine strokes.\nFor 'Accel. pump' algorithm: Decay begin when TPS speed drops to threshold (starts from the AE value corresponding to set threshold and ends with 0).\nFor 'Time based' algorithm: Decay starts during action of AE after elapsing of the 'AE time'."
     IDS_PD_STARTER_FLDCLRTPS_EDIT_TT "If you press the gas pedal before starting the engine so that the throttle opens beyond this threshold, the system will enter the flood clear mode. Exiting the mode will happen automatically after starting the engine. Specify 0 if you want to disable flood clear mode."
     IDS_PD_IDLREG_USECLOSEDLOOP_CHECK_TT "Turn on the closed loop control mode for the IAC valve. The system will try to maintain idling RPM which are set in the corresponding table by opening and closing the valve."
     IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "This value will be added to the IAC position when you press the gas pedal and the transition from idling to load mode occurs."
@@ -3600,6 +3610,10 @@ BEGIN
     IDS_PD_MISC_PWM2_FRQ_EDIT_TT  "Frequency of PWM on the PWM2 output (Hz)"
     IDC_PD_FUNSET_USE_LDAX_GRID_TT "Select a method how load axis grid is defined. If check mark is unchecked grid will be calculated using two values (default). If check mark is checked, grid table will be used (available for editing on the 'Firmware data' tab)"
     IDC_PD_FUNSET_VE2MF_COMBO_TT "Selection of 2nd VE map's function. If selected multiplication (*), then VE=VE1*VE2. If selected addition (+), then VE=VE1+VE2."
+    IDS_PD_ACCELENR_AETYPE_ACCLPUMP "Acceler. pump"
+    IDS_PD_ACCELENR_AETYPE_TIMEBASE "Time based"
+    IDS_PD_ACCELENR_AETYPE_COMBO_TT "Selection of the type of acceleration enrichment. 'Acceler. pump' enrichment works in a similar way to a mechanical accel. pump in a carburetor. 'Time based' enrichment is switched on for a specified time and then fades out smoothly during a specified time."
+    IDS_PD_ACCELENR_AETIME_EDIT_TT "Duration of acceleration enrichment (strokes)."
 END
 
 /////////////////////////////////////////////////////////////////////////////

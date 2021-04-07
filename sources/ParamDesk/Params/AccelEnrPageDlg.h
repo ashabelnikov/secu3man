@@ -57,7 +57,9 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
+  afx_msg void OnChangeDataAEType();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsAET(CCmdUI* pCmdUI);
  /* afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);*/
   DECLARE_MESSAGE_MAP()
 
@@ -72,6 +74,10 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_coldacc_mult_edit;
   CSpinButtonCtrlEx m_decaytime_spin;
   CEditEx m_decaytime_edit;
+  CSpinButtonCtrlEx m_aetime_spin;
+  CEditEx m_aetime_edit;
+
+  CComboBox m_aetype_combo;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -431,6 +431,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_ae_tpsdot_thrd = MathHelpers::Round(p_in->ae_tpsdot_thrd);
     p_params->inj_ae_coldacc_mult = MathHelpers::Round(((p_in->ae_coldacc_mult/100.0f) - 1.00f) * 128.0f);
     p_params->inj_ae_decay_time = p_in->ae_decay_time; //strokes
+    p_params->inj_ae_type = p_in->ae_type; //0 or 1
+    p_params->inj_ae_time = p_in->ae_time; //strokes
    }
    break;
 
@@ -877,6 +879,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->ae_tpsdot_thrd = (float)p_params->inj_ae_tpsdot_thrd;
     p_out->ae_coldacc_mult = ((((float)p_params->inj_ae_coldacc_mult) + 128.0f) / 128.0f) * 100.0f; //convert to %
     p_out->ae_decay_time = p_params->inj_ae_decay_time; //strokes
+    p_out->ae_type = p_params->inj_ae_type; //0 or 1
+    p_out->ae_time = p_params->inj_ae_time; //strokes
    }
    break;
 

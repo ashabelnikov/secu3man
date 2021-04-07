@@ -616,6 +616,8 @@ namespace SECU3IO
   float ae_tpsdot_thrd;               //TPS %/sec threshold
   float ae_coldacc_mult;              //Cold acceleration multiplier
   int ae_decay_time;                  //Decay time in strokes
+  int ae_type;                        //Type of AE
+  int ae_time;                        //time of active phase of AE
  };
 
 
