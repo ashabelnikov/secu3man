@@ -133,7 +133,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 }
 
 //from MainTabController
@@ -156,7 +156,7 @@ void CEEPROMTabController::OnActivate(void)
  mp_comm->setOnSettingsChanged(MakeDelegate(this,&CEEPROMTabController::OnSettingsChanged));
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
 
  m_modification_check_timer.SetTimer(this, &CEEPROMTabController::OnModificationCheckTimer, 250);
 
@@ -932,7 +932,7 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_EXIT: //не используется когда бутлоадер запущен аварийно
   {
    //вновь активируем коммуникационный контроллер приложения
-   mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+   VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
    break;
   }
 
@@ -1001,7 +1001,7 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
 void CEEPROMTabController::finishOnReadEepromFromSECU(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM, mp_bl_data, 0);
@@ -1013,7 +1013,7 @@ void CEEPROMTabController::finishOnReadEepromFromSECU(void)
 void CEEPROMTabController::finishOnWriteEepromToSECU(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM, mp_bl_data, 0);

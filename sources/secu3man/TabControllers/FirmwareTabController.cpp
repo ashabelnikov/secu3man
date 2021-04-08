@@ -184,7 +184,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
  }
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 
  //Set parameters for speed sensor calculations
  mp_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
@@ -221,7 +221,7 @@ void CFirmwareTabController::OnActivate(void)
  //////////////////////////////////////////////////////////////////
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
 
  m_modification_check_timer.SetTimer(this,&CFirmwareTabController::OnModificationCheckTimer,250);
 
@@ -469,7 +469,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_EXIT: //не используется когда бутлоадер запущен аварийно
   {
    //вновь активируем коммуникационный контроллер приложения
-   mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+   VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
    break;
   }
 
@@ -643,7 +643,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   mp_view->EnableBLItems(true);
   mp_view->EnableBLStartedEmergency(true);
 
-  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
  }
 }
 
@@ -2222,7 +2222,7 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options,
 void CFirmwareTabController::finishOnBootLoaderInfo(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE,mp_bl_data,0);
@@ -2234,7 +2234,7 @@ void CFirmwareTabController::finishOnBootLoaderInfo(void)
 void CFirmwareTabController::finishOnReadEepromToFile(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM,mp_bl_data,0);
@@ -2246,7 +2246,7 @@ void CFirmwareTabController::finishOnReadEepromToFile(void)
 void CFirmwareTabController::finishOnWriteEepromFromFile(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM,mp_bl_data,0);
@@ -2258,7 +2258,7 @@ void CFirmwareTabController::finishOnWriteEepromFromFile(void)
 void CFirmwareTabController::finish_OnReadFlashToFile(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,mp_bl_data, m_fpp.m_total_size);
@@ -2270,7 +2270,7 @@ void CFirmwareTabController::finish_OnReadFlashToFile(void)
 void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
 
  //Если установлен режим прошивки только кода (без данных), то все несколько сложнее
  if (mp_view->IsProgrammeOnlyCode())

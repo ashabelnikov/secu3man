@@ -203,20 +203,33 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
 }
 
 //активирование указанного коммуникационного контроллера или деактивирование всех контроллеров
-void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = false */)
+bool CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = false */)
 {
+ bool status  = true;
  _ASSERTE(!(m_pControlApp->GetWorkState() && m_pBootLoader->GetWorkState()));
 
  switch(i_cntr)
  {
   case OP_ACTIVATE_APPLICATION:
    m_pBootLoader->SwitchOn(false, i_force_reinit);
-   m_pControlApp->SwitchOn(true, i_force_reinit);
+   try {
+    m_pControlApp->SwitchOn(true, i_force_reinit);
+   }
+   catch(CComPort::xSetTimeout e)
+   {
+    status  = false;
+   }
    break;
 
   case OP_ACTIVATE_BOOTLOADER:
    m_pControlApp->SwitchOn(false, i_force_reinit);
-   m_pBootLoader->SwitchOn(true, i_force_reinit);
+   try {
+    m_pBootLoader->SwitchOn(true, i_force_reinit);
+   }
+   catch(CComPort::xSetTimeout e)
+   {
+    status  = false;   
+   }
    break;
 
   case OP_DEACTIVATE_ALL: //deactivate all
@@ -228,6 +241,7 @@ void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = fa
    _ASSERTE(0);
    break;
  }
+ return status;
 }
 
 void CCommunicationManager::setOnSettingsChanged(EventWithCode i_OnSettingsChanged)

@@ -125,7 +125,7 @@ void CKnockChannelTabController::OnSettingsChanged(int action)
   return;
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 }
 
 //from MainTabController
@@ -138,7 +138,7 @@ void CKnockChannelTabController::OnActivate(void)
  mp_comm->setOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
 
  //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3, дополнительно используеься программный делитель частоты на 5
  m_params_changes_timer.SetTimer(this,&CKnockChannelTabController::OnParamsChangesTimer, TIMER_PERIOD);

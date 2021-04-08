@@ -239,7 +239,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    EndPaint(hWnd,&pt);
    break;
   case WM_TIMER:
-   ASSERT(KillTimer(hWnd, AUTOCLOSE_TIMER_ID));
+   VERIFY(KillTimer(hWnd, AUTOCLOSE_TIMER_ID));
    DestroyWindow(hWnd);
    break;
   default:

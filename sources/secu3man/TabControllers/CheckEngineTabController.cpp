@@ -81,7 +81,7 @@ CCheckEngineTabController::~CCheckEngineTabController()
 void CCheckEngineTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ VERIFY(m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 }
 
 //from MainTabController
@@ -114,7 +114,7 @@ void CCheckEngineTabController::OnActivate(void)
  m_real_time_errors_mode = false;
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ VERIFY(m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)

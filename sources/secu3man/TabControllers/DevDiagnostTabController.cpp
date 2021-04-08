@@ -237,7 +237,7 @@ CDevDiagnostTabController::~CDevDiagnostTabController()
 void CDevDiagnostTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 }
 
 //from MainTabController
@@ -271,7 +271,7 @@ void CDevDiagnostTabController::OnActivate(void)
  //////////////////////////////////////////////////////////////////
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)

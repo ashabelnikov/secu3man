@@ -101,7 +101,7 @@ void CInjDriverTabController::OnSettingsChanged(int action)
  mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep(), mp_sett->GetPWMulPtMovStep(), mp_sett->GetPWAddPtMovStep());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 }
 
 //from MainTabController
@@ -115,7 +115,7 @@ void CInjDriverTabController::OnActivate(void)
  mp_comm->setOnSettingsChanged(MakeDelegate(this, &CInjDriverTabController::OnSettingsChanged));
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -188,7 +188,7 @@ void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
    m_lzidblhs_tmr.KillTimer(); //got answer!
    Sleep(300);
    //activate communication controller of the boot loader
-   mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+   VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
    if (m_bl_op == 1) //deferred reading of flash
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, &m_bl_data[0], MCU_FLASH_SIZE); //operation does not block thread
@@ -477,7 +477,7 @@ void CInjDriverTabController::OnWriteFirmwareFromFile(void)
  if (StartBootLoader(2))
  {
   //activate communication controller of the boot loader
-  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
   mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
 
   //operation does not block thread
@@ -499,7 +499,7 @@ void CInjDriverTabController::OnReadFirmwareToFile(void)
  if (StartBootLoader(1))
  {
   //activate communication controller of the boot loader
-  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
   mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
 
   //operation does not block thread
@@ -521,7 +521,7 @@ void CInjDriverTabController::OnReadLzblInfo(void)
  if (StartBootLoader(3))
  {
   //activate communication controller of the boot loader
-  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
   mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
 
   //operation does not block thread
@@ -543,7 +543,7 @@ void CInjDriverTabController::OnReadEEPROMToFile(void)
  if (StartBootLoader(4))
  {
   //activate communication controller of the boot loader
-  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
   mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
 
   //operation does not block thread
@@ -568,7 +568,7 @@ void CInjDriverTabController::OnWriteEEPROMFromFile(void)
  if (StartBootLoader(5))
  {
   //activate communication controller of the boot loader
-  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
   mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
 
   //operation does not block thread
@@ -669,7 +669,7 @@ void CInjDriverTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_EXIT:
   {
    //activate application's communication controller again
-   mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+   VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
    m_recv_hs = false;
    break;
   }
@@ -850,7 +850,7 @@ void CInjDriverTabController::OnFirmwareMaster()
  if (StartBootLoader(2))
  {
   //activate communication controller of the boot loader
-  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER));
   mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
 
   //operation does not block thread

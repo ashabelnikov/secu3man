@@ -58,7 +58,7 @@ class CCommunicationManager
   //включение указанного коммуникационного контроллера. Если контроллер уже включен,
   //то функция ничего не делает. Для принудительной переинициализации контроллера необходимо
   //установить флаг i_force_reinit в true.
-  void SwitchOn(size_t i_cntr, bool i_force_reinit = false);
+  bool SwitchOn(size_t i_cntr, bool i_force_reinit = false);
 
   CControlAppAdapter* m_pAppAdapter;
   CControlApp*        m_pControlApp;

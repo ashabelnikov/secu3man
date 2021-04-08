@@ -125,7 +125,7 @@ CLogPlayerTabController::~CLogPlayerTabController()
 void CLogPlayerTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
  mp_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
  mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
 
@@ -220,7 +220,7 @@ void CLogPlayerTabController::OnActivate(void)
  //////////////////////////////////////////////////////////////////
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION));
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
