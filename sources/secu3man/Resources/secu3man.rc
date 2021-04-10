@@ -535,6 +535,7 @@ BEGIN
     IDS_INCOMPATIBLE_FIRMWARE      "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
     IDS_INCOMPATIBLE_QUARTZ        "Обнаружена несовместимость тактовой частоты, некоторые данные и параметры могут стать неверными. Продолжить?"
     IDS_ECUERROR_SYS_START         "Старт прошивки (перезапуск процессора)"
+    IDS_ECUERROR_OILPRESSURE       "Очень низкое давление масла"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1416,6 +1417,7 @@ BEGIN
     IDS_INCOMPATIBLE_FIRMWARE      "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
     IDS_INCOMPATIBLE_QUARTZ        "Incompatibility of clock frequency has detected, some data and parameters may become invalid. Do you want to continue?"
     IDS_ECUERROR_SYS_START         "Firmware start (reset of processor)"
+    IDS_ECUERROR_OILPRESSURE       "Oil pressure is very low"
 END
 
 STRINGTABLE DISCARDABLE 

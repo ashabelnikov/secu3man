@@ -117,6 +117,14 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_MAX_CAPTION, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_EM_CAPTION, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I8_V_USEEM_CHECK, OnUpdateSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_GROUP, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_THRD_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_THRD_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_THRD_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_TIMER_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_TIMER_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_TIMER_CAPTION, OnUpdateSECU3i)
 END_MESSAGE_MAP()
 
 CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
@@ -164,6 +172,8 @@ CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
 , m_add_i8_v_min_edit(CEditEx::MODE_FLOAT)
 , m_add_i8_v_max_edit(CEditEx::MODE_FLOAT)
 , m_add_i8_v_em_edit(CEditEx::MODE_FLOAT)
+, m_oilpress_thrd_edit(CEditEx::MODE_FLOAT)
+, m_oilpress_timer_edit(CEditEx::MODE_INT)
 {
  //empty
 }
@@ -281,6 +291,11 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_ADD_I8_V_EM_SPIN, m_add_i8_v_em_spin);
  DDX_Control(pDX, IDC_CESETT_ADD_I8_V_USEEM_CHECK, m_add_i8_v_useem_check);
 
+ DDX_Control(pDX, IDC_CESETT_OILPRESS_THRD_EDIT, m_oilpress_thrd_edit);
+ DDX_Control(pDX, IDC_CESETT_OILPRESS_THRD_SPIN, m_oilpress_thrd_spin);
+ DDX_Control(pDX, IDC_CESETT_OILPRESS_TIMER_EDIT, m_oilpress_timer_edit);
+ DDX_Control(pDX, IDC_CESETT_OILPRESS_TIMER_SPIN, m_oilpress_timer_spin);
+
  //Do data exchange and validation
  m_map_v_min_edit.DDX_Value(pDX, IDC_CESETT_MAP_V_MIN_EDIT, mp_data->map_v_min);
  DDV_MinMaxFloat(pDX, mp_data->map_v_min, 0.0f, 5.5f);
@@ -385,6 +400,11 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  m_add_i8_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I8_V_EM_EDIT, mp_data->add_i8_v_em);
  DDV_MinMaxFloat(pDX, mp_data->add_i8_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I8_V_USEEM_CHECK, mp_data->add_i8_v_useem);
+
+ m_oilpress_thrd_edit.DDX_Value(pDX, IDC_CESETT_OILPRESS_THRD_EDIT, mp_data->oilpress_thrd);
+ DDV_MinMaxFloat(pDX, mp_data->oilpress_thrd, 0.0f, 8.0f);
+ m_oilpress_timer_edit.DDX_Value(pDX, IDC_CESETT_OILPRESS_TIMER_EDIT, mp_data->oilpress_timer);
+ DDV_MinMaxInt(pDX, mp_data->oilpress_timer, 0, 4000);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -573,6 +593,15 @@ BOOL CCESettingsDlg::OnInitDialog()
  m_add_i8_v_em_edit.SetLimitText(6);
  m_add_i8_v_em_edit.SetDecimalPlaces(3);
 
+ m_oilpress_thrd_spin.SetBuddy(&m_oilpress_thrd_edit);
+ m_oilpress_thrd_spin.SetRangeAndDelta(0, 8.0, 0.01);
+ m_oilpress_thrd_edit.SetLimitText(6);
+ m_oilpress_thrd_edit.SetDecimalPlaces(2);
+ m_oilpress_timer_spin.SetBuddy(&m_oilpress_timer_edit);
+ m_oilpress_timer_spin.SetRangeAndDelta(0, 4000.0, 1.0);
+ m_oilpress_timer_edit.SetLimitText(6);
+ m_oilpress_timer_edit.SetDecimalPlaces(1);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -681,6 +710,11 @@ BOOL CCESettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_add_i8_v_em_spin, MLL::GetString(IDS_CESETT_MAP_V_EM_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_add_i8_v_useem_check, MLL::GetString(IDS_CESETT_MAP_V_USEEM_CHECK_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_oilpress_thrd_edit, MLL::GetString(IDS_CESETT_OILPRESS_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_oilpress_thrd_spin, MLL::GetString(IDS_CESETT_OILPRESS_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_oilpress_timer_edit, MLL::GetString(IDS_CESETT_OILPRESS_TIMER_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_oilpress_timer_spin, MLL::GetString(IDS_CESETT_OILPRESS_TIMER_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -724,7 +758,7 @@ void CCESettingsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(780));
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(825));
 }
 
 void CCESettingsDlg::OnSize(UINT nType, int cx, int cy)

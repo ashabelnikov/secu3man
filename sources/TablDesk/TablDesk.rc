@@ -568,6 +568,15 @@ BEGIN
     EDITTEXT        IDC_CESETT_ADD_I8_V_EM_EDIT,230,435,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_ADD_I8_V_EM_SPIN,"msctls_updown32",UDS_ARROWKEYS,262,435,12,16
     CONTROL         "",IDC_CESETT_ADD_I8_V_USEEM_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,280,435,10,12
+
+    GROUPBOX        "Давление масла",IDC_CESETT_OILPRESS_GROUP,5,460,300,32
+    LTEXT           "Мин. порог (кг/см2)",IDC_CESETT_OILPRESS_THRD_CAPTION,10,472,80,15
+    EDITTEXT        IDC_CESETT_OILPRESS_THRD_EDIT,92,470,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_CESETT_OILPRESS_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,124,470,12,16
+
+    LTEXT           "Время после пуска.(такты)",IDC_CESETT_OILPRESS_TIMER_CAPTION,149,472,97,15
+    EDITTEXT        IDC_CESETT_OILPRESS_TIMER_EDIT,246,470,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_CESETT_OILPRESS_TIMER_SPIN,"msctls_updown32",UDS_ARROWKEYS,278,470,12,16
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -803,6 +812,8 @@ BEGIN
     IDS_GME_INJ_VE2_RADIOBOX_TT "Выбрать таблицу наполнения 2 для редактирования/автонастройки"
     IDS_TD_MANINJPWC_MAP_TT  "Таблица зависимости коэффициента ручной коррекции длительности впрыска от напряжения на входе INJPWC_I"
     IDS_MANINJPWC_MAP "Коэффициент ручной коррекции длительности впрыска"
+    IDS_CESETT_OILPRESS_THRD_EDIT_TT "Установите значение минимально допустимого давления масла в двигателе. Если давление упадет ниже этого значения, то будет установлен соответствующий код ошибки."
+    IDS_CESETT_OILPRESS_TIMER_EDIT_TT "Установите число тактов по истечении которого должна включиться проверка давления масла. Такты отсчитываются с момента старта двигателя."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1366,6 +1377,15 @@ BEGIN
     EDITTEXT        IDC_CESETT_ADD_I8_V_EM_EDIT,230,435,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_ADD_I8_V_EM_SPIN,"msctls_updown32",UDS_ARROWKEYS,262,435,12,16
     CONTROL         "",IDC_CESETT_ADD_I8_V_USEEM_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,280,435,10,12
+
+    GROUPBOX        "Oil pressure",IDC_CESETT_OILPRESS_GROUP,5,460,300,32
+    LTEXT           "Min. threshold (kg/cm2)",IDC_CESETT_OILPRESS_THRD_CAPTION,10,472,80,15
+    EDITTEXT        IDC_CESETT_OILPRESS_THRD_EDIT,92,470,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_CESETT_OILPRESS_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,124,470,12,16
+
+    LTEXT           "Time after start (strokes)",IDC_CESETT_OILPRESS_TIMER_CAPTION,149,472,97,15
+    EDITTEXT        IDC_CESETT_OILPRESS_TIMER_EDIT,246,470,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_CESETT_OILPRESS_TIMER_SPIN,"msctls_updown32",UDS_ARROWKEYS,278,470,12,16
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -1625,6 +1645,8 @@ BEGIN
     IDS_TD_OPS_CURVE_TT        "Setting oil pressure versus voltage dependance for the OPS. This table is necessary for the correct conversion of the voltage (V) at the sensor to pressure of oil in the engine (kg/cm2)."
     IDS_TD_MANINJPWC_MAP_TT  "Table of the coefficient of manual correction of the injection PW vs voltage at the input INJPWC_I"
     IDS_MANINJPWC_MAP "Coefficient of manual inj.PW correction"
+    IDS_CESETT_OILPRESS_THRD_EDIT_TT "Set the value of the minimum allowable oil pressure in the engine. If the pressure falls below this value, the corresponding error code will be set."
+    IDS_CESETT_OILPRESS_TIMER_EDIT_TT "Set the number of strokes after which the oil pressure check should start. Strokes are counted from the moment the start of engine."
 END
 
 /////////////////////////////////////////////////////////////////////////////

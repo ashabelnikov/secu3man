@@ -2085,6 +2085,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Time of opened gas valve on stopped engine"), _T("sec"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("During this time output which controls gas valve (GASVAL_O) will be turned on when engine is stopped."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Отсечка зажигания и впрыска при низком давлении масла"), _T(""), 0, 1, 1, 0, &d.oilpress_cut, _T("Защита двигателя от работы при низком или отсутствующем давлении масла. 1 - включить защиту, 0 - выключить."));
+ else
+  dfd.AppendItem(_T("Allow ignition and fuel injection cut off when oil pressure is low"), _T(""), 0, 1, 1, 0, &d.oilpress_cut, _T("Protection of engine against deterioration when pressure of oil is too low"));
+
  //Crankshaft position settings
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Положение коленвала (нов.алгор.)"));

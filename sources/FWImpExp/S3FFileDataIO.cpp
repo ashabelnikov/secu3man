@@ -83,6 +83,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.17 - Added IAC position's vs MAT map (14.02.2021)
 // 01.18 - Added secondary VE map (28.02.2021)
 // 01.19 - Added 3 maps for sensors: Fuel Tank Level, Exhaust Gas Temperature, Oil Pressure. Added map for manual inj. PW correction
+//         Added two fields into s3f_ce_sett_t struct (oil pressure threshold, oil pressure strokes timer)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -217,7 +218,10 @@ typedef struct
  s3f_int32_t add_i8_v_em;
  s3f_int32_t add_i8_v_flg;
 
- s3f_int32_t reserved[1046];
+ s3f_int32_t oilpress_thrd;
+ s3f_int32_t oilpress_timer;
+
+ s3f_int32_t reserved[1044];
 }s3f_ce_sett_t;
 
 
@@ -777,6 +781,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_sepMaps->cesd.add_i8_v_em = MathHelpers::Round(m_data.cesd.add_i8_v_em * INT_MULTIPLIER);
  WRITEBIT8(p_sepMaps->cesd.add_i8_v_flg, 0, m_data.cesd.add_i8_v_useem);
 
+ p_sepMaps->cesd.oilpress_thrd = MathHelpers::Round(m_data.cesd.oilpress_thrd * INT_MULTIPLIER);
+ p_sepMaps->cesd.oilpress_timer = MathHelpers::Round(m_data.cesd.oilpress_timer * INT_MULTIPLIER);
+
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
  file.Write(&rawdata[0], size);
@@ -1050,6 +1057,9 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  m_data.cesd.add_i8_v_max = p_sepMaps->cesd.add_i8_v_max / INT_MULTIPLIER;
  m_data.cesd.add_i8_v_em = p_sepMaps->cesd.add_i8_v_em / INT_MULTIPLIER;
  m_data.cesd.add_i8_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i8_v_flg, 0);
+
+ m_data.cesd.oilpress_thrd = p_sepMaps->cesd.oilpress_thrd / INT_MULTIPLIER;
+ m_data.cesd.oilpress_timer = p_sepMaps->cesd.oilpress_timer / INT_MULTIPLIER;
 
  return true;
 }

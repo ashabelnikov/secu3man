@@ -670,3 +670,5 @@
 #define IDS_EE_LOAD_GRIDS               4791
 #define IDM_EE_RESET_EEPROM             4792
 #define IDB_FWD_TAB_CTRL_BITMAPS        4793
+#define IDS_ECUERROR_OILPRESSURE        4794
+

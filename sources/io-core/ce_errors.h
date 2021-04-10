@@ -47,8 +47,9 @@
 #define ECUERROR_ADD_I6_SENSOR       17
 #define ECUERROR_ADD_I7_SENSOR       18
 #define ECUERROR_ADD_I8_SENSOR       19
+#define ECUERROR_OILPRESSURE         20
 
-const int SECU3_CE_ERRCODES_COUNT   = 20;
+const int SECU3_CE_ERRCODES_COUNT   = 21;
  //<bitnumber, error code>
 #define _SD std::pair<int, int>
  static std::pair<int, int> secu3_ce_error_codes[SECU3_CE_ERRCODES_COUNT] =
@@ -73,6 +74,7 @@ const int SECU3_CE_ERRCODES_COUNT   = 20;
   _SD(ECUERROR_ADD_I6_SENSOR,       54), //sensor
   _SD(ECUERROR_ADD_I7_SENSOR,       55), //sensor
   _SD(ECUERROR_ADD_I8_SENSOR,       56), //sensor
+  _SD(ECUERROR_OILPRESSURE,         33), //oil pressure is crytical
  };
 #undef _SD
 

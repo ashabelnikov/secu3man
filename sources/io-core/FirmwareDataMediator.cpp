@@ -149,6 +149,9 @@ typedef struct
  _uint add_i8_v_max;
  _uint add_i8_v_em;
  _uchar add_i8_v_flg;
+
+ _uint oilpress_thrd;
+ _uint oilpress_timer;
 }ce_sett_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -295,11 +298,12 @@ typedef struct
  _uint evap_map_thrd;
  _uint ckps_skip_trig;
  _uchar maninjpw_idl;
+ _uchar oilpress_cut;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3572];
+ _uchar reserved[3567];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2672,6 +2676,9 @@ void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
  o_data.add_i8_v_max = ((float)p_fd->exdata.cesd.add_i8_v_max) * ADC_DISCRETE;
  o_data.add_i8_v_em  = ((float)p_fd->exdata.cesd.add_i8_v_em) * ADC_DISCRETE;
  o_data.add_i8_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i8_v_flg, 0); 
+
+ o_data.oilpress_thrd = ((float)p_fd->exdata.cesd.oilpress_thrd) / 256.0f;
+ o_data.oilpress_timer = p_fd->exdata.cesd.oilpress_timer;
 }
 
 void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
@@ -2742,6 +2749,9 @@ void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
  p_fd->exdata.cesd.add_i8_v_max = MathHelpers::Round((i_data.add_i8_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i8_v_em  = MathHelpers::Round((i_data.add_i8_v_em / ADC_DISCRETE));
  WRITEBIT8(p_fd->exdata.cesd.add_i8_v_flg, 0, i_data.add_i8_v_useem);
+
+ p_fd->exdata.cesd.oilpress_thrd = MathHelpers::Round((i_data.oilpress_thrd * 256.0f));
+ p_fd->exdata.cesd.oilpress_timer = i_data.oilpress_timer;
 }
 
 void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
@@ -2802,6 +2812,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.evap_map_thrd = ((float)exd.evap_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.ckps_skip_trig = exd.ckps_skip_trig;
  o_data.maninjpw_idl = exd.maninjpw_idl;
+
+ o_data.oilpress_cut = exd.oilpress_cut;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2857,4 +2869,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.evap_map_thrd = MathHelpers::Round(i_data.evap_map_thrd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.ckps_skip_trig = i_data.ckps_skip_trig;
  exd.maninjpw_idl = i_data.maninjpw_idl;
+
+ exd.oilpress_cut = i_data.oilpress_cut;
 }

@@ -176,6 +176,11 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
   CSpinButtonCtrlEx m_add_i8_v_em_spin;
   CButton m_add_i8_v_useem_check;
 
+  CEditEx m_oilpress_thrd_edit;
+  CSpinButtonCtrlEx m_oilpress_thrd_spin;
+  CEditEx m_oilpress_timer_edit;
+  CSpinButtonCtrlEx m_oilpress_timer_spin;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
 
