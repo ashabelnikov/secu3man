@@ -331,6 +331,8 @@ void CAppSettingsDlg::OnOK()
  UpdateData();
  if (m_OnOk) m_OnOk();
   CDialog::OnOK();
+
+ AfxGetMainWnd()->RedrawWindow();
 }
 
 //обзор каталога
