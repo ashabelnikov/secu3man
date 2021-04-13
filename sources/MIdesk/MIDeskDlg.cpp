@@ -609,7 +609,7 @@ void CMIDeskDlg::SetDistanceUnit(int i_unit)
 
 void CMIDeskDlg::_Resize(void)
 {
- bool redraw = false;
+ bool redraw = true;
  CRect rect;
  GetClientRect(&rect);
  if (!rect.IsRectNull())
@@ -623,7 +623,7 @@ void CMIDeskDlg::_Resize(void)
   m_leds.MoveWindow(_GetGaugesRect(false), redraw);
   m_leds.Invalidate();
 
-  RedrawWindow(NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
+//RedrawWindow(NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
  }
 }
 

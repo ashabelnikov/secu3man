@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(COscillCtrl, Super)
  ON_WM_PAINT()
  ON_WM_NCHITTEST()
  ON_WM_SIZE()
+ ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // COscillCtrl
@@ -600,3 +601,11 @@ void COscillCtrl::ShowValue(bool show)
 {
  m_show_value = show;
 }
+
+//-------------------------------------------------------------
+BOOL COscillCtrl::OnEraseBkgnd(CDC* pDC) 
+{
+ return TRUE; //prevent flickering
+}
+
+//-------------------------------------------------------------

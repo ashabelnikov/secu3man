@@ -39,6 +39,7 @@ class AFX_EXT_CLASS CAnalogMeterCtrl : public CStatic, public CAnalogMeter
   void Redraw(void);
 
  protected:
+  afx_msg BOOL OnEraseBkgnd(CDC* pDC);
   // Generated message map functions
   afx_msg void OnPaint();
 

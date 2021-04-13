@@ -46,6 +46,7 @@ class AFX_EXT_CLASS CMultiLEDCtrl : public CWnd
   CRect GetItemRect(int idx);
 
  protected:
+  afx_msg BOOL OnEraseBkgnd(CDC* pDC);
   afx_msg void OnPaint();
   afx_msg void OnDestroy();
   afx_msg void OnEnable(BOOL bEnable);

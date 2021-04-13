@@ -61,6 +61,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
 
  //Implementation
  protected:
+  afx_msg BOOL OnEraseBkgnd(CDC* pDC);
   afx_msg void OnPaint();
   afx_msg void OnEnable(BOOL bEnable);
   afx_msg void OnSize(UINT nType, int cx, int cy);

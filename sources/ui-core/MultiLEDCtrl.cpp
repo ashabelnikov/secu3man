@@ -54,6 +54,7 @@ BEGIN_MESSAGE_MAP(CMultiLEDCtrl, Super)
  ON_MESSAGE(WM_SETFONT, OnWMSetFont)
  ON_MESSAGE(WM_GETFONT, OnWMGetFont)
  ON_WM_NCHITTEST()
+ ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 BOOL CMultiLEDCtrl::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
@@ -109,6 +110,10 @@ void CMultiLEDCtrl::OnPaint()
   m_bkBrush.DeleteObject();
   m_bkBrush.CreateSolidBrush(m_bkBrushColor);  
  }
+
+ CRect rccl;
+ GetClientRect(&rccl);
+ dc.FillRect(rccl, &m_bkBrush);
 
  COLORREF text_color = GetSysColor(COLOR_BTNTEXT);
  COLORREF gray_color = GetSysColor(COLOR_GRAYTEXT);
@@ -236,4 +241,9 @@ void CMultiLEDCtrl::SetItemColor(int idx, COLORREF color, bool invalidate /*= tr
  m_items[idx].mp_brush = new CBrush(color);
  if (invalidate)
   InvalidateRect(GetItemRect(idx));  
+}
+
+BOOL CMultiLEDCtrl::OnEraseBkgnd(CDC* pDC) 
+{
+ return TRUE; //prevent flickering
 }

@@ -43,6 +43,7 @@ CAnalogMeterCtrl::~CAnalogMeterCtrl()
 BEGIN_MESSAGE_MAP(CAnalogMeterCtrl, CStatic)
  ON_WM_PAINT()
  ON_WM_NCHITTEST()
+ ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,4 +79,9 @@ UINT CAnalogMeterCtrl::OnNcHitTest(CPoint point)
 #endif
 {
  return HTTRANSPARENT;
+}
+
+BOOL CAnalogMeterCtrl::OnEraseBkgnd(CDC* pDC) 
+{
+ return TRUE; //prevent flickering
 }

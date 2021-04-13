@@ -76,8 +76,12 @@ void CtrlScaler::Scale(bool invalidate /*= true*/)
   CRect rc = m_scaleInfo[i].second;
   GDIHelpers::ScaleRect(rc, Xf, Yf);
   m_scaleInfo[i].first->MoveWindow(rc);
+  if (invalidate)
+   m_scaleInfo[i].first->Invalidate();
  }
 
- if (invalidate)
-  mp_parent->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_ERASE); 
+/*if (invalidate)
+{
+ mp_parent->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_ERASE); 
+ }*/
 }

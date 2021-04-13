@@ -1059,7 +1059,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  m_data.cesd.add_i8_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i8_v_flg, 0);
 
  m_data.cesd.oilpress_thrd = p_sepMaps->cesd.oilpress_thrd / INT_MULTIPLIER;
- m_data.cesd.oilpress_timer = p_sepMaps->cesd.oilpress_timer / INT_MULTIPLIER;
+ m_data.cesd.oilpress_timer = (int)(p_sepMaps->cesd.oilpress_timer / INT_MULTIPLIER);
 
  return true;
 }

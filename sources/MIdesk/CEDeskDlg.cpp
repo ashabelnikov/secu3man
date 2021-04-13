@@ -141,5 +141,5 @@ void CCEDeskDlg::Resize(const CRect& i_rect)
 
 #undef _RESIZE
 
- RedrawWindow();
+//RedrawWindow();
 }
