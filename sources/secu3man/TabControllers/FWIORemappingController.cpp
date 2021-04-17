@@ -1689,6 +1689,7 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_FTLS_I, _T("FTLS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_EGTS_I, _T("EGTS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_OPS_I, _T("OPS_I"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_ADD_I5, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I5, m_enable_spiadc); 
@@ -1704,6 +1705,7 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_FTLS_I, _T("FTLS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_EGTS_I, _T("EGTS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_OPS_I, _T("OPS_I"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_ADD_I6, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I6, m_enable_spiadc); 
