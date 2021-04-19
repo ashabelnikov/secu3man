@@ -299,11 +299,12 @@ typedef struct
  _uint ckps_skip_trig;
  _uchar maninjpw_idl;
  _uchar oilpress_cut;
+ _uint  tpsdot_mindt;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3567];
+ _uchar reserved[3565];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2814,6 +2815,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.maninjpw_idl = exd.maninjpw_idl;
 
  o_data.oilpress_cut = exd.oilpress_cut;
+ o_data.tpsdot_mindt = (exd.tpsdot_mindt * 3.2f) / 1000.0f; //convert from 3.2 us units to ms
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2871,4 +2873,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.maninjpw_idl = i_data.maninjpw_idl;
 
  exd.oilpress_cut = i_data.oilpress_cut;
+ exd.tpsdot_mindt = MathHelpers::Round((i_data.tpsdot_mindt * 1000.0f) / 3.2f); //from ms to 3.2us units
 }

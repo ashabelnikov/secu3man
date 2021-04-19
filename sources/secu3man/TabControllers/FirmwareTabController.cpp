@@ -2090,6 +2090,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Allow ignition and fuel injection cut off when oil pressure is low"), _T(""), 0, 1, 1, 0, &d.oilpress_cut, _T("Protection of engine against deterioration when pressure of oil is too low"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Мин. значение dt используемое для вычисления d%/dt ДЗ"), _T("мс"), 5.0f, 200.0f, 1.0f, 1, &d.tpsdot_mindt, _T("Укажите значение дифференциала времени используемого для вычисления скорости движения дроссельной заслонки"));
+ else
+  dfd.AppendItem(_T("Minimum value of dt used for calculation of the d%/dt for TPS"), _T("ms"), 5.0f, 200.0f, 1.0f, 1, &d.tpsdot_mindt, _T("Specify value of the time differencial used by calculation of the speed of moving throttle"));
+
  //Crankshaft position settings
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Положение коленвала (нов.алгор.)"));
