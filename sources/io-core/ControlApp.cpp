@@ -659,8 +659,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 
  //имя этого набора характеристик
  size_t fn_name_size = size - (mp_pdp->getHex8Size()*2);
- strncpy(fnNameDat.name, (const char*)raw_packet, fn_name_size);
- fnNameDat.name[fn_name_size] = 0;
+ mp_pdp->HexStrToBin(raw_packet, fn_name_size, fnNameDat.name);
 
  //Заменяем символы FF на 0x20 
  for(size_t i = 0; i < fn_name_size; ++i)

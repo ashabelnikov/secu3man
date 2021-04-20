@@ -179,6 +179,23 @@ bool PacketDataProxy::Hex24ToBin(const BYTE*& ip_hex_number, unsigned long *o_dw
  }
 }
 
+bool PacketDataProxy::HexStrToBin(const BYTE*& ip_hex_str, int size, char *o_str)
+{
+ if (m_mode)
+ { //hex
+  strncpy(o_str, (const char*)ip_hex_str, size);
+  o_str[size] = 0;
+  ip_hex_str+=size;
+  return true;
+ }
+ else
+ { //bin
+  strncpy(o_str, (const char*)ip_hex_str, size);
+  o_str[size] = 0;
+  ip_hex_str+=size;
+  return true;
+ }
+}
 
 bool PacketDataProxy::Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number)
 {
