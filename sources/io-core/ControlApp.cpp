@@ -96,6 +96,18 @@ void Esc_Tx_Packet(std::vector<BYTE>& io_data, size_t offset, size_t size)
   }
  }
 }
+
+int FletcherChecksum(std::vector<BYTE>& i_data, size_t offset, size_t size)
+{
+ BYTE chksum[2] = {0,0};
+ for(size_t i = 0; i < size; ++i)
+ {
+  size_t index = i + offset;
+  chksum[0]+=i_data[index];
+  chksum[1]+=chksum[0];
+ }
+ return *((unsigned short*)(&chksum[0]));
+}
 }
 
 //-----------------------------------------------------------------------
@@ -124,6 +136,7 @@ CControlApp::CControlApp()
 , m_portAutoReopen(true)
 , m_ignore_n_packets(0)
 , m_splitAng(false)
+, m_checksum_all(true)
 {
  m_pPackets = new Packets();
  m_pPackets->reserve(256);
@@ -2742,16 +2755,18 @@ bool CControlApp::Parse_LZIDBL_HS(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
-//Return: true - если хотя бы один пакет был получен
+//Return: true - if at least 1 packet has been processed successfully
 bool CControlApp::ParsePackets()
 {
  Packets::iterator it;
  bool status = false;
 
+ bool use_checksum = m_checksum_all && !mp_pdp->isHex(); //use checksum only if enabled and if binary mode
+
  ASSERT(m_pPackets);
  for(it = m_pPackets->begin(); it!=m_pPackets->end(); ++it)
  {
-  if (it->size() < 3 || (*it)[0] != '@')
+  if (it->size() < ((size_t)(use_checksum ? 5 : 3)) || (*it)[0] != '@')
    continue;
   if (it->back() != '\r')
    continue;
@@ -2759,14 +2774,22 @@ bool CControlApp::ParsePackets()
   if (!mp_pdp->isHex())
    Esc_Rx_Packet(*it, 2, it->size() - 3); //byte stuffing
 
-  size_t p_size = it->size() - 3;
+  if (use_checksum)
+  {
+   int checksum1 = FletcherChecksum(*it, 2, it->size() - 5);
+   int checksum2 = MAKEWORD((*it)[it->size()-2], (*it)[it->size()-3]);
+   if (checksum1 != checksum2)
+    continue; //packet is corrupted, don't accept it
+  }
+
+  size_t p_size = it->size() - ((size_t)(use_checksum ? 5 : 3));
   const BYTE* p_start = &(*it)[2];
   switch((*it)[1])
   {
    case TEMPER_PAR:
     if (Parse_TEMPER_PAR(p_start, p_size))
-     break; //пакет успешно разобран по составляющим
-    continue;//пакет не прошел сурового отбора нашим жюри :-)
+     break; //packet parsed successfully
+    continue;//packet is corrupted, don't accept it
    case CARBUR_PAR:
     if (Parse_CARBUR_PAR(p_start, p_size))
      break;
@@ -3168,9 +3191,11 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
  switch(i_descriptor)
  {
   case BOOTLOADER:
-   return StartBootLoader();         //no data need
+   m_outgoing_packet.push_back(*((BYTE*)i_packet_data));
+   break;
   case CHANGEMODE:
-   return ChangeContext(i_descriptor);  //no data need, only a descriptor
+   m_outgoing_packet.push_back(*((BYTE*)i_packet_data));
+   break;
   case TEMPER_PAR:
    Build_TEMPER_PAR((TemperPar*)i_packet_data);
    break;
@@ -3247,6 +3272,14 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
   default:
    return false; //invalid descriptor
  }//switch
+
+
+ if (m_checksum_all && !mp_pdp->isHex())
+ { //calculate and put checksum value
+  int checksum = FletcherChecksum(m_outgoing_packet, 2, m_outgoing_packet.size() - 2);
+  mp_pdp->Bin16ToHex(checksum, m_outgoing_packet); //append packet with two bytes of checksum
+ }
+
  m_outgoing_packet.push_back('\r');
 
  if (!mp_pdp->isHex())
@@ -3259,28 +3292,18 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 //посылает команду изменения контекста на новый контекст специфицированный i_new_descriptor-ом
 bool CControlApp::ChangeContext(const BYTE i_new_descriptor)
 {
- m_outgoing_packet.clear();
-
  if (false==IsValidDescriptor(i_new_descriptor))  //передали правильный дескриптор ?
   return false;
 
- m_outgoing_packet.push_back('!');
- m_outgoing_packet.push_back(CHANGEMODE);
- m_outgoing_packet.push_back(i_new_descriptor);
- m_outgoing_packet.push_back('\r');
- return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size()); //посылаем команду изменения дескриптора
+ BYTE data = i_new_descriptor; 
+ return SendPacket(CHANGEMODE, &data);
 }
 //-----------------------------------------------------------------------
 //Посылает команду запуска бутлоадера
 bool CControlApp::StartBootLoader()
 {
- m_outgoing_packet.clear();
-
- m_outgoing_packet.push_back('!');
- m_outgoing_packet.push_back(BOOTLOADER);
- m_outgoing_packet.push_back('l');
- m_outgoing_packet.push_back('\r');
- return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size()); //посылаем команду запуска бутлоадера
+ BYTE data = 'l'; 
+ return SendPacket(BOOTLOADER, &data);
 }
 
 //-----------------------------------------------------------------------
@@ -4272,6 +4295,14 @@ void CControlApp::IgnoreNPackets(int n)
 void CControlApp::SetSplitAngMode(bool mode)
 {
  m_splitAng = mode;
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::SetChecksumMode(bool check_all)
+{ //Enable checksum for SECU and disable chacksum for LZID and vice versa
+ m_checksum_all = check_all;
+ if (mp_pdp)
+  mp_pdp->EnableCRC(!check_all);
 }
 
 //-----------------------------------------------------------------------

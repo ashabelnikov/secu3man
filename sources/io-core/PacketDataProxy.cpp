@@ -32,6 +32,7 @@
 PacketDataProxy::PacketDataProxy()
 : m_mode(true) //default is Hex
 , m_crc(0xFFFF)
+, m_useCrc(true)
 {
  //empty
 }
@@ -69,7 +70,8 @@ bool PacketDataProxy::Hex8ToBin(const BYTE*& ip_hex_number, BYTE* o_byte)
   result = true;
  }
 
- m_crc = crc16(m_crc, o_byte, 1);
+ if (m_useCrc)
+  m_crc = crc16(m_crc, o_byte, 1);
  return result;
 }
 
@@ -111,12 +113,14 @@ bool PacketDataProxy::Hex16ToBin(const BYTE*& ip_hex_number, int* o_word, bool i
  if (i_signed)
  {
   signed short value = *o_word;
-  m_crc = crc16(m_crc, (unsigned char*)&value, 2);
+  if (m_useCrc)
+   m_crc = crc16(m_crc, (unsigned char*)&value, 2);
  }
  else
  {
   unsigned short value = *o_word;
-  m_crc = crc16(m_crc, (unsigned char*)&value, 2);  
+  if (m_useCrc)
+   m_crc = crc16(m_crc, (unsigned char*)&value, 2);  
  }
 
  return result;
@@ -215,7 +219,8 @@ bool PacketDataProxy::Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_numb
 
 bool PacketDataProxy::Bin8ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number)
 {
- m_crc = crc16(m_crc, (unsigned char*)&i_byte, 1);
+ if (m_useCrc)
+  m_crc = crc16(m_crc, (unsigned char*)&i_byte, 1);
  if (m_mode)
  { //hex
   return CNumericConv::Bin8ToHex(i_byte, o_hex_number);
@@ -235,7 +240,8 @@ bool PacketDataProxy::Bin8ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_numb
 
 bool PacketDataProxy::Bin16ToHex(const int i_word, std::vector<BYTE>& o_hex_number)
 {
- m_crc = crc16(m_crc, (unsigned char*)&i_word, 2);
+ if (m_useCrc)
+  m_crc = crc16(m_crc, (unsigned char*)&i_word, 2);
  if (m_mode)
  { //hex
   return CNumericConv::Bin16ToHex(i_word, o_hex_number);
@@ -292,4 +298,9 @@ void PacketDataProxy::resetCRC(void)
 int PacketDataProxy::getCRC(void)
 {
  return m_crc;
+}
+
+void PacketDataProxy::EnableCRC(bool enable)
+{
+ m_useCrc = enable;
 }

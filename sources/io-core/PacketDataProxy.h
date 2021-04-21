@@ -61,7 +61,10 @@ class PacketDataProxy
   void resetCRC(void);
   int getCRC(void);
 
+  void EnableCRC(bool enable);
+
  private:
   bool m_mode; //operation mode: false - binary, true - hex
+  volatile bool m_useCrc;
   unsigned short m_crc;
 };

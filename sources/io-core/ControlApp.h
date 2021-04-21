@@ -110,6 +110,8 @@ class IOCORE_API CControlApp
 
   void IgnoreNPackets(int n);
 
+  void SetChecksumMode(bool check_all);
+
  private:
   typedef std::vector<std::vector<BYTE> > Packets;
 
@@ -150,10 +152,11 @@ class IOCORE_API CControlApp
 
   PacketDataProxy* mp_pdp;
 
-  float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
-  long m_quartz_frq;                    //MCU clock frequency
-  int m_speedUnit;
-  bool m_splitAng;
+  volatile float m_period_distance;     //distance of one period in meters (speed sensor), used in calculations
+  volatile long m_quartz_frq;           //MCU clock frequency
+  volatile int m_speedUnit;
+  volatile bool m_splitAng;
+  volatile bool m_checksum_all;
 
   //helper
   void SwitchOnThread(bool state);
