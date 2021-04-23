@@ -59,11 +59,17 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   //return true - OK, false - check sum is invalid
   bool VerifyParamsCheckSum(const BYTE* ip_eeprom_buffer);
 
+  //Same for set of maps
+  bool VerifyTablesCheckSum(const BYTE* ip_eeprom_buffer);
+
   //returns address of parameters in EEPROM
   size_t GetParamsStartAddr(void) const;   //note: redundant to GetParamsPtr()
 
   void CalculateAndPlaceParamsCRC(BYTE* iop_data);
   void CalculateAndPlaceParamsCRC(void);
+
+  void CalculateAndPlaceTablesCRC(BYTE* iop_data);
+  void CalculateAndPlaceTablesCRC(void);
 
   void GetStartMap(int i_index, float* o_values, bool i_original = false);
   void GetIdleMap(int i_index,  float* o_values, bool i_original = false);

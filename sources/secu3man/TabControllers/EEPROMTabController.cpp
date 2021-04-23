@@ -377,6 +377,12 @@ void CEEPROMTabController::OnOpenEEPROMFromFile(void)
    return; //user canceled
  }
 
+ if (!m_eedm->VerifyTablesCheckSum(buff))
+ {
+  if (IDCANCEL==SECUMessageBox(IDS_EE_EEPROM_TABLES_CRC_INVALID, MB_OKCANCEL))
+   return; //user canceled
+ }
+
  PrepareOnLoadEEPROM(buff, _TSTRING(opened_file_name));
 }
 
@@ -409,6 +415,12 @@ void CEEPROMTabController::OnDropFile(_TSTRING fileName)
    return; //user canceled
  }
 
+ if (!m_eedm->VerifyTablesCheckSum(buff))
+ {
+  if (IDCANCEL==SECUMessageBox(IDS_EE_EEPROM_TABLES_CRC_INVALID, MB_OKCANCEL))
+   return; //user canceled
+ }
+
  PrepareOnLoadEEPROM(buff, _TSTRING(opened_file_name));
 }
 
@@ -428,6 +440,7 @@ void CEEPROMTabController::OnSaveEEPROMToFile(void)
   //контрольная сумма была сохранена только в массив с EEPROM, которое сохранялось,
   //так как сохранение было подтверждено, то теперь можно обновить и массив с активным EEPROM
   m_eedm->CalculateAndPlaceParamsCRC();
+  m_eedm->CalculateAndPlaceTablesCRC();
 
   //данные были успешно сохранены - можно сбрасывать признак модификации
   m_eedm->ResetModified();
@@ -466,6 +479,7 @@ void CEEPROMTabController::OnWriteEEPROMToSECU(void)
  m_eedm->StoreBytes(mp_bl_data); //fill m_bl_date with bytes of EEPROM 
 
  m_eedm->CalculateAndPlaceParamsCRC(mp_bl_data); //update CRC before sending data to SECU-3
+ m_eedm->CalculateAndPlaceTablesCRC(mp_bl_data);
 
  ASSERT(mp_comm);
 
@@ -949,6 +963,12 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
     if (!m_eedm->VerifyParamsCheckSum(mp_bl_data))
     {
      if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
+      chk_sum_status = false; //user canceled
+    }
+
+    if (!m_eedm->VerifyTablesCheckSum(mp_bl_data))
+    {
+     if (IDCANCEL==SECUMessageBox(IDS_EE_EEPROM_TABLES_CRC_INVALID, MB_OKCANCEL))
       chk_sum_status = false; //user canceled
     }
 

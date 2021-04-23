@@ -116,6 +116,13 @@ bool EEPROMDataMediator::VerifyParamsCheckSum(const BYTE* ip_eeprom_buffer)
  return (*crc_addr)==crc; //check it!
 }
 
+bool EEPROMDataMediator::VerifyTablesCheckSum(const BYTE* ip_eeprom_buffer)
+{
+ _uint crc = crc16(ip_eeprom_buffer + EEPROM_REALTIME_TABLES_START, sizeof(f_data_t) - sizeof(_uint));
+ const _uint* crc_addr = (_uint*)(&ip_eeprom_buffer[EEPROM_REALTIME_TABLES_START + sizeof(f_data_t) - sizeof(_uint)]);
+ return (*crc_addr)==crc; //check it!
+}
+
 size_t EEPROMDataMediator::GetParamsStartAddr(void) const
 {
  return EEPROM_PARAM_START;
@@ -679,6 +686,18 @@ void EEPROMDataMediator::CalculateAndPlaceParamsCRC(BYTE* iop_data)
 void EEPROMDataMediator::CalculateAndPlaceParamsCRC(void)
 {
  CalculateAndPlaceParamsCRC(m_bytes_active);
+}
+
+void EEPROMDataMediator::CalculateAndPlaceTablesCRC(BYTE* iop_data)
+{
+ f_data_t* tables = (f_data_t*)(iop_data + EEPROM_REALTIME_TABLES_START);
+ _uint crc = crc16((BYTE*)tables, sizeof(f_data_t) - sizeof(_uint)); //skip last two byte of CRC
+ tables->checksum = crc;
+}
+
+void EEPROMDataMediator::CalculateAndPlaceTablesCRC(void)
+{
+ CalculateAndPlaceTablesCRC(m_bytes_active);
 }
 
 std::set<int> EEPROMDataMediator::GetCEErrorsList(void)

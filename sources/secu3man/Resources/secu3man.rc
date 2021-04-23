@@ -536,6 +536,7 @@ BEGIN
     IDS_INCOMPATIBLE_QUARTZ        "Обнаружена несовместимость тактовой частоты, некоторые данные и параметры могут стать неверными. Продолжить?"
     IDS_ECUERROR_SYS_START         "Старт прошивки (перезапуск процессора)"
     IDS_ECUERROR_OILPRESSURE       "Очень низкое давление масла"
+    IDS_EEPROM_TABL_BROKEN         "Данные таблиц в EEPROM повреждены (CRC)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -578,6 +579,7 @@ BEGIN
     IDS_LOG_PLAYER_NEXT_BUTTON_TT          "Вперед на 1 запись"
     IDS_LOG_PLAYER_TIME_FACTOR_COMBO_TT    "Управление скоростью проигрывания"
     IDS_LOG_PLAYER_POSITION_SLIDER_TT      "Прокрутка записей"
+    IDS_EE_EEPROM_TABLES_CRC_INVALID       "Контрольная сумма не совпадает, возможно что таблицы в EEPROM повреждены. Желаете продолжить?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1418,6 +1420,7 @@ BEGIN
     IDS_INCOMPATIBLE_QUARTZ        "Incompatibility of clock frequency has detected, some data and parameters may become invalid. Do you want to continue?"
     IDS_ECUERROR_SYS_START         "Firmware start (reset of processor)"
     IDS_ECUERROR_OILPRESSURE       "Oil pressure is very low"
+    IDS_EEPROM_TABL_BROKEN         "Tables in EEPROM are broken (CRC)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1573,6 +1576,7 @@ BEGIN
     IDS_CANT_CHECK_DLL_COMPAT              "Program is not able to check library compatibility. \nIf libraries are incompatible, program may work incorrectly."
     IDS_DLL_MAY_BE_INCOMPAT                "Program has detected that some libraries are incompatible (guess you use libraries from different releases). \nIf libraries are incompatible, program may work incorrectly. Libraries: "
     IDS_TAB_INJ_DRIVER                     "Injectors' driver"
+    IDS_EE_EEPROM_TABLES_CRC_INVALID       "Check sum doesn't match, perhaps EEPROM tables are corrupted. Do you want to continue?"
 END
 
 STRINGTABLE DISCARDABLE 
