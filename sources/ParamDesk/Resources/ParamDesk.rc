@@ -597,6 +597,17 @@ BEGIN
     CONTROL         "",IDC_PD_KNOCK_RECOVERY_DELAY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,183,13,17
     LTEXT           "Задержка восстан. УОЗ",IDC_PD_KNOCK_RECOVERY_DELAY_CAPTION,1,184,94,10
     LTEXT           "т",IDC_PD_KNOCK_RECOVERY_DELAY_UNIT,144,184,20,10
+
+    LTEXT           "Выбор датчика детонации",IDC_PD_KNOCK_SELCH_CAPTION,1,213,50,30
+
+    CONTROL         "1",IDC_PD_KNOCK_SELCH1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,210,20,12
+    CONTROL         "2",IDC_PD_KNOCK_SELCH2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,210,20,12
+    CONTROL         "3",IDC_PD_KNOCK_SELCH3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,210,20,12
+    CONTROL         "4",IDC_PD_KNOCK_SELCH4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,210,20,12    
+    CONTROL         "5",IDC_PD_KNOCK_SELCH5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,230,20,12
+    CONTROL         "6",IDC_PD_KNOCK_SELCH6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,230,20,12
+    CONTROL         "7",IDC_PD_KNOCK_SELCH7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,230,20,12
+    CONTROL         "8",IDC_PD_KNOCK_SELCH8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,230,20,12    
 END
 
 IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
@@ -1795,6 +1806,7 @@ BEGIN
     IDS_PD_ACCELENR_AETYPE_TIMEBASE "По времени"
     IDS_PD_ACCELENR_AETYPE_COMBO_TT "Выбор типа обогащения при ускорении. Обогащение 'Ускорительный насос' работает аналогично механическому ускорительному насосу в карбюраторе. Обогащение 'По времени' включается на заданное время и затем плавно затухает на протяжении заданного времени."
     IDS_PD_ACCELENR_AETIME_EDIT_TT "Длительность обогащения (такты)."
+    IDS_PD_KNOCK_SELCH1_TT "Укажите какой датчик детонации использовать для этого канала. Нет галочки - 1-й датчик. Есть галочка - 2-й датчик"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2384,6 +2396,17 @@ BEGIN
     CONTROL         "",IDC_PD_KNOCK_RECOVERY_DELAY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,183,13,17
     LTEXT           "Angle recovery delay",IDC_PD_KNOCK_RECOVERY_DELAY_CAPTION,3,184,94,10
     LTEXT           "str",IDC_PD_KNOCK_RECOVERY_DELAY_UNIT,146,184,20,10
+
+    LTEXT           "Select knock sensor",IDC_PD_KNOCK_SELCH_CAPTION,1,213,50,30
+
+    CONTROL         "1",IDC_PD_KNOCK_SELCH1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,210,20,12
+    CONTROL         "2",IDC_PD_KNOCK_SELCH2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,210,20,12
+    CONTROL         "3",IDC_PD_KNOCK_SELCH3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,210,20,12
+    CONTROL         "4",IDC_PD_KNOCK_SELCH4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,210,20,12    
+    CONTROL         "5",IDC_PD_KNOCK_SELCH5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,230,20,12
+    CONTROL         "6",IDC_PD_KNOCK_SELCH6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,230,20,12
+    CONTROL         "7",IDC_PD_KNOCK_SELCH7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,230,20,12
+    CONTROL         "8",IDC_PD_KNOCK_SELCH8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,230,20,12    
 END
 
 IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
@@ -3614,6 +3637,7 @@ BEGIN
     IDS_PD_ACCELENR_AETYPE_TIMEBASE "Time based"
     IDS_PD_ACCELENR_AETYPE_COMBO_TT "Selection of the type of acceleration enrichment. 'Acceler. pump' enrichment works in a similar way to a mechanical accel. pump in a carburetor. 'Time based' enrichment is switched on for a specified time and then fades out smoothly during a specified time."
     IDS_PD_ACCELENR_AETIME_EDIT_TT "Duration of acceleration enrichment (strokes)."
+    IDS_PD_KNOCK_SELCH1_TT "Specify which knock sensor should be used for this channel. No check - 1st sensor. Set check - 2nd sensor"
 END
 
 /////////////////////////////////////////////////////////////////////////////

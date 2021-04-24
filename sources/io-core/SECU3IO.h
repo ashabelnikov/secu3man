@@ -323,6 +323,7 @@ namespace SECU3IO
   float knock_max_retard;               //максимальное смещение УОЗ
   float knock_threshold;                //in Volts
   int knock_recovery_delay;             //in engine strokes
+  bool knock_selch[8];                  //selection of KS for each channel (cylinder)
  };
 
  struct CEErrors

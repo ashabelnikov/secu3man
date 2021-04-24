@@ -1389,3 +1389,13 @@
 #define IDC_PD_ACCELENR_AETIME_CAPTION   1885
 #define IDC_PD_ACCELENR_AETIME_UNIT      1886
 #define IDS_PD_ACCELENR_AETIME_EDIT_TT   1887
+#define IDC_PD_KNOCK_SELCH1              1888
+#define IDC_PD_KNOCK_SELCH2              1889
+#define IDC_PD_KNOCK_SELCH3              1890
+#define IDC_PD_KNOCK_SELCH4              1891
+#define IDC_PD_KNOCK_SELCH5              1892
+#define IDC_PD_KNOCK_SELCH6              1893
+#define IDC_PD_KNOCK_SELCH7              1894
+#define IDC_PD_KNOCK_SELCH8              1895
+#define IDC_PD_KNOCK_SELCH_CAPTION       1896
+#define IDS_PD_KNOCK_SELCH1_TT           1897

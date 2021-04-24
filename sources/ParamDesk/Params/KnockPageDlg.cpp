@@ -51,6 +51,15 @@ BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_KNOCK_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_KNOCK_RECOVERY_DELAY_EDIT, OnChangeData)
 
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH1, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH2, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH3, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH4, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH5, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH6, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH7, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_KNOCK_SELCH8, OnChangeData)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_ENABLE_KC_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BPF_FREQ_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_INT_TIME_CONST_COMBO, OnUpdateControls)
@@ -94,6 +103,16 @@ BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_THRESHOLD_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RECOVERY_DELAY_UNIT, OnUpdateControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH1, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH2, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH3, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH4, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH5, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH6, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH7, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH8, OnUpdateControls)
+
  ON_WM_DESTROY()
  ON_WM_SIZE()
 END_MESSAGE_MAP()
@@ -122,6 +141,9 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
  m_params.knock_recovery_delay = 2;
 
  m_params.knock_int_time_const = 23; //300us
+
+ for (int i = 0; i < 8; ++i)
+  m_params.knock_selch[i] = 0;
 }
 
 CKnockPageDlg::~CKnockPageDlg()
@@ -157,6 +179,9 @@ void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_KNOCK_THRESHOLD_SPIN, m_threshold_spin);
  DDX_Control(pDX, IDC_PD_KNOCK_RECOVERY_DELAY_SPIN, m_recovery_delay_spin);
 
+ for(int i = 0; i < 8; ++i)
+  DDX_Control(pDX, IDC_PD_KNOCK_SELCH1+i, m_selch[i]);
+
  DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_ENABLE_KC_COMBO, m_params.knock_use_knock_channel);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_BPF_FREQ_COMBO, m_params.knock_bpf_frequency);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_INT_TIME_CONST_COMBO, m_params.knock_int_time_const);
@@ -168,6 +193,9 @@ void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)
  m_max_retard_edit.DDX_Value(pDX, IDC_PD_KNOCK_MAX_RETARD_EDIT, m_params.knock_max_retard);
  m_threshold_edit.DDX_Value(pDX, IDC_PD_KNOCK_THRESHOLD_EDIT, m_params.knock_threshold);
  m_recovery_delay_edit.DDX_Value(pDX, IDC_PD_KNOCK_RECOVERY_DELAY_EDIT, m_params.knock_recovery_delay);
+
+ for(int i = 0; i < 8; ++i)
+  DDX_Check_bool(pDX, IDC_PD_KNOCK_SELCH1+i, m_params.knock_selch[i]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -181,6 +209,7 @@ void CKnockPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CKnockPageDlg::OnInitDialog()
 {
+ size_t i;
  Super::OnInitDialog();
 
  //initialize window scroller
@@ -211,6 +240,9 @@ BOOL CKnockPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_use_knock_channel_combo, MLL::GetString(IDS_PD_KNOCK_ENABLE_KC_COMBO_TT)));
 
+ for (i = 0; i < 8; ++i)
+ VERIFY(mp_ttc->AddWindow(&m_selch[i], MLL::GetString(IDS_PD_KNOCK_SELCH1_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -219,7 +251,6 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_use_knock_channel_combo.AddString(MLL::LoadString(IDS_PD_YES));
  //-----------------------------------------------------------------
  m_bpf_frequency_combo.SetRedraw(false);
- size_t i;
  for (i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //fill combobox containing BPF frequencies
  {
   CString string;
@@ -341,6 +372,6 @@ void CKnockPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(360));
+  mp_scr->SetViewSize(cx, da.ScaleY(410));
 }
 

@@ -1450,7 +1450,7 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::KnockPar& knockPar = m_recepted_packet.m_KnockPar;
- if (size != (mp_pdp->isHex() ? (14+17) : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? (14+19) : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Разрешен/запрещен
@@ -1511,6 +1511,13 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet,&knock_recovery_delay))
   return false;
  knockPar.knock_recovery_delay = knock_recovery_delay;
+
+ //selection of KS for each channel (cylinder)
+ unsigned char knock_selch;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &knock_selch))
+  return false;
+ for (int i = 0; i < 8; ++i)
+  knockPar.knock_selch[i] = CHECKBIT8(knock_selch, i);
 
  return true;
 }
@@ -3606,6 +3613,11 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
  mp_pdp->Bin16ToHex(knock_threshold, m_outgoing_packet);
  unsigned char knock_recovery_delay = (unsigned char)packet_data->knock_recovery_delay;
  mp_pdp->Bin8ToHex(knock_recovery_delay, m_outgoing_packet);
+
+ unsigned char knock_selch = 0;
+ for (int i = 0; i < 8; ++i)
+  WRITEBIT8(knock_selch, i, packet_data->knock_selch[i]); 
+ mp_pdp->Bin8ToHex(knock_selch, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
