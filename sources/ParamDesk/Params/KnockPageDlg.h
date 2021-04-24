@@ -91,5 +91,8 @@ class AFX_EXT_CLASS CKnockPageDlg : public CParamTabBaseDlg, public ParamPageEve
   CSpinButtonCtrlEx m_threshold_spin;
   CSpinButtonCtrlEx m_recovery_delay_spin;
 
+  CEditEx m_knkclt_thrd_edit;
+  CSpinButtonCtrlEx m_knkclt_thrd_spin;
+
   CButton m_selch[8];
 };

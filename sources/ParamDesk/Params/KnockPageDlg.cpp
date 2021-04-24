@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_KNOCK_MAX_RETARD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_KNOCK_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_KNOCK_RECOVERY_DELAY_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_KNOCK_CLT_THRD_EDIT, OnChangeData)
 
  ON_BN_CLICKED(IDC_PD_KNOCK_SELCH1, OnChangeData)
  ON_BN_CLICKED(IDC_PD_KNOCK_SELCH2, OnChangeData)
@@ -113,6 +114,11 @@ BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH7, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_SELCH8, OnUpdateControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_CLT_THRD_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_CLT_THRD_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_CLT_THRD_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_CLT_THRD_UNIT, OnUpdateControls)
+
  ON_WM_DESTROY()
  ON_WM_SIZE()
 END_MESSAGE_MAP()
@@ -128,6 +134,7 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
 , m_max_retard_edit(CEditEx::MODE_FLOAT, true)
 , m_threshold_edit(CEditEx::MODE_FLOAT, true)
 , m_recovery_delay_edit(CEditEx::MODE_INT, true)
+, m_knkclt_thrd_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.knock_use_knock_channel = 0;
  m_params.knock_bpf_frequency = 40;
@@ -144,6 +151,8 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
 
  for (int i = 0; i < 8; ++i)
   m_params.knock_selch[i] = 0;
+
+ m_params.knkclt_thrd = 70.0f;
 }
 
 CKnockPageDlg::~CKnockPageDlg()
@@ -182,6 +191,9 @@ void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)
  for(int i = 0; i < 8; ++i)
   DDX_Control(pDX, IDC_PD_KNOCK_SELCH1+i, m_selch[i]);
 
+ DDX_Control(pDX, IDC_PD_KNOCK_CLT_THRD_EDIT, m_knkclt_thrd_edit);
+ DDX_Control(pDX, IDC_PD_KNOCK_CLT_THRD_SPIN, m_knkclt_thrd_spin);
+
  DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_ENABLE_KC_COMBO, m_params.knock_use_knock_channel);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_BPF_FREQ_COMBO, m_params.knock_bpf_frequency);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_INT_TIME_CONST_COMBO, m_params.knock_int_time_const);
@@ -196,6 +208,8 @@ void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)
 
  for(int i = 0; i < 8; ++i)
   DDX_Check_bool(pDX, IDC_PD_KNOCK_SELCH1+i, m_params.knock_selch[i]);
+
+ m_knkclt_thrd_edit.DDX_Value(pDX, IDC_PD_KNOCK_CLT_THRD_EDIT, m_params.knkclt_thrd);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -242,6 +256,9 @@ BOOL CKnockPageDlg::OnInitDialog()
 
  for (i = 0; i < 8; ++i)
  VERIFY(mp_ttc->AddWindow(&m_selch[i], MLL::GetString(IDS_PD_KNOCK_SELCH1_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_knkclt_thrd_edit, MLL::GetString(IDS_PD_KNOCK_CLT_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_knkclt_thrd_spin, MLL::GetString(IDS_PD_KNOCK_CLT_THRD_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -310,6 +327,13 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_recovery_delay_spin.SetRangeAndDelta(1, 99, 1);
  m_recovery_delay_edit.SetRange(1, 99);
  //-----------------------------------------------------------------
+ m_knkclt_thrd_edit.SetLimitText(6);
+ m_knkclt_thrd_edit.SetDecimalPlaces(2);
+ m_knkclt_thrd_spin.SetBuddy(&m_knkclt_thrd_edit);
+ m_knkclt_thrd_spin.SetRangeAndDelta(-40.0f, 120.0f, 0.25f);
+ m_knkclt_thrd_edit.SetRange(-40.0f, 120.0f);
+ //-----------------------------------------------------------------
+
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -372,6 +396,6 @@ void CKnockPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(410));
+  mp_scr->SetViewSize(cx, da.ScaleY(445));
 }
 

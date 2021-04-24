@@ -324,6 +324,7 @@ namespace SECU3IO
   float knock_threshold;                //in Volts
   int knock_recovery_delay;             //in engine strokes
   bool knock_selch[8];                  //selection of KS for each channel (cylinder)
+  float knkclt_thrd;
  };
 
  struct CEErrors
@@ -796,7 +797,6 @@ const int INPAVNUM = 14;
   float frap;
   float idl_ve_g;
   int stbl_str_cnt;
-  float knkclt_thrd;
   float heating_t_off;
   float heating_time;
   float idltorun_stp_en;

@@ -1450,7 +1450,7 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::KnockPar& knockPar = m_recepted_packet.m_KnockPar;
- if (size != (mp_pdp->isHex() ? (14+19) : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? (14+23) : 19))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Разрешен/запрещен
@@ -1518,6 +1518,12 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
   return false;
  for (int i = 0; i < 8; ++i)
   knockPar.knock_selch[i] = CHECKBIT8(knock_selch, i);
+
+ //Knock detection CLT threshold
+ int knkclt_thrd = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &knkclt_thrd, true))
+  return false;
+ knockPar.knkclt_thrd = ((float)knkclt_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }
@@ -3618,6 +3624,9 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
  for (int i = 0; i < 8; ++i)
   WRITEBIT8(knock_selch, i, packet_data->knock_selch[i]); 
  mp_pdp->Bin8ToHex(knock_selch, m_outgoing_packet);
+
+ int knkclt_thrd = MathHelpers::Round(packet_data->knkclt_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(knkclt_thrd, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

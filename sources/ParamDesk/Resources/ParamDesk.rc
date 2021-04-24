@@ -608,6 +608,11 @@ BEGIN
     CONTROL         "6",IDC_PD_KNOCK_SELCH6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,230,20,12
     CONTROL         "7",IDC_PD_KNOCK_SELCH7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,230,20,12
     CONTROL         "8",IDC_PD_KNOCK_SELCH8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,230,20,12    
+
+    EDITTEXT        IDC_PD_KNOCK_CLT_THRD_EDIT,95,248,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_KNOCK_CLT_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,248,13,17
+    LTEXT           "Порог контроля детонации",IDC_PD_KNOCK_CLT_THRD_CAPTION,0,249,94,10
+    LTEXT           "°C",IDC_PD_KNOCK_CLT_THRD_UNIT,143,249,30,10
 END
 
 IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
@@ -1807,6 +1812,7 @@ BEGIN
     IDS_PD_ACCELENR_AETYPE_COMBO_TT "Выбор типа обогащения при ускорении. Обогащение 'Ускорительный насос' работает аналогично механическому ускорительному насосу в карбюраторе. Обогащение 'По времени' включается на заданное время и затем плавно затухает на протяжении заданного времени."
     IDS_PD_ACCELENR_AETIME_EDIT_TT "Длительность обогащения (такты)."
     IDS_PD_KNOCK_SELCH1_TT "Укажите какой датчик детонации использовать для этого канала. Нет галочки - 1-й датчик. Есть галочка - 2-й датчик"
+    IDS_PD_KNOCK_CLT_THRD_EDIT_TT "Контроль детонации включится только после того, как температура двигателя превысит это значение."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2397,7 +2403,7 @@ BEGIN
     LTEXT           "Angle recovery delay",IDC_PD_KNOCK_RECOVERY_DELAY_CAPTION,3,184,94,10
     LTEXT           "str",IDC_PD_KNOCK_RECOVERY_DELAY_UNIT,146,184,20,10
 
-    LTEXT           "Select knock sensor",IDC_PD_KNOCK_SELCH_CAPTION,1,213,50,30
+    LTEXT           "Select a knock sensor",IDC_PD_KNOCK_SELCH_CAPTION,1,213,50,30
 
     CONTROL         "1",IDC_PD_KNOCK_SELCH1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,210,20,12
     CONTROL         "2",IDC_PD_KNOCK_SELCH2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,210,20,12
@@ -2407,6 +2413,11 @@ BEGIN
     CONTROL         "6",IDC_PD_KNOCK_SELCH6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,230,20,12
     CONTROL         "7",IDC_PD_KNOCK_SELCH7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,230,20,12
     CONTROL         "8",IDC_PD_KNOCK_SELCH8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,230,20,12    
+
+    EDITTEXT        IDC_PD_KNOCK_CLT_THRD_EDIT,95,248,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_KNOCK_CLT_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,248,13,17
+    LTEXT           "Knock control threshold",IDC_PD_KNOCK_CLT_THRD_CAPTION,0,249,94,10
+    LTEXT           "°C",IDC_PD_KNOCK_CLT_THRD_UNIT,143,249,30,10
 END
 
 IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
@@ -3638,6 +3649,7 @@ BEGIN
     IDS_PD_ACCELENR_AETYPE_COMBO_TT "Selection of the type of acceleration enrichment. 'Acceler. pump' enrichment works in a similar way to a mechanical accel. pump in a carburetor. 'Time based' enrichment is switched on for a specified time and then fades out smoothly during a specified time."
     IDS_PD_ACCELENR_AETIME_EDIT_TT "Duration of acceleration enrichment (strokes)."
     IDS_PD_KNOCK_SELCH1_TT "Specify which knock sensor should be used for this channel. No check - 1st sensor. Set check - 2nd sensor"
+    IDS_PD_KNOCK_CLT_THRD_EDIT_TT "Control of knock will be activated only after the temperature of engine exceeds this value."
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -277,6 +277,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->knock_recovery_delay = p_in->knock_recovery_delay;
     for (int i = 0; i < 8; ++i)
      WRITEBIT8(p_params->knock_selch, i, p_in->knock_selch[i]); 
+    p_params->knkclt_thrd  = MathHelpers::Round(p_in->knkclt_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
   case MISCEL_PAR:
@@ -721,6 +722,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->knock_recovery_delay = p_params->knock_recovery_delay;
      for (int i = 0; i < 8; ++i)
       p_out->knock_selch[i] = CHECKBIT8(p_params->knock_selch, i);
+     p_out->knkclt_thrd  = ((float)p_params->knkclt_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
     break;
    case MISCEL_PAR:
