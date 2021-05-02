@@ -125,10 +125,10 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   typedef std::pair<int, COLORREF> IndCfg_t;
 
   void SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE,
-                        IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked, IndCfg_t IndIgn_i, IndCfg_t IndCond_i, IndCfg_t IndEpas_i);
+                        IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked, IndCfg_t IndIgn_i, IndCfg_t IndCond_i, IndCfg_t IndEpas_i, IndCfg_t IndAftStrEnr, IndCfg_t IndIacClLoop);
 
   void GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
-                        IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i);
+                        IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i, IndCfg_t &IndAftStrEnr, IndCfg_t &IndIacClLoop);
 
   void SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
                     int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
@@ -218,9 +218,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   struct IndFieldData
   {
-   IndFieldData(const _TSTRING& cap, COLORREF col, unsigned char* val, UINT uiID) : caption(cap), p_value(val), color(col), m_uiID(uiID) {};
+   IndFieldData(const _TSTRING& cap, COLORREF col, bool* val, UINT uiID) : caption(cap), p_value(val), color(col), m_uiID(uiID) {};
    _TSTRING caption;
-   unsigned char *p_value;
+   bool *p_value;
    COLORREF color;
    UINT m_uiID;
   };

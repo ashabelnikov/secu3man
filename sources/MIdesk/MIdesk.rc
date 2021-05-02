@@ -274,7 +274,9 @@ BEGIN
     IDS_MI_IND_SYSLOCKED    "Система заблокир."
     IDS_MI_IND_IGN_I        "Вход IGN_I"
     IDS_MI_IND_COND_I       "Вход COND_I"
-    IDS_MI_IND_EPAS_I       "вход EPAS_I"
+    IDS_MI_IND_EPAS_I       "Вход EPAS_I"
+    IDS_MI_IND_AFTSTRENR    "Обог.после пуска"
+    IDS_MI_IND_IACCLLOOP    "РХХ closed loop"
 END
 
 
@@ -568,6 +570,8 @@ BEGIN
     IDS_MI_IND_IGN_I        "IGN_I input"
     IDS_MI_IND_COND_I       "COND_I input"
     IDS_MI_IND_EPAS_I       "EPAS_I input"
+    IDS_MI_IND_AFTSTRENR    "Afterstart enr."
+    IDS_MI_IND_IACCLLOOP    "IAC closed loop"
 END
 
 STRINGTABLE DISCARDABLE 

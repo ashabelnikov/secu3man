@@ -41,20 +41,20 @@ namespace SECU3IO
   float adv_angle;                      //текущий УОЗ
   unsigned char air_flow;               //расход воздуха
 
-  unsigned char carb;                   //состояние концевика карбюратора
-  unsigned char gas;                    //состояние газового клапана
-  unsigned char ephh_valve;             //состояние клапана ЭПХХ
-  unsigned char epm_valve;              //состояние клапана ЭМР
-  unsigned char cool_fan;               //состояние вентилятора (включен/выключен)
-  unsigned char st_block;               //состояние выхода блокировки стартера
-  unsigned char acceleration;           //acceleration/deceleration mode
-  unsigned char ce_state;               // !currently is not used!
-  unsigned char fc_revlim;              // fuel cut rev.lim. flag
-  unsigned char floodclear;             // flood clear mode flag   
-  unsigned char sys_locked;             // system locked flag (immobilizer)
-  unsigned char ign_i;                  //IGN_I
-  unsigned char cond_i;                 //COND_I
-  unsigned char epas_i;                 //EPAS_I
+  bool carb;                            //состояние концевика карбюратора
+  bool gas;                             //состояние газового клапана
+  bool ephh_valve;                      //состояние клапана ЭПХХ
+  bool epm_valve;                       //состояние клапана ЭМР
+  bool cool_fan;                        //состояние вентилятора (включен/выключен)
+  bool st_block;                        //состояние выхода блокировки стартера
+  bool acceleration;                    //acceleration/deceleration mode
+  bool ce_state;                        // state of CE
+  bool fc_revlim;                       // fuel cut rev.lim. flag
+  bool floodclear;                      // flood clear mode flag   
+  bool sys_locked;                      // system locked flag (immobilizer)
+  bool ign_i;                           //IGN_I
+  bool cond_i;                          //COND_I
+  bool epas_i;                          //EPAS_I
 
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации
@@ -116,6 +116,8 @@ namespace SECU3IO
   float ftls;                           //level of fuel in the fuel tank
   float egts;                           //exhaust gas temperature
   float ops;                            //oil pressure
+ 
+  bool iac_cl_loop;                     //IAC closed loop flag
  };
 
  struct DbgvarDat

@@ -328,6 +328,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optColIgn_i(_T("IndIgn_i"))
 , m_optColCond_i(_T("IndCond_i"))
 , m_optColEpas_i(_T("IndEpas_i"))
+, m_optColAftStrEnr(_T("IndAftStrEnr"))
+, m_optColIacClLoop(_T("IndIacClLoop"))
 //Autotune
 , m_Name_AutoTune_Section(_T("AutoTune"))
 , m_optLambdaDelay(_T("LambdaDelay"))
@@ -487,6 +489,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldFtls(_T("FTLS"))
 , m_optLogFieldEgts(_T("EGTS"))
 , m_optLogFieldOps(_T("OPS"))
+, m_optLogFieldAftStrEnr(_T("AftStrEnr"))
+, m_optLogFieldIacClLoop(_T("IacClLoop"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -513,6 +517,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optIndIgn_i[i].name = _T("IndIgn_i");
   m_optIndCond_i[i].name = _T("IndCond_i");
   m_optIndEpas_i[i].name = _T("IndEpas_i");
+  m_optIndAftStrEnr[i].name = _T("IndAftStrEnr");
+  m_optIndIacClLoop[i].name = _T("IndIacClLoop");
  }
 
  m_Name_Meters_Section[0] = _T("Meters");
@@ -970,6 +976,8 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optIndIgn_i[i],_T(""), 0, 32, true);
   ii.ReadInt(m_optIndCond_i[i],_T(""), 0, 32, true);
   ii.ReadInt(m_optIndEpas_i[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndAftStrEnr[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndIacClLoop[i],_T(""), 0, 32, true);
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
@@ -987,6 +995,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColIgn_i,_T("00FF00"));
  ic.ReadColor(m_optColCond_i,_T("00FF00"));
  ic.ReadColor(m_optColEpas_i,_T("00FF00"));
+ ic.ReadColor(m_optColAftStrEnr,_T("00FF00"));
+ ic.ReadColor(m_optColIacClLoop,_T("00FF00"));
 
  //Meters
  const TCHAR* metDef[2][31*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
@@ -1195,7 +1205,8 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldFtls, _T("FTLS"));
  lf.ReadString(m_optLogFieldEgts, _T("EGTS"));
  lf.ReadString(m_optLogFieldOps, _T("OPS"));
-
+ lf.ReadString(m_optLogFieldAftStrEnr, _T("AftStrEnr"));
+ lf.ReadString(m_optLogFieldIacClLoop, _T("IacClLoop"));
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
  fn.ReadInt(m_optFuncSM_CONTROL, _T("1"), 0, 1);
@@ -2733,6 +2744,16 @@ bool CAppSettingsModel::WriteSettings(void)
    ii.WriteInt(m_optIndEpas_i[i], _T("EPAS_I input"));
   else
    ii.WriteInt(m_optIndEpas_i[i], _T("Вход EPAS_I"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndAftStrEnr[i], _T("Afterstart enrichment"));
+  else
+   ii.WriteInt(m_optIndAftStrEnr[i], _T("Обогащение после пуска"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndIacClLoop[i], _T("IAC closed loop"));
+  else
+   ii.WriteInt(m_optIndIacClLoop[i], _T("РХХ closed loop"));
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
@@ -2811,6 +2832,16 @@ bool CAppSettingsModel::WriteSettings(void)
   ic.WriteColor(m_optColEpas_i, _T("EPAS_I input"));
  else
   ic.WriteColor(m_optColEpas_i, _T("Вход EPAS_I"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColAftStrEnr, _T("Afterstart enrichment"));
+ else
+  ic.WriteColor(m_optColAftStrEnr, _T("Обогащение после пуска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColIacClLoop, _T("IAC closed loop"));
+ else
+  ic.WriteColor(m_optColIacClLoop, _T("РХХ closed loop"));
 
  TCHAR* mm_comment[2];
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -3570,6 +3601,8 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldFtls);
  lf.WriteString(m_optLogFieldEgts);
  lf.WriteString(m_optLogFieldOps);
+ lf.WriteString(m_optLogFieldAftStrEnr);
+ lf.WriteString(m_optLogFieldIacClLoop);
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -4716,6 +4749,8 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
   o_cfg.m_optIndIgn_i[i] = std::make_pair(m_optIndIgn_i[i].value, m_optColIgn_i.value);
   o_cfg.m_optIndCond_i[i] = std::make_pair(m_optIndCond_i[i].value, m_optColCond_i.value);
   o_cfg.m_optIndEpas_i[i] = std::make_pair(m_optIndEpas_i[i].value, m_optColEpas_i.value);
+  o_cfg.m_optIndAftStrEnr[i] = std::make_pair(m_optIndAftStrEnr[i].value, m_optColAftStrEnr.value);
+  o_cfg.m_optIndIacClLoop[i] = std::make_pair(m_optIndIacClLoop[i].value, m_optColIacClLoop.value);
  }
 }
 
@@ -4739,6 +4774,8 @@ void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
   m_optIndIgn_i[i].value = i_cfg.m_optIndIgn_i[i].first, m_optColIgn_i.value = i_cfg.m_optIndIgn_i[i].second;
   m_optIndCond_i[i].value = i_cfg.m_optIndCond_i[i].first, m_optColCond_i.value = i_cfg.m_optIndCond_i[i].second;
   m_optIndEpas_i[i].value = i_cfg.m_optIndEpas_i[i].first, m_optColEpas_i.value = i_cfg.m_optIndEpas_i[i].second;
+  m_optIndAftStrEnr[i].value = i_cfg.m_optIndAftStrEnr[i].first, m_optColAftStrEnr.value = i_cfg.m_optIndAftStrEnr[i].second;
+  m_optIndIacClLoop[i].value = i_cfg.m_optIndIacClLoop[i].first, m_optColIacClLoop.value = i_cfg.m_optIndIacClLoop[i].second;
  }
 }
 
@@ -5286,6 +5323,8 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldFtls.value = i_flds.m_fldFtls;
  m_optLogFieldEgts.value = i_flds.m_fldEgts;
  m_optLogFieldOps.value = i_flds.m_fldOps;
+ m_optLogFieldAftStrEnr.value = i_flds.m_fldAftStrEnr;
+ m_optLogFieldIacClLoop.value = i_flds.m_fldIacClLoop;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -5347,6 +5386,8 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldFtls = m_optLogFieldFtls.value;
  o_flds.m_fldEgts = m_optLogFieldEgts.value;
  o_flds.m_fldOps = m_optLogFieldOps.value;
+ o_flds.m_fldAftStrEnr = m_optLogFieldAftStrEnr.value;
+ o_flds.m_fldIacClLoop = m_optLogFieldIacClLoop.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

@@ -297,6 +297,8 @@ struct IndicatorsCfg
  std::pair<int, COLORREF> m_optIndIgn_i[2];
  std::pair<int, COLORREF> m_optIndCond_i[2];
  std::pair<int, COLORREF> m_optIndEpas_i[2];
+ std::pair<int, COLORREF> m_optIndAftStrEnr[2];
+ std::pair<int, COLORREF> m_optIndIacClLoop[2];
 };
 
 struct MetersCfg
@@ -468,6 +470,8 @@ struct LogFileFields
  _TSTRING m_fldFtls;
  _TSTRING m_fldEgts;
  _TSTRING m_fldOps;
+ _TSTRING m_fldAftStrEnr;
+ _TSTRING m_fldIacClLoop;
 };
 
 //Functionality
