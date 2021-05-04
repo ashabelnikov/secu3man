@@ -1567,6 +1567,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V34) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
   }
+  if (iov >= FWDM::IOV_V34) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_EGTS_I, _T("EGTS_I"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_ADD_I3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I3, true); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I3, true);
@@ -1579,10 +1582,13 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
   }
-  mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_ADD_I4, _T("NONE"));
+  if (iov >= FWDM::IOV_V34) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_EGTS_I, _T("EGTS_I"));
+  }
   if (iov >= FWDM::IOV_V34) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
   }
+  mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_ADD_I4, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I4, m_enable_extraio); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I4, m_enable_extraio);
 
