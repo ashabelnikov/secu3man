@@ -469,6 +469,7 @@ BEGIN
     CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
     RTEXT           "Скважн. тест. сигнала (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
     CONTROL         "Загружать из прошивки (flash)",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,285,120,10
+    LTEXT           "Как восстановить прошивку?",IDC_INJDRV_BLRECOVER_LINK,100,305,120,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -870,6 +871,7 @@ BEGIN
     IDS_DEVDIAG_TESTCH_COMBO_TT "На выбранном выходе блока SECU-3 будут сгенерированы импульсы заданной частоты и скважности (см. параметры 'Частота тест. сигнала' и 'Скважн. тест. сигнала'). Обратите внимание, что в SECU-3i не все выходы способны корректно работать на высокой частоте."
     IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT "Частота тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
     IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT "Скважность тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
+    IDS_INJDRV_BLRECOVER_TEXT "Для восстановления прошивки (или чтобы произвести другие действия) воспользуйтесь встроенным загрузчиком:\n1. Во всплывающем меню выберите необходимый пункт, например 'Записать прошивку из файла';\n2. Выберите файл прошивки и внизу окна появится надпись 'Ожидание запуска загрузчика' и иконка рукопожатия;\n3. Включите питание блока и через несколько секунд начнется процесс записи прошивки. Если ничего не происходит,\n   то повторите все сначала."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1334,6 +1336,7 @@ BEGIN
     CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
     RTEXT           "Test signal duty (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
     CONTROL         "Load from firmware (flash)",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,285,120,10
+    LTEXT           "How to recover firmware?",IDC_INJDRV_BLRECOVER_LINK,100,305,120,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -1735,6 +1738,7 @@ BEGIN
     IDS_DEVDIAG_TESTCH_COMBO_TT "At the selected SECU-3 output will be generated pulses with specified frequency and duty (see 'Test signal frequency' and 'Test signal duty' parameters)"
     IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT "Frequency of the test signal used for testing of SECU-3 outputs (see dropdown list located to the left)"
     IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT "Duty of the test signal used for testing of SECU-3 outputs  (see dropdown list located to the left)"
+    IDS_INJDRV_BLRECOVER_TEXT "To restore the firmware (or to perform other actions), use the built-in bootloader:\n1. In the pop-up menu, select the required item, for example 'Write firmware from a file';\n2. Select the firmware file and at the bottom of the window there will be an inscription\n   'Waiting for starting bootloader' and a handshake icon;\n3. Turn on the power to the unit and after a few seconds the process of writing the firmware\n   will start. If nothing happens, try all over again."
 END
 
 /////////////////////////////////////////////////////////////////////////////

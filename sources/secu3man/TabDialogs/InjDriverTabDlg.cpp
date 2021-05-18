@@ -39,6 +39,7 @@
 #include "ui-core/Label.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/MsgBox.h"
 
 const UINT CInjDriverTabDlg::IDD = IDD_INJ_DRIVER;
 
@@ -65,6 +66,7 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 , mp_TipLink(new CLabel)
 , mp_secu3logo(new CClickableBmp())
 , mp_scr(new CWndScroller)
+, mp_BLRecLink(new CLabel)
 , m_initialized(false)
 , m_enable(false)
 , m_enable_ee_save(false)
@@ -203,6 +205,7 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_SECU3ORG_LINK, *mp_secu3orgLink);
  DDX_Control(pDX, IDC_SECU3LOGO_BITMAP, *mp_secu3logo);
  DDX_Control(pDX, IDC_INJDRV_TIP_LINK, *mp_TipLink);
+ DDX_Control(pDX, IDC_INJDRV_BLRECOVER_LINK, *mp_BLRecLink);
 
  DDX_Control(pDX, IDC_LOAD_FLASH_CHECK, m_load_flash_check);
 
@@ -393,7 +396,7 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  mp_secu3orgLink->SetLink(true);
  mp_secu3orgLink->SetTextColor(RGB(0, 0, 255));
  mp_secu3orgLink->SetFontUnderline(true);
- mp_secu3orgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_secu3orgLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
  CString str;
  mp_secu3orgLink->GetWindowText(str);
  if (str[0] != _T('h') || str[1] != _T('t') || str[2] != _T('t') || str[3] != _T('p') || str[4] != _T(':') || str[5] != _T('/') || str[6] != _T('/') || str[7] != _T('s') || str[8] != _T('e') || str[9] != _T('c') || str[10] != _T('u') || str[11] != _T('3') || str[12] != _T('.') || str[13] != _T('o') || str[14] != _T('r') || str[15] != _T('g'))
@@ -403,8 +406,14 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  mp_TipLink->SetLink(true);
  mp_TipLink->SetTextColor(RGB(0, 0, 255));
  mp_TipLink->SetFontUnderline(true);
- mp_TipLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_TipLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
  mp_TipLink->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDriverTabDlg::OnTipLinkClick));
+
+ mp_BLRecLink->SetLink(true);
+ mp_BLRecLink->SetTextColor(RGB(0, 0, 255));
+ mp_BLRecLink->SetFontUnderline(true);
+ mp_BLRecLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_BLRecLink->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDriverTabDlg::OnBLRecoverLinkClick));
 
  //init edit boxes and spin buttons
  m_pwm_period_spin.SetBuddy(&m_pwm_period_edit);
@@ -573,7 +582,7 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  m_initialized = true;
 
  mp_secu3logo->SetBitmapID(IDB_SECU3LOGO_BITMAP);
- mp_secu3logo->SetClickCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_secu3logo->SetClickCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
  mp_secu3logo->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDriverTabDlg::OnLogoClick));
 
  UpdateData(FALSE);
@@ -1527,4 +1536,9 @@ void CInjDriverTabDlg::OnFirmwareMaster()
 {
  if (m_onFirmwareMaster)
   m_onFirmwareMaster();
+}
+
+void CInjDriverTabDlg::OnBLRecoverLinkClick()
+{
+ SECUMessageBox(IDS_INJDRV_BLRECOVER_TEXT, MB_OK | MB_ICONINFORMATION);
 }

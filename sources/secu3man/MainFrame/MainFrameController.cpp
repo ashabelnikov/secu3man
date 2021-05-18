@@ -532,6 +532,7 @@ void MainFrameController::OnAppSaveSettings()
  _GrabWindowPos(true); //call it to update window position before saving of settings
  mp_view->SetRedraw(true);
  mp_view->UnlockWindowUpdate();
+ mp_view->UpdateWindow();
  m_pAppSettingsManager->WriteSettings();
  mp_view->EndWaitCursor();
  m_pStatusBarManager->SetInformationText(MLL::LoadString(IDS_SAVED_APP_SETTINGS));
