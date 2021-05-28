@@ -55,6 +55,7 @@ CEErrorIdStr::CEErrorIdStr()
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I7_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I7_SENSOR), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_OILPRESSURE, std::make_pair(MLL::GetString(IDS_ECUERROR_OILPRESSURE), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_EEPROM_TABL_BROKEN, std::make_pair(MLL::GetString(IDS_EEPROM_TABL_BROKEN), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_INJDUTY_LIMIT, std::make_pair(MLL::GetString(IDS_ECUERROR_INJDUTY_LIMIT), v)));
 }
 
 const CEErrorIdStr::ErrorsIDContainer& CEErrorIdStr::Get(void) const

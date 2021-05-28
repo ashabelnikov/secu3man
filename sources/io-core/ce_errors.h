@@ -49,8 +49,9 @@
 #define ECUERROR_ADD_I8_SENSOR       19
 #define ECUERROR_OILPRESSURE         20
 #define ECUERROR_EEPROM_TABL_BROKEN  21
+#define ECUERROR_INJDUTY_LIMIT       22
 
-const int SECU3_CE_ERRCODES_COUNT   = 22;
+const int SECU3_CE_ERRCODES_COUNT   = 23;
  //<bitnumber, error code>
 #define _SD std::pair<int, int>
  static std::pair<int, int> secu3_ce_error_codes[SECU3_CE_ERRCODES_COUNT] =
@@ -77,6 +78,7 @@ const int SECU3_CE_ERRCODES_COUNT   = 22;
   _SD(ECUERROR_ADD_I8_SENSOR,       56), //sensor
   _SD(ECUERROR_OILPRESSURE,         33), //oil pressure is crytical
   _SD(ECUERROR_EEPROM_TABL_BROKEN,  15),
+  _SD(ECUERROR_INJDUTY_LIMIT,       34), //injector's duty reached limit
  };
 #undef _SD
 

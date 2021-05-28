@@ -538,6 +538,7 @@ BEGIN
     IDS_ECUERROR_SYS_START         "Старт прошивки (перезапуск процессора)"
     IDS_ECUERROR_OILPRESSURE       "Очень низкое давление масла"
     IDS_EEPROM_TABL_BROKEN         "Данные таблиц в EEPROM повреждены (CRC)"
+    IDS_ECUERROR_INJDUTY_LIMIT     "Превышение предела производительности форсунки"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1424,6 +1425,7 @@ BEGIN
     IDS_ECUERROR_SYS_START         "Firmware start (reset of processor)"
     IDS_ECUERROR_OILPRESSURE       "Oil pressure is very low"
     IDS_EEPROM_TABL_BROKEN         "Tables in EEPROM are broken (CRC)"
+    IDS_ECUERROR_INJDUTY_LIMIT     "Reaching limit of injector's duty"
 END
 
 STRINGTABLE DISCARDABLE 
