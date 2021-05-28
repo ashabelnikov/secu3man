@@ -38,6 +38,7 @@ set(HEADERS
   MIIAT.h
   MIInjPW.h
   MIInjTim.h
+  MIInjDuty.h
   MIPressure.h
   MITachometer.h
   MITemperature.h
@@ -79,6 +80,7 @@ set (SOURCES
   MIIAT.cpp
   MIInjPW.cpp
   MIInjTim.cpp
+  MIInjDuty.cpp
   MIPressure.cpp
   MITachometer.cpp
   MITemperature.cpp

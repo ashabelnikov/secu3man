@@ -118,6 +118,8 @@ namespace SECU3IO
   float ops;                            //oil pressure
  
   bool iac_cl_loop;                     //IAC closed loop flag
+
+  float inj_duty;                       //injector's duty
  };
 
  struct DbgvarDat

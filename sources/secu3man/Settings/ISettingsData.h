@@ -335,6 +335,7 @@ struct MetersCfg
  int m_optMetFtls[2];
  int m_optMetEgts[2];
  int m_optMetOps[2];
+ int m_optMetInjDuty[2];
 };
 
 typedef enum EInterLang

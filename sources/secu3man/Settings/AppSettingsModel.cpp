@@ -589,6 +589,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetEgts[i][1].name = _T("GrhEgts");
   m_optMetOps[i][0].name = _T("MetOps");
   m_optMetOps[i][1].name = _T("GrhOps");
+  m_optMetInjDuty[i][0].name = _T("MetInjDuty");
+  m_optMetInjDuty[i][1].name = _T("GrhInjDuty");
  }
 
  //заполн€ем базу данных допустимых скоростей дл€ COM-порта
@@ -999,45 +1001,47 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColIacClLoop,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][31*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][32*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
   mm.ReadInt(m_optMetRows[i],_T("2"), 1, 10);
+  int vmax = 34;
   for (int g = 0, d = 0; g < 2; ++g)
   {
-   mm.ReadInt(m_optMetRPM[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetMAP[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetVBat[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetIgnTim[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetTPS[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetCLT[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetAddI1[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetAddI2[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetInjPW[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetIAT[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetEGOCorr[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetAirFlow[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetVehicleSpeed[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetTPSDot[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetMAP2[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetMAPD[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetTmp2[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetFuelConsum[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetKnockRetard[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetKnockGraph[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetSensAFR[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetChokePos[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetGDPos[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetSynLoad[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetInjTimB[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetInjTimE[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetFuelConsumF[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetGrts[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetFtls[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetEgts[i][g],metDef[i][d++], 0, 32, true);
-   mm.ReadInt(m_optMetOps[i][g], metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetRPM[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetMAP[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetVBat[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetIgnTim[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetTPS[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetCLT[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetAddI1[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetAddI2[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetInjPW[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetIAT[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetEGOCorr[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetAirFlow[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetVehicleSpeed[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetTPSDot[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetMAP2[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetMAPD[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetTmp2[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetFuelConsum[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetKnockRetard[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetKnockGraph[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetSensAFR[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetChokePos[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetGDPos[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetSynLoad[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetInjTimB[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetInjTimE[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetFuelConsumF[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetGrts[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetFtls[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetEgts[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetOps[i][g], metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetInjDuty[i][g], metDef[i][d++], 0, vmax, true);
   }
  }
 
@@ -3023,6 +3027,11 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetOps[i][g], _T("Oil pressure"));
   else
    mm.WriteInt(m_optMetOps[i][g], _T("ƒавление масла"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetInjDuty[i][g], _T("Injector's duty"));
+  else
+   mm.WriteInt(m_optMetInjDuty[i][g], _T("«агрузка форсунок"));
   }
  }
 
@@ -4824,6 +4833,7 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetFtls, &m_optMetFtls[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
  }
 }
 
@@ -4863,6 +4873,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetFtls, &m_optMetFtls[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
  }
 }
 

@@ -188,6 +188,7 @@ BEGIN
     IDS_MI_MP_H             "ми/ч"
     IDS_MI_TPS_FMT_STR      "ДПДЗ  %0.1f%%"
     IDS_MI_INJ_PW_TITLE     "Длительн. впрыска"
+    IDS_MI_INJ_DUTY_TITLE   "Загрузка форсунок"
     IDS_MI_MS_UNIT          "мс"
     IDS_MI_IAT_TITLE        "Температура ДТВ"
     IDS_MI_EGO_CORR_TITLE   "Лямбда коррекция"
@@ -257,6 +258,7 @@ BEGIN
     IDS_MI_FTLSGRAPH_V_UNIT   "Уровень топл,Л"
     IDS_MI_OPSGRAPH_V_UNIT    "Масло,кг/см2"
     IDS_MI_EGTSGRAPH_V_UNIT   "Темп.выхлопа,°C"
+    IDS_MI_INJ_DUTY_V_UNIT     "Загр.форс,%"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -483,6 +485,7 @@ BEGIN
     IDS_MI_MP_H             "MPH"
     IDS_MI_TPS_FMT_STR      "TPS  %0.1f%%"
     IDS_MI_INJ_PW_TITLE     "Injection PW"
+    IDS_MI_INJ_DUTY_TITLE   "Injector duty"
     IDS_MI_MS_UNIT          "ms"
     IDS_MI_IAT_TITLE        "Intake air temperature"
     IDS_MI_EGO_CORR_TITLE   "EGO correction"
@@ -552,6 +555,7 @@ BEGIN
     IDS_MI_FTLSGRAPH_V_UNIT   "Fuel level,L"
     IDS_MI_OPSGRAPH_V_UNIT    "Oil pres,kg/cm2"
     IDS_MI_EGTSGRAPH_V_UNIT   "Exhaust gas,°C"
+    IDS_MI_INJ_DUTY_V_UNIT    "Inj.duty,%"
 END
 
 STRINGTABLE DISCARDABLE 
