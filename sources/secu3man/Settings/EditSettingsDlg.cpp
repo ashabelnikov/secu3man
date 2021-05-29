@@ -123,7 +123,7 @@ void CEditSettingsDlg::_HighlightSyntax(void)
  cf_comm.dwMask = CFM_STRIKEOUT | CFM_COLOR | CFM_CHARSET;
  cf_comm.dwEffects = 0;
  cf_comm.bCharSet = RUSSIAN_CHARSET;
- cf_comm.crTextColor = RGB(200,200,150);
+ cf_comm.crTextColor = RGB(0,140,0);
 
  CHARFORMAT cf_sect;
  cf_sect.cbSize = sizeof(cf_sect);
