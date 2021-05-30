@@ -177,6 +177,8 @@ CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_GRTS,  CondFmt(6, 2, -40.0f, 300.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_GRTS), true)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_MAP2,  CondFmt(5, 2, 0.25f, 500.0f, 0.25f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_MAP2), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TMP2, CondFmt(5, 2, -40.0f, 300.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_TMP2), true)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_INPUT1, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_INPUT1), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_INPUT2, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_INPUT2), false)));
 }
 
 LPCTSTR CUniOutPageDlg::GetDialogID(void) const

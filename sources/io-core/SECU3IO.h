@@ -559,6 +559,8 @@ namespace SECU3IO
  const int UNIOUT_COND_GRTS = 28;     //GRTS
  const int UNIOUT_COND_MAP2 = 29;     //MAP2
  const int UNIOUT_COND_TMP2 = 30;     //TMP2
+ const int UNIOUT_COND_INPUT1 = 31;   //INPUT1
+ const int UNIOUT_COND_INPUT2 = 32;   //INPUT2
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

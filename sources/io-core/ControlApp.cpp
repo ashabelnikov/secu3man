@@ -4378,6 +4378,8 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_GRTS:  return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_MAP2:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_TMP2: return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_INPUT1: return MathHelpers::Round(val);
+  case UNIOUT_COND_INPUT2: return MathHelpers::Round(val);
  }
  return 0;
 }
@@ -4423,6 +4425,8 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_GRTS:  return (((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_MAP2:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_TMP2: return ((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  case UNIOUT_COND_INPUT1: return (float)val;
+  case UNIOUT_COND_INPUT2: return (float)val;
  }
  return .0f;
 }

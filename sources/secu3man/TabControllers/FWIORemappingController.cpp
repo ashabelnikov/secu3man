@@ -579,6 +579,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_AUTO_I, _T("AUTO_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_PS, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_PS, true); 
   mp_view->EnableInversion(FWDM::IOS_PS, true);
@@ -711,6 +715,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_AUTO_I, _T("AUTO_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_ADD_I1, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ADD_I1, true); 
   mp_view->EnableInversion(FWDM::IOS_ADD_I1, true);
@@ -723,6 +731,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_COND_I, _T("COND_I"));
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_AUTO_I, _T("AUTO_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_ADD_I2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ADD_I2, true); 
@@ -740,6 +752,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_AUTO_I, _T("AUTO_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_REF_S, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_REF_S, true); 
   mp_view->EnableInversion(FWDM::IOS_REF_S, true);
@@ -751,6 +767,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_COND_I, _T("COND_I"));
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_AUTO_I, _T("AUTO_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_GAS_V, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_GAS_V, true); 
@@ -1511,6 +1531,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_PS, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_PS, true); 
   mp_view->EnableInversion(FWDM::IOS3I_PS, true);
@@ -1523,6 +1547,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_SPDSENS, _T("SPD_SENS"));
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_REF_S, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_REF_S, true); 
@@ -1540,6 +1568,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I1, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I1, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I1, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I1, FWDM::IOP3I_ADD_I1, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I1, true); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I1, true);
@@ -1550,6 +1582,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_ADD_I2, FWDM::IOP3I_AIR_TEMP, _T("AIR_TEMP"));
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I2, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I2, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I2, FWDM::IOP3I_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I2, FWDM::IOP3I_ADD_I2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I2, true); 
@@ -1570,6 +1606,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V34) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_EGTS_I, _T("EGTS_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_ADD_I3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I3, true); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I3, true);
@@ -1588,6 +1628,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V34) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_ADD_I4, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I4, m_enable_extraio); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I4, m_enable_extraio);
@@ -1597,6 +1641,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_GAS_V, FWDM::IOP3I_MAPSEL0, _T("MAPSEL0"));
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_GAS_V, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_GAS_V, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_GAS_V, FWDM::IOP3I_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS3I_GAS_V, FWDM::IOP3I_GAS_V, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_GAS_V, true); 
@@ -1608,6 +1656,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_IGN_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_IGN_I, true); 
   mp_view->EnableInversion(FWDM::IOS3I_IGN_I, true);
@@ -1618,6 +1670,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_COND_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_COND_I, true); 
   mp_view->EnableInversion(FWDM::IOS3I_COND_I, true);
@@ -1627,6 +1683,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_MAPSEL0, _T("MAPSEL0"));
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_EPAS_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_EPAS_I, true); 
@@ -1697,6 +1757,10 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_OPS_I, _T("OPS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_ADD_I5, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I5, m_enable_spiadc); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I5, m_enable_spiadc);
@@ -1712,6 +1776,10 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_EGTS_I, _T("EGTS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_OPS_I, _T("OPS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_ADD_I6, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I6, m_enable_spiadc); 
@@ -1729,6 +1797,10 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_OPS_I, _T("OPS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
   }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_ADD_I7, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I7, m_enable_spiadc); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I7, m_enable_spiadc);
@@ -1742,6 +1814,10 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_EGTS_I, _T("EGTS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_OPS_I, _T("OPS_I"));
    mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_INJPWC_I, _T("INJPWC_I"));
+  }
+  if (iov >= FWDM::IOV_V35) { 
+   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_INPUT2, _T("INPUT2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_ADD_I8, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I8, m_enable_spiadc); 
@@ -1923,9 +1999,9 @@ void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId,
 bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
 {
  if (m_enable_secu3t_features)
-  return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0 || iopId == FWDM::IOP_SPDSENS || iopId == FWDM::IOP_REF_S || iopId == FWDM::IOP_GAS_V || iopId == FWDM::IOP_LAMBDA || iopId == FWDM::IOP_AIR_TEMP || iopId == FWDM::IOP_CKPS || iopId == FWDM::IOP_COND_I || iopId == FWDM::IOP_AUTO_I);
+  return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0 || iopId == FWDM::IOP_SPDSENS || iopId == FWDM::IOP_REF_S || iopId == FWDM::IOP_GAS_V || iopId == FWDM::IOP_LAMBDA || iopId == FWDM::IOP_AIR_TEMP || iopId == FWDM::IOP_CKPS || iopId == FWDM::IOP_COND_I || iopId == FWDM::IOP_AUTO_I || iopId == FWDM::IOP_INPUT1 || iopId == FWDM::IOP_INPUT2);
  else //SECU-3i:
-  return (iopId == FWDM::IOP3I_PS || iopId == FWDM::IOP3I_ADD_I1 || iopId == FWDM::IOP3I_ADD_I2 || iopId == FWDM::IOP3I_IGN_I || iopId == FWDM::IOP3I_BC_INPUT || iopId == FWDM::IOP3I_MAPSEL0 || iopId == FWDM::IOP3I_SPDSENS || iopId == FWDM::IOP3I_REF_S || iopId == FWDM::IOP3I_GAS_V || iopId == FWDM::IOP3I_LAMBDA || iopId == FWDM::IOP3I_AIR_TEMP || iopId == FWDM::IOP3I_CKPS) || iopId == FWDM::IOP3I_ADD_I3 || iopId == FWDM::IOP3I_COND_I || iopId == FWDM::IOP3I_EPAS_I || iopId == FWDM::IOP3I_ADD_I4 || iopId == FWDM::IOP3I_IGNTIM || iopId == FWDM::IOP3I_MAP2 || iopId == FWDM::IOP3I_TMP2 || iopId == FWDM::IOP3I_ADD_I5 || iopId == FWDM::IOP3I_AUTO_I || iopId == FWDM::IOP3I_ADD_I6 || iopId == FWDM::IOP3I_ADD_I7 || iopId == FWDM::IOP3I_ADD_I8 || iopId == FWDM::IOP3I_GRTEMP || iopId == FWDM::IOP3I_FTLS_I || iopId == FWDM::IOP3I_EGTS_I || iopId == FWDM::IOP3I_OPS_I || iopId == FWDM::IOP3I_INJPWC_I;
+  return (iopId == FWDM::IOP3I_PS || iopId == FWDM::IOP3I_ADD_I1 || iopId == FWDM::IOP3I_ADD_I2 || iopId == FWDM::IOP3I_IGN_I || iopId == FWDM::IOP3I_BC_INPUT || iopId == FWDM::IOP3I_MAPSEL0 || iopId == FWDM::IOP3I_SPDSENS || iopId == FWDM::IOP3I_REF_S || iopId == FWDM::IOP3I_GAS_V || iopId == FWDM::IOP3I_LAMBDA || iopId == FWDM::IOP3I_AIR_TEMP || iopId == FWDM::IOP3I_CKPS) || iopId == FWDM::IOP3I_ADD_I3 || iopId == FWDM::IOP3I_COND_I || iopId == FWDM::IOP3I_EPAS_I || iopId == FWDM::IOP3I_ADD_I4 || iopId == FWDM::IOP3I_IGNTIM || iopId == FWDM::IOP3I_MAP2 || iopId == FWDM::IOP3I_TMP2 || iopId == FWDM::IOP3I_ADD_I5 || iopId == FWDM::IOP3I_AUTO_I || iopId == FWDM::IOP3I_ADD_I6 || iopId == FWDM::IOP3I_ADD_I7 || iopId == FWDM::IOP3I_ADD_I8 || iopId == FWDM::IOP3I_GRTEMP || iopId == FWDM::IOP3I_FTLS_I || iopId == FWDM::IOP3I_EGTS_I || iopId == FWDM::IOP3I_OPS_I || iopId == FWDM::IOP3I_INJPWC_I || iopId == FWDM::IOP3I_INPUT1 || iopId == FWDM::IOP3I_INPUT2;
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const

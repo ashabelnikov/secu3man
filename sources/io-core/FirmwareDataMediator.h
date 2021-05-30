@@ -352,14 +352,14 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_EGTS_I     =  90,     // EGTS_I    (input)
    IOP3I_OPS_I      =  91,     // OPS_I     (input)
    IOP3I_INJPWC_I   =  92,     // INJPWC_I  (input)
-// IOP3I_RESERVED40 =  93,     // Reserved  ()
-// IOP3I_RESERVED41 =  94,     // Reserved  ()
+   IOP3I_INPUT1     =  93,     // INPUT1    (input)
+   IOP3I_INPUT2     =  94,     // INPUT2    (input)
 // IOP3I_RESERVED42 =  95,     // Reserved  ()
 // IOP3I_RESERVED43 =  96,     // Reserved  ()
 // IOP3I_RESERVED44 =  97,     // Reserved  ()
 // IOP3I_RESERVED45 =  98,     // Reserved  ()
 // IOP3I_RESERVED46 =  99,     // Reserved  ()
-   IOP3I_COUNT      =  93,     //DON'T forget to update this value
+   IOP3I_COUNT      =  95,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -450,8 +450,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_FL_CONS    =  84,     // FL_CONS     (output)
    IOP_AUTO_I     =  85,     // AUTO_I      (input)
    IOP_VTACHOM    =  86,     // VTACHOM     (output)
-// IOP_RESERVED30 =  87,     // Reserved    ()
-// IOP_RESERVED31 =  88,     // Reserved    ()
+   IOP_INPUT1     =  87,     // INPUT1      (input)
+   IOP_INPUT2     =  88,     // INPUT2      (input)
 // IOP_RESERVED32 =  89,     // Reserved    ()
 // IOP_RESERVED33 =  90,     // Reserved    ()
 // IOP_RESERVED34 =  91,     // Reserved    ()
@@ -463,7 +463,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP_RESERVED40 =  97,     // Reserved    ()
 // IOP_RESERVED41 =  98,     // Reserved    ()
 // IOP_RESERVED42 =  99,     // Reserved    ()
-   IOP_COUNT      =  87,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  89,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
@@ -592,7 +592,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V31 = 0x31,           //V3.1  New plugs were added (PWM1, PWM2, FL_CONS, AUTO_I, UNI_OUT3,4,5, VTACHOM)
    IOV_V32 = 0x32,           //V3.2  New slots were added (ADD_I5,6,7,8, GRTEMP, GRHEAT)
    IOV_V33 = 0x33,           //V3.3  New slots were added (added possibility to remap ADD_I5/7 as MAP2, GASVAL_O plug added)
-   IOV_V34 = 0x34            //V3.4  New plugs: FTLS_I, EGTS_I, OPS_I, INJPWC_I; Plus extra reserved plugs
+   IOV_V34 = 0x34,           //V3.4  New plugs: FTLS_I, EGTS_I, OPS_I, INJPWC_I; Plus extra reserved plugs
+   IOV_V35 = 0x35            //v3.5  New plugs: INPUT1, INPUT2
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
