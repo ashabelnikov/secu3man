@@ -747,8 +747,14 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->evap_afbegin = p_params->evap_afbegin * 32.0f;
      p_out->evap_afslope = (p_params->evap_afslope / 1048576.0f) / 32.0f;
      p_out->fp_timeout_strt = p_params->fp_timeout_strt / 10.0f;
-     p_out->pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)p_params->pwm2_pwmfrq[0]) / 524288.0));
-     p_out->pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)p_params->pwm2_pwmfrq[1]) / 524288.0));
+     if (p_params->pwm2_pwmfrq[0]==0)
+      p_out->pwm2_pwmfrq[0] = 5000; //prevent division by zero
+     else
+      p_out->pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)p_params->pwm2_pwmfrq[0]) / 524288.0));
+     if (p_params->pwm2_pwmfrq[1]==0)
+      p_out->pwm2_pwmfrq[1] = 5000; //prevent division by zero
+     else
+      p_out->pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)p_params->pwm2_pwmfrq[1]) / 524288.0));
     }
     break;
    case CHOKE_PAR:

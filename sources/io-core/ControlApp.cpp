@@ -1669,12 +1669,18 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  int pwmfrq1 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pwmfrq1))
   return false;
- miscPar.pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)pwmfrq1) / 524288.0));
+ if (pwmfrq1==0)
+  miscPar.pwm2_pwmfrq[0] = 5000; //prevent division by zero
+ else
+  miscPar.pwm2_pwmfrq[0] = MathHelpers::Round(1.0/(((double)pwmfrq1) / 524288.0));
 
  int pwmfrq2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pwmfrq2))
   return false;
- miscPar.pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)pwmfrq2) / 524288.0));
+ if (pwmfrq2 == 0)
+  miscPar.pwm2_pwmfrq[1] = 5000; //prevent division by zero
+ else
+  miscPar.pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)pwmfrq2) / 524288.0));
 
  return true;
 }
