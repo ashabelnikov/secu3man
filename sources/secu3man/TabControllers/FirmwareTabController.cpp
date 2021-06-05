@@ -1883,6 +1883,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Increase step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le, _T("Value of the IAC add after exit increases by this value every 100ms if the throttle is open and the engine speed is above the 2nd transient threshold (transient thresholds are set by the corresponding coefficients on the '3:Idling' parameters' tab, value of the 'IAC add after exit' is also set there)"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Коэфф. нагрузки в аргументе таблицы жесткости РХХ"), _T(""), 0.0f, 6.0f, 0.05f, 2, &d.irr_k_load, _T("Коэффициент доли нагрузки в аргументе по горизонтальной оси в таблице жесткости РХХ. Чем выше значение, тем сильнее жесткость РХХ будет зависеть от нагрузки на двигатель."));
+ else
+  dfd.AppendItem(_T("Coeff. of load in argument of idl. rigidity map"), _T(""), 0.0f, 6.0f, 0.05f, 2, &d.irr_k_load, _T("The coefficient of the load share in the argument along the horizontal axis in the idling rigidity map. The higher the value, the more the idlign rigidity will depend on the engine load."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Коэфф. оборотов в аргументе таблицы жесткости РХХ"), _T(""), 0.0f, 6.0f, 0.05f, 2, &d.irr_k_rpm, _T("Коэффициент доли оборотов в аргументе по горизонтальной оси в таблице жесткости РХХ. Чем выше значение, тем сильнее жесткость РХХ будет зависеть от оборотов двигателя."));
+ else
+  dfd.AppendItem(_T("Coeff. of rpm in argument of idl. rigidity map"), _T(""), 0.0f, 6.0f, 0.05f, 2, &d.irr_k_rpm, _T("The coefficient of the rpm share in the argument along the horizontal axis in the idling rigidity map. The higher the value, the more the idlign rigidity will depend on the engine's rpm."));
+
  //ignition timing
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Управление зажиганием:"));

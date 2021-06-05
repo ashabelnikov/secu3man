@@ -300,11 +300,13 @@ typedef struct
  _uchar maninjpw_idl;
  _uchar oilpress_cut;
  _uint  tpsdot_mindt;
+ _uchar irr_k_load;
+ _uchar irr_k_rpm;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3565];
+ _uchar reserved[3563];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2815,6 +2817,9 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.oilpress_cut = exd.oilpress_cut;
  o_data.tpsdot_mindt = (exd.tpsdot_mindt * 3.2f) / 1000.0f; //convert from 3.2 us units to ms
+ 
+ o_data.irr_k_load = exd.irr_k_load / 32.0f;
+ o_data.irr_k_rpm = exd.irr_k_rpm / 32.0f;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2872,4 +2877,7 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.oilpress_cut = i_data.oilpress_cut;
  exd.tpsdot_mindt = MathHelpers::Round((i_data.tpsdot_mindt * 1000.0f) / 3.2f); //from ms to 3.2us units
+
+ exd.irr_k_load = MathHelpers::Round(i_data.irr_k_load * 32.0f);
+ exd.irr_k_rpm = MathHelpers::Round(i_data.irr_k_rpm * 32.0f);
 }
