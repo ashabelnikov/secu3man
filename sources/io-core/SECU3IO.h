@@ -196,8 +196,8 @@ namespace SECU3IO
   bool closed_loop;                     //use closed loop mode (fuel injection only)
   float idl_to_run_add;                 //Value (in %) added to IAC position when exiting from closed loop
   int rpm_on_run_add;                   //Value added to target RPM when vehicle starts to run
-  float idl_reg_p;                      //IAC closeed loop proportional coefficient
-  float idl_reg_i;                      //IAC closed loop integral coefficient
+  float idl_reg_p[2];                   //IAC closeed loop proportional coefficient, [0] - negative, [1] - positive
+  float idl_reg_i[2];                   //IAC closed loop integral coefficient, [0] - negative, [1] - positive
   float idl_coef_thrd1;                 //coefficient for calculating closed loop entering RPM threshold
   float idl_coef_thrd2;                 //coefficient for calculating closed loop leaving RPM threshold
   int  idl_intrpm_lim;                  //RPM error limit for integrator

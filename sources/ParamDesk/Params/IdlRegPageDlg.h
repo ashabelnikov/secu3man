@@ -100,6 +100,10 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_idlregp_edit;
   CSpinButtonCtrlEx m_idlregi_spin;
   CEditEx m_idlregi_edit;
+  CSpinButtonCtrlEx m_idlregpm_spin;
+  CEditEx m_idlregpm_edit;
+  CSpinButtonCtrlEx m_idlregim_spin;
+  CEditEx m_idlregim_edit;
   CSpinButtonCtrlEx m_coeffthrd1_spin;
   CEditEx m_coeffthrd1_edit;
   CSpinButtonCtrlEx m_coeffthrd2_spin;

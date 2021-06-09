@@ -47,6 +47,8 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_IDLREG_RPMONRUNADD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_PROPORTIONAL_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_INTEGRAL_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_IDLREG_PROPORTIONALM_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_IDLREG_INTEGRALM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_COEFFTHRD1_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_COEFFTHRD2_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_INTRPMLIM_EDIT, OnChangeData)
@@ -120,6 +122,16 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRAL_CAPTION,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRAL_UNIT,OnUpdateFuelInjectionControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_PROPORTIONALM_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_PROPORTIONALM_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_PROPORTIONALM_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_PROPORTIONALM_UNIT,OnUpdateFuelInjectionControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRALM_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRALM_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRALM_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRALM_UNIT,OnUpdateFuelInjectionControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_COEFFTHRD1_EDIT,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_COEFFTHRD1_SPIN,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_COEFFTHRD1_CAPTION,OnUpdateFuelInjectionControls)
@@ -168,6 +180,8 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 , m_rpmonrunadd_edit(CEditEx::MODE_INT, true)
 , m_idlregp_edit(CEditEx::MODE_FLOAT, true)
 , m_idlregi_edit(CEditEx::MODE_FLOAT, true)
+, m_idlregpm_edit(CEditEx::MODE_FLOAT, true)
+, m_idlregim_edit(CEditEx::MODE_FLOAT, true)
 , m_coeffthrd1_edit(CEditEx::MODE_FLOAT, true)
 , m_coeffthrd2_edit(CEditEx::MODE_FLOAT, true)
 , m_intrpmlim_edit(CEditEx::MODE_INT, true)
@@ -190,8 +204,10 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
  m_params.closed_loop = false;
  m_params.idl_to_run_add = 30.0f;
  m_params.rpm_on_run_add = 200;
- m_params.idl_reg_p = 0.1f;
- m_params.idl_reg_i = 0.03f;
+ m_params.idl_reg_p[0] = 0.1f;
+ m_params.idl_reg_i[0] = 0.03f;
+ m_params.idl_reg_p[1] = 0.1f;
+ m_params.idl_reg_i[1] = 0.03f;
  m_params.idl_coef_thrd1 = 1.50f;
  m_params.idl_coef_thrd2 = 1.86f;
  m_params.idl_intrpm_lim = 200;
@@ -236,6 +252,10 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_PROPORTIONAL_EDIT, m_idlregp_edit);
  DDX_Control(pDX, IDC_PD_IDLREG_INTEGRAL_SPIN, m_idlregi_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_INTEGRAL_EDIT, m_idlregi_edit);
+ DDX_Control(pDX, IDC_PD_IDLREG_PROPORTIONALM_SPIN, m_idlregpm_spin);
+ DDX_Control(pDX, IDC_PD_IDLREG_PROPORTIONALM_EDIT, m_idlregpm_edit);
+ DDX_Control(pDX, IDC_PD_IDLREG_INTEGRALM_SPIN, m_idlregim_spin);
+ DDX_Control(pDX, IDC_PD_IDLREG_INTEGRALM_EDIT, m_idlregim_edit);
  DDX_Control(pDX, IDC_PD_IDLREG_COEFFTHRD1_SPIN, m_coeffthrd1_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_COEFFTHRD1_EDIT, m_coeffthrd1_edit);
  DDX_Control(pDX, IDC_PD_IDLREG_COEFFTHRD2_SPIN, m_coeffthrd2_spin);
@@ -264,8 +284,10 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, m_params.closed_loop);
  m_idltorunadd_edit.DDX_Value(pDX, IDC_PD_IDLREG_IDLTORUNADD_EDIT, m_params.idl_to_run_add);
  m_rpmonrunadd_edit.DDX_Value(pDX, IDC_PD_IDLREG_RPMONRUNADD_EDIT, m_params.rpm_on_run_add);
- m_idlregp_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONAL_EDIT, m_params.idl_reg_p);
- m_idlregi_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRAL_EDIT, m_params.idl_reg_i);
+ m_idlregp_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONAL_EDIT, m_params.idl_reg_p[0]);
+ m_idlregi_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRAL_EDIT, m_params.idl_reg_i[0]);
+ m_idlregpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONALM_EDIT, m_params.idl_reg_p[1]);
+ m_idlregim_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRALM_EDIT, m_params.idl_reg_i[1]);
  m_coeffthrd1_edit.DDX_Value(pDX, IDC_PD_IDLREG_COEFFTHRD1_EDIT, m_params.idl_coef_thrd1);
  m_coeffthrd2_edit.DDX_Value(pDX, IDC_PD_IDLREG_COEFFTHRD2_EDIT, m_params.idl_coef_thrd2);
  m_intrpmlim_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTRPMLIM_EDIT, m_params.idl_intrpm_lim);
@@ -356,6 +378,18 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_idlregi_edit.SetDecimalPlaces(3);
  m_idlregi_spin.SetRangeAndDelta(0.0f,5.0f,0.005f);
  m_idlregi_edit.SetRange(0.0f,5.0f);
+
+ m_idlregpm_spin.SetBuddy(&m_idlregpm_edit);
+ m_idlregpm_edit.SetLimitText(5);
+ m_idlregpm_edit.SetDecimalPlaces(3);
+ m_idlregpm_spin.SetRangeAndDelta(0.0f,5.0f,0.005f);
+ m_idlregpm_edit.SetRange(0.0f,5.0f);
+
+ m_idlregim_spin.SetBuddy(&m_idlregim_edit);
+ m_idlregim_edit.SetLimitText(5);
+ m_idlregim_edit.SetDecimalPlaces(3);
+ m_idlregim_spin.SetRangeAndDelta(0.0f,5.0f,0.005f);
+ m_idlregim_edit.SetRange(0.0f,5.0f);
 
  m_coeffthrd1_spin.SetBuddy(&m_coeffthrd1_edit);
  m_coeffthrd1_edit.SetLimitText(4);
@@ -448,6 +482,12 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_idlregi_edit, MLL::GetString(IDS_PD_IDLREG_INTEGRAL_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_idlregi_spin, MLL::GetString(IDS_PD_IDLREG_INTEGRAL_EDIT_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_idlregpm_edit, MLL::GetString(IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_idlregpm_spin, MLL::GetString(IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_idlregim_edit, MLL::GetString(IDS_PD_IDLREG_INTEGRALM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_idlregim_spin, MLL::GetString(IDS_PD_IDLREG_INTEGRALM_EDIT_TT)));
+
  VERIFY(mp_ttc->AddWindow(&m_coeffthrd1_edit, MLL::GetString(IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_coeffthrd1_spin, MLL::GetString(IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT)));
 
@@ -526,5 +566,5 @@ void CIdlRegPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(700));
+  mp_scr->SetViewSize(cx, da.ScaleY(755));
 }

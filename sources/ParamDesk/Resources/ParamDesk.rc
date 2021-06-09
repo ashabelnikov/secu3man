@@ -259,45 +259,55 @@ BEGIN
 
     EDITTEXT        IDC_PD_IDLREG_PROPORTIONAL_EDIT,95,240,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_IDLREG_PROPORTIONAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,240,13,17
-    LTEXT           "Пропорциональный",IDC_PD_IDLREG_PROPORTIONAL_CAPTION,0,241,94,10
+    LTEXT           "Пропорциональный(+)",IDC_PD_IDLREG_PROPORTIONAL_CAPTION,0,241,94,10
     LTEXT           "коэф.",IDC_PD_IDLREG_PROPORTIONAL_UNIT,140,241,30,10
 
     EDITTEXT        IDC_PD_IDLREG_INTEGRAL_EDIT,95,260,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_IDLREG_INTEGRAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,260,13,17
-    LTEXT           "Интегральный",IDC_PD_IDLREG_INTEGRAL_CAPTION,0,261,94,10
+    LTEXT           "Интегральный(+)",IDC_PD_IDLREG_INTEGRAL_CAPTION,0,261,94,10
     LTEXT           "коэф.",IDC_PD_IDLREG_INTEGRAL_UNIT,140,261,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD1_EDIT,95,280,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,280,13,17
-    LTEXT           "Порог 1-го пер. режима",IDC_PD_IDLREG_COEFFTHRD1_CAPTION,0,281,94,10
-    LTEXT           "коэф.",IDC_PD_IDLREG_COEFFTHRD1_UNIT,140,281,30,10
+    EDITTEXT        IDC_PD_IDLREG_PROPORTIONALM_EDIT,95,280,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_PROPORTIONALM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,280,13,17
+    LTEXT           "Пропорциональный(-)",IDC_PD_IDLREG_PROPORTIONALM_CAPTION,0,281,94,10
+    LTEXT           "коэф.",IDC_PD_IDLREG_PROPORTIONALM_UNIT,140,281,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD2_EDIT,95,300,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,300,13,17
-    LTEXT           "Порог 2-го пер. режима",IDC_PD_IDLREG_COEFFTHRD2_CAPTION,0,301,94,10
-    LTEXT           "коэф.",IDC_PD_IDLREG_COEFFTHRD2_UNIT,140,301,30,10
+    EDITTEXT        IDC_PD_IDLREG_INTEGRALM_EDIT,95,300,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_INTEGRALM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,300,13,17
+    LTEXT           "Интегральный(-)",IDC_PD_IDLREG_INTEGRALM_CAPTION,0,301,94,10
+    LTEXT           "коэф.",IDC_PD_IDLREG_INTEGRALM_UNIT,140,301,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_INTRPMLIM_EDIT,95,320,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_INTRPMLIM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,320,13,17
-    LTEXT           "Огранич. обор. интегр.",IDC_PD_IDLREG_INTRPMLIM_CAPTION,0,320,94,10
-    LTEXT           "мин-1",IDC_PD_IDLREG_INTRPMLIM_UNIT,140,321,30,10
+    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD1_EDIT,95,320,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,320,13,17
+    LTEXT           "Порог 1-го пер. режима",IDC_PD_IDLREG_COEFFTHRD1_CAPTION,0,321,94,10
+    LTEXT           "коэф.",IDC_PD_IDLREG_COEFFTHRD1_UNIT,140,321,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_MAPVALUE_EDIT,95,340,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_MAPVALUE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,340,13,17
-    LTEXT           "Режимная точка ДАД",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,340,94,10
-    LTEXT           "кПа",IDC_PD_IDLREG_MAPVALUE_UNIT,140,341,30,10
+    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD2_EDIT,95,340,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,340,13,17
+    LTEXT           "Порог 2-го пер. режима",IDC_PD_IDLREG_COEFFTHRD2_CAPTION,0,341,94,10
+    LTEXT           "коэф.",IDC_PD_IDLREG_COEFFTHRD2_UNIT,140,341,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_IACMINPOS_EDIT,95,360,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_IACMINPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,360,13,17
-    LTEXT           "Мин. положение РДВ",IDC_PD_IDLREG_IACMINPOS_CAPTION,0,360,94,10
-    LTEXT           "%",IDC_PD_IDLREG_IACMINPOS_UNIT,140,361,30,10
+    EDITTEXT        IDC_PD_IDLREG_INTRPMLIM_EDIT,95,360,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_INTRPMLIM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,360,13,17
+    LTEXT           "Огранич. обор. интегр.",IDC_PD_IDLREG_INTRPMLIM_CAPTION,0,360,94,10
+    LTEXT           "мин-1",IDC_PD_IDLREG_INTRPMLIM_UNIT,140,361,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_IACMAXPOS_EDIT,95,380,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_IACMAXPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,380,13,17
-    LTEXT           "Макс. положение РДВ",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,380,94,10
-    LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,381,30,10
+    EDITTEXT        IDC_PD_IDLREG_MAPVALUE_EDIT,95,380,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_MAPVALUE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,380,13,17
+    LTEXT           "Режимная точка ДАД",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,380,94,10
+    LTEXT           "кПа",IDC_PD_IDLREG_MAPVALUE_UNIT,140,381,30,10
 
-    CONTROL         "Использовать closed-loop на газу",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,400,115,15
+    EDITTEXT        IDC_PD_IDLREG_IACMINPOS_EDIT,95,400,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMINPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,400,13,17
+    LTEXT           "Мин. положение РДВ",IDC_PD_IDLREG_IACMINPOS_CAPTION,0,400,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMINPOS_UNIT,140,401,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IACMAXPOS_EDIT,95,420,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMAXPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,420,13,17
+    LTEXT           "Макс. положение РДВ",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,420,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,421,30,10
+
+    CONTROL         "Использовать closed-loop на газу",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,440,115,15
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -1722,8 +1732,10 @@ BEGIN
     IDS_PD_IDLREG_USECLOSEDLOOP_CHECK_TT "Включить для клапана РДВ режим управления с замкнутой петлёй обратной связи. Система будет стараться поддерживать обороты ХХ, которые заданы в таблице открывая и закрывая клапан РХХ."
     IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "Это значение будет добавлено к положению РДВ при нажатии на педаль газа когда произойдет переход из режима ХХ в режим нагрузок."
     IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT "Значение, которое будет добавлено к целевым оборотам в случае поступления импульсов от датчика скорости при начале движения автомобиля (если датчик используется)"
-    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Коэффициент пропорциональной составляющей ПИ-регулятора"
-    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Коэффициент интегральной составляющей ПИ-регулятора"
+    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Коэффициент пропорциональной составляющей ПИ-регулятора (используется при ошибке >= 0)"
+    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Коэффициент интегральной составляющей ПИ-регулятора (используется при ошибке >= 0)"
+    IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT "Коэффициент пропорциональной составляющей ПИ-регулятора (используется при ошибке < 0)"
+    IDS_PD_IDLREG_INTEGRALM_EDIT_TT "Коэффициент интегральной составляющей ПИ-регулятора (используется при ошибке < 0)"
     IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT "Коэффициент, на который умножаются целевые обороты ХХ для получения порога входа в режим РХХ (например, целевые обороты ХХ = 850, коэфф = 1.41, значит обороты 1-го перех. режима = 850 * 1.41 = 1200 мин-1)."
     IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT "коэффициент, на который умножаются целевые обороты ХХ для получения порога выхода из режима РХХ (например, целевые обороты ХХ = 850, коэфф = 1.88, значит обороты 2-го перех. режима = 850 * 1.88 = 1600 мин-1)."
     IDS_PD_IDLREG_IACMINPOS_EDIT_TT "Ограничение минимального положения РДВ (РДВ не будет закрываться ниже этого значения). Ограничение необходимо для исключения попадания клапана в зону нелинейности, которая находится в крайнем положении. При включении кондиционера это значение увеличивается на значение 'Добавка к РДВ при вкл. кондиционера'"
@@ -2065,45 +2077,55 @@ BEGIN
 
     EDITTEXT        IDC_PD_IDLREG_PROPORTIONAL_EDIT,95,240,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_IDLREG_PROPORTIONAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,240,13,17
-    LTEXT           "Proportional",IDC_PD_IDLREG_PROPORTIONAL_CAPTION,0,241,94,10
+    LTEXT           "Proportional(+)",IDC_PD_IDLREG_PROPORTIONAL_CAPTION,0,241,94,10
     LTEXT           "coef.",IDC_PD_IDLREG_PROPORTIONAL_UNIT,140,241,30,10
 
     EDITTEXT        IDC_PD_IDLREG_INTEGRAL_EDIT,95,260,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_IDLREG_INTEGRAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,260,13,17
-    LTEXT           "Integral",IDC_PD_IDLREG_INTEGRAL_CAPTION,0,261,94,10
+    LTEXT           "Integral(+)",IDC_PD_IDLREG_INTEGRAL_CAPTION,0,261,94,10
     LTEXT           "coef.",IDC_PD_IDLREG_INTEGRAL_UNIT,140,261,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD1_EDIT,95,280,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,280,13,17
-    LTEXT           "1-st transient threshold",IDC_PD_IDLREG_COEFFTHRD1_CAPTION,0,281,94,10
-    LTEXT           "coef.",IDC_PD_IDLREG_COEFFTHRD1_UNIT,140,281,30,10
+    EDITTEXT        IDC_PD_IDLREG_PROPORTIONALM_EDIT,95,280,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_PROPORTIONALM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,280,13,17
+    LTEXT           "Proportional(-)",IDC_PD_IDLREG_PROPORTIONALM_CAPTION,0,281,94,10
+    LTEXT           "coef.",IDC_PD_IDLREG_PROPORTIONALM_UNIT,140,281,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD2_EDIT,95,300,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,300,13,17
-    LTEXT           "2-nd transient threshold",IDC_PD_IDLREG_COEFFTHRD2_CAPTION,0,301,94,10
-    LTEXT           "coef.",IDC_PD_IDLREG_COEFFTHRD2_UNIT,140,301,30,10
+    EDITTEXT        IDC_PD_IDLREG_INTEGRALM_EDIT,95,300,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_INTEGRALM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,300,13,17
+    LTEXT           "Integral(-)",IDC_PD_IDLREG_INTEGRALM_CAPTION,0,301,94,10
+    LTEXT           "coef.",IDC_PD_IDLREG_INTEGRALM_UNIT,140,301,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_INTRPMLIM_EDIT,95,320,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_INTRPMLIM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,320,13,17
-    LTEXT           "Integrator RPM limit",IDC_PD_IDLREG_INTRPMLIM_CAPTION,0,321,94,10
-    LTEXT           "min-1",IDC_PD_IDLREG_INTRPMLIM_UNIT,140,321,30,10
+    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD1_EDIT,95,320,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,320,13,17
+    LTEXT           "1-st transient threshold",IDC_PD_IDLREG_COEFFTHRD1_CAPTION,0,321,94,10
+    LTEXT           "coef.",IDC_PD_IDLREG_COEFFTHRD1_UNIT,140,321,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_MAPVALUE_EDIT,95,340,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_MAPVALUE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,340,13,17
-    LTEXT           "Pressure (load) on idling",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,341,94,10
-    LTEXT           "kPa",IDC_PD_IDLREG_MAPVALUE_UNIT,140,341,30,10
+    EDITTEXT        IDC_PD_IDLREG_COEFFTHRD2_EDIT,95,340,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_COEFFTHRD2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,340,13,17
+    LTEXT           "2-nd transient threshold",IDC_PD_IDLREG_COEFFTHRD2_CAPTION,0,341,94,10
+    LTEXT           "coef.",IDC_PD_IDLREG_COEFFTHRD2_UNIT,140,341,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_IACMINPOS_EDIT,95,360,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_IACMINPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,360,13,17
-    LTEXT           "Minimum IAC position",IDC_PD_IDLREG_IACMINPOS_CAPTION,0,360,94,10
-    LTEXT           "%",IDC_PD_IDLREG_IACMINPOS_UNIT,140,361,30,10
+    EDITTEXT        IDC_PD_IDLREG_INTRPMLIM_EDIT,95,360,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_INTRPMLIM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,360,13,17
+    LTEXT           "Integrator RPM limit",IDC_PD_IDLREG_INTRPMLIM_CAPTION,0,361,94,10
+    LTEXT           "min-1",IDC_PD_IDLREG_INTRPMLIM_UNIT,140,361,30,10
 
-    EDITTEXT        IDC_PD_IDLREG_IACMAXPOS_EDIT,95,380,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_IDLREG_IACMAXPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,380,13,17
-    LTEXT           "Maximum IAC position",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,380,94,10
-    LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,381,30,10
+    EDITTEXT        IDC_PD_IDLREG_MAPVALUE_EDIT,95,380,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_MAPVALUE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,380,13,17
+    LTEXT           "Pressure (load) on idling",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,381,94,10
+    LTEXT           "kPa",IDC_PD_IDLREG_MAPVALUE_UNIT,140,381,30,10
 
-    CONTROL         "Use closed loop on gas fuel",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,400,115,15
+    EDITTEXT        IDC_PD_IDLREG_IACMINPOS_EDIT,95,400,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMINPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,400,13,17
+    LTEXT           "Minimum IAC position",IDC_PD_IDLREG_IACMINPOS_CAPTION,0,400,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMINPOS_UNIT,140,401,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IACMAXPOS_EDIT,95,420,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMAXPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,420,13,17
+    LTEXT           "Maximum IAC position",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,420,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,421,30,10
+
+    CONTROL         "Use closed loop on gas fuel",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,440,115,15
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -3561,8 +3583,10 @@ BEGIN
     IDS_PD_IDLREG_USECLOSEDLOOP_CHECK_TT "Turn on the closed loop control mode for the IAC valve. The system will try to maintain idling RPM which are set in the corresponding table by opening and closing the valve."
     IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "This value will be added to the IAC position when you press the gas pedal and the transition from idling to load mode occurs."
     IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT "RPM value to be added to the target RPM in the case of receipt of pulses from the speed sensor when the vehicle starts moving (applicable only when the sensor is used)"
-    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Coefficient of the proportional component of the PI-controller"
-    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Coefficient of the integral component of the PI-controller"
+    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Coefficient of the proportional component of the PI-controller (used when error >= 0)"
+    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Coefficient of the integral component of the PI-controller (used when error >= 0)"
+    IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT "Coefficient of the proportional component of the PI-controller (used when error < 0)"
+    IDS_PD_IDLREG_INTEGRALM_EDIT_TT "Coefficient of the integral component of the PI-controller (used when error < 0)"
     IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT "Coefficient by which the target RPM is multiplied to obtain threshold for entering the idling mode (for example, target idling RPM = 850, coefficient = 1.41, thus, RPM of the 1-st transient threshold = 850 * 1.41 = 1200 min-1)."
     IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT "Coefficient by which the target RPM is multiplied to obtain threshold for exiting the idling mode (for example, target idling RPM = 850, coefficient = 1.88, thus, RPM of the 2-st transient threshold = 850 * 1.88 = 1600 min-1)."
     IDS_PD_IDLREG_IACMINPOS_EDIT_TT "Limitation of minimum position of valve (IAC valve will not go below this value). Restriction is necessary to prevent valve from entering the nonlinearity zone, which is in the extreme position. When the air conditioner is turned on, this value increases by the value 'Add. to IAC pos on turn on of air cond.'"

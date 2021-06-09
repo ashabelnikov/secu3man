@@ -109,8 +109,10 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     //closed loop parameters:
     p_params->idl_to_run_add = MathHelpers::Round(p_in->idl_to_run_add * 2.0f);
     p_params->rpm_on_run_add = MathHelpers::Round(p_in->rpm_on_run_add / 10.0f);
-    p_params->idl_reg_p = MathHelpers::Round(p_in->idl_reg_p * 256.0f);
-    p_params->idl_reg_i = MathHelpers::Round(p_in->idl_reg_i * 256.0f);
+    p_params->idl_reg_p[0] = MathHelpers::Round(p_in->idl_reg_p[0] * 256.0f);
+    p_params->idl_reg_i[0] = MathHelpers::Round(p_in->idl_reg_i[0] * 256.0f);
+    p_params->idl_reg_p[1] = MathHelpers::Round(p_in->idl_reg_p[1] * 256.0f);
+    p_params->idl_reg_i[1] = MathHelpers::Round(p_in->idl_reg_i[1] * 256.0f);
     p_params->idl_coef_thrd1 = MathHelpers::Round((p_in->idl_coef_thrd1 - 1.0f) * 128.0f);
     p_params->idl_coef_thrd2 = MathHelpers::Round((p_in->idl_coef_thrd2 - 1.0f) * 128.0f);
     p_params->idl_intrpm_lim = MathHelpers::Round(p_in->idl_intrpm_lim / 10.0f);
@@ -507,8 +509,10 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //Closed loop parameters:
      p_out->idl_to_run_add = ((float)p_params->idl_to_run_add) / 2.0f;
      p_out->rpm_on_run_add = p_params->rpm_on_run_add * 10;
-     p_out->idl_reg_p = ((float)p_params->idl_reg_p) / 256.0f;
-     p_out->idl_reg_i = ((float)p_params->idl_reg_i) / 256.0f;
+     p_out->idl_reg_p[0] = ((float)p_params->idl_reg_p[0]) / 256.0f;
+     p_out->idl_reg_i[0] = ((float)p_params->idl_reg_i[0]) / 256.0f;
+     p_out->idl_reg_p[1] = ((float)p_params->idl_reg_p[1]) / 256.0f;
+     p_out->idl_reg_i[1] = ((float)p_params->idl_reg_i[1]) / 256.0f;
      p_out->idl_coef_thrd1 = (((float)p_params->idl_coef_thrd1) / 128.0f) + 1.0f;
      p_out->idl_coef_thrd2 = (((float)p_params->idl_coef_thrd2) / 128.0f) + 1.0f;
      p_out->idl_intrpm_lim = p_params->idl_intrpm_lim * 10;

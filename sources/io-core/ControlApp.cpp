@@ -895,7 +895,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& idlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != (mp_pdp->isHex() ? 56 : 28))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 64 : 32))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Idling regulator flags
@@ -961,17 +961,29 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
   return false;
  idlRegPar.rpm_on_run_add = rpm_on_run_add * 10;
 
- //IAC closeed loop proportional coefficient
+ //IAC closeed loop proportional coefficient (-)
  int idl_reg_p = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_p))
   return false;
- idlRegPar.idl_reg_p = ((float)idl_reg_p) / 256.0f;
+ idlRegPar.idl_reg_p[0] = ((float)idl_reg_p) / 256.0f;
 
- //IAC closed loop integral coefficient
+ //IAC closeed loop proportional coefficient (+)
+ idl_reg_p = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_p))
+  return false;
+ idlRegPar.idl_reg_p[1] = ((float)idl_reg_p) / 256.0f;
+
+ //IAC closed loop integral coefficient (-)
  int idl_reg_i = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_i))
   return false;
- idlRegPar.idl_reg_i = ((float)idl_reg_i) / 256.0f;
+ idlRegPar.idl_reg_i[0] = ((float)idl_reg_i) / 256.0f;
+
+ //IAC closed loop integral coefficient (+)
+ idl_reg_i = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_i))
+  return false;
+ idlRegPar.idl_reg_i[1] = ((float)idl_reg_i) / 256.0f;
 
  //coefficient for calculating closed loop entering RPM threshold
  unsigned char idl_coef_thrd1 = 0;
@@ -3390,10 +3402,14 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  unsigned char rpm_on_run_add = MathHelpers::Round(packet_data->rpm_on_run_add / 10.0f);
  mp_pdp->Bin8ToHex(rpm_on_run_add, m_outgoing_packet);
 
- int idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p * 256.0f);
+ int idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p[0] * 256.0f);
+ mp_pdp->Bin16ToHex(idl_reg_p, m_outgoing_packet);
+ idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p[1] * 256.0f);
  mp_pdp->Bin16ToHex(idl_reg_p, m_outgoing_packet);
 
- int idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i * 256.0f);
+ int idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i[0] * 256.0f);
+ mp_pdp->Bin16ToHex(idl_reg_i, m_outgoing_packet);
+ idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i[1] * 256.0f);
  mp_pdp->Bin16ToHex(idl_reg_i, m_outgoing_packet);
 
  unsigned char idl_coef_thrd1 = MathHelpers::Round((packet_data->idl_coef_thrd1 - 1.0f) * 128.0f);
