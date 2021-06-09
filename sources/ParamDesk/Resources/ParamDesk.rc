@@ -307,7 +307,12 @@ BEGIN
     LTEXT           "Макс. положение РДВ",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,420,94,10
     LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,421,30,10
 
-    CONTROL         "Использовать closed-loop на газу",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,440,115,15
+    EDITTEXT        IDC_PD_IDLREG_IAC_DEADBAND_EDIT,95,440,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IAC_DEADBAND_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,440,13,17
+    LTEXT           "Зона нечувствит. РДВ",IDC_PD_IDLREG_IAC_DEADBAND_CAPTION,0,441,94,10
+    LTEXT           "мин-1",IDC_PD_IDLREG_IAC_DEADBAND_UNIT,140,441,30,10
+
+    CONTROL         "Использовать closed-loop на газу",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,460,115,15
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -1521,7 +1526,8 @@ BEGIN
     IDS_PD_CKPS_DEGREES_BTDC_EDIT_TT                "Количество градусов от начала импульса (обычно спадающий фронт) до ВМТ. Значение данного параметра не может быть меньше максимального УОЗ."
     IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Смена фронта равноценна изменению порядка подключения проводов к датчику ДНО"
     IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Ограничение значения коррекции УОЗ формируемой регулятором ХХ. Правильно подобранное значение, позволит регулятору сохранять устойчивость."
-    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Зона нечувствительности регулятора. Исключает чувствительность регулятора к небольшим изменениям оборотов."
+    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Зона нечувствительности регулятора УОЗ. Исключает чувствительность регулятора к небольшим изменениям оборотов."
+    IDS_PD_IDLREG_IAC_DEADBAND_EDIT_TT              "Зона нечувствительности регулятора добавочного воздуха. Исключает чувствительность регулятора к небольшим изменениям оборотов."
     IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "Температура двигателя, выше которой начнется работа регулятора (чтобы регулятор работал хотя бы на частично прогретом двигателе). Этот параметр не учитывается если используется таблица целевых оборотов от температуры (впрыск)."
     IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "Набор таблиц используемый для газа. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
     IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "Набор таблиц используемый для бензина. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
@@ -2125,7 +2131,12 @@ BEGIN
     LTEXT           "Maximum IAC position",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,420,94,10
     LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,421,30,10
 
-    CONTROL         "Use closed loop on gas fuel",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,440,115,15
+    EDITTEXT        IDC_PD_IDLREG_IAC_DEADBAND_EDIT,95,440,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IAC_DEADBAND_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,440,13,17
+    LTEXT           "IAC dead band",IDC_PD_IDLREG_IAC_DEADBAND_CAPTION,0,441,94,10
+    LTEXT           "min-1",IDC_PD_IDLREG_IAC_DEADBAND_UNIT,140,441,30,10
+
+    CONTROL         "Use closed loop on gas fuel",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,460,115,15
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -3376,7 +3387,8 @@ BEGIN
     IDS_PD_IDLREG_FACTOR_EDIT_TT                    "The higher the value, the faster controller will change the ignition timing when RPM differs from target value (bigger value - stronger reaction of regulator)."
     IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Sets limits, in which idling regulator will alter ignition timing to maintain target RPM"
     IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Set the target RPM of the idling regulator. It should match the setting of the carburettor on warmed up engine and without load (lights, cooling fan, heater motor, etc.). If you set value to zero, then look up table will be used (injection)."
-    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Dead band of regulator"
+    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Dead band of ign. tim. regulator"
+    IDS_PD_IDLREG_IAC_DEADBAND_EDIT_TT              "Dead band of IAC regulator"
     IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "During warm up idling regulator will be turned on after CLT reach this value. This parameter is ignored if target rpm vs coolant temp. lookup table used."
     IDS_PD_IDLREG_USE_REGULATOR_TT                  "When this check is set, controller will try to maintain target idling RPM by means of altering of ignition timing"
     IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"

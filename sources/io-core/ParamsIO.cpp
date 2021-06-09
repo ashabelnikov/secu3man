@@ -119,6 +119,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->idl_map_value = MathHelpers::Round(p_in->idl_map_value * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->idl_iacminpos = MathHelpers::Round(p_in->idl_iacminpos * 2.0f);
     p_params->idl_iacmaxpos = MathHelpers::Round(p_in->idl_iacmaxpos * 2.0f);
+    p_params->iac_reg_db = p_in->iac_reg_db;
    }
    break;
   case ANGLES_PAR:
@@ -519,6 +520,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->idl_map_value = ((float)p_params->idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->idl_iacminpos = ((float)p_params->idl_iacminpos) / 2.0f;
      p_out->idl_iacmaxpos = ((float)p_params->idl_iacmaxpos) / 2.0f;
+     p_out->iac_reg_db = p_params->iac_reg_db;
     }
     break;
    case ANGLES_PAR:

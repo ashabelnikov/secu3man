@@ -895,7 +895,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& idlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != (mp_pdp->isHex() ? 64 : 32))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 68 : 34))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Idling regulator flags
@@ -1020,6 +1020,10 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_iacmaxpos))
   return false;
  idlRegPar.idl_iacmaxpos = ((float)idl_iacmaxpos / 2.0f);
+
+ //Зона нечувствительности регулятора
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &idlRegPar.iac_reg_db))
+  return false;
 
  return true;
 }
@@ -3429,6 +3433,8 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 
  unsigned char idl_iacmaxpos = MathHelpers::Round(packet_data->idl_iacmaxpos * 2.0f);
  mp_pdp->Bin8ToHex(idl_iacmaxpos, m_outgoing_packet);
+
+ mp_pdp->Bin16ToHex(packet_data->iac_reg_db, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

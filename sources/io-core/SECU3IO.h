@@ -205,6 +205,7 @@ namespace SECU3IO
   float idl_iacminpos;
   float idl_iacmaxpos;
   bool  idl_useiacclongas;
+  int iac_reg_db;
  };
 
  struct CarburPar

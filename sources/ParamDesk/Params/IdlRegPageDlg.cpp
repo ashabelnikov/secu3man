@@ -55,6 +55,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_IDLREG_MAPVALUE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_IACMINPOS_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_IACMAXPOS_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_IDLREG_IAC_DEADBAND_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USE_REGULATOR, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USE_ONGAS, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, OnChangeData)
@@ -163,6 +164,12 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMAXPOS_UNIT,OnUpdateFuelInjectionControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USECLIACONGAS_CHECK,OnUpdateFuelInjectionControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IAC_DEADBAND_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IAC_DEADBAND_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IAC_DEADBAND_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IAC_DEADBAND_UNIT,OnUpdateControls)
+
 END_MESSAGE_MAP()
 
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
@@ -188,6 +195,7 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 , m_mapvalue_edit(CEditEx::MODE_FLOAT, true)
 , m_iacminpos_edit(CEditEx::MODE_FLOAT, true)
 , m_iacmaxpos_edit(CEditEx::MODE_FLOAT, true)
+, m_iac_deadband_edit(CEditEx::MODE_INT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.ifac1 = 1.0f;
@@ -215,6 +223,7 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
  m_params.idl_iacminpos = 10.0f;
  m_params.idl_iacmaxpos = 90.0f;
  m_params.idl_useiacclongas = true;
+ m_params.iac_reg_db = 10;
 }
 
 LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
@@ -269,6 +278,8 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_IACMAXPOS_SPIN, m_iacmaxpos_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_IACMAXPOS_EDIT, m_iacmaxpos_edit);
  DDX_Control(pDX, IDC_PD_IDLREG_USECLIACONGAS_CHECK, m_use_claicongas_check);
+ DDX_Control(pDX, IDC_PD_IDLREG_IAC_DEADBAND_SPIN, m_iac_deadband_spin);
+ DDX_Control(pDX, IDC_PD_IDLREG_IAC_DEADBAND_EDIT, m_iac_deadband_edit);
 
  m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
  m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);
@@ -295,6 +306,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  m_iacminpos_edit.DDX_Value(pDX, IDC_PD_IDLREG_IACMINPOS_EDIT, m_params.idl_iacminpos);
  m_iacmaxpos_edit.DDX_Value(pDX, IDC_PD_IDLREG_IACMAXPOS_EDIT, m_params.idl_iacmaxpos);
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USECLIACONGAS_CHECK, m_params.idl_useiacclongas);
+ m_iac_deadband_edit.DDX_Value(pDX, IDC_PD_IDLREG_IAC_DEADBAND_EDIT, m_params.iac_reg_db);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -426,6 +438,12 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_iacmaxpos_spin.SetRangeAndDelta(0.0f,100.0f,0.5f);
  m_iacmaxpos_edit.SetRange(0.0f,100.0f);
 
+ m_iac_deadband_edit.SetLimitText(3);
+ m_iac_deadband_edit.SetDecimalPlaces(3);
+ m_iac_deadband_spin.SetBuddy(&m_iac_deadband_edit);
+ m_iac_deadband_spin.SetRangeAndDelta(0,500,1);
+ m_iac_deadband_edit.SetRange(0,500);
+
  UpdateData(FALSE);
 
  //initialize window scroller
@@ -499,6 +517,9 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_iacmaxpos_edit, MLL::GetString(IDS_PD_IDLREG_IACMAXPOS_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_iacmaxpos_spin, MLL::GetString(IDS_PD_IDLREG_IACMAXPOS_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_iac_deadband_edit, MLL::GetString(IDS_PD_IDLREG_IAC_DEADBAND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_iac_deadband_spin, MLL::GetString(IDS_PD_IDLREG_IAC_DEADBAND_EDIT_TT)));
       
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);
@@ -566,5 +587,5 @@ void CIdlRegPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(755));
+  mp_scr->SetViewSize(cx, da.ScaleY(795));
 }
