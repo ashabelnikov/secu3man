@@ -266,8 +266,8 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_wheel_miss_num_edit.SetLimitText(1);
  m_wheel_miss_num_edit.SetDecimalPlaces(1);
  m_wheel_miss_num_spin.SetBuddy(&m_wheel_miss_num_edit);
- m_wheel_miss_num_spin.SetRangeAndDelta(0, 2, 1);
- m_wheel_miss_num_edit.SetRange(0, 2);
+ m_wheel_miss_num_spin.SetRangeAndDelta(0, 3, 1);
+ m_wheel_miss_num_edit.SetRange(0, 3);
 
  _FillCKPSTeethBTDCComboBox(); //initialize number of teeth BTDC combobox
  _FillCKPSEngineCylComboBox(); //initialize number of cylinders combobox
