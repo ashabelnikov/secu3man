@@ -63,7 +63,10 @@ bool SaveEEPROMToFile(const BYTE* p_data, const int size, EEPROMDataMediator* p_
 
   //вычисл€ем контрольную сумму и сохран€ем ее в массив с EEPROM
   if (calculate_and_place_crc16)
-   p_eedm->CalculateAndPlaceParamsCRC(save_buff);
+  {
+   p_eedm->CalculateAndPlaceParamsCRC(save_buff); //for params
+   p_eedm->CalculateAndPlaceTablesCRC(save_buff); //for tables
+  }
 
   f.Write(save_buff,size);
   f.Close();

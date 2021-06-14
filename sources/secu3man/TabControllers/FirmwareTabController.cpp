@@ -1306,6 +1306,7 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
 
  mp_view->SetFirmwareCRCs(mp_fwdm->GetCRC16StoredInActiveFirmware(),mp_fwdm->CalculateCRC16OfActiveFirmware());
 
+ funset_names.push_back(_T("eeprom_set1")); //add stub name so that list contain 5 sets
  mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
  BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
