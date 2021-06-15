@@ -491,6 +491,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldOps(_T("OPS"))
 , m_optLogFieldAftStrEnr(_T("AftStrEnr"))
 , m_optLogFieldIacClLoop(_T("IacClLoop"))
+, m_optLogFieldInjDuty(_T("InjDuty"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -1211,6 +1212,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldOps, _T("OPS"));
  lf.ReadString(m_optLogFieldAftStrEnr, _T("AftStrEnr"));
  lf.ReadString(m_optLogFieldIacClLoop, _T("IacClLoop"));
+ lf.ReadString(m_optLogFieldInjDuty, _T("InjDuty"));
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
  fn.ReadInt(m_optFuncSM_CONTROL, _T("1"), 0, 1);
@@ -3612,6 +3614,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldOps);
  lf.WriteString(m_optLogFieldAftStrEnr);
  lf.WriteString(m_optLogFieldIacClLoop);
+ lf.WriteString(m_optLogFieldInjDuty);
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -5336,6 +5339,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldOps.value = i_flds.m_fldOps;
  m_optLogFieldAftStrEnr.value = i_flds.m_fldAftStrEnr;
  m_optLogFieldIacClLoop.value = i_flds.m_fldIacClLoop;
+ m_optLogFieldInjDuty.value = i_flds.m_fldInjDuty;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -5399,6 +5403,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldOps = m_optLogFieldOps.value;
  o_flds.m_fldAftStrEnr = m_optLogFieldAftStrEnr.value;
  o_flds.m_fldIacClLoop = m_optLogFieldIacClLoop.value;
+ o_flds.m_fldInjDuty = m_optLogFieldInjDuty.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

@@ -198,6 +198,7 @@ BEGIN_MESSAGE_MAP(CAppSettingsDlg, CDialog)
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, OnAppSettingsLogfolderUseappfolder)
  ON_BN_CLICKED(IDC_APP_SETTINGS_USEDEBUG_FEATURES, OnAppSettingsLogfolderUseDVFeatures)
  ON_BN_CLICKED(IDC_APP_SETTINGS_PRESPORTS, OnAppSettingsPresentPorts)
+ ON_BN_CLICKED(IDC_APP_SETTINGS_WRITE_LOG_TITLE, OnSelendokRestartPerameters)
  ON_CBN_SELENDOK(IDC_APP_SETTINGS_LANG_SEL_COMBO, OnSelendokRestartPerameters)
  ON_CBN_SELENDOK(IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, OnSelendokPlatform)
  ON_CBN_DROPDOWN(IDC_APP_SETTINGS_PORT_SELECTION2_COMBO, OnDropDownPortSel)
@@ -243,7 +244,7 @@ void CAppSettingsDlg::OnSelendokPlatform()
 
 bool CAppSettingsDlg::IsRestartRequired(void)
 {
- bool resreq = m_iface_lang_selection_orig != m_iface_lang_selection || m_ecu_platform_selection_orig != m_ecu_platform_selection;
+ bool resreq = m_iface_lang_selection_orig != m_iface_lang_selection || m_ecu_platform_selection_orig != m_ecu_platform_selection || m_write_log_fields_orig != m_write_log_fields;
  return resreq;
 }
 
@@ -518,7 +519,7 @@ bool CAppSettingsDlg::GetAlwaysWriteLog(void) const
 
 void CAppSettingsDlg::SetWriteLogFields(bool i_always)
 {
- m_write_log_fields = i_always ? BST_CHECKED : BST_UNCHECKED;
+ m_write_log_fields_orig = m_write_log_fields = i_always ? BST_CHECKED : BST_UNCHECKED;
 }
 
 bool CAppSettingsDlg::GetWriteLogFields(void) const

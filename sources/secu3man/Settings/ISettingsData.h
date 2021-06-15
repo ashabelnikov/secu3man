@@ -473,6 +473,7 @@ struct LogFileFields
  _TSTRING m_fldOps;
  _TSTRING m_fldAftStrEnr;
  _TSTRING m_fldIacClLoop;
+ _TSTRING m_fldInjDuty;
 };
 
 //Functionality

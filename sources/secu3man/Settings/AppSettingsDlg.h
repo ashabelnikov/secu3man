@@ -172,6 +172,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_use_app_folder;
   int m_always_write_log;
   int m_write_log_fields;
+  int m_write_log_fields_orig;
   int m_use_dv_features;
   int m_show_tooltips;
   int m_exfixtures;
