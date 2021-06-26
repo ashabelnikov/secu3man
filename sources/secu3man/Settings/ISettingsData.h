@@ -474,6 +474,9 @@ struct LogFileFields
  _TSTRING m_fldAftStrEnr;
  _TSTRING m_fldIacClLoop;
  _TSTRING m_fldInjDuty;
+ _TSTRING m_fldRigidArg;
+ _TSTRING m_fldServFlag;
+ _TSTRING m_fldRxlaf;
 };
 
 //Functionality

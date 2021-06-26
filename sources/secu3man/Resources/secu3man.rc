@@ -197,7 +197,7 @@ BEGIN
 END
 
 IDD_APP_SETTINGS_EDITOR DIALOG DISCARDABLE  0, 0, 440, 240
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "Редактирование файла настроек программы"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -247,13 +247,13 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,170,125,14
+    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,194,125,14
     CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,168,0,285,192
     CONTROL         "",IDC_LP_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,168,195,238,20
     CONTROL         "",IDC_LP_LOGCONTROL_PANEL_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,145,138
 END
 
-IDD_LOG_PLAYER_CONTROL_PANEL DIALOGEX 0, 0, 165, 145
+IDD_LOG_PLAYER_CONTROL_PANEL DIALOGEX 0, 0, 165, 190
 STYLE DS_CONTROL | WS_CHILD | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
@@ -268,6 +268,10 @@ BEGIN
     LTEXT           "Фактор времени:",IDC_LOG_PLAYER_TIME_FACTOR_CAPTION,94,30,71,8
     CTEXT           "",IDC_LOG_PLAYER_POSITION_INDICATOR,21,138,122,10,SS_NOTIFY
     CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,5,6,146,19,SS_NOTIFY
+    CONTROL         "Зажигание",IDC_LOG_PLAYER_GME_IGN_CHECK,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,155,55,15
+    CONTROL         "Впрыск",IDC_LOG_PLAYER_GME_INJ_CHECK,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,171,55,15
+    LTEXT           "Набор таблиц:",IDC_LOG_PLAYER_MAPSET_CAPTION,94,156,71,8
+    COMBOBOX        IDC_LOG_PLAYER_MAPSET_COMBO,76,170,76,86,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -514,7 +518,7 @@ BEGIN
     IDS_DEV_DIAG_STOP_OUTAUTO_TST  "Остановить автоматическое тестировнаие выходов"
     IDS_DEV_DIAG_ENABLE_BLDE_TST   "Разрешить тестирование выходов BL, DE"
     IDS_DEV_DIAG_ENABLE_TACH_O_TST  "Разрешить тестирование выхода TACH_O"
-    IDS_LOG_FORMAT_DESC            "  чч:мм:сс.сотые\r\n 1 Обороты(мин-1)\r\n 2 УОЗ(°КВ)\r\n 3 ДАД(кПа)\r\n 4 Напр.борт.сети(В)\r\n 5 ДТОЖ(°C)\r\n 6 Уров.сигн.ДД(В)\r\n 7 Корр.УОЗ по ДД(°КВ)\r\n 8 Расход возд.(1-16)\r\n 9 Концев. ДЗ(0,1)\r\n10 Газ. клап.(0,1)\r\n11 ЭПХХ клап.(0,1)\r\n12 ЭМР клап.(0,1)\r\n13 Вентилятор(0,1)\r\n14 Блокир.стартера(0,1)\r\n15 Обогащ.при ускор.(0,1)\r\n16 Отсеч.топл.по обор.(0,1)\r\n17 Продувка двигателя (0,1)\r\n18 Блокировка системы (0,1)\r\n19 Лампа СЕ (0,1)\r\n20 Вход IGN_I (0,1)\r\n21 Вход COND_I (0,1)\r\n22 Вход EPAS_I (0,1)\r\n23 Обогащение после пуска (0,1)\r\n24 РХХ closed loop (0,1)\r\n25 ДПДЗ(%)\r\n26 Вход ADD_I1(В)\r\n27 Вход ADD_I2(В)\r\n28 Положение ВЗ(%)\r\n29 Положение ГД(%)\r\n30 Скорость(км/ч)\r\n31 Расстояние(км)\r\n32 Расход топл.(Л/100км)\r\n33 Расход топл.(Гц)\r\n34 ДТВ(°C)\r\n35 УОЗ из стартовой табл.(°КВ)\r\n36 УОЗ из ХХ табл.(°КВ)\r\n37 УОЗ из рабоч. табл.(°КВ)\r\n38 Корр.УОЗ по ДТОЖ(°КВ)\r\n39 Корр.УОЗ по ДТВ(°КВ)\r\n40 Корр.УОЗ от РХХ(°КВ)\r\n41 Корр.УОЗ октан.(°КВ)\r\n42 Корр.впрыска по ДК\r\n43 Время впрыска(мс)\r\n44 Скорость ДПДЗ (%/s)\r\n45 ДАД2, давление газа (кПа)\r\n46 TMP2, температура газа (°С)\r\n47 Дифф.давление, ДАД2-ДАД (кПа)\r\n48 Воздух/топливо (6-24)\r\n49 Синтетическая нагрузка (кПа или %)\r\n50 Барометр. давление (кПа)\r\n51 Фаза нач. впрыска (°)\r\n52 Фаза конца впрыска (°)\r\n53 Температура газового редуктора (°С)\r\n54 Уровень топлива в баке (Л)\r\n55 Температура выхлопных газов (°С)\r\n56 Давление масла в двиг. (кг/см2)\r\n57 Загрузка форсунок. (%)\r\n58 Метки лога\r\n59 Ошибки СЕ"
+    IDS_LOG_FORMAT_DESC            "  чч:мм:сс.сотые\r\n 1 Обороты(мин-1)\r\n 2 УОЗ(°КВ)\r\n 3 ДАД(кПа)\r\n 4 Напр.борт.сети(В)\r\n 5 ДТОЖ(°C)\r\n 6 Уров.сигн.ДД(В)\r\n 7 Корр.УОЗ по ДД(°КВ)\r\n 8 Расход возд.(1-16)\r\n 9 Концев. ДЗ(0,1)\r\n10 Газ. клап.(0,1)\r\n11 ЭПХХ клап.(0,1)\r\n12 ЭМР клап.(0,1)\r\n13 Вентилятор(0,1)\r\n14 Блокир.стартера(0,1)\r\n15 Обогащ.при ускор.(0,1)\r\n16 Отсеч.топл.по обор.(0,1)\r\n17 Продувка двигателя (0,1)\r\n18 Блокировка системы (0,1)\r\n19 Лампа СЕ (0,1)\r\n20 Вход IGN_I (0,1)\r\n21 Вход COND_I (0,1)\r\n22 Вход EPAS_I (0,1)\r\n23 Обогащение после пуска (0,1)\r\n24 РХХ closed loop (0,1)\r\n25 ДПДЗ(%)\r\n26 Вход ADD_I1(В)\r\n27 Вход ADD_I2(В)\r\n28 Положение ВЗ(%)\r\n29 Положение ГД(%)\r\n30 Скорость(км/ч)\r\n31 Расстояние(км)\r\n32 Расход топл.(Л/100км)\r\n33 Расход топл.(Гц)\r\n34 ДТВ(°C)\r\n35 УОЗ из стартовой табл.(°КВ)\r\n36 УОЗ из ХХ табл.(°КВ)\r\n37 УОЗ из рабоч. табл.(°КВ)\r\n38 Корр.УОЗ по ДТОЖ(°КВ)\r\n39 Корр.УОЗ по ДТВ(°КВ)\r\n40 Корр.УОЗ от РХХ(°КВ)\r\n41 Корр.УОЗ октан.(°КВ)\r\n42 Корр.впрыска по ДК\r\n43 Время впрыска(мс)\r\n44 Скорость ДПДЗ (%/s)\r\n45 ДАД2, давление газа (кПа)\r\n46 TMP2, температура газа (°С)\r\n47 Дифф.давление, ДАД2-ДАД (кПа)\r\n48 Воздух/топливо (6-24)\r\n49 Синтетическая нагрузка (кПа или %)\r\n50 Барометр. давление (кПа)\r\n51 Фаза нач. впрыска (°)\r\n52 Фаза конца впрыска (°)\r\n53 Температура газового редуктора (°С)\r\n54 Уровень топлива в баке (Л)\r\n55 Температура выхлопных газов (°С)\r\n56 Давление масла в двиг. (кг/см2)\r\n57 Загрузка форсунок. (%)\r\n58 Аргумент в табл.жесткости РХХ.\r\n59 Расход воздуха (RxL)\r\n60 Метки лога\r\n61 Служебные флаги \r\n62 Ошибки СЕ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -873,6 +877,9 @@ BEGIN
     IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT "Частота тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
     IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT "Скважность тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
     IDS_INJDRV_BLRECOVER_TEXT "Для восстановления прошивки (или чтобы произвести другие действия) воспользуйтесь встроенным загрузчиком:\n1. Во всплывающем меню выберите необходимый пункт, например 'Записать прошивку из файла';\n2. Выберите файл прошивки и внизу окна появится надпись 'Ожидание запуска загрузчика' и иконка рукопожатия;\n3. Включите питание блока и через несколько секунд начнется процесс записи прошивки. Если ничего не происходит,\n   то повторите все сначала."
+    IDS_LOG_PLAYER_GME_INJ_CHECK_TT "Открыть для просмотра и редактирования таблицы впрыска"
+    IDS_LOG_PLAYER_GME_IGN_CHECK_TT "Открыть для просмотра и редактирования таблицы зажигания"
+    IDS_LOG_PLAYER_MAPSET_COMBO_TT  "Выбор набора таблиц. На вкладке 'Данные прошивки' должна быть открыта прошивка, на вкладке 'EEPROM' должно быть открыто EEPROM. Первые сверху 4 набора таблиц - это таблицы из прошивки, последний набор таблиц - из EEPROM."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1067,7 +1074,7 @@ BEGIN
 END
 
 IDD_APP_SETTINGS_EDITOR DIALOG DISCARDABLE  0, 0, 440, 240
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "Editing a file of program settings"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -1117,13 +1124,13 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,170,125,14    
+    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,194,125,14    
     CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,168,0,285,192
     CONTROL         "",IDC_LP_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,168,195,238,20
     CONTROL         "",IDC_LP_LOGCONTROL_PANEL_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,145,138
 END
 
-IDD_LOG_PLAYER_CONTROL_PANEL DIALOGEX 0, 0, 165, 145
+IDD_LOG_PLAYER_CONTROL_PANEL DIALOGEX 0, 0, 165, 190
 STYLE DS_CONTROL | WS_CHILD | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
@@ -1138,6 +1145,10 @@ BEGIN
     LTEXT           "Time factor:",IDC_LOG_PLAYER_TIME_FACTOR_CAPTION,94,30,71,8
     CTEXT           "",IDC_LOG_PLAYER_POSITION_INDICATOR,21,138,122,10,SS_NOTIFY
     CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,5,6,146,19,SS_NOTIFY
+    CONTROL         "Ignition",IDC_LOG_PLAYER_GME_IGN_CHECK,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,155,55,15
+    CONTROL         "Injection",IDC_LOG_PLAYER_GME_INJ_CHECK,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,171,55,15
+    LTEXT           "Set of maps:",IDC_LOG_PLAYER_MAPSET_CAPTION,94,156,71,8
+    COMBOBOX        IDC_LOG_PLAYER_MAPSET_COMBO,76,170,76,86,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -1443,7 +1454,7 @@ BEGIN
     IDS_DEV_DIAG_STOP_OUTAUTO_TST  "Stop automatic testing of outputs"
     IDS_DEV_DIAG_ENABLE_BLDE_TST   "Enable testing of BL, DE outputs"
     IDS_DEV_DIAG_ENABLE_TACH_O_TST  "Enable testing of the TACH_O output"
-    IDS_LOG_FORMAT_DESC            "  hh:mm:ss.hundreds\r\n 1 RPM(min-1)\r\n 2 Adv.angle(°CS)\r\n 3 MAP(kPa)\r\n 4 Board voltage(V)\r\n 5 CTS(°C)\r\n 6 Knock sig.level(V)\r\n 7 Knock retard(°CS)\r\n 8 Air flow(1-16)\r\n 9 Throttle lim.switch(0,1)\r\n10 Gas valve(0,1)\r\n11 Idle cutoff valve(0,1)\r\n12 Power valve(0,1)\r\n13 Cooling fan(0,1)\r\n14 Starter blocking(0,1)\r\n15 Acceleration enrichment(0,1)\r\n16 Rev.lim. fuel cut (0,1)\r\n17 Flood clear mode (0,1)\r\n18 System locked (0,1)\r\n19 CE lamp (0,1)\r\n20 IGN_I input (0,1)\r\n21 COND_I input (0,1)\r\n22 EPAS_I input (0,1)\r\n23 Afterstart enrichment (0,1)\r\n24 IAC closed loop (0,1)\r\n25 TPS(%)\r\n26 ADD_I1 Input(V)\r\n27 ADD_I2 Input(V)\r\n28 Choke position(%)\r\n29 Gas dosator position(%)\r\n30 Vehicle speed(km/h)\r\n31 Pass.Distance(km)\r\n32 Fuel consumption(L/100km)\r\n33 Fuel consumption(Hz)\r\n34 IAT sensor(°C)\r\n35 Adv.angle from start map(°CS)\r\n36 Adv.angle from idle map(°CS)\r\n37 Adv.angle from work map(°CS)\r\n38 Adv.angle corr.from CTS(°CS)\r\n39 Adv.angle corr.from IAT(°CS)\r\n40 Adv.angle corr.from idle reg.(°CS)\r\n41 Octane correction(°CS)\r\n42 EGO corr.\r\n43 Injector PW(ms)\r\n44 TPS dot (%/s)\r\n45 MAP2, gas pressure (kPa)\r\n46 TMP2, gas temperature (°C)\r\n47 Diff.pressure, MAP2-MAP (kPa)\r\n48 AFR value (6-24)\r\n49 Synthetic load (kPa or %)\r\n50 Barometric pressure (kPa)\r\n51 Begin inj. phase (°)\r\n52 End inj. phase (°)\r\n53 Gas reducer temperature (°C)\r\n54 Fuel tank level (L)\r\n55 Exhaust gas temperature (°C)\r\n56 Oil pressure (kg/cm2)\r\n57 Injector's duty (%)\r\n58 Log marks\r\n59 CE errors"
+    IDS_LOG_FORMAT_DESC            "  hh:mm:ss.hundreds\r\n 1 RPM(min-1)\r\n 2 Adv.angle(°CS)\r\n 3 MAP(kPa)\r\n 4 Board voltage(V)\r\n 5 CTS(°C)\r\n 6 Knock sig.level(V)\r\n 7 Knock retard(°CS)\r\n 8 Air flow(1-16)\r\n 9 Throttle lim.switch(0,1)\r\n10 Gas valve(0,1)\r\n11 Idle cutoff valve(0,1)\r\n12 Power valve(0,1)\r\n13 Cooling fan(0,1)\r\n14 Starter blocking(0,1)\r\n15 Acceleration enrichment(0,1)\r\n16 Rev.lim. fuel cut (0,1)\r\n17 Flood clear mode (0,1)\r\n18 System locked (0,1)\r\n19 CE lamp (0,1)\r\n20 IGN_I input (0,1)\r\n21 COND_I input (0,1)\r\n22 EPAS_I input (0,1)\r\n23 Afterstart enrichment (0,1)\r\n24 IAC closed loop (0,1)\r\n25 TPS(%)\r\n26 ADD_I1 Input(V)\r\n27 ADD_I2 Input(V)\r\n28 Choke position(%)\r\n29 Gas dosator position(%)\r\n30 Vehicle speed(km/h)\r\n31 Pass.Distance(km)\r\n32 Fuel consumption(L/100km)\r\n33 Fuel consumption(Hz)\r\n34 IAT sensor(°C)\r\n35 Adv.angle from start map(°CS)\r\n36 Adv.angle from idle map(°CS)\r\n37 Adv.angle from work map(°CS)\r\n38 Adv.angle corr.from CTS(°CS)\r\n39 Adv.angle corr.from IAT(°CS)\r\n40 Adv.angle corr.from idle reg.(°CS)\r\n41 Octane correction(°CS)\r\n42 EGO corr.\r\n43 Injector PW(ms)\r\n44 TPS dot (%/s)\r\n45 MAP2, gas pressure (kPa)\r\n46 TMP2, gas temperature (°C)\r\n47 Diff.pressure, MAP2-MAP (kPa)\r\n48 AFR value (6-24)\r\n49 Synthetic load (kPa or %)\r\n50 Barometric pressure (kPa)\r\n51 Begin inj. phase (°)\r\n52 End inj. phase (°)\r\n53 Gas reducer temperature (°C)\r\n54 Fuel tank level (L)\r\n55 Exhaust gas temperature (°C)\r\n56 Oil pressure (kg/cm2)\r\n57 Injector's duty (%)\r\n58 Argument in the IAC reg. rigidity map\r\n59 Air flow (RxL)\r\n60 Log marks\r\n61 Service flags\r\n62 CE errors"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1741,6 +1752,9 @@ BEGIN
     IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT "Frequency of the test signal used for testing of SECU-3 outputs (see dropdown list located to the left)"
     IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT "Duty of the test signal used for testing of SECU-3 outputs  (see dropdown list located to the left)"
     IDS_INJDRV_BLRECOVER_TEXT "To restore the firmware (or to perform other actions), use the built-in bootloader:\n1. In the pop-up menu, select the required item, for example 'Write firmware from a file';\n2. Select the firmware file and at the bottom of the window there will be an inscription\n   'Waiting for starting bootloader' and a handshake icon;\n3. Turn on the power to the unit and after a few seconds the process of writing the firmware\n   will start. If nothing happens, try all over again."
+    IDS_LOG_PLAYER_GME_INJ_CHECK_TT "Open injection maps for viewing and editing"
+    IDS_LOG_PLAYER_GME_IGN_CHECK_TT "Open ignition maps for viewing and editing"
+    IDS_LOG_PLAYER_MAPSET_COMBO_TT  "Selecting a set of tables. On the 'Firmware data' tab, the firmware should be open, on the 'EEPROM' tab, the EEPROM should be open. The first 4 sets of tables on the top of the list are from the firmware, the last set (bottom) of tables is from the EEPROM. "
 END
 
 /////////////////////////////////////////////////////////////////////////////

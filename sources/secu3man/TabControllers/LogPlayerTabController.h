@@ -38,6 +38,8 @@ class ISettingsData;
 class LogReader;
 class LogWriter;
 
+class CLPTablesController; //sub-controller
+
 class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 {
  public:
@@ -122,6 +124,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   CStatusBarManager*  mp_sbar;
   ISettingsData* mp_settings;
   LogWriter*     m_pLogWriter;
+  std::auto_ptr<CLPTablesController> mp_tabCntr;
 
   //<factor id, <name, value> >
   std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;

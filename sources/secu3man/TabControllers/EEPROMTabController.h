@@ -49,6 +49,9 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
   virtual ~CEEPROMTabController();
 
+  bool IsEEPROMOpened(void);
+  EEPROMDataMediator* GetEEDM(void) {return m_eedm;}
+
  private:
   typedef std::map<size_t, std::pair<_TSTRING, DWORD> > ErrorsIDContainer;
 
@@ -83,7 +86,6 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   void OnResetEeprom(void);
 
   void OnMapChanged(int i_type);
-  bool IsEEPROMOpened(void);
   void OnMapselNameChanged(void);
   void OnShowCEErrors();
   bool IsLoadGridsAvailable();

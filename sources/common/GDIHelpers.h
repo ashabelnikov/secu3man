@@ -171,4 +171,23 @@ struct GDIHelpers
   dc.LineTo(rc.left, rc.bottom);
   dc.LineTo(rc.left, rc.top);
  }
+
+ static void MakeWindowChild(HWND hwnd, bool child)
+ {
+  if (hwnd && (NULL!=::GetParent(hwnd) != child))
+  {
+   //For compatibility reasons, SetParent does not modify the WS_CHILD or WS_POPUP window styles of the window whose parent is being changed.
+   //Therefore, if hWndNewParent is NULL, you should also clear the WS_CHILD bit and set the WS_POPUP style after calling SetParent.
+   //Conversely, if hWndNewParent is not NULL and the window was previously a child of the desktop, you should clear the WS_POPUP style and
+   //set the WS_CHILD style before calling SetParent.
+   if (child)
+    CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_CHILD, 0);
+
+   ::SetParent(hwnd, child ? AfxGetMainWnd()->GetSafeHwnd() : NULL);
+
+   if (!child)
+    CWnd::FromHandle(hwnd)->ModifyStyle(WS_CHILD, 0, 0);   
+  }
+ }
+
 };

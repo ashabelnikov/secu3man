@@ -35,6 +35,7 @@
 #include "io-core/LogReader.h"
 #include "io-core/logWriter.h"
 #include "io-core/ufcodes.h"
+#include "LPTablesController.h"
 #include "MainFrame/StatusBarManager.h"
 #include "MIDesk/CEDeskDlg.h"
 #include "MIDesk/LMDeskDlg.h"
@@ -83,11 +84,12 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
 , m_pLogWriter(i_pLogWriter)
 , mp_settings(ip_settings)
 , mp_log_reader(new LogReader)
+, mp_tabCntr(new CLPTablesController(ip_view->mp_LPPanelDlg.get(), ip_settings))
 , m_now_tracking(false)
 , m_period_before_tracking(0)
 , m_playing(false)
 , m_current_time_factor(5) //1:1
-{ 
+{  
 #define _IV(id, name, value) (std::make_pair((id), std::make_pair(_TSTRING(name), (value))))
  m_time_factors.insert(_IV(0, _T("16 : 1"),0.0625f));
  m_time_factors.insert(_IV(1, _T(" 8 : 1"), 0.125f));
@@ -124,6 +126,10 @@ CLogPlayerTabController::~CLogPlayerTabController()
 //изменились настройки программы!
 void CLogPlayerTabController::OnSettingsChanged(int action)
 {
+ mp_tabCntr->OnSettingsChanged(action);
+ if (action == 2 || action == 3)
+  return;
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
  mp_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
@@ -245,6 +251,8 @@ void CLogPlayerTabController::OnActivate(void)
  m_one_shot_timer.SetTimer(this, &CLogPlayerTabController::_OnOneShotTimer, 0);
 
  mp_log_reader->SetFFFConst(mp_settings->GetFFFConst());
+
+ mp_tabCntr->OnActivate();
 }
 
 //from MainTabController
@@ -255,6 +263,8 @@ void CLogPlayerTabController::OnDeactivate(void)
  mp_sbar->SetInformationText(_T(""));
  _ClosePlayer();
  mp_settings->SetLogPlayerVert(mp_view->GetSplitterPos());
+
+ mp_tabCntr->OnDeactivate();
 }
 
 //hurrah!!! получен пакет от SECU-3
@@ -692,6 +702,8 @@ void CLogPlayerTabController::_ClosePlayer(void)
 
 void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
 {
+ mp_tabCntr->DisplayCurrentRecord(&m_curr_record.second);
+
  //обновляем приборы, а также обновляем позицию слайдера, если нужно
  mp_view->mp_MIDeskDlg->SetValues(&m_curr_record.second, i_direction == DIR_PREV);
 

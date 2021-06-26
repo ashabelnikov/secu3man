@@ -68,6 +68,7 @@ set(HEADERS
   TabControllers/InjDrvFileDataIO.h
   TabControllers/KnockChannelTabcontroller.h
   Tabcontrollers/LogPlayerTabController.h
+  Tabcontrollers/LPTablesController.h
   TabControllers/ParamMonTabController.h
   TabControllers/PMControllerBase.h
   TabControllers/PMInitDataCollector.h
@@ -128,6 +129,7 @@ set(SOURCES
   TabControllers/InjDrvFileDataIO.cpp
   TabControllers/KnockChannelTabcontroller.cpp
   Tabcontrollers/LogPlayerTabController.cpp
+  Tabcontrollers/LPTablesController.cpp
   TabControllers/ParamMonTabController.cpp
   TabControllers/PMInitDataCollector.cpp
   TabControllers/PMMonitorController.cpp

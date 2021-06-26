@@ -29,6 +29,8 @@
 #include "EditSettingsDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/MsgBox.h"
+#include "common/DPIAware.h"
+#include "common/GDIHelpers.h"
 
 const UINT CEditSettingsDlg::IDD = IDD_APP_SETTINGS_EDITOR;
 
@@ -36,6 +38,7 @@ CEditSettingsDlg::CEditSettingsDlg(const _TSTRING& filename, bool syntaxHighligh
 : CDialog(CEditSettingsDlg::IDD, pParent)
 , m_filename(filename)
 , m_syntaxHighlight(syntaxHighlight)
+, m_initialized(false)
 {
  //empty
 }
@@ -44,16 +47,23 @@ void CEditSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
  CDialog::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_INI_RICHEDIT, m_edit);
+ DDX_Control(pDX, IDOK, m_ok_button);
 }
 
 
 BEGIN_MESSAGE_MAP(CEditSettingsDlg, CDialog)
+ ON_WM_SIZE()
+ ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 BOOL CEditSettingsDlg::OnInitDialog()
 {
  Super::OnInitDialog();
     
+ CRect rc;
+ GetWindowRect(&rc);
+ m_createSize = rc.Size();
+
  //read contents of file:
  CFile f;
  CFileException ex;
@@ -77,6 +87,8 @@ BOOL CEditSettingsDlg::OnInitDialog()
  }
  
  GetDlgItem(IDOK)->SetFocus();
+
+ m_initialized = true;
 
  UpdateData(FALSE);
  return FALSE;  // return TRUE unless you set the focus to a control
@@ -187,4 +199,31 @@ void CEditSettingsDlg::_HighlightSyntax(void)
  }
  m_edit.SetRedraw(TRUE);
  m_edit.HideSelection(TRUE, FALSE);
+}
+
+void CEditSettingsDlg::OnSize(UINT nType, int cx, int cy)
+{
+ Super::OnSize(nType, cx, cy);
+
+ if (!m_initialized)
+  return;
+
+  CRect rc1, rc2;
+
+  DPIAware da;
+  rc1 = GDIHelpers::GetChildWndRect(&m_ok_button);
+  m_ok_button.MoveWindow(rc1.left, cy - rc1.Height() - da.ScaleY(7), rc1.Width(), rc1.Height());
+
+  rc2 = GDIHelpers::GetChildWndRect(&m_edit);
+  m_edit.MoveWindow(rc2.left, rc2.top, (cx - rc2.left) - da.ScaleX(7), rc1.top - da.ScaleY(13));
+}
+
+
+void CEditSettingsDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+ if (m_initialized)
+ {
+  lpMMI->ptMinTrackSize.x = m_createSize.cx;
+  lpMMI->ptMinTrackSize.y = m_createSize.cy;
+ }
 }

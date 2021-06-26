@@ -86,6 +86,20 @@ class CLPControlPanelDlg : public CModelessDialog
   void setOnTimeFactorCombo(EventWithCode i_callback);
   void setOnSliderMoved(EventHScroll i_callback);
 
+  //related to maps
+  void FillMapSetCombo(std::vector<_TSTRING>& mapsets);
+  void EnableMapSetCombo(bool enable);
+  void EnableGmeButtons(bool enable);
+  void setOnSelectMapset(EventHandler i_callback);
+  void setOnGmeIgnButton(EventHandler i_callback);
+  void setOnGmeInjButton(EventHandler i_callback);
+  bool GetGmeIgnCheck(void);
+  bool GetGmeInjCheck(void);
+  void SetGmeIgnCheck(bool checked);
+  void SetGmeInjCheck(bool checked);
+  int GetMapSetSelection(void);
+  void SetMapSetSelection(int sel);
+
  protected:
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -100,6 +114,9 @@ class CLPControlPanelDlg : public CModelessDialog
   afx_msg void OnPrevButton();
   afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
   afx_msg void OnSelchangeTimeFactorCombo();
+  afx_msg void OnSelchangeMapSetCombo();
+  afx_msg void OnGmeIgnButton();
+  afx_msg void OnGmeInjButton();
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -112,6 +129,10 @@ private:
   CSliderCtrl m_slider;
   CStatic m_file_indicator;
   CStatic m_position_indicator;
+  CButton m_gmeinj_button;
+  CButton m_gmeign_button;
+  CComboBox m_mapset_combo;
+  CStatic m_mapset_caption;
 
   bool m_next_button_state;
   bool m_prev_button_state;
@@ -125,6 +146,9 @@ private:
   EventHandler m_on_open_file_button;
   EventWithCode m_on_time_factor_combo;
   EventHScroll m_on_slider_moved;
+  EventHandler m_on_selmapset_combo;
+  EventHandler m_on_gmeign_button;
+  EventHandler m_on_gmeinj_button;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -781,6 +781,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldAftStrEnr;
   OptField_t<_TSTRING> m_optLogFieldIacClLoop;
   OptField_t<_TSTRING> m_optLogFieldInjDuty;
+  OptField_t<_TSTRING> m_optLogFieldRigidArg;
+  OptField_t<_TSTRING> m_optLogFieldServFlag;
+  OptField_t<_TSTRING> m_optLogFieldRxlaf;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

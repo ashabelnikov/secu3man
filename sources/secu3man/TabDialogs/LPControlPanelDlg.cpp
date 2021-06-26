@@ -54,6 +54,9 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_LOG_PLAYER_TIME_FACTOR_COMBO, m_time_factor_combo);
+ DDX_Control(pDX, IDC_LOG_PLAYER_MAPSET_COMBO, m_mapset_combo);
+ DDX_Control(pDX, IDC_LOG_PLAYER_GME_INJ_CHECK, m_gmeinj_button);
+ DDX_Control(pDX, IDC_LOG_PLAYER_GME_IGN_CHECK, m_gmeign_button);
  DDX_Control(pDX, IDC_LOG_PLAYER_PLAY_BUTTON, m_play_button);
  DDX_Control(pDX, IDC_LOG_PLAYER_NEXT_BUTTON, m_next_button);
  DDX_Control(pDX, IDC_LOG_PLAYER_PREV_BUTTON, m_prev_button);
@@ -62,6 +65,7 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOG_PLAYER_OPEN_FILE_BUTTON, m_open_file_button);
  DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_SLIDER, m_slider);
  DDX_Control(pDX, IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, m_stoponmarks_check);
+ DDX_Control(pDX, IDC_LOG_PLAYER_MAPSET_CAPTION, m_mapset_caption);
 }
 
 BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
@@ -78,6 +82,9 @@ BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_BN_CLICKED(IDC_LOG_PLAYER_PREV_BUTTON, OnPrevButton)
  ON_WM_HSCROLL()
  ON_CBN_SELCHANGE(IDC_LOG_PLAYER_TIME_FACTOR_COMBO, OnSelchangeTimeFactorCombo)
+ ON_CBN_SELCHANGE(IDC_LOG_PLAYER_MAPSET_COMBO, OnSelchangeMapSetCombo)
+ ON_BN_CLICKED(IDC_LOG_PLAYER_GME_INJ_CHECK, OnGmeInjButton)
+ ON_BN_CLICKED(IDC_LOG_PLAYER_GME_IGN_CHECK, OnGmeIgnButton)
 END_MESSAGE_MAP()
 
 BOOL CLPControlPanelDlg::OnInitDialog()
@@ -96,6 +103,10 @@ BOOL CLPControlPanelDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_stoponmarks_check, MLL::GetString(IDS_LOG_PLAYER_STOPONMARKS_CHECKBOX_TT)));
  VERIFY(mp_ttc->AddWindow(&m_file_indicator, MLL::GetString(IDS_LOG_PLAYER_FILE_NAME_INDICATOR_TT)));
  VERIFY(mp_ttc->AddWindow(&m_position_indicator, MLL::GetString(IDS_LOG_PLAYER_POSITION_INDICATOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_mapset_combo, MLL::GetString(IDS_LOG_PLAYER_MAPSET_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gmeinj_button, MLL::GetString(IDS_LOG_PLAYER_GME_INJ_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gmeign_button, MLL::GetString(IDS_LOG_PLAYER_GME_IGN_CHECK_TT)));
+
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -257,6 +268,24 @@ void CLPControlPanelDlg::OnSelchangeTimeFactorCombo()
  }
 }
 
+void CLPControlPanelDlg::OnSelchangeMapSetCombo()
+{
+ if (m_on_selmapset_combo)
+  m_on_selmapset_combo();
+}
+
+void CLPControlPanelDlg::OnGmeIgnButton()
+{
+ if (m_on_gmeign_button)
+  m_on_gmeign_button();
+}
+
+void CLPControlPanelDlg::OnGmeInjButton()
+{
+ if (m_on_gmeinj_button)
+  m_on_gmeinj_button();
+}
+
 void CLPControlPanelDlg::setOnPlayButton(EventHandler i_callback)
 {
  m_on_play_button = i_callback;
@@ -347,4 +376,70 @@ void CLPControlPanelDlg::SetSliderPageSize(unsigned long i_page_size)
 bool CLPControlPanelDlg::GetStopOnMarksCheck(void)
 {
  return m_stoponmarks_check.GetCheck() == BST_CHECKED;
+}
+
+void CLPControlPanelDlg::FillMapSetCombo(std::vector<_TSTRING>& mapsets)
+{
+ for(size_t i = 0; i < mapsets.size(); ++i)
+  m_mapset_combo.AddString(mapsets[i].c_str());
+}
+
+void CLPControlPanelDlg::EnableMapSetCombo(bool enable)
+{
+ m_mapset_combo.EnableWindow(enable);
+ m_mapset_caption.EnableWindow(enable);
+}
+
+void CLPControlPanelDlg::EnableGmeButtons(bool enable)
+{
+ m_gmeinj_button.EnableWindow(enable);
+ m_gmeign_button.EnableWindow(enable);
+}
+
+void CLPControlPanelDlg::setOnSelectMapset(EventHandler i_callback)
+{
+ m_on_selmapset_combo = i_callback;
+}
+
+void CLPControlPanelDlg::setOnGmeIgnButton(EventHandler i_callback)
+{
+ m_on_gmeign_button = i_callback;
+}
+
+void CLPControlPanelDlg::setOnGmeInjButton(EventHandler i_callback)
+{
+ m_on_gmeinj_button = i_callback;
+}
+
+bool CLPControlPanelDlg::GetGmeIgnCheck(void)
+{
+ return m_gmeign_button.GetCheck()==BST_CHECKED;
+}
+
+bool CLPControlPanelDlg::GetGmeInjCheck(void)
+{
+ return m_gmeinj_button.GetCheck()==BST_CHECKED;
+}
+
+void CLPControlPanelDlg::SetGmeIgnCheck(bool checked)
+{
+ m_gmeign_button.SetCheck(checked ? BST_CHECKED : BST_UNCHECKED);
+}
+
+void CLPControlPanelDlg::SetGmeInjCheck(bool checked)
+{
+ m_gmeinj_button.SetCheck(checked ? BST_CHECKED : BST_UNCHECKED);
+}
+
+int CLPControlPanelDlg::GetMapSetSelection(void)
+{
+ int sel = m_mapset_combo.GetCurSel();
+ return (sel == CB_ERR) ? -1 : sel;
+}
+
+void CLPControlPanelDlg::SetMapSetSelection(int sel)
+{
+ if (sel == -1)
+  return;
+ m_mapset_combo.SetCurSel(sel);
 }

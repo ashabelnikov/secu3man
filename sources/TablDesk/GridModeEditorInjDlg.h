@@ -40,7 +40,7 @@ class CGMEInjOtherDlg;
 class CGMEInjPwm1Dlg;
 class CGMEInjPwm2Dlg;
 
-class CGridModeEditorInjDlg : public CDialog
+class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
 {
   typedef CDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;

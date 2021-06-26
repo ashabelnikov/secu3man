@@ -103,6 +103,9 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  mp_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
 
  mp_view->mp_TablesPanel->setOnChangeSettings(MakeDelegate(this, &CEEPROMTabController::OnChangeSettingsMapEd));
+
+ //register controller!
+ TabControllersCommunicator::GetInstance()->AddReference(this, TCC_EEPROM_TAB_CONTROLLER);
 }
 
 CEEPROMTabController::~CEEPROMTabController()

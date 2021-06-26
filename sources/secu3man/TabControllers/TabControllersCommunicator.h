@@ -48,3 +48,4 @@ class TabControllersCommunicator
 
 //identifiers of tab controllers
 #define TCC_FIRMWARE_TAB_CONTROLLER 1
+#define TCC_EEPROM_TAB_CONTROLLER   2

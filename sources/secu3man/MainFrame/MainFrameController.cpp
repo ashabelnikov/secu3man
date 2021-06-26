@@ -409,7 +409,10 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldEgts);
  m_pLogWriter->SetFieldName(i++, lff.m_fldOps);
  m_pLogWriter->SetFieldName(i++, lff.m_fldInjDuty);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldRigidArg);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldRxlaf);
  m_pLogWriter->SetFieldName(i++, lff.m_fldLogMarks);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldServFlag);
  m_pLogWriter->SetFieldName(i++, lff.m_fldCECodes);
  m_pLogWriter->SetWriteFields(settings->GetWriteLogFields());
 }
@@ -481,6 +484,9 @@ void MainFrameController::OnAfterCreate(void)
  CToolTipCtrlEx::ActivateAllTooltips(settings->GetShowToolTips());
  DLL::ShowHints(settings->GetShowToolTips(), settings->GetToolTipTime());  
  CToolTipCtrlEx::SetVisibleTime(settings->GetToolTipTime());
+
+ //set check's state
+ mp_view->CheckOnToggleMapWnd(settings->GetToggleMapWnd());
 }
 
 void MainFrameController::OnGetInitialPos(CPoint& o_point)

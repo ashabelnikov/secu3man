@@ -30,7 +30,8 @@ SOURCES = Application/StdAfx.cpp Application/secu3man.cpp Application/Communicat
   TabDialogs/LogPlayerTabDlg.cpp TabDialogs/LPControlPanelDlg.cpp TabDialogs/ParamMonTabDlg.cpp TabsManagement/MainTabController.cpp \
   TabControllers/FirmwareFileUtils.cpp TabDialogs/EEPROMTabDlg.cpp TabDialogs/EEPROMContextMenuManager.cpp TabControllers/EEPROMTabController.cpp \
   TabControllers/CEErrorIdStr.cpp TabControllers/ErrorMsg.cpp TabControllers/MapsWndScrPos.cpp TabDialogs/DevDiagInpsDlg.cpp TabDialogs/DevDiagOutsDlg.cpp \
-  TabDialogs/InjDriverTabDlg.cpp TabControllers/InjDriverTabController.cpp TabControllers/InjDrvFileDataIO.cpp Settings/EditSettingsDlg.cpp
+  TabDialogs/InjDriverTabDlg.cpp TabControllers/InjDriverTabController.cpp TabControllers/InjDrvFileDataIO.cpp Settings/EditSettingsDlg.cpp \
+  Tabcontrollers/LPTablesController.cpp
 
 
 # EXE building

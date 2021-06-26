@@ -47,6 +47,8 @@ class CEditSettingsDlg : public CDialog
   virtual BOOL OnInitDialog();
   virtual void OnCancel();
   virtual void OnOK();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -54,4 +56,7 @@ class CEditSettingsDlg : public CDialog
   CRichEditCtrl m_edit;
   _TSTRING m_filename;
   bool m_syntaxHighlight;
+  bool m_initialized;
+  CSize m_createSize;
+  CButton m_ok_button;
 };

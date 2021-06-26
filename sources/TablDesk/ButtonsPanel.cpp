@@ -25,15 +25,16 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include "AutoTuneController.h"
 #include "ButtonsPanel.h"
 #include "common/dpiaware.h"
 #include "common/MathHelpers.h"
+#include "common/GDIHelpers.h"
 #include "DLLLinkedFunctions.h"
 #include "GridModeEditorIgnDlg.h"
 #include "io-core/secu3io.h"
 #include "MapIds.h"
 #include "ui-core/WndScroller.h"
-#include "AutoTuneController.h"
 #include "ui-core/MapEditorCtrl.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
@@ -4014,32 +4015,14 @@ void CButtonsPanel::MakeChartsChildren(bool children)
  for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
  {
   hwnd = GetMapWindow(i);
-  _MakeWindowChild(hwnd, children);
+  GDIHelpers::MakeWindowChild(hwnd, children);
  }
 
  hwnd = GetMapWindow(TYPE_MAP_GME_IGN_WND); //pseudo map
- _MakeWindowChild(hwnd, children);
+ GDIHelpers::MakeWindowChild(hwnd, children);
 
  hwnd = GetMapWindow(TYPE_MAP_GME_INJ_WND); //pseudo map
- _MakeWindowChild(hwnd, children);
-}
-
-void CButtonsPanel::_MakeWindowChild(HWND hwnd, bool child)
-{
- if (hwnd && (NULL!=::GetParent(hwnd) != child))
- {
-  //For compatibility reasons, SetParent does not modify the WS_CHILD or WS_POPUP window styles of the window whose parent is being changed.
-  //Therefore, if hWndNewParent is NULL, you should also clear the WS_CHILD bit and set the WS_POPUP style after calling SetParent.
-  //Conversely, if hWndNewParent is not NULL and the window was previously a child of the desktop, you should clear the WS_POPUP style and
-  //set the WS_CHILD style before calling SetParent.
-  if (child)
-   CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_CHILD, 0);
-
-  ::SetParent(hwnd, _ChartParentHwnd());
-
-  if (!child)
-   CWnd::FromHandle(hwnd)->ModifyStyle(WS_CHILD, 0, 0);   
- }
+ GDIHelpers::MakeWindowChild(hwnd, children);
 }
 
 void CButtonsPanel::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
@@ -4051,7 +4034,7 @@ void CButtonsPanel::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   m_openedChart = i_hwnd;
  }
 
- _MakeWindowChild(i_hwnd, m_children_charts);
+ GDIHelpers::MakeWindowChild(i_hwnd, m_children_charts);
  ::SendMessage(i_hwnd, WM_NCACTIVATE, TRUE, -1);
 
  if (m_OnOpenMapWnd)

@@ -59,7 +59,7 @@ class CStaticDisp : public CStatic
 };
 
 
-class CGridModeEditorIgnDlg : public CDialog
+class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
 {
   typedef CDialog Super;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
