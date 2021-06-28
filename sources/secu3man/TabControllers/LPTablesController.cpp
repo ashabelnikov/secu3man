@@ -47,7 +47,6 @@
 #undef max
 
 using namespace fastdelegate;
-//using namespace SECU3IO;
 
 CLPTablesController::CLPTablesController(CLPControlPanelDlg* ip_view, ISettingsData* ip_settings)
 : mp_view(ip_view)

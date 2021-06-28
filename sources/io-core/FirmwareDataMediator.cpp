@@ -302,11 +302,12 @@ typedef struct
  _uint  tpsdot_mindt;
  _uchar irr_k_load;
  _uchar irr_k_rpm;
+ _uchar cold_eng_int;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3563];
+ _uchar reserved[3562];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2820,6 +2821,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  
  o_data.irr_k_load = exd.irr_k_load / 32.0f;
  o_data.irr_k_rpm = exd.irr_k_rpm / 32.0f;
+
+ o_data.cold_eng_int = exd.cold_eng_int;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2880,4 +2883,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.irr_k_load = MathHelpers::Round(i_data.irr_k_load * 32.0f);
  exd.irr_k_rpm = MathHelpers::Round(i_data.irr_k_rpm * 32.0f);
+
+ exd.cold_eng_int = i_data.cold_eng_int;
 }
