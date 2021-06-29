@@ -1899,6 +1899,12 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Use special algorithm for cold engine"), _T(""), 0, 1, 1, 1, &d.cold_eng_int, _T("Use separate closed loop algorithm when engine is cold (1). Set to 0 for using same algorithm for cold and hot engine."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Период вызова кода closed loop РДВ/ВЗ"), _T("сек"), 0.00f, 1.0f, 0.01f, 2, &d.iacreg_period, _T("Период вызова кода closed loop РДВ/ВЗ. Определяет частоту вызова регулятора. Используется в коде управления РДВ и в коде управления ВЗ"));
+ else
+  dfd.AppendItem(_T("Period of calling IAC's/Choke closed loop code"), _T("sec"), 0.00f, 1.0f, 0.01f, 2, &d.iacreg_period, _T("Period of calling IAC's/Choke closed loop code. Used in the IAC's regulator code and in the choke regulator code."));
+
+
  //ignition timing
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Управление зажиганием:"));

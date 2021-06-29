@@ -303,11 +303,12 @@ typedef struct
  _uchar irr_k_load;
  _uchar irr_k_rpm;
  _uchar cold_eng_int;
+ _uchar iacreg_period;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3562];
+ _uchar reserved[3561];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2823,6 +2824,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.irr_k_rpm = exd.irr_k_rpm / 32.0f;
 
  o_data.cold_eng_int = exd.cold_eng_int;
+
+ o_data.iacreg_period = ((float)exd.iacreg_period) / 100.0f; //convert to sec
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2885,4 +2888,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.irr_k_rpm = MathHelpers::Round(i_data.irr_k_rpm * 32.0f);
 
  exd.cold_eng_int = i_data.cold_eng_int;
+
+ exd.iacreg_period = MathHelpers::Round(i_data.iacreg_period * 100.0f);
 }

@@ -161,7 +161,7 @@ void CTemperPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 void CTemperPageDlg::OnUpdateVentOff(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && (!m_use_vent_pwm_enabled || m_use_vent_pwm.GetCheck()!=BST_CHECKED));
+ pCmdUI->Enable(m_enabled /*&& (!m_use_vent_pwm_enabled || m_use_vent_pwm.GetCheck()!=BST_CHECKED)*/);
 }
 
 void CTemperPageDlg::OnUpdateUseVentPwm(CCmdUI* pCmdUI)
