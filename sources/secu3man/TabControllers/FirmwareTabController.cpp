@@ -1904,6 +1904,10 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Period of calling IAC's/Choke closed loop code"), _T("sec"), 0.00f, 1.0f, 0.01f, 2, &d.iacreg_period, _T("Period of calling IAC's/Choke closed loop code. Used in the IAC's regulator code and in the choke regulator code."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДТОЖ вкл. РДВ closed loop"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.iacreg_turn_on_temp, _T("Режим closed loop для РДВ включится только если температура двигателя выше этого порога или обороты выше целевых оборотов ХХ. Данный параметр актуален только если используется специальный алгоритм для холодного двигателя."));
+ else
+  dfd.AppendItem(_T("CLT threshold for turn on of the IAC closed loop"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.iacreg_turn_on_temp, _T("IAC closed loop will turn on only if the engine temperature is above this threshold or RPM is above target value. This parameter is useful only if special algorithm for cold engine is used."));
 
  //ignition timing
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
