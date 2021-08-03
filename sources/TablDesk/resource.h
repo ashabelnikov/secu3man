@@ -574,4 +574,7 @@
 #define IDC_CESETT_OILPRESS_TIMER_SPIN  5928
 #define IDS_CESETT_OILPRESS_THRD_EDIT_TT 5929
 #define IDS_CESETT_OILPRESS_TIMER_EDIT_TT 5930
-
+#define IDC_TD_MAF_CURVE                5931
+#define IDS_TD_MAF_CURVE_TT             5932
+#define IDS_MAF_CURVE_MAP               5933
+#define IDS_MAF_UNIT                    5934

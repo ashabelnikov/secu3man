@@ -245,6 +245,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetManInjPwcMap(float* op_values, bool i_original = false);
   void SetManInjPwcMap(const float* i_values);
 
+  void GetMAFCurveMap(float* op_values, bool i_original = false);
+  void SetMAFCurveMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {
@@ -295,10 +298,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_ADD_I6     =  35,     // ADD_I6      (input)
    IOP3I_ADD_I7     =  36,     // ADD_I7      (input)
    IOP3I_ADD_I8     =  37,     // ADD_I8      (input)
-   IOP3I_OILP_I     =  38,     // OILP_I      (input)
-   IOP3I_GENS_I     =  39,     // GENS_I      (input)   
+   IOP3I_MAP_I      =  38,     // MAP_I       (input)
+   IOP3I_OILP_I     =  39,     // OILP_I      (input)
+   IOP3I_GENS_I     =  40,     // GENS_I      (input)   
    //reserved slots are here
-   IOP3I_RESERVED3  =  40,     // Reserved      ()
    IOP3I_RESERVED4  =  41,     // Reserved      ()
    IOP3I_RESERVED5  =  42,     // Reserved      ()
    IOP3I_RESERVED6  =  43,     // Reserved      ()
@@ -355,11 +358,11 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_INPUT1     =  93,     // INPUT1    (input)
    IOP3I_INPUT2     =  94,     // INPUT2    (input)
    IOP3I_REFPRS_I   =  95,     // REFPRS_I  (input)
-// IOP3I_RESERVED43 =  96,     // Reserved  ()
+   IOP3I_MAF        =  96,     // MAF       (input)
 // IOP3I_RESERVED44 =  97,     // Reserved  ()
 // IOP3I_RESERVED45 =  98,     // Reserved  ()
 // IOP3I_RESERVED46 =  99,     // Reserved  ()
-   IOP3I_COUNT      =  96,     //DON'T forget to update this value
+   IOP3I_COUNT      =  97,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -381,7 +384,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_GAS_V      =  16,     // GAS_V       (input)
    IOP_REF_S      =  17,     // REF_S       (input)
    IOP_CKPS       =  18,     // CKPS        (input)
-   IOP_RESERVED0  =  19,     // Reserved    ()
+   IOP_MAP_S      =  19,     // MAP_S       (input)
    IOP_RESERVED1  =  20,     // Reserved    ()
    IOP_RESERVED2  =  21,     // Reserved    ()
    IOP_RESERVED3  =  22,     // Reserved    ()
@@ -452,7 +455,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_VTACHOM    =  86,     // VTACHOM     (output)
    IOP_INPUT1     =  87,     // INPUT1      (input)
    IOP_INPUT2     =  88,     // INPUT2      (input)
-// IOP_RESERVED32 =  89,     // Reserved    ()
+   IOP_MAF        =  89,     // MAF         (input)
 // IOP_RESERVED33 =  90,     // Reserved    ()
 // IOP_RESERVED34 =  91,     // Reserved    ()
 // IOP_RESERVED35 =  92,     // Reserved    ()
@@ -463,7 +466,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP_RESERVED40 =  97,     // Reserved    ()
 // IOP_RESERVED41 =  98,     // Reserved    ()
 // IOP_RESERVED42 =  99,     // Reserved    ()
-   IOP_COUNT      =  89,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  90,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
@@ -510,9 +513,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS3I_ADD_I6     =  35,     // ADD_I6      (input)
    IOS3I_ADD_I7     =  36,     // ADD_I7      (input)
    IOS3I_ADD_I8     =  37,     // ADD_I8      (input)
-   IOS3I_OILP_I     =  38,     // OILP_I      (input)
-   IOS3I_GENS_I     =  39,     // GENS_I      (input)
-// IOS_RESERVED3    =  40,     // Reserved    ()
+   IOS3I_MAP_I      =  38,     // MAP_I       (input)
+   IOS3I_OILP_I     =  39,     // OILP_I      (input)
+   IOS3I_GENS_I     =  40,     // GENS_I      (input)
 // IOS_RESERVED4    =  41,     // Reserved    ()
 // IOS_RESERVED5    =  42,     // Reserved    ()
 // IOS_RESERVED6    =  43,     // Reserved    ()
@@ -522,7 +525,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOS_RESERVED10   =  47,     // Reserved    ()
 // IOS_RESERVED11   =  48,     // Reserved    ()
    //reserved slots are here
-   IOS3I_COUNT      =  38,
+   IOS3I_COUNT      =  39,
    //SECU-3T:   
    IOS_IGN_OUT1     =   0,     // IGN_OUT1
    IOS_IGN_OUT2     =   1,     // IGN_OUT2
@@ -543,7 +546,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS_GAS_V        =  16,     // GAS_V       (input)
    IOS_REF_S        =  17,     // REF_S       (input)
    IOS_CKPS         =  18,     // CKPS        (input)
-// IOS_RESERVED0    =  19,     // Reserved    ()
+   IOS_MAP_S        =  19,     // MAP_S       (input)
 // IOS_RESERVED1    =  20,     // Reserved    ()
 // IOS_RESERVED2    =  21,     // Reserved    ()
 // IOS_RESERVED3    =  22,     // Reserved    ()
@@ -573,7 +576,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOS_RESERVED18   =  46,     // Reserved    ()
 // IOS_RESERVED18   =  47,     // Reserved    ()
 // IOS_RESERVED18   =  48,     // Reserved    ()
-   IOS_COUNT        =  19,     // Number of slots used for I/O remapping
+   IOS_COUNT        =  20,     // Number of slots used for I/O remapping
    IOS_NA           =  255     //
   };
 
@@ -593,7 +596,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V32 = 0x32,           //V3.2  New slots were added (ADD_I5,6,7,8, GRTEMP, GRHEAT)
    IOV_V33 = 0x33,           //V3.3  New slots were added (added possibility to remap ADD_I5/7 as MAP2, GASVAL_O plug added)
    IOV_V34 = 0x34,           //V3.4  New plugs: FTLS_I, EGTS_I, OPS_I, INJPWC_I; Plus extra reserved plugs
-   IOV_V35 = 0x35            //v3.5  New plugs: INPUT1, INPUT2, REFPRS_I
+   IOV_V35 = 0x35,           //v3.5  New plugs: INPUT1, INPUT2, REFPRS_I
+   IOV_V36 = 0x36            //v3.6  New slots: MAP_x; new plugs: MAF
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

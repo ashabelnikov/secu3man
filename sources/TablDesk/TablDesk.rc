@@ -125,6 +125,7 @@ BEGIN
     CONTROL         "Настр. крив. ДТВГ",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,558,96,18
     CONTROL         "Настр. крив. ДДМ",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,577,96,18
     CONTROL         "Ручн.корр.впрыска",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,577,96,18
+    CONTROL         "Кривая расхода ДМРВ",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,596,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -734,6 +735,7 @@ BEGIN
     IDS_OPS_CURVE_MAP       "Настройка кривой датчика давления масла (ДДМ)"
     IDS_MAPS_FUELTANK_UNIT  "Уровень топлива (Л)"
     IDS_MAPS_PRESSUREKG_UNIT "Давление (кг/см2)"
+    IDS_MAF_UNIT            "Расход воздуха (г/сек)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -814,6 +816,8 @@ BEGIN
     IDS_MANINJPWC_MAP "Коэффициент ручной коррекции длительности впрыска"
     IDS_CESETT_OILPRESS_THRD_EDIT_TT "Установите значение минимально допустимого давления масла в двигателе. Если давление упадет ниже этого значения, то будет установлен соответствующий код ошибки."
     IDS_CESETT_OILPRESS_TIMER_EDIT_TT "Установите число тактов по истечении которого должна включиться проверка давления масла. Такты отсчитываются с момента старта двигателя."
+    IDS_TD_MAF_CURVE_TT "Зависимость расхода воздуха (г/сек) от напряжения на выходе ДМРВ (В). Используется для вычисления значения массового расхода воздуха."
+    IDS_MAF_CURVE_MAP "Кривая расхода ДМРВ"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -936,6 +940,7 @@ BEGIN
     CONTROL         "Tune EGTS curve",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,558,96,18
     CONTROL         "Tune OPS curve",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,577,96,18
     CONTROL         "Manual inj.PW corr.",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,577,96,18
+    CONTROL         "MAF flow curve",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,596,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1562,6 +1567,7 @@ BEGIN
     IDS_OPS_CURVE_MAP       "Tune oil pressure sensor's curve (OPS)"
     IDS_MAPS_FUELTANK_UNIT  "Level of fuel (L)"
     IDS_MAPS_PRESSUREKG_UNIT "Pressure (kg/cm2)"
+    IDS_MAF_UNIT            "Air flow (g/sec)"
 END
 
 
@@ -1647,6 +1653,8 @@ BEGIN
     IDS_MANINJPWC_MAP "Coefficient of manual inj.PW correction"
     IDS_CESETT_OILPRESS_THRD_EDIT_TT "Set the value of the minimum allowable oil pressure in the engine. If the pressure falls below this value, the corresponding error code will be set."
     IDS_CESETT_OILPRESS_TIMER_EDIT_TT "Set the number of strokes after which the oil pressure check should start. Strokes are counted from the moment the start of engine."
+    IDS_TD_MAF_CURVE_TT "Dependence of the air flow rate (g/sec) on the voltage at the output of the mass air flow sensor (V). Used to calculate the mass air flow value."
+    IDS_MAF_CURVE_MAP "MAF flow curve"
 END
 
 /////////////////////////////////////////////////////////////////////////////

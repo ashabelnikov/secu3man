@@ -148,6 +148,8 @@ struct WndSettings
  int m_OpsCurveMapWnd_Y;
  int m_ManInjPwcMapWnd_X;
  int m_ManInjPwcMapWnd_Y;
+ int m_MAFCurveMapWnd_X;
+ int m_MAFCurveMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -271,6 +273,8 @@ struct WndSize
  int m_OpsCurveMapWnd_H;
  int m_ManInjPwcMapWnd_W;
  int m_ManInjPwcMapWnd_H;
+ int m_MAFCurveMapWnd_W;
+ int m_MAFCurveMapWnd_H;
 };
 
 //Holds windows's state data
@@ -336,6 +340,7 @@ struct MetersCfg
  int m_optMetEgts[2];
  int m_optMetOps[2];
  int m_optMetInjDuty[2];
+ int m_optMetMAF[2];
 };
 
 typedef enum EInterLang
@@ -409,6 +414,7 @@ struct MapPtMovStep
  float m_egts_curve_map;
  float m_ops_curve_map;
  float m_maninjpwc_map;
+ float m_mafcurve_map;
 };
 
 //Log file's fileds
@@ -477,6 +483,7 @@ struct LogFileFields
  _TSTRING m_fldRigidArg;
  _TSTRING m_fldServFlag;
  _TSTRING m_fldRxlaf;
+ _TSTRING m_fldMAF;
 };
 
 //Functionality
@@ -560,6 +567,7 @@ class ISettingsData
   virtual int GetFtlsAverage(void) const = 0;
   virtual int GetEgtsAverage(void) const = 0;
   virtual int GetOpsAverage(void) const = 0;
+  virtual int GetMAFAverage(void) const = 0;
 
   virtual int GetTitleFontSize(void) const = 0;
   virtual int GetValueFontSize(void) const = 0;

@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 162 : 81))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 166 : 83))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -633,6 +633,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  sensorDat.inj_duty = ((float)inj_duty) / 2.0f;
 
+ //mass iar flow (g/sec)
+ int maf = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &maf, true))
+  return false;
+ sensorDat.maf = ((float)maf) / 64.0f;
+
  return true;
 }
 
@@ -796,7 +802,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 45 : 23))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 59 : 30))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -886,6 +892,22 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &ve2_map_func))
   return false;
  funSetPar.ve2_map_func = ve2_map_func;
+
+ //read-only parameter: number of engine cylinders
+ unsigned char cyl_num = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &cyl_num))
+  return false;
+ funSetPar.cyl_num = cyl_num;
+ 
+ int inj_cyl_disp = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_cyl_disp))
+  return false;
+ funSetPar.inj_cyl_disp = float(inj_cyl_disp) / 16384.0f;
+
+ unsigned long mafload_const = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &mafload_const))
+  return false;
+ funSetPar.mafload_const = (float)mafload_const;
 
  return true;
 }
@@ -2363,7 +2385,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& injctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 60 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 84 : 43))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
@@ -2459,6 +2481,21 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_min_pw))
   return false;
  injctrPar.inj_min_pw[0] = ((((float)inj_min_pw) * 8) * discrete) / 1000.0f; //convert to ms
+
+ //MAF consts
+ unsigned long inj_maf_const = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_maf_const))
+  return false;
+ injctrPar.inj_maf_const[0] = (float)inj_maf_const;
+ //second fuel:
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_maf_const))
+  return false;
+ injctrPar.inj_maf_const[1] = (float)inj_maf_const;
+
+ unsigned long mafload_const = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &mafload_const))
+  return false;
+ injctrPar.mafload_const = (float)mafload_const;
 
  return true;
 }
@@ -3532,6 +3569,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
  unsigned char ve2_map_func = packet_data->ve2_map_func;
  mp_pdp->Bin8ToHex(ve2_map_func, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(0, m_outgoing_packet); //stub for cyl_num
+ int inj_cyl_disp = MathHelpers::Round(packet_data->inj_cyl_disp * 16384.0f);
+ mp_pdp->Bin16ToHex(inj_cyl_disp, m_outgoing_packet);
+ mp_pdp->Bin32ToHex((unsigned long)packet_data->mafload_const, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -4087,6 +4128,10 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
  mp_pdp->Bin8ToHex(inj_min_pw, m_outgoing_packet);
  inj_min_pw = MathHelpers::Round(((packet_data->inj_min_pw[0] * 1000.0f) / discrete) / 8.0f);
  mp_pdp->Bin8ToHex(inj_min_pw, m_outgoing_packet);
+ //MAF consts
+ mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_maf_const[0], m_outgoing_packet);
+ mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_maf_const[1], m_outgoing_packet);
+ mp_pdp->Bin32ToHex((unsigned long)packet_data->mafload_const, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

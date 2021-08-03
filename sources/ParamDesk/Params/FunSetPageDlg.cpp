@@ -30,7 +30,9 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/DynFieldsDialog.h"
 #include "../MAPCalc/MAPCalcController.h"
+#include "common/Calculations.h"
 
 const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
 
@@ -411,6 +413,22 @@ void CFunSetPageDlg::OnChangeDataLoadSrc()
 {
  UpdateData();
  UpdateLoadAxisUnits();
+
+ //edit engine size here in the modal dialog window if firmware has no fuel injection support (Injection tab is disabled in ignition-only firmwares)
+ if (m_params.load_src_cfg == 4 && !m_fuel_injection) //MAF
+ {
+  CDynFieldsContainer dfd(this, _T("Редактирование знчения (Edit value)"), 120, true);
+  float engineSize = m_params.inj_cyl_disp * m_params.cyl_num;
+  dfd.AppendItem(_T("Объем двигателя (Engine size)"), _T("L"), 0.01f, 8.0f, 0.0001f, 4, &engineSize, _T("Объем двигателя в литрах\nEngine size in litres"));
+  if (dfd.DoModal()==IDOK)
+  {
+   //calculate new value of cylinder's displacement
+   m_params.inj_cyl_disp = engineSize / m_params.cyl_num;
+   //calculate constant used for calculation of MAF load (synthetic load)
+   m_params.mafload_const = calc::calcMAFLoadConst(m_params.inj_cyl_disp, m_params.cyl_num);
+  }
+ }
+
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
  UpdateDialogControls(this, TRUE);
 }
@@ -520,9 +538,10 @@ void CFunSetPageDlg::FillCBByLoadOpts(void)
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAPBARO));   //MAP(baro)
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_TPS));       //TPS
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAPTPS));    //MAP+TPS
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAF));       //MAF
 
  //for gas
- if (m_params.load_src_cfg < 4)
+ if (m_params.load_src_cfg < 5)
   m_load_src_combo.SetCurSel(m_params.load_src_cfg);
  else
   m_load_src_combo.SetCurSel(0);

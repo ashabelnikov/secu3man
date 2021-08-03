@@ -405,6 +405,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_ManInjPwcMapWnd_W = rc.right - rc.left;
    sz.m_ManInjPwcMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_MAF_CURVE:
+   ws.m_MAFCurveMapWnd_X = rc.left;
+   ws.m_MAFCurveMapWnd_Y = rc.top;
+   sz.m_MAFCurveMapWnd_W = rc.right - rc.left;
+   sz.m_MAFCurveMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -668,6 +674,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_MANINJPWC:
    X = ws.m_ManInjPwcMapWnd_X, Y = ws.m_ManInjPwcMapWnd_Y;
    W = sz.m_ManInjPwcMapWnd_W, H = sz.m_ManInjPwcMapWnd_H;
+   break;
+  case TYPE_MAP_MAF_CURVE:
+   X = ws.m_MAFCurveMapWnd_X, Y = ws.m_MAFCurveMapWnd_Y;
+   W = sz.m_MAFCurveMapWnd_W, H = sz.m_MAFCurveMapWnd_H;
    break;
   default:
    return; //undefined case...

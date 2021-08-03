@@ -294,6 +294,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_EGTS_CURVE, mptms.m_egts_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_OPS_CURVE, mptms.m_ops_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MANINJPWC, mptms.m_maninjpwc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MAF_CURVE, mptms.m_mafcurve_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -1180,6 +1181,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(false),false);
  mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(true),true);
 
+ mp_fwdm->GetMAFCurveMap(mp_view->mp_TablesPanel->GetMAFCurveMap(false),false);
+ mp_fwdm->GetMAFCurveMap(mp_view->mp_TablesPanel->GetMAFCurveMap(true),true);
+
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
@@ -1521,6 +1525,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_MANINJPWC:
    mp_fwdm->SetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(false));
+   break;
+  case TYPE_MAP_MAF_CURVE:
+   mp_fwdm->SetMAFCurveMap(mp_view->mp_TablesPanel->GetMAFCurveMap(false));
    break;
  }
 }
@@ -2426,6 +2433,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_egts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_EGTS_CURVE);
  mptms.m_ops_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_OPS_CURVE);
  mptms.m_maninjpwc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MANINJPWC);
+ mptms.m_mafcurve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MAF_CURVE);
  mp_settings->SetMapPtMovStep(mptms);
 }
 

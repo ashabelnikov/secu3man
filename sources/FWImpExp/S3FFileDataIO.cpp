@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0119 //01.19
+#define CURRENT_VERSION 0x0120 //01.20
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -84,6 +84,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.18 - Added secondary VE map (28.02.2021)
 // 01.19 - Added 3 maps for sensors: Fuel Tank Level, Exhaust Gas Temperature, Oil Pressure. Added map for manual inj. PW correction
 //         Added two fields into s3f_ce_sett_t struct (oil pressure threshold, oil pressure strokes timer)
+// 01.20 - Added MAF flow curve (25.07.2021)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -272,7 +273,10 @@ struct S3FSepMaps
  s3f_int32_t ops_curve[OPS_LOOKUP_TABLE_SIZE+2];        //Oil pressure sensor look up table, since v01.19
  s3f_int32_t injpw_coef[INJPWCOEF_LUT_SIZE];            //Manual inj. PW correction map
 
- s3f_int32_t reserved[4022];       //reserved bytes, = 0
+ //since v01.20
+ s3f_int32_t maf_curve[MAF_FLOW_CURVE_SIZE+1];
+
+ s3f_int32_t reserved[3957];       //reserved bytes, = 0
 };
 
 
@@ -704,7 +708,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ops_curve[i] = MathHelpers::Round(m_data.ops_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < INJPWCOEF_LUT_SIZE; ++i)
   p_sepMaps->injpw_coef[i] = MathHelpers::Round(m_data.injpw_coef[i] * INT_MULTIPLIER);
-
+ for(i = 0; i < MAF_FLOW_CURVE_SIZE+1; ++i)
+  p_sepMaps->maf_curve[i] = MathHelpers::Round(m_data.maf_curve[i] * INT_MULTIPLIER);
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
@@ -963,6 +968,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.ops_curve[i] = p_sepMaps->ops_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < INJPWCOEF_LUT_SIZE; ++i)
   m_data.injpw_coef[i] = p_sepMaps->injpw_coef[i] / INT_MULTIPLIER;
+ for(i = 0; i < MAF_FLOW_CURVE_SIZE+1; ++i)
+  m_data.maf_curve[i] = p_sepMaps->maf_curve[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

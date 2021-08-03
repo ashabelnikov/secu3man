@@ -153,6 +153,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->barocorr_type = p_in->barocorr_type;
     WRITEBIT8(p_params->func_flags, 0, p_in->use_load_grid);
     p_params->ve2_map_func = p_in->ve2_map_func;
+    p_params->inj_cyl_disp = MathHelpers::Round(p_in->inj_cyl_disp * 16384.0f);
+    p_params->mafload_const = MathHelpers::Round(p_in->mafload_const);
    }
    break;
   case STARTR_PAR:
@@ -402,6 +404,10 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     float discrete = PlatformParamHolder::GetQuartzFact(GetPlatformId()); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
     p_params->inj_min_pw[0] = MathHelpers::Round(((p_in->inj_min_pw[0] * 1000.0f) / discrete) / 8.0f);
     p_params->inj_min_pw[1] = MathHelpers::Round(((p_in->inj_min_pw[1] * 1000.0f) / discrete) / 8.0f);
+
+    p_params->inj_maf_const[0] = MathHelpers::Round(p_in->inj_maf_const[0]);
+    p_params->inj_maf_const[1] = MathHelpers::Round(p_in->inj_maf_const[1]);
+    p_params->mafload_const = MathHelpers::Round(p_in->mafload_const);
    }
    break;
   case LAMBDA_PAR:
@@ -557,6 +563,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->barocorr_type = p_params->barocorr_type;
      p_out->use_load_grid = CHECKBIT8(p_params->func_flags, 0);
      p_out->ve2_map_func = p_params->ve2_map_func;
+     p_out->cyl_num = p_params->ckps_engine_cyl; //read-only parameter, its value required for calculations
+     p_out->inj_cyl_disp = float(p_params->inj_cyl_disp) / 16384.0f;
+     p_out->mafload_const = (float)p_params->mafload_const;
     }
     break;
    case STARTR_PAR:
@@ -862,6 +871,10 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     float discrete = PlatformParamHolder::GetQuartzFact(GetPlatformId()); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
     p_out->inj_min_pw[0] = ((float(p_params->inj_min_pw[0]) * discrete) / 1000.0f) * 8.0f;  //convert to ms
     p_out->inj_min_pw[1] = ((float(p_params->inj_min_pw[1]) * discrete) / 1000.0f) * 8.0f;  //convert to ms
+
+    p_out->inj_maf_const[0] = (float)p_params->inj_maf_const[0];
+    p_out->inj_maf_const[1] = (float)p_params->inj_maf_const[1];
+    p_out->mafload_const = (float)p_params->mafload_const;
    }
    break;
   case LAMBDA_PAR:

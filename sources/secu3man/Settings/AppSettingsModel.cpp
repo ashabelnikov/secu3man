@@ -109,6 +109,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFtlsAverage(_T("FtlsAverage"))
 , m_optEgtsAverage(_T("EgtsAverage"))
 , m_optOpsAverage(_T("OpsAverage"))
+, m_optMAFAverage(_T("MAFAverage"))
 
 , m_optTitleFontSize(_T("TitleFontSize"))
 , m_optValueFontSize(_T("ValueFontSize"))
@@ -180,6 +181,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optEgtsCurveMapWnd(_T("EgtsCurveMapWnd"))
 , m_optOpsCurveMapWnd(_T("OpsCurveMapWnd"))
 , m_optManInjPwcMapWnd(_T("ManInjPwcMapWnd"))
+, m_optMAFCurveMapWnd(_T("ManMAFCurveMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -275,6 +277,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optEgtsCurveMapWndSize(_T("EgtsCurveMapWnd"))
 , m_optOpsCurveMapWndSize(_T("OpsCurveMapWnd"))
 , m_optManInjPwcMapWndSize(_T("ManInjPwcMapWnd"))
+, m_optMAFCurveMapWndSize(_T("MAFCurveMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -429,6 +432,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepEgtsCurveMap(_T("EgtsCurveMapWnd"))
 , m_optPtMovStepOpsCurveMap(_T("OpsCurveMapWnd"))
 , m_optPtMovStepManInjPwcMap(_T("ManInjPwcMapWnd"))
+, m_optPtMovStepMAFCurveMap(_T("MAFCurveMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -495,6 +499,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldRigidArg(_T("RigidArg"))
 , m_optLogFieldServFlag(_T("ServFlag"))
 , m_optLogFieldRxlaf(_T("Rxlaf"))
+, m_optLogFieldMAF(_T("MAF"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -595,6 +600,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetOps[i][1].name = _T("GrhOps");
   m_optMetInjDuty[i][0].name = _T("MetInjDuty");
   m_optMetInjDuty[i][1].name = _T("GrhInjDuty");
+  m_optMetMAF[i][0].name = _T("MetMAF");
+  m_optMetMAF[i][1].name = _T("GrhMAF");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -745,6 +752,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optFtlsAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optEgtsAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optOpsAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optMAFAverage, _T("0"), 0, 16);
 
  fs.ReadInt(m_optTachometerMax, _T("8000"), 0, 15000);
  fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
@@ -825,6 +833,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optEgtsCurveMapWnd);
  ws.ReadWndPos(m_optOpsCurveMapWnd);
  ws.ReadWndPos(m_optManInjPwcMapWnd);
+ ws.ReadWndPos(m_optMAFCurveMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -923,6 +932,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optEgtsCurveMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optOpsCurveMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optManInjPwcMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optMAFCurveMapWndSize, 0, 10000);
+
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  sz1.ReadWndPos(m_optStrtMapWndSize1);
@@ -1005,8 +1016,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColIacClLoop,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][32*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][33*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -1046,6 +1057,7 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetEgts[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetOps[i][g], metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetInjDuty[i][g], metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetMAF[i][g],metDef[i][d++], 0, vmax, true);
   }
  }
 
@@ -1152,6 +1164,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepEgtsCurveMap, _T("5.0"), 0.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepOpsCurveMap, _T("0.1"), 0.0f, 1.0f);
  ms.ReadFlt(m_optPtMovStepManInjPwcMap, _T("0.01"), 0.0f, 0.1f);
+ ms.ReadFlt(m_optPtMovStepMAFCurveMap, _T("0.01"), 0.0f, 10.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1219,6 +1232,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldRigidArg, _T("RigidArg"));
  lf.ReadString(m_optLogFieldServFlag, _T("ServFlag"));
  lf.ReadString(m_optLogFieldRxlaf, _T("Rxlaf"));
+ lf.ReadString(m_optLogFieldMAF, _T("MAF"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -1579,6 +1593,12 @@ bool CAppSettingsModel::WriteSettings(void)
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений фазы конца впрыска. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optInjTimEAverage); 
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for MAF values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДМРВ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optMAFAverage); 
+ //---------------------------
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the RPM gauge (e.g. 6000 min-1)."));
  else
@@ -2006,6 +2026,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optManInjPwcMapWnd, _T("Map for manual correction of injection PW"));
  else
   ws.WriteWndPos(m_optManInjPwcMapWnd, _T("Таблица для ручной коррекции длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optMAFCurveMapWnd, _T("MAF flow curve"));
+ else
+  ws.WriteWndPos(m_optMAFCurveMapWnd, _T("Кривая расхода ДМРВ"));
 
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -2477,6 +2502,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optManInjPwcMapWndSize, _T("Map for manual correction of injection PW"));
  else
   sz.WriteWndPos(m_optManInjPwcMapWndSize, _T("Таблица для ручной коррекции длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optMAFCurveMapWndSize, _T("MAF flow curve"));
+ else
+  sz.WriteWndPos(m_optMAFCurveMapWndSize, _T("Кривая расхода ДМРВ"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3041,6 +3071,11 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetInjDuty[i][g], _T("Injector's duty"));
   else
    mm.WriteInt(m_optMetInjDuty[i][g], _T("Загрузка форсунок"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetMAF[i][g], _T("MAF sensor"));
+  else
+   mm.WriteInt(m_optMetMAF[i][g], _T("Датчик ДМРВ"));
   }
  }
 
@@ -3550,6 +3585,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepManInjPwcMap, 3, _T("Таблица для ручной коррекции длительности впрыска"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepMAFCurveMap, 3, _T("MAF flow curve"));
+ else
+  ms.WriteFlt(m_optPtMovStepMAFCurveMap, 3, _T("Кривая расхода ДМРВ"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -3622,6 +3662,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldInjDuty);
  lf.WriteString(m_optLogFieldRigidArg);
  lf.WriteString(m_optLogFieldRxlaf);
+ lf.WriteString(m_optLogFieldMAF);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -3856,6 +3897,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optOpsCurveMapWnd.value.y = i_wndSettings.m_OpsCurveMapWnd_Y;
  m_optManInjPwcMapWnd.value.x = i_wndSettings.m_ManInjPwcMapWnd_X;
  m_optManInjPwcMapWnd.value.y = i_wndSettings.m_ManInjPwcMapWnd_Y; 
+ m_optMAFCurveMapWnd.value.x = i_wndSettings.m_MAFCurveMapWnd_X;
+ m_optMAFCurveMapWnd.value.y = i_wndSettings.m_MAFCurveMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -3978,6 +4021,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_OpsCurveMapWnd_Y = m_optOpsCurveMapWnd.value.y;
  o_wndSettings.m_ManInjPwcMapWnd_X = m_optManInjPwcMapWnd.value.x;
  o_wndSettings.m_ManInjPwcMapWnd_Y = m_optManInjPwcMapWnd.value.y;
+ o_wndSettings.m_MAFCurveMapWnd_X = m_optMAFCurveMapWnd.value.x;
+ o_wndSettings.m_MAFCurveMapWnd_Y = m_optMAFCurveMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4236,6 +4281,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optOpsCurveMapWndSize.value.y = i_wndSize.m_OpsCurveMapWnd_H; 
  m_optManInjPwcMapWndSize.value.x = i_wndSize.m_ManInjPwcMapWnd_W;
  m_optManInjPwcMapWndSize.value.y = i_wndSize.m_ManInjPwcMapWnd_H; 
+ m_optMAFCurveMapWndSize.value.x = i_wndSize.m_MAFCurveMapWnd_W;
+ m_optMAFCurveMapWndSize.value.y = i_wndSize.m_MAFCurveMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4358,6 +4405,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_OpsCurveMapWnd_H = m_optOpsCurveMapWndSize.value.y;
  o_wndSize.m_ManInjPwcMapWnd_W = m_optManInjPwcMapWndSize.value.x;
  o_wndSize.m_ManInjPwcMapWnd_H = m_optManInjPwcMapWndSize.value.y;
+ o_wndSize.m_MAFCurveMapWnd_W = m_optMAFCurveMapWndSize.value.x;
+ o_wndSize.m_MAFCurveMapWnd_H = m_optMAFCurveMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4721,6 +4770,11 @@ int CAppSettingsModel::GetInjTimEAverage(void) const
  return m_optInjTimEAverage.value;
 }
 
+int CAppSettingsModel::GetMAFAverage(void) const
+{
+ return m_optMAFAverage.value;
+}
+
 bool CAppSettingsModel::GetAllowVisualTheme(void) const
 {
  return m_optAllowVisualTheme.value;
@@ -4847,6 +4901,7 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
  }
 }
 
@@ -4887,6 +4942,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
  }
 }
 
@@ -5226,6 +5282,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepEgtsCurveMap.value = i_ptMovStep.m_egts_curve_map;
  m_optPtMovStepOpsCurveMap.value = i_ptMovStep.m_ops_curve_map;
  m_optPtMovStepManInjPwcMap.value = i_ptMovStep.m_maninjpwc_map;
+ m_optPtMovStepMAFCurveMap.value = i_ptMovStep.m_mafcurve_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -5286,6 +5343,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_egts_curve_map = m_optPtMovStepEgtsCurveMap.value;
  o_ptMovStep.m_ops_curve_map = m_optPtMovStepOpsCurveMap.value;
  o_ptMovStep.m_maninjpwc_map = m_optPtMovStepManInjPwcMap.value;
+ o_ptMovStep.m_mafcurve_map = m_optPtMovStepMAFCurveMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
@@ -5353,6 +5411,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldRigidArg.value = i_flds.m_fldRigidArg;
  m_optLogFieldServFlag.value = i_flds.m_fldServFlag;
  m_optLogFieldRxlaf.value = i_flds.m_fldRxlaf;
+ m_optLogFieldMAF.value = i_flds.m_fldMAF;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -5420,6 +5479,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldRigidArg = m_optLogFieldRigidArg.value;
  o_flds.m_fldServFlag = m_optLogFieldServFlag.value;
  o_flds.m_fldRxlaf = m_optLogFieldRxlaf.value;
+ o_flds.m_fldMAF = m_optLogFieldMAF.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

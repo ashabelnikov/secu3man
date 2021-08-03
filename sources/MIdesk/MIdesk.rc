@@ -222,6 +222,8 @@ BEGIN
     IDS_MI_FTLS_TITLE        "Уровень топлива"
     IDS_MI_EGTS_TITLE        "Темп.выхл.газов"
     IDS_MI_OPS_TITLE         "Давление масла"
+    IDS_MI_MAF_TITLE         "ДМРВ"
+    IDS_MI_MAF_UNIT          "г/сек"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -261,6 +263,7 @@ BEGIN
     IDS_MI_OPSGRAPH_V_UNIT    "Масло,кг/см2"
     IDS_MI_EGTSGRAPH_V_UNIT   "Темп.выхлопа,°C"
     IDS_MI_INJ_DUTY_V_UNIT     "Загр.форс,%"
+    IDS_MI_MAFGRAPH_V_UNIT    "ДМРВ,г/сек"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -523,6 +526,8 @@ BEGIN
     IDS_MI_OPS_TITLE         "Oil pressure"
     IDS_MI_FTLS_UNIT         "L"
     IDS_MI_OPS_UNIT          "kg/cm2"
+    IDS_MI_MAF_TITLE         "MAF"
+    IDS_MI_MAF_UNIT          "g/sec"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -560,6 +565,7 @@ BEGIN
     IDS_MI_OPSGRAPH_V_UNIT    "Oil pres,kg/cm2"
     IDS_MI_EGTSGRAPH_V_UNIT   "Exhaust gas,°C"
     IDS_MI_INJ_DUTY_V_UNIT    "Inj.duty,%"
+    IDS_MI_MAFGRAPH_V_UNIT    "MAF,g/sec"
 END
 
 STRINGTABLE DISCARDABLE 

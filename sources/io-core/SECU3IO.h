@@ -120,6 +120,7 @@ namespace SECU3IO
   bool iac_cl_loop;                     //IAC closed loop flag
 
   float inj_duty;                       //injector's duty
+  float maf;                            //mass air flow in g/sec
  };
 
  struct DbgvarDat
@@ -178,6 +179,9 @@ namespace SECU3IO
   int barocorr_type;
   bool use_load_grid;
   int ve2_map_func;
+  int cyl_num;                        //read-only parameter: number of cylinders
+  float inj_cyl_disp;                 //The displacement of one cylinder in liters
+  float mafload_const;                //precalculated constant for MAF (for calculation of MAF load)
  };
 
  struct IdlRegPar
@@ -593,6 +597,8 @@ namespace SECU3IO
   int inj_anglespec[2];               //Specifies how inj.timing coupled with inj.pulse (beginning, middle, end)
   float fff_const;                    //fuel consumption const.
   float inj_min_pw[2];                //min. inj PW (ms)
+  float inj_maf_const[2];             //precalculated constant for MAF (for calculation of inj. PW)
+  float mafload_const;                //precalculated constant for MAF (for calculation of MAF load)
  };
 
  struct LambdaPar

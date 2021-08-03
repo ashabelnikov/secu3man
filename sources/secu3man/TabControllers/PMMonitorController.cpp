@@ -99,6 +99,10 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
  mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
  mp_view->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
+ mp_view->SetFtlsAverageNum(mp_settings->GetFtlsAverage());
+ mp_view->SetEgtsAverageNum(mp_settings->GetEgtsAverage());
+ mp_view->SetOpsAverageNum(mp_settings->GetOpsAverage());
+ mp_view->SetMAFAverageNum(mp_settings->GetMAFAverage());
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -141,6 +145,10 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
  mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
  mp_view->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
+ mp_view->SetFtlsAverageNum(mp_settings->GetFtlsAverage());
+ mp_view->SetEgtsAverageNum(mp_settings->GetEgtsAverage());
+ mp_view->SetOpsAverageNum(mp_settings->GetOpsAverage());
+ mp_view->SetMAFAverageNum(mp_settings->GetMAFAverage());
  mp_view->SetITMode(mp_settings->GetITEdMode());
 }
 

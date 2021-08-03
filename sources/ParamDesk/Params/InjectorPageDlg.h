@@ -123,6 +123,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;
   bool m_ovf_msgbox;
+  bool m_maf_ovf_msgbox;
 
   CFont m_boldDlgFont;
   int m_itmode;

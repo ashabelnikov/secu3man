@@ -1289,6 +1289,10 @@ BEGIN
     COMBOBOX        IDC_IO_REMAPPING3I_ADD_I8_COMBOBOX,53,491,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Инверсия",IDC_IO_REMAPPING3I_ADD_I8_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,491,48,12
 
+    RTEXT           "MAP_I",IDC_IO_REMAPPING3I_MAP_I_CAPTION,0,505,50,13
+    COMBOBOX        IDC_IO_REMAPPING3I_MAP_I_COMBOBOX,53,504,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Инверсия",IDC_IO_REMAPPING3I_MAP_I_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,504,48,12
+
     //SECU-3T:
     RTEXT           "IGN_OUT1",IDC_IO_REMAPPING_IGN_OUT1_CAPTION,0,11,50,13
     COMBOBOX        IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX,53,10,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
@@ -1365,6 +1369,10 @@ BEGIN
     RTEXT           "CKPS",IDC_IO_REMAPPING_CKPS_CAPTION,0,245,50,13
     COMBOBOX        IDC_IO_REMAPPING_CKPS_COMBOBOX,53,244,55,100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Инверсия",IDC_IO_REMAPPING_CKPS_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,244,48,12
+
+    RTEXT           "MAP_S",IDC_IO_REMAPPING_MAP_S_CAPTION,0,258,50,13
+    COMBOBOX        IDC_IO_REMAPPING_MAP_S_COMBOBOX,53,257,55,100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Инверсия", IDC_IO_REMAPPING_MAP_S_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,257,48,12
 END
 
 IDD_MAP_CALC DIALOGEX 0, 0, 211, 140
@@ -1486,6 +1494,7 @@ BEGIN
     IDS_IO_REMAPPING3I_INJ_O5_INV_TT "Инверсия не работает если выход INJ_O5 переназначен как PWM1, PWM2, FL_CONS или VTACHOM"
     IDS_IO_REMAPPING3I_BL_INV_TT     "Инверсия не работает если выход BL переназначен как PWM1, PWM2, FL_CONS или VTACHOM"
     IDS_IO_REMAPPING3I_DE_INV_TT     "Инверсия не работает если выход DE переназначен как PWM1, PWM2, FL_CONS или VTACHOM"
+    IDS_IO_REMAPPING_MAP_S_TT    "Вход ДАД. Может использоваться для подключения ДАД или ДМРВ."
 END
 
 STRINGTABLE
@@ -1558,7 +1567,7 @@ BEGIN
     IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Скорость уменьшения УОЗ в градусах за один такт двигателя."
     IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Скорость увеличения УОЗ в градусах за один такт двигателя."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Разрешить работу регулятора если на входе GAS_V высокий уровень"
-    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Выберите метод определения нагрузки двигателя: ДАД или ДАД(баро) (Speed-density), ДПДЗ (Alpha-N), ДАД+ДПДЗ (смешанный Speed-density + Alpha-N). В смешанном режиме используется таблица переключения ДАД/ДПДЗ. Если выбран режим ДАД(баро), то в качестве верхнего значения по оси нагрузки в таблицах будет использоваться не константа, а барометрическое давление."
+    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Выберите метод определения нагрузки двигателя: ДАД или ДАД(баро) (Speed-density), ДПДЗ (Alpha-N), ДАД+ДПДЗ (смешанный Speed-density + Alpha-N), ДМРВ (mass air flow). В смешанном режиме используется таблица переключения ДАД/ДПДЗ. Если выбран режим ДАД(баро), то в качестве верхнего значения по оси нагрузки в таблицах будет использоваться не константа, а барометрическое давление. Если выбран режим ДМРВ, то должна быть настроена таблица кривой расхода ДМРВ и указан правильный объем двигателя."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Выключать бензонасос при переходе на газ (высокий уровень на входе GAS_V)"
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Выключать форсунки при переходе на газ (высокий уровень на входе GAS_V)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Начало импульса относительно ВМТ (значение больше 0 соответствует началу импульса до ВМТ)"
@@ -1669,6 +1678,7 @@ BEGIN
     IDS_PD_LOAD_OPT_MAPTPS         "ДАД+ДПДЗ"
     IDS_PD_NBO                     "УДК"
     IDS_PD_WBO                     "ШДК"
+    IDS_PD_LOAD_OPT_MAF            "ДМРВ"
 END
 
 STRINGTABLE
@@ -1723,6 +1733,7 @@ BEGIN
     IDS_IO_REMAPPING3I_ADD_I6_TT  "Аналоговый вход 6. Доступен только в прошивках с поддержкой MCP3204"
     IDS_IO_REMAPPING3I_ADD_I7_TT  "Аналоговый вход 7. Доступен только в прошивках с поддержкой MCP3204"
     IDS_IO_REMAPPING3I_ADD_I8_TT  "Аналоговый вход 8. Доступен только в прошивках с поддержкой MCP3204"
+    IDS_IO_REMAPPING3I_MAP_I_TT   "Вход ДАД. Может быть использован для подключения ДАД или ДМРВ."
 END
 
 STRINGTABLE
@@ -1757,7 +1768,7 @@ BEGIN
     IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT "Верхний порог отсечки топлива. Подача топлива выключается когда обороты поднимаются выше этого порога."
     IDS_PD_CKPS_RISING_SPARK_TT "Если установить эту галочку, то прошивка будет генерировать импульсы для CDI. Импульс начинается в момент искры и заканчивается по истечении времени указанном в таблице времени накопления."
     IDS_PD_CKPS_USE_CAM_REF_TT "Возможность синхронизации от ДУИ+ДФ (например датчик на зубьях маховика и датчик фаз в трамблере)."
-    IDS_PD_CKPS_ENGINE_CYL_COMBO_TT "Количество цилиндров в вашем двигателе. Вы должны знать это число, с него и нужно начинать настройку блока SECU-3."
+    IDS_PD_CKPS_ENGINE_CYL_COMBO_TT "Количество цилиндров в вашем двигателе. Вы должны знать это число, с него и нужно начинать настройку блока SECU-3. После изменения числа цилиндров необходимо заново ввести значение параметра 'Объем двигателя' на вкладке 'Впрыск'."
     IDS_PD_MISC_UART_SPEED_COMBO_TT "Скорость (бит/сек), с которой блок SECU-3 принимает и передает данные. Для блока с процессором ATmega644 установите 57600, для блока с процессором ATmega1284 установите 115200."
     IDS_PD_MISC_PACKET_PERIOD_EDIT_TT "Определяет с какой частотой SECU-3 передает пакеты с данными. Чем меньше период передачи пакетов, тем больше вычислительных ресурсов прошивка и программа SECU-3 Manager будут затрачивать на их обработку."
     IDS_PD_MISC_INJ_OFFONPET_CHECK_TT "Выключать форсунки при переходе на бензин (низкий уровень на входе GAS_V)."
@@ -3123,6 +3134,10 @@ BEGIN
     COMBOBOX        IDC_IO_REMAPPING3I_ADD_I8_COMBOBOX,53,491,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Invert",IDC_IO_REMAPPING3I_ADD_I8_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,491,48,12
 
+    RTEXT           "MAP_I",IDC_IO_REMAPPING3I_MAP_I_CAPTION,0,505,50,13
+    COMBOBOX        IDC_IO_REMAPPING3I_MAP_I_COMBOBOX,53,504,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Invert",IDC_IO_REMAPPING3I_MAP_I_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,504,48,12
+
     //SECU-3T
     RTEXT           "IGN_OUT1",IDC_IO_REMAPPING_IGN_OUT1_CAPTION,0,11,50,13
     COMBOBOX        IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX,53,10,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
@@ -3199,6 +3214,10 @@ BEGIN
     RTEXT           "CKPS",IDC_IO_REMAPPING_CKPS_CAPTION,0,245,50,13
     COMBOBOX        IDC_IO_REMAPPING_CKPS_COMBOBOX,53,244,55,100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Invert",IDC_IO_REMAPPING_CKPS_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,244,48,12
+
+    RTEXT           "MAP_S",IDC_IO_REMAPPING_MAP_S_CAPTION,0,258,50,13
+    COMBOBOX        IDC_IO_REMAPPING_MAP_S_COMBOBOX,53,257,55,100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Invert", IDC_IO_REMAPPING_MAP_S_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,257,48,12
 END
 
 IDD_MAP_CALC DIALOGEX 0, 0, 211, 140
@@ -3345,6 +3364,7 @@ BEGIN
     IDS_IO_REMAPPING3I_INJ_O5_INV_TT "Inversion check doesn't work if INJ_O5 is reassigned to PWM1, PWM2, FL_CONS or VTACHOM"
     IDS_IO_REMAPPING3I_BL_INV_TT     "Inversion check doesn't work if BL is reassigned to PWM1, PWM2, FL_CONS or VTACHOM"
     IDS_IO_REMAPPING3I_DE_INV_TT     "Inversion check doesn't work if DE is reassigned to PWM1, PWM2, FL_CONS or VTACHOM"
+    IDS_IO_REMAPPING_MAP_S_TT    "MAP input. Can be used for connection of MAP or MAF sensors."
 END
 
 STRINGTABLE
@@ -3416,7 +3436,7 @@ BEGIN
     IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Specify decreasing speed of ignition timing in crankshaft degrees per one engine stroke."
     IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Specify increasing speed of ignition timing in crankshaft degrees per one engine stroke."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Enable working of regulator when on the GAS_V input is high level"
-    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Select engine load measuring method: using MAP or MAP(baro) (Speed-density), TPS (Alpha-N) or MAP+TPS (mixed). In mixed mode additional table used for switching between MAP and TPS. If the MAP(baro) mode is selected, then the barometric pressure will be used as the upper value along the load axis in the maps instead of a constant value."
+    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Select engine load measuring method: using MAP or MAP(baro) (Speed-density), TPS (Alpha-N), MAP+TPS (mixed) or MAF (MAF/RPM). In mixed mode additional table used for switching between MAP and TPS. If the MAP(baro) mode is selected, then the barometric pressure will be used as the upper value along the load axis in the maps instead of a constant value. If MAF mode is selected, then MAF flow curve map should be tuned and correct engine displacement must be specified."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Turn off petrol fuel pump when switching ot gas (high level at the GAS_V input)"
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Turn off fuel injectors when switching ot gas (high level at the GAS_V input)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Beginning of pulse relatively to TDC (if value > 0, then before TDC)"
@@ -3527,6 +3547,7 @@ BEGIN
     IDS_PD_LOAD_OPT_MAPTPS         "MAP+TPS"
     IDS_PD_NBO                     "NBO"
     IDS_PD_WBO                     "WBO"
+    IDS_PD_LOAD_OPT_MAF            "MAF"
 END
 
 STRINGTABLE
@@ -3580,6 +3601,7 @@ BEGIN
     IDS_IO_REMAPPING3I_ADD_I6_TT  "Analog input 6. Awailable only in firmware with MCP3204 support"
     IDS_IO_REMAPPING3I_ADD_I7_TT  "Analog input 7. Awailable only in firmware with MCP3204 support"
     IDS_IO_REMAPPING3I_ADD_I8_TT  "Analog input 8. Awailable only in firmware with MCP3204 support"
+    IDS_IO_REMAPPING3I_MAP_I_TT   "MAP input. Can be used for connection of MAP or MAF sensors."
 END
 
 STRINGTABLE
@@ -3614,7 +3636,7 @@ BEGIN
     IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT "Fuel cutoff upper threshold. Fuel supply is turned off when the engine speed raises above this threshold."
     IDS_PD_CKPS_RISING_SPARK_TT "If you check this box, the firmware will generate pulses for CDI. The pulse starts at the moment of spark and ends after the time specified in the dwell time table."
     IDS_PD_CKPS_USE_CAM_REF_TT "Allows synchronization from two sensors (CKP+cam) with non-missing tooth wheel (e.g. flywheel) and cam sensor (1 tooth)."
-    IDS_PD_CKPS_ENGINE_CYL_COMBO_TT "Number of cylinders in your engine. You should know this number, which is a good start point in tuning of the SECU-3 unit."
+    IDS_PD_CKPS_ENGINE_CYL_COMBO_TT "Number of cylinders in your engine. You should know this number, which is a good start point in tuning of the SECU-3 unit. After changing the number of cylinders, it is necessary to re-enter the value of the 'Engine displacement' parameter on the 'Fuel injection' tab."
     IDS_PD_MISC_UART_SPEED_COMBO_TT "The speed (bit/sec) at which SECU-3 receives and transmits data. For unit with ATmega644 processor, set 57600, for unit with ATmega1284 processor, set 115200."
     IDS_PD_MISC_PACKET_PERIOD_EDIT_TT "Sets how often SECU-3 transmits data packets. The shorter the packet transmission period, the more computing resources firmware and SECU-3 Manager program will spend on their processing."
     IDS_PD_MISC_INJ_OFFONPET_CHECK_TT "Turn off injectors when switching ot petrol (low level at the GAS_V input)."

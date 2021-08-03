@@ -253,6 +253,11 @@ typedef struct
  //injection PW coefficient vs voltage
  _int injpw_coef[INJPWCOEF_LUT_SIZE];
 
+ //MAF flow curve
+ _uint maf_curve[MAF_FLOW_CURVE_SIZE+1];
+
+ _uchar reserved1[1429];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -309,7 +314,7 @@ typedef struct
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3559];
+ _uchar reserved[2000];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1494,6 +1499,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetEgtsCurveMap(op_fwd->egts_curve);
  GetOpsCurveMap(op_fwd->ops_curve);
  GetManInjPwcMap(op_fwd->injpw_coef);
+ GetMAFCurveMap(op_fwd->maf_curve);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1581,6 +1587,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetEgtsCurveMap(ip_fwd->egts_curve);
  SetOpsCurveMap(ip_fwd->ops_curve);
  SetManInjPwcMap(ip_fwd->injpw_coef);
+ SetMAFCurveMap(ip_fwd->maf_curve);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2440,6 +2447,32 @@ void CFirmwareDataMediator::SetManInjPwcMap(const float* ip_values)
 
  for (int i = 0; i < INJPWCOEF_LUT_SIZE; i++ )
   p_fd->exdata.injpw_coef[i] = MathHelpers::Round((ip_values[i]*INJPWCOEF_MULT));
+}
+
+void CFirmwareDataMediator::GetMAFCurveMap(float* op_values, bool i_original /* = false*/)
+{
+ ASSERT(op_values);
+
+ //get address of the beginning of set of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < MAF_FLOW_CURVE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.maf_curve[i]) / MAF_FLOW_CURVE_MULT;
+
+ op_values[i] = (float)p_fd->exdata.maf_curve[i]; //copy value of Y-axis maximum
+}
+
+void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //get address of the beginning of set of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < MAF_FLOW_CURVE_SIZE; i++ )
+  p_fd->exdata.maf_curve[i] = MathHelpers::Round((ip_values[i]*MAF_FLOW_CURVE_MULT));
+
+ p_fd->exdata.maf_curve[i] = MathHelpers::Round(ip_values[i]); //copy value of Y-axis maximum
 }
 
 //--------------------------------------------------------------------------------

@@ -33,6 +33,7 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 #include "ui-core/MsgBox.h"
+#include "common/Calculations.h"
 
 const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
 
@@ -140,6 +141,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
 , m_fff_const_edit(CEditEx::MODE_FLOAT, true)
 , m_ovf_msgbox(false)
+, m_maf_ovf_msgbox(false)
 , mp_scr(new CWndScroller)
 , m_itmode(0)
 {
@@ -167,6 +169,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
   m_params.inj_timing_crk[i] = 0; 
   m_params.inj_anglespec[i] = 0;
   m_params.inj_min_pw[i] = 1.0f; 
+  m_params.inj_maf_const[i] = 0;
  }
 
  m_params.inj_cyl_disp = 0.375f;
@@ -177,6 +180,8 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
  m_params.inj_useaddcorrs = false;
  m_params.inj_usediffpress = false;
  m_params.inj_secinjrowswt = false;
+ 
+ m_params.mafload_const = 0;
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
@@ -531,7 +536,24 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
     m_ovf_msgbox = false;
    }
   }
+
+  //calculate constant used for calculation of inj. PW using MAF.
+  m_params.inj_maf_const[i] = (float)(((120.0 * 18750000.0) / mifr * (double(bnk_num) / (double(inj_num) * double(m_params.inj_squirt_num[i])))) / 64.0);
+  if (m_params.inj_maf_const[i] > 103200)
+  {
+   m_params.inj_maf_const[i] = 103200;
+   if (!m_maf_ovf_msgbox)
+   {
+    m_maf_ovf_msgbox = true;
+    SECUMessageBox(_T("Overflow detected when calculating constant for MAF inj. PW equetion! Change configuration to eliminate this error."));
+    m_maf_ovf_msgbox = false;
+   }
+  }
+
  } //for
+
+ //calculate constant used for calculation of MAF load (synthetic load)
+ m_params.mafload_const = calc::calcMAFLoadConst(m_params.inj_cyl_disp, m_params.cyl_num);
 
  memcpy(o_values,&m_params, sizeof(SECU3IO::InjctrPar));
 }

@@ -90,13 +90,14 @@ enum EFWDFlags
  FLAG_EGTSCURVE_MAP = 53,    //separate
  FLAG_OPSCURVE_MAP  = 54,    //separate
  FLAG_MANINJPWC_MAP = 55,    //separate
+ FLAG_MAFCURVE_MAP  = 56,    //separate
 
- FLAG_NR_OF_FLAGS   = 56,    //total number of flags
+ FLAG_NR_OF_FLAGS   = 57,    //total number of flags
 
  FLAG_SET_START     = 0,
  FLAG_SET_END       = 29,
  FLAG_SEP_START     = 30,
- FLAG_SEP_END       = 55,
+ FLAG_SEP_END       = 56,
 };
 
 class CToolTipCtrlEx;

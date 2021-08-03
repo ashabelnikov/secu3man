@@ -49,6 +49,7 @@ set(HEADERS
   MITPSDot.h
   MIMap2.h
   MIMapD.h
+  MIMaf.h
   MITemp2.h
   MIGrts.h
   MIFuelConsum.h
@@ -91,6 +92,7 @@ set (SOURCES
   MITPSDot.cpp
   MIMap2.cpp
   MIMapD.cpp
+  MIMaf.cpp
   MITemp2.cpp
   MIGrts.cpp
   MIFuelConsum.cpp

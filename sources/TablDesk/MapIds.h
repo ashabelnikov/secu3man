@@ -84,14 +84,15 @@ enum EMapTypes
  TYPE_MAP_EGTS_CURVE    = 53, //
  TYPE_MAP_OPS_CURVE     = 54, //
  TYPE_MAP_MANINJPWC     = 55, //
+ TYPE_MAP_MAF_CURVE     = 56, //
 
- TYPE_MAP_GME_IGN_WND   = 56, //pseudo map, grid mode editing window for ignition maps
- TYPE_MAP_GME_INJ_WND   = 57, //pseudo map, grid mode editing window for injection maps
+ TYPE_MAP_GME_IGN_WND   = 57, //pseudo map, grid mode editing window for ignition maps
+ TYPE_MAP_GME_INJ_WND   = 58, //pseudo map, grid mode editing window for injection maps
 
  TYPE_MAP_SET_START     = 1,
  TYPE_MAP_SET_END       = 30,
  TYPE_MAP_ALL_START     = 1,
- TYPE_MAP_ALL_END       = 57,
+ TYPE_MAP_ALL_END       = 58,
  TYPE_MAP_SEP_START     = 31,
- TYPE_MAP_SEP_END       = 55
+ TYPE_MAP_SEP_END       = 56
 };
