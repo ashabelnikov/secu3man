@@ -637,7 +637,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int maf = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &maf, true))
   return false;
- sensorDat.maf = ((float)maf) / 64.0f;
+ sensorDat.maf = ((float)maf) / MAFS_MULT;
 
  return true;
 }
@@ -4453,6 +4453,7 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_TMP2: return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_INPUT1: return MathHelpers::Round(val);
   case UNIOUT_COND_INPUT2: return MathHelpers::Round(val);
+  case UNIOUT_COND_MAF:  return MathHelpers::Round(val * MAFS_MULT);
  }
  return 0;
 }
@@ -4500,6 +4501,7 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_TMP2: return ((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
   case UNIOUT_COND_INPUT1: return (float)val;
   case UNIOUT_COND_INPUT2: return (float)val;
+  case UNIOUT_COND_MAF:  return (((float)val) / MAFS_MULT);
  }
  return .0f;
 }
