@@ -60,6 +60,7 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I7_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I8_FACTOR_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I8_CORRECTION_EDIT, OnChangeEdit)
+ ON_BN_CLICKED(IDC_PD_ADCCOMPEN_MODE_CHECK, OnChangeEdit)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_CAPTION, OnUpdateControls)
@@ -73,6 +74,7 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I6_CAPTION, OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I7_CAPTION, OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I8_CAPTION, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MODE_CHECK, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, OnUpdateControls)
@@ -187,6 +189,7 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ai7_adc_correction = 0.0f;
  m_params.ai8_adc_factor = 1.0f;
  m_params.ai8_adc_correction = 0.0f;
+ m_params.adc_comp_mode = true;
 }
 
 CADCCompenPageDlg::~CADCCompenPageDlg()
@@ -262,6 +265,8 @@ void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I8_FACTOR_EDIT, m_ai8_factor_edit);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I8_CORRECTION_EDIT, m_ai8_correction_edit);
 
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_MODE_CHECK, m_adc_comp_mode_check);
+
  m_map_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, m_params.map_adc_factor);
  m_map_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, m_params.map_adc_correction);
 
@@ -297,6 +302,8 @@ void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
 
  m_ai8_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I8_FACTOR_EDIT, m_params.ai8_adc_factor);
  m_ai8_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I8_CORRECTION_EDIT, m_params.ai8_adc_correction);
+
+ DDX_Check_bool(pDX, IDC_PD_ADCCOMPEN_MODE_CHECK, m_params.adc_comp_mode);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -532,6 +539,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_ai8_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ai8_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_adc_comp_mode_check, MLL::GetString(IDS_PD_ADCCOMPEN_MODE_CHECK_TT)));
+
  //initialize window scroller
  mp_scr->Init(this);
 
@@ -619,5 +628,5 @@ void CADCCompenPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(480));
+  mp_scr->SetViewSize(cx, da.ScaleY(500));
 }

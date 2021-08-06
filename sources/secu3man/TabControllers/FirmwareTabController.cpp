@@ -2072,6 +2072,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Low dead band for cooling fan's PWM"), _T("N"), 0, 60, 1, 1, &d.vent_minband, _T("If the current step number (duty) is less than this value, the fan turns off completely (or does not turn on). This is necessary so that the PWM in vain does not 'torment' the fan's brushes when duty cycle is not enough to create torque to rotate the shaft."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Число шагов ШИМ используемое при работе кондиционера"), _T("N"), 0, 60, 1, 1, &d.vent_maxband, _T("При работе кондиционера скважность ШИМ вентилятора будет определяться этим числом шагов."));
+ else
+  dfd.AppendItem(_T("Number of PWM steps used with air conditioner"), _T("N"), 0, 60, 1, 1, &d.vent_maxband, _T("When the air conditioner is on, the duty cycle of the fan's PWM will be determined by this number of steps."));
+
  //miscellaneous
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Прочие константы:"));

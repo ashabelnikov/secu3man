@@ -1353,6 +1353,27 @@ void __cdecl CTablesSetPanel::OnCloseMAFCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeMAFCurveXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetMAFCurveMap(false)[64 + 1 + i_type] = i_value;
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_MAF_CURVE);
+}
+
+//------------------------------------------------------------------------
 void __cdecl CTablesSetPanel::OnWndActivationMAFCurveTable(void* i_param, long cmd)
 {
  CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
@@ -1402,9 +1423,10 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
   rpm+=60;
  }
 
+/*
  for(size_t i = 0; i < 64; ++i)
   m_mafcurve_slots[i] = (float)((5.0*i) / 63.0);
-
+*/
  memset(m_cts_curve_x_axis_limits, 0, sizeof(float) * 2);
  memset(m_ats_curve_x_axis_limits, 0, sizeof(float) * 2);
 }
@@ -2983,11 +3005,13 @@ void CTablesSetPanel::OnViewMAFCurveMap()
  if ((!m_md[TYPE_MAP_MAF_CURVE].state)&&(DLL::Chart2DCreate))
  {
   m_md[TYPE_MAP_MAF_CURVE].state = 1;
-  m_md[TYPE_MAP_MAF_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetMAFCurveMap(true),GetMAFCurveMap(false), 0.0, 650.0, m_mafcurve_slots, 64,
+  m_md[TYPE_MAP_MAF_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetMAFCurveMap(true),GetMAFCurveMap(false), 0.0, 650.0, /*m_mafcurve_slots*/NULL, 64,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAF_UNIT).c_str(),
     MLL::GetString(IDS_MAF_CURVE_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_MAF_CURVE].handle, 1, _T("%.03f"));
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_MAF_CURVE].handle, 1, true, 0, 5.00f, 0, 5.00f, 0.01f, -1, -1, OnChangeMAFCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_MAF_CURVE].handle, 1, NULL, NULL);
   DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_MAF_CURVE].handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_MAF_CURVE].handle, m_md[TYPE_MAP_MAF_CURVE].ptMovStep);
   DLL::Chart2DSetOnChange(m_md[TYPE_MAP_MAF_CURVE].handle,OnChangeMAFCurveTable,this);
@@ -2995,6 +3019,7 @@ void CTablesSetPanel::OnViewMAFCurveMap()
   DLL::Chart2DSetOnClose(m_md[TYPE_MAP_MAF_CURVE].handle,OnCloseMAFCurveTable,this);
   DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_MAF_CURVE].handle, OnWndActivationMAFCurveTable, this);
   DLL::Chart2DUpdate(m_md[TYPE_MAP_MAF_CURVE].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_MAF_CURVE].handle, 1, GetMAFCurveMap(false)[64+1], GetMAFCurveMap(false)[64+2]);
 
   //let controller to know about opening of this window
   OnOpenMapWnd(m_md[TYPE_MAP_MAF_CURVE].handle, TYPE_MAP_MAF_CURVE);

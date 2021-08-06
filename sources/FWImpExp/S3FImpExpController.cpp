@@ -204,7 +204,7 @@ void S3FImportController::OnOkPressed(void)
   memcpy(mp_fwd->injpw_coef, mp_s3f_io->GetData().injpw_coef, sizeof(float) * (INJPWCOEF_LUT_SIZE));
 
  if (mp_view->GetFWDFlag(FLAG_MAFCURVE_MAP))
-  memcpy(mp_fwd->maf_curve, mp_s3f_io->GetData().maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+1));
+  memcpy(mp_fwd->maf_curve, mp_s3f_io->GetData().maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+1+2));
 
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
@@ -660,7 +660,7 @@ void S3FExportController::OnOkPressed(void)
   memcpy(mp_s3f_io->GetDataLeft().injpw_coef, mp_fwd->injpw_coef, sizeof(float) * (INJPWCOEF_LUT_SIZE));
 
  if (mp_view->GetFWDFlag(FLAG_MAFCURVE_MAP))
-  memcpy(mp_s3f_io->GetDataLeft().maf_curve, mp_fwd->maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+1));
+  memcpy(mp_s3f_io->GetDataLeft().maf_curve, mp_fwd->maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+1+2));
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)

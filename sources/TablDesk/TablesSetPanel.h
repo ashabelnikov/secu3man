@@ -338,6 +338,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   static void __cdecl OnChangeMAFCurveTable(void* i_param);
   static void __cdecl OnCloseMAFCurveTable(void* i_param);
+  static void __cdecl OnChangeMAFCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationMAFCurveTable(void* i_param, long cmd);
 
   bool m_dwellcntrl_enabled;
@@ -358,5 +359,5 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
-  float m_mafcurve_slots[64];
+/*  float m_mafcurve_slots[64];*/
 };

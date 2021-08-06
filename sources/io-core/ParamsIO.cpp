@@ -175,76 +175,78 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
   case ADCCOR_PAR:
    {
     ADCCompenPar* p_in = (ADCCompenPar*)ip_values;
+    WRITEBIT8(p_params->adc_flags, 0, p_in->adc_comp_mode);
+
     p_params->map_adc_factor      = MathHelpers::Round(p_in->map_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long map_correction_d  = MathHelpers::Round((-p_in->map_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->map_adc_correction  = MathHelpers::Round(16384 * (0.5f - map_correction_d * p_in->map_adc_factor));
+    p_params->map_adc_correction  = MathHelpers::Round(16384 * (0.5f - map_correction_d * (p_in->adc_comp_mode ? p_in->map_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->temp_adc_factor     = MathHelpers::Round(p_in->temp_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long temp_correction_d = MathHelpers::Round((-p_in->temp_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * p_in->temp_adc_factor));
+    p_params->temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * (p_in->adc_comp_mode ? p_in->temp_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ubat_adc_factor     = MathHelpers::Round(p_in->ubat_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ubat_correction_d = MathHelpers::Round((-p_in->ubat_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ubat_adc_correction = MathHelpers::Round(16384 * (0.5f - ubat_correction_d * p_in->ubat_adc_factor));
+    p_params->ubat_adc_correction = MathHelpers::Round(16384 * (0.5f - ubat_correction_d * (p_in->adc_comp_mode ? p_in->ubat_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->tps_adc_factor     = MathHelpers::Round(p_in->tps_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long tps_correction_d = MathHelpers::Round((-p_in->tps_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->tps_adc_correction = MathHelpers::Round(16384 * (0.5f - tps_correction_d * p_in->tps_adc_factor));
+    p_params->tps_adc_correction = MathHelpers::Round(16384 * (0.5f - tps_correction_d * (p_in->adc_comp_mode ? p_in->tps_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai1_adc_factor     = MathHelpers::Round(p_in->ai1_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai1_correction_d = MathHelpers::Round((-p_in->ai1_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai1_adc_correction = MathHelpers::Round(16384 * (0.5f - ai1_correction_d * p_in->ai1_adc_factor));
+    p_params->ai1_adc_correction = MathHelpers::Round(16384 * (0.5f - ai1_correction_d * (p_in->adc_comp_mode ? p_in->ai1_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai2_adc_factor     = MathHelpers::Round(p_in->ai2_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai2_correction_d = MathHelpers::Round((-p_in->ai2_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai2_adc_correction = MathHelpers::Round(16384 * (0.5f - ai2_correction_d * p_in->ai2_adc_factor));
+    p_params->ai2_adc_correction = MathHelpers::Round(16384 * (0.5f - ai2_correction_d * (p_in->adc_comp_mode ? p_in->ai2_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai3_adc_factor     = MathHelpers::Round(p_in->ai3_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai3_correction_d = MathHelpers::Round((-p_in->ai3_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai3_adc_correction = MathHelpers::Round(16384 * (0.5f - ai3_correction_d * p_in->ai3_adc_factor));
+    p_params->ai3_adc_correction = MathHelpers::Round(16384 * (0.5f - ai3_correction_d * (p_in->adc_comp_mode ? p_in->ai3_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai4_adc_factor     = MathHelpers::Round(p_in->ai4_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai4_correction_d = MathHelpers::Round((-p_in->ai4_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai4_adc_correction = MathHelpers::Round(16384 * (0.5f - ai4_correction_d * p_in->ai4_adc_factor));
+    p_params->ai4_adc_correction = MathHelpers::Round(16384 * (0.5f - ai4_correction_d * (p_in->adc_comp_mode ? p_in->ai4_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai5_adc_factor     = MathHelpers::Round(p_in->ai5_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai5_correction_d = MathHelpers::Round((-p_in->ai5_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai5_adc_correction = MathHelpers::Round(16384 * (0.5f - ai5_correction_d * p_in->ai5_adc_factor));
+    p_params->ai5_adc_correction = MathHelpers::Round(16384 * (0.5f - ai5_correction_d * (p_in->adc_comp_mode ? p_in->ai5_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai6_adc_factor     = MathHelpers::Round(p_in->ai6_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai6_correction_d = MathHelpers::Round((-p_in->ai6_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai6_adc_correction = MathHelpers::Round(16384 * (0.5f - ai6_correction_d * p_in->ai6_adc_factor));
+    p_params->ai6_adc_correction = MathHelpers::Round(16384 * (0.5f - ai6_correction_d * (p_in->adc_comp_mode ? p_in->ai6_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai7_adc_factor     = MathHelpers::Round(p_in->ai7_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai7_correction_d = MathHelpers::Round((-p_in->ai7_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai7_adc_correction = MathHelpers::Round(16384 * (0.5f - ai7_correction_d * p_in->ai7_adc_factor));
+    p_params->ai7_adc_correction = MathHelpers::Round(16384 * (0.5f - ai7_correction_d * (p_in->adc_comp_mode ? p_in->ai7_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
 
     p_params->ai8_adc_factor     = MathHelpers::Round(p_in->ai8_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long ai8_correction_d = MathHelpers::Round((-p_in->ai8_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-    p_params->ai8_adc_correction = MathHelpers::Round(16384 * (0.5f - ai8_correction_d * p_in->ai8_adc_factor));
+    p_params->ai8_adc_correction = MathHelpers::Round(16384 * (0.5f - ai8_correction_d * (p_in->adc_comp_mode ? p_in->ai8_adc_factor : 1.0f)));
     //-------------------------------------------------------------------------
    }
    break;
@@ -586,21 +588,24 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
    case ADCCOR_PAR:
     {
      ADCCompenPar* p_out = (ADCCompenPar*)op_values;
+
+     p_out->adc_comp_mode = CHECKBIT8(p_params->adc_flags, 0);
+
      p_out->map_adc_factor      = ((float)p_params->map_adc_factor) / 16384;
      //-------------------------------------------------------------------------
-     p_out->map_adc_correction  = ((((float)p_params->map_adc_correction)/16384.0f) - 0.5f) / p_out->map_adc_factor;
+     p_out->map_adc_correction  = ((((float)p_params->map_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->map_adc_factor : 1.0f);
      p_out->map_adc_correction*=ADC_DISCRETE; //в вольты
      //-------------------------------------------------------------------------
 
      p_out->temp_adc_factor     = ((float)p_params->temp_adc_factor) / 16384;
      //-------------------------------------------------------------------------
-     p_out->temp_adc_correction = ((((float)p_params->temp_adc_correction)/16384.0f) - 0.5f) / p_out->temp_adc_factor;
+     p_out->temp_adc_correction = ((((float)p_params->temp_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->temp_adc_factor : 1.0f);
      p_out->temp_adc_correction*=ADC_DISCRETE; //в вольты
      //-------------------------------------------------------------------------
 
      p_out->ubat_adc_factor     = ((float)p_params->ubat_adc_factor) / 16384;
      //-------------------------------------------------------------------------
-     p_out->ubat_adc_correction = ((((float)p_params->ubat_adc_correction)/16384.0f) - 0.5f) / p_out->ubat_adc_factor;
+     p_out->ubat_adc_correction = ((((float)p_params->ubat_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ubat_adc_factor : 1.0f);
      p_out->ubat_adc_correction*=ADC_DISCRETE; //в вольты
      //-------------------------------------------------------------------------
 
@@ -608,7 +613,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->tps_adc_factor > 0)
      {
-      p_out->tps_adc_correction = ((((float)p_params->tps_adc_correction)/16384.0f) - 0.5f) / p_out->tps_adc_factor;
+      p_out->tps_adc_correction = ((((float)p_params->tps_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->tps_adc_factor : 1.0f);
       p_out->tps_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -619,7 +624,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai1_adc_factor > 0)
      {
-      p_out->ai1_adc_correction = ((((float)p_params->ai1_adc_correction)/16384.0f) - 0.5f) / p_out->ai1_adc_factor;
+      p_out->ai1_adc_correction = ((((float)p_params->ai1_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai1_adc_factor : 1.0f);
       p_out->ai1_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -630,7 +635,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai2_adc_factor > 0)
      {
-      p_out->ai2_adc_correction = ((((float)p_params->ai2_adc_correction)/16384.0f) - 0.5f) / p_out->ai2_adc_factor;
+      p_out->ai2_adc_correction = ((((float)p_params->ai2_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai2_adc_factor : 1.0f);
       p_out->ai2_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -641,7 +646,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai3_adc_factor > 0)
      {
-      p_out->ai3_adc_correction = ((((float)p_params->ai3_adc_correction)/16384.0f) - 0.5f) / p_out->ai3_adc_factor;
+      p_out->ai3_adc_correction = ((((float)p_params->ai3_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai3_adc_factor : 1.0f);
       p_out->ai3_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -652,7 +657,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai4_adc_factor > 0)
      {
-      p_out->ai4_adc_correction = ((((float)p_params->ai4_adc_correction)/16384.0f) - 0.5f) / p_out->ai4_adc_factor;
+      p_out->ai4_adc_correction = ((((float)p_params->ai4_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai4_adc_factor : 1.0f);
       p_out->ai4_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -663,7 +668,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai5_adc_factor > 0)
      {
-      p_out->ai5_adc_correction = ((((float)p_params->ai5_adc_correction)/16384.0f) - 0.5f) / p_out->ai5_adc_factor;
+      p_out->ai5_adc_correction = ((((float)p_params->ai5_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai5_adc_factor : 1.0f);
       p_out->ai5_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -674,7 +679,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai6_adc_factor > 0)
      {
-      p_out->ai6_adc_correction = ((((float)p_params->ai6_adc_correction)/16384.0f) - 0.5f) / p_out->ai6_adc_factor;
+      p_out->ai6_adc_correction = ((((float)p_params->ai6_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai6_adc_factor : 1.0f);
       p_out->ai6_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -685,7 +690,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai7_adc_factor > 0)
      {
-      p_out->ai7_adc_correction = ((((float)p_params->ai7_adc_correction)/16384.0f) - 0.5f) / p_out->ai7_adc_factor;
+      p_out->ai7_adc_correction = ((((float)p_params->ai7_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai7_adc_factor : 1.0f);
       p_out->ai7_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else
@@ -696,7 +701,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      //-------------------------------------------------------------------------
      if (p_out->ai8_adc_factor > 0)
      {
-      p_out->ai8_adc_correction = ((((float)p_params->ai8_adc_correction)/16384.0f) - 0.5f) / p_out->ai8_adc_factor;
+      p_out->ai8_adc_correction = ((((float)p_params->ai8_adc_correction)/16384.0f) - 0.5f) / (p_out->adc_comp_mode ? p_out->ai8_adc_factor : 1.0f);
       p_out->ai8_adc_correction*=ADC_DISCRETE; //в вольты
      }
      else

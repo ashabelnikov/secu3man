@@ -254,9 +254,9 @@ typedef struct
  _int injpw_coef[INJPWCOEF_LUT_SIZE];
 
  //MAF flow curve
- _uint maf_curve[MAF_FLOW_CURVE_SIZE+1];
+ _uint maf_curve[MAF_FLOW_CURVE_SIZE+1+2];
 
- _uchar reserved1[1429];
+ _uchar reserved1[1425];
 
  //firmware constants:
  _int evap_clt;
@@ -310,11 +310,12 @@ typedef struct
  _uchar cold_eng_int;
  _uchar iacreg_period;
  _int iacreg_turn_on_temp;
+ _uchar vent_maxband;
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2000];
+ _uchar reserved[1999];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2460,6 +2461,10 @@ void CFirmwareDataMediator::GetMAFCurveMap(float* op_values, bool i_original /* 
   op_values[i] = ((float)p_fd->exdata.maf_curve[i]) / MAF_FLOW_CURVE_MULT;
 
  op_values[i] = (float)p_fd->exdata.maf_curve[i]; //copy value of Y-axis maximum
+ i++;
+
+ for (; i < MAF_FLOW_CURVE_SIZE+3; i++ )
+  op_values[i] = ((float)p_fd->exdata.maf_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
@@ -2473,6 +2478,10 @@ void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
   p_fd->exdata.maf_curve[i] = MathHelpers::Round((ip_values[i]*MAF_FLOW_CURVE_MULT));
 
  p_fd->exdata.maf_curve[i] = MathHelpers::Round(ip_values[i]); //copy value of Y-axis maximum
+ i++;
+
+ for (; i < MAF_FLOW_CURVE_SIZE+3; i++ )
+  p_fd->exdata.maf_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 //--------------------------------------------------------------------------------
@@ -2862,6 +2871,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.iacreg_period = ((float)exd.iacreg_period) / 100.0f; //convert to sec
  
  o_data.iacreg_turn_on_temp = ((float)exd.iacreg_turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ o_data.vent_maxband = exd.vent_maxband;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2928,4 +2939,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.iacreg_period = MathHelpers::Round(i_data.iacreg_period * 100.0f);
 
  exd.iacreg_turn_on_temp = MathHelpers::Round(i_data.iacreg_turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ exd.vent_maxband = i_data.vent_maxband;
 }

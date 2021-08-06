@@ -134,4 +134,6 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_ai8_correction_spin;
   CEditEx m_ai8_factor_edit;
   CEditEx m_ai8_correction_edit;
+
+  CButton m_adc_comp_mode_check;
 };

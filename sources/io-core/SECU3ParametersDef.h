@@ -294,10 +294,12 @@ typedef struct params_t
  _ulong inj_maf_const[2];              // Constant used to calculate inj. PW with MAF.  Const = (((120 * 18750000) / Ifr ) * (Nbnk / (Nsq * Ninj))) / 64
  _ulong mafload_const;                 // Constant used to calculate synthetic load based on MAF. Const = (((101.35 * 64 * 128) * 120) / (64 * 0.0012041)) / (CYL_DISP * Ncyl), where CYL_DISP is in cc units
 
+ _uchar adc_flags;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[162];
+ _uchar reserved[161];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

@@ -1276,8 +1276,14 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ADCCompenPar& adcCompenPar = m_recepted_packet.m_ADCCompenPar;
- if (size != (mp_pdp->isHex() ? 144 : 72))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 146 : 73))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
+
+ //ADC flags
+ unsigned char flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
+  return false;
+ adcCompenPar.adc_comp_mode = CHECKBIT8(flags, 0);
 
  signed int map_adc_factor = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&map_adc_factor))
@@ -1287,7 +1293,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long map_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&map_adc_correction))
   return false;
- adcCompenPar.map_adc_correction = ((((float)map_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.map_adc_factor;
+ adcCompenPar.map_adc_correction = ((((float)map_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.map_adc_factor : 1.0f);
  adcCompenPar.map_adc_correction*=m_adc_discrete; //в вольты
 
  signed int ubat_adc_factor = 0;
@@ -1298,7 +1304,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ubat_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ubat_adc_correction))
   return false;
- adcCompenPar.ubat_adc_correction = ((((float)ubat_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ubat_adc_factor;
+ adcCompenPar.ubat_adc_correction = ((((float)ubat_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ubat_adc_factor : 1.0f);
  adcCompenPar.ubat_adc_correction*=m_adc_discrete; //в вольты
 
  signed int temp_adc_factor = 0;
@@ -1309,7 +1315,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long temp_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&temp_adc_correction))
   return false;
- adcCompenPar.temp_adc_correction = ((((float)temp_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.temp_adc_factor;
+ adcCompenPar.temp_adc_correction = ((((float)temp_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.temp_adc_factor : 1.0f);
  adcCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты
  
  //TPS sensor
@@ -1321,7 +1327,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long tps_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&tps_adc_correction))
   return false;
- adcCompenPar.tps_adc_correction = ((((float)tps_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.tps_adc_factor;
+ adcCompenPar.tps_adc_correction = ((((float)tps_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.tps_adc_factor : 1.0f);
  adcCompenPar.tps_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I1 input
@@ -1333,7 +1339,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai1_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai1_adc_correction))
   return false;
- adcCompenPar.ai1_adc_correction = ((((float)ai1_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai1_adc_factor;
+ adcCompenPar.ai1_adc_correction = ((((float)ai1_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai1_adc_factor : 1.0f);
  adcCompenPar.ai1_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I2 input
@@ -1345,7 +1351,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai2_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai2_adc_correction))
   return false;
- adcCompenPar.ai2_adc_correction = ((((float)ai2_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai2_adc_factor;
+ adcCompenPar.ai2_adc_correction = ((((float)ai2_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai2_adc_factor : 1.0f);
  adcCompenPar.ai2_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I3 input
@@ -1357,7 +1363,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai3_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai3_adc_correction))
   return false;
- adcCompenPar.ai3_adc_correction = ((((float)ai3_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai3_adc_factor;
+ adcCompenPar.ai3_adc_correction = ((((float)ai3_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai3_adc_factor : 1.0f);
  adcCompenPar.ai3_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I4 input
@@ -1369,7 +1375,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai4_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai4_adc_correction))
   return false;
- adcCompenPar.ai4_adc_correction = ((((float)ai4_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai4_adc_factor;
+ adcCompenPar.ai4_adc_correction = ((((float)ai4_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai4_adc_factor : 1.0f);
  adcCompenPar.ai4_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I5 input
@@ -1381,7 +1387,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai5_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai5_adc_correction))
   return false;
- adcCompenPar.ai5_adc_correction = ((((float)ai5_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai5_adc_factor;
+ adcCompenPar.ai5_adc_correction = ((((float)ai5_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai5_adc_factor : 1.0f);
  adcCompenPar.ai5_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I6 input
@@ -1393,7 +1399,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai6_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai6_adc_correction))
   return false;
- adcCompenPar.ai6_adc_correction = ((((float)ai6_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai6_adc_factor;
+ adcCompenPar.ai6_adc_correction = ((((float)ai6_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai6_adc_factor : 1.0f);
  adcCompenPar.ai6_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I7 input
@@ -1405,7 +1411,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai7_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai7_adc_correction))
   return false;
- adcCompenPar.ai7_adc_correction = ((((float)ai7_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai7_adc_factor;
+ adcCompenPar.ai7_adc_correction = ((((float)ai7_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai7_adc_factor : 1.0f);
  adcCompenPar.ai7_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_I4 input
@@ -1417,7 +1423,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  signed long ai8_adc_correction = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet,&ai8_adc_correction))
   return false;
- adcCompenPar.ai8_adc_correction = ((((float)ai8_adc_correction)/16384.0f) - 0.5f) / adcCompenPar.ai8_adc_factor;
+ adcCompenPar.ai8_adc_correction = ((((float)ai8_adc_correction)/16384.0f) - 0.5f) / (adcCompenPar.adc_comp_mode ? adcCompenPar.ai8_adc_factor : 1.0f);
  adcCompenPar.ai8_adc_correction*=m_adc_discrete; //в вольты
 
  return true;
@@ -3578,76 +3584,80 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
 {
+ unsigned char flags = 0;
+ WRITEBIT8(flags, 0, packet_data->adc_comp_mode);
+ mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+
  signed int map_adc_factor = MathHelpers::Round(packet_data->map_adc_factor * 16384);
  mp_pdp->Bin16ToHex(map_adc_factor,m_outgoing_packet);
  signed long map_correction_d = MathHelpers::Round((-packet_data->map_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long map_adc_correction = MathHelpers::Round(16384 * (0.5f - map_correction_d * packet_data->map_adc_factor));
+ signed long map_adc_correction = MathHelpers::Round(16384 * (0.5f - map_correction_d * (packet_data->adc_comp_mode ? packet_data->map_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(map_adc_correction,m_outgoing_packet);
 
  signed int ubat_adc_factor = MathHelpers::Round(packet_data->ubat_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ubat_adc_factor,m_outgoing_packet);
  signed long ubat_correction_d = MathHelpers::Round((-packet_data->ubat_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ubat_adc_correction = MathHelpers::Round(16384 * (0.5f - ubat_correction_d * packet_data->ubat_adc_factor));
+ signed long ubat_adc_correction = MathHelpers::Round(16384 * (0.5f - ubat_correction_d * (packet_data->adc_comp_mode ? packet_data->ubat_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ubat_adc_correction,m_outgoing_packet);
 
  signed int temp_adc_factor = MathHelpers::Round(packet_data->temp_adc_factor * 16384);
  mp_pdp->Bin16ToHex(temp_adc_factor,m_outgoing_packet);
  signed long temp_correction_d = MathHelpers::Round((-packet_data->temp_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * packet_data->temp_adc_factor));
+ signed long temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * (packet_data->adc_comp_mode ? packet_data->temp_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(temp_adc_correction,m_outgoing_packet);
  //TPS sensor
  signed int tps_adc_factor = MathHelpers::Round(packet_data->tps_adc_factor * 16384);
  mp_pdp->Bin16ToHex(tps_adc_factor,m_outgoing_packet);
  signed long tps_correction_d = MathHelpers::Round((-packet_data->tps_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long tps_adc_correction = MathHelpers::Round(16384 * (0.5f - tps_correction_d * packet_data->tps_adc_factor));
+ signed long tps_adc_correction = MathHelpers::Round(16384 * (0.5f - tps_correction_d * (packet_data->adc_comp_mode ? packet_data->tps_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(tps_adc_correction,m_outgoing_packet);
  //ADD_I1 input
  signed int ai1_adc_factor = MathHelpers::Round(packet_data->ai1_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai1_adc_factor,m_outgoing_packet);
  signed long ai1_correction_d = MathHelpers::Round((-packet_data->ai1_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai1_adc_correction = MathHelpers::Round(16384 * (0.5f - ai1_correction_d * packet_data->ai1_adc_factor));
+ signed long ai1_adc_correction = MathHelpers::Round(16384 * (0.5f - ai1_correction_d * (packet_data->adc_comp_mode ? packet_data->ai1_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai1_adc_correction,m_outgoing_packet);
  //ADD_I2 input
  signed int ai2_adc_factor = MathHelpers::Round(packet_data->ai2_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai2_adc_factor,m_outgoing_packet);
  signed long ai2_correction_d = MathHelpers::Round((-packet_data->ai2_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai2_adc_correction = MathHelpers::Round(16384 * (0.5f - ai2_correction_d * packet_data->ai2_adc_factor));
+ signed long ai2_adc_correction = MathHelpers::Round(16384 * (0.5f - ai2_correction_d * (packet_data->adc_comp_mode ? packet_data->ai2_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai2_adc_correction,m_outgoing_packet);
  //ADD_I3 input
  signed int ai3_adc_factor = MathHelpers::Round(packet_data->ai3_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai3_adc_factor,m_outgoing_packet);
  signed long ai3_correction_d = MathHelpers::Round((-packet_data->ai3_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai3_adc_correction = MathHelpers::Round(16384 * (0.5f - ai3_correction_d * packet_data->ai3_adc_factor));
+ signed long ai3_adc_correction = MathHelpers::Round(16384 * (0.5f - ai3_correction_d * (packet_data->adc_comp_mode ? packet_data->ai3_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai3_adc_correction,m_outgoing_packet);
  //ADD_I4 input
  signed int ai4_adc_factor = MathHelpers::Round(packet_data->ai4_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai4_adc_factor,m_outgoing_packet);
  signed long ai4_correction_d = MathHelpers::Round((-packet_data->ai4_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai4_adc_correction = MathHelpers::Round(16384 * (0.5f - ai4_correction_d * packet_data->ai4_adc_factor));
+ signed long ai4_adc_correction = MathHelpers::Round(16384 * (0.5f - ai4_correction_d * (packet_data->adc_comp_mode ? packet_data->ai4_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai4_adc_correction,m_outgoing_packet);
  //ADD_I5 input
  signed int ai5_adc_factor = MathHelpers::Round(packet_data->ai5_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai5_adc_factor,m_outgoing_packet);
  signed long ai5_correction_d = MathHelpers::Round((-packet_data->ai5_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai5_adc_correction = MathHelpers::Round(16384 * (0.5f - ai5_correction_d * packet_data->ai5_adc_factor));
+ signed long ai5_adc_correction = MathHelpers::Round(16384 * (0.5f - ai5_correction_d * (packet_data->adc_comp_mode ? packet_data->ai5_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai5_adc_correction, m_outgoing_packet);
  //ADD_I6 input
  signed int ai6_adc_factor = MathHelpers::Round(packet_data->ai6_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai6_adc_factor,m_outgoing_packet);
  signed long ai6_correction_d = MathHelpers::Round((-packet_data->ai6_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai6_adc_correction = MathHelpers::Round(16384 * (0.5f - ai6_correction_d * packet_data->ai6_adc_factor));
+ signed long ai6_adc_correction = MathHelpers::Round(16384 * (0.5f - ai6_correction_d * (packet_data->adc_comp_mode ? packet_data->ai6_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai6_adc_correction, m_outgoing_packet);
  //ADD_I7 input
  signed int ai7_adc_factor = MathHelpers::Round(packet_data->ai7_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai7_adc_factor,m_outgoing_packet);
  signed long ai7_correction_d = MathHelpers::Round((-packet_data->ai7_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai7_adc_correction = MathHelpers::Round(16384 * (0.5f - ai7_correction_d * packet_data->ai7_adc_factor));
+ signed long ai7_adc_correction = MathHelpers::Round(16384 * (0.5f - ai7_correction_d * (packet_data->adc_comp_mode ? packet_data->ai7_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai7_adc_correction,m_outgoing_packet);
  //ADD_I8 input
  signed int ai8_adc_factor = MathHelpers::Round(packet_data->ai8_adc_factor * 16384);
  mp_pdp->Bin16ToHex(ai8_adc_factor,m_outgoing_packet);
  signed long ai8_correction_d = MathHelpers::Round((-packet_data->ai8_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ai8_adc_correction = MathHelpers::Round(16384 * (0.5f - ai8_correction_d * packet_data->ai8_adc_factor));
+ signed long ai8_adc_correction = MathHelpers::Round(16384 * (0.5f - ai8_correction_d * (packet_data->adc_comp_mode ? packet_data->ai8_adc_factor : 1.0f)));
  mp_pdp->Bin32ToHex(ai8_adc_correction,m_outgoing_packet);
 }
 

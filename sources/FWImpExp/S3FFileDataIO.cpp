@@ -274,9 +274,9 @@ struct S3FSepMaps
  s3f_int32_t injpw_coef[INJPWCOEF_LUT_SIZE];            //Manual inj. PW correction map
 
  //since v01.20
- s3f_int32_t maf_curve[MAF_FLOW_CURVE_SIZE+1];
+ s3f_int32_t maf_curve[MAF_FLOW_CURVE_SIZE+1+2];
 
- s3f_int32_t reserved[3957];       //reserved bytes, = 0
+ s3f_int32_t reserved[3955];       //reserved bytes, = 0
 };
 
 
@@ -708,7 +708,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ops_curve[i] = MathHelpers::Round(m_data.ops_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < INJPWCOEF_LUT_SIZE; ++i)
   p_sepMaps->injpw_coef[i] = MathHelpers::Round(m_data.injpw_coef[i] * INT_MULTIPLIER);
- for(i = 0; i < MAF_FLOW_CURVE_SIZE+1; ++i)
+ for(i = 0; i < MAF_FLOW_CURVE_SIZE+1+2; ++i)
   p_sepMaps->maf_curve[i] = MathHelpers::Round(m_data.maf_curve[i] * INT_MULTIPLIER);
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -968,7 +968,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.ops_curve[i] = p_sepMaps->ops_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < INJPWCOEF_LUT_SIZE; ++i)
   m_data.injpw_coef[i] = p_sepMaps->injpw_coef[i] / INT_MULTIPLIER;
- for(i = 0; i < MAF_FLOW_CURVE_SIZE+1; ++i)
+ for(i = 0; i < MAF_FLOW_CURVE_SIZE+1+2; ++i)
   m_data.maf_curve[i] = p_sepMaps->maf_curve[i] / INT_MULTIPLIER;
 
  //convert RPM grid

@@ -523,6 +523,8 @@ BEGIN
     CTEXT           "ADD_I8",IDC_PD_ADCCOMPEN_ADD_I8_CAPTION,0,257,32,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_ADD_I8_FACTOR_UNIT,74,254,25,12
     LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_ADD_I8_CORRECTION_UNIT,141,252,23,18
+
+    CONTROL         "Умножать корр. на коэфф.",IDC_PD_ADCCOMPEN_MODE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,276,110,12
 END
 
 IDD_PD_CKPS_PAGE DIALOGEX 0, 0, 183, 150
@@ -1551,8 +1553,8 @@ BEGIN
     IDS_PD_IDLREG_USE_REGULATOR_TT                  "Разрешает регулирование оборотов ХХ используя УОЗ. Рекомендуется в начале настроить карбюратор, таблицы УОЗ и только потом включать регулятор ХХ."
     IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT        "В режиме без ШИМ вентилятор выключится если температура упадет ниже данного порога. Если используется ШИМ и управление питанием, то после выключения зажигания SECU-3 будет управлять вентилятором пока температура двигателя не опустится ниже этого порога или не истечет таймер."
     IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT         "В режиме управления без ШИМ вентилятор включится если температура превысит данный порог. В режиме управления с ШИМ вентилятор начнет плавно набирать обороты по мере приближения температуры к этому порогу вплоть до полного включения. Если используется управление питанием, то после выключения зажигания SECU-3 будет управлять вентилятором пока не истечет таймер либо пока температура не опустится ниже 'Порог выключения вентилятора'."
-    IDS_PD_ADCCOMPEN_FACTOR_TT                      "Подберите значение этого коэффициента для компенсации погрешности измерения. Для контроля используйте галочку 'Показывать сырые значения датчиков' и сравнивайте показания с точным вольтметром, подключенным к датчику."
-    IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Используйте если вам нужно сдвинуть напряжение вверх или вниз. Скорее всего у вас не возникнет необходимость менять этот параметр."
+    IDS_PD_ADCCOMPEN_FACTOR_TT                      "Подберите значение этого коэффициента для компенсации погрешности измерения. Для контроля используйте галочку 'Показывать сырые значения датчиков' и сравнивайте показания с точным вольтметром, подключенным к датчику. Если установлена галочка 'Умножать корр. на коэфф.', тогда используется формула: значение после коррекции = (значение с АЦП + корр.) * коэфф., в противном случае используется формула: значение после коррекции = (значение с АЦП * коэфф.) + корр."
+    IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Используйте если вам нужно сдвинуть напряжение вверх или вниз. Скорее всего у вас не возникнет необходимость менять этот параметр. Если установлена галочка 'Умножать корр. на коэфф.', тогда используется формула: значение после коррекции = (значение с АЦП + корр.) * коэфф., в противном случае используется формула: значение после коррекции = (значение с АЦП * коэфф.) + корр."
     IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "Отсечка зажигания (используйте осторожно!). Выдача импульсов зажигания будет прекращена при превышении заданных оборотов."
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_LO_TT           "Нижний порог оборотов ЭПХХ. Должен быть меньше чем верхний порог. Чем меньше значение тем больше экономия топлива при ПХХ, Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "Верхний порог оборотов ЭПХХ. Должен быть больше чем нижний порог. Чем меньше значения тем больше экономия топлива при ПХХ. Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
@@ -1845,6 +1847,7 @@ BEGIN
     IDS_PD_ACCELENR_AETIME_EDIT_TT "Длительность обогащения (такты)."
     IDS_PD_KNOCK_SELCH1_TT "Укажите какой датчик детонации использовать для этого канала. Нет галочки - 1-й датчик. Есть галочка - 2-й датчик"
     IDS_PD_KNOCK_CLT_THRD_EDIT_TT "Контроль детонации включится только после того, как температура двигателя превысит это значение."
+    IDS_PD_ADCCOMPEN_MODE_CHECK_TT "Выбор формулы по которой будет осуществляться коррекция значений АЦП. Если галочка утсановлена, то используется формула: значение после коррекции = (значение АЦП + корр.) * коэфф. Если галочка не установлена, то используется формула: значение после коррекции = (значение с АЦП * коэфф.) + корр."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2359,6 +2362,8 @@ BEGIN
     CTEXT           "ADD_I8",IDC_PD_ADCCOMPEN_ADD_I8_CAPTION,0,257,32,11
     LTEXT           "factor",IDC_PD_ADCCOMPEN_ADD_I8_FACTOR_UNIT,74,254,25,12
     LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_ADD_I8_CORRECTION_UNIT,141,252,23,18
+
+    CONTROL         "Multiply corr. by factor",IDC_PD_ADCCOMPEN_MODE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,276,110,12
 END
 
 IDD_PD_CKPS_PAGE DIALOGEX 0, 0, 183, 150
@@ -3424,8 +3429,8 @@ BEGIN
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_LO_TT           "The lower the value the greater fuel economy in forced idling mode, but the higher probability of stalling when you release the gas pedal. Set empirically minimal value at which the engine does not stall when you release the gas. The value of the lower threshold should be lower than the upper threshold."
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "The lower the value the greater fuel economy in forced idling mode, but the higher probability of stalling when you release the gas pedal. Set empirically minimal value at which the engine does not stall when you release the gas. The value of the upper threshold should be greater than the lower threshold."
     IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Set so that when you press the gas pedal, light in the throttle indicator light up"
-    IDS_PD_ADCCOMPEN_FACTOR_TT                      "If necessary, alter factors for matching of raw values and real value at the inputs on unit"
-    IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this"
+    IDS_PD_ADCCOMPEN_FACTOR_TT                      "If necessary, alter factors for matching of raw values and real value at the inputs on unit. If check box 'Multiply corr. by factor' is set, then following formula is used: value after correction = (value from ADC + corr.) * factor, otherwise: value after correction = (value from ADC * factor) + corr."
+    IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this. If check box 'Multiply corr. by factor' is set, then following formula is used: value after correction = (value from ADC + corr.) * factor, otherwise: value after correction = (value from ADC * factor) + corr."
     IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed"
     IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Limitation of RPM error (error calculated as difference between target and current RPMs)."
     IDS_PD_TEMPER_VENTTIMER_EDIT_TT                 "Determines how long cooling fan will work on stopped engine. Set to 0, if you want cooling fan to work while temperature is not fall (no time restrictions)."
@@ -3714,6 +3719,7 @@ BEGIN
     IDS_PD_ACCELENR_AETIME_EDIT_TT "Duration of acceleration enrichment (strokes)."
     IDS_PD_KNOCK_SELCH1_TT "Specify which knock sensor should be used for this channel. No check - 1st sensor. Set check - 2nd sensor"
     IDS_PD_KNOCK_CLT_THRD_EDIT_TT "Control of knock will be activated only after the temperature of engine exceeds this value."
+    IDS_PD_ADCCOMPEN_MODE_CHECK_TT "The choice of the formula by which the correction of the ADC values will be carried out. If the checkbox is checked, then the following formula is used: value after correction = (value from ADC + corr.) * factor. If the checkbox is not set, then the formula is used: value after correction = (value from ADC * factor) + corr."
 END
 
 /////////////////////////////////////////////////////////////////////////////
