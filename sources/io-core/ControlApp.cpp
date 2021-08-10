@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 166 : 83))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 168 : 84))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -638,6 +638,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &maf, true))
   return false;
  sensorDat.maf = ((float)maf) / MAFS_MULT;
+
+ //PWM duty of cooling fan
+ unsigned char vent_duty = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &vent_duty))
+  return false;
+ sensorDat.vent_duty = ((float)vent_duty) / 2.0f;
 
  return true;
 }

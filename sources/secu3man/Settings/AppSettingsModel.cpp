@@ -500,6 +500,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldServFlag(_T("ServFlag"))
 , m_optLogFieldRxlaf(_T("Rxlaf"))
 , m_optLogFieldMAF(_T("MAF"))
+, m_optLogFieldVentDuty(_T("VentDuty"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -602,6 +603,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetInjDuty[i][1].name = _T("GrhInjDuty");
   m_optMetMAF[i][0].name = _T("MetMAF");
   m_optMetMAF[i][1].name = _T("GrhMAF");
+  m_optMetVentDuty[i][0].name = _T("MetVentDuty");
+  m_optMetVentDuty[i][1].name = _T("GrhVentDuty");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -1016,13 +1019,13 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColIacClLoop,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][33*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][34*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
   mm.ReadInt(m_optMetRows[i],_T("2"), 1, 10);
-  int vmax = 34;
+  int vmax = 40;
   for (int g = 0, d = 0; g < 2; ++g)
   {
    mm.ReadInt(m_optMetRPM[i][g],metDef[i][d++], 0, vmax, true);
@@ -1058,6 +1061,7 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetOps[i][g], metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetInjDuty[i][g], metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetMAF[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetVentDuty[i][g], metDef[i][d++], 0, vmax, true);
   }
  }
 
@@ -1233,6 +1237,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldServFlag, _T("ServFlag"));
  lf.ReadString(m_optLogFieldRxlaf, _T("Rxlaf"));
  lf.ReadString(m_optLogFieldMAF, _T("MAF"));
+ lf.ReadString(m_optLogFieldVentDuty, _T("VentDuty"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -3076,6 +3081,11 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetMAF[i][g], _T("MAF sensor"));
   else
    mm.WriteInt(m_optMetMAF[i][g], _T("Датчик ДМРВ"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetVentDuty[i][g], _T("Cooling fan's PWM duty"));
+  else
+   mm.WriteInt(m_optMetVentDuty[i][g], _T("Скважность ШИМ вентилятора охлаждения"));
   }
  }
 
@@ -3663,6 +3673,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldRigidArg);
  lf.WriteString(m_optLogFieldRxlaf);
  lf.WriteString(m_optLogFieldMAF);
+ lf.WriteString(m_optLogFieldVentDuty);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -4902,6 +4913,7 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0]);
  }
 }
 
@@ -4943,6 +4955,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0]);
  }
 }
 
@@ -5412,6 +5425,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldServFlag.value = i_flds.m_fldServFlag;
  m_optLogFieldRxlaf.value = i_flds.m_fldRxlaf;
  m_optLogFieldMAF.value = i_flds.m_fldMAF;
+ m_optLogFieldVentDuty.value = i_flds.m_fldVentDuty;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -5480,6 +5494,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldServFlag = m_optLogFieldServFlag.value;
  o_flds.m_fldRxlaf = m_optLogFieldRxlaf.value;
  o_flds.m_fldMAF = m_optLogFieldMAF.value;
+ o_flds.m_fldVentDuty = m_optLogFieldVentDuty.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

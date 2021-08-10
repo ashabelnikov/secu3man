@@ -173,6 +173,8 @@ BEGIN
     IDS_MI_ADD_I1_TT        "Напряжение на входе ADD_IO1"
     IDS_MI_ADD_I2_TT        "Напряжение на входе ADD_IO2"
     IDS_LOG_MARKS_DESK_TT   "Пользовательские маркеры в логе"
+    IDS_MI_VENT_DUTY_TITLE  "Скважность Вент."
+    IDS_MI_VENT_DUTY_V_UNIT "Скважн.Вент,%"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -475,6 +477,8 @@ BEGIN
     IDS_MI_ADD_I1_TT        "Voltage at the ADD_IO1 input"
     IDS_MI_ADD_I2_TT        "Voltage at the ADD_IO2 input"
     IDS_LOG_MARKS_DESK_TT   "User's markers in the log"
+    IDS_MI_VENT_DUTY_TITLE  "Fan's duty"
+    IDS_MI_VENT_DUTY_V_UNIT "Fan's duty,%"
 END
 
 STRINGTABLE DISCARDABLE 

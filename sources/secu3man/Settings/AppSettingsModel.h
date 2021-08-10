@@ -607,6 +607,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetOps[2][2];
   OptField_t<int> m_optMetInjDuty[2][2];
   OptField_t<int> m_optMetMAF[2][2];
+  OptField_t<int> m_optMetVentDuty[2][2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
@@ -792,6 +793,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldServFlag;
   OptField_t<_TSTRING> m_optLogFieldRxlaf;
   OptField_t<_TSTRING> m_optLogFieldMAF;
+  OptField_t<_TSTRING> m_optLogFieldVentDuty;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

@@ -121,6 +121,7 @@ namespace SECU3IO
 
   float inj_duty;                       //injector's duty
   float maf;                            //mass air flow in g/sec
+  float vent_duty;                      //PWM duty of cooling fan
  };
 
  struct DbgvarDat
