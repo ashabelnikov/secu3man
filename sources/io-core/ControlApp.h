@@ -149,6 +149,7 @@ class IOCORE_API CControlApp
   bool m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn();
   bool m_portAutoReopen;                //flag, makes thread to do auto reopening of COM port (each 100ms if port is not opened)
   volatile LONG m_ignore_n_packets;
+  bool m_blman_packet;
 
   PacketDataProxy* mp_pdp;
 

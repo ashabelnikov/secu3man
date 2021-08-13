@@ -137,6 +137,7 @@ CControlApp::CControlApp()
 , m_ignore_n_packets(0)
 , m_splitAng(false)
 , m_checksum_all(true)
+, m_blman_packet(false)
 {
  m_pPackets = new Packets();
  m_pPackets->reserve(256);
@@ -2853,6 +2854,7 @@ bool CControlApp::ParsePackets()
  bool status = false;
 
  bool use_checksum = m_checksum_all && !mp_pdp->isHex(); //use checksum only if enabled and if binary mode
+ m_blman_packet = false;
 
  ASSERT(m_pPackets);
  for(it = m_pPackets->begin(); it!=m_pPackets->end(); ++it)
@@ -2927,7 +2929,11 @@ bool CControlApp::ParsePackets()
     continue;
    case OP_COMP_NC:
     if (Parse_OP_COMP_NC(p_start, p_size))
+    {
+     if (m_recepted_packet.m_OPCompNc.opcode == OPCODE_BL_MANSTART && m_recepted_packet.m_OPCompNc.opdata == OPDATA_BL_MANSTART)
+      m_blman_packet = true; //special case (this packet shuold not cause online status)
      break;
+    }
     continue;
    case KNOCK_PAR:
     if (Parse_KNOCK_PAR(p_start, p_size))
@@ -3089,7 +3095,7 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   if (true==p_capp->ParsePackets()) //хотя бы один пакет обработан успешно ?
   {
    p_capp->SetPacketsTimer(p_capp->m_dat_packet_timeout);  //reset timeout timer
-   if ((p_capp->m_online_state==false)||(p_capp->m_force_notify_about_connection))  //мы были в оффлайне, надо известить пользователя о переходе в онлайн...
+   if ((p_capp->m_blman_packet==false && p_capp->m_online_state==false)||(p_capp->m_force_notify_about_connection))  //мы были в оффлайне, надо известить пользователя о переходе в онлайн...
    {
     p_capp->m_online_state = true;
     pEventHandler->OnConnection(p_capp->m_online_state);

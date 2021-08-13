@@ -270,7 +270,7 @@ void MainFrameController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SEC
 {
  //Если пришел пакет с отладочными данными, то обновляем отладочную панель этими данными
  //(если она(панель) создана)
- if(DBGVAR_DAT==i_descriptor)
+ if (DBGVAR_DAT==i_descriptor)
  {
   const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
   if (mp_view->GetDVDesk())

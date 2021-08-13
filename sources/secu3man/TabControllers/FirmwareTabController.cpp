@@ -366,6 +366,10 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
      }
     }
     return;
+   case SECU3IO::OPCODE_BL_MANSTART: //confirmation that user has started boot loader manually
+    if (p_ndata->opdata == SECU3IO::OPDATA_BL_MANSTART)
+     mp_view->SetBLStartedEmergency(true);
+    return;
   } 
  }
  else if (i_descriptor == INJDRV_PAR)
@@ -388,7 +392,7 @@ void CFirmwareTabController::OnConnection(const bool i_online)
   //если мы перешли в онлайн, то убираем чекбокс - пользователь нас обманывает:
   //он указал что бутлоадер запущен аварийно и в тоже время запущен Application
   mp_view->SetBLStartedEmergency(false);
-
+ 
   mp_view->EnableAppItems(true);
   if (m_clear_sbar_txt_on_conn)
   {

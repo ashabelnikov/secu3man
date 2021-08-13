@@ -213,6 +213,9 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
      mp_tabcntr->InvalidateCache();
     }
     return;
+   case SECU3IO::OPCODE_BL_MANSTART: //confirmation that user has started boot loader manually
+    if (p_ndata->opdata == SECU3IO::OPDATA_BL_MANSTART)
+    return;
   }
  }
 

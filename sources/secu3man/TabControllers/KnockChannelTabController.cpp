@@ -183,6 +183,9 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
    case OPCODE_SAVE_TABLSET:      //таблицы были сохранены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
     return;
+   case SECU3IO::OPCODE_BL_MANSTART: //confirmation that user has started boot loader manually
+    if (p_ndata->opdata == SECU3IO::OPDATA_BL_MANSTART)
+     return;
   }
  }
 

@@ -320,6 +320,8 @@ namespace SECU3IO
  const int OPCODE_DIAGNOST_LEAVE       = 7;  //leave diagnostic mode
  const int OPCODE_RESET_EEPROM         = 0xCF;//reset EEPROM
  const int OPCODE_BL_CONFIRM           = 0xCB; //boot loader entering confirmation
+ const int OPCODE_BL_MANSTART          = 0xC8; //boot loader started manually (using a jumper)
+ const int OPDATA_BL_MANSTART          = 0x8C; //data for OPCODE_BL_MANSTART
 
  struct KnockPar
  {
