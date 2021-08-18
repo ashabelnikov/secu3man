@@ -215,6 +215,7 @@ class CAppSettingsModel : public ISettingsData
   virtual float GetMinTPS(void);
   virtual float GetMaxTPS(void);
   virtual float GetCLTThrd(void);
+  virtual float GetTunSoftness(void);
 
   virtual int GetGradSaturation(void);
   virtual int GetGradBrightness(void);
@@ -642,6 +643,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optMinTPS;
   OptField_t<float> m_optMaxTPS;
   OptField_t<float> m_optCLTThrd;
+  OptField_t<float> m_optTunSoftness;
 
   //Map editor
   OptField_t<int> m_optGradSaturation;

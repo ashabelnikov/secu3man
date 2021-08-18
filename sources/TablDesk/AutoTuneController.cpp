@@ -72,6 +72,7 @@ CAutoTuneController::CAutoTuneController()
 , m_ldaxUseTable(false)
 , m_ve2mf(0) //use 1st VE map (neither mul or add)
 , m_active_ve(0) //1st VE map is active by default
+, m_tunSoft(1.0f)
 {
  m_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
  m_loadGrid2 = MathHelpers::BuildGridFromRange(0.0f, 100.0f, VEMAP_LOAD_SIZE);
@@ -258,6 +259,9 @@ bool CAutoTuneController::_ApplyCorrection(void)
     if (avdist < m_avdists[l][r] || (m_afrhits[l][r] < m_MinDistThrd))
     {
      m_avdists[l][r] = avdist;
+
+     //apply softness factor to correction
+     corr = 1.0f + ((corr - 1.0f) / m_tunSoft);
 
      //Apply correction depending on the selected function
      if (0==m_ve2mf || 1==m_ve2mf) //VE1 or VE1*VE2
@@ -682,4 +686,9 @@ void CAutoTuneController::SetVE2MapFunc(int func)
 void CAutoTuneController::OnSelectVEMap(int vemap) //event from view
 {
  m_active_ve = vemap;
+}
+
+void CAutoTuneController::SetTunSoftness(float soft)
+{
+ m_tunSoft = soft;
 }

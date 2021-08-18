@@ -287,6 +287,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->mp_ButtonsPanel->SetMapEditorSettings(mp_settings->GetGradSaturation(), mp_settings->GetGradBrightness(), mp_settings->GetBoldFont(), mp_settings->GetSpotMarkers(), mp_settings->GetSpotMarkersSize());
  mp_view->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
+ mp_view->mp_ButtonsPanel->SetTunSoftness(mp_settings->GetTunSoftness());
 }
 
 CPMTablesController::~CPMTablesController()

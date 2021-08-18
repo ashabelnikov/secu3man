@@ -93,6 +93,7 @@ class CAutoTuneController
  void SetMinTPS(float tps);
  void SetMaxTPS(float tps);
  void SetCLTThrd(float clt);
+ void SetTunSoftness(float soft);
 
  float* GetLamDelMap(int id);
  bool* GetBlockedCells(void);
@@ -173,4 +174,6 @@ class CAutoTuneController
   float m_cltThrd;
   int m_ve2mf;
   int m_active_ve;
+
+  float m_tunSoft;
 };

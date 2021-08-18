@@ -4002,6 +4002,12 @@ void CButtonsPanel::SetCLTThrd(float clt)
   mp_autoTuneCntr->SetCLTThrd(clt);
 }
 
+void CButtonsPanel::SetTunSoftness(float soft)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetTunSoftness(soft);
+}
+
 void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bool spotMarkers, float spotMarkersSize)
 {
  CMapEditorCtrl::SetSettings(gradSat, gradBrt, bold, spotMarkers, spotMarkersSize);

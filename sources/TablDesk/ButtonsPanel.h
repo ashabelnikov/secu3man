@@ -129,6 +129,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void SetMinTPS(float tps);
   void SetMaxTPS(float tps);
   void SetCLTThrd(float clt);
+  void SetTunSoftness(float soft);
 
   void SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bool spotMarkers, float spotMarkersSize);
 

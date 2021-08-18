@@ -349,6 +349,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMinTPS(_T("MinTPS"))
 , m_optMaxTPS(_T("MaxTPS"))
 , m_optCLTThrd(_T("CLTThrd"))
+, m_optTunSoftness(_T("TunSoftness"))
 //Map editor
 , m_Name_MapEditor_Section(_T("MapEditor"))
 , m_optGradSaturation(_T("GradSaturation"))
@@ -1081,7 +1082,7 @@ bool CAppSettingsModel::ReadSettings(void)
  at.ReadFlt(m_optMinTPS,_T("0.0"), 0.0f, 100.0f);
  at.ReadFlt(m_optMaxTPS,_T("100.0"), 0.0f, 100.0f);
  at.ReadFlt(m_optCLTThrd,_T("70.0"), 0.0f, 180.0f);
-
+ at.ReadFlt(m_optTunSoftness,_T("1.0"), 0.5f, 5.0f);
  //Map editor
  IniIO me(IniFileName, m_Name_MapEditor_Section);
  me.ReadInt(m_optGradSaturation, _T("120"), 0, 255);
@@ -3181,6 +3182,12 @@ bool CAppSettingsModel::WriteSettings(void)
   at.WriteComment(_T("Автонастройка не начнется пока ДТОЖ меньше чем указанное значение."));
  at.WriteFlt(m_optCLTThrd, 1);
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("The softness coefficient of automatic tuning the values in table. The higher the value, the slower the auto-tuning takes place, but the higher the error tolerance."));
+ else
+  at.WriteComment(_T("Коэффициент мягкости откатки значений в таблице. Чем выше значение, тем медленнее происходит автонастройка, но при этом стойкость к ошибкам выше."));
+ at.WriteFlt(m_optTunSoftness, 2);
+
  //Map editor
  IniIO me(IniFileName, m_Name_MapEditor_Section);
 
@@ -5045,6 +5052,11 @@ float CAppSettingsModel::GetMaxTPS(void)
 float CAppSettingsModel::GetCLTThrd(void)
 {
  return m_optCLTThrd.value;
+}
+
+float CAppSettingsModel::GetTunSoftness(void)
+{
+ return m_optTunSoftness.value;
 }
 
 void CAppSettingsModel::SetShowExFixtures(bool i_show)

@@ -639,6 +639,7 @@ class ISettingsData
   virtual float GetMinTPS(void) = 0;
   virtual float GetMaxTPS(void) = 0;
   virtual float GetCLTThrd(void) = 0;
+  virtual float GetTunSoftness(void) = 0;
 
   virtual int GetGradSaturation(void) = 0;
   virtual int GetGradBrightness(void) = 0;
