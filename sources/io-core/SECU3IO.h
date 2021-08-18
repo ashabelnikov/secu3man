@@ -227,6 +227,7 @@ namespace SECU3IO
   float fuelcut_cts_thrd;               //fuel cut CTS threshold
   int  revlim_lot;                      //rev.limitting lo threshold
   int  revlim_hit;                      //rev.limitting hi threshold
+  int fuelcut_uni;
  };
 
  struct TemperPar

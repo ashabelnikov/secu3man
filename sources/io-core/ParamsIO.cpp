@@ -89,6 +89,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->fuelcut_cts_thrd = MathHelpers::Round(p_in->fuelcut_cts_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->revlim_lot  = p_in->revlim_lot;
     p_params->revlim_hit  = p_in->revlim_hit;
+    p_params->fuelcut_uni = (p_in->fuelcut_uni==UNI_OUTPUT_NUM) ? 0xF : p_in->fuelcut_uni;
    }
    break;
   case IDLREG_PAR:
@@ -498,6 +499,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->fuelcut_cts_thrd = ((float)p_params->fuelcut_cts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->revlim_lot = p_params->revlim_lot;
      p_out->revlim_hit = p_params->revlim_hit;
+     p_out->fuelcut_uni = p_params->fuelcut_uni;
+     if (p_out->fuelcut_uni == 0xF)
+      p_out->fuelcut_uni = UNI_OUTPUT_NUM; //disabled
     }
     break;
    case IDLREG_PAR:

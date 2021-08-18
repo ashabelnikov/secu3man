@@ -49,6 +49,7 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CARBUR_FC_CTS_THRD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_CARBUR_FUELCUT_UNI_COMBO, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,OnUpdateControls)
@@ -108,6 +109,9 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_UNIT,OnUpdateInjGasControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ENGPROTECT_GROUP,OnUpdateInjGasControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FUELCUT_UNI_COMBO,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FUELCUT_UNI_CAPTION,OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
@@ -140,6 +144,7 @@ CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
  m_params.fuelcut_cts_thrd = 15.0f;
  m_params.revlim_lot = 8000;
  m_params.revlim_hit = 8100;
+ m_params.fuelcut_uni = SECU3IO::UNI_OUTPUT_NUM; //disabled
 }
 
 LPCTSTR CCarburPageDlg::GetDialogID(void) const
@@ -179,6 +184,8 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT, m_revlim_lo_threshold_edit);
  DDX_Control(pDX, IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT, m_revlim_hi_threshold_edit);
 
+ DDX_Control(pDX, IDC_PD_CARBUR_FUELCUT_UNI_COMBO, m_fuelcut_uni_combo);
+
  m_shutoff_lo_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_params.ephh_lot);
  m_shutoff_hi_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_params.ephh_hit);
 
@@ -195,6 +202,8 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
 
  m_revlim_lo_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT, m_params.revlim_lot);
  m_revlim_hi_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT, m_params.revlim_hit);
+
+ DDX_CBIndex_int(pDX, IDC_PD_CARBUR_FUELCUT_UNI_COMBO, m_params.fuelcut_uni);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -289,6 +298,14 @@ BOOL CCarburPageDlg::OnInitDialog()
  m_revlim_hi_threshold_spin.SetRangeAndDelta(500,30000,50);
  m_revlim_hi_threshold_edit.SetRange(500,30000);
 
+ m_fuelcut_uni_combo.AddString(_T("1"));
+ m_fuelcut_uni_combo.AddString(_T("2"));
+ m_fuelcut_uni_combo.AddString(_T("3"));
+ m_fuelcut_uni_combo.AddString(_T("4"));
+ m_fuelcut_uni_combo.AddString(_T("5"));
+ m_fuelcut_uni_combo.AddString(_T("6"));
+ m_fuelcut_uni_combo.AddString(_T("--no--"));
+
  //initialize window scroller
  mp_scr->Init(this);
 
@@ -330,6 +347,8 @@ BOOL CCarburPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_revlim_hi_threshold_edit, MLL::GetString(IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_revlim_hi_threshold_spin, MLL::GetString(IDS_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_fuelcut_uni_combo, MLL::GetString(IDS_PD_CARBUR_FUELCUT_UNI_COMBO_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -410,5 +429,5 @@ void CCarburPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(440));
+  mp_scr->SetViewSize(cx, da.ScaleY(460));
 }

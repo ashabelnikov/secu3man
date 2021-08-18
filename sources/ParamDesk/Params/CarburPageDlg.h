@@ -97,6 +97,8 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_revlim_hi_threshold_spin;
   CEditEx m_revlim_hi_threshold_edit;
 
+  CComboBox m_fuelcut_uni_combo;
+
   std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
