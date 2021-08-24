@@ -2132,6 +2132,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Minimum value of dt used for calculation of the d%/dt for TPS"), _T("ms"), 5.0f, 200.0f, 1.0f, 1, &d.tpsdot_mindt, _T("Specify value of the time differencial used by calculation of the speed of moving throttle"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длительность работы блока после выключения зажигания."), _T("сек"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Блок продолжит работу указанное время после выключения зажигания. Подразумевается использование управления питанием блока."));
+ else
+  dfd.AppendItem(_T("The duration of the unit's operation after the ignition is turned off. "), _T("sec"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Unit will continue to operate specified time after switching ignition off."));
+
  //Crankshaft position settings
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Положение коленвала (нов.алгор.)"));

@@ -854,6 +854,7 @@ const int INPAVNUM = 14;
   float iacreg_period;
   float iacreg_turn_on_temp;
   int vent_maxband;
+  float pwron_time;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

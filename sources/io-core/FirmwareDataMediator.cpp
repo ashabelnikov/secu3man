@@ -311,11 +311,12 @@ typedef struct
  _uchar iacreg_period;
  _int iacreg_turn_on_temp;
  _uchar vent_maxband;
+ _uint pwron_time; 
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1999];
+ _uchar reserved[1997];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2873,6 +2874,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.iacreg_turn_on_temp = ((float)exd.iacreg_turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  o_data.vent_maxband = exd.vent_maxband;
+ o_data.pwron_time = ((float)exd.pwron_time) / 100.0f; //convert to seconds
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2941,4 +2943,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.iacreg_turn_on_temp = MathHelpers::Round(i_data.iacreg_turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  exd.vent_maxband = i_data.vent_maxband;
+
+ exd.pwron_time = MathHelpers::Round(i_data.pwron_time * 100.0f);
 }
