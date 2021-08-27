@@ -31,6 +31,8 @@
 
 namespace SECU3IO
 {
+ const int UNI_OUTPUT_NUM = 6;
+
  //описывает все входы системы - их производные и интегральные величины
  struct SensorDat
  {
@@ -122,6 +124,7 @@ namespace SECU3IO
   float inj_duty;                       //injector's duty
   float maf;                            //mass air flow in g/sec
   float vent_duty;                      //PWM duty of cooling fan
+  bool uniout[UNI_OUTPUT_NUM];          //States of universal outputs
  };
 
  struct DbgvarDat
@@ -512,6 +515,7 @@ namespace SECU3IO
  //Describes a universal programmable output
  struct uni_output_par
  {
+  bool use;                             //output's usage check
   unsigned char logicFunc;              //logic function between two conditions
   bool invers_1;                        //inversion flags for condition 1
   bool invers_2;                        //inversion flags for condition 2
@@ -522,8 +526,6 @@ namespace SECU3IO
   float on_thrd_2;                      //same as on_thrd_1
   float off_thrd_2;                     //same as off_thrd_1
  };
-
- const int UNI_OUTPUT_NUM = 6;
 
  struct UniOutPar
  {

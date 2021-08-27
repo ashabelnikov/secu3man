@@ -296,7 +296,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 168 : 84))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 170 : 85))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -645,6 +645,14 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &vent_duty))
   return false;
  sensorDat.vent_duty = ((float)vent_duty) / 2.0f;
+
+ //8 bit flags of universal outputs
+ int uniout = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &uniout))
+  return false;
+ //universal output's state flags
+ for(int i = 0; i < UNI_OUTPUT_NUM; ++i)
+  sensorDat.uniout[i]   = CHECKBIT8(uniout, i);
 
  return true;
 }
@@ -2360,6 +2368,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
   uniOutPar.out[oi].logicFunc = flags >> 4;
   uniOutPar.out[oi].invers_1 = (flags & 0x01) != 0;
   uniOutPar.out[oi].invers_2 = (flags & 0x02) != 0;
+  uniOutPar.out[oi].use      = (flags & 0x04) != 0;
 
   unsigned char cond1 = 0;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &cond1))
@@ -4096,7 +4105,7 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
  CondEncoder cen(m_quartz_frq, m_period_distance);
  for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
  {
-  unsigned char flags = ((packet_data->out[oi].logicFunc) << 4) | ((int)packet_data->out[oi].invers_2 << 1) | ((int)packet_data->out[oi].invers_1);
+  unsigned char flags = ((packet_data->out[oi].logicFunc) << 4) | ((int)packet_data->out[oi].use << 2) | ((int)packet_data->out[oi].invers_2 << 1) | ((int)packet_data->out[oi].invers_1);
   mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
   mp_pdp->Bin8ToHex(packet_data->out[oi].condition1, m_outgoing_packet);
   mp_pdp->Bin8ToHex(packet_data->out[oi].condition2, m_outgoing_packet);

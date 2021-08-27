@@ -333,6 +333,12 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optColEpas_i(_T("IndEpas_i"))
 , m_optColAftStrEnr(_T("IndAftStrEnr"))
 , m_optColIacClLoop(_T("IndIacClLoop"))
+, m_optColUniOut1(_T("IndUniOut1"))
+, m_optColUniOut2(_T("IndUniOut2"))
+, m_optColUniOut3(_T("IndUniOut3"))
+, m_optColUniOut4(_T("IndUniOut4"))
+, m_optColUniOut5(_T("IndUniOut5"))
+, m_optColUniOut6(_T("IndUniOut6"))
 //Autotune
 , m_Name_AutoTune_Section(_T("AutoTune"))
 , m_optLambdaDelay(_T("LambdaDelay"))
@@ -502,6 +508,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldRxlaf(_T("Rxlaf"))
 , m_optLogFieldMAF(_T("MAF"))
 , m_optLogFieldVentDuty(_T("VentDuty"))
+, m_optLogFieldUniOuts(_T("UnivOuts"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -530,6 +537,12 @@ CAppSettingsModel::CAppSettingsModel()
   m_optIndEpas_i[i].name = _T("IndEpas_i");
   m_optIndAftStrEnr[i].name = _T("IndAftStrEnr");
   m_optIndIacClLoop[i].name = _T("IndIacClLoop");
+  m_optIndUniOut1[i].name = _T("UnivOut1");
+  m_optIndUniOut2[i].name = _T("UnivOut2");
+  m_optIndUniOut3[i].name = _T("UnivOut3");
+  m_optIndUniOut4[i].name = _T("UnivOut4");
+  m_optIndUniOut5[i].name = _T("UnivOut5");
+  m_optIndUniOut6[i].name = _T("UnivOut6");
  }
 
  m_Name_Meters_Section[0] = _T("Meters");
@@ -999,6 +1012,12 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optIndEpas_i[i],_T(""), 0, 32, true);
   ii.ReadInt(m_optIndAftStrEnr[i],_T(""), 0, 32, true);
   ii.ReadInt(m_optIndIacClLoop[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndUniOut1[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndUniOut2[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndUniOut3[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndUniOut4[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndUniOut5[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndUniOut6[i],_T(""), 0, 32, true);
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
@@ -1018,6 +1037,12 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColEpas_i,_T("00FF00"));
  ic.ReadColor(m_optColAftStrEnr,_T("00FF00"));
  ic.ReadColor(m_optColIacClLoop,_T("00FF00"));
+ ic.ReadColor(m_optColUniOut1,_T("00FF00"));
+ ic.ReadColor(m_optColUniOut2,_T("00FF00"));
+ ic.ReadColor(m_optColUniOut3,_T("00FF00"));
+ ic.ReadColor(m_optColUniOut4,_T("00FF00"));
+ ic.ReadColor(m_optColUniOut5,_T("00FF00"));
+ ic.ReadColor(m_optColUniOut6,_T("00FF00"));
 
  //Meters
  const TCHAR* metDef[2][34*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
@@ -1239,6 +1264,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldRxlaf, _T("Rxlaf"));
  lf.ReadString(m_optLogFieldMAF, _T("MAF"));
  lf.ReadString(m_optLogFieldVentDuty, _T("VentDuty"));
+ lf.ReadString(m_optLogFieldUniOuts, _T("UnivOuts"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -2803,6 +2829,36 @@ bool CAppSettingsModel::WriteSettings(void)
    ii.WriteInt(m_optIndIacClLoop[i], _T("IAC closed loop"));
   else
    ii.WriteInt(m_optIndIacClLoop[i], _T("–’’ closed loop"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndUniOut1[i], _T("Universal output 1"));
+  else
+   ii.WriteInt(m_optIndUniOut1[i], _T("”ниверсальный выход 1"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndUniOut2[i], _T("Universal output 2"));
+  else
+   ii.WriteInt(m_optIndUniOut2[i], _T("”ниверсальный выход 2"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndUniOut3[i], _T("Universal output 3"));
+  else
+   ii.WriteInt(m_optIndUniOut3[i], _T("”ниверсальный выход 3"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndUniOut4[i], _T("Universal output 4"));
+  else
+   ii.WriteInt(m_optIndUniOut4[i], _T("”ниверсальный выход 4"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndUniOut5[i], _T("Universal output 5"));
+  else
+   ii.WriteInt(m_optIndUniOut5[i], _T("”ниверсальный выход 5"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndUniOut6[i], _T("Universal output 6"));
+  else
+   ii.WriteInt(m_optIndUniOut6[i], _T("”ниверсальный выход 6"));
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
@@ -2891,6 +2947,36 @@ bool CAppSettingsModel::WriteSettings(void)
   ic.WriteColor(m_optColIacClLoop, _T("IAC closed loop"));
  else
   ic.WriteColor(m_optColIacClLoop, _T("–’’ closed loop"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColUniOut1, _T("Universal output 1"));
+ else
+  ic.WriteColor(m_optColUniOut1, _T("”ниверсальный выход 1"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColUniOut2, _T("Universal output 2"));
+ else
+  ic.WriteColor(m_optColUniOut2, _T("”ниверсальный выход 2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColUniOut3, _T("Universal output 3"));
+ else
+  ic.WriteColor(m_optColUniOut3, _T("”ниверсальный выход 3"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColUniOut4, _T("Universal output 4"));
+ else
+  ic.WriteColor(m_optColUniOut4, _T("”ниверсальный выход 4"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColUniOut5, _T("Universal output 5"));
+ else
+  ic.WriteColor(m_optColUniOut5, _T("”ниверсальный выход 5"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColUniOut6, _T("Universal output 6"));
+ else
+  ic.WriteColor(m_optColUniOut6, _T("”ниверсальный выход 6"));
 
  TCHAR* mm_comment[2];
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -3681,6 +3767,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldRxlaf);
  lf.WriteString(m_optLogFieldMAF);
  lf.WriteString(m_optLogFieldVentDuty);
+ lf.WriteString(m_optLogFieldUniOuts);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -4845,6 +4932,12 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
   o_cfg.m_optIndEpas_i[i] = std::make_pair(m_optIndEpas_i[i].value, m_optColEpas_i.value);
   o_cfg.m_optIndAftStrEnr[i] = std::make_pair(m_optIndAftStrEnr[i].value, m_optColAftStrEnr.value);
   o_cfg.m_optIndIacClLoop[i] = std::make_pair(m_optIndIacClLoop[i].value, m_optColIacClLoop.value);
+  o_cfg.m_optIndUniOut1[i] = std::make_pair(m_optIndUniOut1[i].value, m_optColUniOut1.value);
+  o_cfg.m_optIndUniOut2[i] = std::make_pair(m_optIndUniOut2[i].value, m_optColUniOut2.value);
+  o_cfg.m_optIndUniOut3[i] = std::make_pair(m_optIndUniOut3[i].value, m_optColUniOut3.value);
+  o_cfg.m_optIndUniOut4[i] = std::make_pair(m_optIndUniOut4[i].value, m_optColUniOut4.value);
+  o_cfg.m_optIndUniOut5[i] = std::make_pair(m_optIndUniOut5[i].value, m_optColUniOut5.value);
+  o_cfg.m_optIndUniOut6[i] = std::make_pair(m_optIndUniOut6[i].value, m_optColUniOut6.value);
  }
 }
 
@@ -4870,6 +4963,12 @@ void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
   m_optIndEpas_i[i].value = i_cfg.m_optIndEpas_i[i].first, m_optColEpas_i.value = i_cfg.m_optIndEpas_i[i].second;
   m_optIndAftStrEnr[i].value = i_cfg.m_optIndAftStrEnr[i].first, m_optColAftStrEnr.value = i_cfg.m_optIndAftStrEnr[i].second;
   m_optIndIacClLoop[i].value = i_cfg.m_optIndIacClLoop[i].first, m_optColIacClLoop.value = i_cfg.m_optIndIacClLoop[i].second;
+  m_optIndUniOut1[i].value = i_cfg.m_optIndUniOut1[i].first, m_optColUniOut1.value = i_cfg.m_optIndUniOut1[i].second;
+  m_optIndUniOut2[i].value = i_cfg.m_optIndUniOut2[i].first, m_optColUniOut2.value = i_cfg.m_optIndUniOut2[i].second;
+  m_optIndUniOut3[i].value = i_cfg.m_optIndUniOut3[i].first, m_optColUniOut3.value = i_cfg.m_optIndUniOut3[i].second;
+  m_optIndUniOut4[i].value = i_cfg.m_optIndUniOut4[i].first, m_optColUniOut4.value = i_cfg.m_optIndUniOut4[i].second;
+  m_optIndUniOut5[i].value = i_cfg.m_optIndUniOut5[i].first, m_optColUniOut5.value = i_cfg.m_optIndUniOut5[i].second;
+  m_optIndUniOut6[i].value = i_cfg.m_optIndUniOut6[i].first, m_optColUniOut6.value = i_cfg.m_optIndUniOut6[i].second;
  }
 }
 
@@ -5438,6 +5537,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldRxlaf.value = i_flds.m_fldRxlaf;
  m_optLogFieldMAF.value = i_flds.m_fldMAF;
  m_optLogFieldVentDuty.value = i_flds.m_fldVentDuty;
+ m_optLogFieldUniOuts.value = i_flds.m_fldUniOuts;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -5507,6 +5607,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldRxlaf = m_optLogFieldRxlaf.value;
  o_flds.m_fldMAF = m_optLogFieldMAF.value;
  o_flds.m_fldVentDuty = m_optLogFieldVentDuty.value;
+ o_flds.m_fldUniOuts = m_optLogFieldUniOuts.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

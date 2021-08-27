@@ -48,6 +48,12 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_UNIOUT_5_COND2_INV_CHECK, OnChangeInvFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_6_COND1_INV_CHECK, OnChangeInvFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_6_COND2_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_1_USE_CHECK, OnChangeUseFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_2_USE_CHECK, OnChangeUseFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_3_USE_CHECK, OnChangeUseFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_4_USE_CHECK, OnChangeUseFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_5_USE_CHECK, OnChangeUseFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_6_USE_CHECK, OnChangeUseFlags)
 
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_COND1_COMBO, OnChangeDataOut1Con1)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_COND2_COMBO, OnChangeDataOut1Con2)
@@ -70,12 +76,20 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_6_LOGFUN_COMBO, OnChangeDataLFCombo)
 
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_12_LOGFUN_COMBO, OnChangeDataLF12Combo)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_GROUP, IDC_PD_UNIOUT_1_LOGFUN_COMBO, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_GROUP, IDC_PD_UNIOUT_2_LOGFUN_COMBO, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_3_GROUP, IDC_PD_UNIOUT_3_LOGFUN_COMBO, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_4_GROUP, IDC_PD_UNIOUT_4_LOGFUN_COMBO, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_5_GROUP, IDC_PD_UNIOUT_5_LOGFUN_COMBO, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_6_GROUP, IDC_PD_UNIOUT_6_LOGFUN_COMBO, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_1_USE_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_2_USE_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_3_USE_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_4_USE_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_5_USE_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_6_USE_CHECK, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_GROUP, IDC_PD_UNIOUT_1_LOGFUN_COMBO, OnUpdateControls1)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_GROUP, IDC_PD_UNIOUT_2_LOGFUN_COMBO, OnUpdateControls2)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_3_GROUP, IDC_PD_UNIOUT_3_LOGFUN_COMBO, OnUpdateControls3)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_4_GROUP, IDC_PD_UNIOUT_4_LOGFUN_COMBO, OnUpdateControls4)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_5_GROUP, IDC_PD_UNIOUT_5_LOGFUN_COMBO, OnUpdateControls5)
+ ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_6_GROUP, IDC_PD_UNIOUT_6_LOGFUN_COMBO, OnUpdateControls6)
 
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_COND2_COMBO, IDC_PD_UNIOUT_1_COND2_INV_CHECK, OnUpdateControlsOut1Con2)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_COND2_COMBO, IDC_PD_UNIOUT_2_COND2_INV_CHECK, OnUpdateControlsOut2Con2)
@@ -84,7 +98,7 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_5_COND2_COMBO, IDC_PD_UNIOUT_5_COND2_INV_CHECK, OnUpdateControlsOut5Con2)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_6_COND2_COMBO, IDC_PD_UNIOUT_6_COND2_INV_CHECK, OnUpdateControlsOut6Con2)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_12_LOGFUN_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_12_LOGFUN_COMBO, OnUpdateControlsLF)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND1_ON_EDIT,  OnChangeData)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND1_OFF_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND2_ON_EDIT,  OnChangeData)
@@ -137,6 +151,7 @@ CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
   m_params.out[i].off_thrd_1 = 50.0f;
   m_params.out[i].on_thrd_2 = 55.0f;
   m_params.out[i].off_thrd_2 = 50.0f;
+  m_params.out[i].use = false;
  }
  m_params.logicFunc12 = SECU3IO::UNIOUT_LF_OR;
 
@@ -207,6 +222,7 @@ void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_OFF_EDIT + idoff, m_out[i].off_thrd_2_edit);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_OFF_SPIN + idoff, m_out[i].off_thrd_2_spin);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_INV_CHECK + idoff, m_out[i].inv2_check);
+  DDX_Control(pDX, IDC_PD_UNIOUT_1_USE_CHECK + idoff, m_out[i].use_check);
 
   m_out[i].on_thrd_1_edit.DDX_Value(pDX, IDC_PD_UNIOUT_1_COND1_ON_EDIT + idoff, m_params.out[i].on_thrd_1);
   m_out[i].off_thrd_1_edit.DDX_Value(pDX, IDC_PD_UNIOUT_1_COND1_OFF_EDIT + idoff, m_params.out[i].off_thrd_1);
@@ -215,6 +231,7 @@ void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)
 
   DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_COND1_INV_CHECK + idoff, m_params.out[i].invers_1);
   DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_COND2_INV_CHECK + idoff, m_params.out[i].invers_2);
+  DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_USE_CHECK + idoff, m_params.out[i].use);
  }
  DDX_Control(pDX, IDC_PD_UNIOUT_12_LOGFUN_COMBO, lf12_combo); //logic function for 1st and 2nd outputs
 }
@@ -225,34 +242,69 @@ void CUniOutPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
+void CUniOutPageDlg::OnUpdateControlsLF(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[0].use && m_params.out[1].use);
+}
+
+void CUniOutPageDlg::OnUpdateControls1(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[0].use);
+}
+
+void CUniOutPageDlg::OnUpdateControls2(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[1].use);
+}
+
+void CUniOutPageDlg::OnUpdateControls3(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[2].use);
+}
+
+void CUniOutPageDlg::OnUpdateControls4(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[3].use);
+}
+
+void CUniOutPageDlg::OnUpdateControls5(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[4].use);
+}
+
+void CUniOutPageDlg::OnUpdateControls6(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.out[5].use);
+}
+
 void CUniOutPageDlg::OnUpdateControlsOut1Con2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.out[0].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+ pCmdUI->Enable(m_enabled && m_params.out[0].logicFunc != SECU3IO::UNIOUT_LF_NONE && m_params.out[0].use);
 }
 
 void CUniOutPageDlg::OnUpdateControlsOut2Con2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.out[1].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+ pCmdUI->Enable(m_enabled && m_params.out[1].logicFunc != SECU3IO::UNIOUT_LF_NONE && m_params.out[1].use);
 }
 
 void CUniOutPageDlg::OnUpdateControlsOut3Con2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.out[2].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+ pCmdUI->Enable(m_enabled && m_params.out[2].logicFunc != SECU3IO::UNIOUT_LF_NONE && m_params.out[2].use);
 }
 
 void CUniOutPageDlg::OnUpdateControlsOut4Con2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.out[3].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+ pCmdUI->Enable(m_enabled && m_params.out[3].logicFunc != SECU3IO::UNIOUT_LF_NONE && m_params.out[3].use);
 }
 
 void CUniOutPageDlg::OnUpdateControlsOut5Con2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.out[4].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+ pCmdUI->Enable(m_enabled && m_params.out[4].logicFunc != SECU3IO::UNIOUT_LF_NONE && m_params.out[4].use);
 }
 
 void CUniOutPageDlg::OnUpdateControlsOut6Con2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.out[5].logicFunc != SECU3IO::UNIOUT_LF_NONE);
+ pCmdUI->Enable(m_enabled && m_params.out[5].logicFunc != SECU3IO::UNIOUT_LF_NONE && m_params.out[5].use);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -300,6 +352,7 @@ BOOL CUniOutPageDlg::OnInitDialog()
   VERIFY(mp_ttc->AddWindow(&m_out[i].cond2_combo, MLL::GetString(IDS_PD_UNIOUT_1_COND2_COMBO_TT)));
   VERIFY(mp_ttc->AddWindow(&m_out[i].inv1_check, MLL::GetString(IDS_PD_UNIOUT_1_COND1_INV_CHECK_TT)));
   VERIFY(mp_ttc->AddWindow(&m_out[i].inv2_check, MLL::GetString(IDS_PD_UNIOUT_1_COND2_INV_CHECK_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_out[i].use_check, MLL::GetString(IDS_PD_UNIOUT_1_USE_CHECK_TT)));
 
   //finally, set condition format
   _SetCondInputFormat(i, false), _SetCondInputFormat(i, true);
@@ -325,6 +378,13 @@ void CUniOutPageDlg::OnChangeInvFlags(void)
 {
  UpdateData();
  OnChangeNotify();
+}
+
+void CUniOutPageDlg::OnChangeUseFlags(void)
+{
+ UpdateData();
+ OnChangeNotify();
+ UpdateDialogControls(this, TRUE);
 }
 
 void CUniOutPageDlg::OnChangeDataOut1Con1(void)

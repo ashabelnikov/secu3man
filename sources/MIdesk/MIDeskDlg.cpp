@@ -110,8 +110,8 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_ENDRAGNDROP, OnUpdateIndEnDragNDrop)
  ON_COMMAND(IDM_MI_IND_DEL_INDICATOR, OnIndDelete)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_DEL_INDICATOR, OnUpdateIndDelete)
- ON_COMMAND_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_IACCLLOOP, OnIndAddIndicator)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_IACCLLOOP, OnUpdateIndAddIndicator)
+ ON_COMMAND_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_UNIOUT6, OnIndAddIndicator)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_UNIOUT6, OnUpdateIndAddIndicator)
  ON_COMMAND(IDM_MI_IND_SET_COLOR, OnIndSetColor)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_SET_COLOR, OnUpdateIndSetColor)
 END_MESSAGE_MAP()
@@ -834,7 +834,7 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
   _Resize();
 }
 
-void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked, IndCfg_t IndIgn_i, IndCfg_t IndCond_i, IndCfg_t IndEpas_i, IndCfg_t IndAftStrEnr, IndCfg_t IndIacClLoop)
+void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked, IndCfg_t IndIgn_i, IndCfg_t IndCond_i, IndCfg_t IndEpas_i, IndCfg_t IndAftStrEnr, IndCfg_t IndIacClLoop, IndCfg_t UniOut1, IndCfg_t UniOut2, IndCfg_t UniOut3, IndCfg_t UniOut4, IndCfg_t UniOut5, IndCfg_t UniOut6)
 {
  m_indCfg.clear();
  m_indCfg.insert(std::make_pair(IDM_MI_IND_GAS_V, IndGas_v));
@@ -853,6 +853,12 @@ void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t 
  m_indCfg.insert(std::make_pair(IDM_MI_IND_EPAS_I, IndEpas_i));
  m_indCfg.insert(std::make_pair(IDM_MI_IND_AFTSTRENR, IndAftStrEnr));
  m_indCfg.insert(std::make_pair(IDM_MI_IND_IACCLLOOP, IndIacClLoop));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_UNIOUT1, UniOut1));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_UNIOUT2, UniOut2));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_UNIOUT3, UniOut3));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_UNIOUT4, UniOut4));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_UNIOUT5, UniOut5));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_UNIOUT6, UniOut6));
 
  m_indRows = IndRows;
  m_IndHeightCoeff = IndHeingtPercent / 100.0f;
@@ -1254,7 +1260,7 @@ void CMIDeskDlg::GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVB
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
-                      IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i, IndCfg_t &IndAftStrEnr, IndCfg_t &IndIacClLoop)
+                      IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i, IndCfg_t &IndAftStrEnr, IndCfg_t &IndIacClLoop, IndCfg_t &UniOut1, IndCfg_t &UniOut2, IndCfg_t &UniOut3, IndCfg_t &UniOut4, IndCfg_t &UniOut5, IndCfg_t &UniOut6)
 {
  IndHeingtPercent = m_IndHeightCoeff * 100.0f;
  IndRows = m_indRows;
@@ -1275,6 +1281,12 @@ void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_
  IndEpas_i = m_indCfg[IDM_MI_IND_EPAS_I];
  IndAftStrEnr = m_indCfg[IDM_MI_IND_AFTSTRENR];
  IndIacClLoop = m_indCfg[IDM_MI_IND_IACCLLOOP];
+ UniOut1 = m_indCfg[IDM_MI_IND_UNIOUT1];
+ UniOut2 = m_indCfg[IDM_MI_IND_UNIOUT2];
+ UniOut3 = m_indCfg[IDM_MI_IND_UNIOUT3];
+ UniOut4 = m_indCfg[IDM_MI_IND_UNIOUT4];
+ UniOut5 = m_indCfg[IDM_MI_IND_UNIOUT5];
+ UniOut6 = m_indCfg[IDM_MI_IND_UNIOUT6];
 }
 
 void CMIDeskDlg::setOnMISettingsChanged(EventHandler i_Function)
@@ -2732,6 +2744,30 @@ void CMIDeskDlg::_IndFactory(UINT uiID)
   case IDM_MI_IND_IACCLLOOP:
    if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
     m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_IACCLLOOP), m_indCfg[uiID].second, &m_values.iac_cl_loop, IDM_MI_IND_IACCLLOOP)));
+   break;
+  case IDM_MI_IND_UNIOUT1:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_UNIOUT1), m_indCfg[uiID].second, &m_values.uniout[0], IDM_MI_IND_UNIOUT1)));
+   break;
+  case IDM_MI_IND_UNIOUT2:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_UNIOUT2), m_indCfg[uiID].second, &m_values.uniout[1], IDM_MI_IND_UNIOUT2)));
+   break;
+  case IDM_MI_IND_UNIOUT3:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_UNIOUT3), m_indCfg[uiID].second, &m_values.uniout[2], IDM_MI_IND_UNIOUT3)));
+   break;
+  case IDM_MI_IND_UNIOUT4:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_UNIOUT4), m_indCfg[uiID].second, &m_values.uniout[3], IDM_MI_IND_UNIOUT4)));
+   break;
+  case IDM_MI_IND_UNIOUT5:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_UNIOUT5), m_indCfg[uiID].second, &m_values.uniout[4], IDM_MI_IND_UNIOUT5)));
+   break;
+  case IDM_MI_IND_UNIOUT6:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_UNIOUT6), m_indCfg[uiID].second, &m_values.uniout[5], IDM_MI_IND_UNIOUT6)));
    break;
  }
 }

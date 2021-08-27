@@ -33,7 +33,7 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";                                                                                                                                                                          //6.3     //6.3
-const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%5.1f%c %%5.1f%c %%6.1f%c %%4.2f%c %%5.1f%c %%4.2f%c %%07d%c %%6.2f%c %%5.1f%c %%01d%c %%05d%c %%s\r\n";
+const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%5.1f%c %%5.1f%c %%6.1f%c %%4.2f%c %%5.1f%c %%4.2f%c %%07d%c %%6.2f%c %%5.1f%c %%02d%c %%01d%c %%05d%c %%s\r\n";
 
 namespace {
 void DwordToString(DWORD value, char* str)
@@ -91,6 +91,10 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
   WRITEBIT32(service_flags, 6, p_sensors->idlreg_use);
   WRITEBIT32(service_flags, 7, p_sensors->octan_use);
   WRITEBIT32(service_flags, 8, p_sensors->rigid_use);
+
+  int uniout_flags = 0;
+  for(int i= 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
+   WRITEBIT8(uniout_flags, i, p_sensors->uniout[i]);
 
   fprintf(m_out_handle, m_csv_data_template,
                         p_sensors->frequen,
@@ -163,6 +167,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                        
                         p_sensors->maf,
                         p_sensors->vent_duty,         //cooling fan's duty
+                        uniout_flags,
 
                         m_pending_marks,
                         service_flags,
@@ -234,7 +239,7 @@ bool LogWriter::IsLoggingInProcess(void)
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogWriter::InjectMarks(int marks)

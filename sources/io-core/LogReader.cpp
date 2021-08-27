@@ -41,7 +41,7 @@ using namespace SECU3IO;
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 64
+#define CSV_COUNT_DATA_VAL 65
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -49,7 +49,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%d%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -221,6 +221,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty;
  char ce_errors[35] = {0};
  int service_flags = 0;
+ int uniout_flags = 0;
 
  result = sscanf(mp_recBuff + CSV_TIME_PANE_LEN, m_csv_data_template,
                 &frequen,
@@ -284,6 +285,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
                 &rxlaf,
                 &maf,
                 &vent_duty,
+                &uniout_flags,
                 &log_mark,
                 &service_flags,
                 &ce_errors);
@@ -366,6 +368,10 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.maf = maf;
  o_data.vent_duty = vent_duty;
 
+ //universal outputs
+ for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
+  o_data.uniout[i] = CHECKBIT8(uniout_flags, i);
+
  //Encode service flags
  o_data.knkret_use = CHECKBIT32(service_flags, 0);
  o_data.strt_use =   CHECKBIT32(service_flags, 1);
@@ -410,7 +416,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const

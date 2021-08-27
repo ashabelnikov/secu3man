@@ -306,6 +306,12 @@ BEGIN
     IDS_MI_IND_SET_COLOR     "Цвет"
     IDS_MI_IND_PERCHEIGHT    "Высота"
     IDS_MI_IND_ENDRAGNDROP   "Разрешить перетаскивание"
+    IDS_MI_IND_UNIOUT1  "Универ.1"
+    IDS_MI_IND_UNIOUT2  "Универ.2"
+    IDS_MI_IND_UNIOUT3  "Универ.3"
+    IDS_MI_IND_UNIOUT4  "Универ.4"
+    IDS_MI_IND_UNIOUT5  "Универ.5"
+    IDS_MI_IND_UNIOUT6  "Универ.6"
 END
 
 
@@ -609,6 +615,12 @@ BEGIN
     IDS_MI_IND_SET_COLOR     "Set color"
     IDS_MI_IND_PERCHEIGHT    "Height"
     IDS_MI_IND_ENDRAGNDROP   "Enable drag and drop"
+    IDS_MI_IND_UNIOUT1       "UnivOut1"
+    IDS_MI_IND_UNIOUT2       "UnivOut2"
+    IDS_MI_IND_UNIOUT3       "UnivOut3"
+    IDS_MI_IND_UNIOUT4       "UnivOut4"
+    IDS_MI_IND_UNIOUT5       "UnivOut5"
+    IDS_MI_IND_UNIOUT6       "UnivOut6"
 END
 
 /////////////////////////////////////////////////////////////////////////////

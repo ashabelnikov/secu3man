@@ -60,6 +60,13 @@ class CUniOutPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsLF(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControls1(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControls2(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControls3(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControls4(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControls5(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControls6(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsOut1Con2(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsOut2Con2(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsOut3Con2(CCmdUI* pCmdUI);
@@ -67,6 +74,7 @@ class CUniOutPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControlsOut5Con2(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsOut6Con2(CCmdUI* pCmdUI);
   afx_msg void OnChangeInvFlags(void);
+  afx_msg void OnChangeUseFlags(void);
   afx_msg void OnChangeDataOut1Con1(void);
   afx_msg void OnChangeDataOut1Con2(void);
   afx_msg void OnChangeDataOut2Con1(void);
@@ -101,6 +109,7 @@ class CUniOutPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   struct Out
   {
+   CButton use_check;
    CComboBox cond1_combo;
    CComboBox cond2_combo;
    CComboBox lf_combo;
