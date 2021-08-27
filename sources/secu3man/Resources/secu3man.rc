@@ -893,6 +893,11 @@ BEGIN
  IDS_DEV_DIAG_DE_CHECK_TT        "Вывод процессора DE (PC2). Выведен на один из контактов джампера установленного на плате. В данном случае тестируется как выход."
  IDS_DEV_DIAG_ADD_O1_CHECK_TT    "Выход ADD_O1 (управление разными устройствами)"
  IDS_DEV_DIAG_ADD_O2_CHECK_TT    "Выход ADD_O2 (управление разными устройствами)"
+ IDS_DEV_DIAG_INJ_O1_CHECK_TT    "Выход управления форсункой 1"
+ IDS_DEV_DIAG_INJ_O2_CHECK_TT    "Выход управления форсункой 2"
+ IDS_DEV_DIAG_INJ_O3_CHECK_TT    "Выход управления форсункой 3"
+ IDS_DEV_DIAG_INJ_O4_CHECK_TT    "Выход управления форсункой 4"
+ IDS_DEV_DIAG_INJ_O5_CHECK_TT    "Выход управления форсункой 5"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1781,6 +1786,11 @@ BEGIN
  IDS_DEV_DIAG_DE_CHECK_TT        "Processor's pin DE (PC2). Brought out to one of the contacts of the jumper installed on the board. In this case, it is tested as an output."
  IDS_DEV_DIAG_ADD_O1_CHECK_TT    "ADD_O1 output (control of various devices)"
  IDS_DEV_DIAG_ADD_O2_CHECK_TT    "ADD_O2 output (control of various devices)"
+ IDS_DEV_DIAG_INJ_O1_CHECK_TT    "Injector 1 output."
+ IDS_DEV_DIAG_INJ_O2_CHECK_TT    "Injector 2 output."
+ IDS_DEV_DIAG_INJ_O3_CHECK_TT    "Injector 3 output."
+ IDS_DEV_DIAG_INJ_O4_CHECK_TT    "Injector 4 output."
+ IDS_DEV_DIAG_INJ_O5_CHECK_TT    "Injector 5 output."
 END
 
 /////////////////////////////////////////////////////////////////////////////
