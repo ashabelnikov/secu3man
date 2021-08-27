@@ -836,6 +836,9 @@ BEGIN
     IDS_DEV_DIAG_GAS_V_TT           "Логическое состояние входа GAS_V (0 - нет напряжения, 1 - есть напряжение). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на индикацию значений на вкладке 'Диагностика'."
     IDS_DEV_DIAG_IGN_OUT1_CHECK_TT  "Управление выходом зажигания 1. Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Если ваш блок со встроенными силовыми ключами, то данная галочка работает наоборот. Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
     IDS_DEV_DIAG_IGN_OUT2_CHECK_TT  "Управление выходом зажигания 2. Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Если ваш блок со встроенными силовыми ключами, то данная галочка работает наоборот. Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_IGN_OUT3_CHECK_TT  "Управление выходом зажигания 3. Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Если ваш блок со встроенными силовыми ключами, то данная галочка работает наоборот. Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_IGN_OUT4_CHECK_TT  "Управление выходом зажигания 4. Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Если ваш блок со встроенными силовыми ключами, то данная галочка работает наоборот. Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
+    IDS_DEV_DIAG_IGN_OUT5_CHECK_TT  "Управление выходом зажигания 5. Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Если ваш блок со встроенными силовыми ключами, то данная галочка работает наоборот. Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
     IDS_DEV_DIAG_IE_CHECK_TT        "Управление выходом IE. Установите галочку и выход включится (транзистор начнет пропускать ток с 12В на выход). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
     IDS_DEV_DIAG_FE_CHECK_TT        "Управление выходом FE. Установите галочку и выход включится (транзистор начнет пропускать ток с 12В на выход). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
     IDS_DEV_DIAG_ST_BLOCK_CHECK_TT  "Управление выходом блокировки стартера (реле стартера). Установите галочку и выход включится (транзистор начнет пропускать ток с выхода на массу). Выпадающие списки и галочки инверсии в окне переназначения I/O не влияют на управление выходами на вкладке 'Диагностика'."
@@ -880,6 +883,16 @@ BEGIN
     IDS_LOG_PLAYER_GME_INJ_CHECK_TT "Открыть для просмотра и редактирования таблицы впрыска"
     IDS_LOG_PLAYER_GME_IGN_CHECK_TT "Открыть для просмотра и редактирования таблицы зажигания"
     IDS_LOG_PLAYER_MAPSET_COMBO_TT  "Выбор набора таблиц. На вкладке 'Данные прошивки' должна быть открыта прошивка, на вкладке 'EEPROM' должно быть открыто EEPROM. Первые сверху 4 набора таблиц - это таблицы из прошивки, последний набор таблиц - из EEPROM."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_DEV_DIAG_ECF_CHECK_TT       "Выход управления вентилятором / моментным РДВ (ШИМ)"
+ IDS_DEV_DIAG_CE_CHECK_TT        "Выход управления лампой Check Engine"
+ IDS_DEV_DIAG_BL_CHECK_TT        "Вывод процессора BL (PC3). Выведен на один из контактов джампера установленного на плате. В данном случае тестируется как выход."
+ IDS_DEV_DIAG_DE_CHECK_TT        "Вывод процессора DE (PC2). Выведен на один из контактов джампера установленного на плате. В данном случае тестируется как выход."
+ IDS_DEV_DIAG_ADD_O1_CHECK_TT    "Выход ADD_O1 (управление разными устройствами)"
+ IDS_DEV_DIAG_ADD_O2_CHECK_TT    "Выход ADD_O2 (управление разными устройствами)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1711,6 +1724,9 @@ BEGIN
     IDS_DEV_DIAG_GAS_V_TT           "Logical state of GAS_V input (0 - no voltage, 1 - voltage). Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the indication of values on the 'Diagnostics' tab."
     IDS_DEV_DIAG_IGN_OUT1_CHECK_TT  "Control of the ignition output 1. Check the box and the output will turn on (transistor will begin to pass current to ground). If your unit with embedded coil drivers this check will work vice versa. Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
     IDS_DEV_DIAG_IGN_OUT2_CHECK_TT  "Control of the ignition output 2. Check the box and the output will turn on (transistor will begin to pass current to ground). If your unit with embedded coil drivers this check will work vice versa. Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_IGN_OUT3_CHECK_TT  "Control of the ignition output 3. Check the box and the output will turn on (transistor will begin to pass current to ground). If your unit with embedded coil drivers this check will work vice versa. Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_IGN_OUT4_CHECK_TT  "Control of the ignition output 4. Check the box and the output will turn on (transistor will begin to pass current to ground). If your unit with embedded coil drivers this check will work vice versa. Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
+    IDS_DEV_DIAG_IGN_OUT5_CHECK_TT  "Control of the ignition output 5. Check the box and the output will turn on (transistor will begin to pass current to ground). If your unit with embedded coil drivers this check will work vice versa. Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
     IDS_DEV_DIAG_IE_CHECK_TT        "Сontrol of IE output. Check the box and the output will turn on (transistor will begin to pass current from 12V to the output). Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
     IDS_DEV_DIAG_FE_CHECK_TT        "Control of FE output. Check the box and the output will turn on (transistor will begin to pass current from 12V to the output). Drop-down lists and inversion checkboxes in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
     IDS_DEV_DIAG_ST_BLOCK_CHECK_TT  "Control of starter blocking output (starter relay). Check the box and the output will turn on (transistor will begin to pass current from the output to ground). Drop-down lists and checkboxes of inversions in the I/O reassignment window do not affect the control of outputs on the 'Diagnostics' tab."
@@ -1755,6 +1771,16 @@ BEGIN
     IDS_LOG_PLAYER_GME_INJ_CHECK_TT "Open injection maps for viewing and editing"
     IDS_LOG_PLAYER_GME_IGN_CHECK_TT "Open ignition maps for viewing and editing"
     IDS_LOG_PLAYER_MAPSET_COMBO_TT  "Selecting a set of tables. On the 'Firmware data' tab, the firmware should be open, on the 'EEPROM' tab, the EEPROM should be open. The first 4 sets of tables on the top of the list are from the firmware, the last set (bottom) of tables is from the EEPROM. "
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_DEV_DIAG_ECF_CHECK_TT       "Output for controlling cooling fan / IAC valve (PWM)"
+ IDS_DEV_DIAG_CE_CHECK_TT        "Output for controlling Check Engine lamp"
+ IDS_DEV_DIAG_BL_CHECK_TT        "Processor's pin BL (PC3). Brought out to one of the contacts of the jumper installed on the board. In this case, it is tested as an output."
+ IDS_DEV_DIAG_DE_CHECK_TT        "Processor's pin DE (PC2). Brought out to one of the contacts of the jumper installed on the board. In this case, it is tested as an output."
+ IDS_DEV_DIAG_ADD_O1_CHECK_TT    "ADD_O1 output (control of various devices)"
+ IDS_DEV_DIAG_ADD_O2_CHECK_TT    "ADD_O2 output (control of various devices)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
