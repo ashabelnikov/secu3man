@@ -117,6 +117,15 @@ BOOL CDevDiagOutsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_INJ_O3_CHECK), MLL::GetString(IDS_DEV_DIAG_INJ_O3_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_INJ_O4_CHECK), MLL::GetString(IDS_DEV_DIAG_INJ_O4_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_INJ_O5_CHECK), MLL::GetString(IDS_DEV_DIAG_INJ_O5_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_FPMP_O_CHECK), MLL::GetString(IDS_DEV_DIAG_FPMP_O_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_PWRR_O_CHECK), MLL::GetString(IDS_DEV_DIAG_PWRR_O_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_EVAP_O_CHECK), MLL::GetString(IDS_DEV_DIAG_EVAP_O_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_O2SH_O_CHECK), MLL::GetString(IDS_DEV_DIAG_O2SH_O_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_COND_O_CHECK), MLL::GetString(IDS_DEV_DIAG_COND_O_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_ADD_O2_CHECK1), MLL::GetString(IDS_DEV_DIAG_ADD_O2_CHECK1_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_TACH_O_CHECK), MLL::GetString(IDS_DEV_DIAG_TACH_O_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_BLO_CHECK), MLL::GetString(IDS_DEV_DIAG_BLO_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_DEO_CHECK), MLL::GetString(IDS_DEV_DIAG_DEO_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

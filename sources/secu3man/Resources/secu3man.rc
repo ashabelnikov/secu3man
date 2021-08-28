@@ -326,9 +326,9 @@ FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "",IDC_DEV_DIAG_VOLTAGE,6,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "Voltage",IDC_DEV_DIAG_VOLTAGE_CAPTION,42,0,40,12
-    LTEXT           "",IDC_DEV_DIAG_MAP_S,6,25,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_MAP_S,6,25,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "MAP_S",IDC_DEV_DIAG_MAP_S_CAPTION,42,25,40,12
-    LTEXT           "",IDC_DEV_DIAG_TEMP,6,50,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_TEMP,6,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "TEMP",IDC_DEV_DIAG_TEMP_CAPTION,42,50,40,12
     LTEXT           "",IDC_DEV_DIAG_ADD_I1,6,75,30,12,0,WS_EX_STATICEDGE
     LTEXT           "ADD_I1",IDC_DEV_DIAG_ADD_I1_CAPTION,42,75,40,12
@@ -345,9 +345,9 @@ BEGIN
 
     LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "GAS_V",IDC_DEV_DIAG_GAS_V_CAPTION,122,0,40,12
-    LTEXT           "",IDC_DEV_DIAG_CKPS,85,25,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_CKPS,85,25,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "CKPS",IDC_DEV_DIAG_CKPS_CAPTION,122,25,40,12
-    LTEXT           "",IDC_DEV_DIAG_REF_S,85,50,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_REF_S,85,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "REF_S",IDC_DEV_DIAG_REF_S_CAPTION,122,50,40,12
     LTEXT           "",IDC_DEV_DIAG_PS,85,75,30,12,0,WS_EX_STATICEDGE
     LTEXT           "PS",IDC_DEV_DIAG_PS_CAPTION,122,75,40,12
@@ -898,6 +898,19 @@ BEGIN
  IDS_DEV_DIAG_INJ_O3_CHECK_TT    "Выход управления форсункой 3"
  IDS_DEV_DIAG_INJ_O4_CHECK_TT    "Выход управления форсункой 4"
  IDS_DEV_DIAG_INJ_O5_CHECK_TT    "Выход управления форсункой 5"
+ IDS_DEV_DIAG_FPMP_O_CHECK_TT    "Выход управления реле электрического бензонасоса"
+ IDS_DEV_DIAG_PWRR_O_CHECK_TT    "Выход управления реле питанием блока (главное реле)"
+ IDS_DEV_DIAG_EVAP_O_CHECK_TT    "Выход управления клапаном продувки адсорбера"
+ IDS_DEV_DIAG_O2SH_O_CHECK_TT    "Выход управления подогревом датчика кислорода"
+ IDS_DEV_DIAG_COND_O_CHECK_TT    "Выход управления муфтой кондиционера"
+ IDS_DEV_DIAG_ADD_O2_CHECK1_TT   "Дополнительный выход, используется для управления различными устройствами"
+ IDS_DEV_DIAG_TACH_O_CHECK_TT    "Выход импульсов для тахометра (PC4, INT/~HOLD)"
+ IDS_DEV_DIAG_BLO_CHECK_TT       "Вход/Выход BL_I (PC3), 'голый' вывод процессра (без буферного транзистора). В данном случае тестируется как выход. Внутри блока вывод процессора подсоединен к сигналу DIR контроллера шагового двигателя и к затвору опционального транзистора, выход которого выведен на контакт внешнего разъема SM_AO1."
+ IDS_DEV_DIAG_DEO_CHECK_TT       "Вход/Выход DE_I (PC2), 'голый' вывод процессра (без буферного транзистора). В данном случае тестируется как выход. Внутри блока вывод процессора подсоединен к сигналу STEP контроллера шагового двигателя и к затвору опционального транзистора, выход которого выведен на контакт внешнего разъема SM_AO2."
+ IDS_DEV_DIAG_MAP_S_TT           "Вход ДАД (PA2)"
+ IDS_DEV_DIAG_TEMP_TT            "Вход ДТОЖ (PA0)"
+ IDS_DEV_DIAG_CKPS_TT            "Вход ДПКВ/ДУИ (PD6)"
+ IDS_DEV_DIAG_REF_S_TT           "Вход ДНО (PD2)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1221,9 +1234,9 @@ FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "",IDC_DEV_DIAG_VOLTAGE,6,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "Voltage",IDC_DEV_DIAG_VOLTAGE_CAPTION,42,0,40,12
-    LTEXT           "",IDC_DEV_DIAG_MAP_S,6,25,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_MAP_S,6,25,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "MAP_S",IDC_DEV_DIAG_MAP_S_CAPTION,42,25,40,12
-    LTEXT           "",IDC_DEV_DIAG_TEMP,6,50,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_TEMP,6,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "TEMP",IDC_DEV_DIAG_TEMP_CAPTION,42,50,40,12
     LTEXT           "",IDC_DEV_DIAG_ADD_I1,6,75,30,12,0,WS_EX_STATICEDGE
     LTEXT           "ADD_I1",IDC_DEV_DIAG_ADD_I1_CAPTION,42,75,40,12
@@ -1240,9 +1253,9 @@ BEGIN
 
     LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "GAS_V",IDC_DEV_DIAG_GAS_V_CAPTION,122,0,40,12
-    LTEXT           "",IDC_DEV_DIAG_CKPS,85,25,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_CKPS,85,25,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "CKPS",IDC_DEV_DIAG_CKPS_CAPTION,122,25,40,12
-    LTEXT           "",IDC_DEV_DIAG_REF_S,85,50,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_REF_S,85,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "REF_S",IDC_DEV_DIAG_REF_S_CAPTION,122,50,40,12
     LTEXT           "",IDC_DEV_DIAG_PS,85,75,30,12,0,WS_EX_STATICEDGE
     LTEXT           "PS",IDC_DEV_DIAG_PS_CAPTION,122,75,40,12
@@ -1791,6 +1804,19 @@ BEGIN
  IDS_DEV_DIAG_INJ_O3_CHECK_TT    "Injector 3 output."
  IDS_DEV_DIAG_INJ_O4_CHECK_TT    "Injector 4 output."
  IDS_DEV_DIAG_INJ_O5_CHECK_TT    "Injector 5 output."
+ IDS_DEV_DIAG_FPMP_O_CHECK_TT    "Output for electric fuel pump"
+ IDS_DEV_DIAG_PWRR_O_CHECK_TT    "Output for controlling unit's supply (main relay)"
+ IDS_DEV_DIAG_EVAP_O_CHECK_TT    "Output for canister purge valve"
+ IDS_DEV_DIAG_O2SH_O_CHECK_TT    "Output for heater of exhaust gas oxygen sensor"
+ IDS_DEV_DIAG_COND_O_CHECK_TT    "Output for air conditioner's clutch"
+ IDS_DEV_DIAG_ADD_O2_CHECK1_TT   "Auxiliary output (control of various devices)"
+ IDS_DEV_DIAG_TACH_O_CHECK_TT    "Output producing pulses for tachometer (PC4, INT/~HOLD)"
+ IDS_DEV_DIAG_BLO_CHECK_TT       "Input/Output BL_I (PC3), 'bare' processor's pin (without buffering transistor). Here, it is tested as an output. Inside the unit, the processor's pin is connected to the DIR signal of the stepper motor controller and to the gate of the optional transistor, the output of which is brought out to the SM_AO1 contact of the external connector."
+ IDS_DEV_DIAG_DEO_CHECK_TT       "Input/Output BL_I (PC2), 'bare' processor's pin (without buffering transistor). Here, it is tested as an output. Inside the unit, the processor's pin is connected to the STEP signal of the stepper motor controller and to the gate of the optional transistor, the output of which is brought out to the SM_AO2 contact of the external connector."
+ IDS_DEV_DIAG_MAP_S_TT           "Input for MAP sensor (PA2)"
+ IDS_DEV_DIAG_TEMP_TT            "Input for CLT sensor (PA0)"
+ IDS_DEV_DIAG_CKPS_TT            "Input for CKP sensor (PD6)"
+ IDS_DEV_DIAG_REF_S_TT           "Input for CKP reference sensor (PD2)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

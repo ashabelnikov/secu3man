@@ -129,6 +129,11 @@ BOOL CDevDiagInpsDlg::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_VOLTAGE), MLL::GetString(IDS_DEV_DIAG_VOLTAGE_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_GAS_V), MLL::GetString(IDS_DEV_DIAG_GAS_V_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_MAP_S), MLL::GetString(IDS_DEV_DIAG_MAP_S_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_TEMP), MLL::GetString(IDS_DEV_DIAG_TEMP_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_CKPS), MLL::GetString(IDS_DEV_DIAG_CKPS_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_REF_S), MLL::GetString(IDS_DEV_DIAG_REF_S_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
