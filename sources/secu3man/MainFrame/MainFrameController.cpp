@@ -185,18 +185,19 @@ void MainFrameController::OnAppSettings()
 
   mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
 
+  //Control state of the "Inj.driver" tab
+  mp_view->EnableTab(7, settings->GetInjDrvTabActive()); 
+
+  //Do restart if required (must be last)
   if (m_pAppSettingsManager->IsRestartRequired())
   {
    if (IDYES == SECUMessageBox(MLL::LoadString(IDS_APP_SETTINGS_APPRESTART_CONFIRM), MB_YESNO | MB_DEFBUTTON1))
    {
-    if (RA_ActivateRestartProcess())
-     AfxGetMainWnd()->DestroyWindow();
+    AfxGetMainWnd()->SendMessage(WM_CLOSE, NULL, NULL);
+    if (!::IsWindow(mp_view->m_hWnd)) //start new instance of app. only if previous instance is not alive (users might cancel exiting)
+     RA_ActivateRestartProcess();
    }
   }
-
-  //Control state of the "Inj.driver" tab
-  if (IsWindow(mp_view->GetSafeHwnd()))
-   mp_view->EnableTab(7, settings->GetInjDrvTabActive()); 
  }
 }
 
@@ -575,8 +576,9 @@ void MainFrameController::OnEditSettings()
   mp_view->EndWaitCursor();
   if (IDYES == SECUMessageBox(MLL::LoadString(IDS_APP_SETTINGS_APPRESTART_CONFIRM), MB_YESNO | MB_DEFBUTTON1))
   {
-   if (RA_ActivateRestartProcess())
-    AfxGetMainWnd()->DestroyWindow();
+   AfxGetMainWnd()->SendMessage(WM_CLOSE, NULL, NULL);
+   if (!::IsWindow(mp_view->m_hWnd)) //start new instance of app. only if previous instance is not alive (users might cancel exiting)
+    RA_ActivateRestartProcess();
   }
  }
 }
