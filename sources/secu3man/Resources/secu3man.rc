@@ -330,17 +330,17 @@ BEGIN
     LTEXT           "MAP_S",IDC_DEV_DIAG_MAP_S_CAPTION,42,25,40,12
     LTEXT           "",IDC_DEV_DIAG_TEMP,6,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "TEMP",IDC_DEV_DIAG_TEMP_CAPTION,42,50,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I1,6,75,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I1,6,75,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I1",IDC_DEV_DIAG_ADD_I1_CAPTION,42,75,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I2,6,100,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I2,6,100,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I2",IDC_DEV_DIAG_ADD_I2_CAPTION,42,100,40,12
-    LTEXT           "",IDC_DEV_DIAG_CARB,6,125,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_CARB,6,125,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "CARB",IDC_DEV_DIAG_CARB_CAPTION,42,125,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I3,6,150,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I3,6,150,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I3",IDC_DEV_DIAG_ADD_I3_CAPTION,42,150,40,12
-    LTEXT           "",IDC_DEV_DIAG_IGN_I,6,175,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_IGN_I,6,175,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "IGN_I",IDC_DEV_DIAG_IGN_I_CAPTION,42,175,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I4,6,200,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I4,6,200,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I4",IDC_DEV_DIAG_ADD_I4_CAPTION,42,200,40,12
 
     LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
@@ -349,23 +349,23 @@ BEGIN
     LTEXT           "CKPS",IDC_DEV_DIAG_CKPS_CAPTION,122,25,40,12
     LTEXT           "",IDC_DEV_DIAG_REF_S,85,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "REF_S",IDC_DEV_DIAG_REF_S_CAPTION,122,50,40,12
-    LTEXT           "",IDC_DEV_DIAG_PS,85,75,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_PS,85,75,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "PS",IDC_DEV_DIAG_PS_CAPTION,122,75,40,12
-    LTEXT           "",IDC_DEV_DIAG_BL,85,100,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_BL,85,100,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "BL jmp",IDC_DEV_DIAG_BL_CAPTION,122,100,40,12
-    LTEXT           "",IDC_DEV_DIAG_DE,85,125,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_DE,85,125,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "DE jmp",IDC_DEV_DIAG_DE_CAPTION,122,125,40,12
-    LTEXT           "",IDC_DEV_DIAG_COND_I,85,150,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_COND_I,85,150,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "COND_I",IDC_DEV_DIAG_COND_I_CAPTION,122,150,40,12
-    LTEXT           "",IDC_DEV_DIAG_EPAS_I,85,175,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_EPAS_I,85,175,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "EPAS_I",IDC_DEV_DIAG_EPAS_I_CAPTION,122,175,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I5,85,200,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I5,85,200,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I5",IDC_DEV_DIAG_ADD_I5_CAPTION,122,200,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I6,6,225,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I6,6,225,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I6",IDC_DEV_DIAG_ADD_I6_CAPTION,42,225,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I7,85,225,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I7,85,225,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I7",IDC_DEV_DIAG_ADD_I7_CAPTION,122,225,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I8,6,250,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I8,6,250,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I8",IDC_DEV_DIAG_ADD_I8_CAPTION,42,250,40,12
 END
 
@@ -911,6 +911,21 @@ BEGIN
  IDS_DEV_DIAG_TEMP_TT            "Вход ДТОЖ (PA0)"
  IDS_DEV_DIAG_CKPS_TT            "Вход ДПКВ/ДУИ (PD6)"
  IDS_DEV_DIAG_REF_S_TT           "Вход ДНО (PD2)"
+ IDS_DEV_DIAG_PS_TT              "Вход датчика фаз (PD3)"
+ IDS_DEV_DIAG_BL_TT              "Вход/Выход BL (PC3), 'голый' вывод процессра. В данном случае тестируется как вход. В блоках SECU-3i данная нога процессара выведена на контакт внешнего разъема BL_I, в остальных блоках выведена на один из контактов перемычки на плате. Данный вход используется для аварийного запуска встроенного загрузчика."
+ IDS_DEV_DIAG_DE_TT              "Вход/Выход DE (PC2), 'голый' вывод процессра. В данном случае тестируется как вход. В блоках SECU-3i данная нога процессара выведена на контакт внешнего разъема DE_I, в остальных блоках выведена на один из контактов перемычки на плате. Данный вход используется для аварийного сброса EEPROM."
+ IDS_DEV_DIAG_ADD_I1_TT          "Аналоговый вход ADD_I1 (PA6)"
+ IDS_DEV_DIAG_ADD_I2_TT          "Аналоговый вход ADD_I2 (PA5)"
+ IDS_DEV_DIAG_ADD_I3_TT          "Аналоговый вход ADD_I3 (PA4)"
+ IDS_DEV_DIAG_ADD_I4_TT          "Аналоговый вход ADD_I4 (PA3)"
+ IDS_DEV_DIAG_CARB_TT            "Вход концевика дроссельной заслонки / ДПДЗ"
+ IDS_DEV_DIAG_IGN_I_TT           "Вход контроля напряжения с замка зажигания. Используется для управления питанием блока."
+ IDS_DEV_DIAG_COND_I_TT          "Вход запроса включения муфты кондиционера."
+ IDS_DEV_DIAG_EPAS_I_TT          "Вход запроса включения ЭУР"
+ IDS_DEV_DIAG_ADD_I5_TT          "Аналоговый вход ADD_I5 (расширитель MCP3204)"
+ IDS_DEV_DIAG_ADD_I6_TT          "Аналоговый вход ADD_I6 (расширитель MCP3204)"
+ IDS_DEV_DIAG_ADD_I7_TT          "Аналоговый вход ADD_I7 (расширитель MCP3204)"
+ IDS_DEV_DIAG_ADD_I8_TT          "Аналоговый вход ADD_I8 (расширитель MCP3204)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1238,17 +1253,17 @@ BEGIN
     LTEXT           "MAP_S",IDC_DEV_DIAG_MAP_S_CAPTION,42,25,40,12
     LTEXT           "",IDC_DEV_DIAG_TEMP,6,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "TEMP",IDC_DEV_DIAG_TEMP_CAPTION,42,50,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I1,6,75,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I1,6,75,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I1",IDC_DEV_DIAG_ADD_I1_CAPTION,42,75,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I2,6,100,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I2,6,100,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I2",IDC_DEV_DIAG_ADD_I2_CAPTION,42,100,40,12
-    LTEXT           "",IDC_DEV_DIAG_CARB,6,125,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_CARB,6,125,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "CARB",IDC_DEV_DIAG_CARB_CAPTION,42,125,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I3,6,150,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I3,6,150,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I3",IDC_DEV_DIAG_ADD_I3_CAPTION,42,150,40,12
-    LTEXT           "",IDC_DEV_DIAG_IGN_I,6,175,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_IGN_I,6,175,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "IGN_I",IDC_DEV_DIAG_IGN_I_CAPTION,42,175,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I4,6,200,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I4,6,200,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I4",IDC_DEV_DIAG_ADD_I4_CAPTION,42,200,40,12
 
     LTEXT           "",IDC_DEV_DIAG_GAS_V,85,0,30,12,SS_NOTIFY,WS_EX_STATICEDGE
@@ -1257,23 +1272,23 @@ BEGIN
     LTEXT           "CKPS",IDC_DEV_DIAG_CKPS_CAPTION,122,25,40,12
     LTEXT           "",IDC_DEV_DIAG_REF_S,85,50,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "REF_S",IDC_DEV_DIAG_REF_S_CAPTION,122,50,40,12
-    LTEXT           "",IDC_DEV_DIAG_PS,85,75,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_PS,85,75,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "PS",IDC_DEV_DIAG_PS_CAPTION,122,75,40,12
-    LTEXT           "",IDC_DEV_DIAG_BL,85,100,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_BL,85,100,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "BL jmp",IDC_DEV_DIAG_BL_CAPTION,122,100,40,12
-    LTEXT           "",IDC_DEV_DIAG_DE,85,125,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_DE,85,125,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "DE jmp",IDC_DEV_DIAG_DE_CAPTION,122,125,40,12
-    LTEXT           "",IDC_DEV_DIAG_COND_I,85,150,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_COND_I,85,150,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "COND_I",IDC_DEV_DIAG_COND_I_CAPTION,122,150,40,12
-    LTEXT           "",IDC_DEV_DIAG_EPAS_I,85,175,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_EPAS_I,85,175,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "EPAS_I",IDC_DEV_DIAG_EPAS_I_CAPTION,122,175,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I5,85,200,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I5,85,200,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I5",IDC_DEV_DIAG_ADD_I5_CAPTION,122,200,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I6,6,225,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I6,6,225,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I6",IDC_DEV_DIAG_ADD_I6_CAPTION,42,225,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I7,85,225,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I7,85,225,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I7",IDC_DEV_DIAG_ADD_I7_CAPTION,122,225,40,12
-    LTEXT           "",IDC_DEV_DIAG_ADD_I8,6,250,30,12,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_DEV_DIAG_ADD_I8,6,250,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I8",IDC_DEV_DIAG_ADD_I8_CAPTION,42,250,40,12
 END
 
@@ -1817,6 +1832,21 @@ BEGIN
  IDS_DEV_DIAG_TEMP_TT            "Input for CLT sensor (PA0)"
  IDS_DEV_DIAG_CKPS_TT            "Input for CKP sensor (PD6)"
  IDS_DEV_DIAG_REF_S_TT           "Input for CKP reference sensor (PD2)"
+ IDS_DEV_DIAG_PS_TT              "Input for camshaft position sensor (PD3)"
+ IDS_DEV_DIAG_BL_TT              "Input/Output BL (PC3), processor's 'bare' pin (not protected). Here, it is tested as an input. In SECU-3i units, this processor's pin is brought out to the BL_I contact of the external connector, in other units it is brought out to one of the jumper contacts on PCB. This input is used for emergency startup of the built-in bootloader."
+ IDS_DEV_DIAG_DE_TT              "Input/Output DE (PC2), processor's 'bare' pin (not protected). Here, it is tested as an input. In SECU-3i units, this processor's pin is brought out to the DE_I contact of the external connector, in other units it is brought out to one of the jumper contacts on PCB. This input is used for emergency resetting EEPROM."
+ IDS_DEV_DIAG_ADD_I1_TT          "Analog input ADD_I1 (PA6)"
+ IDS_DEV_DIAG_ADD_I2_TT          "Analog input ADD_I2 (PA5)"
+ IDS_DEV_DIAG_ADD_I3_TT          "Analog input ADD_I3 (PA4)"
+ IDS_DEV_DIAG_ADD_I4_TT          "Analog input ADD_I4 (PA3)"
+ IDS_DEV_DIAG_CARB_TT            "Input for throttle limit switch / TPS"
+ IDS_DEV_DIAG_IGN_I_TT           "Voltage control input from the ignition lock. Used to control power to the unit."
+ IDS_DEV_DIAG_COND_I_TT          "Input for turn on request from air conditioner."
+ IDS_DEV_DIAG_EPAS_I_TT          "Input for turn on request from electric power steering"
+ IDS_DEV_DIAG_ADD_I5_TT          "Analog input ADD_I5 (MCP3204 expander)"
+ IDS_DEV_DIAG_ADD_I6_TT          "Analog input ADD_I6 (MCP3204 expander)"
+ IDS_DEV_DIAG_ADD_I7_TT          "Analog input ADD_I7 (MCP3204 expander)"
+ IDS_DEV_DIAG_ADD_I8_TT          "Analog input ADD_I8 (MCP3204 expander)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
