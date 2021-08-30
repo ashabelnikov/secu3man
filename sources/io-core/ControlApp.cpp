@@ -136,7 +136,6 @@ CControlApp::CControlApp()
 , m_portAutoReopen(true)
 , m_ignore_n_packets(0)
 , m_splitAng(false)
-, m_checksum_all(true)
 , m_blman_packet(false)
 {
  m_pPackets = new Packets();
@@ -2868,13 +2867,15 @@ bool CControlApp::ParsePackets()
 {
  Packets::iterator it;
  bool status = false;
-
- bool use_checksum = m_checksum_all && !mp_pdp->isHex(); //use checksum only if enabled and if binary mode
  m_blman_packet = false;
 
  ASSERT(m_pPackets);
  for(it = m_pPackets->begin(); it!=m_pPackets->end(); ++it)
  {
+  //don't use checksum for LZIDBL_HS packets because a lot of users already have units with bootloader which does't support checksum.
+  //For INJDRV_PAR packets checksum is calculated inside methods of PacketDataProxy class
+  bool use_checksum = (*it)[1]!=INJDRV_PAR && (*it)[1]!=LZIDBL_HS && !mp_pdp->isHex(); //don't use checksum for specified packet types and for Hex mode
+
   if (it->size() < ((size_t)(use_checksum ? 5 : 3)) || (*it)[0] != '@')
    continue;
   if (it->back() != '\r')
@@ -3024,9 +3025,14 @@ bool CControlApp::ParsePackets()
      break;
     continue;
    case INJDRV_PAR:
-    if (Parse_INJDRV_PAR(p_start, p_size))
+    {
+    mp_pdp->EnableCRC(true);
+    bool result = Parse_INJDRV_PAR(p_start, p_size);
+    mp_pdp->EnableCRC(false);
+    if (result)
      break;
     continue;
+    }
    case LZIDBL_HS:
     if (Parse_LZIDBL_HS(p_start, p_size))
      break;
@@ -3373,22 +3379,28 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    Build_ACCEL_PAR((AccelPar*)i_packet_data);
    break;
   case INJDRV_PAR:
+   mp_pdp->EnableCRC(true);
    Build_INJDRV_PAR((InjDrvPar*)i_packet_data);
+   break;
+  case INJDRV_ADR:
+   mp_pdp->EnableCRC(true);
+   Build_INJDRV_ADR((InjDrvAdr*)i_packet_data);
    break;
   case LZIDBL_HS:
    Build_LZIDBL_HS((LzidBLHS*)i_packet_data);
-   break;
-  case INJDRV_ADR:
-   Build_INJDRV_ADR((InjDrvAdr*)i_packet_data);
    break;
 
   default:
    return false; //invalid descriptor
  }//switch
 
+ mp_pdp->EnableCRC(false);
 
- if (m_checksum_all && !mp_pdp->isHex())
- { //calculate and put checksum value
+
+ //don't use checksum for LZIDBL_HS packets because a lot of users already have units with bootloader which does't support checksum.
+ if (i_descriptor!=LZIDBL_HS && !mp_pdp->isCRCEnabled() && !mp_pdp->isHex())
+ {
+  //calculate and put checksum value
   int checksum = FletcherChecksum(m_outgoing_packet, 2, m_outgoing_packet.size() - 2);
   mp_pdp->Bin16ToHex(checksum, m_outgoing_packet); //append packet with two bytes of checksum
  }
@@ -4436,14 +4448,6 @@ void CControlApp::IgnoreNPackets(int n)
 void CControlApp::SetSplitAngMode(bool mode)
 {
  m_splitAng = mode;
-}
-
-//-----------------------------------------------------------------------
-void CControlApp::SetChecksumMode(bool check_all)
-{ //Enable checksum for SECU and disable chacksum for LZID and vice versa
- m_checksum_all = check_all;
- if (mp_pdp)
-  mp_pdp->EnableCRC(!check_all);
 }
 
 //-----------------------------------------------------------------------

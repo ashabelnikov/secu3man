@@ -304,3 +304,8 @@ void PacketDataProxy::EnableCRC(bool enable)
 {
  m_useCrc = enable;
 }
+
+bool PacketDataProxy::isCRCEnabled(void)
+{
+ return m_useCrc;
+}

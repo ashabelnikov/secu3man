@@ -110,8 +110,6 @@ class IOCORE_API CControlApp
 
   void IgnoreNPackets(int n);
 
-  void SetChecksumMode(bool check_all);
-
  private:
   typedef std::vector<std::vector<BYTE> > Packets;
 
@@ -157,7 +155,6 @@ class IOCORE_API CControlApp
   volatile long m_quartz_frq;           //MCU clock frequency
   volatile int m_speedUnit;
   volatile bool m_splitAng;
-  volatile bool m_checksum_all;
 
   //helper
   void SwitchOnThread(bool state);

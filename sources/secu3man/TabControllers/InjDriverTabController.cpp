@@ -138,8 +138,6 @@ void CInjDriverTabController::OnActivate(void)
  mp_comm->m_pControlApp->ChangeContext(SILENT);
  mp_view->EnableBLItems(true);
 
- mp_comm->m_pControlApp->SetChecksumMode(false); //set checksum mode for communication with SECU-LZIDx
-
  //select device depending on the drop down list
  SECU3IO::InjDrvAdr adr;
  adr.dev_address = mp_view->GetInjDrvSel();
@@ -159,7 +157,6 @@ void CInjDriverTabController::OnDeactivate(void)
  m_address_tmr.KillTimer();
  mp_comm->m_pBootLoader->SetPlatformParameters(PlatformParamHolder(mp_sett->GetECUPlatformType()));
  m_bl_op = 0;
- mp_comm->m_pControlApp->SetChecksumMode(true); //set checksum mode for communication with SECU-3
  mp_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //set default context before exiting
 }
 
