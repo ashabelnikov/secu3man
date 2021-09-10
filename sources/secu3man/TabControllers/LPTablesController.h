@@ -85,8 +85,8 @@ class CLPTablesController : public MapWndScrPos
   float iaccwMap[16+2];
   float aftstrMap[16];
   float wrmpMap[16];
-  float aetpsMap[8];
-  float aerpmMap[4];
+  float aetpsMap[8*2]; //map+bins
+  float aerpmMap[4*2]; //map+bins
   float crnkMap[16];
   float deadMap[32];
   float egocrvMap[16+2];
