@@ -223,6 +223,16 @@ BOOL CSecu3manApp::InitInstance()
  if (RA_CheckForRestartProcessStart())
   RA_WaitForPreviousProcessFinish();
 
+ //load MS Sans Serif font
+ TCHAR szDirectory[MAX_PATH] = "";
+ ::GetCurrentDirectory(sizeof(szDirectory) - 1, szDirectory);
+ _TSTRING fontPath = _TSTRING(szDirectory) + _T("\\") + _TSTRING(_T("sserifer.fon"));
+ if (0==AddFontResourceEx(fontPath.c_str(), FR_PRIVATE, 0))
+ {
+  _TSSTREAM str; str << _T("Can't load ") << fontPath <<  _T(" file with 'MS Sans Serif' font!");
+  ::MessageBox(NULL, str.str().c_str(), _T("Error"), MB_OK | MB_ICONWARNING);
+ }
+
  AfxEnableControlContainer();
 
  CoInitialize(NULL);
