@@ -71,6 +71,18 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
 
   void OnSettingsChanged(int action);
 
+  void OnTrimtabButton(void);
+  void OnTrimtabReadButton(void);
+  void OnTrimtabResetButton(void);
+  void OnTrimtabSaveButton(void);
+
+  void PPS_SetOperation(int pps, bool clear_ltft_chache = false);
+  bool PPS_ReadFWOptions(const BYTE i_descriptor, const void* i_packet_data);
+  bool PPS_ReadFunset(const BYTE i_descriptor, const void* i_packet_data);
+  bool PPS_ReadRPMGrid(const BYTE i_descriptor, const void* i_packet_data);
+  bool PPS_ReadLodGrid(const BYTE i_descriptor, const void* i_packet_data);
+  bool PPS_ReadLTFTMap(const BYTE i_descriptor, const void* i_packet_data);
+
   //data
   CCheckEngineTabDlg*  m_view;
   CCommunicationManager* m_comm;
@@ -83,4 +95,28 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   std::auto_ptr<CEErrorIdStr> mp_errors_ids;
 
   CObjectTimer<CCheckEngineTabController> m_autoCETmr;
+
+  float m_rpmGrid[16];       //RPM grid for LTFT map
+  float m_loadGrid[16];      //load grid for LTFT map
+  float m_trimTab[256];      //contents of the LTFT map
+
+  int m_packet_processing_state;
+  int m_operation_state;
+
+  enum //Packet Processing States
+  {
+   PPS_READ_FWOPTIONS = 0,   //read firmare options
+   PPS_READ_FUNSET = 1,      //read FUNSET_PAR
+   PPS_READ_RPMGRID = 2,     //read RPM grid
+   PPS_READ_LODGRID = 3,     //read load grid
+   PPS_READ_LTFT_MAP = 4,    //read LTFT map
+   PPS_READ_MONITOR_DATA = 5 //read SENSOR_DAT
+  };
+
+  DWORD m_fw_options; //Firmware options' bits read from SECU
+  std::vector<int> m_rdLTFTMapFlags; //LTFT map acquisition flags
+  std::vector<float> m_ltft_load_slots; //load axis's grid
+  float m_ldaxMinVal;  //minimum value on the load axis
+  bool m_ldaxBaro;     //use dynamic upper value on the load axis
+  float m_baroPrev;    //previous value of baro pressure
 };

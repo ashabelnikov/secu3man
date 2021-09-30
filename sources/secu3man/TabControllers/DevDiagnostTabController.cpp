@@ -308,6 +308,12 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
   const SECU3IO::OPCompNc* p_ndata = (SECU3IO::OPCompNc*)ip_packet;
   switch(p_ndata->opcode)
   {
+  case SECU3IO::OPCODE_SAVE_LTFT: //LTFT table had been saved
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_SAVED));
+    return;
+   case SECU3IO::OPCODE_RESET_LTFT: //LTFT table had been reset
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_RESET));
+    return;
    case SECU3IO::OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
     return;

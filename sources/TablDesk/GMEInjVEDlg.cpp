@@ -296,7 +296,7 @@ void CGMEInjVEDlg::BindLoadGrid(const float* pGrid, bool updateLabels /*= false*
 {
  mp_loadGrid = pGrid;
  ASSERT(pGrid);
- if (updateLabels && m_ve1_radio.GetCheck()==BST_CHECKED)
+ if (updateLabels /*&& m_ve1_radio.GetCheck()==BST_CHECKED*/)
  {
   m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
   m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
@@ -311,7 +311,7 @@ void CGMEInjVEDlg::BindLoadGrid2(const float* pGrid, bool updateLabels /*= false
 {
  mp_loadGrid2 = pGrid;
  ASSERT(pGrid);
- if (updateLabels && m_ve2_radio.GetCheck()==BST_CHECKED)
+ if (updateLabels /*&& m_ve2_radio.GetCheck()==BST_CHECKED*/)
  {
   m_ve2_map.AttachLabels(mp_rpmGrid, mp_loadGrid2);
   m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid2);

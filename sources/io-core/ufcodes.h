@@ -79,4 +79,6 @@
 #define   CLTGRD_PAR   '('
 #define   LODGRD_PAR   ')'
 
+#define   LTFT_DAT     'K'
+
 #endif //_UFCODES_H_

@@ -411,9 +411,6 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_tempi_map.ShowMarkers(dv.temp_use && !dv.strt_use && dv.idlreg_use, true);
  m_tempi_map.SetArguments(0, dv.temp);
 
- m_work_map.ShowMarkers(dv.work_use && dv.air_flow, true);
- m_work_map.SetArguments(dv.load, (float)dv.rpm);
-
  //Update vertical axis of work map
  bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
  if (m_ldaxNeedsUpdate || (baroChanged && useBaroMax))
@@ -423,6 +420,9 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
   m_work_map.UpdateDisplay();
   m_ldaxNeedsUpdate = false;
  }
+
+ m_work_map.ShowMarkers(dv.work_use && dv.air_flow, true);
+ m_work_map.SetArguments(dv.load, (float)dv.rpm);
 }
 
 void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useTable, bool forceUpdate /*=false*/)

@@ -195,6 +195,12 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   const OPCompNc* p_ndata = (OPCompNc*)ip_packet;
   switch(p_ndata->opcode)
   {
+   case OPCODE_SAVE_LTFT: //LTFT table had been saved
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_SAVED));
+    return;
+   case OPCODE_RESET_LTFT: //LTFT table had been reset
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_RESET));
+    return;
    case OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
     return;

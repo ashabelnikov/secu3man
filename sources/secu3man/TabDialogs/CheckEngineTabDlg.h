@@ -31,6 +31,7 @@
 #include "common/unicodesupport.h"
 #include "ui-core/TabDialog.h"
 #include "ui-core/ListCtrlEx.h"
+#include "ui-core/MapEditorCtrl.h"
 
 class CHeaderCtrlEx;
 class CToolTipCtrlEx;
@@ -51,6 +52,10 @@ class CCheckEngineTabDlg : public CTabDialog
   void setOnWriteSavedErrors(EventHandler OnFunction) {m_OnWriteSavedErrors = OnFunction;}
   void setOnListSetAllErrors(EventHandler OnFunction) {m_OnListSetAllErrors = OnFunction;}
   void setOnListClearAllErrors(EventHandler OnFunction) {m_OnListClearAllErrors = OnFunction;}
+  void setOnTrimtabButton(EventHandler OnFunction) {m_OnTrimtabButton = OnFunction;}
+  void setOnTrimtabReadButton(EventHandler OnFunction) {m_OnTrimtabReadButton = OnFunction;}
+  void setOnTrimtabResetButton(EventHandler OnFunction) {m_OnTrimtabResetButton = OnFunction;}
+  void setOnTrimtabSaveButton(EventHandler OnFunction) {m_OnTrimtabSaveButton = OnFunction;}
 
   bool GetRealTimeErrorsCheck(void) const;
 
@@ -64,6 +69,15 @@ class CCheckEngineTabDlg : public CTabDialog
   void EnableAll(bool i_enable);
   void EnableRWButtons(bool i_enable);
 
+  void SetLocale(int locale);
+  bool GetTrimtabButtonState(void);
+  void BindMaps(float* pTrimtab);
+  void BindRPMGrid(float* pGrid);
+  void BindLoadGrid(float* pGrid);
+  void EnableTrimtab(bool i_enable);
+  void UpdateView(bool axisLabels = false);
+  void SetArguments(int rpm, float load, bool strt_use);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -76,18 +90,24 @@ class CCheckEngineTabDlg : public CTabDialog
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateInertnessCheckbox(CCmdUI* pCmdUI);
   afx_msg void OnUpdateRWButtons(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsLTFT(CCmdUI* pCmdUI);
   afx_msg void OnDestroy();
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnListSetAllErrors();
   afx_msg void OnListClearAllErrors();
   afx_msg void OnCustomdrawList(NMHDR*, LRESULT*);
   afx_msg void OnPaint();
+  afx_msg void OnTrimTableButton();
+  afx_msg void OnTrimtabReadButton();
+  afx_msg void OnTrimtabResetButton();
+  afx_msg void OnTrimtabSaveButton();
   DECLARE_MESSAGE_MAP()
 
  private:
   void OnCeresetLinkClick(void);
 
   CStatic m_quick_help_text;
+  CStatic m_ltft_unit_text;
   CListCtrlEx m_errors_list;
   CImageList m_image_list;
   CButton m_realtime_checkbox;
@@ -96,12 +116,22 @@ class CCheckEngineTabDlg : public CTabDialog
   CButton m_write_saved_button;
   CButton m_list_set_all_button;
   CButton m_list_clear_all_button;
+  CButton m_trimtab_button;
+  CMapEditorCtrl m_ltft_map;
+  CButton m_ltft_read_button;
+  CButton m_ltft_reset_button;
+  CButton m_ltft_save_button;
+  CFont m_font;
 
   EventHandler  m_OnRealTimeErrors;
   EventHandler  m_OnReadSavedErrors;
   EventHandler  m_OnWriteSavedErrors;
   EventHandler  m_OnListSetAllErrors;
   EventHandler  m_OnListClearAllErrors;
+  EventHandler  m_OnTrimtabButton;
+  EventHandler  m_OnTrimtabReadButton;
+  EventHandler  m_OnTrimtabResetButton;
+  EventHandler  m_OnTrimtabSaveButton;
 
   //Key = ID, Value = index of item in the list
   typedef std::map<size_t,size_t> Indexes;
@@ -118,4 +148,12 @@ class CCheckEngineTabDlg : public CTabDialog
   std::auto_ptr<CHeaderCtrlEx> m_header_ctrl;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CLabel> mp_ceresetLink;
+
+  int m_locale; //0 - english, 1 - russian
+
+  const float* mp_trimTab;
+  const float* mp_rpmGrid;
+  const float* mp_loadGrid;
+  bool m_trimtab_enabled; //trim table functionality
 };
+

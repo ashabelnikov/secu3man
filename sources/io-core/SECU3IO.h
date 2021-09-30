@@ -326,6 +326,9 @@ namespace SECU3IO
  const int OPCODE_BL_CONFIRM           = 0xCB; //boot loader entering confirmation
  const int OPCODE_BL_MANSTART          = 0xC8; //boot loader started manually (using a jumper)
  const int OPDATA_BL_MANSTART          = 0x8C; //data for OPCODE_BL_MANSTART
+ const int OPCODE_RESET_LTFT           = 0xCA; //Reset LTFT map
+ const int OPDATA_RESET_LTFT           = 0xBB; //Reset LTFT map
+ const int OPCODE_SAVE_LTFT            = 9;  //save LTFT
 
  struct KnockPar
  {
@@ -420,6 +423,7 @@ namespace SECU3IO
 
  struct SepTabPar
  {
+  int reserv;                           //reserved
   unsigned int address;                 //адрес начала фрагмента данных в таблице
   float table_data[32];                 //фрагмент данных (не более 16-ти байт)
   unsigned int data_size;               //размер фрагмента данных
@@ -508,7 +512,7 @@ namespace SECU3IO
   bool use_imm;                         //flag specifying to use or not to use immobilizer
   bool use_respar;                      //use reserve parameters (from FLASH only)
   bool chk_fwcrc;                       //check integrity of firmware
-  bool bt_type;                         //Bluetooth type: 0 - BC417, 1 - BK3231
+  int  bt_type;                         //Bluetooth type (2 bits): 0 - BC417, 1 - BK3231, 2 - BK3231S (JDY-31)
   BYTE ibtn_keys[IBTN_KEYS_NUM][IBTN_KEY_SIZE];//iButton keys
  };
 
@@ -858,6 +862,12 @@ const int INPAVNUM = 14;
   int vent_maxband;
   float pwron_time;
   float pwron_time1;
+
+  int    ltft_mode;       //!< 0 - LTFT is turned off, 1 - use only for petrol, 2 - use only for gas, 3 - use for both petrol and gas
+  float  ltft_learn_clt;  //!< Temperature threshold for learning
+  float  ltft_cell_band;  //!< cell band in %
+  float  ltft_stab_time;  //!< Learn stability time
+  float  ltft_learn_grad; //!< Learning gradient
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

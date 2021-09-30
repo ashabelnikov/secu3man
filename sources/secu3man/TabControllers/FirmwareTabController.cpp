@@ -347,6 +347,12 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
    case SECU3IO::OPCODE_SAVE_TABLSET:     //таблицы были сохранены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
     return;
+   case SECU3IO::OPCODE_RESET_LTFT: //LTFT table had been reset
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_RESET));
+    return;
+   case SECU3IO::OPCODE_SAVE_LTFT: //LTFT table had been saved
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_SAVED));
+    return;
    case SECU3IO::OPCODE_RESET_EEPROM:     //начался процесс сброса EEPROM
     if (p_ndata->opdata == 0x55)
     {
@@ -2206,6 +2212,37 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Число зубьев пропускаемое перед пуском"), _T("N"), 0, 500, 1, 1, &d.ckps_skip_trig, _T("Число зубьев, которое система проигнорирует перед поиском синхрометки в начале пуска двигателя."));
  else
   dfd.AppendItem(_T("Number of teeth to skip at the beginning of cranking"), _T("N"), 0, 500, 1, 1, &d.ckps_skip_trig, _T("Number of teeth, system will ignore before looking for missing tooth at the beginning of cranking"));
+
+ //LTFT
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Долговременная лямбда-коррекция (LTFT)"));
+ else
+  dfd.AppendItem(_T("Long Term Fuel Trim"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Использование коррекции"), _T(""), 0, 3, 1, 1, &d.ltft_mode, _T("0 - адаптация по лямбде выключена; 1 - включена только для бензина (GAS_V=0); 2 - включена только для газа (GAS_V=1); 3 - включена и для газа и для бензина."));
+ else
+  dfd.AppendItem(_T("Use of LTFT"), _T(""), 0, 3, 1, 1, &d.ltft_mode, _T("0 - LTFT is turned off; 1 - LTFT is working only for petrol (GAS_V=0); 2 - LTFT is working only for gas (GAS_V=1); 3 - LTFT is working for both petrol and gas"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Температура разрешения адаптации"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt, _T("Процесс адаптации включится только когда температура двигателя превысит этот порог."));
+ else
+  dfd.AppendItem(_T("CLT threshold for LTFT"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt, _T("LTFT learning will work only when coolant temperature is above this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Допуск на стационарность для адаптации"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Определяет зону вокруг обучаемой ячейки таблицы, в которую должна попасть режимная точка. Используется по осях оборотов и нагрузки."));
+ else
+  dfd.AppendItem(_T("Stationarity tolerance for learning"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Defines zone around the learning cell in table into which the regime point should fall. It is used for rpm and load axises."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Время стационарности рабочей точки"), _T("сек"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Адаптация ячейки происходит только когда рабочая точка находится в ее зоне в течение этого времени."));
+ else
+  dfd.AppendItem(_T("Stationarity time for regime point"), _T("sec"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Learning of a cell will be performed only when regime point resides in its zone during this period of time."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Градиент таблицы адаптации"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Определает скорость изменения соседних ячеек. Чем выше значение, тем больше меняются соседние ячейки при адаптации текущей ячейки."));
+ else
+  dfd.AppendItem(_T("Learning gradient"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Determines the rate of change of adjacent cells. The higher the value, the more neighboring cells change when learning the current cell."));
 
  if (dfd.DoModal()==IDOK)
  {

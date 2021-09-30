@@ -1951,6 +1951,44 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_LTFT_DAT(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::SepTabPar& ltftTabPar = m_recepted_packet.m_SepTabPar;
+ if (mp_pdp->isHex() ? (size < 4 || size > 36) : (size < 2 || size > 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ unsigned char reserv;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &reserv))
+  return false;
+ ltftTabPar.reserv = reserv;
+
+ //адрес фрагмента данных в таблице (смещение в таблице)
+ unsigned char address;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
+  return false;
+ ltftTabPar.address = address;
+
+ size-=(mp_pdp->getHex8Size()*2);
+ size_t div = mp_pdp->isHex() ? 2 : 1;
+ if (size % div) // 1 byte in HEX is 2 symbols
+  return false;
+
+ //data fragment
+ size_t data_size = 0;
+ for(size_t i = 0; i < size / div; ++i)
+ {
+  int value = 0;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
+   return false;
+  ltftTabPar.table_data[i] = (((float)value) / 512.0f) * 100.0f;
+  ++data_size;
+ }
+ ltftTabPar.data_size = data_size;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& rpmGrdPar = m_recepted_packet.m_SepTabPar;
@@ -2333,7 +2371,7 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
  securPar.use_imm  = CHECKBIT8(flags, 2);
  securPar.use_respar = CHECKBIT8(flags, 3);
  securPar.chk_fwcrc = CHECKBIT8(flags, 4);
- securPar.bt_type = CHECKBIT8(flags, 5);
+ securPar.bt_type = (flags >> 5) & 0x3;   //read 5,6 bits
 
  //Parse out iButton keys
  BYTE key[IBTN_KEY_SIZE]; int i, j;
@@ -2980,6 +3018,10 @@ bool CControlApp::ParsePackets()
     if (Parse_ATTTAB_PAR(p_start, p_size))
      break;
     continue;
+   case LTFT_DAT:
+    if (Parse_LTFT_DAT(p_start, p_size))
+     break;
+    continue;
    case RPMGRD_PAR:
     if (Parse_RPMGRD_PAR(p_start, p_size))
      break;
@@ -3272,6 +3314,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case SILENT:
   case LZIDBL_HS:
   case INJDRV_ADR:
+  case LTFT_DAT:
    return true;
   default:
    return false;
@@ -4100,8 +4143,8 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
  WRITEBIT8(flags, 1, packet_data->set_btbr);
  WRITEBIT8(flags, 2, packet_data->use_imm);
  WRITEBIT8(flags, 3, packet_data->use_respar);
- WRITEBIT8(flags, 4, packet_data->chk_fwcrc);
- WRITEBIT8(flags, 5, packet_data->bt_type);
+ WRITEBIT8(flags, 4, packet_data->chk_fwcrc); 
+ flags|= (packet_data->bt_type << 5);        //write 5,6 bits
 
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 

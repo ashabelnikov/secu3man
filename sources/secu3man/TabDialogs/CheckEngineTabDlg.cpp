@@ -30,6 +30,7 @@
 #include "common/DPIAware.h"
 #include "common/GDIHelpers.h"
 #include "common/unicodesupport.h"
+#include "ui-core/fnt_helpers.h"
 #include "ui-core/HeaderCtrlEx.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/Label.h"
@@ -41,11 +42,16 @@ const UINT CCheckEngineTabDlg::IDD = IDD_CHECK_ENGINE;
 
 CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CCheckEngineTabDlg::IDD, pParent)
+, m_ltft_map(16, 16, true, true, NULL, 3, true) //inverted order of rows and vertical labels' data, read-only
 , m_all_enabled(false)
+, m_trimtab_enabled(false)
 , m_rw_buttons_enabled(false)
 , m_initialized(false)
 , m_header_ctrl(new CHeaderCtrlEx())
 , mp_ceresetLink(new CLabel)
+, mp_trimTab(NULL)
+, mp_rpmGrid(NULL)
+, mp_loadGrid(NULL)
 {
  m_image_list.Create(IDB_CE_LIST_ICONS, 16, 2, RGB(255,255,255));
  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT);
@@ -68,6 +74,12 @@ void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CE_LIST_SETALL_BUTTON, m_list_set_all_button);
  DDX_Control(pDX, IDC_CE_LIST_CLEARALL_BUTTON, m_list_clear_all_button);
  DDX_Control(pDX, IDC_CE_CERESET_LINK, *mp_ceresetLink);
+ DDX_Control(pDX, IDC_CE_TRIMTAB_BUTTON, m_trimtab_button);
+ DDX_Control(pDX, IDC_CE_TRIMTAB_MAP, m_ltft_map);
+ DDX_Control(pDX, IDC_CE_TRIMTAB_READ, m_ltft_read_button);
+ DDX_Control(pDX, IDC_CE_TRIMTAB_RESET, m_ltft_reset_button);
+ DDX_Control(pDX, IDC_CE_TRIMTAB_SAVE, m_ltft_save_button);
+ DDX_Control(pDX, IDC_CE_LTFT_UNIT, m_ltft_unit_text);
 }
 
 LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
@@ -85,7 +97,10 @@ BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_BN_CLICKED(IDC_CE_WRITE_ERRORS_BUTTON, OnWriteSavedErrors)
  ON_BN_CLICKED(IDC_CE_LIST_SETALL_BUTTON, OnListSetAllErrors)
  ON_BN_CLICKED(IDC_CE_LIST_CLEARALL_BUTTON, OnListClearAllErrors)
-
+ ON_BN_CLICKED(IDC_CE_TRIMTAB_BUTTON, OnTrimTableButton)
+ ON_BN_CLICKED(IDC_CE_TRIMTAB_READ, OnTrimtabReadButton)
+ ON_BN_CLICKED(IDC_CE_TRIMTAB_RESET, OnTrimtabResetButton)
+ ON_BN_CLICKED(IDC_CE_TRIMTAB_SAVE, OnTrimtabSaveButton)
  ON_UPDATE_COMMAND_UI(IDC_CE_QUICK_HELP, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_CE_ERRORS_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_CE_READ_REALTIME_CHECKBOX, OnUpdateControls)
@@ -95,6 +110,12 @@ BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CE_LIST_SETALL_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_CE_LIST_CLEARALL_BUTTON, OnUpdateControls)
  ON_NOTIFY(NM_CUSTOMDRAW, IDC_CE_ERRORS_LIST, OnCustomdrawList)
+ ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_BUTTON, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_READ, OnUpdateControlsLTFT)
+ ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_RESET, OnUpdateControlsLTFT)
+ ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_MAP, OnUpdateControlsLTFT)
+ ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_SAVE, OnUpdateControlsLTFT)
+ ON_UPDATE_COMMAND_UI(IDC_CE_LTFT_UNIT, OnUpdateControlsLTFT)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -103,6 +124,17 @@ END_MESSAGE_MAP()
 BOOL CCheckEngineTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ if (m_locale==0)
+ {
+  HBITMAP hBitmap = (HBITMAP)LoadImage(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_LTFTTAB_EN), IMAGE_BITMAP, 0, 0, LR_SHARED);
+  m_trimtab_button.SetBitmap(hBitmap);
+ }
+ else if (m_locale==1)
+ {
+  HBITMAP hBitmap = (HBITMAP)LoadImage(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_LTFTTAB_RU), IMAGE_BITMAP, 0, 0, LR_SHARED);
+  m_trimtab_button.SetBitmap(hBitmap);
+ }
 
  m_quick_help_text.SetWindowText(MLL::LoadString(IDS_CEPAGE_QUICK_HELP_TEXT));
 
@@ -139,6 +171,10 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_read_saved_button, MLL::GetString(IDS_CE_READ_ERRORS_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_write_saved_button, MLL::GetString(IDS_CE_WRITE_ERRORS_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_realtime_checkbox, MLL::GetString(IDS_CE_READ_REALTIME_CHECKBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_trimtab_button, MLL::GetString(IDS_CE_TRIMTAB_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ltft_read_button, MLL::GetString(IDS_CE_TRIMTAB_READ_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ltft_reset_button, MLL::GetString(IDS_CE_TRIMTAB_RESET_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ltft_save_button, MLL::GetString(IDS_CE_TRIMTAB_SAVE_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -148,6 +184,19 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  mp_ceresetLink->SetFontUnderline(true);
  mp_ceresetLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
  mp_ceresetLink->SetOnClick(fastdelegate::MakeDelegate(this, &CCheckEngineTabDlg::OnCeresetLinkClick));
+
+ if (!m_font.GetSafeHandle())
+  CloneWndFont(this, &m_font, -1, false);
+
+ m_ltft_map.SetRange(-24.7f, 24.7f);
+ m_ltft_map.AttachMap(const_cast<float*>(mp_trimTab));
+ m_ltft_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+ m_ltft_map.ShowLabels(true, true);
+ m_ltft_map.SetDecimalPlaces(1, 0, 0);
+ m_ltft_map.SetFont(&m_font);
+ m_ltft_map.EnableAbroadMove(false, false);
+ m_ltft_map.SetValueIncrement(0.1f);
+ m_ltft_map.SetSelection(0, 0, false);
 
  m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -237,6 +286,11 @@ void CCheckEngineTabDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_all_enabled);
 }
 
+void CCheckEngineTabDlg::OnUpdateControlsLTFT(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_all_enabled && m_trimtab_enabled);
+}
+
 void CCheckEngineTabDlg::OnUpdateInertnessCheckbox(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_all_enabled && BST_CHECKED == m_realtime_checkbox.GetCheck());
@@ -322,7 +376,7 @@ void CCheckEngineTabDlg::OnCustomdrawList ( NMHDR* pNMHDR, LRESULT* pResult )
  }*/
 }
 
-void CCheckEngineTabDlg::OnSize( UINT nType, int cx, int cy )
+void CCheckEngineTabDlg::OnSize(UINT nType, int cx, int cy)
 {
  if (m_initialized)
  {
@@ -355,6 +409,9 @@ void CCheckEngineTabDlg::OnSize( UINT nType, int cx, int cy )
   m_write_saved_button.Invalidate();
   m_read_saved_button.Invalidate();
   m_realtime_checkbox.Invalidate();
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_ltft_map);
+  m_ltft_map.SetWindowPos(NULL, 0, 0, cx - rc1.left - da.ScaleX(7), cy - rc1.top - da.ScaleY(7), SWP_NOMOVE | SWP_NOZORDER);
  }
 
  Super::OnSize(nType, cx, cy);
@@ -377,4 +434,112 @@ void CCheckEngineTabDlg::OnPaint()
 void CCheckEngineTabDlg::OnCeresetLinkClick(void)
 {
  SECUMessageBox(IDS_HOW_TO_RESET_CEERRORS, MB_OK | MB_ICONINFORMATION);
+}
+
+void CCheckEngineTabDlg::OnTrimTableButton()
+{
+ if (GetTrimtabButtonState())
+ { //trim table
+  m_quick_help_text.ShowWindow(SW_HIDE);
+  m_errors_list.ShowWindow(SW_HIDE);
+  m_realtime_checkbox.ShowWindow(SW_HIDE);
+  m_show_with_inertness.ShowWindow(SW_HIDE);
+  m_read_saved_button.ShowWindow(SW_HIDE);
+  m_write_saved_button.ShowWindow(SW_HIDE);
+  m_list_set_all_button.ShowWindow(SW_HIDE);
+  m_list_clear_all_button.ShowWindow(SW_HIDE);
+  mp_ceresetLink->ShowWindow(SW_HIDE);
+  m_ltft_map.ShowWindow(SW_SHOW);
+  m_ltft_read_button.ShowWindow(SW_SHOW);
+  m_ltft_reset_button.ShowWindow(SW_SHOW);
+  m_ltft_save_button.ShowWindow(SW_SHOW);
+  m_ltft_unit_text.ShowWindow(SW_SHOW);
+ }
+ else
+ { //CE errors
+  m_quick_help_text.ShowWindow(SW_SHOW);
+  m_errors_list.ShowWindow(SW_SHOW);
+  m_realtime_checkbox.ShowWindow(SW_SHOW);
+  m_show_with_inertness.ShowWindow(SW_SHOW);
+  m_read_saved_button.ShowWindow(SW_SHOW);
+  m_write_saved_button.ShowWindow(SW_SHOW);
+  m_list_set_all_button.ShowWindow(SW_SHOW);
+  m_list_clear_all_button.ShowWindow(SW_SHOW);
+  mp_ceresetLink->ShowWindow(SW_SHOW);
+  m_ltft_map.ShowWindow(SW_HIDE);
+  m_ltft_read_button.ShowWindow(SW_HIDE);
+  m_ltft_reset_button.ShowWindow(SW_HIDE);
+  m_ltft_save_button.ShowWindow(SW_HIDE);
+  m_ltft_unit_text.ShowWindow(SW_HIDE);
+ }
+
+ if (m_OnTrimtabButton)
+  m_OnTrimtabButton();
+}
+
+void CCheckEngineTabDlg::SetLocale(int locale)
+{
+ m_locale = locale;
+}
+
+bool CCheckEngineTabDlg::GetTrimtabButtonState(void)
+{
+ return m_trimtab_button.GetCheck()==BST_CHECKED;
+}
+
+void CCheckEngineTabDlg::OnTrimtabReadButton()
+{
+ if (m_OnTrimtabReadButton)
+  m_OnTrimtabReadButton();
+}
+
+void CCheckEngineTabDlg::OnTrimtabResetButton()
+{
+ if (IDYES==SECUMessageBox(MLL::GetString(IDS_RESET_LTFT_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
+ {
+  if (m_OnTrimtabResetButton)
+   m_OnTrimtabResetButton();
+ }
+}
+
+void CCheckEngineTabDlg::OnTrimtabSaveButton()
+{
+ if (m_OnTrimtabSaveButton)
+  m_OnTrimtabSaveButton();
+}
+
+void CCheckEngineTabDlg::BindMaps(float* pTrimtab)
+{
+ mp_trimTab = pTrimtab;
+}
+
+void CCheckEngineTabDlg::BindRPMGrid(float* pGrid)
+{
+ mp_rpmGrid = pGrid;
+}
+
+void CCheckEngineTabDlg::BindLoadGrid(float* pGrid)
+{
+ mp_loadGrid = pGrid;
+}
+
+void CCheckEngineTabDlg::EnableTrimtab(bool i_enable)
+{
+ m_trimtab_enabled = i_enable;
+}
+
+void CCheckEngineTabDlg::UpdateView(bool axisLabels /*= false*/)
+{
+ if (axisLabels)
+  m_ltft_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //update axis labels
+ m_ltft_map.UpdateDisplay();
+}
+
+void CCheckEngineTabDlg::SetArguments(int rpm, float load, bool strt_use)
+{
+ if (m_ltft_map.GetSafeHwnd() && m_ltft_map.IsWindowVisible())
+ {
+  m_ltft_map.ShowMarkers(!strt_use, true);
+  m_ltft_map.SetArguments(load, (float)rpm);
+ }
 }

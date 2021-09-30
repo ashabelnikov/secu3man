@@ -290,6 +290,12 @@ void CLogPlayerTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
    case OPCODE_SAVE_TABLSET:      //таблицы были сохранены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
     return;
+   case OPCODE_RESET_LTFT: //LTFT table had been reset
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_RESET));
+    return;
+   case OPCODE_SAVE_LTFT: //LTFT table had been saved
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_SAVED));
+    return;
   }
  }
 }

@@ -77,7 +77,7 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
  m_params.use_imm = false;
  m_params.use_respar = false;
  m_params.chk_fwcrc = true;
- m_params.bt_type = false;
+ m_params.bt_type = 0;
  for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
   memset(m_params.ibtn_keys[j], 0, SECU3IO::IBTN_KEY_SIZE);
 }
@@ -115,7 +115,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_params.use_imm);
  DDX_Check_bool(pDX, IDC_PD_SECUR_USE_RESPAR_CHECK, m_params.use_respar);
  DDX_Check_bool(pDX, IDC_PD_SECUR_CHK_FWCRC_CHECK, m_params.chk_fwcrc);
- DDX_CBIndex_bool(pDX, IDC_PD_SECUR_BT_TYPE_COMBO, m_params.bt_type);
+ DDX_CBIndex_int(pDX, IDC_PD_SECUR_BT_TYPE_COMBO, m_params.bt_type);
 }
 
 void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -176,6 +176,7 @@ BOOL CSecurPageDlg::OnInitDialog()
 
  m_bt_type_combo.AddString(_T("BC417"));
  m_bt_type_combo.AddString(_T("BK3231"));
+ m_bt_type_combo.AddString(_T("BK3231S(JDY-31)"));
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);

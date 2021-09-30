@@ -210,6 +210,7 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
+    CONTROL         "",IDC_CE_TRIMTAB_BUTTON,"Button",BS_BITMAP | BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,12,85,24,53
     PUSHBUTTON      "Установить все",IDC_CE_LIST_SETALL_BUTTON,52,3,65,16
     PUSHBUTTON      "Сбросить все",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
     CONTROL         "Показывать ошибки с инертностью",IDC_CE_READ_INERTNESS_CHECKBOX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
@@ -219,6 +220,11 @@ BEGIN
     CONTROL         "Считывать ошибки в реальном времени",IDC_CE_READ_REALTIME_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
     CTEXT           "Как стереть ошибки?",IDC_CE_CERESET_LINK,393,196,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CONTROL         "LTFT map",IDC_CE_TRIMTAB_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,48,25,433,215,WS_EX_STATICEDGE
+    PUSHBUTTON      "Прочитать",IDC_CE_TRIMTAB_READ,52,3,65,16, NOT WS_VISIBLE
+    PUSHBUTTON      "Сбросить",IDC_CE_TRIMTAB_RESET,135,3,65,16, NOT WS_VISIBLE
+    PUSHBUTTON      "Сохранить",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
+    CTEXT           "Значения\nв таблице\nуказаны\n в %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -543,6 +549,7 @@ BEGIN
     IDS_ECUERROR_OILPRESSURE       "Очень низкое давление масла"
     IDS_EEPROM_TABL_BROKEN         "Данные таблиц в EEPROM повреждены (CRC)"
     IDS_ECUERROR_INJDUTY_LIMIT     "Превышение предела производительности форсунки"
+    IDS_ECUERROR_EEPROM_LTFT_BROKEN "Данные таблицы обучения в EEPROM повреждены"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -883,6 +890,16 @@ BEGIN
     IDS_LOG_PLAYER_GME_INJ_CHECK_TT "Открыть для просмотра и редактирования таблицы впрыска"
     IDS_LOG_PLAYER_GME_IGN_CHECK_TT "Открыть для просмотра и редактирования таблицы зажигания"
     IDS_LOG_PLAYER_MAPSET_COMBO_TT  "Выбор набора таблиц. На вкладке 'Данные прошивки' должна быть открыта прошивка, на вкладке 'EEPROM' должно быть открыто EEPROM. Первые сверху 4 набора таблиц - это таблицы из прошивки, последний набор таблиц - из EEPROM."
+    IDS_CE_TRIMTAB_BUTTON_TT "Открыть/закрыть таблицу обучения (долговременная коррекция по ДК)"
+    IDS_CE_TRIMTAB_READ_TT  "Прочитать таблицу долговременной коррекции по ДК (LTFT) из блока SECU-3"
+    IDS_CE_TRIMTAB_RESET_TT "Отправить команду сброса содержимого таблицы долговременной коррекции по ДК блоку SECU-3."
+    IDS_RESET_LTFT_COMFIRMATION "Вы действительно хотите сбросить содержимое таблицы долговременной коррекции по ДК?"
+    IDS_CE_LTFT_HAS_BEEN_RESET "Таблица обучения была успешно сброшена."
+    IDS_CE_RESETTING_LTFT "Идет сброс таблицы обучения..."
+    IDS_CE_READING_LTFTMAP  "Чтение таблицы обучения..."
+    IDS_CE_TRIMTAB_SAVE_TT "Сохранить таблицу долговременной коррекции по ДК в EEPROM"
+    IDS_CE_SAVING_LTFT "Сохранение таблицы обучения..."
+    IDS_CE_LTFT_HAS_BEEN_SAVED "Таблица обучения была успешно сохранена."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1133,6 +1150,7 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
+    CONTROL         "",IDC_CE_TRIMTAB_BUTTON,"Button",BS_BITMAP | BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,12,85,24,53
     PUSHBUTTON      "Set All",IDC_CE_LIST_SETALL_BUTTON,52,3,65,16
     PUSHBUTTON      "Reset All",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
     CONTROL         "Show errors with inertness",IDC_CE_READ_INERTNESS_CHECKBOX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
@@ -1142,6 +1160,11 @@ BEGIN
     CONTROL         "Read errors in realtime", IDC_CE_READ_REALTIME_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
     CTEXT           "How to clear errors?",IDC_CE_CERESET_LINK,393,196,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CONTROL         "LTFT map",IDC_CE_TRIMTAB_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,48,25,433,215,WS_EX_STATICEDGE
+    PUSHBUTTON      "Read",IDC_CE_TRIMTAB_READ,52,3,65,16, NOT WS_VISIBLE
+    PUSHBUTTON      "Reset",IDC_CE_TRIMTAB_RESET,135,3,65,16, NOT WS_VISIBLE
+    PUSHBUTTON      "Save",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
+    CTEXT           "Values\nin table\nare\n in %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -1483,6 +1506,7 @@ BEGIN
     IDS_ECUERROR_OILPRESSURE       "Oil pressure is very low"
     IDS_EEPROM_TABL_BROKEN         "Tables in EEPROM are broken (CRC)"
     IDS_ECUERROR_INJDUTY_LIMIT     "Reaching limit of injector's duty"
+    IDS_ECUERROR_EEPROM_LTFT_BROKEN "LTFT map data in EEPROM is corrupted"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1804,6 +1828,16 @@ BEGIN
     IDS_LOG_PLAYER_GME_INJ_CHECK_TT "Open injection maps for viewing and editing"
     IDS_LOG_PLAYER_GME_IGN_CHECK_TT "Open ignition maps for viewing and editing"
     IDS_LOG_PLAYER_MAPSET_COMBO_TT  "Selecting a set of tables. On the 'Firmware data' tab, the firmware should be open, on the 'EEPROM' tab, the EEPROM should be open. The first 4 sets of tables on the top of the list are from the firmware, the last set (bottom) of tables is from the EEPROM. "
+    IDS_CE_TRIMTAB_BUTTON_TT "Open/close long term fuel trim table"
+    IDS_CE_TRIMTAB_READ_TT  "Read the Long Term Fuel Trim table from SECU-3 unit"
+    IDS_CE_TRIMTAB_RESET_TT "Send to SECU-3 unit command to reset contents of the Long Term Fuel Trim table"
+    IDS_RESET_LTFT_COMFIRMATION "Are you sure you want to reset contents of the Long Term Fuel Trim table? "
+    IDS_CE_LTFT_HAS_BEEN_RESET "LTFT map has been reset successfully."
+    IDS_CE_RESETTING_LTFT "Resetting LTFT table..."
+    IDS_CE_READING_LTFTMAP  "Reading LTFT map..."
+    IDS_CE_TRIMTAB_SAVE_TT "Save LTFT map to EEPROM."
+    IDS_CE_SAVING_LTFT "Saving LTFT map..."
+    IDS_CE_LTFT_HAS_BEEN_SAVED "LTFT map has been saved successfully."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1886,6 +1920,8 @@ IDB_MAIN_TAB_CTRL_BITMAPS BITMAP   "res\\tab_ctrl_bitmaps.bmp"
 IDB_FWD_TAB_CTRL_BITMAPS BITMAP    "res\\fwd_tabctrl_bitmaps.bmp"
 IDB_CE_LIST_ICONS       BITMAP     "res\\ce_list_icons.bmp"
 IDB_INJDRV_TIP_PIC      JPG        "res\\injdrvtips.jpg"
+IDB_LTFTTAB_RU          BITMAP     "res\\ltfttab-ru.bmp"
+IDB_LTFTTAB_EN          BITMAP     "res\\ltfttab-en.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

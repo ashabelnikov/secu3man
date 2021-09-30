@@ -164,7 +164,7 @@ typedef struct
  //таблица времени накопления энергии в катушках зажигания (зависимость от напряжения)
  _uint coil_on_time[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
- //Coolant temperature sensor lookup table (таблица значений температуры с шагом по напряжению)
+ //Coolant temperature sensor lookup table
  _int cts_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
  //Related voltage limits
  _uint cts_vl_begin;
@@ -313,11 +313,17 @@ typedef struct
  _uchar vent_maxband;
  _uint pwron_time;
  _uint pwron_time1; 
+
+ _uchar  ltft_mode;       //!< 0 - LTFT is turned off, 1 - use only for petrol, 2 - use only for gas, 3 - use for both petrol and gas
+ _int    ltft_learn_clt;  //!< Temperature threshold for learning, value in 0.25C units
+ _uchar  ltft_cell_band;  //!< cell band in %, Value 256 corresponds to 100%, e.g. 1 discrete correspons to 0,390625%
+ _uchar  ltft_stab_time;  //!< Learn stability time, value in 0.01 second units
+ _uchar  ltft_learn_grad; //!< Learning gradient, 256 corresponds to 1.0, range 0...0.99
  
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1995];
+ _uchar reserved[1989];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2877,6 +2883,12 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.vent_maxband = exd.vent_maxband;
  o_data.pwron_time = ((float)exd.pwron_time) / 100.0f; //convert to seconds
  o_data.pwron_time1 = ((float)exd.pwron_time1) / 100.0f; //convert to seconds
+
+ o_data.ltft_mode = exd.ltft_mode;
+ o_data.ltft_learn_clt = ((float)exd.ltft_learn_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.ltft_cell_band = ((float)exd.ltft_cell_band * 100.0f) / 256.0f;
+ o_data.ltft_stab_time = ((float)exd.ltft_stab_time) / 100.0f;
+ o_data.ltft_learn_grad = ((float)exd.ltft_learn_grad) / 256.0f;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2948,4 +2960,10 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.pwron_time = MathHelpers::Round(i_data.pwron_time * 100.0f);
  exd.pwron_time1 = MathHelpers::Round(i_data.pwron_time1 * 100.0f);
+
+ exd.ltft_mode = i_data.ltft_mode;
+ exd.ltft_learn_clt = MathHelpers::Round(i_data.ltft_learn_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.ltft_cell_band = MathHelpers::Round((i_data.ltft_cell_band * 256.0f) / 100.0f);
+ exd.ltft_stab_time = MathHelpers::Round(i_data.ltft_stab_time * 100.0f);
+ exd.ltft_learn_grad = MathHelpers::Round(i_data.ltft_learn_grad * 256.0f);
 }
