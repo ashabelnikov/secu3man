@@ -578,6 +578,7 @@ namespace SECU3IO
  const int UNIOUT_COND_INPUT1 = 31;   //INPUT1
  const int UNIOUT_COND_INPUT2 = 32;   //INPUT2
  const int UNIOUT_COND_MAF = 33;      //MAF
+ const int UNIOUT_COND_TPSDOT = 34;   //TPS dot
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

@@ -4541,6 +4541,7 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_INPUT1: return MathHelpers::Round(val);
   case UNIOUT_COND_INPUT2: return MathHelpers::Round(val);
   case UNIOUT_COND_MAF:  return MathHelpers::Round(val * MAFS_MULT);
+  case UNIOUT_COND_TPSDOT: return MathHelpers::Round(val); //%/s
  }
  return 0;
 }
@@ -4589,6 +4590,7 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_INPUT1: return (float)val;
   case UNIOUT_COND_INPUT2: return (float)val;
   case UNIOUT_COND_MAF:  return (((float)val) / MAFS_MULT);
+  case UNIOUT_COND_TPSDOT: return (float)val;
  }
  return .0f;
 }
