@@ -137,8 +137,8 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
  m_coldacc_mult_spin.SetBuddy(&m_coldacc_mult_edit);
  m_coldacc_mult_edit.SetLimitText(3);
  m_coldacc_mult_edit.SetDecimalPlaces(0);
- m_coldacc_mult_spin.SetRangeAndDelta(100, 299, 1);
- m_coldacc_mult_edit.SetRange(100, 299);
+ m_coldacc_mult_spin.SetRangeAndDelta(100, 600, 1);
+ m_coldacc_mult_edit.SetRange(100, 600);
 
  m_decaytime_spin.SetBuddy(&m_decaytime_edit);
  m_decaytime_edit.SetLimitText(3);
