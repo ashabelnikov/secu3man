@@ -363,7 +363,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     UniOutPar* p_in = (UniOutPar*)ip_values;
     for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
     {
-     p_params->uni_output[oi].flags = ((p_in->out[oi].logicFunc) << 4) | (p_in->out[oi].invers_2?2:0) | (p_in->out[oi].invers_1?1:0);
+     p_params->uni_output[oi].flags = ((p_in->out[oi].logicFunc) << 4) | (p_in->out[oi].invers?8:0) | (p_in->out[oi].use?4:0) | (p_in->out[oi].invers_2?2:0) | (p_in->out[oi].invers_1?1:0);
      p_params->uni_output[oi].condition1 = p_in->out[oi].condition1;
      p_params->uni_output[oi].condition2 = p_in->out[oi].condition2;
      p_params->uni_output[oi].on_thrd_1 = cen.UniOutEncodeCondVal(p_in->out[oi].on_thrd_1, p_in->out[oi].condition1);
@@ -829,6 +829,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->out[oi].logicFunc = p_params->uni_output[oi].flags >> 4;
      p_out->out[oi].invers_1 = CHECKBIT8(p_params->uni_output[oi].flags, 0);
      p_out->out[oi].invers_2 = CHECKBIT8(p_params->uni_output[oi].flags, 1);
+     p_out->out[oi].use = CHECKBIT8(p_params->uni_output[oi].flags, 2);
+     p_out->out[oi].invers = CHECKBIT8(p_params->uni_output[oi].flags, 3);
      p_out->out[oi].condition1 = p_params->uni_output[oi].condition1;
      p_out->out[oi].condition2 = p_params->uni_output[oi].condition2;
      p_out->out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(cen.isSigned(p_params->uni_output[oi].condition1) ? ((_int)p_params->uni_output[oi].on_thrd_1) : p_params->uni_output[oi].on_thrd_1, p_params->uni_output[oi].condition1);

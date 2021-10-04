@@ -2406,6 +2406,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
   uniOutPar.out[oi].invers_1 = (flags & 0x01) != 0;
   uniOutPar.out[oi].invers_2 = (flags & 0x02) != 0;
   uniOutPar.out[oi].use      = (flags & 0x04) != 0;
+  uniOutPar.out[oi].invers   = (flags & 0x08) != 0;
 
   unsigned char cond1 = 0;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &cond1))
@@ -4160,7 +4161,7 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
  CondEncoder cen(m_quartz_frq, m_period_distance);
  for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
  {
-  unsigned char flags = ((packet_data->out[oi].logicFunc) << 4) | ((int)packet_data->out[oi].use << 2) | ((int)packet_data->out[oi].invers_2 << 1) | ((int)packet_data->out[oi].invers_1);
+  unsigned char flags = ((packet_data->out[oi].logicFunc) << 4) | ((int)packet_data->out[oi].invers << 3) | ((int)packet_data->out[oi].use << 2) | ((int)packet_data->out[oi].invers_2 << 1) | ((int)packet_data->out[oi].invers_1);
   mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
   mp_pdp->Bin8ToHex(packet_data->out[oi].condition1, m_outgoing_packet);
   mp_pdp->Bin8ToHex(packet_data->out[oi].condition2, m_outgoing_packet);

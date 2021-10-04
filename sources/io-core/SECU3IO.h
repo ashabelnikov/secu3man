@@ -523,6 +523,7 @@ namespace SECU3IO
   unsigned char logicFunc;              //logic function between two conditions
   bool invers_1;                        //inversion flags for condition 1
   bool invers_2;                        //inversion flags for condition 2
+  bool invers;                          //common inversion
   unsigned char condition1;             //code of condition 1
   unsigned char condition2;             //code of condition 2
   float on_thrd_1;                      //ON threshold (if value > on_thrd_1)

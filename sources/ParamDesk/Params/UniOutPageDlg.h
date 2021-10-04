@@ -115,6 +115,7 @@ class CUniOutPageDlg : public CParamTabBaseDlg, public ParamPageEvents
    CComboBox lf_combo;
    CButton inv1_check;
    CButton inv2_check;
+   CButton inv_check;
 
    CSpinButtonCtrlEx on_thrd_1_spin;
    CEditEx on_thrd_1_edit;

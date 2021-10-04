@@ -54,6 +54,12 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_UNIOUT_4_USE_CHECK, OnChangeUseFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_5_USE_CHECK, OnChangeUseFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_6_USE_CHECK, OnChangeUseFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_1_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_2_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_3_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_4_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_5_INV_CHECK, OnChangeInvFlags)
+ ON_BN_CLICKED(IDC_PD_UNIOUT_6_INV_CHECK, OnChangeInvFlags)
 
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_COND1_COMBO, OnChangeDataOut1Con1)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_COND2_COMBO, OnChangeDataOut1Con2)
@@ -83,6 +89,13 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_4_USE_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_5_USE_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_6_USE_CHECK, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_1_INV_CHECK, OnUpdateControls1)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_2_INV_CHECK, OnUpdateControls2)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_3_INV_CHECK, OnUpdateControls3)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_4_INV_CHECK, OnUpdateControls4)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_5_INV_CHECK, OnUpdateControls5)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_6_INV_CHECK, OnUpdateControls6)
 
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_GROUP, IDC_PD_UNIOUT_1_LOGFUN_COMBO, OnUpdateControls1)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_GROUP, IDC_PD_UNIOUT_2_LOGFUN_COMBO, OnUpdateControls2)
@@ -224,6 +237,7 @@ void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_OFF_SPIN + idoff, m_out[i].off_thrd_2_spin);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_INV_CHECK + idoff, m_out[i].inv2_check);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_USE_CHECK + idoff, m_out[i].use_check);
+  DDX_Control(pDX, IDC_PD_UNIOUT_1_INV_CHECK + idoff, m_out[i].inv_check);
 
   m_out[i].on_thrd_1_edit.DDX_Value(pDX, IDC_PD_UNIOUT_1_COND1_ON_EDIT + idoff, m_params.out[i].on_thrd_1);
   m_out[i].off_thrd_1_edit.DDX_Value(pDX, IDC_PD_UNIOUT_1_COND1_OFF_EDIT + idoff, m_params.out[i].off_thrd_1);
@@ -233,6 +247,7 @@ void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_COND1_INV_CHECK + idoff, m_params.out[i].invers_1);
   DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_COND2_INV_CHECK + idoff, m_params.out[i].invers_2);
   DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_USE_CHECK + idoff, m_params.out[i].use);
+  DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_INV_CHECK + idoff, m_params.out[i].invers);
  }
  DDX_Control(pDX, IDC_PD_UNIOUT_12_LOGFUN_COMBO, lf12_combo); //logic function for 1st and 2nd outputs
 }
@@ -354,6 +369,7 @@ BOOL CUniOutPageDlg::OnInitDialog()
   VERIFY(mp_ttc->AddWindow(&m_out[i].inv1_check, MLL::GetString(IDS_PD_UNIOUT_1_COND1_INV_CHECK_TT)));
   VERIFY(mp_ttc->AddWindow(&m_out[i].inv2_check, MLL::GetString(IDS_PD_UNIOUT_1_COND2_INV_CHECK_TT)));
   VERIFY(mp_ttc->AddWindow(&m_out[i].use_check, MLL::GetString(IDS_PD_UNIOUT_1_USE_CHECK_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_out[i].inv_check, MLL::GetString(IDS_PD_UNIOUT_1_INV_CHECK_TT)));
 
   //finally, set condition format
   _SetCondInputFormat(i, false), _SetCondInputFormat(i, true);
