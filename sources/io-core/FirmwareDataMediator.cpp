@@ -319,11 +319,13 @@ typedef struct
  _uchar  ltft_cell_band;  //!< cell band in %, Value 256 corresponds to 100%, e.g. 1 discrete correspons to 0,390625%
  _uchar  ltft_stab_time;  //!< Learn stability time, value in 0.01 second units
  _uchar  ltft_learn_grad; //!< Learning gradient, 256 corresponds to 1.0, range 0...0.99
- 
+
+ _uchar  pwrrelay_uni; 
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1989];
+ _uchar reserved[1988];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2889,6 +2891,12 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.ltft_cell_band = ((float)exd.ltft_cell_band * 100.0f) / 256.0f;
  o_data.ltft_stab_time = ((float)exd.ltft_stab_time) / 100.0f;
  o_data.ltft_learn_grad = ((float)exd.ltft_learn_grad) / 256.0f;
+
+ o_data.pwrrelay_uni = exd.pwrrelay_uni;
+ if (o_data.pwrrelay_uni == 0xF)
+  o_data.pwrrelay_uni = 0; //zero means disabled
+ else
+  o_data.pwrrelay_uni++;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2966,4 +2974,9 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.ltft_cell_band = MathHelpers::Round((i_data.ltft_cell_band * 256.0f) / 100.0f);
  exd.ltft_stab_time = MathHelpers::Round(i_data.ltft_stab_time * 100.0f);
  exd.ltft_learn_grad = MathHelpers::Round(i_data.ltft_learn_grad * 256.0f);
+
+ if (i_data.pwrrelay_uni==0)
+  exd.pwrrelay_uni = 0xF;   //zero means disabled
+ else
+ exd.pwrrelay_uni = i_data.pwrrelay_uni-1;
 }

@@ -871,6 +871,8 @@ const int INPAVNUM = 14;
   float  ltft_cell_band;  //!< cell band in %
   float  ltft_stab_time;  //!< Learn stability time
   float  ltft_learn_grad; //!< Learning gradient
+
+  int  pwrrelay_uni;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

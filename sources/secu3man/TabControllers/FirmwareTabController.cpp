@@ -2090,73 +2090,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Number of PWM steps used with air conditioner"), _T("N"), 0, 60, 1, 1, &d.vent_maxband, _T("When the air conditioner is on, the duty cycle of the fan's PWM will be determined by this number of steps."));
 
- //miscellaneous
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Прочие константы:"));
- else
-  dfd.AppendItem(_T("Other constants:"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Разрешить запуск при продувке двигателя"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."));
- else
-  dfd.AppendItem(_T("Allow engine start in flood clear mode"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Таймер блокировки стартера"), _T("такт"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Количество тактов от момента достижения порога оборотов блокировки стартера до момента его фактического выключения. Установите значение 0, если хотите чтобы использовалась таблица вместо этой простой константы."));
- else
-  dfd.AppendItem(_T("Starter's blocking timer"), _T("str"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Тumber of strokes from the moment the starter's blocking threshold is reached until starter is actually turned off. Set the value to 0 if you want the table to be used instead of this simple constant."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Алгоритм прогнозирования положения коленвала для ДХ"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Выбор алгоритма прогнозирования положения коленвала в прошивках с синхронизацией от ДХ (Nзуб=Nцил). 0 - последний интервал. 1 - Первая производная"));
- else
-  dfd.AppendItem(_T("Algorithm of crankshaft position prediction for hall"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Selection of algorithm of crankshaft position prediction for firmwares with synchronization from a Hall sensor (Nteeth=Ncyl). 0 - Last interval. 1 - First derivative."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Множитель частоты импульсов на выходе для тахометра (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("Данный множитель определяет соотношение оборотов и частоты импульсов для тахометра выдаваемых на выход VTACHOM. Например, 1.000 означает, что за один оборот коленвала выдается 1 импульс. Чем выше значение множителя, тем выше частота."));
- else
-  dfd.AppendItem(_T("Frequency multiplier for tachometer output (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("This multiplier specify ratio of RPM and frequency of pulses produced at VTACHOM output. For example, 1.000 means that for 1 revolution of crankshaft 1 pulse is produced. The higher the value of multiplier, the higher the frequency."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Передавать вместо ADD_I1 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I1. 1 - вход ADD_I1 (по умолчанию), 2 - вход ADD_I2, 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
- else
-  dfd.AppendItem(_T("Send value of another input instead of ADD_I1"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Select what firmware should send instead of ADD_I1 value. 1 - ADD_I1 input (default), 2 - ADD_I2 input, 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Передавать вместо ADD_I2 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I2. 1 - вход ADD_I1, 2 - вход ADD_I2 (по умолчанию), 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
- else
-  dfd.AppendItem(_T("Send value of another input instead of ADD_I2"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Select what firmware should send instead of ADD_I2 value. 1 - ADD_I1 input, 2 - ADD_I2 input (default), 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Время открытого газового клапана на не запущенном двигателе"), _T("сек"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("Время на протяжении которого выход управляющий газовым клапаном (GASVAL_O) будет включен на не запущеном двигателе."));
- else
-  dfd.AppendItem(_T("Time of opened gas valve on stopped engine"), _T("sec"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("During this time output which controls gas valve (GASVAL_O) will be turned on when engine is stopped."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Отсечка зажигания и впрыска при низком давлении масла"), _T(""), 0, 1, 1, 0, &d.oilpress_cut, _T("Защита двигателя от работы при низком или отсутствующем давлении масла. 1 - включить защиту, 0 - выключить."));
- else
-  dfd.AppendItem(_T("Allow ignition and fuel injection cut off when oil pressure is low"), _T(""), 0, 1, 1, 0, &d.oilpress_cut, _T("Protection of engine against deterioration when pressure of oil is too low"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Мин. значение dt используемое для вычисления d%/dt ДЗ"), _T("мс"), 5.0f, 200.0f, 1.0f, 1, &d.tpsdot_mindt, _T("Укажите значение дифференциала времени используемого для вычисления скорости движения дроссельной заслонки"));
- else
-  dfd.AppendItem(_T("Minimum value of dt used for calculation of the d%/dt for TPS"), _T("ms"), 5.0f, 200.0f, 1.0f, 1, &d.tpsdot_mindt, _T("Specify value of the time differencial used by calculation of the speed of moving throttle"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Длительность работы блока после выключения зажигания."), _T("сек"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Блок продолжит работу указанное время после выключения зажигания. Подразумевается использование управления питанием блока."));
- else
-  dfd.AppendItem(_T("The duration of the unit's operation after the ignition is turned off. "), _T("sec"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Unit will continue to operate specified time after switching ignition off."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Задержка реакции на пропадание уровня на входе IGN (IGN_I)."), _T("сек"), 0.01f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Блок продолжит работу указанное время после выключения зажигания, все функции (импульсы зажигания, впрыск и т.д.) в это время продолжают работать. Подразумевается использование управления питанием блока."));
- else
-  dfd.AppendItem(_T("Delay in response to loss of level at the IGN input (IGN_I)"), _T("sec"), 0.01f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Unit will continue to operate specified time after switching ignition off, all functions (ignition pulses, injection etc) will continue to work during this time."));
-
  //Crankshaft position settings
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Положение коленвала (нов.алгор.)"));
  else
   dfd.AppendItem(_T("Crankshaft position (new algor.):"));
-
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("ВМТ цилиндра 1"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[0], _T("Положение ВМТ 1-го цилиндра относительно первого зуба диска синхронизации"));
@@ -2243,6 +2181,72 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Градиент таблицы адаптации"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Определает скорость изменения соседних ячеек. Чем выше значение, тем больше меняются соседние ячейки при адаптации текущей ячейки."));
  else
   dfd.AppendItem(_T("Learning gradient"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Determines the rate of change of adjacent cells. The higher the value, the more neighboring cells change when learning the current cell."));
+
+ //miscellaneous
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Прочие константы:"));
+ else
+  dfd.AppendItem(_T("Other constants:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Разрешить запуск при продувке двигателя"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."));
+ else
+  dfd.AppendItem(_T("Allow engine start in flood clear mode"), _T(""), 0, 1, 1, 0, &d.fldclr_start, _T("If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Таймер блокировки стартера"), _T("такт"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Количество тактов от момента достижения порога оборотов блокировки стартера до момента его фактического выключения. Установите значение 0, если хотите чтобы использовалась таблица вместо этой простой константы."));
+ else
+  dfd.AppendItem(_T("Starter's blocking timer"), _T("str"), 0, 255, 1, 1, &d.stbl_str_cnt, _T("Тumber of strokes from the moment the starter's blocking threshold is reached until starter is actually turned off. Set the value to 0 if you want the table to be used instead of this simple constant."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Алгоритм прогнозирования положения коленвала для ДХ"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Выбор алгоритма прогнозирования положения коленвала в прошивках с синхронизацией от ДХ (Nзуб=Nцил). 0 - последний интервал. 1 - Первая производная"));
+ else
+  dfd.AppendItem(_T("Algorithm of crankshaft position prediction for hall"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Selection of algorithm of crankshaft position prediction for firmwares with synchronization from a Hall sensor (Nteeth=Ncyl). 0 - Last interval. 1 - First derivative."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Множитель частоты импульсов на выходе для тахометра (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("Данный множитель определяет соотношение оборотов и частоты импульсов для тахометра выдаваемых на выход VTACHOM. Например, 1.000 означает, что за один оборот коленвала выдается 1 импульс. Чем выше значение множителя, тем выше частота."));
+ else
+  dfd.AppendItem(_T("Frequency multiplier for tachometer output (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("This multiplier specify ratio of RPM and frequency of pulses produced at VTACHOM output. For example, 1.000 means that for 1 revolution of crankshaft 1 pulse is produced. The higher the value of multiplier, the higher the frequency."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Передавать вместо ADD_I1 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I1. 1 - вход ADD_I1 (по умолчанию), 2 - вход ADD_I2, 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
+ else
+  dfd.AppendItem(_T("Send value of another input instead of ADD_I1"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Select what firmware should send instead of ADD_I1 value. 1 - ADD_I1 input (default), 2 - ADD_I2 input, 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Передавать вместо ADD_I2 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I2. 1 - вход ADD_I1, 2 - вход ADD_I2 (по умолчанию), 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
+ else
+  dfd.AppendItem(_T("Send value of another input instead of ADD_I2"), _T(""), 1, 8, 1, 0, &d.add_i2_sub, _T("Select what firmware should send instead of ADD_I2 value. 1 - ADD_I1 input, 2 - ADD_I2 input (default), 3 - ADD_I3 input, 4 - ADD_I4 input etc"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Время открытого газового клапана на не запущенном двигателе"), _T("сек"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("Время на протяжении которого выход управляющий газовым клапаном (GASVAL_O) будет включен на не запущеном двигателе."));
+ else
+  dfd.AppendItem(_T("Time of opened gas valve on stopped engine"), _T("sec"), 1.0f, 100.0f, 0.1f, 1, &d.gasval_ontime, _T("During this time output which controls gas valve (GASVAL_O) will be turned on when engine is stopped."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Отсечка зажигания и впрыска при низком давлении масла"), _T(""), 0, 1, 1, 0, &d.oilpress_cut, _T("Защита двигателя от работы при низком или отсутствующем давлении масла. 1 - включить защиту, 0 - выключить."));
+ else
+  dfd.AppendItem(_T("Allow ignition and fuel injection cut off when oil pressure is low"), _T(""), 0, 1, 1, 0, &d.oilpress_cut, _T("Protection of engine against deterioration when pressure of oil is too low"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Мин. значение dt используемое для вычисления d%/dt ДЗ"), _T("мс"), 5.0f, 200.0f, 1.0f, 1, &d.tpsdot_mindt, _T("Укажите значение дифференциала времени используемого для вычисления скорости движения дроссельной заслонки"));
+ else
+  dfd.AppendItem(_T("Minimum value of dt used for calculation of the d%/dt for TPS"), _T("ms"), 5.0f, 200.0f, 1.0f, 1, &d.tpsdot_mindt, _T("Specify value of the time differencial used by calculation of the speed of moving throttle"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длительность работы блока после выключения зажигания."), _T("сек"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Блок продолжит работу указанное время после выключения зажигания. Подразумевается использование управления питанием блока."));
+ else
+  dfd.AppendItem(_T("The duration of the unit's operation after the ignition is turned off. "), _T("sec"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Unit will continue to operate specified time after switching ignition off."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Задержка реакции на пропадание уровня на входе IGN (IGN_I)."), _T("сек"), 0.01f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Блок продолжит работу указанное время после выключения зажигания, все функции (импульсы зажигания, впрыск и т.д.) в это время продолжают работать. Подразумевается использование управления питанием блока."));
+ else
+  dfd.AppendItem(_T("Delay in response to loss of level at the IGN input (IGN_I)"), _T("sec"), 0.01f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Unit will continue to operate specified time after switching ignition off, all functions (ignition pulses, injection etc) will continue to work during this time."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Номер универсального выхода для управления питанием"), _T(""), 0, 6, 1, 0, &d.pwrrelay_uni, _T("Выбор универсального выхода, условия которого будут использованы при управлении реле питания блока. Результат вычисления условий универ.выхода объединяется с результатом вычисления других условий через функцию 'И'. Установите значение 0 для отключения этой функции."));
+ else
+  dfd.AppendItem(_T("Number of univ. output for controlling power relay"), _T(""), 0, 6, 1, 0, &d.pwrrelay_uni, _T("Use conditions of the selected universal output for control of power management. The result calculated from universal output's conditions is combined with the result calculated from other conditions through the logic 'AND' function. Set this value to 0 if you want to disable this function."));
 
  if (dfd.DoModal()==IDOK)
  {
