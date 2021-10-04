@@ -1068,7 +1068,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CarburPar& carburPar = m_recepted_packet.m_CarburPar;
- if (size != (mp_pdp->isHex() ? 43 : 22))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 45 : 23))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
@@ -1133,6 +1133,13 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
  carburPar.fuelcut_uni = fuelcut_uni;
  if (carburPar.fuelcut_uni == 0xF)
   carburPar.fuelcut_uni = UNI_OUTPUT_NUM; //disabled
+
+ unsigned char igncut_uni = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &igncut_uni))
+  return false;
+ carburPar.igncut_uni = igncut_uni;
+ if (carburPar.igncut_uni == 0xF)
+  carburPar.igncut_uni = UNI_OUTPUT_NUM; //disabled
 
  return true;
 }
@@ -3497,6 +3504,8 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->revlim_hit, m_outgoing_packet);
  int fuelcut_uni = (packet_data->fuelcut_uni==UNI_OUTPUT_NUM) ? 0xF : packet_data->fuelcut_uni;
  mp_pdp->Bin8ToHex(fuelcut_uni, m_outgoing_packet);
+ int igncut_uni = (packet_data->igncut_uni==UNI_OUTPUT_NUM) ? 0xF : packet_data->igncut_uni;
+ mp_pdp->Bin8ToHex(igncut_uni, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

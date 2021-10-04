@@ -381,6 +381,9 @@ BEGIN
 
     LTEXT           "Использ. условие универ. вых.",IDC_PD_CARBUR_FUELCUT_UNI_CAPTION,0,264,110,8
     COMBOBOX        IDC_PD_CARBUR_FUELCUT_UNI_COMBO,115,263,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    LTEXT           "Использ. условие универ. вых. для отсечки зажигания",IDC_PD_CARBUR_IGNCUT_UNI_CAPTION,0,284,110,16
+    COMBOBOX        IDC_PD_CARBUR_IGNCUT_UNI_COMBO,115,284,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
@@ -1866,6 +1869,7 @@ BEGIN
     IDS_PD_CARBUR_FUELCUT_UNI_COMBO_TT "Использовать условия выбранного универсального выхода для отсечки топлива. Результат вычисления условий универ.выхода объединяется с результатом вычисления других условий через функцию 'И'."
     IDS_PD_UNIOUT_1_USE_CHECK_TT "Включить обработку условий универсального выхода."
     IDS_PD_UNIOUT_1_INV_CHECK_TT "Инверсия конечного результата"
+    IDS_PD_CARBUR_IGNCUT_UNI_COMBO_TT "Использовать условия выбранного универсального выхода для отсечки зажигания. Результат вычисления условий универ.выхода объединяется с результатом вычисления других условий через функцию 'И'."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2238,6 +2242,9 @@ BEGIN
 
     LTEXT           "Use univ.output's condition",IDC_PD_CARBUR_FUELCUT_UNI_CAPTION,0,264,110,8
     COMBOBOX        IDC_PD_CARBUR_FUELCUT_UNI_COMBO,115,263,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    LTEXT           "Use univ.output's condition for ignition cut off",IDC_PD_CARBUR_IGNCUT_UNI_CAPTION,0,284,110,16
+    COMBOBOX        IDC_PD_CARBUR_IGNCUT_UNI_COMBO,115,284,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
@@ -3747,9 +3754,10 @@ BEGIN
     IDS_PD_KNOCK_SELCH1_TT "Specify which knock sensor should be used for this channel. No check - 1st sensor. Set check - 2nd sensor"
     IDS_PD_KNOCK_CLT_THRD_EDIT_TT "Control of knock will be activated only after the temperature of engine exceeds this value."
     IDS_PD_ADCCOMPEN_MODE_CHECK_TT "The choice of the formula by which the correction of the ADC values will be carried out. If the checkbox is checked, then the following formula is used: value after correction = (value from ADC + corr.) * factor. If the checkbox is not set, then the formula is used: value after correction = (value from ADC * factor) + corr."
-    IDS_PD_CARBUR_FUELCUT_UNI_COMBO_TT "Use conditions of the selected universal output for fuel cutoff. The result calculated from universal output's conditions is combined with the result calculated from other conditions through the 'AND' function."
+    IDS_PD_CARBUR_FUELCUT_UNI_COMBO_TT "Use conditions of the selected universal output for fuel cut off. The result calculated from universal output's conditions is combined with the result calculated from other conditions through the logic 'AND' function."
     IDS_PD_UNIOUT_1_USE_CHECK_TT "Turn on processing conditions of universal output."
     IDS_PD_UNIOUT_1_INV_CHECK_TT "Inversion of the final result"
+    IDS_PD_CARBUR_IGNCUT_UNI_COMBO_TT "Use conditions of the selected universal output for ignition cut off. The result calculated from universal output's conditions is combined with the result calculated from other conditions through the logic 'AND' function."
 END
 
 /////////////////////////////////////////////////////////////////////////////

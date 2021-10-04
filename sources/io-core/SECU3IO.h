@@ -231,6 +231,7 @@ namespace SECU3IO
   int  revlim_lot;                      //rev.limitting lo threshold
   int  revlim_hit;                      //rev.limitting hi threshold
   int fuelcut_uni;
+  int igncut_uni;
  };
 
  struct TemperPar
