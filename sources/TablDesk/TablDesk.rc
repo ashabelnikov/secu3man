@@ -1402,27 +1402,6 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,160,335,50,14
 END
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_CALC_UP             BITMAP     "calc_up.bmp"
-IDB_CALC_DOWN           BITMAP     "calc_down.bmp"
-IDB_CALC_FOCUSED        BITMAP     "calc_focused.bmp"
-IDB_CALC_DISABLED       BITMAP     "calc_disabled.bmp"
-
-IDB_GRID_UP             BITMAP     "grid_up.bmp"
-IDB_GRID_DOWN           BITMAP     "grid_down.bmp"
-IDB_GRID_FOCUSED        BITMAP     "grid_focused.bmp"
-IDB_GRID_DISABLED       BITMAP     "grid_disabled.bmp"
-
-IDB_CONST_UP            BITMAP     "const_up.bmp"
-IDB_CONST_DOWN          BITMAP     "const_down.bmp"
-IDB_CONST_FOCUSED       BITMAP     "const_focused.bmp"
-IDB_CONST_DISABLED      BITMAP     "const_disabled.bmp"
-
-IDI_GRAPH               ICON       "graph.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1663,8 +1642,29 @@ END
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
 
-// BITMAP
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
 IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
+
+IDB_CALC_UP             BITMAP     "res\\calc_up.bmp"
+IDB_CALC_DOWN           BITMAP     "res\\calc_down.bmp"
+IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
+IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
+
+IDB_GRID_UP             BITMAP     "res\\grid_up.bmp"
+IDB_GRID_DOWN           BITMAP     "res\\grid_down.bmp"
+IDB_GRID_FOCUSED        BITMAP     "res\\grid_focused.bmp"
+IDB_GRID_DISABLED       BITMAP     "res\\grid_disabled.bmp"
+
+IDB_CONST_UP            BITMAP     "res\\const_up.bmp"
+IDB_CONST_DOWN          BITMAP     "res\\const_down.bmp"
+IDB_CONST_FOCUSED       BITMAP     "res\\const_focused.bmp"
+IDB_CONST_DISABLED      BITMAP     "res\\const_disabled.bmp"
+
+IDI_GRAPH               ICON       "res\\graph.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information

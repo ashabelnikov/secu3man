@@ -149,7 +149,7 @@ class MeasInstrBase
      m_meter.Redraw();
    }
    else if (m_scope.GetSafeHwnd())
-    m_scope.EnableWindow(enable); 
+    m_scope.EnableWindow(enable);
   }
 
   //прибор видим или скрыт ?

@@ -356,11 +356,11 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
  m_add_i1_inp.Scale(Xf, Yf);
  m_add_i2_inp.Scale(Xf, Yf);
  m_add_i3_inp.Scale(Xf, Yf);
- m_add_i4_inp.Scale(Xf, Yf); 
+ m_add_i4_inp.Scale(Xf, Yf);
  m_add_i5_inp.Scale(Xf, Yf);
  m_add_i6_inp.Scale(Xf, Yf);
  m_add_i7_inp.Scale(Xf, Yf);
- m_add_i8_inp.Scale(Xf, Yf); 
+ m_add_i8_inp.Scale(Xf, Yf);
 
  UpdateWindow();
 }

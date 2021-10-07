@@ -633,7 +633,7 @@ END
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
 
-IDC_CURSOR_HAND_MOVE    CURSOR     "move.cur"
+IDC_CURSOR_HAND_MOVE    CURSOR     "res//move.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information

@@ -91,15 +91,15 @@ bool WriteHexFile(FILE* fout, const std::vector<BYTE>& code)
   {
    insert02record(fout, ((haddr & 0xF0000) >> 4) & 0xFFFF);
    seg_addr = (haddr & 0xF0000);
-  }            
+  }
 
   if ((code.size() - haddr) < bsize)
    hexstr(fout, p, haddr & 0xFFFF, (code.size() - haddr));
   else
    hexstr(fout, p, haddr & 0xFFFF, bsize);
-    
+
   haddr+=bsize;
-  p+=bsize;    
+  p+=bsize;
  }
  fprintf(fout,":00000001FF\r\n");
  return true;
