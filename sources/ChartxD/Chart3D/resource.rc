@@ -33,6 +33,10 @@ stringtable
   IDS_PM_SET_PTMOV_STEP, "Шаг смещения точек..."
   IDS_PM_HIDE_MARKS, "Спрятать надписи"
   IDS_PM_HIDE_OLDCURVE, "Спрятать 'старую' кривую"
+  IDS_PM_EXPORT, "Экспорт"
+  IDS_PM_EXPORT_CSV, "В формат .csv"
+  IDS_PM_IMPORT, "Импорт"
+  IDS_PM_IMPORT_CSV, "Из формата .csv"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -62,4 +66,8 @@ stringtable
   IDS_PM_SET_PTMOV_STEP, "Points' moving step..."
   IDS_PM_HIDE_MARKS, "Hide marks"
   IDS_PM_HIDE_OLDCURVE, "Hide 'old' curve"
+  IDS_PM_EXPORT, "Export"
+  IDS_PM_EXPORT_CSV, "Into .csv format"
+  IDS_PM_IMPORT, "Import"
+  IDS_PM_IMPORT_CSV, "From .csv format"
 }

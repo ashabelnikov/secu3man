@@ -33,6 +33,7 @@
 #include "Form2D.h"
 #include "../common/MathHelpers.h"
 #include "../common/DPIAware.h"
+#include "../common/StrUtils.h"
 #include "../PtMovStep/PtMovStepDlg.h"
 #include "../ManageFrm.h"
 //---------------------------------------------------------------------------
@@ -256,6 +257,14 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
  PM_HideMarks->Caption = string;
  ::LoadString(hInstance, IDS_PM_HIDE_OLDCURVE, string, 1024);
  PM_HideOldCurve->Caption = string;
+ ::LoadString(hInstance, IDS_PM_EXPORT, string, 1024);
+ PM_Export->Caption = string;
+ ::LoadString(hInstance, IDS_PM_EXPORT_CSV, string, 1024);
+ PM_ExportCSV->Caption = string;
+ ::LoadString(hInstance, IDS_PM_IMPORT, string, 1024);
+ PM_Import->Caption = string;
+ ::LoadString(hInstance, IDS_PM_IMPORT_CSV, string, 1024);
+ PM_ImportCSV->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -912,6 +921,7 @@ void __fastcall TForm2D::FormResize(TObject *Sender)
   UpdateBinsPosition();
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::UpdateBinsPosition(void)
 {
  //Set position of edit boxes
@@ -926,6 +936,7 @@ void __fastcall TForm2D::UpdateBinsPosition(void)
  }
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::FormCreate(TObject *Sender)
 {
  DPIAware da;
@@ -945,3 +956,92 @@ void TForm2D::UpdateSystemColors(void)
  Series1->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
  Series2->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
 }
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnExportCSV(TObject *Sender)
+{
+ if (saveDialog->Execute())
+ {
+  FILE* fh = _tfopen(saveDialog->FileName.c_str(),_T("wb+"));
+  if (NULL == fh)
+  {
+   ::MessageBox(NULL, "Can't open file for writing!", "Error", MB_OK | MB_ICONERROR);
+   return;
+  }
+
+  //write function's values
+  AnsiString valFmt = Chart1->Series[0]->ValueFormat;
+  for(int i = 0; i < m_count_of_function_points; ++i)
+  {
+   AnsiString as = FormatFloat(valFmt, mp_modified_function[i]);  
+   if (i == m_count_of_function_points-1)
+    fprintf(fh, "%s\r\n", as.c_str());    
+   else
+    fprintf(fh, "%s,", as.c_str());
+  }
+
+  //write horizontal axis's grid
+  for(int i = 0; i < m_count_of_function_points; ++i)
+  {
+   AnsiString as;
+   if (m_horizontal_axis_grid_mode < 2) //0,1 modes
+    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
+   else  //mode 2
+    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_of_function_points]);
+
+   if (i == m_count_of_function_points-1)
+    fprintf(fh, "%s", as.c_str());    
+   else
+    fprintf(fh, "%s,", as.c_str());
+  }
+
+  fclose(fh);
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnImportCSV(TObject *Sender)
+{
+ if (openDialog->Execute())
+ {
+  FILE* file = fopen(openDialog->FileName.c_str(), "r");
+  if (NULL == file)
+  {
+   ::MessageBox(NULL, "Can't open file for reading!", "Error", MB_OK | MB_ICONERROR);
+   return;
+  }
+  //parse file
+  std::vector<std::vector<std::string> > csv;
+  char line[8192+1];
+  while (fgets(line, 8192, file))
+  {
+   csv.push_back(StrUtils::TokenizeStr(line, ','));
+  }
+
+  fclose(file);
+    
+  if (csv.size() != 2)
+  {
+   ::MessageBox(NULL, "Error reading csv file! Number of lines must be = 2.", "Error", MB_OK | MB_ICONERROR);
+   return;
+  }
+
+  if (csv[0].size() != (size_t)m_count_of_function_points || csv[1].size() != (size_t)m_count_of_function_points)
+  {
+   ::MessageBox(NULL, "Error reading csv file! Incorrect number of values.", "Error", MB_OK | MB_ICONERROR);
+   return;
+  }
+
+  //copy new data
+  for(int i = 0; i < m_count_of_function_points; ++i)
+   mp_modified_function[i] = atof(csv[0][i].c_str());
+  //delete old values and fill series again
+  for (;Series1->Count() > 0;)
+   Series1->Delete(Series1->Count()-1);
+  for (;Series2->Count() > 0;)
+   Series2->Delete(Series2->Count()-1);
+  DataPrepare();
+ }
+}
+
+//---------------------------------------------------------------------------

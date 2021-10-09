@@ -65,6 +65,10 @@ class TForm2D : public TForm
   TMenuItem *PM_SetPtMovStep;
   TMenuItem *PM_HideMarks;
   TMenuItem *PM_HideOldCurve;
+  TMenuItem *PM_Export;
+  TMenuItem *PM_ExportCSV;
+  TMenuItem *PM_Import;
+  TMenuItem *PM_ImportCSV;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
@@ -86,6 +90,9 @@ class TForm2D : public TForm
   TFloatUpDown *UpDown6;
   TFloatUpDown *UpDown7;
   TFloatUpDown *UpDown8;
+  TOpenDialog* openDialog;
+  TSaveDialog* saveDialog;
+
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
@@ -113,6 +120,8 @@ class TForm2D : public TForm
   void __fastcall FormDeactivate(TObject *Sender);
   void __fastcall FormResize(TObject *Sender);
   void __fastcall FormCreate(TObject *Sender);
+  void __fastcall OnExportCSV(TObject *Sender);
+  void __fastcall OnImportCSV(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);

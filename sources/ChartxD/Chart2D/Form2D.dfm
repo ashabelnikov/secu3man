@@ -647,5 +647,26 @@ object Form2D: TForm2D
       Caption = 'Hide old curve'
       OnClick = OnHideOldCurve
     end
+    object PM_Export: TMenuItem
+      Caption = 'Export'
+      object PM_ExportCSV: TMenuItem
+        Caption = '1'
+        OnClick = OnExportCSV
+      end
+    end
+    object PM_Import: TMenuItem
+      Caption = 'Import'
+      object PM_ImportCSV: TMenuItem
+        Caption = '1'
+        OnClick = OnImportCSV
+      end
+    end
+  end
+
+  object openDialog: TOpenDialog
+    DefaultExt = 'csv'
+  end
+  object saveDialog: TSaveDialog
+    DefaultExt = 'csv'
   end
 end

@@ -137,6 +137,12 @@ class TForm3D : public TForm
   TMenuItem *PM_CopyFromCurve13;
   TMenuItem *PM_CopyFromCurve14;
   TMenuItem *PM_CopyFromCurve15;
+  TMenuItem *PM_Export;
+  TMenuItem *PM_ExportCSV;
+  TMenuItem *PM_Import;
+  TMenuItem *PM_ImportCSV;
+  TOpenDialog* openDialog;
+  TSaveDialog* saveDialog;
 
   void __fastcall TrackBarAfChange(TObject *Sender);
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
@@ -168,6 +174,8 @@ class TForm3D : public TForm
   void __fastcall OnHideOldCurve(TObject *Sender);
   void __fastcall FormDeactivate(TObject *Sender);
   void __fastcall OnCreateForm(TObject *Sender);
+  void __fastcall OnExportCSV(TObject *Sender);
+  void __fastcall OnImportCSV(TObject *Sender);
 
  public:
   __fastcall TForm3D(HWND parent);

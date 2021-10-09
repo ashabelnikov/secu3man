@@ -25,3 +25,7 @@
 #define IDS_PM_SET_PTMOV_STEP          219
 #define IDS_PM_HIDE_MARKS              221
 #define IDS_PM_HIDE_OLDCURVE           222
+#define IDS_PM_EXPORT                  223
+#define IDS_PM_EXPORT_CSV              224
+#define IDS_PM_IMPORT                  225
+#define IDS_PM_IMPORT_CSV              226

@@ -26,10 +26,12 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <stdio.h>
 #include "resource.h"
 #include "Form3D.h"
 #include "../common/MathHelpers.h"
 #include "../common/DPIAware.h"
+#include "../common/StrUtils.h"
 #include "../PtmovStep/PtMovStepDlg.h"
 #include "../ManageFrm.h"
 
@@ -220,6 +222,14 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
  PM_HideMarks->Caption = string;
  ::LoadString(hInstance, IDS_PM_HIDE_OLDCURVE, string, 1024);
  PM_HideOldCurve->Caption = string;
+ ::LoadString(hInstance, IDS_PM_EXPORT, string, 1024);
+ PM_Export->Caption = string;
+ ::LoadString(hInstance, IDS_PM_EXPORT_CSV, string, 1024);
+ PM_ExportCSV->Caption = string;
+ ::LoadString(hInstance, IDS_PM_IMPORT, string, 1024);
+ PM_Import->Caption = string;
+ ::LoadString(hInstance, IDS_PM_IMPORT_CSV, string, 1024);
+ PM_ImportCSV->Caption = string;
 } 
 
 //---------------------------------------------------------------------------
@@ -378,6 +388,8 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
    PopupMenu->Items->Items[i]->Enabled = false;
   PM_ZeroAllCurves->Enabled = true;
   PM_SetPtMovStep->Enabled = true;
+  PM_Export->Enabled = true;
+  PM_Import->Enabled = true;
  }
  else
  {
@@ -1167,6 +1179,113 @@ void TForm3D::SetChartTitle(const AnsiString& title)
 {
  m_u_title = title;
  Chart1->Title->Text->SetText(title.c_str());
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnExportCSV(TObject *Sender)
+{
+ if (saveDialog->Execute())
+ {
+  FILE* fh = _tfopen(saveDialog->FileName.c_str(),_T("wb+"));
+  if (NULL == fh)
+  {
+   ::MessageBox(NULL, "Can't open file for writing!", "Error", MB_OK | MB_ICONERROR);
+   return;
+  }
+
+  //write function's values
+  AnsiString valFmt = Chart1->Series[0]->ValueFormat;
+  if (CheckBoxBv->Checked)
+  {
+   for(int j = 0; j < m_count_z; j++)
+   {
+    for(int i = 0; i < m_count_x; i++)
+    {
+     AnsiString as = FormatFloat(valFmt, GetItem_m(j,i));  
+     if (i == m_count_x-1)
+      fprintf(fh, "%s\r\n", as.c_str());    
+     else
+      fprintf(fh, "%s,", as.c_str());
+    }
+   }
+  }
+  else
+  {
+   for(int j = m_count_z-1; j >= 0; j--)
+   {
+    for(int i = 0; i < m_count_x; i++)
+    {
+     AnsiString as = FormatFloat(valFmt, GetItem_m(j,i));  
+     if (i == m_count_x-1)
+      fprintf(fh, "%s\r\n", as.c_str());    
+     else
+      fprintf(fh, "%s,", as.c_str());
+    }
+   }
+  }
+
+  //write horizontal axis's grid
+  for(int i = 0; i < m_count_x; i++)
+  {
+   AnsiString as;
+   as.sprintf(m_values_format_x.c_str(),m_u_slots[i]);
+   if (i == m_count_x-1)
+    fprintf(fh, "%s\r\n", as.c_str());    
+   else
+    fprintf(fh, "%s,", as.c_str());
+  }
+
+  fclose(fh);
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnImportCSV(TObject *Sender)
+{
+ if (openDialog->Execute())
+ {
+  FILE* file = fopen(openDialog->FileName.c_str(), "r");
+  if (NULL == file)
+  {
+   ::MessageBox(NULL, "Can't open file for reading!", "Error", MB_OK | MB_ICONERROR);
+   return;
+  }
+  //parse file
+  std::vector<std::vector<std::string> > csv;
+  char line[8192+1];
+  while (fgets(line, 8192, file))
+  {
+   csv.push_back(StrUtils::TokenizeStr(line, ','));
+  }
+
+  fclose(file);
+    
+  if (csv.size() != (size_t)(m_count_z+1))
+  {
+   ::MessageBox(NULL, "Error reading csv file! Incorrect number of rows.", "Error", MB_OK | MB_ICONERROR);
+   return;
+  }
+  
+  for(size_t i = 0; i < csv.size(); ++i)
+  {
+   if (csv[i].size() != (size_t)m_count_x)
+   {
+    ::MessageBox(NULL, "Error reading csv file! Incorrect number of values in row.", "Error", MB_OK | MB_ICONERROR);
+    return;
+   }
+  }
+
+  //set read values
+  for(int j = 0; j < m_count_z; j++)
+   for(int i = 0; i < m_count_x; i++)
+    SetItem(j, i, atof(csv[(m_count_z-1)-j][i].c_str()));
+
+  //delete old values and then fill series again
+  for(int i = 0; i < Chart1->SeriesList->Count; i++)
+   for (;Chart1->Series[i]->Count() > 0;)
+    Chart1->Series[i]->Delete(Chart1->Series[i]->Count()-1);
+  DataPrepare();
+ }
 }
 
 //---------------------------------------------------------------------------

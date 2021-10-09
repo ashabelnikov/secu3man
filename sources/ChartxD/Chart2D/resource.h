@@ -17,3 +17,7 @@
 #define IDS_PM_HIDE_MARKS              112
 #define IDS_PM_HIDE_OLDCURVE           113
 #define IDS_TT_EDIT_X_GRID             114
+#define IDS_PM_EXPORT                  115
+#define IDS_PM_EXPORT_CSV              116
+#define IDS_PM_IMPORT                  117
+#define IDS_PM_IMPORT_CSV              118
