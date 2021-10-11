@@ -257,7 +257,7 @@ void CGridModeEditorInjDlg::BindLoadGrid(float* pGrid, float* pGrid2)
  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
  const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
  m_pVEPageDlg->BindLoadGrid(pLoadGrid);
- m_pVEPageDlg->BindLoadGrid(pGrid2);
+ m_pVEPageDlg->BindLoadGrid2(pGrid2);
  m_pAFRPageDlg->BindLoadGrid(pLoadGrid);
  m_pITPageDlg->BindLoadGrid(pLoadGrid);
  m_pPwm1PageDlg->BindLoadGrid(pLoadGrid);
