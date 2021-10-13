@@ -1443,6 +1443,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V33) { 
    mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
   }
+  mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_ADD_O2, _T("ADD_O2"));
+  mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_ECF, _T("ECF"));
   mp_view->AddItem(FWDM::IOS3I_PWRR_O, FWDM::IOP3I_PWRR_O, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_PWRR_O, true);
   mp_view->EnableInversion(FWDM::IOS3I_PWRR_O, true);
@@ -1529,6 +1531,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V33) { 
    mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_GASVAL_O, _T("GASVAL_O"));
   }
+  mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_PWRR_O, _T("PWRR_O"));
   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_ADD_O2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_O2, true);
   mp_view->EnableInversion(FWDM::IOS3I_ADD_O2, true);
@@ -1932,6 +1935,11 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
    if (((FWDM::IOSid)s == FWDM::IOS3I_INJ_O5) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_INJ_O5)))
     continue; //5
 
+   if (((FWDM::IOSid)s == FWDM::IOS3I_PWRR_O) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_PWRR_O)))
+    continue; //PWRR_O
+   if (((FWDM::IOSid)s == FWDM::IOS3I_ADD_O2) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_ADD_O2)))
+    continue; //ADD_O2
+
    //hack which allows remap ECF output to other output slots
    if (((FWDM::IOSid)s == FWDM::IOS3I_ECF) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_ECF)))
     continue; //ECF
@@ -2199,6 +2207,9 @@ void CFWIORemappingController::_EnableInversionItems(void)
   enableFlags.insert(std::make_pair(FWDM::IOS3I_ECF, false));
   enableFlags.insert(std::make_pair(FWDM::IOS3I_PS, false));
   enableFlags.insert(std::make_pair(FWDM::IOS3I_CKPS, false));
+
+  enableFlags.insert(std::make_pair(FWDM::IOS3I_PWRR_O, false));
+  enableFlags.insert(std::make_pair(FWDM::IOS3I_ADD_O2, false));
  }
 
  for(int p = FWDM::IOP_START; p < _IOPCount(); ++p)
