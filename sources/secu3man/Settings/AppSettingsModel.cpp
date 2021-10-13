@@ -1429,7 +1429,7 @@ bool CAppSettingsModel::WriteSettings(void)
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Automatically reopen COM port after plugging of USB cable or Bluetooth. Set to 0 to disable this feature."));
  else
-  os.WriteComment(_T("Автоматически переоткрывать COM порт после подключения по USB каделю или Bluetooth. Установите в 0 для запрещения этой функции."));
+  os.WriteComment(_T("Автоматически переоткрывать COM порт после подключения по USB кабелю или Bluetooth. Установите в 0 для запрещения этой функции."));
  os.WriteInt(m_optPortAutoReopen); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)

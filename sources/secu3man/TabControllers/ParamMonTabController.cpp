@@ -130,6 +130,8 @@ void CParamMonTabController::OnSettingsChanged(int action)
   mp_moncntr->OnSettingsChanged();
  }
 
+ mp_tabcntr->OnSettingsChanged();
+
  ConfigureIndicators();
  mp_view->Invalidate();
 }

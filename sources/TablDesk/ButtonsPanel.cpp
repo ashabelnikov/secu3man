@@ -1684,7 +1684,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_view(990)
+, m_scrl_view(1020)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_carb_afr(false)
@@ -1756,6 +1756,7 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_PWM1_MAP,  m_view_pwm1_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_PWM2_MAP,  m_view_pwm2_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IACMAT_MAP,  m_view_iacmat_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_TPSZON_MAP,  m_view_tpszon_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
@@ -1876,6 +1877,7 @@ BOOL CButtonsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_pwm1_map_btn, MLL::GetString(IDS_TD_VIEW_PWM1_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_pwm2_map_btn, MLL::GetString(IDS_TD_VIEW_PWM2_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_iacmat_map_btn, MLL::GetString(IDS_TD_VIEW_IACMAT_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_tpszon_map_btn, MLL::GetString(IDS_TD_VIEW_TPSZON_MAP_TT))); 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -4232,4 +4234,10 @@ void CButtonsPanel::SetSplitAngMode(bool mode)
   DLL::Chart3DSetTitle(m_md[TYPE_MAP_PWM1].handle, MLL::GetString(IDS_PWM1_MAP).c_str());
   m_view_pwm1_map_btn.SetWindowText(MLL::GetString(IDS_TD_VIEW_PWM1_MAP).c_str());
  }
+}
+
+void CButtonsPanel::SetCSVSepSymbol(char sepsymb)
+{
+ DLL::Chart2DSetCSVSepSymbol(sepsymb);
+ DLL::Chart3DSetCSVSepSymbol(sepsymb);
 }

@@ -57,6 +57,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step);
  float __declspec(dllexport)  __cdecl Chart2DGetPtMovingStep(HWND hWnd);
  void  __declspec(dllexport)  __cdecl Chart2DUpdateYRange(HWND parent, float i_fnc_min, float i_fnc_max);
+ void  __declspec(dllexport)  __cdecl Chart2DSetCSVSepSymbol(char sepsymb);
 }
 
 extern HINSTANCE hInst;
@@ -358,3 +359,7 @@ void __cdecl Chart2DUpdateYRange(HWND hWnd, float i_fnc_min, float i_fnc_max)
 }
 
 //---------------------------------------------------------------------------
+void __cdecl Chart2DSetCSVSepSymbol(char sepsymb)
+{
+ TForm2D::m_csvsep_symb = sepsymb;
+}

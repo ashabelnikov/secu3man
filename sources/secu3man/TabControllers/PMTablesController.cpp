@@ -957,3 +957,8 @@ void CPMTablesController::setOnChangeSettings(EventHandler OnCB)
 {
  m_OnChangeSettings = OnCB;
 }
+
+void CPMTablesController::OnSettingsChanged(void)
+{
+ mp_view->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetCSVSepSymbol());
+}

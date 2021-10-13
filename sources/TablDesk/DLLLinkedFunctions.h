@@ -57,6 +57,7 @@ namespace DLL
  typedef void (__cdecl *Chart2DSetPtMovingStep_Addr) (HWND hWnd, float step);
  typedef float (__cdecl *Chart2DGetPtMovingStep_Addr) (HWND hWnd);
  typedef void (__cdecl *Chart2DUpdateYRange_Addr) (HWND hWnd, float i_fnc_min, float i_fnc_max);
+ typedef void (__cdecl *Chart2DSetCSVSepSymbol_Addr) (char sepsymb);
 
  //3D
  typedef HWND (__cdecl *Chart3DCreate_Addr) (HWND parent, const float *ip_original_function, float *iop_modified_function, const float *ip_x_axis_grid_values, int i_x_count_of_points, int i_z_count_of_points, float i_aai_min, float i_aai_max, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
@@ -75,6 +76,7 @@ namespace DLL
  typedef void (__cdecl *Chart3DSetOnValueTransform_Addr) (HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
  typedef void (__cdecl *Chart3DSetAxisTitle_Addr) (HWND hWnd, int i_axis, LPCTSTR axisTitle);
  typedef void (__cdecl *Chart3DSetTitle_Addr) (HWND hWnd, LPCTSTR axisTitle);
+ typedef void (__cdecl *Chart3DSetCSVSepSymbol_Addr) (char sepsymb);
 
  //common
  typedef void (__cdecl *ChartxDSetLanguage_Addr) (int i_language);
@@ -99,6 +101,7 @@ namespace DLL
  extern Chart2DSetPtMovingStep_Addr     Chart2DSetPtMovingStep;
  extern Chart2DGetPtMovingStep_Addr     Chart2DGetPtMovingStep;
  extern Chart2DUpdateYRange_Addr        Chart2DUpdateYRange;
+ extern Chart2DSetCSVSepSymbol_Addr     Chart2DSetCSVSepSymbol;
 
  extern Chart3DCreate_Addr              Chart3DCreate;
  extern Chart3DUpdate_Addr              Chart3DUpdate;
@@ -116,6 +119,7 @@ namespace DLL
  extern Chart3DSetOnValueTransform_Addr Chart3DSetOnValueTransform;
  extern Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle;
  extern Chart3DSetTitle_Addr            Chart3DSetTitle;
+ extern Chart3DSetCSVSepSymbol_Addr     Chart3DSetCSVSepSymbol;
 
  extern ChartxDSetLanguage_Addr         ChartxDSetLanguage;
  extern ChartxDShowHints_Addr           ChartxDShowHints;

@@ -55,6 +55,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DSetOnValueTransform(HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle);
  void  __declspec(dllexport)  __cdecl Chart3DSetTitle(HWND hWnd, LPCTSTR title);
+ void  __declspec(dllexport)  __cdecl Chart3DSetCSVSepSymbol(char sepsymb);
 }
 
 extern HINSTANCE hInst;
@@ -275,6 +276,12 @@ void __cdecl Chart3DSetTitle(HWND hWnd, LPCTSTR title)
   return;
 
  pForm->SetChartTitle(title);
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetCSVSepSymbol(char sepsymb)
+{
+ TForm3D::m_csvsep_symb = sepsymb;
 }
 
 //---------------------------------------------------------------------------

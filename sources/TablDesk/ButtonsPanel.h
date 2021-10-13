@@ -152,6 +152,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetSplitAngMode(bool mode);
 
+  void SetCSVSepSymbol(char sepsymb);
+
  public: //установка обработчиков событий
   void setOnChangeSettings(EventHandler OnCB);
   void setOnMapChanged(EventWithCode OnFunction);
@@ -282,6 +284,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_pwm1_map_btn;
   CButton m_view_pwm2_map_btn;
   CButton m_view_iacmat_map_btn;
+  CButton m_view_tpszon_map_btn;
 
   CButton m_grid_mode_editing_ign_check;
   CButton m_grid_mode_editing_inj_check;

@@ -272,9 +272,11 @@ BOOL CSecu3manApp::InitInstance()
  {
   case IL_ENGLISH:
    SetThreadLocalSettings(LANG_ENGLISH, SUBLANG_ENGLISH_US);
+   _tsetlocale(LC_ALL, _T("English_USA.1252"));
    break;
   case IL_RUSSIAN:
-   SetThreadLocalSettings(LANG_RUSSIAN, SUBLANG_ENGLISH_US);
+   SetThreadLocalSettings(LANG_RUSSIAN, SUBLANG_DEFAULT);
+   _tsetlocale(LC_ALL, _T("Russian_Russia.1251"));
    break;
  }
 

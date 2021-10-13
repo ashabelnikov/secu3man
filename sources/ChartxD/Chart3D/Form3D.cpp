@@ -39,6 +39,8 @@
 #pragma package(smart_init)
 #pragma resource "Form3D.dfm"
 
+char TForm3D::m_csvsep_symb = ',';
+
 //---------------------------------------------------------------------------
 //цвета для 3D графика
 long col[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491,
@@ -1193,6 +1195,9 @@ void __fastcall TForm3D::OnExportCSV(TObject *Sender)
    return;
   }
 
+  char temp[16];
+  sprintf(temp, "%%s%c", m_csvsep_symb);
+
   //write function's values
   AnsiString valFmt = Chart1->Series[0]->ValueFormat;
   if (CheckBoxBv->Checked)
@@ -1205,7 +1210,7 @@ void __fastcall TForm3D::OnExportCSV(TObject *Sender)
      if (i == m_count_x-1)
       fprintf(fh, "%s\r\n", as.c_str());    
      else
-      fprintf(fh, "%s,", as.c_str());
+      fprintf(fh, temp, as.c_str());
     }
    }
   }
@@ -1219,7 +1224,7 @@ void __fastcall TForm3D::OnExportCSV(TObject *Sender)
      if (i == m_count_x-1)
       fprintf(fh, "%s\r\n", as.c_str());    
      else
-      fprintf(fh, "%s,", as.c_str());
+      fprintf(fh, temp, as.c_str());
     }
    }
   }
@@ -1232,7 +1237,7 @@ void __fastcall TForm3D::OnExportCSV(TObject *Sender)
    if (i == m_count_x-1)
     fprintf(fh, "%s\r\n", as.c_str());    
    else
-    fprintf(fh, "%s,", as.c_str());
+    fprintf(fh, temp, as.c_str());
   }
 
   fclose(fh);
@@ -1255,7 +1260,7 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
   char line[8192+1];
   while (fgets(line, 8192, file))
   {
-   csv.push_back(StrUtils::TokenizeStr(line, ','));
+   csv.push_back(StrUtils::TokenizeStr(line, m_csvsep_symb));
   }
 
   fclose(file);

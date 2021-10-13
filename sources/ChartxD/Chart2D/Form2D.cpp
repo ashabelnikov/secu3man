@@ -40,6 +40,8 @@
 #pragma package(smart_init)
 #pragma resource "Form2D.dfm"
 
+char TForm2D::m_csvsep_symb = ',';
+
 //---------------------------------------------------------------------------
 __fastcall TForm2D::TForm2D(HWND parent)
 : TForm(parent)
@@ -969,6 +971,9 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
    return;
   }
 
+  char temp[16];
+  sprintf(temp, "%%s%c", m_csvsep_symb);
+
   //write function's values
   AnsiString valFmt = Chart1->Series[0]->ValueFormat;
   for(int i = 0; i < m_count_of_function_points; ++i)
@@ -977,7 +982,7 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
    if (i == m_count_of_function_points-1)
     fprintf(fh, "%s\r\n", as.c_str());    
    else
-    fprintf(fh, "%s,", as.c_str());
+    fprintf(fh, temp, as.c_str());
   }
 
   //write horizontal axis's grid
@@ -992,7 +997,7 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
    if (i == m_count_of_function_points-1)
     fprintf(fh, "%s", as.c_str());    
    else
-    fprintf(fh, "%s,", as.c_str());
+    fprintf(fh, temp, as.c_str());
   }
 
   fclose(fh);
@@ -1015,7 +1020,7 @@ void __fastcall TForm2D::OnImportCSV(TObject *Sender)
   char line[8192+1];
   while (fgets(line, 8192, file))
   {
-   csv.push_back(StrUtils::TokenizeStr(line, ','));
+   csv.push_back(StrUtils::TokenizeStr(line, m_csvsep_symb));
   }
 
   fclose(file);

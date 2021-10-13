@@ -18,6 +18,7 @@ EXPORTS
   Chart2DSetPtMovingStep     = _Chart2DSetPtMovingStep
   Chart2DGetPtMovingStep     = _Chart2DGetPtMovingStep
   Chart2DUpdateYRange        = _Chart2DUpdateYRange
+  Chart2DSetCSVSepSymbol     = _Chart2DSetCSVSepSymbol
 
   ; VC funcname              = BCB funcname
   Chart3DCreate              = _Chart3DCreate
@@ -36,6 +37,7 @@ EXPORTS
   Chart3DSetAxisTitle        = _Chart3DSetAxisTitle
   Chart3DGetPtMovingStep     = _Chart3DGetPtMovingStep
   Chart3DSetTitle            = _Chart3DSetTitle
+  Chart3DSetCSVSepSymbol     = _Chart3DSetCSVSepSymbol
 
   ; VC funcname              = BCB funcname
   ChartxDSetLanguage         = _ChartxDSetLanguage

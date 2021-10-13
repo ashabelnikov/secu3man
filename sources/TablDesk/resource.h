@@ -578,3 +578,5 @@
 #define IDS_TD_MAF_CURVE_TT             5932
 #define IDS_MAF_CURVE_MAP               5933
 #define IDS_MAF_UNIT                    5934
+#define IDC_TD_VIEW_TPSZON_MAP          5935
+#define IDS_TD_VIEW_TPSZON_MAP_TT       5936

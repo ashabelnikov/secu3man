@@ -159,6 +159,7 @@ class TForm2D : public TForm
   AnsiString m_y_axis_title;
   float m_pt_moving_step;
   int m_horizontal_axis_grid_mode;             //3 modes are possible
+  static char m_csvsep_symb;
 
  private:
   TEdit* m_binsEdit[8];

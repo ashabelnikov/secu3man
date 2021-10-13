@@ -196,6 +196,8 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
+
+ mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetCSVSepSymbol());
 }
 
 void CFirmwareTabController::OnActivate(void)

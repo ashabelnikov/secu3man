@@ -77,6 +77,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
 
   void setOnChangeSettings(EventHandler OnCB);
 
+  void OnSettingsChanged(void);
+
  private:
   //Events from view
   void OnMapChanged(int i_mapType);

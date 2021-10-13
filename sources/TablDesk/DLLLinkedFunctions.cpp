@@ -50,6 +50,7 @@ namespace DLL
  Chart2DSetPtMovingStep_Addr     Chart2DSetPtMovingStep = NULL;
  Chart2DGetPtMovingStep_Addr     Chart2DGetPtMovingStep = NULL;
  Chart2DUpdateYRange_Addr        Chart2DUpdateYRange = NULL;
+ Chart2DSetCSVSepSymbol_Addr     Chart2DSetCSVSepSymbol = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
@@ -67,6 +68,7 @@ namespace DLL
  Chart3DSetOnValueTransform_Addr Chart3DSetOnValueTransform = NULL;
  Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle = NULL;
  Chart3DSetTitle_Addr            Chart3DSetTitle = NULL;
+ Chart3DSetCSVSepSymbol_Addr     Chart3DSetCSVSepSymbol = NULL;
 
  ChartxDSetLanguage_Addr         ChartxDSetLanguage = NULL;
  ChartxDShowHints_Addr           ChartxDShowHints = NULL;
@@ -120,6 +122,7 @@ namespace DLL
    Chart2DSetPtValuesFormat = NULL;
    Chart2DSetPtMovingStep = NULL;
    Chart2DUpdateYRange = NULL;
+   Chart2DSetCSVSepSymbol = NULL;
    //3D
    Chart3DCreate = NULL;
    Chart3DUpdate = NULL;
@@ -136,6 +139,7 @@ namespace DLL
    Chart3DSetOnValueTransform = NULL;
    Chart3DSetAxisTitle = NULL;
    Chart3DSetTitle = NULL;
+   Chart3DSetCSVSepSymbol = NULL;
    //common
    ChartxDSetLanguage = NULL;
    ChartxDShowHints = NULL;
@@ -161,6 +165,7 @@ namespace DLL
    LoadFunction(hModule, Chart2DSetPtMovingStep, "Chart2DSetPtMovingStep", status);
    LoadFunction(hModule, Chart2DGetPtMovingStep, "Chart2DGetPtMovingStep", status);
    LoadFunction(hModule, Chart2DUpdateYRange, "Chart2DUpdateYRange", status);
+   LoadFunction(hModule, Chart2DSetCSVSepSymbol, "Chart2DSetCSVSepSymbol", status);
    //3D
    LoadFunction(hModule, Chart3DCreate, "Chart3DCreate", status);
    LoadFunction(hModule, Chart3DUpdate, "Chart3DUpdate", status);
@@ -178,6 +183,7 @@ namespace DLL
    LoadFunction(hModule, Chart3DSetOnValueTransform, "Chart3DSetOnValueTransform", status);
    LoadFunction(hModule, Chart3DSetAxisTitle, "Chart3DSetAxisTitle", status);
    LoadFunction(hModule, Chart3DSetTitle, "Chart3DSetTitle", status);
+   LoadFunction(hModule, Chart3DSetCSVSepSymbol, "Chart3DSetCSVSepSymbol", status);
    //common
    LoadFunction(hModule, ChartxDSetLanguage, "ChartxDSetLanguage", status);
    LoadFunction(hModule, ChartxDShowHints, "ChartxDShowHints", status);

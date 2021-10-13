@@ -49,9 +49,13 @@ void __cdecl ChartxDSetLanguage(int i_language)
  {
   case IL_ENGLISH:
    ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   setlocale(LC_ALL, "English_USA.1252");
+   GetFormatSettings();
    break;
   case IL_RUSSIAN:
-   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_DEFAULT), SORT_DEFAULT));
+   setlocale(LC_ALL, "Russian_Russia.1251");
+   GetFormatSettings();
    break;
  }
 }
