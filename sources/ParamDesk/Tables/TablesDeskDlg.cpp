@@ -453,6 +453,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   case TYPE_MAP_INJ_IACMAT:
    return mp_ButtonsPanel->GetIACMATMap(i_original);
 
+  case TYPE_MAP_INJ_TPSZON:
+   return mp_ButtonsPanel->GetTpszonMap(i_original);
+
   default:
   return NULL;
  }

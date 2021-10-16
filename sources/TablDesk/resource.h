@@ -580,3 +580,5 @@
 #define IDS_MAF_UNIT                    5934
 #define IDC_TD_VIEW_TPSZON_MAP          5935
 #define IDS_TD_VIEW_TPSZON_MAP_TT       5936
+#define IDS_TPSZON_MAP                  5937
+#define IDS_MAPS_TPSZON_UNIT            5938

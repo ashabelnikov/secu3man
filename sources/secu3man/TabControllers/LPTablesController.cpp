@@ -277,7 +277,7 @@ void CLPTablesController::_OnSelectMapSet(void)
    p_fwdm->GetPwm1Map(index, pwm1Map, false);
    p_fwdm->GetPwm2Map(index, pwm2Map, false);
    p_fwdm->GetIACMATMap(index, iacmatMap, false);
-
+   p_fwdm->GetTpszonMap(index, tpszonMap, false);
   }
   else
   { //from eeprom
@@ -314,6 +314,7 @@ void CLPTablesController::_OnSelectMapSet(void)
    p_eedm->GetPwm1Map(index, pwm1Map, false);
    p_eedm->GetPwm2Map(index, pwm2Map, false);
    p_eedm->GetIACMATMap(index, iacmatMap, false);
+   p_eedm->GetTpszonMap(index, tpszonMap, false);
   }
  }
 
@@ -516,6 +517,12 @@ void CLPTablesController::_OnMapChanged(int i_mapType)
    else
     p_eedm->SetIACMATMap(index, iacmatMap);
    break;
+  case TYPE_MAP_INJ_TPSZON:
+   if (source)
+    p_fwdm->SetTpszonMap(index, tpszonMap);
+   else
+    p_eedm->SetTpszonMap(index, tpszonMap);
+   break;
  }
 }
 
@@ -594,7 +601,7 @@ void CLPTablesController::_OnGmeInjButton(void)
   mp_gridModeEditorInjDlg.reset(new CGridModeEditorInjDlg());
   mp_gridModeEditorInjDlg->BindMaps(veMap, afrMap, itMap, idlcMap, idlrMap, itrpmMap, rigidMap, iaccMap, iaccwMap,
                                     aftstrMap, wrmpMap, aetpsMap, aerpmMap, crnkMap, deadMap, egocrvMap, iatcltMap,
-                                    tpsswtMap, atscMap, gtscMap, gpscMap, pwm1Map, pwm2Map, iacmatMap, ve2Map);
+                                    tpsswtMap, atscMap, gtscMap, gpscMap, pwm1Map, pwm2Map, iacmatMap, ve2Map, tpszonMap);
   mp_gridModeEditorInjDlg->BindRPMGrid(m_rpm_grid_values);
   mp_gridModeEditorInjDlg->BindCLTGrid(m_clt_grid_values);
   mp_gridModeEditorInjDlg->BindLoadGrid(m_load_grid_values, &m_ve2_map_load_slots[0]);

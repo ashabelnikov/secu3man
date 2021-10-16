@@ -851,6 +851,28 @@ void EEPROMDataMediator::SetTpsswtMap(int i_index,const float* ip_values)
   p_maps[i_index].inj_tpsswt[i] = MathHelpers::Round((ip_values[i]*TPSSWT_MAPS_M_FACTOR));
 }
 
+void EEPROMDataMediator::GetTpszonMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_TPSZON_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_tpszon[i]) / TPSZON_MAPS_M_FACTOR;
+}
+
+void EEPROMDataMediator::SetTpszonMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_TPSZON_SIZE; i++ )
+  p_maps[i_index].inj_tpszon[i] = MathHelpers::Round((ip_values[i]*TPSZON_MAPS_M_FACTOR));
+}
+
 void EEPROMDataMediator::GetGtscMap(int i_index,float* op_values, bool i_original /* = false */)
 {
  ASSERT(op_values);

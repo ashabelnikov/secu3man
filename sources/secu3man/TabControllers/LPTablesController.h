@@ -92,6 +92,7 @@ class CLPTablesController : public MapWndScrPos
   float egocrvMap[16+2];
   float iatcltMap[8+2];
   float tpsswtMap[16];
+  float tpszonMap[16];
   float atscMap[16];
   float gtscMap[16];
   float gpscMap[17+2];

@@ -125,6 +125,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
    return p_maps->pwm_duty2;
   case TYPE_MAP_INJ_IACMAT:
    return p_maps->iac_mat_corr;
+  case TYPE_MAP_INJ_TPSZON:
+   return p_maps->inj_tpszon;
  }
  return NULL; //undefined type of map
 }
@@ -194,6 +196,8 @@ size_t _GetMapSize(int i_mapType)
    return F_WRK_POINTS_L * F_WRK_POINTS_F;
   case TYPE_MAP_INJ_IACMAT:
    return INJ_ATS_CORR_SIZE;
+  case TYPE_MAP_INJ_TPSZON:
+   return INJ_TPSZON_SIZE;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -345,6 +349,7 @@ void CPMTablesController::OnActivate(void)
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
+ mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_TPSZON, mptms.m_tpszon_map);
 }
 
 void CPMTablesController::OnDeactivate(void)
@@ -594,6 +599,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
    break;
   case ETMT_IACMAT_MAP: //IAC position's correction vs MAT
    UpdateMap(m_maps->iac_mat_corr, m_maps_flags->iac_mat_corr, data);
+   break;
+  case ETMT_TPSZON_MAP: //MAP/TPS load axis allocation
+   UpdateMap(m_maps->inj_tpszon, m_maps_flags->inj_tpszon, data);
    break;
 
   default: ASSERT(0);
@@ -946,6 +954,7 @@ void CPMTablesController::OnChangeSettings(void)
  mptms.m_pwm1_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_PWM1);
  mptms.m_pwm2_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_PWM2);
  mptms.m_iacmat_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
+ mptms.m_tpszon_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_TPSZON);
 
  mp_settings->SetMapPtMovStep(mptms);
 

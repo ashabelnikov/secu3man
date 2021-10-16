@@ -311,6 +311,9 @@ void S3FImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_tpsswt, mp_s3f_io->GetData().maps[other_sel].inj_tpsswt,sizeof(float) * INJ_TPSSWT_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_tpszon, mp_s3f_io->GetData().maps[other_sel].inj_tpszon,sizeof(float) * INJ_TPSZON_SIZE);
+
  if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_gts_corr, mp_s3f_io->GetData().maps[other_sel].inj_gts_corr,sizeof(float) * INJ_GTS_CORR_SIZE);
 
@@ -373,6 +376,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0118 = (mp_s3f_io->GetVersion() > 0x0117);
  bool sv0119 = (mp_s3f_io->GetVersion() > 0x0118);
  bool sv0120 = (mp_s3f_io->GetVersion() > 0x0119);
+ bool sv0121 = (mp_s3f_io->GetVersion() > 0x0120);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -429,6 +433,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_IACMAT_MAP, sv0117);    //since v01.17
  mp_view->SetFWDFlag(FLAG_VE2_MAP, sv0118);          //since v01.18
  mp_view->EnableFWDFlag(FLAG_VE2_MAP, sv0118);       //since v01.18
+ mp_view->SetFWDFlag(FLAG_TPSZON_MAP, sv0121);       //since v01.21
+ mp_view->EnableFWDFlag(FLAG_TPSZON_MAP, sv0121);    //since v01.21
+
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -763,6 +770,9 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_tpsswt, mp_fwd->maps[current_sel].inj_tpsswt, sizeof(float) * INJ_TPSSWT_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_tpszon, mp_fwd->maps[current_sel].inj_tpszon, sizeof(float) * INJ_TPSZON_SIZE);
 
  if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_gts_corr, mp_fwd->maps[current_sel].inj_gts_corr, sizeof(float) * INJ_GTS_CORR_SIZE);

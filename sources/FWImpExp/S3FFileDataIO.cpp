@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0120 //01.20
+#define CURRENT_VERSION 0x0121 //01.21
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -85,6 +85,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.19 - Added 3 maps for sensors: Fuel Tank Level, Exhaust Gas Temperature, Oil Pressure. Added map for manual inj. PW correction
 //         Added two fields into s3f_ce_sett_t struct (oil pressure threshold, oil pressure strokes timer)
 // 01.20 - Added MAF flow curve (25.07.2021)
+// 01.21 - Added MAP/TPS load axis allocation table (14.10.2021)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -145,8 +146,10 @@ struct S3FMapSetItem
  s3f_int32_t iac_mat_corr[INJ_ATS_CORR_SIZE];              // IAC position's correction vs MAT
  //since v01.18
  s3f_int32_t inj_ve2[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // Secondary VE
+ //since v01.21
+ s3f_int32_t inj_tpszon[INJ_TPSZON_SIZE];                  // MAP/TPS load axis allocation
 
- s3f_int32_t reserved[1776]; //reserved bytes, = 0
+ s3f_int32_t reserved[1760]; //reserved bytes, = 0
 };
 
 
@@ -638,6 +641,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].pwm_duty2[i] = MathHelpers::Round(m_data.maps[s].pwm_duty2[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    p_setItem[s].iac_mat_corr[i] = MathHelpers::Round(m_data.maps[s].iac_mat_corr[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_TPSZON_SIZE; ++i)
+   p_setItem[s].inj_tpszon[i] = MathHelpers::Round(m_data.maps[s].inj_tpszon[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -901,6 +906,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].pwm_duty2[i] = p_setItem[s].pwm_duty2[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    m_data.maps[s].iac_mat_corr[i] = p_setItem[s].iac_mat_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_TPSZON_SIZE; ++i)
+   m_data.maps[s].inj_tpszon[i] = p_setItem[s].inj_tpszon[i] / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];

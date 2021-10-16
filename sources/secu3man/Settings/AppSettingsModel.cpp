@@ -182,6 +182,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optOpsCurveMapWnd(_T("OpsCurveMapWnd"))
 , m_optManInjPwcMapWnd(_T("ManInjPwcMapWnd"))
 , m_optMAFCurveMapWnd(_T("ManMAFCurveMapWnd"))
+, m_optTpszonMapWnd(_T("TpsMapZonesMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -216,6 +217,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwm1MapWnd1(_T("Pwm1MapWnd"))
 , m_optPwm2MapWnd1(_T("Pwm2MapWnd"))
 , m_optIACMATMapWnd1(_T("IACMATCorrMapWnd"))
+, m_optTpszonMapWnd1(_T("TpsMapZonesMapWnd"))
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
@@ -278,6 +280,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optOpsCurveMapWndSize(_T("OpsCurveMapWnd"))
 , m_optManInjPwcMapWndSize(_T("ManInjPwcMapWnd"))
 , m_optMAFCurveMapWndSize(_T("MAFCurveMapWnd"))
+, m_optTpszonMapWndSize(_T("TpsMapZonesMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -312,6 +315,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwm1MapWndSize1(_T("Pwm1MapWnd"))
 , m_optPwm2MapWndSize1(_T("Pwm2MapWnd"))
 , m_optIACMATMapWndSize1(_T("IACMATCorrMapWnd"))
+, m_optTpszonMapWndSize1(_T("TpsMapZonesMapWnd"))
 //state of windows (minimized, normal, maximized)
 , m_Name_WndState_Section(_T("WndState"))
 , m_optMainFrmWndState(_T("MainFrmWnd"))
@@ -413,6 +417,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepPwm1Map(_T("Pwm1MapWnd"))
 , m_optPtMovStepPwm2Map(_T("Pwm2MapWnd"))
 , m_optPtMovStepIACMATMap(_T("IACMATCorrMapWnd"))
+, m_optPtMovStepTpszonMap(_T("TpsMapZonesMapWnd"))
 //separate
 , m_optPtMovStepCrkTempMap(_T("CrkTempMapWnd"))
 , m_optPtMovStepEHPauseMap(_T("EHPauseMapWnd"))
@@ -702,6 +707,9 @@ bool CAppSettingsModel::ReadSettings(void)
  CString IniFileName = GetINIFileFullName();
  bool status = true;
 
+ TCHAR* curLocale = _tsetlocale(LC_ALL, NULL); //remember current locale
+ _tsetlocale(LC_ALL, _T("English_USA.1252"));
+
  //Options
  IniIO os(IniFileName, m_Name_Options_Section);
 
@@ -851,6 +859,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optOpsCurveMapWnd);
  ws.ReadWndPos(m_optManInjPwcMapWnd);
  ws.ReadWndPos(m_optMAFCurveMapWnd);
+ ws.ReadWndPos(m_optTpszonMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -887,6 +896,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optPwm1MapWnd1);
  ws1.ReadWndPos(m_optPwm2MapWnd1);
  ws1.ReadWndPos(m_optIACMATMapWnd1);
+ ws1.ReadWndPos(m_optTpszonMapWnd1);
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -950,6 +960,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optOpsCurveMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optManInjPwcMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optMAFCurveMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optTpszonMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -985,6 +996,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optPwm1MapWndSize1);
  sz1.ReadWndPos(m_optPwm2MapWndSize1);
  sz1.ReadWndPos(m_optIACMATMapWndSize1);
+ sz1.ReadWndPos(m_optTpszonMapWndSize1);
 
  //State of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -1168,6 +1180,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepPwm1Map,  _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepPwm2Map,  _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepIACMATMap, _T("0.25"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepTpszonMap, _T("0.5"), 0.0f, 10.0f);
  //separate
  ms.ReadFlt(m_optPtMovStepCrkTempMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepEHPauseMap, _T("0.01"), 0.0f, 10.0f);
@@ -1271,6 +1284,8 @@ bool CAppSettingsModel::ReadSettings(void)
  fn.ReadInt(m_optFuncSM_CONTROL, _T("1"), 0, 1);
  fn.ReadInt(m_optFuncGD_CONTROL, _T("1"), 0, 1);
 
+ _tsetlocale(LC_ALL, curLocale); //return previous locale
+
  return status;
 }
 
@@ -1278,6 +1293,9 @@ bool CAppSettingsModel::WriteSettings(void)
 {
  CString IniFileName = GetINIFileFullName();
  bool status = true;
+
+ TCHAR* curLocale = _tsetlocale(LC_ALL, NULL); //remember current locale
+ _tsetlocale(LC_ALL, _T("English_USA.1252"));
 
  IniIO os(IniFileName, m_Name_Options_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2064,6 +2082,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optMAFCurveMapWnd, _T("Кривая расхода ДМРВ"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optTpszonMapWnd, _T("Load axis allocation between MAP and TPS"));
+ else
+  ws.WriteWndPos(m_optTpszonMapWnd, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2231,6 +2254,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optIACMATMapWnd1, _T("IAC position's correction vs MAT map"));
  else
   ws1.WriteWndPos(m_optIACMATMapWnd1, _T("Коррекция положения РДВ от температуры воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optTpszonMapWnd1, _T("Load axis allocation between MAP and TPS"));
+ else
+  ws1.WriteWndPos(m_optTpszonMapWnd1, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -2540,6 +2568,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   sz.WriteWndPos(m_optMAFCurveMapWndSize, _T("Кривая расхода ДМРВ"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optTpszonMapWndSize, _T("Load axis allocation between MAP and TPS"));
+ else
+  sz.WriteWndPos(m_optTpszonMapWndSize, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
+
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2707,6 +2740,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optIACMATMapWndSize1, _T("IAC position's correction vs MAT map"));
  else
   sz1.WriteWndPos(m_optIACMATMapWndSize1, _T("Коррекция положения РДВ от температуры воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optTpszonMapWndSize1, _T("Load axis allocation between MAP and TPS"));
+ else
+  sz1.WriteWndPos(m_optTpszonMapWndSize1, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
 
  //States of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -3562,6 +3600,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepIACMATMap, 3, _T("Коррекция положения РДВ от температуры воздуха"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepTpszonMap, 3, _T("Load axis allocation between MAP and TPS"));
+ else
+  ms.WriteFlt(m_optPtMovStepTpszonMap, 3, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
+
  //separate maps
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, _T("Ign.timing vs CLT correction on cranking"));
@@ -3792,6 +3835,8 @@ bool CAppSettingsModel::WriteSettings(void)
  if (!_CheckAndCorrectLFCRs())
   status = false;
 
+ _tsetlocale(LC_ALL, curLocale); //restore previous locale
+
  return status;
 }
 
@@ -4004,6 +4049,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optManInjPwcMapWnd.value.y = i_wndSettings.m_ManInjPwcMapWnd_Y; 
  m_optMAFCurveMapWnd.value.x = i_wndSettings.m_MAFCurveMapWnd_X;
  m_optMAFCurveMapWnd.value.y = i_wndSettings.m_MAFCurveMapWnd_Y; 
+ m_optTpszonMapWnd.value.x = i_wndSettings.m_TpszonMapWnd_X;
+ m_optTpszonMapWnd.value.y = i_wndSettings.m_TpszonMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -4128,6 +4175,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_ManInjPwcMapWnd_Y = m_optManInjPwcMapWnd.value.y;
  o_wndSettings.m_MAFCurveMapWnd_X = m_optMAFCurveMapWnd.value.x;
  o_wndSettings.m_MAFCurveMapWnd_Y = m_optMAFCurveMapWnd.value.y;
+ o_wndSettings.m_TpszonMapWnd_X = m_optTpszonMapWnd.value.x;
+ o_wndSettings.m_TpszonMapWnd_Y = m_optTpszonMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4196,6 +4245,8 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optPwm2MapWnd1.value.y = i_wndSettings.m_Pwm2MapWnd_Y;
  m_optIACMATMapWnd1.value.x = i_wndSettings.m_IACMATMapWnd_X;
  m_optIACMATMapWnd1.value.y = i_wndSettings.m_IACMATMapWnd_Y;
+ m_optTpszonMapWnd1.value.x = i_wndSettings.m_TpszonMapWnd_X;
+ m_optTpszonMapWnd1.value.y = i_wndSettings.m_TpszonMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
@@ -4264,6 +4315,8 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_Pwm2MapWnd_Y = m_optPwm2MapWnd1.value.y;
  o_wndSettings.m_IACMATMapWnd_X = m_optIACMATMapWnd1.value.x;
  o_wndSettings.m_IACMATMapWnd_Y = m_optIACMATMapWnd1.value.y;
+ o_wndSettings.m_TpszonMapWnd_X = m_optTpszonMapWnd1.value.x;
+ o_wndSettings.m_TpszonMapWnd_Y = m_optTpszonMapWnd1.value.y;
 }
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
@@ -4388,6 +4441,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optManInjPwcMapWndSize.value.y = i_wndSize.m_ManInjPwcMapWnd_H; 
  m_optMAFCurveMapWndSize.value.x = i_wndSize.m_MAFCurveMapWnd_W;
  m_optMAFCurveMapWndSize.value.y = i_wndSize.m_MAFCurveMapWnd_H; 
+ m_optTpszonMapWndSize.value.x = i_wndSize.m_TpszonMapWnd_W;
+ m_optTpszonMapWndSize.value.y = i_wndSize.m_TpszonMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4512,6 +4567,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_ManInjPwcMapWnd_H = m_optManInjPwcMapWndSize.value.y;
  o_wndSize.m_MAFCurveMapWnd_W = m_optMAFCurveMapWndSize.value.x;
  o_wndSize.m_MAFCurveMapWnd_H = m_optMAFCurveMapWndSize.value.y;
+ o_wndSize.m_TpszonMapWnd_W = m_optTpszonMapWndSize.value.x;
+ o_wndSize.m_TpszonMapWnd_H = m_optTpszonMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4580,6 +4637,8 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optPwm2MapWndSize1.value.y = i_wndSize.m_Pwm2MapWnd_H;
  m_optIACMATMapWndSize1.value.x = i_wndSize.m_IACMATMapWnd_W;
  m_optIACMATMapWndSize1.value.y = i_wndSize.m_IACMATMapWnd_H;
+ m_optTpszonMapWndSize1.value.x = i_wndSize.m_TpszonMapWnd_W;
+ m_optTpszonMapWndSize1.value.y = i_wndSize.m_TpszonMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
@@ -4648,6 +4707,8 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_Pwm2MapWnd_H = m_optPwm2MapWndSize1.value.y;
  o_wndSize.m_IACMATMapWnd_W = m_optIACMATMapWndSize1.value.x;
  o_wndSize.m_IACMATMapWnd_H = m_optIACMATMapWndSize1.value.y;
+ o_wndSize.m_TpszonMapWnd_W = m_optTpszonMapWndSize1.value.x;
+ o_wndSize.m_TpszonMapWnd_H = m_optTpszonMapWndSize1.value.y;
 }
 
 void CAppSettingsModel::SetWndState(const WndState& i_wndState)
@@ -5380,6 +5441,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepPwm1Map.value = i_ptMovStep.m_pwm1_map;
  m_optPtMovStepPwm2Map.value = i_ptMovStep.m_pwm2_map;
  m_optPtMovStepIACMATMap.value = i_ptMovStep.m_iacmat_map;
+ m_optPtMovStepTpszonMap.value = i_ptMovStep.m_tpszon_map;
  //separate
  m_optPtMovStepAttenMap.value = i_ptMovStep.m_attenuator_map;
  m_optPtMovStepDwellCntrlMap.value = i_ptMovStep.m_dwellcntrl_map;
@@ -5441,6 +5503,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_pwm1_map = m_optPtMovStepPwm1Map.value;
  o_ptMovStep.m_pwm2_map = m_optPtMovStepPwm2Map.value;
  o_ptMovStep.m_iacmat_map = m_optPtMovStepIACMATMap.value;
+ o_ptMovStep.m_tpszon_map = m_optPtMovStepTpszonMap.value;
  //separate
  o_ptMovStep.m_attenuator_map = m_optPtMovStepAttenMap.value;
  o_ptMovStep.m_dwellcntrl_map = m_optPtMovStepDwellCntrlMap.value;

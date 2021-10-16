@@ -87,7 +87,9 @@ typedef struct
 
  _uchar inj_ve2[INJ_VE_POINTS_L][(INJ_VE_POINTS_F*3)/2];// secondary VE (12 bit per cell, 16 rows, 24 bytes per row)
 
- _uchar reserved[85];                                 // reserved bytes - for compatibility
+ _uchar inj_tpszon[INJ_TPSZON_SIZE];                  // MAP/TPS load axis allocation
+
+ _uchar reserved[69];                                 // reserved bytes - for compatibility
  _uint  checksum;
 }f_data_t;
 

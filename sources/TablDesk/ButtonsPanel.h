@@ -93,6 +93,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetCLTGrid(void);
   float* GetLoadGrid(void);
   float* GetVE2Map(bool i_original);
+  float* GetTpszonMap(bool i_original);
 
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);  
@@ -197,6 +198,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewPwm1Map();
   afx_msg void OnViewPwm2Map();
   afx_msg void OnViewIACMATMap();
+  afx_msg void OnViewTpszonMap();
   afx_msg void OnGridModeEditingIgn();
   afx_msg void OnGridModeEditingInj();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
@@ -229,6 +231,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewPwm1Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewPwm2Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIACMATMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewTpszonMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditingIgn(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditingInj(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
@@ -384,6 +387,8 @@ private:
   static void __cdecl OnCloseIACMATMap(void* i_param);
   static void __cdecl OnChangeVE2Map(void* i_param);
   static void __cdecl OnCloseVE2Map(void* i_param);
+  static void __cdecl OnChangeTpszonMap(void* i_param);
+  static void __cdecl OnCloseTpszonMap(void* i_param);
 
   static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationVE2Map(void* i_param, long cmd);
@@ -410,6 +415,7 @@ private:
   static void __cdecl OnWndActivationPwm1Map(void* i_param, long cmd);
   static void __cdecl OnWndActivationPwm2Map(void* i_param, long cmd);
   static void __cdecl OnWndActivationIACMATMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationTpszonMap(void* i_param, long cmd);
 
   void OnGridMapChangedIgn(int mapType);
   void OnGridMapClosedIgn(HWND, int);

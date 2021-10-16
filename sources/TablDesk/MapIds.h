@@ -57,42 +57,43 @@ enum EMapTypes
  TYPE_MAP_DA_TEMPI_CORR = 28, //must be = 28
  TYPE_MAP_INJ_IACMAT    = 29, //must be = 29
  TYPE_MAP_INJ_VE2       = 30, //must be = 30
+ TYPE_MAP_INJ_TPSZON    = 31, //must be = 31
 
  //separate maps
- TYPE_MAP_ATTENUATOR    = 31, //
- TYPE_MAP_DWELLCNTRL    = 32, //
- TYPE_MAP_CTS_CURVE     = 33, //
- TYPE_MAP_ATS_CURVE     = 34, //
- TYPE_MAP_ATS_CORR      = 35, //
- TYPE_MAP_GASDOSE       = 36, //
- TYPE_MAP_BAROCORR      = 37, //
- TYPE_MAP_MANIGNTIM     = 38, //
- TYPE_MAP_TMP2_CURVE    = 39, //
- TYPE_MAP_CRKCLT_CORR   = 40, //
- TYPE_MAP_EH_PAUSE      = 41, //
- TYPE_MAP_CRANKING_THRD = 42, //
- TYPE_MAP_CRANKING_TIME = 43, //
- TYPE_MAP_SMAPABAN_THRD = 44, //
- TYPE_MAP_KNOCK_ZONE    = 45, //
- TYPE_MAP_GRTS_CURVE    = 46, //
- TYPE_MAP_GRHEAT_DUTY   = 47, //
- TYPE_MAP_PWMIAC_UCOEF  = 48, //
- TYPE_MAP_AFTSTR_STRK0  = 49, //
- TYPE_MAP_AFTSTR_STRK1  = 50, //
- TYPE_MAP_GRVDELAY      = 51, //
- TYPE_MAP_FTLS_CURVE    = 52, //
- TYPE_MAP_EGTS_CURVE    = 53, //
- TYPE_MAP_OPS_CURVE     = 54, //
- TYPE_MAP_MANINJPWC     = 55, //
- TYPE_MAP_MAF_CURVE     = 56, //
+ TYPE_MAP_ATTENUATOR    = 32, //
+ TYPE_MAP_DWELLCNTRL    = 33, //
+ TYPE_MAP_CTS_CURVE     = 34, //
+ TYPE_MAP_ATS_CURVE     = 35, //
+ TYPE_MAP_ATS_CORR      = 36, //
+ TYPE_MAP_GASDOSE       = 37, //
+ TYPE_MAP_BAROCORR      = 38, //
+ TYPE_MAP_MANIGNTIM     = 39, //
+ TYPE_MAP_TMP2_CURVE    = 40, //
+ TYPE_MAP_CRKCLT_CORR   = 41, //
+ TYPE_MAP_EH_PAUSE      = 42, //
+ TYPE_MAP_CRANKING_THRD = 43, //
+ TYPE_MAP_CRANKING_TIME = 44, //
+ TYPE_MAP_SMAPABAN_THRD = 45, //
+ TYPE_MAP_KNOCK_ZONE    = 46, //
+ TYPE_MAP_GRTS_CURVE    = 47, //
+ TYPE_MAP_GRHEAT_DUTY   = 48, //
+ TYPE_MAP_PWMIAC_UCOEF  = 49, //
+ TYPE_MAP_AFTSTR_STRK0  = 50, //
+ TYPE_MAP_AFTSTR_STRK1  = 51, //
+ TYPE_MAP_GRVDELAY      = 52, //
+ TYPE_MAP_FTLS_CURVE    = 53, //
+ TYPE_MAP_EGTS_CURVE    = 54, //
+ TYPE_MAP_OPS_CURVE     = 55, //
+ TYPE_MAP_MANINJPWC     = 56, //
+ TYPE_MAP_MAF_CURVE     = 57, //
 
- TYPE_MAP_GME_IGN_WND   = 57, //pseudo map, grid mode editing window for ignition maps
- TYPE_MAP_GME_INJ_WND   = 58, //pseudo map, grid mode editing window for injection maps
+ TYPE_MAP_GME_IGN_WND   = 58, //pseudo map, grid mode editing window for ignition maps
+ TYPE_MAP_GME_INJ_WND   = 59, //pseudo map, grid mode editing window for injection maps
 
  TYPE_MAP_SET_START     = 1,
- TYPE_MAP_SET_END       = 30,
+ TYPE_MAP_SET_END       = 31,
  TYPE_MAP_ALL_START     = 1,
- TYPE_MAP_ALL_END       = 58,
- TYPE_MAP_SEP_START     = 31,
- TYPE_MAP_SEP_END       = 56
+ TYPE_MAP_ALL_END       = 59,
+ TYPE_MAP_SEP_START     = 32,
+ TYPE_MAP_SEP_END       = 57
 };

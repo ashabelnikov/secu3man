@@ -738,6 +738,8 @@ BEGIN
     IDS_MAPS_FUELTANK_UNIT  "Уровень топлива (Л)"
     IDS_MAPS_PRESSUREKG_UNIT "Давление (кг/см2)"
     IDS_MAF_UNIT            "Расход воздуха (г/сек)"
+    IDS_TPSZON_MAP          "ДАД/ДПДЗ по оси нагрузки"
+    IDS_MAPS_TPSZON_UNIT    "Нагрузка (%)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1552,6 +1554,8 @@ BEGIN
     IDS_MAPS_FUELTANK_UNIT  "Level of fuel (L)"
     IDS_MAPS_PRESSUREKG_UNIT "Pressure (kg/cm2)"
     IDS_MAF_UNIT            "Air flow (g/sec)"
+    IDS_TPSZON_MAP          "MAP/TPS on load axis"
+    IDS_MAPS_TPSZON_UNIT    "Load (%)"
 END
 
 

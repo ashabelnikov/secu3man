@@ -207,6 +207,9 @@ void EEPROMImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
   m_eedm->GetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
 
+ if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
+  m_eedm->GetTpszonMap(other_sel, mp_fwd->maps[current_sel].inj_tpszon);
+
  if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
   m_eedm->GetGtscMap(other_sel, mp_fwd->maps[current_sel].inj_gts_corr);
 
@@ -273,6 +276,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TPSZON_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);

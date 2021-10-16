@@ -102,6 +102,8 @@ struct WndSettings
  int m_CESettingsWnd_Y;
  int m_TpsswtMapWnd_X;
  int m_TpsswtMapWnd_Y;
+ int m_TpszonMapWnd_X;
+ int m_TpszonMapWnd_Y;
  int m_Tmp2CurveMapWnd_X;
  int m_Tmp2CurveMapWnd_Y;
  int m_GtscMapWnd_X;
@@ -227,6 +229,8 @@ struct WndSize
  int m_CESettingsWnd_H;
  int m_TpsswtMapWnd_W;
  int m_TpsswtMapWnd_H;
+ int m_TpszonMapWnd_W;
+ int m_TpszonMapWnd_H;
  int m_Tmp2CurveMapWnd_W;
  int m_Tmp2CurveMapWnd_H;
  int m_GtscMapWnd_W;
@@ -394,6 +398,7 @@ struct MapPtMovStep
  float m_pwm1_map;
  float m_pwm2_map;
  float m_iacmat_map;
+ float m_tpszon_map;
  //separate
  float m_attenuator_map;
  float m_dwellcntrl_map;

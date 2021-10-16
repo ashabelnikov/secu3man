@@ -421,6 +421,7 @@ namespace SECU3IO
  const int ETMT_TEMPI_MAP = 28;         //temp.corr. map (idling)
  const int ETMT_IACMAT_MAP = 29;        //IAC position's correction vs MAT
  const int ETMT_VE2_MAP = 30;           //Secondary VE map
+ const int ETMT_TPSZON_MAP = 31;        //MAP/TPS load axis allocation map
 
  struct SepTabPar
  {

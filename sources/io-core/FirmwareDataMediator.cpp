@@ -1325,6 +1325,28 @@ void CFirmwareDataMediator::SetTpsswtMap(int i_index,const float* ip_values)
   p_fd->tables[i_index].inj_tpsswt[i] = MathHelpers::Round((ip_values[i]*TPSSWT_MAPS_M_FACTOR));
 }
 
+void CFirmwareDataMediator::GetTpszonMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_TPSZON_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_tpszon[i]) / TPSZON_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetTpszonMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_TPSZON_SIZE; i++ )
+  p_fd->tables[i_index].inj_tpszon[i] = MathHelpers::Round((ip_values[i]*TPSZON_MAPS_M_FACTOR));
+}
+
 void CFirmwareDataMediator::GetGtscMap(int i_index,float* op_values, bool i_original /* = false */)
 {
  ASSERT(op_values);
@@ -1478,6 +1500,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetPwm1Map(i,op_fwd->maps[i].pwm_duty1);
   GetPwm2Map(i,op_fwd->maps[i].pwm_duty2);
   GetIACMATMap(i, op_fwd->maps[i].iac_mat_corr);
+  GetTpszonMap(i, op_fwd->maps[i].inj_tpszon);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1566,6 +1589,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetPwm1Map(i,ip_fwd->maps[i].pwm_duty1);
   SetPwm2Map(i,ip_fwd->maps[i].pwm_duty2);
   SetIACMATMap(i, ip_fwd->maps[i].iac_mat_corr);
+  SetTpszonMap(i, ip_fwd->maps[i].inj_tpszon);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
