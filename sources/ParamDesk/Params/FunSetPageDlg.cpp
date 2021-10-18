@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_UNI_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BAROCORRTYPE_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_VE2MF_COMBO, OnChangeVE2MF)
+ ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_V_UNI_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_MAP_GRAD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_PRESS_SWING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET_EDIT, OnChangeData)
@@ -125,6 +126,9 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_VE2MF_CAPTION, OnUpdateControlsFuelInject)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_VE2MF_COMBO, OnUpdateControlsFuelInject)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_V_UNI_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_V_UNI_CAPTION,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
@@ -158,6 +162,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
  m_params.barocorr_type = 0; //disabled
  m_params.use_load_grid = false;
  m_params.ve2_map_func = 0; //use 1st VE map
+ m_params.uni_gas_v = SECU3IO::UNI_OUTPUT_NUM; //disabled
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -196,6 +201,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_UNIT, m_lolo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_UNIT, m_hilo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_USE_LDAX_GRID, m_use_ldax_grid_check);
+ DDX_Control(pDX, IDC_PD_FUNSET_GAS_V_UNI_COMBO, m_gas_v_uni_combo);
 
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
@@ -213,6 +219,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_CBIndex_int(pDX, IDC_PD_FUNSET_BAROCORRTYPE_COMBO, m_params.barocorr_type);
  DDX_Check_bool(pDX, IDC_PD_FUNSET_USE_LDAX_GRID, m_params.use_load_grid);
  DDX_CBIndex_int(pDX, IDC_PD_FUNSET_VE2MF_COMBO, m_params.ve2_map_func);
+ DDX_CBIndex_int(pDX, IDC_PD_FUNSET_GAS_V_UNI_COMBO, m_params.uni_gas_v);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -327,6 +334,14 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_ve2mf_combo.AddString(_T("VE1*VE2")); //1 - use multiplication
  m_ve2mf_combo.AddString(_T("VE1+VE2")); //2 - use addition
 
+ m_gas_v_uni_combo.AddString(_T("1"));
+ m_gas_v_uni_combo.AddString(_T("2"));
+ m_gas_v_uni_combo.AddString(_T("3"));
+ m_gas_v_uni_combo.AddString(_T("4"));
+ m_gas_v_uni_combo.AddString(_T("5"));
+ m_gas_v_uni_combo.AddString(_T("6"));
+ m_gas_v_uni_combo.AddString(_T("--no--"));
+
  //initialize window scroller
  mp_scr->Init(this);
 
@@ -365,6 +380,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_use_ldax_grid_check, MLL::GetString(IDC_PD_FUNSET_USE_LDAX_GRID_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ve2mf_combo, MLL::GetString(IDC_PD_FUNSET_VE2MF_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gas_v_uni_combo, MLL::GetString(IDS_PD_FUNSET_GAS_V_UNI_COMBO_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

@@ -155,6 +155,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->barocorr_type = p_in->barocorr_type;
     WRITEBIT8(p_params->func_flags, 0, p_in->use_load_grid);
     p_params->ve2_map_func = p_in->ve2_map_func;
+    p_params->gas_v_uni = (p_in->uni_gas_v==UNI_OUTPUT_NUM) ? 0xF : p_in->uni_gas_v;
     p_params->inj_cyl_disp = MathHelpers::Round(p_in->inj_cyl_disp * 16384.0f);
     p_params->mafload_const = MathHelpers::Round(p_in->mafload_const);
    }
@@ -573,6 +574,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->barocorr_type = p_params->barocorr_type;
      p_out->use_load_grid = CHECKBIT8(p_params->func_flags, 0);
      p_out->ve2_map_func = p_params->ve2_map_func;
+     p_out->uni_gas_v = p_params->gas_v_uni;
+     if (p_out->uni_gas_v == 0xF)
+      p_out->uni_gas_v = UNI_OUTPUT_NUM; //disabled
      p_out->cyl_num = p_params->ckps_engine_cyl; //read-only parameter, its value required for calculations
      p_out->inj_cyl_disp = float(p_params->inj_cyl_disp) / 16384.0f;
      p_out->mafload_const = (float)p_params->mafload_const;

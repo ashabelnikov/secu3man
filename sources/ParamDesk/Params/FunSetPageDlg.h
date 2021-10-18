@@ -94,6 +94,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CComboBox m_benzin_uni_combo;
   CComboBox m_barocorr_type_combo;
   CComboBox m_ve2mf_combo;
+  CComboBox m_gas_v_uni_combo;
   CSpinButtonCtrlEx m_press_swing_spin;
   CEditEx m_press_swing_edit;
   CSpinButtonCtrlEx m_map_grad_spin;

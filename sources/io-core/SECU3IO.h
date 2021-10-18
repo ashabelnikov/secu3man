@@ -186,6 +186,7 @@ namespace SECU3IO
   int cyl_num;                        //read-only parameter: number of cylinders
   float inj_cyl_disp;                 //The displacement of one cylinder in liters
   float mafload_const;                //precalculated constant for MAF (for calculation of MAF load)
+  int uni_gas_v;
  };
 
  struct IdlRegPar

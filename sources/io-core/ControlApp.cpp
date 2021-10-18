@@ -816,7 +816,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 59 : 30))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 61 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -906,6 +906,14 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &ve2_map_func))
   return false;
  funSetPar.ve2_map_func = ve2_map_func;
+
+ //Uni.outputs selected for GAS_V
+ BYTE gas_v_uni = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &gas_v_uni))
+  return false;
+ funSetPar.uni_gas_v = gas_v_uni;
+ if (funSetPar.uni_gas_v == 0xF)
+  funSetPar.uni_gas_v = UNI_OUTPUT_NUM; //disabled
 
  //read-only parameter: number of engine cylinders
  unsigned char cyl_num = 0;
@@ -3672,6 +3680,8 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
  unsigned char ve2_map_func = packet_data->ve2_map_func;
  mp_pdp->Bin8ToHex(ve2_map_func, m_outgoing_packet);
+ int gas_v_uni = (packet_data->uni_gas_v==UNI_OUTPUT_NUM) ? 0xF : packet_data->uni_gas_v;
+ mp_pdp->Bin8ToHex(gas_v_uni, m_outgoing_packet);
  mp_pdp->Bin8ToHex(0, m_outgoing_packet); //stub for cyl_num
  int inj_cyl_disp = MathHelpers::Round(packet_data->inj_cyl_disp * 16384.0f);
  mp_pdp->Bin16ToHex(inj_cyl_disp, m_outgoing_packet);
