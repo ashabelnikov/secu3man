@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "EditEx.h"
+#include "common/unicodesupport.h"
 
 static const COLORREF ErrColor = RGB(255,120,120);
 
@@ -61,21 +62,21 @@ bool CEditEx::OnChar_int(UINT nChar, UINT nRepCnt, UINT nFlags)
   return false;
  }
 
- if(!(nChar >= '0' && nChar <= '9' || nChar == '-' || nChar == '\b'))
+ if (!(nChar >= '0' && nChar <= '9' || nChar == '-' || nChar == '\b'))
   return false;
 
  GetWindowText(str);
 
- if(nChar == '-' && !str.IsEmpty() && str[0] == '-')
+ if (nChar == '-' && !str.IsEmpty() && str[0] == '-')
   return false;
 
  int nStartChar, nEndChar;
  GetSel(nStartChar, nEndChar);
 
- if(nChar == '\b' && nStartChar <= 0)
+ if (nChar == '\b' && nStartChar <= 0)
   return false;
 
- if(nChar == '-' && (nStartChar != 0 || nEndChar != 0))
+ if (nChar == '-' && (nStartChar != 0 || nEndChar != 0))
   return false;
 
  return true;
@@ -93,24 +94,26 @@ bool CEditEx::OnChar_float(UINT nChar, UINT nRepCnt, UINT nFlags)
   return false;
  }
 
- if(!(nChar >= '0' && nChar <= '9' || nChar == '.' || nChar == '-' || nChar == '\b'))
+ TCHAR decPt = *_TDECIMAL_POINT(localeconv()); //get decimal point's symbol from current locale
+
+ if (!(nChar >= '0' && nChar <= '9' || nChar == decPt || nChar == '-' || nChar == '\b'))
   return false;
 
  GetWindowText(str);
 
- if(nChar == '-' && !str.IsEmpty() && str[0] == '-')
+ if (nChar == '-' && !str.IsEmpty() && str[0] == '-')
   return false;
 
- if(nChar == '.' && (str.Find('.') >= 0 || str.IsEmpty()))
+ if (nChar == decPt && (str.Find(decPt) >= 0 || str.IsEmpty()))
   return false;
 
  int nStartChar, nEndChar;
  GetSel(nStartChar, nEndChar);
 
- if(nChar == '\b' && nStartChar <= 0)
+ if (nChar == '\b' && nStartChar <= 0)
   return false;
 
- if(nChar == '-' && (nStartChar != 0 || nEndChar != 0))
+ if (nChar == '-' && (nStartChar != 0 || nEndChar != 0))
   return false;
 
  return true;
@@ -121,7 +124,7 @@ bool CEditEx::OnChar_float(UINT nChar, UINT nRepCnt, UINT nFlags)
 bool CEditEx::OnChar_hex(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
  CString str;
- if(!(nChar >= 'A' && nChar <= 'F' || nChar >= 'a' && nChar <= 'f'
+ if (!(nChar >= 'A' && nChar <= 'F' || nChar >= 'a' && nChar <= 'f'
    || nChar >= '0' && nChar <= '9' || nChar == '\b'))
   return false;
 
@@ -130,10 +133,10 @@ bool CEditEx::OnChar_hex(UINT nChar, UINT nRepCnt, UINT nFlags)
  int nStartChar, nEndChar;
  GetSel(nStartChar, nEndChar);
 
- if(nChar == '\b' && nStartChar <= 0)
+ if (nChar == '\b' && nStartChar <= 0)
   return false;
 
- if(nChar != '\b' && nEndChar - nStartChar == 0 && str.GetLength() >= 8)
+ if (nChar != '\b' && nEndChar - nStartChar == 0 && str.GetLength() >= 8)
   return false;
 
  return true;
@@ -144,7 +147,7 @@ bool CEditEx::OnChar_hex(UINT nChar, UINT nRepCnt, UINT nFlags)
 bool CEditEx::OnChar_hexstr(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
  CString str;
- if(!(nChar >= 'A' && nChar <= 'F' || nChar >= 'a' && nChar <= 'f'
+ if (!(nChar >= 'A' && nChar <= 'F' || nChar >= 'a' && nChar <= 'f'
    || nChar >= '0' && nChar <= '9' || nChar == '\b'))
   return false;
 
@@ -153,7 +156,7 @@ bool CEditEx::OnChar_hexstr(UINT nChar, UINT nRepCnt, UINT nFlags)
  int nStartChar, nEndChar;
  GetSel(nStartChar, nEndChar);
 
- if(nChar == '\b' && nStartChar <= 0)
+ if (nChar == '\b' && nStartChar <= 0)
   return false;
 
  return true;
