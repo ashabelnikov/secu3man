@@ -40,13 +40,14 @@ enum MeterMemberEnum
  meter_labels,  //tick labels
  meter_unit,    //units
  meter_bground, //background
+ meter_3drect,  //3D rect around a meter
 };
 
 // CAnalogMeter class
 class AFX_EXT_CLASS CAnalogMeter
 {
  public:
-  CAnalogMeter() ;
+  CAnalogMeter();
   virtual ~CAnalogMeter();
 
  // Operations
@@ -79,6 +80,9 @@ class AFX_EXT_CLASS CAnalogMeter
 
   void GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const;
   void GetState(enum MeterMemberEnum meter_member, bool* pState) const;
+
+  void SetTickLength(double length) { m_tickLength = 1.0 / length;}
+  void SetNeedleWidth(double width) { m_needleWidth = width; }
  
  protected:
   bool m_boolForceRedraw;
@@ -113,6 +117,7 @@ class AFX_EXT_CLASS CAnalogMeter
   bool m_swLabels;
   bool m_swUnit;
   bool m_swNeedle;
+  bool m_sw3DRect;
 
   COLORREF m_colorTitle;
   COLORREF m_colorTLPane;
@@ -155,6 +160,8 @@ class AFX_EXT_CLASS CAnalogMeter
   double m_dNeedlePos_n;
   double m_dMinScale;
   double m_dMaxScale;
+  double m_tickLength;
+  double m_needleWidth;
 
   CString m_strTitle;
   CString m_strUnit;

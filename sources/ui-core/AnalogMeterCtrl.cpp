@@ -52,9 +52,9 @@ END_MESSAGE_MAP()
 void CAnalogMeterCtrl::OnPaint()
 {
  CPaintDC dc(this); // device context for painting
- CRect rectClient ;
+ CRect rectClient;
 
- GetClientRect (&rectClient);
+ GetClientRect(&rectClient);
  ShowMeter(&dc, rectClient);
  // Do not call CStatic::OnPaint() for painting messages
 }

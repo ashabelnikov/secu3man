@@ -79,6 +79,7 @@ CAnalogMeter::CAnalogMeter()
 , m_swValue(true)
 , m_swUnit(true)
 , m_swNeedle(true)
+, m_sw3DRect(true)
  // colors
 , m_colorTitle(RGB(128, 128, 128)) // title color
 , m_colorTLPane(RGB(0, 0, 255))    //top-left pane color
@@ -95,6 +96,8 @@ CAnalogMeter::CAnalogMeter()
  // draw the whole thing the first time
 , m_boolForceRedraw(true)
 , m_dRadiansPerValue(0.0)  // will be modified on first drawing
+, m_tickLength(0.92)
+, m_needleWidth(1.0)
 {
  m_AlertZones.reserve(16);
  // set pen/brush colors
@@ -219,9 +222,11 @@ void CAnalogMeter::DrawScale()
 
  m_dcGrid.Rectangle(m_rectGfx);
  m_rectGfx.DeflateRect(3,3);
- m_dcGrid.Draw3dRect(m_rectGfx, GDIHelpers::InvRGB(255, 255, 255), GDIHelpers::InvRGB(0, 0, 0));
+ if (m_sw3DRect)
+  m_dcGrid.Draw3dRect(m_rectGfx, GDIHelpers::InvRGB(255, 255, 255), GDIHelpers::InvRGB(0, 0, 0));
  m_rectGfx.DeflateRect(1,1);
- m_dcGrid.Draw3dRect(m_rectGfx, GDIHelpers::InvRGB(220, 220, 220), GDIHelpers::InvRGB(127, 127, 127));
+ if (m_sw3DRect)
+  m_dcGrid.Draw3dRect(m_rectGfx, GDIHelpers::InvRGB(220, 220, 220), GDIHelpers::InvRGB(127, 127, 127));
  m_rectGfx.DeflateRect(4,4);
 
  // old pen / brush
@@ -242,7 +247,7 @@ void CAnalogMeter::DrawScale()
   disable_range = true;
   disable_unit  = true;
  }
- if((m_rectGfx.Height() < 20) || (m_rectGfx.Width() < 20))
+ if((m_rectGfx.Height() < 10) || (m_rectGfx.Width() < 10))
   return;
 
  // make a square
@@ -302,7 +307,7 @@ void CAnalogMeter::DrawScale()
 
  // determine the size and location of the meter "pie"
  m_nRadiusPix     = m_rectGfx.Height()*50/100;
- m_nHalfBaseWidth = m_nRadiusPix/25;
+ m_nHalfBaseWidth = MathHelpers::Round((m_nRadiusPix/25.0) * m_needleWidth);
  dTemp = m_nCXPix - m_nRadiusPix*sin(m_dLimitAngleRad);
  m_nLeftLimitXPix = MathHelpers::Round(dTemp);
  dTemp = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad);
@@ -460,14 +465,14 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
   //-------draw ticks ---------------
   dX = m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
   dY = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
-  if(m_swGrid) m_dcGrid.MoveTo(MathHelpers::Round(dX), MathHelpers::Round(dY)) ;
+  if(m_swGrid) m_dcGrid.MoveTo(MathHelpers::Round(dX), MathHelpers::Round(dY));
   if (tick % 2)
    len = 1.0;    //short tick
   else
    len = 0.95;   //long tick
-  dX = m_nCXPix + 0.92*len*m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
-  dY = m_nCYPix - 0.92*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
-  if(m_swGrid) m_dcGrid.LineTo(MathHelpers::Round(dX), MathHelpers::Round(dY)) ;
+  dX = m_nCXPix + m_tickLength*len*m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
+  dY = m_nCYPix - m_tickLength*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
+  if(m_swGrid) m_dcGrid.LineTo(MathHelpers::Round(dX), MathHelpers::Round(dY));
 
   if (!m_swLabels) //нужно ли рисовать подписи?
    continue;
@@ -795,6 +800,10 @@ void CAnalogMeter::SetState(enum MeterMemberEnum meter_member, bool State)
   case meter_needle:
    m_swNeedle = State;
    break;
+
+  case meter_3drect:
+   m_sw3DRect = State;
+   break;
  }
 }
 
@@ -988,6 +997,10 @@ void CAnalogMeter::GetState(enum MeterMemberEnum meter_member, bool* pState) con
 
   case meter_needle:
    *pState = m_swNeedle;
+   break;
+
+  case meter_3drect:
+   *pState = m_sw3DRect;
    break;
  }
 }

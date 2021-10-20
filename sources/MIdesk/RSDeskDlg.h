@@ -26,10 +26,12 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include "IRSView.h"
 #include "ui-core/DialogWithAccelerators.h"
 
 class CWndScroller;
+class CAnalogMeterCtrl;
 
 /////////////////////////////////////////////////////////////////////////////
 // CRSDeskDlg dialog
@@ -61,6 +63,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
+  afx_msg void OnPaint();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
@@ -75,11 +78,19 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
 
   struct Input
   {
-   Input() : value(.0f) {}
+   Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRange = 6.0f, int ticsNum = 6);
+  ~Input();
    void StoreRects(void);
    void Scale(float Xf, float Yf);
-   CStatic ctrl[3]; //field, caption, unit
-   CRect rect[3];   //field, caption, unit
+   void UpdateMeter(void);
+   void UpdateColors(void);
+   void DDX_Control(CDataExchange *pDX);
+   void DDX_Text_Fmt(CDataExchange *pDX, LPCTSTR templ);
+   void EnableWindow(bool enable);
+   void ShowWindow(int show);
+   CStatic* ctrl[4]; //field, caption, unit, meter
+   CRect rect[4];   //field, caption, unit, meter
+   UINT resid[4];
    float value;
   };
 
@@ -98,10 +109,13 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   Input m_add_i7_inp;
   Input m_add_i8_inp;
 
+  std::vector<Input*> m_fields;
+
   CFont m_fieldFont;
   CRect m_origRect;
   
   std::auto_ptr<CWndScroller> mp_scr;
+  COLORREF m_COLOR_BTNFACE;
 };
 
 /////////////////////////////////////////////////////////////////////////////

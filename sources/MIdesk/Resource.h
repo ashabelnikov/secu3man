@@ -468,3 +468,16 @@
 #define IDS_MI_IND_UNIOUT4              2550
 #define IDS_MI_IND_UNIOUT5              2551
 #define IDS_MI_IND_UNIOUT6              2552
+#define IDC_RS_MAP_METER                2553
+#define IDC_RS_UBAT_METER               2554
+#define IDC_RS_TEMP_METER               2555
+#define IDC_RS_KNOCK_METER              2556
+#define IDC_RS_TPS_METER                2557
+#define IDC_RS_ADD_I1_METER             2558
+#define IDC_RS_ADD_I2_METER             2559
+#define IDC_RS_ADD_I3_METER             2560
+#define IDC_RS_ADD_I4_METER             2561
+#define IDC_RS_ADD_I5_METER             2562
+#define IDC_RS_ADD_I6_METER             2563
+#define IDC_RS_ADD_I7_METER             2564
+#define IDC_RS_ADD_I8_METER             2565

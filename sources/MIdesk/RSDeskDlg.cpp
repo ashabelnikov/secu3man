@@ -32,28 +32,113 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/AnalogMeterCtrl.h"
 
+static const int InpFldNum = 4;
+
+CRSDeskDlg::Input::Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRange /*= 5.0f*/, int ticsNum /*= 5*/)
+: value(.0f)
+{
+ ctrl[0] = new CStatic();
+ ctrl[1] = new CStatic();
+ ctrl[2] = new CStatic();
+
+ CAnalogMeterCtrl *meter = new CAnalogMeterCtrl();
+ meter->SetRange(.0, valueRange);
+ meter->SetTickNumber(ticsNum);
+ meter->SetMeterSize(120);
+ meter->SetState(meter_3drect, false);
+ meter->SetState(meter_labels, false);
+ meter->SetState(meter_value, false);
+ meter->SetNeedleWidth(1.5);
+ meter->SetTickLength(1.35);
+ ctrl[3] = meter;
+
+ resid[0] = id0;
+ resid[1] = id1;
+ resid[2] = id2;
+ resid[3] = id3;
+}
+
+CRSDeskDlg::Input::~Input()
+{
+ for (int i = 0; i < InpFldNum; ++i)
+  delete ctrl[i];
+}
 
 void CRSDeskDlg::Input::StoreRects(void)
 {
- for (int i = 0; i < 3; ++i)
-  rect[i] = GDIHelpers::GetChildWndRect(&ctrl[i]);
+ for (int i = 0; i < InpFldNum; ++i)
+  rect[i] = GDIHelpers::GetChildWndRect(ctrl[i]);
+
+ CAnalogMeterCtrl *meter = static_cast<CAnalogMeterCtrl*>(ctrl[3]);
+ meter->SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ meter->SetColor(meter_needle, RGB(60,100,255));
+ meter->SetColor(meter_grid, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
+ meter->Update();
 }
 
 void CRSDeskDlg::Input::Scale(float Xf, float Yf)
 {
- for (int i = 0; i < 3; ++i)
+ for(int i = 0; i < InpFldNum; ++i)
  {
   CRect rc = rect[i];
   GDIHelpers::ScaleRect(rc, Xf, Yf);
-  ctrl[i].MoveWindow(rc);
-  ctrl[i].Invalidate();
+  ctrl[i]->MoveWindow(rc);
+  ctrl[i]->Invalidate();
  }
+}
+
+void CRSDeskDlg::Input::UpdateMeter(void)
+{
+ CAnalogMeterCtrl *meter = static_cast<CAnalogMeterCtrl*>(ctrl[3]);
+ meter->SetNeedleValue(value);    
+ meter->Update();
+}
+
+void CRSDeskDlg::Input::UpdateColors(void)
+{
+ CAnalogMeterCtrl *meter = static_cast<CAnalogMeterCtrl*>(ctrl[3]);
+ meter->SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ meter->SetColor(meter_grid, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
+ meter->Redraw();
+}
+
+void CRSDeskDlg::Input::DDX_Control(CDataExchange *pDX)
+{
+ for(int i = 0; i < InpFldNum; ++i)
+  ::DDX_Control(pDX, resid[i], *ctrl[i]);
+}
+
+void CRSDeskDlg::Input::DDX_Text_Fmt(CDataExchange *pDX, LPCTSTR templ)
+{ 
+ ::DDX_Text_Fmt(pDX, resid[0], value, templ);
+}
+
+void CRSDeskDlg::Input::EnableWindow(bool enable)
+{
+ for(int i = 0; i < InpFldNum; ++i)
+  ctrl[i]->EnableWindow(enable);
+
+ CAnalogMeterCtrl *meter = static_cast<CAnalogMeterCtrl*>(ctrl[3]);
+ meter->SetState(meter_needle, enable);
+ meter->SetState(meter_grid, enable);
+ COLORREF bk_color;
+ meter->GetColor(meter_bground, &bk_color);
+ meter->SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
+ meter->Redraw();
+}
+
+void CRSDeskDlg::Input::ShowWindow(int show)
+{
+ for(int i = 0; i < InpFldNum; ++i)
+  ctrl[i]->ShowWindow(show);
 }
 
 BEGIN_MESSAGE_MAP(CRSDeskDlg, CDialog)
  ON_WM_DESTROY()
  ON_WM_SIZE()
+ ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 const UINT CRSDeskDlg::IDD = IDD_RAW_SENSORS_DESK;
@@ -69,8 +154,33 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 , m_enable_spiadc(false)
 , m_was_initialized(false)
 , mp_scr(new CWndScroller)
+, m_map_inp(IDC_RS_MAP_VALUE, IDC_RS_MAP_CAPTION, IDC_RS_MAP_UNIT, IDC_RS_MAP_METER)
+, m_ubat_inp(IDC_RS_UBAT_VALUE, IDC_RS_UBAT_CAPTION, IDC_RS_UBAT_UNIT, IDC_RS_UBAT_METER, 20.0f, 10)
+, m_temp_inp(IDC_RS_TEMP_VALUE, IDC_RS_TEMP_CAPTION, IDC_RS_TEMP_UNIT, IDC_RS_TEMP_METER)
+, m_knock_inp(IDC_RS_KNOCK_VALUE, IDC_RS_KNOCK_CAPTION, IDC_RS_KNOCK_UNIT, IDC_RS_KNOCK_METER)
+, m_tps_inp(IDC_RS_TPS_VALUE, IDC_RS_TPS_CAPTION, IDC_RS_TPS_UNIT, IDC_RS_TPS_METER)
+, m_add_i1_inp(IDC_RS_ADD_I1_VALUE, IDC_RS_ADD_I1_CAPTION, IDC_RS_ADD_I1_UNIT, IDC_RS_ADD_I1_METER)
+, m_add_i2_inp(IDC_RS_ADD_I2_VALUE, IDC_RS_ADD_I2_CAPTION, IDC_RS_ADD_I2_UNIT, IDC_RS_ADD_I2_METER)
+, m_add_i3_inp(IDC_RS_ADD_I3_VALUE, IDC_RS_ADD_I3_CAPTION, IDC_RS_ADD_I3_UNIT, IDC_RS_ADD_I3_METER)
+, m_add_i4_inp(IDC_RS_ADD_I4_VALUE, IDC_RS_ADD_I4_CAPTION, IDC_RS_ADD_I4_UNIT, IDC_RS_ADD_I4_METER)
+, m_add_i5_inp(IDC_RS_ADD_I5_VALUE, IDC_RS_ADD_I5_CAPTION, IDC_RS_ADD_I5_UNIT, IDC_RS_ADD_I5_METER)
+, m_add_i6_inp(IDC_RS_ADD_I6_VALUE, IDC_RS_ADD_I6_CAPTION, IDC_RS_ADD_I6_UNIT, IDC_RS_ADD_I6_METER)
+, m_add_i7_inp(IDC_RS_ADD_I7_VALUE, IDC_RS_ADD_I7_CAPTION, IDC_RS_ADD_I7_UNIT, IDC_RS_ADD_I7_METER)
+, m_add_i8_inp(IDC_RS_ADD_I8_VALUE, IDC_RS_ADD_I8_CAPTION, IDC_RS_ADD_I8_UNIT, IDC_RS_ADD_I8_METER)
 {
- //empty
+ m_fields.push_back(&m_map_inp);
+ m_fields.push_back(&m_ubat_inp);
+ m_fields.push_back(&m_temp_inp);
+ m_fields.push_back(&m_knock_inp);
+ m_fields.push_back(&m_tps_inp);
+ m_fields.push_back(&m_add_i1_inp);
+ m_fields.push_back(&m_add_i2_inp);
+ m_fields.push_back(&m_add_i3_inp);
+ m_fields.push_back(&m_add_i4_inp);
+ m_fields.push_back(&m_add_i5_inp);
+ m_fields.push_back(&m_add_i6_inp);
+ m_fields.push_back(&m_add_i7_inp);
+ m_fields.push_back(&m_add_i8_inp);
 }
 
 CRSDeskDlg::~CRSDeskDlg()
@@ -82,64 +192,11 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
- //field
- DDX_Control(pDX, IDC_RS_MAP_VALUE, m_map_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_UBAT_VALUE, m_ubat_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_TEMP_VALUE, m_temp_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_KNOCK_VALUE, m_knock_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_TPS_VALUE, m_tps_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I1_VALUE, m_add_i1_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I2_VALUE, m_add_i2_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I3_VALUE, m_add_i3_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I4_VALUE, m_add_i4_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I5_VALUE, m_add_i5_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I6_VALUE, m_add_i6_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I7_VALUE, m_add_i7_inp.ctrl[0]);
- DDX_Control(pDX, IDC_RS_ADD_I8_VALUE, m_add_i8_inp.ctrl[0]);
+ for(size_t i = 0; i < m_fields.size(); ++i)
+  m_fields[i]->DDX_Control(pDX);
 
- //caption
- DDX_Control(pDX, IDC_RS_MAP_CAPTION, m_map_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_UBAT_CAPTION, m_ubat_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_TEMP_CAPTION, m_temp_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_KNOCK_CAPTION, m_knock_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_TPS_CAPTION, m_tps_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I1_CAPTION, m_add_i1_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I2_CAPTION, m_add_i2_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I3_CAPTION, m_add_i3_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I4_CAPTION, m_add_i4_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I5_CAPTION, m_add_i5_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I6_CAPTION, m_add_i6_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I7_CAPTION, m_add_i7_inp.ctrl[1]);
- DDX_Control(pDX, IDC_RS_ADD_I8_CAPTION, m_add_i8_inp.ctrl[1]);
-
- //unit
- DDX_Control(pDX, IDC_RS_MAP_UNIT, m_map_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_UBAT_UNIT, m_ubat_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_TEMP_UNIT, m_temp_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_KNOCK_UNIT, m_knock_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_TPS_UNIT, m_tps_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I1_UNIT, m_add_i1_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I2_UNIT, m_add_i2_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I3_UNIT, m_add_i3_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I4_UNIT, m_add_i4_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I5_UNIT, m_add_i5_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I6_UNIT, m_add_i6_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I7_UNIT, m_add_i7_inp.ctrl[2]);
- DDX_Control(pDX, IDC_RS_ADD_I8_UNIT, m_add_i8_inp.ctrl[2]);
-
- DDX_Text_Fmt(pDX,IDC_RS_MAP_VALUE, m_map_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_UBAT_VALUE, m_ubat_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_TEMP_VALUE, m_temp_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_KNOCK_VALUE, m_knock_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_TPS_VALUE, m_tps_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I1_VALUE, m_add_i1_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I2_VALUE, m_add_i2_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I3_VALUE, m_add_i3_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I4_VALUE, m_add_i4_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I5_VALUE, m_add_i5_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I6_VALUE, m_add_i6_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I7_VALUE, m_add_i7_inp.value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I8_VALUE, m_add_i8_inp.value, _T("%.3f"));
+ for(size_t i = 0; i < m_fields.size(); ++i)
+  m_fields[i]->DDX_Text_Fmt(pDX, _T("%.3f"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -150,21 +207,13 @@ BOOL CRSDeskDlg::OnInitDialog()
  Super::OnInitDialog();
  m_enabled = -1; //reset cache flag
 
- CloneWndFont(&m_map_inp.ctrl[0], &m_fieldFont, 16, true);
+ //remember color to have ability to detect changing of system colors (see OnPaint)
+ m_COLOR_BTNFACE = GetSysColor(COLOR_BTNFACE);
 
- m_map_inp.ctrl[0].SetFont(&m_fieldFont);
- m_ubat_inp.ctrl[0].SetFont(&m_fieldFont);
- m_temp_inp.ctrl[0].SetFont(&m_fieldFont);
- m_knock_inp.ctrl[0].SetFont(&m_fieldFont);
- m_tps_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i1_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i2_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i3_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i4_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i5_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i6_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i7_inp.ctrl[0].SetFont(&m_fieldFont);
- m_add_i8_inp.ctrl[0].SetFont(&m_fieldFont);
+ CloneWndFont(m_map_inp.ctrl[0], &m_fieldFont, 16, true);
+
+ for(size_t i = 0; i < m_fields.size(); ++i)
+  m_fields[i]->ctrl[0]->SetFont(&m_fieldFont);
 
  //initialize window scroller
  mp_scr->Init(this);
@@ -173,19 +222,8 @@ BOOL CRSDeskDlg::OnInitDialog()
  UpdateData(FALSE);
 
  //Store iriginal rects
- m_map_inp.StoreRects();
- m_ubat_inp.StoreRects();
- m_temp_inp.StoreRects(); 
- m_knock_inp.StoreRects();
- m_tps_inp.StoreRects();
- m_add_i1_inp.StoreRects();
- m_add_i2_inp.StoreRects();
- m_add_i3_inp.StoreRects();
- m_add_i4_inp.StoreRects();
- m_add_i5_inp.StoreRects();
- m_add_i6_inp.StoreRects();
- m_add_i7_inp.StoreRects();
- m_add_i8_inp.StoreRects();
+ for(size_t i = 0; i < m_fields.size(); ++i)
+  m_fields[i]->StoreRects();
 
  GetClientRect(m_origRect);
 
@@ -210,22 +248,19 @@ void CRSDeskDlg::Enable(bool enable)
   return; //already has needed state
  m_enabled = enable;
 
- for (int i = 0; i < 3; ++i)
- {
-  m_map_inp.ctrl[i].EnableWindow(enable);
-  m_ubat_inp.ctrl[i].EnableWindow(enable);
-  m_temp_inp.ctrl[i].EnableWindow(enable);
-  m_knock_inp.ctrl[i].EnableWindow(enable);
-  m_tps_inp.ctrl[i].EnableWindow(enable);
-  m_add_i1_inp.ctrl[i].EnableWindow(enable);
-  m_add_i2_inp.ctrl[i].EnableWindow(enable);
-  m_add_i3_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features);
-  m_add_i4_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
-  m_add_i5_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
-  m_add_i6_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
-  m_add_i7_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
-  m_add_i8_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
- }
+ m_map_inp.EnableWindow(enable);
+ m_ubat_inp.EnableWindow(enable);
+ m_temp_inp.EnableWindow(enable);
+ m_knock_inp.EnableWindow(enable);
+ m_tps_inp.EnableWindow(enable);
+ m_add_i1_inp.EnableWindow(enable);
+ m_add_i2_inp.EnableWindow(enable);
+ m_add_i3_inp.EnableWindow(enable && !m_enable_secu3t_features);
+ m_add_i4_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
+ m_add_i5_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
+ m_add_i6_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
+ m_add_i7_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
+ m_add_i8_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
 }
 
 void CRSDeskDlg::Show(bool show)
@@ -233,22 +268,19 @@ void CRSDeskDlg::Show(bool show)
  int sw = ((show) ? SW_SHOW : SW_HIDE);
  int sw3i = ((show && !m_enable_secu3t_features) ? SW_SHOW : SW_HIDE);
 
- for (int i = 0; i < 3; ++i)
- {
-  m_map_inp.ctrl[i].ShowWindow(sw);
-  m_ubat_inp.ctrl[i].ShowWindow(sw);
-  m_temp_inp.ctrl[i].ShowWindow(sw);
-  m_knock_inp.ctrl[i].ShowWindow(sw);
-  m_tps_inp.ctrl[i].ShowWindow(sw);
-  m_add_i1_inp.ctrl[i].ShowWindow(sw);
-  m_add_i2_inp.ctrl[i].ShowWindow(sw);
-  m_add_i3_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i4_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i5_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i6_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i7_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i8_inp.ctrl[i].ShowWindow(sw3i);
- }
+ m_map_inp.ShowWindow(sw);
+ m_ubat_inp.ShowWindow(sw);
+ m_temp_inp.ShowWindow(sw);
+ m_knock_inp.ShowWindow(sw);
+ m_tps_inp.ShowWindow(sw);
+ m_add_i1_inp.ShowWindow(sw);
+ m_add_i2_inp.ShowWindow(sw);
+ m_add_i3_inp.ShowWindow(sw3i);
+ m_add_i4_inp.ShowWindow(sw3i);
+ m_add_i5_inp.ShowWindow(sw3i);
+ m_add_i6_inp.ShowWindow(sw3i);
+ m_add_i7_inp.ShowWindow(sw3i);
+ m_add_i8_inp.ShowWindow(sw3i);
 }
 
 using namespace SECU3IO;
@@ -269,6 +301,9 @@ void CRSDeskDlg::SetValues(const RawSensDat* i_values)
  m_add_i7_inp.value = i_values->add_i7_value;
  m_add_i8_inp.value = i_values->add_i8_value;
  UpdateData(FALSE);
+
+ for(size_t i = 0; i < m_fields.size(); ++i)
+  m_fields[i]->UpdateMeter();
 }
 
 void CRSDeskDlg::GetValues(RawSensDat* o_values)
@@ -298,22 +333,19 @@ void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
  updateScrollerSize();
 
  //in the SECU-3i only
- for (int i = 0; i < 3; ++i)
- {
-  m_add_i3_inp.ctrl[i].EnableWindow(m_enabled && !i_enable);
-  m_add_i4_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_extraio);
-  m_add_i5_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
-  m_add_i6_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
-  m_add_i7_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
-  m_add_i8_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
-  int sw3i = ((!i_enable) ? SW_SHOW : SW_HIDE);
-  m_add_i3_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i4_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i5_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i6_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i7_inp.ctrl[i].ShowWindow(sw3i);
-  m_add_i8_inp.ctrl[i].ShowWindow(sw3i);
- }
+ m_add_i3_inp.EnableWindow(m_enabled && !i_enable);
+ m_add_i4_inp.EnableWindow(m_enabled && !i_enable && m_enable_extraio);
+ m_add_i5_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+ m_add_i6_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+ m_add_i7_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+ m_add_i8_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+ int sw3i = ((!i_enable) ? SW_SHOW : SW_HIDE);
+ m_add_i3_inp.ShowWindow(sw3i);
+ m_add_i4_inp.ShowWindow(sw3i);
+ m_add_i5_inp.ShowWindow(sw3i);
+ m_add_i6_inp.ShowWindow(sw3i);
+ m_add_i7_inp.ShowWindow(sw3i);
+ m_add_i8_inp.ShowWindow(sw3i);
 }
 
 void CRSDeskDlg::EnableExtraIO(bool i_enable)
@@ -322,8 +354,7 @@ void CRSDeskDlg::EnableExtraIO(bool i_enable)
   return; //already has needed state
  m_enable_extraio = i_enable;
  //in the SECU-3i only
- for (int i = 0; i < 3; ++i)
-  m_add_i4_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+ m_add_i4_inp.EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
 }
 
 void CRSDeskDlg::EnableSpiAdc(bool i_enable)
@@ -332,13 +363,10 @@ void CRSDeskDlg::EnableSpiAdc(bool i_enable)
   return; //already has needed state
  m_enable_spiadc = i_enable;
  //in the SECU-3i units with m1284 processor only
- for (int i = 0; i < 3; ++i)
- {
-  m_add_i5_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
-  m_add_i6_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
-  m_add_i7_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
-  m_add_i8_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
- }
+ m_add_i5_inp.EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+ m_add_i6_inp.EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+ m_add_i7_inp.EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+ m_add_i8_inp.EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
 }
 
 void CRSDeskDlg::Resize(const CRect& i_rect)
@@ -348,19 +376,8 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
  GDIHelpers::CalcRectToRectRatio(i_rect, m_origRect, Xf, Yf);
 
  //Resize controls
- m_map_inp.Scale(Xf, Yf);
- m_ubat_inp.Scale(Xf, Yf);
- m_temp_inp.Scale(Xf, Yf);
- m_knock_inp.Scale(Xf, Yf);
- m_tps_inp.Scale(Xf, Yf);
- m_add_i1_inp.Scale(Xf, Yf);
- m_add_i2_inp.Scale(Xf, Yf);
- m_add_i3_inp.Scale(Xf, Yf);
- m_add_i4_inp.Scale(Xf, Yf);
- m_add_i5_inp.Scale(Xf, Yf);
- m_add_i6_inp.Scale(Xf, Yf);
- m_add_i7_inp.Scale(Xf, Yf);
- m_add_i8_inp.Scale(Xf, Yf);
+ for(size_t i = 0; i < m_fields.size(); ++i)
+  m_fields[i]->Scale(Xf, Yf);
 
  UpdateWindow();
 }
@@ -382,5 +399,18 @@ void CRSDeskDlg::OnSize(UINT nType, int cx, int cy)
   GetClientRect(&rect);
   if (!rect.IsRectNull())
    Resize(rect);
+ }
+}
+
+void CRSDeskDlg::OnPaint() 
+{
+ CPaintDC dc(this); // device context for painting
+
+ COLORREF newcolor = GetSysColor(COLOR_BTNFACE);
+ if (newcolor != m_COLOR_BTNFACE)
+ {
+  m_COLOR_BTNFACE = newcolor;
+  for(size_t i = 0; i < m_fields.size(); ++i)
+   m_fields[i]->UpdateColors();
  }
 }
