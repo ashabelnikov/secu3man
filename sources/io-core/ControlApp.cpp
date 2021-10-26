@@ -2469,7 +2469,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& injctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 84 : 43))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 92 : 47))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
@@ -2580,6 +2580,15 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex32ToBin(raw_packet, &mafload_const))
   return false;
  injctrPar.mafload_const = (float)mafload_const;
+
+ int inj_max_pw = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_max_pw))
+  return false;
+ injctrPar.inj_max_pw[0] = float(inj_max_pw) * (3.2f / 1000.0f); //from 3.2 us units to ms
+ //second fuel:
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_max_pw))
+  return false;
+ injctrPar.inj_max_pw[1] = float(inj_max_pw) * (3.2f / 1000.0f); //from 3.2 us units to ms
 
  return true;
 }
@@ -4254,6 +4263,11 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
  mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_maf_const[0], m_outgoing_packet);
  mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_maf_const[1], m_outgoing_packet);
  mp_pdp->Bin32ToHex((unsigned long)packet_data->mafload_const, m_outgoing_packet);
+
+ int inj_max_pw = MathHelpers::Round(packet_data->inj_max_pw[0] * (1000.0f / 3.2f));
+ mp_pdp->Bin16ToHex(inj_max_pw, m_outgoing_packet);
+ inj_max_pw = MathHelpers::Round(packet_data->inj_max_pw[1] * (1000.0f / 3.2f));
+ mp_pdp->Bin16ToHex(inj_max_pw, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

@@ -265,7 +265,6 @@ typedef struct
  _uchar fi_enter_strokes;
  _uchar fi_leave_strokes;
  _uchar iac_cond_add;
- _uint inj_max_pw;
  _int  aircond_clt;
  _uchar aircond_tps;
  _int  idl_ve;
@@ -325,7 +324,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1988];
+ _uchar reserved[1990];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2843,7 +2842,6 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.fi_enter_strokes = exd.fi_enter_strokes;
  o_data.fi_leave_strokes = exd.fi_leave_strokes;
  o_data.iac_cond_add = (exd.iac_cond_add / 2.0f);
- o_data.inj_max_pw = (exd.inj_max_pw * 3.2f) / 1000.0f; //from 3.2 us units to ms
  o_data.aircond_clt = ((float)exd.aircond_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.aircond_tps = ((float)exd.aircond_tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.idl_ve = ((float)exd.idl_ve) / VE_MAPS_M_FACTOR;
@@ -2930,7 +2928,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.fi_enter_strokes = i_data.fi_enter_strokes;
  exd.fi_leave_strokes = i_data.fi_leave_strokes;
  exd.iac_cond_add = MathHelpers::Round(i_data.iac_cond_add * 2.0f);
- exd.inj_max_pw = MathHelpers::Round((i_data.inj_max_pw * 1000.0f) / 3.2f); //from ms to 3.2us units
  exd.aircond_clt = MathHelpers::Round(i_data.aircond_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.aircond_tps = MathHelpers::Round(i_data.aircond_tps * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.idl_ve = MathHelpers::Round(i_data.idl_ve * VE_MAPS_M_FACTOR);

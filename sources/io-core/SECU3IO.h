@@ -616,6 +616,7 @@ namespace SECU3IO
   float inj_min_pw[2];                //min. inj PW (ms)
   float inj_maf_const[2];             //precalculated constant for MAF (for calculation of inj. PW)
   float mafload_const;                //precalculated constant for MAF (for calculation of MAF load)
+  float inj_max_pw[2];                //maximum injection PW in ms
  };
 
  struct LambdaPar

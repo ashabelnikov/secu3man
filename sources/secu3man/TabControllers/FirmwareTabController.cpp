@@ -1992,11 +1992,6 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("VE on idling for gas (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for LPG (GAS_V = 1)."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Максимальная длительность впрыска"), _T("мс"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw, _T("Ограничение максимальной длительности впрыска. Длительность импульсов впрыска не может быть больше этого значения."));
- else
-  dfd.AppendItem(_T("Max. injection pulse width"), _T("ms"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw, _T("Limitting the maximum injection pulse width. The width of injection pulses can not be above this value."));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Alpha-N: умножать время впрыска на ДПДЗ"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("Выбор на что умножать базовое время впрыска при работе в режиме Alpha-N: на ДАД или ДПДЗ. Если установить 0, то прошивка производит умножение на ДАД, если установить 1, то прошивка производит умножение на ДПДЗ. Если установить 2, то прошивка производит умножение на 101.3"));
  else
   dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("The choice of what to multiply the base injection PW when working in Alpha-N mode: by MAP or TPS. If you set 0, then the firmware multiplies by MAP, if you set 1, then the firmware multiplies by TPS. If you set it to 2, then firmware multiplies by 101.3 constant"));

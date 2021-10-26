@@ -413,6 +413,9 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_maf_const[0] = MathHelpers::Round(p_in->inj_maf_const[0]);
     p_params->inj_maf_const[1] = MathHelpers::Round(p_in->inj_maf_const[1]);
     p_params->mafload_const = MathHelpers::Round(p_in->mafload_const);
+
+    p_params->inj_max_pw[0] = MathHelpers::Round(p_in->inj_max_pw[0] * (1000.0f / 3.2f));
+    p_params->inj_max_pw[1] = MathHelpers::Round(p_in->inj_max_pw[1] * (1000.0f / 3.2f));
    }
    break;
   case LAMBDA_PAR:
@@ -894,6 +897,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->inj_maf_const[0] = (float)p_params->inj_maf_const[0];
     p_out->inj_maf_const[1] = (float)p_params->inj_maf_const[1];
     p_out->mafload_const = (float)p_params->mafload_const;
+
+    p_out->inj_max_pw[0] = float(p_params->inj_max_pw[0]) * (3.2f / 1000.0f); //from 3.2 us units to ms
+    p_out->inj_max_pw[1] = float(p_params->inj_max_pw[1]) * (3.2f / 1000.0f); //from 3.2 us units to ms
    }
    break;
   case LAMBDA_PAR:

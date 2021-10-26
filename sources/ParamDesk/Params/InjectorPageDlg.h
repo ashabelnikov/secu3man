@@ -117,6 +117,8 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   CSpinButtonCtrlEx m_min_pw_spin[2];
   CEditEx m_min_pw_edit[2];
+  CSpinButtonCtrlEx m_max_pw_spin[2];
+  CEditEx m_max_pw_edit[2];
 
   float m_fuel_density[2];  //fuel density (g/cc)
 

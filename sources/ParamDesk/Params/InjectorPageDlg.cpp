@@ -56,6 +56,8 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FFFCONST_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_MINPW_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_MINPW_G_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_MAXPW_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_MAXPW_G_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USEADDCORRS_CHECK,OnChangeData) 
@@ -85,6 +87,15 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MINPW_G_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MINPW_G_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MINPW_G_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_G_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_G_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_G_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MAXPW_G_UNIT,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_EDIT,OnUpdateInjTiming)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_SPIN,OnUpdateInjTiming)
@@ -159,6 +170,8 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
   m_inj_timing_crk_edit[i].SetOwnDDV(true);
   m_min_pw_edit[i].SetMode(CEditEx::MODE_FLOAT);
   m_min_pw_edit[i].SetOwnDDV(true);
+  m_max_pw_edit[i].SetMode(CEditEx::MODE_FLOAT);
+  m_max_pw_edit[i].SetOwnDDV(true);
   //params
   m_params.inj_usetimingmap[i] = 0;
   m_params.inj_config[i] = SECU3IO::INJCFG_SIMULTANEOUS;
@@ -170,6 +183,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
   m_params.inj_anglespec[i] = 0;
   m_params.inj_min_pw[i] = 1.0f; 
   m_params.inj_maf_const[i] = 0;
+  m_params.inj_max_pw[i] = 100.0f;
  }
 
  m_params.inj_cyl_disp = 0.375f;
@@ -239,6 +253,11 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_MINPW_G_EDIT, m_min_pw_edit[1]);
  DDX_Control(pDX,IDC_PD_INJECTOR_MINPW_G_SPIN, m_min_pw_spin[1]);
 
+ DDX_Control(pDX,IDC_PD_INJECTOR_MAXPW_EDIT, m_max_pw_edit[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_MAXPW_SPIN, m_max_pw_spin[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_MAXPW_G_EDIT, m_max_pw_edit[1]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_MAXPW_G_SPIN, m_max_pw_spin[1]);
+
  float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
  m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, engdisp);
  m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
@@ -273,6 +292,9 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
 
  m_min_pw_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_MINPW_EDIT, m_params.inj_min_pw[0]);
  m_min_pw_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_MINPW_G_EDIT, m_params.inj_min_pw[1]);
+
+ m_max_pw_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_MAXPW_EDIT, m_params.inj_max_pw[0]);
+ m_max_pw_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_MAXPW_G_EDIT, m_params.inj_max_pw[1]);
 }
 
 void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -336,6 +358,12 @@ BOOL CInjectorPageDlg::OnInitDialog()
   m_min_pw_edit[i].SetDecimalPlaces(2);
   m_min_pw_spin[i].SetRangeAndDelta(0.10f, 6.50f, 0.025f);
   m_min_pw_edit[i].SetRange(0.10f, 6.50f);
+
+  m_max_pw_spin[i].SetBuddy(&m_max_pw_edit[i]);
+  m_max_pw_edit[i].SetLimitText(6);
+  m_max_pw_edit[i].SetDecimalPlaces(2);
+  m_max_pw_spin[i].SetRangeAndDelta(0.0f, 100.0f, 0.1f);
+  m_max_pw_edit[i].SetRange(0.0f, 100.0f);
  }
 
  m_fff_const_spin.SetBuddy(&m_fff_const_edit);
@@ -370,6 +398,8 @@ BOOL CInjectorPageDlg::OnInitDialog()
   VERIFY(mp_ttc->AddWindow(&m_flowrate_spin[i], MLL::GetString(IDS_PD_INJECTOR_FLOWRATE_EDIT_TT)));
   VERIFY(mp_ttc->AddWindow(&m_min_pw_edit[i], MLL::GetString(IDS_PD_INJECTOR_MINPW_EDIT_TT)));
   VERIFY(mp_ttc->AddWindow(&m_min_pw_spin[i], MLL::GetString(IDS_PD_INJECTOR_MINPW_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_max_pw_edit[i], MLL::GetString(IDS_PD_INJECTOR_MAXPW_EDIT_TT)));
+  VERIFY(mp_ttc->AddWindow(&m_max_pw_spin[i], MLL::GetString(IDS_PD_INJECTOR_MAXPW_EDIT_TT)));
   VERIFY(mp_ttc->AddWindow(&m_inj_usetimingmap_check[i], MLL::GetString(IDS_PD_INJECTOR_USETIMINGMAP_CHECK_TT)));
  }
 
@@ -886,7 +916,7 @@ void CInjectorPageDlg::OnSize(UINT nType, int cx, int cy)
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(780));
+  mp_scr->SetViewSize(cx, da.ScaleY(840));
 }
 
 void CInjectorPageDlg::SetITEdMode(int mode)
