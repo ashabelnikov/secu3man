@@ -92,6 +92,9 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_primedelay_edit;
   CSpinButtonCtrlEx m_fldclrtps_spin;
   CEditEx m_fldclrtps_edit;
+  CSpinButtonCtrlEx m_stblstrcnt_spin;
+  CEditEx m_stblstrcnt_edit;
+  CButton m_fldclrstart_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;

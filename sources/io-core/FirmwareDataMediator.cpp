@@ -270,7 +270,6 @@ typedef struct
  _int  idl_ve;
  _uint frap;
  _int  idl_ve_g;
- _uchar stbl_str_cnt;
  _int  reserv_0;        //reserved!
  _int  heating_t_off;
  _uchar heating_time;
@@ -283,7 +282,6 @@ typedef struct
  _uchar vent_pwmsteps;
  _uchar vent_minband;
  _uchar an_tps_mul;
- _uchar fldclr_start;
  _uchar hall_predict;
  _uint  vtachom_mult; //value * 8192
  _uint  grheat_time;
@@ -321,7 +319,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1994];
+ _uchar reserved[1996];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2847,7 +2845,6 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.evap_tps_hi = ((float)exd.evap_tps_hi) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.frap = ((float)exd.frap) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.idl_ve_g = ((float)exd.idl_ve_g) / VE_MAPS_M_FACTOR;
- o_data.stbl_str_cnt = exd.stbl_str_cnt;
  o_data.heating_t_off = ((float)exd.heating_t_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.heating_time = ((float)exd.heating_time) / 10.0f; //convert from 6 sec units to minutes
  o_data.idltorun_stp_en = ((float)exd.idltorun_stp_en) / 32.0f; //convert to %
@@ -2859,7 +2856,6 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.vent_pwmsteps = exd.vent_pwmsteps;
  o_data.vent_minband = exd.vent_minband;
  o_data.an_tps_mul = exd.an_tps_mul;
- o_data.fldclr_start = exd.fldclr_start;
  o_data.hall_predict = exd.hall_predict;
 
  int vtachom_mult = exd.vtachom_mult;
@@ -2930,7 +2926,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.evap_tps_hi = MathHelpers::Round(i_data.evap_tps_hi * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.frap = MathHelpers::Round(i_data.frap * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.idl_ve_g = MathHelpers::Round(i_data.idl_ve_g * VE_MAPS_M_FACTOR);
- exd.stbl_str_cnt = i_data.stbl_str_cnt;
  exd.heating_t_off = MathHelpers::Round(i_data.heating_t_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.heating_time = MathHelpers::Round(i_data.heating_time * 10.0f);
  exd.idltorun_stp_en = MathHelpers::Round(i_data.idltorun_stp_en * 32.0f);
@@ -2942,7 +2937,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.vent_pwmsteps = i_data.vent_pwmsteps;
  exd.vent_minband = i_data.vent_minband;
  exd.an_tps_mul = i_data.an_tps_mul;
- exd.fldclr_start = i_data.fldclr_start;
  exd.hall_predict = i_data.hall_predict;
  exd.vtachom_mult = MathHelpers::Round((1.0f / i_data.vtachom_mult) * 8192.0f);
  exd.grheat_time = MathHelpers::Round(i_data.grheat_time * 6000.0f);

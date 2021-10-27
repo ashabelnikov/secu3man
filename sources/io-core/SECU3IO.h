@@ -152,6 +152,8 @@ namespace SECU3IO
   float inj_prime_hot;                  //prime pulse width at 70C
   float inj_prime_delay;                //prime pulse delay
   float inj_floodclear_tps;             //flood clear mode threshold
+  int stbl_str_cnt;
+  bool fldclr_start;
  };
 
  struct AnglesPar
@@ -829,7 +831,6 @@ const int INPAVNUM = 14;
   float evap_tps_hi;
   float frap;
   float idl_ve_g;
-  int stbl_str_cnt;
   float heating_t_off;
   float heating_time;
   float idltorun_stp_en;
@@ -841,7 +842,6 @@ const int INPAVNUM = 14;
   int vent_pwmsteps;
   int vent_minband;
   int an_tps_mul;
-  int fldclr_start;
   int hall_predict;
   float vtachom_mult;
   float grheat_time;

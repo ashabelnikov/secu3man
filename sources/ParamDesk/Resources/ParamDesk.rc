@@ -89,6 +89,13 @@ BEGIN
     CONTROL         "",IDC_PD_STARTER_FLDCLRTPS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
     LTEXT           "Порог вкл. режима продувки",IDC_PD_STARTER_FLDCLRTPS_CAPTION,0,171,94,20
     LTEXT           "%",IDC_PD_STARTER_FLDCLRTPS_UNIT,140,171,30,10
+
+    EDITTEXT        IDC_PD_STARTER_STBLSTRCNT_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_STBLSTRCNT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Таймер блокировки стартера",IDC_PD_STARTER_STBLSTRCNT_CAPTION,0,191,94,20
+    LTEXT           "такт",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,191,30,10
+
+    CONTROL         "Разрешить запуск при продувке двигателя",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,210,137,15
 END
 
 IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
@@ -1887,6 +1894,8 @@ BEGIN
     IDS_PD_ANGLES_SHIFT_IGNTIM_EDIT_TT "Значение УОЗ используемое при переключени передач (пока на входе AUTO_I присутствует сигнал)"
     IDS_PD_ANGLES_ALWAYS_WRKMAP_CHECK_TT "Если установить в 1, то рабочая карта УОЗ будет использоваться не только для рабочего режима, но и для режима ХХ. Установите в 0 для работы в обычном режиме (для ХХ своя карта УОЗ)"
     IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT "0 - не применять ручную октан коррекцию на холостом ходу (коррекция будет применяться только в рабочем режиме), 1 - разрешить применение ручной октан коррекции на холостом ходу"
+    IDS_PD_STARTER_STBLSTRCNT_EDIT_TT "Количество тактов от момента достижения порога оборотов блокировки стартера до момента его фактического выключения. Установите значение 0, если хотите чтобы использовалась таблица вместо этой простой константы."
+    IDS_PD_STARTER_FLDCLRSTART_CHECK_TT "Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1973,6 +1982,13 @@ BEGIN
     CONTROL         "",IDC_PD_STARTER_FLDCLRTPS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
     LTEXT           "Flood clear mode threshold",IDC_PD_STARTER_FLDCLRTPS_CAPTION,0,171,94,20
     LTEXT           "%",IDC_PD_STARTER_FLDCLRTPS_UNIT,140,171,30,10
+
+    EDITTEXT        IDC_PD_STARTER_STBLSTRCNT_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_STBLSTRCNT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Starter's blocking timer",IDC_PD_STARTER_STBLSTRCNT_CAPTION,0,191,94,20
+    LTEXT           "str",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,191,30,10
+
+    CONTROL         "Allow engine start in flood clear mode",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,210,137,15
 END
 
 IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
@@ -3799,6 +3815,8 @@ BEGIN
     IDS_PD_ANGLES_SHIFT_IGNTIM_EDIT_TT "Value of ignition timing used when shifting gears (while signal is present at the AUTO_I input)"
     IDS_PD_ANGLES_ALWAYS_WRKMAP_CHECK_TT "If set to 1, then working ignition timing map will be used also for idling mode. Set ot 0 for working in default mode (seperate map will be used on idling)"
     IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT "0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"
+    IDS_PD_STARTER_STBLSTRCNT_EDIT_TT "Number of strokes from the moment the starter's blocking threshold is reached until starter is actually turned off. Set the value to 0 if you want the table to be used instead of this simple constant."
+    IDS_PD_STARTER_FLDCLRSTART_CHECK_TT "If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."
 END
 
 /////////////////////////////////////////////////////////////////////////////

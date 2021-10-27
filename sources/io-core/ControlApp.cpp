@@ -713,7 +713,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& startrPar = m_recepted_packet.m_StartrPar;
- if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 32 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -764,6 +764,18 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_strokes1))
   return false;
  startrPar.inj_aftstr_strokes[1] = aftstr_strokes1 * 4;
+
+ //Starter bloking strokes
+ unsigned char stbl_str_cnt = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &stbl_str_cnt))
+  return false;
+ startrPar.stbl_str_cnt = stbl_str_cnt;
+
+ //Cranking flags
+ BYTE strt_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &strt_flags))
+  return false;
+ startrPar.fldclr_start = CHECKBIT8(strt_flags, 0);
 
  return true;
 }
@@ -3627,6 +3639,11 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin8ToHex(inj_floodclear_tps, m_outgoing_packet);
  int inj_aftstr_strokes1 = MathHelpers::Round(packet_data->inj_aftstr_strokes[1] / 4.0f);
  mp_pdp->Bin8ToHex(inj_aftstr_strokes1, m_outgoing_packet);
+ int stbl_str_cnt = MathHelpers::Round(packet_data->stbl_str_cnt);
+ mp_pdp->Bin8ToHex(stbl_str_cnt, m_outgoing_packet);
+ unsigned char flags = 0; //not used now
+ WRITEBIT8(flags, 0, packet_data->fldclr_start);
+ mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 

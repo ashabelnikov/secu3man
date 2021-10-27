@@ -176,6 +176,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_prime_delay = MathHelpers::Round(p_in->inj_prime_delay * 10.0f);
     p_params->inj_floodclear_tps = MathHelpers::Round(p_in->inj_floodclear_tps * 2.0f);
     p_params->inj_aftstr_strokes1 = MathHelpers::Round(p_in->inj_aftstr_strokes[1] / 4.0f);
+    p_params->stbl_str_cnt = p_in->stbl_str_cnt;
+    WRITEBIT8(p_params->strt_flags, 0, p_in->fldclr_start);
    }
    break;
   case ADCCOR_PAR:
@@ -604,6 +606,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->inj_prime_delay = float(p_params->inj_prime_delay) / 10.0f; //convert to seconds
      p_out->inj_floodclear_tps = float(p_params->inj_floodclear_tps) / 2.0f;
      p_out->inj_aftstr_strokes[1] = p_params->inj_aftstr_strokes1 * 4;
+     p_out->stbl_str_cnt = p_params->stbl_str_cnt;
+     p_out->fldclr_start = CHECKBIT8(p_params->strt_flags, 0);
     }
     break;
    case ADCCOR_PAR:
