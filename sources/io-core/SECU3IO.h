@@ -162,6 +162,9 @@ namespace SECU3IO
   float  dec_speed;
   float  inc_speed;
   unsigned char zero_adv_ang;
+  bool igntim_wrkmap;
+  bool manigntim_idl;
+  float shift_igntim;
  };
 
 
@@ -818,7 +821,6 @@ const int INPAVNUM = 14;
   int fi_enter_strokes;
   int fi_leave_strokes;
   float iac_cond_add;
-  float inj_max_pw;
   float aircond_clt;
   float aircond_tps;
   float idl_ve;
@@ -839,8 +841,6 @@ const int INPAVNUM = 14;
   int vent_pwmsteps;
   int vent_minband;
   int an_tps_mul;
-  int igntim_wrkmap;
-  float shift_igntim;
   int fldclr_start;
   int hall_predict;
   float vtachom_mult;
@@ -848,7 +848,6 @@ const int INPAVNUM = 14;
   int add_i1_sub;
   int add_i2_sub;
   int idlreg_captrange;
-  int manigntim_idl;
   float idlent_timval;
   float gasval_ontime;
   float tdc_angle[8];

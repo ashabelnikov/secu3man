@@ -100,31 +100,30 @@ BEGIN
     EDITTEXT        IDC_PD_ANGLES_MAX_ANGLE_EDIT,91,26,28,15,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEED_EDIT,12,73,29,15,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEED_EDIT,91,74,28,15,ES_AUTOHSCROLL
-    CONTROL         "Нулев. уг.опер. (полезно для отладки)",
-                    IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,6,106,65,29
+    CONTROL         "Нулев. уг.опер. (полезно для отладки)",IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,6,106,65,29
     EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,76,118,47,15,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
-    CONTROL         "",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
-    CONTROL         "",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,127,117,12,16
+    CONTROL         "",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
+    CONTROL         "",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
+    CONTROL         "",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,127,117,12,16
     LTEXT           "Минимальный УОЗ",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,14,72,9
     LTEXT           "Максимальный УОЗ",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,14,74,9
     LTEXT           "Октан коррекция",IDC_PD_ANGLES_CORRECTION_CAPTION,75,106,90,10
     LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
     LTEXT           "град.",IDC_PD_ANGLES_CORRECTION_UNIT,145,120,26,11
-    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEED_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,16
-    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEED_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,17
+    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEED_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,16
+    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEED_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,17
     LTEXT           "Уменьшение",IDC_PD_ANGLES_DECREASE_SPEED_CAPTION,9,60,72,9
     LTEXT           "Увеличение",IDC_PD_ANGLES_INCREASE_SPEED_CAPTION,87,60,74,9
     LTEXT           "град./ такт",IDC_PD_ANGLES_DECREASE_SPEED_UNIT,60,71,22,16
     LTEXT           "град./ такт",IDC_PD_ANGLES_INCREASE_SPEED_UNIT,138,72,20,16
     GROUPBOX        "Скорость изменения УОЗ",IDC_PD_ANGLES_ANGLE_SPEED_GROUP,5,48,158,51,0,WS_EX_TRANSPARENT
+    EDITTEXT        IDC_PD_ANGLES_SHIFT_IGNTIM_EDIT,95,138,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ANGLES_SHIFT_IGNTIM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,138,13,17
+    LTEXT           "УОЗ при переключении передач",IDC_PD_ANGLES_SHIFT_IGNTIM_CAPTION,0,138,94,16
+    LTEXT           "°",IDC_PD_ANGLES_SHIFT_IGNTIM_UNIT,140,138,30,10
+    CONTROL         "Всегда использовать карту УОЗ рабочего режима",IDC_PD_ANGLES_ALWAYS_WRKMAP_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,158,137,15
+    CONTROL         "Применять ручную октан коррецию в режиме ХХ",IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,178,137,15
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -1885,6 +1884,9 @@ BEGIN
     IDS_PD_UNIOUT_1_INV_CHECK_TT "Инверсия конечного результата"
     IDS_PD_CARBUR_IGNCUT_UNI_COMBO_TT "Использовать условия выбранного универсального выхода для отсечки зажигания. Результат вычисления условий универ.выхода объединяется с результатом вычисления других условий через функцию 'И'."
     IDS_PD_FUNSET_GAS_V_UNI_COMBO_TT "Определяют какой универсальный выход используется вместо входа GAS_V. Если выбрано --no--, то универсальные выходы никак не влияют на использование входа GAS_V. Если выбран 1,2...6, то соответствующий универсальный выход будет работать как GAS_V. Если вы используете дополнительное условие (вкладка Универ.Выходы) для объединения 1 и 2-го универсального выхода, то нужно выбрать 1-й выход (2-й не выбирать!)."
+    IDS_PD_ANGLES_SHIFT_IGNTIM_EDIT_TT "Значение УОЗ используемое при переключени передач (пока на входе AUTO_I присутствует сигнал)"
+    IDS_PD_ANGLES_ALWAYS_WRKMAP_CHECK_TT "Если установить в 1, то рабочая карта УОЗ будет использоваться не только для рабочего режима, но и для режима ХХ. Установите в 0 для работы в обычном режиме (для ХХ своя карта УОЗ)"
+    IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT "0 - не применять ручную октан коррекцию на холостом ходу (коррекция будет применяться только в рабочем режиме), 1 - разрешить применение ручной октан коррекции на холостом ходу"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2000,6 +2002,12 @@ BEGIN
     LTEXT           "degr./ stroke",IDC_PD_ANGLES_DECREASE_SPEED_UNIT,60,71,22,16
     LTEXT           "degr./ stroke",IDC_PD_ANGLES_INCREASE_SPEED_UNIT,137,72,21,16
     GROUPBOX        "Limitation of angle change speed",IDC_PD_ANGLES_ANGLE_SPEED_GROUP,5,48,158,51,0,WS_EX_TRANSPARENT
+    EDITTEXT        IDC_PD_ANGLES_SHIFT_IGNTIM_EDIT,95,138,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ANGLES_SHIFT_IGNTIM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,138,13,17
+    LTEXT           "Ignition timing when shifting gears",IDC_PD_ANGLES_SHIFT_IGNTIM_CAPTION,0,138,94,16
+    LTEXT           "°",IDC_PD_ANGLES_SHIFT_IGNTIM_UNIT,140,138,30,10
+    CONTROL         "Always use working mode's ignition timing map",IDC_PD_ANGLES_ALWAYS_WRKMAP_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,158,137,15
+    CONTROL         "Apply manual ignition timing correction on idling",IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,178,137,15
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -3788,6 +3796,9 @@ BEGIN
     IDS_PD_UNIOUT_1_INV_CHECK_TT "Inversion of the final result"
     IDS_PD_CARBUR_IGNCUT_UNI_COMBO_TT "Use conditions of the selected universal output for ignition cut off. The result calculated from universal output's conditions is combined with the result calculated from other conditions through the logic 'AND' function."
     IDS_PD_FUNSET_GAS_V_UNI_COMBO_TT "Determine which universal output is used instead of GAS_V input. If --no-- is selected, then the universal outputs have no effect on GAS_V behaviour. If 1,2...6 is selected, then the corresponding universal output will work as GAS_V. If you use an additional condition (tab Universal outputs) to combine the 1st and 2nd universal outputs, then you need to select the 1st output (do not select the 2nd!)."
+    IDS_PD_ANGLES_SHIFT_IGNTIM_EDIT_TT "Value of ignition timing used when shifting gears (while signal is present at the AUTO_I input)"
+    IDS_PD_ANGLES_ALWAYS_WRKMAP_CHECK_TT "If set to 1, then working ignition timing map will be used also for idling mode. Set ot 0 for working in default mode (seperate map will be used on idling)"
+    IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT "0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"
 END
 
 /////////////////////////////////////////////////////////////////////////////

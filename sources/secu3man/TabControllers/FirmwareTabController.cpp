@@ -1939,27 +1939,6 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("CLT threshold for turn on of the IAC closed loop"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.iacreg_turn_on_temp, _T("IAC closed loop will turn on only if the engine temperature is above this threshold or RPM is above target value. This parameter is useful only if special algorithm for cold engine is used."));
 
- //ignition timing
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Управление зажиганием:"));
- else
-  dfd.AppendItem(_T("Ignition control:"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Всегда использовать карту УОЗ рабочего режима"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("Если установить в 1, то рабочая карта УОЗ будет использоваться не только для рабочего режима, но и для режима ХХ. Установите в 0 для работы в обычном режиме (для ХХ своя карта УОЗ)"));
- else
-  dfd.AppendItem(_T("Always use working mode's ignition timing map"), _T(""), 0, 1, 1, 0, &d.igntim_wrkmap, _T("If set to 1, then working ignition timing map will be used also for idling mode. Set ot 0 for working in default mode (seperate map will be used on idling)"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Применять ручную октан коррецию в режиме ХХ"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - не применять ручную октан коррекцию на холостом ходу (коррекция будет применяться только в рабочем режиме), 1 - разрешить применение ручной октан коррекции на холостом ходу"));
- else
-  dfd.AppendItem(_T("Apply manual ignition timing correction on idling"), _T(""), 0, 1, 1, 0, &d.manigntim_idl, _T("0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"));
-
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("УОЗ при переключении передач"), _T("°"), -15.0f, 55.0f, 0.1f, 1, &d.shift_igntim, _T("Значение УОЗ используемое при переключени передач (пока на входе AUTO_I присутствует сигнал)"));
- else
-  dfd.AppendItem(_T("Ignition timing when shifting gears"), _T("°"), -15.0f, 55.0f, 0.1f, 1, &d.shift_igntim, _T("Value of ignition timing used when shifting gears (while signal is present at the AUTO_I input)"));
-
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));

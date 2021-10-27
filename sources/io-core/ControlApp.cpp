@@ -772,7 +772,7 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::AnglesPar& anglesPar = m_recepted_packet.m_AnglesPar;
- if (size != (mp_pdp->isHex() ? 21 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 27 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Максимальный, допустимый УОЗ (число со знаком)
@@ -808,6 +808,19 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
  //Признак нулевого УОЗ
  if (false == mp_pdp->Hex4ToBin(raw_packet, &anglesPar.zero_adv_ang))
   return false;
+
+ //Ignition timing flags
+ BYTE ign_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ign_flags))
+  return false;
+ anglesPar.igntim_wrkmap = CHECKBIT8(ign_flags, 0);
+ anglesPar.manigntim_idl = CHECKBIT8(ign_flags, 1);
+
+ //Ignition timing for shifting 
+ int shift_igntim;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &shift_igntim, true))
+  return false;
+ anglesPar.shift_igntim = ((float)shift_igntim) / m_angle_multiplier;
 
  return true;
 }
@@ -3654,6 +3667,12 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
  int inc_speed = MathHelpers::Round(packet_data->inc_speed * m_angle_multiplier);
  mp_pdp->Bin16ToHex(inc_speed,m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
+ unsigned char flags = 0;
+ WRITEBIT8(flags, 0, packet_data->igntim_wrkmap);
+ WRITEBIT8(flags, 1, packet_data->manigntim_idl);
+ mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+ int shift_igntim = MathHelpers::Round(packet_data->shift_igntim * m_angle_multiplier);
+ mp_pdp->Bin16ToHex(shift_igntim, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

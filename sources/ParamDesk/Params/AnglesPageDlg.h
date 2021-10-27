@@ -33,6 +33,9 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
+class CToolTipCtrlEx;
+class CWndScroller;
+
 class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
@@ -52,12 +55,15 @@ class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
  private:
-  std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
   SECU3IO::AnglesPar m_params;
   bool m_enabled;
@@ -74,4 +80,8 @@ class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_increase_speed_edit;
   CButton m_zeroaa_check;
 
+  CEditEx m_shift_igntim_edit;
+  CSpinButtonCtrlEx m_shift_igntim_spin;
+  CButton m_always_wrkmap_check;
+  CButton m_manigntim_idl_check;
 };
