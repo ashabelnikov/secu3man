@@ -283,10 +283,9 @@
 #define IDC_GME_INJ_DEAD1               5637
 #define IDC_GME_INJ_EGOCRV              5638
 #define IDC_GME_INJ_IATCLT              5639
-#define IDC_GME_INJ_TPSSWT              5640
-#define IDC_GME_INJ_ATSC                5641
-#define IDC_GME_INJ_GTSC                5642
-#define IDC_GME_INJ_GPSC                5643
+#define IDC_GME_INJ_ATSC                5640
+#define IDC_GME_INJ_GTSC                5641
+#define IDC_GME_INJ_GPSC                5642
 #define IDC_GME_INJ_LAMDEL_BTN          5644
 #define IDC_GME_INJ_CELWGT_BTN          5645
 #define IDC_GME_INJ_STRSTP_BTN          5646
@@ -547,10 +546,9 @@
 #define IDC_GME_INJ_DEAD_TEXT           5901
 #define IDC_GME_INJ_EGOCRV_TEXT         5902
 #define IDC_GME_INJ_IATCLT_TEXT         5903
-#define IDC_GME_INJ_TPSSWT_TEXT         5904
-#define IDC_GME_INJ_ATSC_TEXT           5905
-#define IDC_GME_INJ_GTSC_TEXT           5906
-#define IDC_GME_INJ_GPSC_TEXT           5907
+#define IDC_GME_INJ_ATSC_TEXT           5904
+#define IDC_GME_INJ_GTSC_TEXT           5905
+#define IDC_GME_INJ_GPSC_TEXT           5906
 #define IDC_TD_FTLS_CURVE               5908
 #define IDC_TD_EGTS_CURVE               5909
 #define IDC_TD_OPS_CURVE                5910
@@ -582,3 +580,9 @@
 #define IDS_TD_VIEW_TPSZON_MAP_TT       5936
 #define IDS_TPSZON_MAP                  5937
 #define IDS_MAPS_TPSZON_UNIT            5938
+#define IDD_GME_INJ_OTHER1              5939
+#define IDC_GME_INJ_TPSSWT_TEXT         5940
+#define IDC_GME_INJ_TPSZON_TEXT         5941
+#define IDC_GME_INJ_TPSSWT              5642
+#define IDC_GME_INJ_TPSZON              5943
+#define IDS_GME_INJ_OTHER1_TAB          5944

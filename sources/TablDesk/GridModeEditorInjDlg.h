@@ -37,6 +37,7 @@ class CGMEInjITDlg;
 class CGMEInjIRegDlg;
 class CGMEInjEnrDlg;
 class CGMEInjOtherDlg;
+class CGMEInjOther1Dlg;
 class CGMEInjPwm1Dlg;
 class CGMEInjPwm2Dlg;
 
@@ -97,6 +98,7 @@ class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
   void OnChangeIReg(int mapId);
   void OnChangeEnr(int mapId);
   void OnChangeOther(int mapId);
+  void OnChangeOther1(int mapId);
   void OnChangePwm1(void);
   void OnChangePwm2(void);
 
@@ -112,6 +114,7 @@ class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
   std::auto_ptr<CGMEInjIRegDlg> m_pIRegPageDlg;
   std::auto_ptr<CGMEInjEnrDlg> m_pEnrPageDlg;
   std::auto_ptr<CGMEInjOtherDlg> m_pOtherPageDlg;
+  std::auto_ptr<CGMEInjOther1Dlg> m_pOther1PageDlg;
   std::auto_ptr<CGMEInjPwm1Dlg> m_pPwm1PageDlg;
   std::auto_ptr<CGMEInjPwm2Dlg> m_pPwm2PageDlg;
 

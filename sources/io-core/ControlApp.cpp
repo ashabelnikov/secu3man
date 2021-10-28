@@ -338,7 +338,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_retard, true))
   return false;
  sensorDat.knkret_use = (knock_retard != 32767);
- sensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
+ sensorDat.knock_retard = sensorDat.knkret_use ? ((float)knock_retard) / m_angle_multiplier : 0;
 
  //Расход воздуха
  if (false == mp_pdp->Hex8ToBin(raw_packet,&sensorDat.air_flow))

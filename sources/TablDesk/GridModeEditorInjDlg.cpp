@@ -35,6 +35,7 @@
 #include "GMEInjIRegDlg.h"
 #include "GMEInjEnrDlg.h"
 #include "GMEInjOtherDlg.h"
+#include "GMEInjOther1Dlg.h"
 #include "GMEInjPwm1Dlg.h"
 #include "GMEInjPwm2Dlg.h"
 #include "io-core/SECU3IO.h"
@@ -97,6 +98,9 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
  m_pOtherPageDlg->BindDeadGrid(const_cast<float*>(SECU3IO::dwellcntrl_map_slots));
  m_pOtherPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeOther));
 
+ m_pOther1PageDlg.reset(new CGMEInjOther1Dlg());
+ m_pOther1PageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeOther1));
+
  m_pPwm1PageDlg.reset(new CGMEInjPwm1Dlg());
  m_pPwm1PageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
  m_pPwm1PageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangePwm1));
@@ -134,6 +138,7 @@ BOOL CGridModeEditorInjDlg::OnInitDialog()
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_IREG_TAB), m_pIRegPageDlg.get(), 0);
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_ENR_TAB), m_pEnrPageDlg.get(), 0);
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_OTHER_TAB), m_pOtherPageDlg.get(), 0);
+ m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_OTHER1_TAB), m_pOther1PageDlg.get(), 0);
  m_pwm1TabIdx = m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_PWM1_TAB), m_pPwm1PageDlg.get(), 0);
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_PWM2_TAB), m_pPwm2PageDlg.get(), 0);
 
@@ -194,6 +199,12 @@ void CGridModeEditorInjDlg::UpdateDialogControls(void)
   m_pOtherPageDlg->UpdateDialogControls(this, true);
  }
 
+ if (m_pOther1PageDlg->GetSafeHwnd())
+ {
+  m_pOther1PageDlg->EnableWindow(allowed);
+  m_pOther1PageDlg->UpdateDialogControls(this, true);
+ }
+
  if (m_pPwm1PageDlg->GetSafeHwnd())
  {
   m_pPwm1PageDlg->EnableWindow(allowed);
@@ -229,7 +240,8 @@ void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float*
  m_pITPageDlg->BindMaps(pIT);
  m_pIRegPageDlg->BindMaps(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW, pIACMAT);
  m_pEnrPageDlg->BindMaps(pAftstr, pWrmp, pAETPS, pAERPM);
- m_pOtherPageDlg->BindMaps(pCrnk, pDead, pEGOCrv, pIATCLT, pTpsswt, pAtsc, pGtsc, pGpsc);
+ m_pOtherPageDlg->BindMaps(pCrnk, pDead, pEGOCrv, pIATCLT, pAtsc, pGtsc, pGpsc);
+ m_pOther1PageDlg->BindMaps(pTpsswt, pTpszon);
  m_pPwm1PageDlg->BindMaps(pPwm1);
  m_pPwm2PageDlg->BindMaps(pPwm2);
 }
@@ -240,6 +252,7 @@ void CGridModeEditorInjDlg::BindRPMGrid(float* pGrid)
  m_pAFRPageDlg->BindRPMGrid(pGrid);
  m_pITPageDlg->BindRPMGrid(pGrid);
  m_pOtherPageDlg->BindRPMGrid(pGrid);
+ m_pOther1PageDlg->BindRPMGrid(pGrid);
  m_pPwm1PageDlg->BindRPMGrid(pGrid);
  m_pPwm2PageDlg->BindRPMGrid(pGrid);
 }
@@ -280,6 +293,8 @@ void CGridModeEditorInjDlg::UpdateView(bool axisLabels /*= fasle*/)
    m_pEnrPageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pOtherPageDlg->m_hWnd))
    m_pOtherPageDlg->UpdateView(axisLabels); 
+  if (::IsWindow(m_pOther1PageDlg->m_hWnd))
+   m_pOther1PageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pPwm1PageDlg->m_hWnd))
    m_pPwm1PageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pPwm2PageDlg->m_hWnd))
@@ -324,6 +339,12 @@ void CGridModeEditorInjDlg::OnChangeEnr(int mapId)
 }
 
 void CGridModeEditorInjDlg::OnChangeOther(int mapId)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(mapId);
+}
+
+void CGridModeEditorInjDlg::OnChangeOther1(int mapId)
 {
  if (m_OnMapChanged)
   m_OnMapChanged(mapId);
@@ -379,6 +400,7 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos, dv.rigid_arg, dv.rigid_use, dv.air_temp);
  m_pEnrPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tpsdot, dv.rpm, dv.aftstr_enr);
  m_pOtherPageDlg->SetArguments(dv.strt_use, dv.temp, dv.voltage, dv.add_i1, dv.rpm, dv.tmp2, dv.air_temp, dv.map2, dv.rxlaf);
+ m_pOther1PageDlg->SetArguments(dv.strt_use, dv.rpm);
  m_pPwm1PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pPwm2PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
 }

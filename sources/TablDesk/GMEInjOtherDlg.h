@@ -41,7 +41,7 @@ class CGMEInjOtherDlg : public CTabDialog
  ~CGMEInjOtherDlg();
   static const UINT IDD;
 
-  void BindMaps(float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc);
+  void BindMaps(float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pAtsc, float* pGtsc, float* pGpsc);
   void BindTemperGrid(float* pGrid); //rest temperature
   void BindCLTGrid(float* pGrid); //CLT grid
   void BindDeadGrid(float* pGrid);
@@ -68,7 +68,6 @@ class CGMEInjOtherDlg : public CTabDialog
   void OnChangeDead(void);
   void OnChangeEGOCrv(void);
   void OnChangeIATCLT(void);
-  void OnChangeTpsswt(void);
   void OnChangeAtsc(void);
   void OnChangeGtsc(void);
   void OnChangeGpsc(void);
@@ -78,7 +77,6 @@ class CGMEInjOtherDlg : public CTabDialog
   void OnAbroadMoveDead1(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveEGOCrv(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveIATCLT(CMapEditorCtrl::AbroadDir direction, int column);
-  void OnAbroadMoveTpsswt(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveAtsc(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveGtsc(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveGpsc(CMapEditorCtrl::AbroadDir direction, int column);
@@ -91,17 +89,15 @@ class CGMEInjOtherDlg : public CTabDialog
   CMapEditorCtrl m_dead1_map;
   CMapEditorCtrl m_egocrv_map;
   CMapEditorCtrl m_iatclt_map;
-  CMapEditorCtrl m_tpsswt_map;
   CMapEditorCtrl m_atsc_map;
   CMapEditorCtrl m_gtsc_map;
   CMapEditorCtrl m_gpsc_map;
-  CStatic m_ctrls[8];
+  CStatic m_ctrls[7];
 
   float* mp_CrnkMap;
   float* mp_DeadMap;
   float* mp_EGOCrvMap;
   float* mp_IATCLTMap;
-  float* mp_TpsswtMap;
   float* mp_AtscMap;
   float* mp_GtscMap;
   float* mp_GpscMap;
