@@ -164,4 +164,7 @@ class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
 
   std::auto_ptr<CtrlScaler> mp_cscl;
   CStatic m_ctrls[19];
+
+  _TSTRING wrk_caption_wrk;
+  _TSTRING wrk_caption_str;
 };

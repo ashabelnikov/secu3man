@@ -827,6 +827,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
   return false;
  anglesPar.igntim_wrkmap = CHECKBIT8(ign_flags, 0);
  anglesPar.manigntim_idl = CHECKBIT8(ign_flags, 1);
+ anglesPar.zero_adv_ang_oct = CHECKBIT8(ign_flags, 2);
 
  //Ignition timing for shifting 
  int shift_igntim;
@@ -3687,6 +3688,7 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
  unsigned char flags = 0;
  WRITEBIT8(flags, 0, packet_data->igntim_wrkmap);
  WRITEBIT8(flags, 1, packet_data->manigntim_idl);
+ WRITEBIT8(flags, 2, packet_data->zero_adv_ang_oct);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
  int shift_igntim = MathHelpers::Round(packet_data->shift_igntim * m_angle_multiplier);
  mp_pdp->Bin16ToHex(shift_igntim, m_outgoing_packet);

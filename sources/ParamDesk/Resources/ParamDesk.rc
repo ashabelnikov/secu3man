@@ -131,6 +131,7 @@ BEGIN
     LTEXT           "°",IDC_PD_ANGLES_SHIFT_IGNTIM_UNIT,140,138,30,10
     CONTROL         "Всегда использовать карту УОЗ рабочего режима",IDC_PD_ANGLES_ALWAYS_WRKMAP_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,158,137,16
     CONTROL         "Применять ручную октан коррецию в режиме ХХ",IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,178,137,16
+    CONTROL         "Нулев. уг.опер. с октан коррекцией",IDC_PD_ANGLES_ZEROAAOCT_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,198,137,16
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -1896,6 +1897,7 @@ BEGIN
     IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT "0 - не применять ручную октан коррекцию на холостом ходу (коррекция будет применяться только в рабочем режиме), 1 - разрешить применение ручной октан коррекции на холостом ходу"
     IDS_PD_STARTER_STBLSTRCNT_EDIT_TT "Количество тактов от момента достижения порога оборотов блокировки стартера до момента его фактического выключения. Установите значение 0, если хотите чтобы использовалась таблица вместо этой простой константы."
     IDS_PD_STARTER_FLDCLRSTART_CHECK_TT "Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."
+    IDS_PD_ANGLES_ZEROAAOCT_CHECK_TT "Нулевой угол опережения с октан коррекцией. Игнорируются все таблицы и коррекции УОЗ кроме параметра 'Октан коррекция'. Также, в этом режиме не действуют ограничения накладываемые параметрами 'Минимальный УОЗ' и 'Максимальный УОЗ'."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2024,6 +2026,7 @@ BEGIN
     LTEXT           "°",IDC_PD_ANGLES_SHIFT_IGNTIM_UNIT,140,138,30,10
     CONTROL         "Always use working mode's ignition timing map",IDC_PD_ANGLES_ALWAYS_WRKMAP_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,158,137,16
     CONTROL         "Apply manual ignition timing correction on idling",IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,178,137,16
+    CONTROL         "Zero adv. angle with octane correction",IDC_PD_ANGLES_ZEROAAOCT_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,198,137,16
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -3539,6 +3542,7 @@ BEGIN
     IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Set this check for activation of using of immobilizer (iButton)"
     IDS_PD_IDLREG_PMODE_CHECK_TT                    "Ignition timing based idling regulator will work in the proportional mode. This option is applicable only when using it in conjunction with IAC closed-loop regulator."
     IDS_PD_IDLREG_USECLIACONGAS_CHECK_TT            "Use closed loop for IAC when GAS_V input is high."
+    IDS_PD_ANGLES_ZEROAAOCT_CHECK_TT                "Zero advance angle mode with octane correction. All ign.timing tables and corrections are ignored except for the 'Octane correction' parameter. Also, in this mode the restrictions imposed by the 'Min. advance angle' and 'Max. advance angle' parameters do not apply."
 END
 
 STRINGTABLE

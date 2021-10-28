@@ -57,6 +57,8 @@ class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
+  afx_msg void OnChangeDataZeroAA();
+  afx_msg void OnChangeDataZeroAAOct();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
@@ -79,6 +81,7 @@ class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_decrease_speed_edit;
   CEditEx m_increase_speed_edit;
   CButton m_zeroaa_check;
+  CButton m_zeroaaoct_check;
 
   CEditEx m_shift_igntim_edit;
   CSpinButtonCtrlEx m_shift_igntim_spin;

@@ -42,7 +42,8 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ANGLES_DECREASE_SPEED_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ANGLES_INCREASE_SPEED_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ANGLES_SHIFT_IGNTIM_EDIT, OnChangeData)
- ON_BN_CLICKED(IDC_PD_ANGLES_ZEROAA_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_ANGLES_ZEROAA_CHECK, OnChangeDataZeroAA)
+ ON_BN_CLICKED(IDC_PD_ANGLES_ZEROAAOCT_CHECK, OnChangeDataZeroAAOct)
  ON_BN_CLICKED(IDC_PD_ANGLES_ALWAYS_WRKMAP_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK, OnChangeData)
 
@@ -72,6 +73,7 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEED_UNIT, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_ZEROAA_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_ZEROAAOCT_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_ANGLE_SPEED_GROUP, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_SHIFT_IGNTIM_EDIT, OnUpdateControls)
@@ -100,6 +102,7 @@ CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
  m_params.dec_speed = 3.0f;
  m_params.inc_speed = 3.0f;
  m_params.zero_adv_ang = 0;
+ m_params.zero_adv_ang_oct = false;
  m_params.shift_igntim = 0.0f;
  m_params.igntim_wrkmap = false;
  m_params.manigntim_idl = true;
@@ -128,6 +131,7 @@ void CAnglesPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_ANGLES_SHIFT_IGNTIM_SPIN, m_shift_igntim_spin);
  DDX_Control(pDX, IDC_PD_ANGLES_ALWAYS_WRKMAP_CHECK, m_always_wrkmap_check);
  DDX_Control(pDX, IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK, m_manigntim_idl_check);
+ DDX_Control(pDX, IDC_PD_ANGLES_ZEROAAOCT_CHECK, m_zeroaaoct_check);
 
  m_max_angle_edit.DDX_Value(pDX, IDC_PD_ANGLES_MAX_ANGLE_EDIT, m_params.max_angle);
  m_min_angle_edit.DDX_Value(pDX, IDC_PD_ANGLES_MIN_ANGLE_EDIT, m_params.min_angle);
@@ -138,6 +142,7 @@ void CAnglesPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_UCHAR(pDX, IDC_PD_ANGLES_ZEROAA_CHECK, m_params.zero_adv_ang);
  DDX_Check_bool(pDX, IDC_PD_ANGLES_ALWAYS_WRKMAP_CHECK, m_params.igntim_wrkmap);
  DDX_Check_bool(pDX, IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK, m_params.manigntim_idl);
+ DDX_Check_bool(pDX, IDC_PD_ANGLES_ZEROAAOCT_CHECK, m_params.zero_adv_ang_oct);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -221,6 +226,8 @@ BOOL CAnglesPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_always_wrkmap_check,MLL::GetString(IDS_PD_ANGLES_ALWAYS_WRKMAP_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_manigntim_idl_check,MLL::GetString(IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_zeroaaoct_check,MLL::GetString(IDS_PD_ANGLES_ZEROAAOCT_CHECK_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
  mp_ttc->ActivateToolTips(true);
 
@@ -236,6 +243,24 @@ void CAnglesPageDlg::OnDestroy()
 
 void CAnglesPageDlg::OnChangeData()
 {
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CAnglesPageDlg::OnChangeDataZeroAA()
+{
+ if (m_zeroaa_check.GetCheck()==BST_CHECKED)
+  m_zeroaaoct_check.SetCheck(BST_UNCHECKED);
+
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CAnglesPageDlg::OnChangeDataZeroAAOct()
+{
+ if (m_zeroaaoct_check.GetCheck()==BST_CHECKED)
+  m_zeroaa_check.SetCheck(BST_UNCHECKED);
+
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
@@ -278,5 +303,5 @@ void CAnglesPageDlg::OnSize(UINT nType, int cx, int cy)
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(345));
+  mp_scr->SetViewSize(cx, da.ScaleY(360));
 }

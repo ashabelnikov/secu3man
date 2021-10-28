@@ -586,3 +586,5 @@
 #define IDC_GME_INJ_TPSSWT              5642
 #define IDC_GME_INJ_TPSZON              5943
 #define IDS_GME_INJ_OTHER1_TAB          5944
+#define IDS_GME_WM_CAPTION_WRKTEXT      5945
+#define IDS_GME_WM_CAPTION_STRTEXT      5946

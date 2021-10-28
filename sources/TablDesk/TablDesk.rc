@@ -833,6 +833,8 @@ BEGIN
     IDS_TD_MAF_CURVE_TT "Зависимость расхода воздуха (г/сек) от напряжения на выходе ДМРВ (В). Используется для вычисления значения массового расхода воздуха."
     IDS_MAF_CURVE_MAP "Кривая расхода ДМРВ"
     IDS_TD_VIEW_TPSZON_MAP_TT "Данная кривая указывает как разделить ось нагрузки между ДАД и ДПДЗ в зависимости от оборотов двигателя. В зоне ниже кривой будет использоваться нагрузки по ДАД. В зоне выше кривой будет использоваться нагрузка по ДПДЗ."
+    IDS_GME_WM_CAPTION_WRKTEXT "Рабочая"
+    IDS_GME_WM_CAPTION_STRTEXT "Пуск"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1664,6 +1666,8 @@ BEGIN
     IDS_TD_MAF_CURVE_TT "Dependence of the air flow rate (g/sec) on the voltage at the output of the mass air flow sensor (V). Used to calculate the mass air flow value."
     IDS_MAF_CURVE_MAP "MAF flow curve"
     IDS_TD_VIEW_TPSZON_MAP_TT "This curve indicates how to allocate the load axis between MAP and TPS depending on the engine speed. In the area below the curve, MAP-based load will be used. In the area above the curve, the TPS-based load will be used."
+    IDS_GME_WM_CAPTION_WRKTEXT "Work"
+    IDS_GME_WM_CAPTION_STRTEXT "Start"
 END
 
 /////////////////////////////////////////////////////////////////////////////

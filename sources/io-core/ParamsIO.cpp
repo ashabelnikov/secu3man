@@ -135,6 +135,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->zero_adv_ang = p_in->zero_adv_ang;
     WRITEBIT8(p_params->igntim_flags, 0, p_in->igntim_wrkmap);
     WRITEBIT8(p_params->igntim_flags, 1, p_in->manigntim_idl);
+    WRITEBIT8(p_params->igntim_flags, 2, p_in->zero_adv_ang_oct);
     p_params->shift_igntim  = MathHelpers::Round(p_in->shift_igntim * ANGLE_MULTIPLIER);
    }
    break;
@@ -559,6 +560,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->zero_adv_ang = p_params->zero_adv_ang;
      p_out->igntim_wrkmap = CHECKBIT8(p_params->igntim_flags, 0);
      p_out->manigntim_idl = CHECKBIT8(p_params->igntim_flags, 1);
+     p_out->zero_adv_ang_oct = CHECKBIT8(p_params->igntim_flags, 2);
      p_out->shift_igntim  = ((float)p_params->shift_igntim)  / ANGLE_MULTIPLIER;
     }
     break;

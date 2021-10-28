@@ -167,6 +167,7 @@ namespace SECU3IO
   bool igntim_wrkmap;
   bool manigntim_idl;
   float shift_igntim;
+  bool  zero_adv_ang_oct;
  };
 
 

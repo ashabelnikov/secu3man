@@ -108,6 +108,9 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
  m_work_map_load_slots.reserve(32);
  m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16, true);  //<--reverse order
  m_curDV.baro_press = 101.3f; //sea level atmospheric pressure by default
+
+ wrk_caption_wrk = MLL::GetString(IDS_GME_WM_CAPTION_WRKTEXT);
+ wrk_caption_str = MLL::GetString(IDS_GME_WM_CAPTION_STRTEXT);
 }
 
 CGridModeEditorIgnDlg::~CGridModeEditorIgnDlg()
@@ -293,7 +296,16 @@ void CGridModeEditorIgnDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
  bool flag = true;
 
- if (pCmdUI->m_nID == IDC_GME_WM_VALUE) flag = m_curDV.work_use;
+ if (pCmdUI->m_nID == IDC_GME_WM_VALUE) 
+ {
+  flag = m_curDV.strt_use ? true : m_curDV.work_use;
+ }
+
+ if (pCmdUI->m_nID == IDC_GME_WM_CAPTION) 
+ {
+  pCmdUI->SetText(m_curDV.strt_use ? wrk_caption_str.c_str() : wrk_caption_wrk.c_str());
+ }
+
  else if (pCmdUI->m_nID == IDC_GME_OC_VALUE) flag = m_curDV.octan_use;
  else if (pCmdUI->m_nID == IDC_GME_TC_VALUE) flag = m_curDV.temp_use;
  else if (pCmdUI->m_nID == IDC_GME_KC_VALUE) flag = m_curDV.knkret_use;
@@ -386,7 +398,7 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_aa_value.SetValue(dv.adv_ang);
  m_kc_value.SetValue(dv.knock_retard);
  m_im_value.SetValue(dv.idle_aalt);
- m_wm_value.SetValue(dv.work_aalt);
+ m_wm_value.SetValue(dv.strt_use ? dv.strt_aalt : dv.work_aalt);
  m_tc_value.SetValue(dv.temp_aalt);
  m_ac_value.SetValue(dv.airt_aalt);
  m_ic_value.SetValue(dv.idlreg_aac);
