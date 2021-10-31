@@ -79,6 +79,9 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   void OnMIDeskSettingsChanged(void);
 
  private:
+  void OnStopOnMarksCheck();
+  void OnStopOnErrorsCheck();
+
   //вспомогательные функции
   void _OpenFile(const _TSTRING& fileName);
   void _GoNext(void);
@@ -156,4 +159,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   size_t m_current_time_factor;
 
   CObjectTimer<CLogPlayerTabController> m_one_shot_timer;
+
+  bool stop_on_marks;
+  bool stop_on_errors;
 };

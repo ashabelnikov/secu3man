@@ -140,6 +140,14 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
  long int fsize = ftell(f_handle);
  fseek(f_handle, 0L, SEEK_SET);
 
+ if (0 == fsize)
+ { //file is empty
+  o_error = FE_FORMAT;
+  fclose(f_handle);
+  m_file_handle = NULL;
+  return false;
+ }
+
  //save record count
  if (i_check)
  {

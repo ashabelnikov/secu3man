@@ -66,6 +66,7 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_SLIDER, m_slider);
  DDX_Control(pDX, IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, m_stoponmarks_check);
  DDX_Control(pDX, IDC_LOG_PLAYER_MAPSET_CAPTION, m_mapset_caption);
+ DDX_Control(pDX, IDC_LOG_PLAYER_STOPONERRORS_CHECKBOX, m_stoponerrors_check);
 }
 
 BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
@@ -76,6 +77,7 @@ BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_TIME_FACTOR_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_TIME_FACTOR_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_STOPONERRORS_CHECKBOX, OnUpdateControls)
  ON_BN_CLICKED(IDC_LOG_PLAYER_OPEN_FILE_BUTTON, OnOpenFileButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_PLAY_BUTTON, OnPlayButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_NEXT_BUTTON, OnNextButton)
@@ -85,6 +87,8 @@ BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_CBN_SELCHANGE(IDC_LOG_PLAYER_MAPSET_COMBO, OnSelchangeMapSetCombo)
  ON_BN_CLICKED(IDC_LOG_PLAYER_GME_INJ_CHECK, OnGmeInjButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_GME_IGN_CHECK, OnGmeIgnButton)
+ ON_BN_CLICKED(IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, OnStopOnMarksCheck)
+ ON_BN_CLICKED(IDC_LOG_PLAYER_STOPONERRORS_CHECKBOX, OnStopOnErrorsCheck)
 END_MESSAGE_MAP()
 
 BOOL CLPControlPanelDlg::OnInitDialog()
@@ -106,7 +110,7 @@ BOOL CLPControlPanelDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_mapset_combo, MLL::GetString(IDS_LOG_PLAYER_MAPSET_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gmeinj_button, MLL::GetString(IDS_LOG_PLAYER_GME_INJ_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gmeign_button, MLL::GetString(IDS_LOG_PLAYER_GME_IGN_CHECK_TT)));
-
+ VERIFY(mp_ttc->AddWindow(&m_stoponerrors_check, MLL::GetString(IDS_LOG_PLAYER_STOPONERRORS_CHECKBOX_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -286,6 +290,18 @@ void CLPControlPanelDlg::OnGmeInjButton()
   m_on_gmeinj_button();
 }
 
+void CLPControlPanelDlg::OnStopOnMarksCheck()
+{
+ if (m_on_stoponmarks_check)
+  m_on_stoponmarks_check();
+}
+
+void CLPControlPanelDlg::OnStopOnErrorsCheck()
+{
+ if (m_on_stoponerrors_check)
+  m_on_stoponerrors_check();
+}
+
 void CLPControlPanelDlg::setOnPlayButton(EventHandler i_callback)
 {
  m_on_play_button = i_callback;
@@ -378,6 +394,11 @@ bool CLPControlPanelDlg::GetStopOnMarksCheck(void)
  return m_stoponmarks_check.GetCheck() == BST_CHECKED;
 }
 
+bool CLPControlPanelDlg::GetStopOnErrorsCheck(void)
+{
+ return m_stoponerrors_check.GetCheck() == BST_CHECKED;
+}
+
 void CLPControlPanelDlg::FillMapSetCombo(std::vector<_TSTRING>& mapsets)
 {
  for(size_t i = 0; i < mapsets.size(); ++i)
@@ -442,4 +463,14 @@ void CLPControlPanelDlg::SetMapSetSelection(int sel)
  if (sel == -1)
   return;
  m_mapset_combo.SetCurSel(sel);
+}
+
+void CLPControlPanelDlg::setOnStopOnMarksCheck(EventHandler i_callback)
+{
+ m_on_stoponmarks_check = i_callback;
+}
+
+void CLPControlPanelDlg::setOnStopOnErrorsCheck(EventHandler i_callback)
+{
+ m_on_stoponerrors_check = i_callback;
 }

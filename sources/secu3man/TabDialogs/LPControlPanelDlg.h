@@ -72,6 +72,7 @@ class CLPControlPanelDlg : public CModelessDialog
   unsigned long GetSliderPageSize(void) const;
   void SetSliderPageSize(unsigned long i_page_size);
   bool GetStopOnMarksCheck(void);
+  bool GetStopOnErrorsCheck(void);
 
   //indicators
   void SetFileIndicator(const _TSTRING& i_string);
@@ -85,6 +86,8 @@ class CLPControlPanelDlg : public CModelessDialog
   void setOnOpenFileButton(EventHandler i_callback);
   void setOnTimeFactorCombo(EventWithCode i_callback);
   void setOnSliderMoved(EventHScroll i_callback);
+  void setOnStopOnMarksCheck(EventHandler i_callback);
+  void setOnStopOnErrorsCheck(EventHandler i_callback);
 
   //related to maps
   void FillMapSetCombo(std::vector<_TSTRING>& mapsets);
@@ -117,6 +120,8 @@ class CLPControlPanelDlg : public CModelessDialog
   afx_msg void OnSelchangeMapSetCombo();
   afx_msg void OnGmeIgnButton();
   afx_msg void OnGmeInjButton();
+  afx_msg void OnStopOnMarksCheck();
+  afx_msg void OnStopOnErrorsCheck();
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -126,6 +131,7 @@ private:
   CButton m_prev_button;
   CButton m_open_file_button;
   CButton m_stoponmarks_check;
+  CButton m_stoponerrors_check;
   CSliderCtrl m_slider;
   CStatic m_file_indicator;
   CStatic m_position_indicator;
@@ -149,6 +155,8 @@ private:
   EventHandler m_on_selmapset_combo;
   EventHandler m_on_gmeign_button;
   EventHandler m_on_gmeinj_button;
+  EventHandler m_on_stoponmarks_check;
+  EventHandler m_on_stoponerrors_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

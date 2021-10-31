@@ -89,6 +89,8 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
 , m_period_before_tracking(0)
 , m_playing(false)
 , m_current_time_factor(5) //1:1
+, stop_on_marks(false)
+, stop_on_errors(false)
 {  
 #define _IV(id, name, value) (std::make_pair((id), std::make_pair(_TSTRING(name), (value))))
  m_time_factors.insert(_IV(0, _T("16 : 1"),0.0625f));
@@ -111,6 +113,8 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
  mp_view->mp_LPPanelDlg->setOnTimeFactorCombo(MakeDelegate(this,&CLogPlayerTabController::OnTimeFactorCombo));
  mp_view->mp_LPPanelDlg->setOnSliderMoved(MakeDelegate(this,&CLogPlayerTabController::OnSliderMoved));
  mp_view->setOnDropFile(MakeDelegate(this,&CLogPlayerTabController::OnDropFile));
+ mp_view->mp_LPPanelDlg->setOnStopOnMarksCheck(MakeDelegate(this, &CLogPlayerTabController::OnStopOnMarksCheck));
+ mp_view->mp_LPPanelDlg->setOnStopOnErrorsCheck(MakeDelegate(this, &CLogPlayerTabController::OnStopOnErrorsCheck));
 
  m_timer.SetMsgHandler(this, &CLogPlayerTabController::OnTimer);
 
@@ -648,7 +652,7 @@ void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_d
   mp_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos());
 
  //Stop playing if mark appears and it is enabled by a check box
- if (m_curr_marks && mp_view->mp_LPPanelDlg->GetStopOnMarksCheck())
+ if ((m_curr_marks && stop_on_marks) || (m_curr_record.second.ce_state && stop_on_errors))
  {
   if (mp_view->mp_LPPanelDlg->GetPlayButtonState()) //start
   {
@@ -843,4 +847,14 @@ void CLogPlayerTabController::_OnOneShotTimer(void)
  m_one_shot_timer.KillTimer();
  if (mp_settings->GetLogPlayerVert() != std::numeric_limits<int>::max())
   mp_view->SetSplitterPos(mp_settings->GetLogPlayerVert());
+}
+
+void CLogPlayerTabController::OnStopOnMarksCheck()
+{
+ stop_on_marks = mp_view->mp_LPPanelDlg->GetStopOnMarksCheck();
+}
+
+void CLogPlayerTabController::OnStopOnErrorsCheck()
+{
+ stop_on_errors = mp_view->mp_LPPanelDlg->GetStopOnErrorsCheck();
 }
