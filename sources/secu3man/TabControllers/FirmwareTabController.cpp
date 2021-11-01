@@ -2039,12 +2039,12 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.heating_t_off, _T("Intake manifold heating will be turned off after the temperature of engine reaches the specified value. The heating control is carried out by means of the output reassigned as INTK_HEAT."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Макс. время работы подогрева коллектора"), _T("мин"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time, _T("Подгрев впускного коллектора будет выключен по истечении этого времени даже если температурный порог еще не достигнут. Это должно предотвратить чрезмерный разряд аккумулятора."));
+  dfd.AppendItem(_T("Макс. время работы подогрева коллектора"), _T("мин"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time, _T("Подогрев впускного коллектора будет выключен по истечении этого времени даже если температурный порог еще не достигнут. Это должно предотвратить чрезмерный разряд аккумулятора."));
  else
   dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("min"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time, _T("Intake manifold heating will be turned off after this time, even if the temperature threshold has not yet been reached. This should prevent over-discharge of the battery."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Макс. время работы подогрева газового редуктора"), _T("мин"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("Подгрев впускного коллектора будет выключен по истечении этого времени когда двигатель остановлен. Это должно предотвратить чрезмерный разряд аккумулятора."));
+  dfd.AppendItem(_T("Макс. время работы подогрева газового редуктора"), _T("мин"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("Подогрев газового редуктора будет выключен по истечении этого времени когда двигатель остановлен. Это должно предотвратить чрезмерный разряд аккумулятора."));
  else
   dfd.AppendItem(_T("Timeout threshold of gas reducer's heater"), _T("min"), 0.01f, 10.0f, 0.01f, 2, &d.grheat_time, _T("Gas reducer's heating will be turned off after this time when engine is stopped. This should prevent over-discharge of the battery."));
 
