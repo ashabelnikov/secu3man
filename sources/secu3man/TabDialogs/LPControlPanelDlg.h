@@ -31,6 +31,7 @@
 #include "ui-core/DialogWithAccelerators.h"
 
 class CToolTipCtrlEx;
+class CHatchDispCtrl;
 
 class CLPControlPanelDlg : public CModelessDialog
 {
@@ -79,6 +80,10 @@ class CLPControlPanelDlg : public CModelessDialog
   void SetPositionIndicator(const _TSTRING& i_string);
 
   void EnableAll(bool i_enable);
+
+  void ResetHatch(void);
+  void DrawHatch(unsigned long pos, COLORREF color);
+  void InvalidateHatch(void);
 
   void setOnPlayButton(EventHandler i_callback);
   void setOnNextButton(EventHandler i_callback);
@@ -159,4 +164,5 @@ private:
   EventHandler m_on_stoponerrors_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CHatchDispCtrl> m_marksFrame;
 };

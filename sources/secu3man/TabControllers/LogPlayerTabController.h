@@ -121,6 +121,8 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   void _OnOneShotTimer(void);
 
+  void _BuildMarksBitmap(void);
+
  private:
   CLogPlayerTabDlg*  mp_view;
   CCommunicationManager* mp_comm;

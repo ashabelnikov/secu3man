@@ -37,6 +37,7 @@ set(HEADERS
   DialogWithAccelerators.h
   DynFieldsDialog.h
   EditEx.h
+  HatchDispCtrl.h
   HeaderCtrlEx.h
   HotKeysManager.h
   HotKeysToCmdRouter.h
@@ -77,6 +78,7 @@ set(SOURCES
   DialogWithAccelerators.cpp
   DynFieldsDialog.cpp
   EditEx.cpp
+  HatchDispCtrl.cpp
   HeaderCtrlEx.cpp
   HotKeysManager.cpp
   HotKeysToCmdRouter.cpp

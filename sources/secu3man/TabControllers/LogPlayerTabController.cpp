@@ -515,11 +515,11 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
  mp_view->mp_LPPanelDlg->EnableAll(true);
  mp_view->EnableAll(true);
 
-
  //инициализируем логику плеера и начинаем сразу проигрывать
  if (mp_log_reader->GetCount() > 0)
  {
   _InitPlayer();
+  _BuildMarksBitmap();
   _Play(true);
  }
  ////////////////////////////////////////////////////////////////
@@ -857,4 +857,33 @@ void CLogPlayerTabController::OnStopOnMarksCheck()
 void CLogPlayerTabController::OnStopOnErrorsCheck()
 {
  stop_on_errors = mp_view->mp_LPPanelDlg->GetStopOnErrorsCheck();
+}
+
+void CLogPlayerTabController::_BuildMarksBitmap(void)
+{
+ if (!mp_log_reader->IsOpened())
+  return;
+
+ unsigned long prev_pos = mp_log_reader->GetCurPos();
+ mp_log_reader->SetCurPos(0); //set position and file pointer
+
+ mp_view->mp_LPPanelDlg->ResetHatch();
+
+ int marks; bool errors;
+ unsigned long pos = 0;
+ while(mp_log_reader->GetMRecord(marks, errors))
+ {
+  if (errors)
+   mp_view->mp_LPPanelDlg->DrawHatch(pos, RGB(250,250,0));
+  else if (marks & 0x1)
+   mp_view->mp_LPPanelDlg->DrawHatch(pos, RGB(255,0,0));
+  else if (marks & 0x2)
+   mp_view->mp_LPPanelDlg->DrawHatch(pos, RGB(0,255,0));
+  else if (marks & 0x4)
+   mp_view->mp_LPPanelDlg->DrawHatch(pos, RGB(0,0,255));
+  pos++;
+ }
+
+ mp_view->mp_LPPanelDlg->InvalidateHatch();
+ mp_log_reader->SetCurPos(prev_pos); //restore previous position
 }

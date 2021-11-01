@@ -46,6 +46,12 @@ using namespace SECU3IO;
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
 
+//offset of the marks value in record
+#define CSV_MARKS_OFFSET 404
+
+//offset of the CE flag's value in record
+#define CSV_CE_OFFSET 97
+
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
@@ -442,6 +448,14 @@ unsigned long LogReader::GetCurPos(void) const
  return m_current_record;
 }
 
+void LogReader::SetCurPos(unsigned long pos)
+{
+ if (0==m_record_count || pos >= (m_record_count-1))
+  return;
+ m_current_record = pos;
+ VERIFY(!fseek(m_file_handle, m_fileOffset + (m_record_size*m_current_record), SEEK_SET));
+}
+
 int LogReader::_CompareFileHandles(FILE* f1, FILE* f2)
 {
  HANDLE hand1 = ((HANDLE)_get_osfhandle(fileno(f1)));
@@ -463,4 +477,15 @@ int LogReader::_CompareFileHandles(FILE* f1, FILE* f2)
 void LogReader::SetFFFConst(int fffConst)
 {
  m_fffConst = fffConst;
+}
+
+bool LogReader::GetMRecord(int &o_marks, bool &o_errors)
+{
+ size_t real_count = fread(mp_recBuff, sizeof(char), m_record_size, m_file_handle);
+ if (real_count != m_record_size)
+  return false;
+
+ o_marks = mp_recBuff[CSV_MARKS_OFFSET] - 0x30;
+ o_errors = mp_recBuff[CSV_CE_OFFSET] - 0x30;
+ return true;
 }

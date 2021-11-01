@@ -56,6 +56,10 @@ class IOCORE_API LogReader
   //получает данные из текущей записи
   bool GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o_marks);
 
+  //Gets marks and errors record.
+  //this function automatically sets file pointer to next position
+  bool GetMRecord(int &o_marks, bool &o_errors);
+
   //Move num records next
   //returns false if end is reached
   bool Next(unsigned long num = 1);
@@ -76,6 +80,9 @@ class IOCORE_API LogReader
 
   //Returns current position
   unsigned long GetCurPos(void) const;
+
+  //Sets current position, this function also sets file pointer to specified position
+  void SetCurPos(unsigned long pos);
 
   void SetFFFConst(int fffConst);
 

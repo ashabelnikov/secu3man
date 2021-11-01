@@ -29,7 +29,9 @@
 
 #include <limits>
 #include "common/FastDelegate.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/HatchDispCtrl.h"
 
 using namespace std;
 
@@ -46,6 +48,7 @@ CLPControlPanelDlg::CLPControlPanelDlg(CWnd* pParent /*=NULL*/)
 , m_play_button_state(false)
 , m_slider_state(false)
 , m_all_enabled(false)
+, m_marksFrame(new CHatchDispCtrl())
 {
  //empty
 }
@@ -67,6 +70,7 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, m_stoponmarks_check);
  DDX_Control(pDX, IDC_LOG_PLAYER_MAPSET_CAPTION, m_mapset_caption);
  DDX_Control(pDX, IDC_LOG_PLAYER_STOPONERRORS_CHECKBOX, m_stoponerrors_check);
+ DDX_Control(pDX, IDC_LP_LOGCONTROL_MARKS_FRAME, *m_marksFrame.get());
 }
 
 BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
@@ -78,6 +82,7 @@ BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_TIME_FACTOR_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_STOPONERRORS_CHECKBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_LP_LOGCONTROL_MARKS_FRAME, OnUpdateControls)
  ON_BN_CLICKED(IDC_LOG_PLAYER_OPEN_FILE_BUTTON, OnOpenFileButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_PLAY_BUTTON, OnPlayButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_NEXT_BUTTON, OnNextButton)
@@ -113,6 +118,14 @@ BOOL CLPControlPanelDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_stoponerrors_check, MLL::GetString(IDS_LOG_PLAYER_STOPONERRORS_CHECKBOX_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //allign marks' frame to slider's channel, so their grids will match
+ CRect chrc;
+ m_slider.GetChannelRect(&chrc);
+ CRect thrc;
+ m_slider.GetThumbRect(&thrc);
+ CRect mrrc = GDIHelpers::GetChildWndRect(m_marksFrame.get());
+ m_marksFrame->MoveWindow(mrrc.left + chrc.left + thrc.Width()/2, mrrc.top, chrc.Width() - thrc.Width(), mrrc.Height());
 
  UpdateDialogControls(this,TRUE);
  return TRUE;
@@ -185,6 +198,7 @@ void CLPControlPanelDlg::SetSliderRange(unsigned long i_begin, unsigned long i_e
 {
  m_slider.SetRangeMin(i_begin);
  m_slider.SetRangeMax(i_end);
+ m_marksFrame->SetRange(i_end - i_begin);
 }
 
 void CLPControlPanelDlg::SetFileIndicator(const _TSTRING& i_string)
@@ -473,4 +487,19 @@ void CLPControlPanelDlg::setOnStopOnMarksCheck(EventHandler i_callback)
 void CLPControlPanelDlg::setOnStopOnErrorsCheck(EventHandler i_callback)
 {
  m_on_stoponerrors_check = i_callback;
+}
+
+void CLPControlPanelDlg::ResetHatch(void)
+{
+ m_marksFrame->Init();
+}
+
+void CLPControlPanelDlg::DrawHatch(unsigned long pos, COLORREF color)
+{
+ m_marksFrame->DrawHatch(pos, color);
+}
+
+void CLPControlPanelDlg::InvalidateHatch(void)
+{
+ m_marksFrame->DrawBitmap();
 }

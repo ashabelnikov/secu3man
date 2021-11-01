@@ -21,7 +21,7 @@ SOURCES = StdAfx.cpp AnalogMeter.cpp AnalogMeterCtrl.cpp ddx_helpers.cpp fnt_hel
   ProgressCtrlEx.cpp SpinButtonctrlEx.cpp TabController.cpp TabDialog.cpp ToolTipCtrlEx.cpp \
   UpdatableDialog.cpp WindowSubClasser.cpp XBrowseForFolder.cpp uicore.cpp WndScroller.cpp \
   Chart2D.cpp MapEditorCtrl.cpp MultiLEDCtrl.cpp ScrlMessageBox.cpp ListCtrlEx.cpp ClickableBmp.cpp \
-  DynFieldsDialog.cpp FileDialogEx.cpp MsgBox.cpp ColorDialogEx.cpp CtrlScaler.cpp
+  DynFieldsDialog.cpp FileDialogEx.cpp MsgBox.cpp ColorDialogEx.cpp CtrlScaler.cpp HatchDispCtrl.cpp
 
 # DLL building
 all: uicore
