@@ -46,6 +46,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optUseAppFolder(_T("UseAppFolder"))
 , m_optAlwaysWriteLog(_T("AlwaysWriteLog"))
 , m_optCSVSepSymbol(_T("CSVSeparatingSymbol"))
+, m_optMapCSVSepSymbol(_T("MapCSVSeparatingSymbol"))
 , m_optMIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
 , m_optInterfaceLang(_T("InterfaceLanguage"))
 , m_optECUPlatformType(_T("ECUPlatformType"))
@@ -662,6 +663,8 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\":\"  colon")),     ':'));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"+\"  plus")),      '+'));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"-\"  minus")),     '-'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"*\"  star")),      '*'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"|\"  stick")),     '|'));
 
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("English")), _TSTRING(_T("english"))), IL_ENGLISH) );
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Russian")), _TSTRING(_T("russian"))), IL_RUSSIAN) );
@@ -718,6 +721,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadDword(m_optBaudRateBootloader, _T("115200"), m_AllowableBaudRates);
  os.ReadString(m_optLogFilesFolder, m_current_directory);
  os.ReadInt(m_optCSVSepSymbol, _T("44"), m_AllowaleCSVSepSymbols);
+ os.ReadInt(m_optMapCSVSepSymbol, _T("44"), m_AllowaleCSVSepSymbols);
  os.ReadInt(m_optUseAppFolder, _T("1"), 0, 1);
  os.ReadInt(m_optAlwaysWriteLog, _T("1"), 0, 1);
  os.ReadInt(m_optMIDeskUpdatePeriod, _T("40"), 0, 1000); 
@@ -1351,6 +1355,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Символ, используемый для разделения полей в CSV файле."));
  os.WriteInt(m_optCSVSepSymbol);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Symbol used to separate fields in the Map CSV file."));
+ else
+  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файлах таблиц."));
+ os.WriteInt(m_optMapCSVSepSymbol);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Specifies how frequently virtual gauges and indicators will be updated (redraw). Value in the milliseconds"));
@@ -3922,7 +3932,12 @@ char CAppSettingsModel::GetCSVSepSymbol(void) const
  return m_optCSVSepSymbol.value;
 }
 
-int  CAppSettingsModel::GetMIDeskUpdatePeriod(void) const
+char CAppSettingsModel::GetMapCSVSepSymbol(void) const
+{
+ return m_optMapCSVSepSymbol.value;
+}
+
+int CAppSettingsModel::GetMIDeskUpdatePeriod(void) const
 {
  return m_optMIDeskUpdatePeriod.value;
 }

@@ -79,6 +79,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool  GetUseAppFolder(void) const;
   virtual bool  GetAlwaysWriteLog(void) const;
   virtual char  GetCSVSepSymbol(void) const;
+  virtual char  GetMapCSVSepSymbol(void) const;
   virtual int   GetMIDeskUpdatePeriod(void) const;
   //Возвращает полный путь к каталогу из которого было запущено приложение
   //(каталог который был текущим на момент вызва конструктора этого класса)
@@ -282,6 +283,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optInterfaceLang;
   OptField_t<int> m_optECUPlatformType;
   OptField_t<char> m_optCSVSepSymbol;
+  OptField_t<char> m_optMapCSVSepSymbol;
   OptField_t<_TSTRING> m_optLogFilesFolder;
   OptField_t<bool> m_optUseAppFolder;
   OptField_t<bool>  m_optAlwaysWriteLog;

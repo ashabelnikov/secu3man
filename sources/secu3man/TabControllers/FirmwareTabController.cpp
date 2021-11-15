@@ -188,7 +188,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 
  //Set parameters for speed sensor calculations
  mp_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
- //Set clock frequency (16 or 20 mHz)
+ //Set clock frequency (16 or 20 MHz)
  mp_fwdm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  mp_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
@@ -197,7 +197,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
- mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetCSVSepSymbol());
+ mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
 }
 
 void CFirmwareTabController::OnActivate(void)

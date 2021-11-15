@@ -521,6 +521,7 @@ class ISettingsData
   virtual bool  GetUseAppFolder(void) const = 0;
   virtual bool  GetAlwaysWriteLog(void) const = 0;
   virtual char  GetCSVSepSymbol(void) const = 0;
+  virtual char  GetMapCSVSepSymbol(void) const = 0;
   virtual int   GetMIDeskUpdatePeriod(void) const = 0;
   virtual CString GetAppDirectory(void) const = 0;
   virtual bool GetCOMPortBother(void) const = 0;

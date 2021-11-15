@@ -135,7 +135,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
- mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetCSVSepSymbol());
+ mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
