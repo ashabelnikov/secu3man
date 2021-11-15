@@ -39,6 +39,12 @@
 #include "Settings/ISettingsData.h"
 #include "CEErrorIdStr.h"
 #include "io-core/FirmwareMapsDataHolder.h"
+#include "TabControllersCommunicator.h"
+#include "FirmwareTabController.h"
+#include "EEPROMTabController.h"
+#include "io-core/EEPROMDataMediator.h"
+#include "io-core/FirmwareDataMediator.h"
+#include "io-core/FirmwareMapsDataHolder.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -88,6 +94,8 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
 , m_ldaxMinVal(0)
 , m_ldaxBaro(false)
 , m_baroPrev(std::numeric_limits<float>::max())
+, mp_fwdcntr(NULL)
+, mp_eedcntr(NULL)
 {
  //инициализируем указатели на вспомогательные объекты
  m_view = i_view;
@@ -103,6 +111,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
  m_view->setOnTrimtabReadButton(MakeDelegate(this, &CCheckEngineTabController::OnTrimtabReadButton));
  m_view->setOnTrimtabResetButton(MakeDelegate(this, &CCheckEngineTabController::OnTrimtabResetButton));
  m_view->setOnTrimtabSaveButton(MakeDelegate(this, &CCheckEngineTabController::OnTrimtabSaveButton));
+ m_view->setOnTrimtabExportMenu(MakeDelegate(this, &CCheckEngineTabController::OnTrimtabExport));
 
  m_view->SetLocale(mp_settings->GetInterfaceLanguage());
 
@@ -174,6 +183,32 @@ void CCheckEngineTabController::OnActivate(void)
  //read CE error from SECU-3 after opening of tab if allowed
  if (mp_settings->GetAutoCERead())
   m_pending_ce_autoreading = true;
+
+ //////////////////////////////////////////////////////////////////////////////
+ //Fill LTFT export menu with names of sets
+ //load list of names from firmware
+ mp_fwdcntr = static_cast<CFirmwareTabController*>
+ (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
+ if (mp_fwdcntr->IsFirmwareOpened())
+ {
+  m_view->EnableTrimtabFWExport(true);  
+  std::vector<_TSTRING> mapsets;
+  CFirmwareDataMediator *p_fwdm = mp_fwdcntr->GetFWDM();
+  mapsets = p_fwdm->GetFunctionsSetNames();
+  m_view->SetTrimtabExpMenuStrings(mapsets, false);
+ }
+
+ //load list of names from EEPROM
+ mp_eedcntr = static_cast<CEEPROMTabController*>
+ (TabControllersCommunicator::GetInstance()->GetReference(TCC_EEPROM_TAB_CONTROLLER));
+ if (mp_eedcntr->IsEEPROMOpened())
+ {
+  m_view->EnableTrimtabEEExport(true);  
+  EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
+  std::vector<_TSTRING> eesets = p_eedm->GetFunctionsSetNames();
+  m_view->SetTrimtabExpMenuStrings(eesets, true);
+ }
+ //////////////////////////////////////////////////////////////////////////////
 }
 
 //from MainTabController
@@ -618,4 +653,32 @@ void CCheckEngineTabController::OnTrimtabSaveButton(void)
  packet_data.opcode = OPCODE_SAVE_LTFT;
  packet_data.opdata = 0;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+}
+
+void CCheckEngineTabController::OnTrimtabExport(int setIdx)
+{
+ float ve[INJ_VE_POINTS_L*INJ_VE_POINTS_F];
+ if (setIdx < TABLES_NUMBER)
+ {
+  CFirmwareDataMediator *p_fwdm = mp_fwdcntr->GetFWDM();
+  p_fwdm->GetVEMap(setIdx, ve, false);
+  ApplyTrimtabToVE(ve);
+  p_fwdm->SetVEMap(setIdx, ve); //save modified map
+ }
+ else
+ {
+  EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
+  p_eedm->GetVEMap(0, ve, false);
+  ApplyTrimtabToVE(ve);
+  p_eedm->SetVEMap(0, ve);
+ }
+}
+
+void CCheckEngineTabController::ApplyTrimtabToVE(float *ve)
+{
+ for(int i = 0; i < INJ_VE_POINTS_L*INJ_VE_POINTS_F; ++i)
+ {
+  ve[i]+= (ve[i] * m_trimTab[i] / 100.0f);
+  ve[i] = MathHelpers::RestrictValue(ve[i], 0.01f, 1.99f);
+ }
 }

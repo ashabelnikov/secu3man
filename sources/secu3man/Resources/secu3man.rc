@@ -81,6 +81,19 @@ BEGIN
     END
 END
 
+IDR_LTFTEXP_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "набор таблиц прошивки 1",               ID_LTFTEXP_POPUP_FIRMWARE0
+        MENUITEM "набор таблиц прошивки 2",               ID_LTFTEXP_POPUP_FIRMWARE1
+        MENUITEM "набор таблиц прошивки 3",               ID_LTFTEXP_POPUP_FIRMWARE2
+        MENUITEM "набор таблиц прошивки 4",               ID_LTFTEXP_POPUP_FIRMWARE3
+        MENUITEM SEPARATOR
+        MENUITEM "набор таблиц EEPROM",                   ID_LTFTEXP_POPUP_EEPROM
+    END
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -224,6 +237,7 @@ BEGIN
     PUSHBUTTON      "Прочитать",IDC_CE_TRIMTAB_READ,52,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Сбросить",IDC_CE_TRIMTAB_RESET,135,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Сохранить",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
+    PUSHBUTTON      "Экспорт",IDC_CE_TRIMTAB_EXPORT,301,3,65,16, NOT WS_VISIBLE
     CTEXT           "Значения\nв таблице\nуказаны\n в %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
 END
 
@@ -903,6 +917,7 @@ BEGIN
     IDS_CE_SAVING_LTFT "Сохранение таблицы обучения..."
     IDS_CE_LTFT_HAS_BEEN_SAVED "Таблица обучения была успешно сохранена."
     IDS_LOG_PLAYER_STOPONERRORS_CHECKBOX_TT "Автоматически ставить проигрывание на паузу для записей содержащих ошибки Check Engine"
+    IDS_CE_TRIMTAB_EXPORT_TT "Экспорт данных таблицы обучения в таблицу наполнения выбранного набора таблиц. Таблица наполнения (VE) будет скорректирована в соответствии со значениями из таблицы обучения. Не забудьте сбросить таблицу обучения. Первые 4 набора таблиц находятся в прошивке, последний находится в EEPROM. Откройте прошивку на вкладке 'Данные прошивки' и EEPROM на вкладке 'EEPROM'."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1021,6 +1036,19 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Reset EEPROM",                ID_INJDRV_POPUP_RESETEEPROM
         MENUITEM "Firmware master",             ID_INJDRV_POPUP_FIRMWAREMASTER
+    END
+END
+
+IDR_LTFTEXP_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "firmware set 1",               ID_LTFTEXP_POPUP_FIRMWARE0
+        MENUITEM "firmware set 2",               ID_LTFTEXP_POPUP_FIRMWARE1
+        MENUITEM "firmware set 3",               ID_LTFTEXP_POPUP_FIRMWARE2
+        MENUITEM "firmware set 4",               ID_LTFTEXP_POPUP_FIRMWARE3
+        MENUITEM SEPARATOR
+        MENUITEM "EEPROM set",                  ID_LTFTEXP_POPUP_EEPROM
     END
 END
 
@@ -1167,6 +1195,7 @@ BEGIN
     PUSHBUTTON      "Read",IDC_CE_TRIMTAB_READ,52,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Reset",IDC_CE_TRIMTAB_RESET,135,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Save",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
+    PUSHBUTTON      "Export",IDC_CE_TRIMTAB_EXPORT,301,3,65,16, NOT WS_VISIBLE
     CTEXT           "Values\nin table\nare\n in %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
 END
 
@@ -1843,6 +1872,7 @@ BEGIN
     IDS_CE_SAVING_LTFT "Saving LTFT map..."
     IDS_CE_LTFT_HAS_BEEN_SAVED "LTFT map has been saved successfully."
     IDS_LOG_PLAYER_STOPONERRORS_CHECKBOX_TT "Automatically stop on records with errors (Check Engine)"
+    IDS_CE_TRIMTAB_EXPORT_TT "Export of the LTFT table data to the VE table of the selected set of tables. The VE table will be adjusted according to the values from the LTFT table. Don't forget to reset the LTFT table. First 4 sets reside in the flash, last one reside in EEPROM. Open firmware on the 'Firmware data' tab, open EEPROM on the 'EEPROM' tab."
 END
 
 STRINGTABLE DISCARDABLE 

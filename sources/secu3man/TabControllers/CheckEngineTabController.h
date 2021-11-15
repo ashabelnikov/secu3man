@@ -39,6 +39,9 @@ class CStatusBarManager;
 class ISettingsData;
 class CEErrorIdStr;
 
+class CFirmwareTabController;
+class CEEPROMTabController;
+
 class CCheckEngineTabController : public ITabController, private IAPPEventHandler
 {
  public:
@@ -75,6 +78,8 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   void OnTrimtabReadButton(void);
   void OnTrimtabResetButton(void);
   void OnTrimtabSaveButton(void);
+  void OnTrimtabExport(int setIdx);
+  void ApplyTrimtabToVE(float *ve);
 
   void PPS_SetOperation(int pps, bool clear_ltft_chache = false);
   bool PPS_ReadFWOptions(const BYTE i_descriptor, const void* i_packet_data);
@@ -89,6 +94,9 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   CStatusBarManager*  m_sbar;
   CControlAppAdapter* m_pAdapter;
   ISettingsData* mp_settings;
+
+  CFirmwareTabController* mp_fwdcntr;
+  CEEPROMTabController* mp_eedcntr;
 
   bool m_real_time_errors_mode;
   bool m_pending_ce_autoreading;

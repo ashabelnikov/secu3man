@@ -27,6 +27,7 @@
 
 #include <map>
 #include <memory>
+#include <vector>
 #include "common/fastdelegate.h"
 #include "common/unicodesupport.h"
 #include "ui-core/TabDialog.h"
@@ -40,6 +41,7 @@ class CLabel;
 class CCheckEngineTabDlg : public CTabDialog
 {
   typedef CTabDialog Super;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
@@ -56,6 +58,7 @@ class CCheckEngineTabDlg : public CTabDialog
   void setOnTrimtabReadButton(EventHandler OnFunction) {m_OnTrimtabReadButton = OnFunction;}
   void setOnTrimtabResetButton(EventHandler OnFunction) {m_OnTrimtabResetButton = OnFunction;}
   void setOnTrimtabSaveButton(EventHandler OnFunction) {m_OnTrimtabSaveButton = OnFunction;}
+  void setOnTrimtabExportMenu(EventWithCode OnFunction) {m_OnTrimtabExportMenu = OnFunction;}
 
   bool GetRealTimeErrorsCheck(void) const;
 
@@ -78,11 +81,16 @@ class CCheckEngineTabDlg : public CTabDialog
   void UpdateView(bool axisLabels = false);
   void SetArguments(int rpm, float load, bool strt_use);
 
+  void EnableTrimtabFWExport(bool en);
+  void EnableTrimtabEEExport(bool en);
+  void SetTrimtabExpMenuStrings(const std::vector<_TSTRING> &strings, bool eeprom);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnClose();
+  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnRealTimeErrorsCheckbox();
   afx_msg void OnReadSavedErrors();
@@ -91,6 +99,8 @@ class CCheckEngineTabDlg : public CTabDialog
   afx_msg void OnUpdateInertnessCheckbox(CCmdUI* pCmdUI);
   afx_msg void OnUpdateRWButtons(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsLTFT(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsLTFTFWExp(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsLTFTEEExp(CCmdUI* pCmdUI);
   afx_msg void OnDestroy();
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnListSetAllErrors();
@@ -101,6 +111,8 @@ class CCheckEngineTabDlg : public CTabDialog
   afx_msg void OnTrimtabReadButton();
   afx_msg void OnTrimtabResetButton();
   afx_msg void OnTrimtabSaveButton();
+  afx_msg void OnTrimtabExportButton();
+  afx_msg void OnTrimtabExportMenu(UINT id);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -121,6 +133,8 @@ class CCheckEngineTabDlg : public CTabDialog
   CButton m_ltft_read_button;
   CButton m_ltft_reset_button;
   CButton m_ltft_save_button;
+  CButton m_ltft_export_button;
+  CMenu m_ltftexp_menu;
   CFont m_font;
 
   EventHandler  m_OnRealTimeErrors;
@@ -132,6 +146,7 @@ class CCheckEngineTabDlg : public CTabDialog
   EventHandler  m_OnTrimtabReadButton;
   EventHandler  m_OnTrimtabResetButton;
   EventHandler  m_OnTrimtabSaveButton;
+  EventWithCode m_OnTrimtabExportMenu;
 
   //Key = ID, Value = index of item in the list
   typedef std::map<size_t,size_t> Indexes;
@@ -155,5 +170,8 @@ class CCheckEngineTabDlg : public CTabDialog
   const float* mp_rpmGrid;
   const float* mp_loadGrid;
   bool m_trimtab_enabled; //trim table functionality
+
+  bool m_trimtab_fwexp_enabled;
+  bool m_trimtab_eeexp_enabled;
 };
 
