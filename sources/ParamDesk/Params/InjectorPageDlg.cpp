@@ -569,13 +569,13 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
 
   //calculate constant used for calculation of inj. PW using MAF.
   m_params.inj_maf_const[i] = (float)(((120.0 * 18750000.0) / mifr * (double(bnk_num) / (double(inj_num) * double(m_params.inj_squirt_num[i])))) / 64.0);
-  if (m_params.inj_maf_const[i] > 103200)
+  if (m_params.inj_maf_const[i] > (103200*4))
   {
-   m_params.inj_maf_const[i] = 103200;
+   m_params.inj_maf_const[i] = (103200*4);
    if (!m_maf_ovf_msgbox)
    {
     m_maf_ovf_msgbox = true;
-    SECUMessageBox(_T("Overflow detected when calculating constant for MAF inj. PW equetion! Change configuration to eliminate this error."));
+    SECUMessageBox(_T("Overflow detected when calculating constant for MAF inj. PW equation! Change configuration to eliminate this error."));
     m_maf_ovf_msgbox = false;
    }
   }
