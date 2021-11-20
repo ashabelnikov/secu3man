@@ -2139,689 +2139,708 @@ void CTablesSetPanel::SetFunSetListBoxSelection(int i_selected_index)
 
 void CTablesSetPanel::OnViewAttenuatorMap()
 {
+ MapData &md = m_md[TYPE_MAP_ATTENUATOR];
  //If button was released, then close editor's window
  if (m_view_attenuator_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_ATTENUATOR].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_ATTENUATOR].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_ATTENUATOR].state = 1;
-  m_md[TYPE_MAP_ATTENUATOR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ATTENUATOR_GAIN_UNIT).c_str(),
     MLL::GetString(IDS_ATTENUATOR_MAP).c_str(), false);
-  DLL::Chart2DSetMarksVisible(m_md[TYPE_MAP_ATTENUATOR].handle,1, false); //пр€чем надписи над узловыми точками функции
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_ATTENUATOR].handle,OnChangeAttenuatorTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_ATTENUATOR].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_ATTENUATOR].handle,OnCloseAttenuatorTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_ATTENUATOR].handle, OnWndActivationAttenuatorTable, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_ATTENUATOR].handle, 0, OnGetYAxisLabel, this);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_ATTENUATOR].handle, 0, _T("#0.00"));
-  DLL::Chart2DInverseAxis(m_md[TYPE_MAP_ATTENUATOR].handle, 0, true);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_ATTENUATOR].handle, m_md[TYPE_MAP_ATTENUATOR].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_ATTENUATOR].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetMarksVisible(md.handle,1, false); //пр€чем надписи над узловыми точками функции
+  DLL::Chart2DSetOnChange(md.handle,OnChangeAttenuatorTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseAttenuatorTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationAttenuatorTable, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 0, OnGetYAxisLabel, this);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 0, _T("#0.00"));
+  DLL::Chart2DInverseAxis(md.handle, 0, true);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_ATTENUATOR].handle, TYPE_MAP_ATTENUATOR);
+  OnOpenMapWnd(md.handle, TYPE_MAP_ATTENUATOR);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_ATTENUATOR].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_ATTENUATOR].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewDwellCntrlMap()
 {
+ MapData &md = m_md[TYPE_MAP_DWELLCNTRL];
  //If button was released, then close editor's window
  if (m_view_dwellcntrl_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_DWELLCNTRL].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_DWELLCNTRL].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_DWELLCNTRL].state = 1;
-  m_md[TYPE_MAP_DWELLCNTRL].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDwellCntrlMap(true), GetDwellCntrlMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDwellCntrlMap(true), GetDwellCntrlMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DWELLCNTRL_UNIT).c_str(),
     MLL::GetString(IDS_DWELLCNTRL_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_DWELLCNTRL].handle, 1, _T("%.01f"));
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_DWELLCNTRL].handle, OnChangeDwellCntrlTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_DWELLCNTRL].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_DWELLCNTRL].handle, OnCloseDwellCntrlTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_DWELLCNTRL].handle, OnWndActivationDwellCntrlTable, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_DWELLCNTRL].handle, m_md[TYPE_MAP_DWELLCNTRL].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_DWELLCNTRL].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(md.handle, OnChangeDwellCntrlTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseDwellCntrlTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationDwellCntrlTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_DWELLCNTRL].handle, TYPE_MAP_DWELLCNTRL);
+  OnOpenMapWnd(md.handle, TYPE_MAP_DWELLCNTRL);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_DWELLCNTRL].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_DWELLCNTRL].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewCTSCurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_CTS_CURVE];
  //If button was released, then close editor's window
  if (m_view_cts_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_CTS_CURVE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_CTS_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_CTS_CURVE].state = 1;
-  m_md[TYPE_MAP_CTS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCTSCurveMap(true), GetCTSCurveMap(false), GetCLTGrid()[0], GetCLTGrid()[15], NULL, 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCTSCurveMap(true), GetCTSCurveMap(false), GetCLTGrid()[0], GetCLTGrid()[15], NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CTS_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_CTS_CURVE].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_CTS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeCTSXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_CTS_CURVE].handle, 1, OnGetXAxisLabel, this);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CTS_CURVE].handle, OnChangeCTSCurveTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_CTS_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_CTS_CURVE].handle, OnCloseCTSCurveTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CTS_CURVE].handle, OnWndActivationCTSCurveTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_CTS_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CTS_CURVE].handle, m_md[TYPE_MAP_CTS_CURVE].ptMovStep);
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_CTS_CURVE].handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeCTSXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabel, this);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeCTSCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseCTSCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationCTSCurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_CTS_CURVE].handle, TYPE_MAP_CTS_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_CTS_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_CTS_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_CTS_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewATSCurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_ATS_CURVE];
  //If button was released, then close editor's window
  if (m_view_ats_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_ATS_CURVE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_ATS_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_ATS_CURVE].state = 1;
-  m_md[TYPE_MAP_ATS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetATSCurveMap(true), GetATSCurveMap(false), -40.0, 120.0, NULL, 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetATSCurveMap(true), GetATSCurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_ATS_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_ATS_CURVE].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_ATS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeATSXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_ATS_CURVE].handle, 1, OnGetXAxisLabel, this);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_ATS_CURVE].handle, OnChangeATSCurveTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_ATS_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_ATS_CURVE].handle, OnCloseATSCurveTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_ATS_CURVE].handle, OnWndActivationATSCurveTable, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_ATS_CURVE].handle, m_md[TYPE_MAP_ATS_CURVE].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_ATS_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_ATS_CURVE].handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeATSXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabel, this);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeATSCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseATSCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationATSCurveTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_ATS_CURVE].handle, TYPE_MAP_ATS_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_ATS_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_ATS_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_ATS_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewATSAACMap()
 {
+ MapData &md = m_md[TYPE_MAP_ATS_CORR];
  //If button was released, then close editor's window
  if (m_view_ats_aac_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_ATS_CORR].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_ATS_CORR].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_ATS_CORR].state = 1;
-  m_md[TYPE_MAP_ATS_CORR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetATSAACMap(true),GetATSAACMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetATSAACMap(true),GetATSAACMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_ATSCORR_MAP).c_str(), false);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_ATS_CORR].handle,OnChangeATSAACTable,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_ATS_CORR].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_ATS_CORR].handle,OnCloseATSAACTable,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_ATS_CORR].handle, OnWndActivationATSAACTable, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_ATS_CORR].handle, m_md[TYPE_MAP_ATS_CORR].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_ATS_CORR].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnChange(md.handle,OnChangeATSAACTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseATSAACTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationATSAACTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_ATS_CORR].handle, TYPE_MAP_ATS_CORR);
+  OnOpenMapWnd(md.handle, TYPE_MAP_ATS_CORR);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_ATS_CORR].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_ATS_CORR].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewGasdosePosMap()
 {
+ MapData &md = m_md[TYPE_MAP_GASDOSE];
  //if button has been turned off, then close editor's window
  if (m_view_gasdose_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_GASDOSE].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_GASDOSE].state)&&(DLL::Chart3DCreate))
+ if ((!md.state)&&(DLL::Chart3DCreate))
  {
-  m_md[TYPE_MAP_GASDOSE].state = 1;
-  m_md[TYPE_MAP_GASDOSE].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetGasdosePosMap(true),GetGasdosePosMap(false),GetRPMGrid(),16,16,0,100.0,
+  md.state = 1;
+  md.handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetGasdosePosMap(true),GetGasdosePosMap(false),GetRPMGrid(),16,16,0,100.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_GDP_UNIT).c_str(),
     MLL::GetString(IDS_GDP_MAP).c_str());
-  DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_GASDOSE].handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart3DSetOnChange(m_md[TYPE_MAP_GASDOSE].handle,OnChangeGasdoseTable,this);
-  DLL::Chart3DSetOnChangeSettings(m_md[TYPE_MAP_GASDOSE].handle, OnChangeSettingsCME, this);
-  DLL::Chart3DSetOnClose(m_md[TYPE_MAP_GASDOSE].handle,OnCloseGasdoseTable,this);
-  DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_GASDOSE].handle, OnWndActivationGasdoseTable, this);
-  DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_GASDOSE].handle, m_md[TYPE_MAP_GASDOSE].ptMovStep);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(md.handle,OnChangeGasdoseTable,this);
+  DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(md.handle,OnCloseGasdoseTable,this);
+  DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationGasdoseTable, this);
+  DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_GASDOSE].handle, TYPE_MAP_GASDOSE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_GASDOSE);
 
-  DLL::Chart3DShow(m_md[TYPE_MAP_GASDOSE].handle, true);
+  DLL::Chart3DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_GASDOSE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewBarocorrMap()
 {
+ MapData &md = m_md[TYPE_MAP_BAROCORR];
  //If button was released, then close editor's window
  if (m_view_barocorr_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_BAROCORR].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_BAROCORR].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_BAROCORR].state = 1;
-  m_md[TYPE_MAP_BAROCORR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetBarocorrMap(true), GetBarocorrMap(false), 80.0, 120.0, NULL, 9,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetBarocorrMap(true), GetBarocorrMap(false), 80.0, 120.0, NULL, 9,
     MLL::GetString(IDS_MAPS_ATMOPRESS_UNIT).c_str(),  //horizontal axis
     MLL::GetString(IDS_MAPS_COEFFP_UNIT).c_str(),     //vertical axis
     MLL::GetString(IDS_BAROCORR_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_BAROCORR].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_BAROCORR].handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_BAROCORR].handle, m_md[TYPE_MAP_BAROCORR].ptMovStep);
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_BAROCORR].handle, 1, true, 60.0f, 110.0f, 60.0f, 110.0f, 0.1f, 5, 1, OnChangeBarocorrXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_BAROCORR].handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_BAROCORR].handle, OnChangeBarocorrTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_BAROCORR].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_BAROCORR].handle, OnCloseBarocorrTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_BAROCORR].handle, OnWndActivationBarocorrTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_BAROCORR].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_BAROCORR].handle, 1, GetBarocorrMap(false)[9], GetBarocorrMap(false)[9+1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 60.0f, 110.0f, 60.0f, 110.0f, 0.1f, 5, 1, OnChangeBarocorrXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeBarocorrTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseBarocorrTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationBarocorrTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetBarocorrMap(false)[9], GetBarocorrMap(false)[9+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_BAROCORR].handle, TYPE_MAP_BAROCORR);
+  OnOpenMapWnd(md.handle, TYPE_MAP_BAROCORR);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_BAROCORR].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_BAROCORR].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewTmp2CurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_TMP2_CURVE];
  //If button was released, then close editor's window
  if (m_view_tmp2_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_TMP2_CURVE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_TMP2_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_TMP2_CURVE].state = 1;
-  m_md[TYPE_MAP_TMP2_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTmp2CurveMap(true), GetTmp2CurveMap(false), -40.0, 120.0, NULL, 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTmp2CurveMap(true), GetTmp2CurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_TMP2_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_TMP2_CURVE].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_TMP2_CURVE].handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_TMP2_CURVE].handle, m_md[TYPE_MAP_TMP2_CURVE].ptMovStep);
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_TMP2_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeTmp2CurveXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_TMP2_CURVE].handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_TMP2_CURVE].handle, OnChangeTmp2CurveTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_TMP2_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_TMP2_CURVE].handle, OnCloseTmp2CurveTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_TMP2_CURVE].handle, OnWndActivationTmp2CurveTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_TMP2_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_TMP2_CURVE].handle, 1, GetTmp2CurveMap(false)[16], GetTmp2CurveMap(false)[16+1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeTmp2CurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeTmp2CurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseTmp2CurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationTmp2CurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetTmp2CurveMap(false)[16], GetTmp2CurveMap(false)[16+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_TMP2_CURVE].handle, TYPE_MAP_TMP2_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_TMP2_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_TMP2_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_TMP2_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewGrtsCurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_GRTS_CURVE];
  //If button was released, then close editor's window
  if (m_view_grts_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_GRTS_CURVE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_GRTS_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_GRTS_CURVE].state = 1;
-  m_md[TYPE_MAP_GRTS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrtsCurveMap(true), GetGrtsCurveMap(false), -40.0, 120.0, NULL, 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrtsCurveMap(true), GetGrtsCurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_GRTS_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_GRTS_CURVE].handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_GRTS_CURVE].handle, m_md[TYPE_MAP_GRTS_CURVE].ptMovStep);
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeGrtsCurveXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_GRTS_CURVE].handle, OnChangeGrtsCurveTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_GRTS_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_GRTS_CURVE].handle, OnCloseGrtsCurveTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_GRTS_CURVE].handle, OnWndActivationGrtsCurveTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_GRTS_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, GetGrtsCurveMap(false)[16], GetGrtsCurveMap(false)[16+1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeGrtsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeGrtsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseGrtsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationGrtsCurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetGrtsCurveMap(false)[16], GetGrtsCurveMap(false)[16+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_GRTS_CURVE].handle, TYPE_MAP_GRTS_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_GRTS_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_GRTS_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_GRTS_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewManIgntimMap()
 {
+ MapData &md = m_md[TYPE_MAP_MANIGNTIM];
  //If button was released, then close editor's window
  if (m_view_manigntim_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_MANIGNTIM].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_MANIGNTIM].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_MANIGNTIM].state = 1;
-  m_md[TYPE_MAP_MANIGNTIM].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetManIgntimMap(true),GetManIgntimMap(false),-15.0,15.0,SECU3IO::manigntim_map_slots,16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetManIgntimMap(true),GetManIgntimMap(false),-15.0,15.0,SECU3IO::manigntim_map_slots,16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_MANIGNTIM_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_MANIGNTIM].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_MANIGNTIM].handle, _T("#0.0"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_MANIGNTIM].handle, m_md[TYPE_MAP_MANIGNTIM].ptMovStep);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_MANIGNTIM].handle,OnChangeManIgntimTable,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_MANIGNTIM].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_MANIGNTIM].handle,OnCloseManIgntimTable,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_MANIGNTIM].handle, OnWndActivationManIgntimTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_MANIGNTIM].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.0"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeManIgntimTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseManIgntimTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationManIgntimTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_MANIGNTIM].handle, TYPE_MAP_MANIGNTIM);
+  OnOpenMapWnd(md.handle, TYPE_MAP_MANIGNTIM);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_MANIGNTIM].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_MANIGNTIM].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewCrkTempMap()
 {
+ MapData &md = m_md[TYPE_MAP_CRKCLT_CORR];
  //If button was released, then close editor's window
  if (m_view_crktemp_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_CRKCLT_CORR].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_CRKCLT_CORR].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_CRKCLT_CORR].state = 1;
-  m_md[TYPE_MAP_CRKCLT_CORR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrkTempMap(true),GetCrkTempMap(false),-15.0,25.0, GetCLTGrid(),16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrkTempMap(true),GetCrkTempMap(false),-15.0,25.0, GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_CRKTEMP_MAP).c_str(), false);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRKCLT_CORR].handle,OnChangeCrkTempTable,this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_CRKCLT_CORR].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_CRKCLT_CORR].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_CRKCLT_CORR].handle,OnCloseCrkTempTable,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRKCLT_CORR].handle, OnWndActivationCrkTempTable, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CRKCLT_CORR].handle, m_md[TYPE_MAP_CRKCLT_CORR].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_CRKCLT_CORR].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnChange(md.handle,OnChangeCrkTempTable,this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseCrkTempTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationCrkTempTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_CRKCLT_CORR].handle, TYPE_MAP_CRKCLT_CORR);
+  OnOpenMapWnd(md.handle, TYPE_MAP_CRKCLT_CORR);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_CRKCLT_CORR].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_CRKCLT_CORR].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewEHPauseMap()
 {
+ MapData &md = m_md[TYPE_MAP_EH_PAUSE];
  //If button was released, then close editor's window
  if (m_view_eh_pause_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_EH_PAUSE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_EH_PAUSE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_EH_PAUSE].state = 1;
-  m_md[TYPE_MAP_EH_PAUSE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEHPauseMap(true), GetEHPauseMap(false), 0.01f, 2.55f, SECU3IO::dwellcntrl_map_slots, 32,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEHPauseMap(true), GetEHPauseMap(false), 0.01f, 2.55f, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_EH_PAUSE_UNIT).c_str(),
     MLL::GetString(IDS_EH_PAUSE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_EH_PAUSE].handle, 1, _T("%.01f"));
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_EH_PAUSE].handle, OnChangeEHPauseTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_EH_PAUSE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_EH_PAUSE].handle, OnCloseEHPauseTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_EH_PAUSE].handle, OnWndActivationEHPauseTable, this);
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_EH_PAUSE].handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_EH_PAUSE].handle, m_md[TYPE_MAP_EH_PAUSE].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_EH_PAUSE].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(md.handle, OnChangeEHPauseTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseEHPauseTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationEHPauseTable, this);
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_EH_PAUSE].handle, TYPE_MAP_EH_PAUSE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_EH_PAUSE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_EH_PAUSE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_EH_PAUSE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewCrankingThrdMap()
 {
+ MapData &md = m_md[TYPE_MAP_CRANKING_THRD];
  //if button was released, then close editor's window
  if (m_view_cranking_thrd_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_CRANKING_THRD].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_CRANKING_THRD].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_CRANKING_THRD].state = 1;
-  m_md[TYPE_MAP_CRANKING_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingThrdMap(true),GetCrankingThrdMap(false),0.0f,2500.0f,GetCLTGrid(),16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingThrdMap(true),GetCrankingThrdMap(false),0.0f,2500.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_CRANKING_THRD_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_CRANKING_THRD].handle, _T("#0"));
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_CRANKING_THRD].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CRANKING_THRD].handle, m_md[TYPE_MAP_CRANKING_THRD].ptMovStep);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRANKING_THRD].handle,OnWndActivationCrankingThrdMap,this);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRANKING_THRD].handle,OnChangeCrankingThrdMap,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_CRANKING_THRD].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_CRANKING_THRD].handle,OnCloseCrankingThrdMap,this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_CRANKING_THRD].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationCrankingThrdMap,this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeCrankingThrdMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseCrankingThrdMap,this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_CRANKING_THRD].handle, TYPE_MAP_CRANKING_THRD);
+  OnOpenMapWnd(md.handle, TYPE_MAP_CRANKING_THRD);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_CRANKING_THRD].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_CRANKING_THRD].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewCrankingTimeMap()
 {
+ MapData &md = m_md[TYPE_MAP_CRANKING_TIME];
  //if button was released, then close editor's window
  if (m_view_cranking_time_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_CRANKING_TIME].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_CRANKING_TIME].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_CRANKING_TIME].state = 1;
-  m_md[TYPE_MAP_CRANKING_TIME].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingTimeMap(true),GetCrankingTimeMap(false),0.0f,255.0f,GetCLTGrid(),16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingTimeMap(true),GetCrankingTimeMap(false),0.0f,255.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_STROKE_UNIT).c_str(),
     MLL::GetString(IDS_CRANKING_TIME_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_CRANKING_TIME].handle, _T("#0"));
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_CRANKING_TIME].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CRANKING_TIME].handle, m_md[TYPE_MAP_CRANKING_TIME].ptMovStep);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRANKING_TIME].handle,OnWndActivationCrankingTimeMap,this);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRANKING_TIME].handle,OnChangeCrankingTimeMap,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_CRANKING_TIME].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_CRANKING_TIME].handle,OnCloseCrankingTimeMap,this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_CRANKING_TIME].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationCrankingTimeMap,this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeCrankingTimeMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseCrankingTimeMap,this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_CRANKING_TIME].handle, TYPE_MAP_CRANKING_TIME);
+  OnOpenMapWnd(md.handle, TYPE_MAP_CRANKING_TIME);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_CRANKING_TIME].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_CRANKING_TIME].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewSmapabanThrdMap()
 {
+ MapData &md = m_md[TYPE_MAP_SMAPABAN_THRD];
  //if button was released, then close editor's window
  if (m_view_smapaban_thrd_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_SMAPABAN_THRD].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_SMAPABAN_THRD].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_SMAPABAN_THRD].state = 1;
-  m_md[TYPE_MAP_SMAPABAN_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetSmapabanThrdMap(true),GetSmapabanThrdMap(false),0.0f,2500.0f,GetCLTGrid(),16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetSmapabanThrdMap(true),GetSmapabanThrdMap(false),0.0f,2500.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_SMAPABAN_THRD_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_SMAPABAN_THRD].handle, _T("#0"));
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_SMAPABAN_THRD].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_SMAPABAN_THRD].handle, m_md[TYPE_MAP_SMAPABAN_THRD].ptMovStep);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnWndActivationSmapabanThrdMap,this);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnChangeSmapabanThrdMap,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_SMAPABAN_THRD].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnCloseSmapabanThrdMap,this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_SMAPABAN_THRD].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationSmapabanThrdMap,this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeSmapabanThrdMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseSmapabanThrdMap,this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_SMAPABAN_THRD].handle, TYPE_MAP_SMAPABAN_THRD);
+  OnOpenMapWnd(md.handle, TYPE_MAP_SMAPABAN_THRD);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_SMAPABAN_THRD].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_SMAPABAN_THRD].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewKnockZoneMap()
 {
+ MapData &md = m_md[TYPE_MAP_KNOCK_ZONE];
  //if button has been turned off, then close editor's window
  if (m_view_knock_zone_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_KNOCK_ZONE].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_KNOCK_ZONE].state)&&(DLL::Chart3DCreate))
+ if ((!md.state)&&(DLL::Chart3DCreate))
  {
-  m_md[TYPE_MAP_KNOCK_ZONE].state = 1;
-  m_md[TYPE_MAP_KNOCK_ZONE].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetKnockZoneMap(true),GetKnockZoneMap(false),GetRPMGrid(),16,16,0,1.0,
+  md.state = 1;
+  md.handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetKnockZoneMap(true),GetKnockZoneMap(false),GetRPMGrid(),16,16,0,1.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_KNOCK_ZONE_UNIT).c_str(),
     MLL::GetString(IDS_KNOCK_ZONE_MAP).c_str());
-  DLL::Chart3DSetPtValuesFormat(m_md[TYPE_MAP_KNOCK_ZONE].handle, _T("#0"));
-  DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_KNOCK_ZONE].handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart3DSetOnChange(m_md[TYPE_MAP_KNOCK_ZONE].handle,OnChangeKnockZoneMap,this);
-  DLL::Chart3DSetOnChangeSettings(m_md[TYPE_MAP_KNOCK_ZONE].handle, OnChangeSettingsCME, this);
-  DLL::Chart3DSetOnClose(m_md[TYPE_MAP_KNOCK_ZONE].handle,OnCloseKnockZoneMap,this);
-  DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_KNOCK_ZONE].handle, OnWndActivationKnockZoneMap, this);
-  DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_KNOCK_ZONE].handle, m_md[TYPE_MAP_KNOCK_ZONE].ptMovStep);
+  DLL::Chart3DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(md.handle,OnChangeKnockZoneMap,this);
+  DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(md.handle,OnCloseKnockZoneMap,this);
+  DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationKnockZoneMap, this);
+  DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_KNOCK_ZONE].handle, TYPE_MAP_KNOCK_ZONE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_KNOCK_ZONE);
 
-  DLL::Chart3DShow(m_md[TYPE_MAP_KNOCK_ZONE].handle, true);
+  DLL::Chart3DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_KNOCK_ZONE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewGrHeatDutyMap()
 {
+ MapData &md = m_md[TYPE_MAP_GRHEAT_DUTY];
  //If button was released, then close editor's window
  if (m_view_grheat_duty_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_GRHEAT_DUTY].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_GRHEAT_DUTY].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_GRHEAT_DUTY].state = 1;
-  m_md[TYPE_MAP_GRHEAT_DUTY].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrHeatDutyMap(true),GetGrHeatDutyMap(false),0.0,100.0, GetCLTGrid(),16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrHeatDutyMap(true),GetGrHeatDutyMap(false),0.0,100.0, GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str(),
     MLL::GetString(IDS_GRHEAT_DUTY_MAP).c_str(), false);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_GRHEAT_DUTY].handle,OnChangeGrHeatDutyTable,this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_GRHEAT_DUTY].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_GRHEAT_DUTY].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_GRHEAT_DUTY].handle,OnCloseGrHeatDutyTable,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_GRHEAT_DUTY].handle, OnWndActivationGrHeatDutyTable, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_GRHEAT_DUTY].handle, m_md[TYPE_MAP_GRHEAT_DUTY].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_GRHEAT_DUTY].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnChange(md.handle,OnChangeGrHeatDutyTable,this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseGrHeatDutyTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationGrHeatDutyTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_GRHEAT_DUTY].handle, TYPE_MAP_GRHEAT_DUTY);
+  OnOpenMapWnd(md.handle, TYPE_MAP_GRHEAT_DUTY);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_GRHEAT_DUTY].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_GRHEAT_DUTY].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewPwmIacUCoefMap()
 {
+ MapData &md = m_md[TYPE_MAP_PWMIAC_UCOEF];
  //If button was released, then close editor's window
  if (m_view_pwmiac_ucoef_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_PWMIAC_UCOEF].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_PWMIAC_UCOEF].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_PWMIAC_UCOEF].state = 1;
-  m_md[TYPE_MAP_PWMIAC_UCOEF].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetPwmIacUCoefMap(true),GetPwmIacUCoefMap(false), 0.0, 3.0, SECU3IO::voltage_map_slots, 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetPwmIacUCoefMap(true),GetPwmIacUCoefMap(false), 0.0, 3.0, SECU3IO::voltage_map_slots, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_PWMIAC_UCOEF_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, 1, _T("%.01f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, _T("#0.000"));
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_PWMIAC_UCOEF].handle,OnChangePwmIacUCoefMap,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_PWMIAC_UCOEF].handle,OnClosePwmIacUCoefMap,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, OnWndActivationPwmIacUCoefMap, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, m_md[TYPE_MAP_PWMIAC_UCOEF].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.01f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.000"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangePwmIacUCoefMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnClosePwmIacUCoefMap,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationPwmIacUCoefMap, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, TYPE_MAP_PWMIAC_UCOEF);
+  OnOpenMapWnd(md.handle, TYPE_MAP_PWMIAC_UCOEF);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_PWMIAC_UCOEF].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_PWMIAC_UCOEF].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewAftstrStrk0Map()
 {
+ MapData &md = m_md[TYPE_MAP_AFTSTR_STRK0];
  //If button was released, then close editor's window
  if (m_view_aftstr_strk0_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_AFTSTR_STRK0].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_AFTSTR_STRK0].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_AFTSTR_STRK0].state = 1;
-  m_md[TYPE_MAP_AFTSTR_STRK0].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAftstrStrk0Map(true), GetAftstrStrk0Map(false), 1.0, 2000.0, GetCLTGrid(), 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAftstrStrk0Map(true), GetAftstrStrk0Map(false), 1.0, 2000.0, GetCLTGrid(), 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(), //x unit
     MLL::GetString(IDS_MAPS_STROKE_UNIT).c_str(),      //y unit
     MLL::GetString(IDS_AFTSTR_STRK0_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_AFTSTR_STRK0].handle, 1, _T("%.0f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_AFTSTR_STRK0].handle, _T("#0"));
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_AFTSTR_STRK0].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_AFTSTR_STRK0].handle,OnChangeAftstrStrk0Map,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_AFTSTR_STRK0].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_AFTSTR_STRK0].handle,OnCloseAftstrStrk0Map,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_AFTSTR_STRK0].handle, OnWndActivationAftstrStrk0Map, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_AFTSTR_STRK0].handle, m_md[TYPE_MAP_AFTSTR_STRK0].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_AFTSTR_STRK0].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.0f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeAftstrStrk0Map,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseAftstrStrk0Map,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationAftstrStrk0Map, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_AFTSTR_STRK0].handle, TYPE_MAP_AFTSTR_STRK0);
+  OnOpenMapWnd(md.handle, TYPE_MAP_AFTSTR_STRK0);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_AFTSTR_STRK0].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
@@ -2831,112 +2850,115 @@ void CTablesSetPanel::OnViewAftstrStrk0Map()
 
 void CTablesSetPanel::OnViewAftstrStrk1Map()
 {
+ MapData &md = m_md[TYPE_MAP_AFTSTR_STRK1];
  //If button was released, then close editor's window
  if (m_view_aftstr_strk1_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_AFTSTR_STRK1].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_AFTSTR_STRK1].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_AFTSTR_STRK1].state = 1;
-  m_md[TYPE_MAP_AFTSTR_STRK1].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAftstrStrk1Map(true), GetAftstrStrk1Map(false), 1.0, 2000.0, GetCLTGrid(), 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAftstrStrk1Map(true), GetAftstrStrk1Map(false), 1.0, 2000.0, GetCLTGrid(), 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(), //x unit
     MLL::GetString(IDS_MAPS_STROKE_UNIT).c_str(),      //y unit
     MLL::GetString(IDS_AFTSTR_STRK1_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_AFTSTR_STRK1].handle, 1, _T("%.0f"));
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_AFTSTR_STRK1].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_AFTSTR_STRK1].handle, _T("#0"));
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_AFTSTR_STRK1].handle,OnChangeAftstrStrk1Map,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_AFTSTR_STRK1].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_AFTSTR_STRK1].handle,OnCloseAftstrStrk1Map,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_AFTSTR_STRK1].handle, OnWndActivationAftstrStrk1Map, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_AFTSTR_STRK1].handle, m_md[TYPE_MAP_AFTSTR_STRK1].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_AFTSTR_STRK1].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.0f"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeAftstrStrk1Map,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseAftstrStrk1Map,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationAftstrStrk1Map, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_AFTSTR_STRK1].handle, TYPE_MAP_AFTSTR_STRK1);
+  OnOpenMapWnd(md.handle, TYPE_MAP_AFTSTR_STRK1);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_AFTSTR_STRK1].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_AFTSTR_STRK1].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewGrValDelMap()
 {
+ MapData &md = m_md[TYPE_MAP_GRVDELAY];
  //If button was released, then close editor's window
  if (m_view_grvaldel_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_GRVDELAY].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_GRVDELAY].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_GRVDELAY].state = 1;
-  m_md[TYPE_MAP_GRVDELAY].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrValDelMap(true), GetGrValDelMap(false),0.0, 120.0, GetCLTGrid(), 16,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGrValDelMap(true), GetGrValDelMap(false),0.0, 120.0, GetCLTGrid(), 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_GRVDELAY_UNIT).c_str(),
     MLL::GetString(IDS_GRVDELAY_MAP).c_str(), false);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_GRVDELAY].handle,OnChangeGrValDelMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_GRVDELAY].handle, 1, OnGetXAxisLabelCLT, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_GRVDELAY].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_GRVDELAY].handle,OnCloseGrValDelMap,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_GRVDELAY].handle, OnWndActivationGrValDelMap, this);
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_GRVDELAY].handle, m_md[TYPE_MAP_GRVDELAY].ptMovStep);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_GRVDELAY].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnChange(md.handle,OnChangeGrValDelMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseGrValDelMap,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationGrValDelMap, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_GRVDELAY].handle, TYPE_MAP_GRVDELAY);
+  OnOpenMapWnd(md.handle, TYPE_MAP_GRVDELAY);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_GRVDELAY].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_GRVDELAY].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewFtlsCurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_FTLS_CURVE];
  //If button was released, then close editor's window
  if (m_view_ftls_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_FTLS_CURVE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_FTLS_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_FTLS_CURVE].state = 1;
-  m_md[TYPE_MAP_FTLS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetFtlsCurveMap(true), GetFtlsCurveMap(false), 0.0, 100.0, NULL, 17,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetFtlsCurveMap(true), GetFtlsCurveMap(false), 0.0, 100.0, NULL, 17,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_FUELTANK_UNIT).c_str(),
     MLL::GetString(IDS_FTLS_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_FTLS_CURVE].handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_FTLS_CURVE].handle, m_md[TYPE_MAP_FTLS_CURVE].ptMovStep);
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeFtlsCurveXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_FTLS_CURVE].handle, OnChangeFtlsCurveTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_FTLS_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_FTLS_CURVE].handle, OnCloseFtlsCurveTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_FTLS_CURVE].handle, OnWndActivationFtlsCurveTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_FTLS_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, GetFtlsCurveMap(false)[17], GetFtlsCurveMap(false)[17+1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeFtlsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeFtlsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseFtlsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationFtlsCurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetFtlsCurveMap(false)[17], GetFtlsCurveMap(false)[17+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_FTLS_CURVE].handle, TYPE_MAP_FTLS_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_FTLS_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_FTLS_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_FTLS_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
@@ -2979,154 +3001,158 @@ void CTablesSetPanel::OnViewFtlsCorMap()
 
 void CTablesSetPanel::OnViewEgtsCurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_EGTS_CURVE];
  //If button was released, then close editor's window
  if (m_view_egts_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_EGTS_CURVE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_EGTS_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_EGTS_CURVE].state = 1;
-  m_md[TYPE_MAP_EGTS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEgtsCurveMap(true), GetEgtsCurveMap(false), 0.0, 1100.0, NULL, 17,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEgtsCurveMap(true), GetEgtsCurveMap(false), 0.0, 1100.0, NULL, 17,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_EGTS_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_EGTS_CURVE].handle, _T("#0.0"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_EGTS_CURVE].handle, m_md[TYPE_MAP_EGTS_CURVE].ptMovStep);
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeEgtsCurveXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_EGTS_CURVE].handle, OnChangeEgtsCurveTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_EGTS_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_EGTS_CURVE].handle, OnCloseEgtsCurveTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_EGTS_CURVE].handle, OnWndActivationEgtsCurveTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_EGTS_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, GetEgtsCurveMap(false)[17], GetEgtsCurveMap(false)[17+1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.0"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeEgtsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeEgtsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseEgtsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationEgtsCurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetEgtsCurveMap(false)[17], GetEgtsCurveMap(false)[17+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_EGTS_CURVE].handle, TYPE_MAP_EGTS_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_EGTS_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_EGTS_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_EGTS_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewOpsCurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_OPS_CURVE];
  //If button was released, then close editor's window
  if (m_view_ops_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_OPS_CURVE].handle, WM_CLOSE, 0, 0);
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_OPS_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_OPS_CURVE].state = 1;
-  m_md[TYPE_MAP_OPS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetOpsCurveMap(true), GetOpsCurveMap(false), 0.0, 6.0, NULL, 17,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetOpsCurveMap(true), GetOpsCurveMap(false), 0.0, 6.0, NULL, 17,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_PRESSUREKG_UNIT).c_str(),
     MLL::GetString(IDS_OPS_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_OPS_CURVE].handle, 1, _T("%.02f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_OPS_CURVE].handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_OPS_CURVE].handle, m_md[TYPE_MAP_OPS_CURVE].ptMovStep);
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_OPS_CURVE].handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeOpsCurveXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_OPS_CURVE].handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_OPS_CURVE].handle, OnChangeOpsCurveTable, this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_OPS_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_OPS_CURVE].handle, OnCloseOpsCurveTable, this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_OPS_CURVE].handle, OnWndActivationOpsCurveTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_OPS_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_OPS_CURVE].handle, 1, GetOpsCurveMap(false)[17], GetOpsCurveMap(false)[17+1]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeOpsCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeOpsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseOpsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationOpsCurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetOpsCurveMap(false)[17], GetOpsCurveMap(false)[17+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_OPS_CURVE].handle, TYPE_MAP_OPS_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_OPS_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_OPS_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_OPS_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewManInjPwcMap()
 {
+ MapData &md = m_md[TYPE_MAP_MANINJPWC];
  //If button was released, then close editor's window
  if (m_view_maninjpwc_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_MANINJPWC].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_MANINJPWC].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_MANINJPWC].state = 1;
-  m_md[TYPE_MAP_MANINJPWC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetManInjPwcMap(true),GetManInjPwcMap(false),0.5,1.5,SECU3IO::maninjpwc_map_slots,17,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetManInjPwcMap(true),GetManInjPwcMap(false),0.5,1.5,SECU3IO::maninjpwc_map_slots,17,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_MANINJPWC_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_MANINJPWC].handle, 1, _T("%.03f"));
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_MANINJPWC].handle, _T("#0.000"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_MANINJPWC].handle, m_md[TYPE_MAP_MANINJPWC].ptMovStep);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_MANINJPWC].handle,OnChangeManInjPwcTable,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_MANINJPWC].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_MANINJPWC].handle,OnCloseManInjPwcTable,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_MANINJPWC].handle, OnWndActivationManInjPwcTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_MANINJPWC].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.03f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.000"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeManInjPwcTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseManInjPwcTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationManInjPwcTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_MANINJPWC].handle, TYPE_MAP_MANINJPWC);
+  OnOpenMapWnd(md.handle, TYPE_MAP_MANINJPWC);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_MANINJPWC].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_MANINJPWC].handle);
+  ::SetFocus(md.handle);
  }
 }
 
 void CTablesSetPanel::OnViewMAFCurveMap()
 {
+ MapData &md = m_md[TYPE_MAP_MAF_CURVE];
  //If button was released, then close editor's window
  if (m_view_mafcurve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_md[TYPE_MAP_MAF_CURVE].handle,WM_CLOSE,0,0);
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_md[TYPE_MAP_MAF_CURVE].state)&&(DLL::Chart2DCreate))
+ if ((!md.state)&&(DLL::Chart2DCreate))
  {
-  m_md[TYPE_MAP_MAF_CURVE].state = 1;
-  m_md[TYPE_MAP_MAF_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetMAFCurveMap(true),GetMAFCurveMap(false), 0.0, 650.0, /*m_mafcurve_slots*/NULL, 64,
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetMAFCurveMap(true),GetMAFCurveMap(false), 0.0, 650.0, /*m_mafcurve_slots*/NULL, 64,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAF_UNIT).c_str(),
     MLL::GetString(IDS_MAF_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_MAF_CURVE].handle, 1, _T("%.03f"));
-  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_MAF_CURVE].handle, 1, true, 0, 5.00f, 0, 5.00f, 0.01f, -1, -1, OnChangeMAFCurveXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_MAF_CURVE].handle, 1, NULL, NULL);
-  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_MAF_CURVE].handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_MAF_CURVE].handle, m_md[TYPE_MAP_MAF_CURVE].ptMovStep);
-  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_MAF_CURVE].handle,OnChangeMAFCurveTable,this);
-  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_MAF_CURVE].handle, OnChangeSettingsCME, this);
-  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_MAF_CURVE].handle,OnCloseMAFCurveTable,this);
-  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_MAF_CURVE].handle, OnWndActivationMAFCurveTable, this);
-  DLL::Chart2DUpdate(m_md[TYPE_MAP_MAF_CURVE].handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_MAF_CURVE].handle, 1, GetMAFCurveMap(false)[64+1], GetMAFCurveMap(false)[64+2]);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.03f"));
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 5.00f, 0, 5.00f, 0.01f, -1, -1, OnChangeMAFCurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeMAFCurveTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseMAFCurveTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationMAFCurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetMAFCurveMap(false)[64+1], GetMAFCurveMap(false)[64+2]);
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_md[TYPE_MAP_MAF_CURVE].handle, TYPE_MAP_MAF_CURVE);
+  OnOpenMapWnd(md.handle, TYPE_MAP_MAF_CURVE);
 
-  DLL::Chart2DShow(m_md[TYPE_MAP_MAF_CURVE].handle, true);
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {
-  ::SetFocus(m_md[TYPE_MAP_MAF_CURVE].handle);
+  ::SetFocus(md.handle);
  }
 }
 
