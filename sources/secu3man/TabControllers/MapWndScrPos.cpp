@@ -387,6 +387,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_FtlsCurveMapWnd_W = rc.right - rc.left;
    sz.m_FtlsCurveMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_FTLSCOR:
+   ws.m_FtlsCorMapWnd_X = rc.left;
+   ws.m_FtlsCorMapWnd_Y = rc.top;
+   sz.m_FtlsCorMapWnd_W = rc.right - rc.left;
+   sz.m_FtlsCorMapWnd_H = rc.bottom - rc.top;
+   break;
   case TYPE_MAP_EGTS_CURVE:
    ws.m_EgtsCurveMapWnd_X = rc.left;
    ws.m_EgtsCurveMapWnd_Y = rc.top;
@@ -668,6 +674,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_FTLS_CURVE:
    X = ws.m_FtlsCurveMapWnd_X, Y = ws.m_FtlsCurveMapWnd_Y;
    W = sz.m_FtlsCurveMapWnd_W, H = sz.m_FtlsCurveMapWnd_H;
+   break;
+  case TYPE_MAP_FTLSCOR:
+   X = ws.m_FtlsCorMapWnd_X, Y = ws.m_FtlsCorMapWnd_Y;
+   W = sz.m_FtlsCorMapWnd_W, H = sz.m_FtlsCorMapWnd_H;
    break;
   case TYPE_MAP_EGTS_CURVE:
    X = ws.m_EgtsCurveMapWnd_X, Y = ws.m_EgtsCurveMapWnd_Y;

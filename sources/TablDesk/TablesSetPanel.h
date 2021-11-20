@@ -80,6 +80,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetOpsCurveMap(bool i_original);
   float* GetManInjPwcMap(bool i_original);
   float* GetMAFCurveMap(bool i_original);
+  float* GetFtlsCorMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -149,6 +150,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewOpsCurveMap();
   afx_msg void OnViewManInjPwcMap();
   afx_msg void OnViewMAFCurveMap();
+  afx_msg void OnViewFtlsCorMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -172,6 +174,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewAftstrStrk1Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGrValDelMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewFtlsCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewFtlsCorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewEgtsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewOpsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewManInjPwcMap(CCmdUI* pCmdUI);
@@ -212,6 +215,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_ops_curve_map_btn;
   CButton   m_view_maninjpwc_map_btn;
   CButton   m_view_mafcurve_map_btn;
+  CButton   m_view_ftlscor_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
@@ -340,6 +344,10 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseMAFCurveTable(void* i_param);
   static void __cdecl OnChangeMAFCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationMAFCurveTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeFtlsCorTable(void* i_param);
+  static void __cdecl OnCloseFtlsCorTable(void* i_param);
+  static void __cdecl OnWndActivationFtlsCorTable(void* i_param, long cmd);
 
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;

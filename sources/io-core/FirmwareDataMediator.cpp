@@ -256,7 +256,10 @@ typedef struct
  //MAF flow curve
  _uint maf_curve[MAF_FLOW_CURVE_SIZE+1+2];
 
- _uchar reserved1[1425];
+ //FTLS correction coefficient vs board voltage
+ _uint ftlscor_ucoef[FTLSCOR_UCOEF_SIZE];
+
+ _uchar reserved1[1361];
 
  //firmware constants:
  _int evap_clt;
@@ -1528,6 +1531,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetOpsCurveMap(op_fwd->ops_curve);
  GetManInjPwcMap(op_fwd->injpw_coef);
  GetMAFCurveMap(op_fwd->maf_curve);
+ GetFtlsCorMap(op_fwd->ftls_corr);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1617,6 +1621,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetOpsCurveMap(ip_fwd->ops_curve);
  SetManInjPwcMap(ip_fwd->injpw_coef);
  SetMAFCurveMap(ip_fwd->maf_curve);
+ SetFtlsCorMap(ip_fwd->ftls_corr);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2510,6 +2515,24 @@ void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
 
  for (; i < MAF_FLOW_CURVE_SIZE+3; i++ )
   p_fd->exdata.maf_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
+void CFirmwareDataMediator::GetFtlsCorMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
+ for (int i = 0; i < FTLSCOR_UCOEF_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.ftlscor_ucoef[i]) / PWMIAC_UCOEF_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetFtlsCorMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+ for (int i = 0; i < FTLSCOR_UCOEF_SIZE; i++ )
+  p_fd->exdata.ftlscor_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
 }
 
 //--------------------------------------------------------------------------------

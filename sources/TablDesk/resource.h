@@ -588,3 +588,6 @@
 #define IDS_GME_INJ_OTHER1_TAB          5944
 #define IDS_GME_WM_CAPTION_WRKTEXT      5945
 #define IDS_GME_WM_CAPTION_STRTEXT      5946
+#define IDC_TD_FTLSCOR_MAP              5947
+#define IDS_TD_FTLSCOR_MAP_TT           5948
+#define IDS_FTLSCOR_MAP                 5949

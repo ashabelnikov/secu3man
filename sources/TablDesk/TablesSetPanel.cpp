@@ -1388,6 +1388,50 @@ void __cdecl CTablesSetPanel::OnWndActivationMAFCurveTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeFtlsCorTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_FTLSCOR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseFtlsCorTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_FTLSCOR].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_FTLSCOR].handle, TYPE_MAP_FTLSCOR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationFtlsCorTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_FTLSCOR].handle, cmd);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -1465,6 +1509,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_OPS_CURVE, m_view_ops_curve_map_btn);
  DDX_Control(pDX, IDC_TD_MANINJPWC_MAP, m_view_maninjpwc_map_btn);
  DDX_Control(pDX, IDC_TD_MAF_CURVE, m_view_mafcurve_map_btn);
+ DDX_Control(pDX, IDC_TD_FTLSCOR_MAP, m_view_ftlscor_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -1498,6 +1543,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_OPS_CURVE, OnViewOpsCurveMap)
  ON_BN_CLICKED(IDC_TD_MANINJPWC_MAP, OnViewManInjPwcMap)
  ON_BN_CLICKED(IDC_TD_MAF_CURVE, OnViewMAFCurveMap)
+ ON_BN_CLICKED(IDC_TD_FTLSCOR_MAP, OnViewFtlsCorMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -1531,6 +1577,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_OPS_CURVE, OnUpdateViewOpsCurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_MANINJPWC_MAP, OnUpdateViewManInjPwcMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_MAF_CURVE, OnUpdateViewMAFCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_FTLSCOR_MAP, OnUpdateViewFtlsCorMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -1584,6 +1631,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_ops_curve_map_btn, MLL::GetString(IDS_TD_OPS_CURVE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_maninjpwc_map_btn, MLL::GetString(IDS_TD_MANINJPWC_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_mafcurve_map_btn, MLL::GetString(IDS_TD_MAF_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_ftlscor_map_btn, MLL::GetString(IDS_TD_FTLSCOR_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1786,6 +1834,14 @@ void CTablesSetPanel::OnUpdateViewFtlsCurveMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_FTLS_CURVE].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewFtlsCorMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_ftls_curve_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_FTLSCOR].state) ? TRUE : FALSE );
+}
+
 void CTablesSetPanel::OnUpdateViewEgtsCurveMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
@@ -1895,6 +1951,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_OPS_CURVE].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_OPS_CURVE].handle, GetOpsCurveMap(true), GetOpsCurveMap(false));
+
+ if (m_md[TYPE_MAP_FTLSCOR].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_FTLSCOR].handle, GetFtlsCorMap(true), GetFtlsCorMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1998,6 +2057,8 @@ void CTablesSetPanel::EnableFtlsCurve(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_FTLS_CURVE].state && ::IsWindow(m_md[TYPE_MAP_FTLS_CURVE].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_FTLS_CURVE].handle, enable && Super::IsAllowed());
+ if (m_md[TYPE_MAP_FTLSCOR].state && ::IsWindow(m_md[TYPE_MAP_FTLSCOR].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_FTLSCOR].handle, enable && Super::IsAllowed());
 }
 
 void CTablesSetPanel::EnableEgtsCurve(bool enable)
@@ -2879,6 +2940,43 @@ void CTablesSetPanel::OnViewFtlsCurveMap()
  }
 }
 
+void CTablesSetPanel::OnViewFtlsCorMap()
+{
+ MapData &md = m_md[TYPE_MAP_FTLSCOR];
+ //If button was released, then close editor's window
+ if (m_view_ftlscor_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetFtlsCorMap(true),GetFtlsCorMap(false), 0.0, 3.0, SECU3IO::dwellcntrl_map_slots, 32,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
+    MLL::GetString(IDS_FTLSCOR_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.01f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.000"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeFtlsCorTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseFtlsCorTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationFtlsCorTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //allow controller to detect closing of this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_FTLSCOR);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
 void CTablesSetPanel::OnViewEgtsCurveMap()
 {
  //If button was released, then close editor's window
@@ -3255,6 +3353,14 @@ float* CTablesSetPanel::GetFtlsCurveMap(bool i_original)
   return m_md[TYPE_MAP_FTLS_CURVE].original;
  else
   return m_md[TYPE_MAP_FTLS_CURVE].active;
+}
+
+float* CTablesSetPanel::GetFtlsCorMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_FTLSCOR].original;
+ else
+  return m_md[TYPE_MAP_FTLSCOR].active;
 }
 
 float* CTablesSetPanel::GetEgtsCurveMap(bool i_original)

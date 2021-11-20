@@ -298,6 +298,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_OPS_CURVE, mptms.m_ops_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MANINJPWC, mptms.m_maninjpwc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MAF_CURVE, mptms.m_mafcurve_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTLSCOR, mptms.m_ftlscor_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -1188,6 +1189,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetFtlsCurveMap(mp_view->mp_TablesPanel->GetFtlsCurveMap(false),false);
  mp_fwdm->GetFtlsCurveMap(mp_view->mp_TablesPanel->GetFtlsCurveMap(true),true);
 
+ mp_fwdm->GetFtlsCorMap(mp_view->mp_TablesPanel->GetFtlsCorMap(false),false);
+ mp_fwdm->GetFtlsCorMap(mp_view->mp_TablesPanel->GetFtlsCorMap(true),true);
+
  mp_fwdm->GetEgtsCurveMap(mp_view->mp_TablesPanel->GetEgtsCurveMap(false),false);
  mp_fwdm->GetEgtsCurveMap(mp_view->mp_TablesPanel->GetEgtsCurveMap(true),true);
 
@@ -1524,6 +1528,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_FTLS_CURVE:
    mp_fwdm->SetFtlsCurveMap(mp_view->mp_TablesPanel->GetFtlsCurveMap(false));
+   break;
+  case TYPE_MAP_FTLSCOR:
+   mp_fwdm->SetFtlsCorMap(mp_view->mp_TablesPanel->GetFtlsCorMap(false));
    break;
   case TYPE_MAP_EGTS_CURVE:
    mp_fwdm->SetEgtsCurveMap(mp_view->mp_TablesPanel->GetEgtsCurveMap(false));
@@ -2472,6 +2479,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_ops_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_OPS_CURVE);
  mptms.m_maninjpwc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MANINJPWC);
  mptms.m_mafcurve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MAF_CURVE);
+ mptms.m_ftlscor_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTLSCOR);
  mp_settings->SetMapPtMovStep(mptms);
 }
 

@@ -238,6 +238,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetFtlsCurveMap(float* op_values, bool i_original = false);
   void SetFtlsCurveMap(const float* i_values);
 
+  void GetFtlsCorMap(float* op_values, bool i_original = false);
+  void SetFtlsCorMap(const float* i_values);
+
   void GetEgtsCurveMap(float* op_values, bool i_original = false);
   void SetEgtsCurveMap(const float* i_values);
 

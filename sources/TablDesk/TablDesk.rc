@@ -128,6 +128,7 @@ BEGIN
     CONTROL         "Настр. крив. ДДМ",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,597,96,18
     CONTROL         "Ручн.корр.впрыска",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,597,96,18
     CONTROL         "Кривая расхода ДМРВ",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,616,96,18
+    CONTROL         "Коррекция ДУТ",IDC_TD_FTLSCOR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,616,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -835,6 +836,8 @@ BEGIN
     IDS_TD_VIEW_TPSZON_MAP_TT "Данная кривая указывает как разделить ось нагрузки между ДАД и ДПДЗ в зависимости от оборотов двигателя. В зоне ниже кривой будет использоваться нагрузки по ДАД. В зоне выше кривой будет использоваться нагрузка по ДПДЗ."
     IDS_GME_WM_CAPTION_WRKTEXT "Рабочая"
     IDS_GME_WM_CAPTION_STRTEXT "Пуск"
+    IDS_TD_FTLSCOR_MAP_TT "Таблица коррекции показаний датчика уровня топлива. В таблице задан коэффициент коррекции в зависимости от напряжения бортовой сети."
+    IDS_FTLSCOR_MAP "Коррекция уровня топлива от напряжения бортовой сети"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -960,6 +963,7 @@ BEGIN
     CONTROL         "Tune OPS curve",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,597,96,18
     CONTROL         "Manual inj.PW corr.",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,597,96,18
     CONTROL         "MAF flow curve",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,616,96,18
+    CONTROL         "FTLS correction",IDC_TD_FTLSCOR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,616,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1668,6 +1672,8 @@ BEGIN
     IDS_TD_VIEW_TPSZON_MAP_TT "This curve indicates how to allocate the load axis between MAP and TPS depending on the engine speed. In the area below the curve, MAP-based load will be used. In the area above the curve, the TPS-based load will be used."
     IDS_GME_WM_CAPTION_WRKTEXT "Work"
     IDS_GME_WM_CAPTION_STRTEXT "Start"
+    IDS_TD_FTLSCOR_MAP_TT "Table of correction of fuel tank level sensor. The table contains correction factor depending on the board voltage."
+    IDS_FTLSCOR_MAP "Fuel tank level correction vs board voltage"
 END
 
 /////////////////////////////////////////////////////////////////////////////
