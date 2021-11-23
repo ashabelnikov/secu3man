@@ -37,6 +37,9 @@ class AFX_EXT_CLASS CDialogWithAccelerators : public CDialog
  protected:
   //здесь будет грязный хак!
   virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
+  DECLARE_MESSAGE_MAP()
 };
 
 //Диалог с акселераторами который нельзя закрыть по IDOK или IDCANCEL

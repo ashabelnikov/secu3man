@@ -37,9 +37,6 @@ class CEEPROMContextMenuManager
   void TrackPopupMenu(int x, int y, bool topAlign = true);
   void EnableBLMenuItems(bool i_enable);
 
-  //Надо вызывать когда окну приходит WM_INITMENUPOPUP
-  void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
-
  private:
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu
   CMenu m_ParentMenu;  //Top level menu

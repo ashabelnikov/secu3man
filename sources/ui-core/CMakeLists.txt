@@ -12,6 +12,7 @@ ADD_DEFINITIONS(-DFNT_HELPERS_EXPORTS)
 ADD_DEFINITIONS(-DIMAGE_UTILS_EXPORTS)
 ADD_DEFINITIONS(-DXBROWSEFORFOLDER_EXPORTS)
 ADD_DEFINITIONS(-DMSGBOX_EXPORTS)
+ADD_DEFINITIONS(-DMENU_HELPERS_EXPORTS)
 
 set(CMAKE_MFC_FLAG 2)
 set(PROJECT ui-core)
@@ -43,6 +44,7 @@ set(HEADERS
   HotKeysToCmdRouter.h
   ImageUtils.h
   ITabControllerEvent.h
+  InitMenuPopup.h
   Label.h
   LEDIndicator.h
   MapEditorCtrl.h
@@ -84,6 +86,7 @@ set(SOURCES
   HotKeysToCmdRouter.cpp
   ImageUtils.cpp
   ITabControllerEvent.cpp
+  InitMenuPopup.cpp
   Label.cpp
   LEDIndicator.cpp
   MapEditorCtrl.cpp

@@ -82,7 +82,6 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_LBUTTONUP()
  ON_WM_SETCURSOR()
  ON_WM_CONTEXTMENU()
- ON_WM_INITMENUPOPUP()
  ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
  ON_COMMAND(IDM_MI_MET_DEL_GAUGE, OnMetDeleteGauge)
  ON_UPDATE_COMMAND_UI(IDM_MI_MET_DEL_GAUGE, OnUpdateMetDelete)
@@ -1292,12 +1291,6 @@ void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_
 void CMIDeskDlg::setOnMISettingsChanged(EventHandler i_Function)
 {
  m_OnMISettingsChanged = i_Function;
-}
-
-void CMIDeskDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
-{
- mp_ctxMenuMgrMet->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
- mp_ctxMenuMgrInd->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 void CMIDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)

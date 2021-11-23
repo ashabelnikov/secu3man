@@ -81,7 +81,6 @@ BEGIN_MESSAGE_MAP(CTablesDeskDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SYSCOMMAND()
  ON_WM_CONTEXTMENU()
- ON_WM_INITMENUPOPUP()
  ON_WM_SIZE()
  ON_UPDATE_COMMAND_UI(IDC_TABLES_DESK_TITLE, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_SAVE_BUTTON, OnUpdateControls)
@@ -551,11 +550,6 @@ void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)
 void CTablesDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
  mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);
-}
-
-void CTablesDeskDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
-{
- mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 void CTablesDeskDlg::OnRangeCmdsLoad(UINT nID)

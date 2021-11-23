@@ -59,6 +59,9 @@ class AFX_EXT_CLASS CUpdatableDialog : public CDialog
   //здесь будет грязный хак!
   virtual BOOL PreTranslateMessage(MSG* pMsg);
 
+  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
+  DECLARE_MESSAGE_MAP()
+
  private:
   BOOL m_bDoIdle;
 };

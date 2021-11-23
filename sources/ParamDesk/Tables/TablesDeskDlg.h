@@ -108,7 +108,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   afx_msg void OnSaveButton();
   afx_msg void OnSysCommand(UINT, LONG);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnRangeCmdsLoad(UINT nID);
   afx_msg void OnRangeCmdsSave(UINT nID);
   afx_msg void OnImportFromS3F(void);

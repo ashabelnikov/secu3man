@@ -173,7 +173,6 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
   afx_msg LRESULT OnMouseLeave(WPARAM wParam, LPARAM lParam);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnMetAddGauge(UINT nID);
   afx_msg void OnMetDeleteGauge();
   afx_msg void OnUpdateMetDelete(CCmdUI* pCmdUI);

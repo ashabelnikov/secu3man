@@ -157,7 +157,6 @@ class CDevDiagnostTabDlg : public CTabDialog
   afx_msg void OnUpdateDiagControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateEnterButton(CCmdUI* pCmdUI);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnEnterButton();
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();

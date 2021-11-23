@@ -7,7 +7,7 @@ CC      = cl
 # compiler flags
 CFLAGS  = /nologo /W3 /GX /GR /MD /O2 /Ob2 -I.. /D_AFXDLL /D_AFXEXT /D_WINDLL /DWIN32 /D_WINDOWS /Ycstdafx.h
 CFLAGS = $(CFLAGS) -D_CRT_NON_CONFORMING_SWPRINTFS -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS
-CFLAGS = $(CFLAGS) -DDDX_HELPERS_EXPORTS -DFNT_HELPERS_EXPORTS -DXBROWSEFORFOLDER_EXPORTS -DMSGBOX_EXPORTS
+CFLAGS = $(CFLAGS) -DDDX_HELPERS_EXPORTS -DFNT_HELPERS_EXPORTS -DXBROWSEFORFOLDER_EXPORTS -DMSGBOX_EXPORTS -DMENU_HELPERS_EXPORTS
 CFLAGS = $(CFLAGS) /D NDEBUG
 CFLAGS = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
@@ -21,7 +21,8 @@ SOURCES = StdAfx.cpp AnalogMeter.cpp AnalogMeterCtrl.cpp ddx_helpers.cpp fnt_hel
   ProgressCtrlEx.cpp SpinButtonctrlEx.cpp TabController.cpp TabDialog.cpp ToolTipCtrlEx.cpp \
   UpdatableDialog.cpp WindowSubClasser.cpp XBrowseForFolder.cpp uicore.cpp WndScroller.cpp \
   Chart2D.cpp MapEditorCtrl.cpp MultiLEDCtrl.cpp ScrlMessageBox.cpp ListCtrlEx.cpp ClickableBmp.cpp \
-  DynFieldsDialog.cpp FileDialogEx.cpp MsgBox.cpp ColorDialogEx.cpp CtrlScaler.cpp HatchDispCtrl.cpp
+  DynFieldsDialog.cpp FileDialogEx.cpp MsgBox.cpp ColorDialogEx.cpp CtrlScaler.cpp HatchDispCtrl.cpp \
+  InitMenuPopup.cpp
 
 # DLL building
 all: uicore

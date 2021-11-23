@@ -93,7 +93,6 @@ class CKnockChannelTabDlg : public CTabDialog
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnSaveParameters();
   afx_msg void OnCopyToAttenuatorTable();
   afx_msg void OnClearFunction();

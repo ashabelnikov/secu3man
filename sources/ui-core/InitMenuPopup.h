@@ -19,25 +19,21 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file DiagnostContextMenuManager.h
+/** \file InitMenuPopup.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-class CDiagnostContextMenuManager
-{
- public:
-  CDiagnostContextMenuManager(CWnd* pWnd = NULL);
-  virtual ~CDiagnostContextMenuManager();
+#ifdef MENU_HELPERS_EXPORTS
+ #define MENU_HELPERS_API __declspec(dllexport)
+#else
+ #define MENU_HELPERS_API __declspec(dllimport)
+#endif
 
-  void Attach(CWnd* pWnd);
-  void CreateContent(void);
-  void TrackPopupMenu(int x, int y);
+namespace MenuHelpers {
 
-  CMenu& GetParentMenu(void);
+//This method should be called when a pop-up menu is about to become active
+void MENU_HELPERS_API InitMenuPopup(CWnd* pWnd, CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
 
- private:
-  CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu
-  CMenu m_ParentMenu;  //Top level menu
-};
+}

@@ -25,6 +25,11 @@
 
 #include "stdafx.h"
 #include "DialogWithAccelerators.h"
+#include "InitMenuPopup.h"
+
+BEGIN_MESSAGE_MAP(CDialogWithAccelerators, Super)
+ ON_WM_INITMENUPOPUP()
+END_MESSAGE_MAP()
 
 CDialogWithAccelerators::CDialogWithAccelerators()
 {
@@ -47,6 +52,12 @@ BOOL CDialogWithAccelerators::PreTranslateMessage(MSG* pMsg)
  return Super::PreTranslateMessage(pMsg);
 }
 
+void CDialogWithAccelerators::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
+{
+ MenuHelpers::InitMenuPopup(this, pMenu, nIndex, bSysMenu);
+}
+
+//--------------------------------------------------------------------
 CModelessDialog::CModelessDialog()
 {
  //empty

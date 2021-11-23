@@ -80,7 +80,6 @@ LPCTSTR CEEPROMTabDlg::GetDialogID(void) const
 
 BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_WM_CONTEXTMENU()
- ON_WM_INITMENUPOPUP()
  ON_WM_DESTROY()
  ON_WM_TIMER()
  ON_WM_DROPFILES()
@@ -247,11 +246,6 @@ void CEEPROMTabDlg::OnPopupMenuButton()
  CRect rc;
  m_ee_popup_menu_button.GetWindowRect(rc);
  mp_ContextMenuManager->TrackPopupMenu(rc.left, rc.top, false); //bottom align
-}
-
-void CEEPROMTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
-{
- mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 void CEEPROMTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)

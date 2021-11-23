@@ -128,7 +128,6 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_WM_CONTEXTMENU()
  ON_UPDATE_COMMAND_UI(IDM_READ_FLASH, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_OPEN_FLASH, OnUpdatePopupMenu_file)
- ON_WM_INITMENUPOPUP()
  ON_WM_TIMER()
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -296,11 +295,6 @@ void CFirmwareTabDlg::OnPopupMenuButton()
  CRect rc;
  m_fw_popup_menu_button.GetWindowRect(rc);
  mp_ContextMenuManager->TrackPopupMenu(rc.left, rc.top, false); //bottom align
-}
-
-void CFirmwareTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
-{
- mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 void CFirmwareTabDlg::OnUpdatePopupMenu_bl(CCmdUI* pCmdUI)

@@ -90,7 +90,6 @@ class CCheckEngineTabDlg : public CTabDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnClose();
-  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnRealTimeErrorsCheckbox();
   afx_msg void OnReadSavedErrors();

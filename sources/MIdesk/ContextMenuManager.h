@@ -37,9 +37,6 @@ class CMetContextMenuManager
 
   CMenu& GetParentMenu(void);
 
-  //Should be called when window receives WM_INITMENUPOPUP
-  void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
-
  private:
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu
   CMenu m_parentMenu;  //Top level menu
@@ -64,9 +61,6 @@ class CIndContextMenuManager
   void TrackPopupMenu(int x, int y);
 
   CMenu& GetParentMenu(void);
-
-  //Should be called when window receives WM_INITMENUPOPUP
-  void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
 
  private:
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu

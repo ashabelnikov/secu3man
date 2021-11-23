@@ -35,9 +35,6 @@ class CKnockContextMenuManager
   void CreateContent(void);
   void TrackPopupMenu(int x, int y);
 
-  //Надо вызывать когда окну приходит WM_INITMENUPOPUP
-  void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
-
  private:
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu
   CMenu m_ParentMenu;  //Top level menu

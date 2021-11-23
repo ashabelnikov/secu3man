@@ -87,7 +87,6 @@ class CEEPROMTabDlg : public CTabDialog
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDropFiles(HDROP hDropInfo);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnPopupMenuButton();
   afx_msg void OnUpdatePopupMenu_bl(CCmdUI* pCmdUI);
   afx_msg void OnUpdatePopupMenu_file(CCmdUI* pCmdUI);

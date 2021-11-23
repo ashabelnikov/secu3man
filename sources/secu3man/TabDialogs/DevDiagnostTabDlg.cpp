@@ -48,7 +48,6 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
  ON_WM_CONTEXTMENU()
- ON_WM_INITMENUPOPUP()
  ON_WM_SIZE()
 
  ON_EN_CHANGE(IDC_DEVDIAG_TESTCH_FRQ_EDIT, OnChangeData)
@@ -253,11 +252,6 @@ void CDevDiagnostTabDlg::OnDestroy()
 void CDevDiagnostTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
  mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);
-}
-
-void CDevDiagnostTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
-{
- mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 void CDevDiagnostTabDlg::OnOutputCheckToggle(int output_id, bool state)

@@ -108,7 +108,6 @@ LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
 
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_WM_DESTROY()
- ON_WM_INITMENUPOPUP()
  ON_WM_CONTEXTMENU()
  ON_WM_SIZE()
  ON_BN_CLICKED(IDC_KC_SAVE_PARAM_BUTTON, OnSaveParameters)
@@ -191,11 +190,6 @@ void CKnockChannelTabDlg::OnDestroy()
  Super::OnDestroy();
  KillTimer(TIMER_ID);
  m_initialized = false;
-}
-
-void CKnockChannelTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
-{
- mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 void CKnockChannelTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
