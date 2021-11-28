@@ -64,7 +64,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 , m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
 , m_is_app_items_available(false)
-, mp_ParamDeskDlg(new CParamDeskDlg(NULL, true)) //<-- используем вкладку параметров детонации
+, mp_ParamDeskDlg(new CParamDeskDlg(NULL, true, false)) //<-- use knock parameters tab, don't use TPS learning
 , mp_IORemappingDlg(new CIORemappingDlg())
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 , mp_ContextMenuManager(new CFirmwareModeContextMenuManager())

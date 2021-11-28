@@ -36,6 +36,8 @@
 class IParamDeskView : public IDeskView
 {
  public:
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
+
   virtual bool SetValues(BYTE i_descriptor, const void* i_values) = 0;  //put data into specified tab
   virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;        //get data from specified tab
   virtual bool LockUIUpdate(BYTE i_descriptor, bool lock) = 0;
@@ -76,6 +78,7 @@ class IParamDeskView : public IDeskView
   virtual void SetOnTabActivate(EventHandler OnTabActivate) = 0; //Will be called when tab become active
   virtual void SetOnChangeInTab(EventHandler OnChangeInTab) = 0; //обработчик будет вызываться при изменении пользователем данных вкладки
   virtual void SetOnSaveButton(EventHandler OnSaveButton) = 0; //обработчик будет вызываться при нажатии кнопки "сохранить"
+  virtual void SetOnTPSLearning(EventWithCode OnCB) = 0;
 
   //call only for active panel
   virtual bool SetCurSel(int sel) = 0;

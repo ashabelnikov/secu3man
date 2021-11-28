@@ -27,6 +27,7 @@
 
 #include <vector>
 #include "common/unicodesupport.h"
+#include "common/objecttimer.h"
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "common/ParamTabBaseDlg.h"
@@ -40,9 +41,10 @@ class CWndScroller;
 class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CFunSetPageDlg(CWnd* pParent = NULL); // standard constructor
+  CFunSetPageDlg(CWnd* pParent = NULL, bool m_tps_learning = true); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
 
@@ -60,6 +62,8 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void FillCBByLoadOpts(void);
 
+  void setOnTPSLearning(EventWithCode OnCB) {m_OnTPSLearning = OnCB;}
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
@@ -71,21 +75,26 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeDataLoadSrc();
   afx_msg void OnMapCalcButton();
   afx_msg void OnMap2CalcButton();
+  afx_msg void OnTpsCalcButton();
   afx_msg void OnChangeVE2MF();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsLower(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsUpper(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsFuelInject(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsTPSLearning(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   void UpdateLoadAxisUnits(void);
+  void OnTPsLearningPushTimer(void);
+  void OnTPsLearningReleaseTimer(void);
   SECU3IO::FunSetPar m_params;
   std::vector<_TSTRING> m_fun_names;
   bool m_enabled;
   bool m_enable_secu3t_features;
   bool m_fuel_injection;
+  bool m_tps_learning;
 
   CComboBox m_gas_maps_combo;
   CComboBox m_benzin_maps_combo;
@@ -109,6 +118,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_tps_curve_gradient_edit;
   CBitmapButton m_calc_map_btn;
   CBitmapButton m_calc_map2_btn;
+  CBitmapButton m_calc_tps_btn;
   CStatic m_lolo_unit;
   CStatic m_hilo_unit;
   CButton m_use_ldax_grid_check;
@@ -120,4 +130,9 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;  
+
+  EventWithCode m_OnTPSLearning;
+  CObjectTimer<CFunSetPageDlg> m_tpsl_tmr;  
+  float m_tpsl_push_value;
+  float m_tpsl_release_value;
 };

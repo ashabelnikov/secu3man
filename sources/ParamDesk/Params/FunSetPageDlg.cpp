@@ -31,8 +31,10 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 #include "ui-core/DynFieldsDialog.h"
+#include "ui-core/MsgBox.h"
 #include "../MAPCalc/MAPCalcController.h"
 #include "common/Calculations.h"
+#include <math.h>
 
 const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
 
@@ -58,6 +60,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_MAP_CALC_BUTTON, OnMapCalcButton)
  ON_BN_CLICKED(IDC_PD_MAP_CALC2_BUTTON, OnMap2CalcButton)
  ON_BN_CLICKED(IDC_PD_FUNSET_USE_LDAX_GRID, OnChangeDataLdaxGrid)
+ ON_BN_CLICKED(IDC_PD_TPS_CALC_BUTTON, OnTpsCalcButton)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_EDIT,OnUpdateControlsLower)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_SPIN,OnUpdateControlsLower)
@@ -123,15 +126,18 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC2_BUTTON, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TPS_CALC_BUTTON, OnUpdateControlsTPSLearning)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_VE2MF_CAPTION, OnUpdateControlsFuelInject)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_VE2MF_COMBO, OnUpdateControlsFuelInject)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_V_UNI_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_V_UNI_CAPTION,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_USE_LDAX_GRID, OnUpdateControls)
 END_MESSAGE_MAP()
 
-CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
+CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/, bool tps_learning /*=true*/)
 : Super(CFunSetPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_enable_secu3t_features(false)
@@ -145,6 +151,9 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 , m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 , m_fuel_injection(false)
+, m_tps_learning(tps_learning)
+, m_tpsl_push_value(.0f)
+, m_tpsl_release_value(.0f)
 {
  m_params.map_lower_pressure = 4.5f;
  m_params.map_upper_pressure = 10.0f;
@@ -163,6 +172,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
  m_params.use_load_grid = false;
  m_params.ve2_map_func = 0; //use 1st VE map
  m_params.uni_gas_v = SECU3IO::UNI_OUTPUT_NUM; //disabled
+ m_params.tps_raw = .0f;
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -198,6 +208,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN, m_tps_curve_gradient_spin);
  DDX_Control(pDX, IDC_PD_MAP_CALC_BUTTON, m_calc_map_btn);
  DDX_Control(pDX, IDC_PD_MAP_CALC2_BUTTON, m_calc_map2_btn);
+ DDX_Control(pDX, IDC_PD_TPS_CALC_BUTTON, m_calc_tps_btn);
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_UNIT, m_lolo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_UNIT, m_hilo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_USE_LDAX_GRID, m_use_ldax_grid_check);
@@ -251,6 +262,11 @@ void CFunSetPageDlg::OnUpdateControlsFuelInject(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_fuel_injection);
 }
 
+void CFunSetPageDlg::OnUpdateControlsTPSLearning(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_tps_learning);
+}
+
 BOOL CFunSetPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
@@ -259,6 +275,9 @@ BOOL CFunSetPageDlg::OnInitDialog()
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
  m_calc_map2_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                            MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
+
+ m_calc_tps_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
  m_map_grad_spin.SetBuddy(&m_map_grad_edit);
@@ -280,7 +299,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map_curve_offset_edit.SetRange(-5.0f,5.0f);
 
  m_map_curve_gradient_spin.SetBuddy(&m_map_curve_gradient_edit);
- m_map_curve_gradient_edit.SetLimitText(5);
+ m_map_curve_gradient_edit.SetLimitText(6);
  m_map_curve_gradient_edit.SetDecimalPlaces(3);
  m_map_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
  m_map_curve_gradient_edit.SetRange(-150.0f,150.0f);
@@ -292,7 +311,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map2_curve_offset_edit.SetRange(-5.0f,5.0f);
 
  m_map2_curve_gradient_spin.SetBuddy(&m_map2_curve_gradient_edit);
- m_map2_curve_gradient_edit.SetLimitText(5);
+ m_map2_curve_gradient_edit.SetLimitText(6);
  m_map2_curve_gradient_edit.SetDecimalPlaces(3);
  m_map2_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
  m_map2_curve_gradient_edit.SetRange(-150.0f,150.0f);
@@ -304,7 +323,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_tps_curve_offset_edit.SetRange(-5.0f, 5.0f);
 
  m_tps_curve_gradient_spin.SetBuddy(&m_tps_curve_gradient_edit);
- m_tps_curve_gradient_edit.SetLimitText(5);
+ m_tps_curve_gradient_edit.SetLimitText(6);
  m_tps_curve_gradient_edit.SetDecimalPlaces(3);
  m_tps_curve_gradient_spin.SetRangeAndDelta(-100.0f, 100.0f, 0.01f);
  m_tps_curve_gradient_edit.SetRange(-100.0f, 100.0f);
@@ -369,6 +388,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_calc_map_btn, MLL::GetString(IDS_PD_MAP_CALC_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_calc_map2_btn, MLL::GetString(IDC_PD_MAP_CALC2_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_tps_btn, MLL::GetString(IDS_PD_TPS_CALC_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gas_maps_combo, MLL::GetString(IDS_PD_FUNSET_GAS_MAPS_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_benzin_maps_combo, MLL::GetString(IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT)));
 
@@ -397,6 +417,7 @@ void CFunSetPageDlg::OnDestroy()
 {
  Super::OnDestroy();
  mp_scr->Close();
+ m_tpsl_tmr.KillTimer();
 }
 
 void CFunSetPageDlg::OnChangeData()
@@ -470,6 +491,44 @@ void CFunSetPageDlg::OnMap2CalcButton()
   m_params.map2_curve_gradient = gradient;
   UpdateData(false);
   OnChangeNotify(); //notify event receiver about change
+ }
+}
+
+void CFunSetPageDlg::OnTpsCalcButton()
+{
+ SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_TPSLEARN_PUSH).c_str(), MB_OK | MB_ICONASTERISK);
+ if (m_OnTPSLearning)
+  m_OnTPSLearning(1); //start
+ m_tpsl_tmr.SetTimer(this, &CFunSetPageDlg::OnTPsLearningPushTimer, 1000);
+}
+
+void CFunSetPageDlg::OnTPsLearningPushTimer(void)
+{
+ m_tpsl_push_value = m_params.tps_raw;
+ m_tpsl_tmr.KillTimer();
+ SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_TPSLEARN_RELEASE).c_str(), MB_OK | MB_ICONASTERISK);
+ m_tpsl_tmr.SetTimer(this, &CFunSetPageDlg::OnTPsLearningReleaseTimer, 1000);
+}
+
+void CFunSetPageDlg::OnTPsLearningReleaseTimer(void)
+{
+ m_tpsl_release_value = m_params.tps_raw;
+ m_tpsl_tmr.KillTimer();
+ if (m_OnTPSLearning)
+  m_OnTPSLearning(0); //finish
+
+ float d = m_tpsl_push_value - m_tpsl_release_value;
+ if (fabs(d) > 0.1f) //prevent division by zero
+ { 
+  SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_TPSLEARN_FINISH).c_str(), MB_OK | MB_ICONASTERISK);
+  m_params.tps_curve_gradient = (100.0f / d); //gradient in %/V
+  m_params.tps_curve_offset = .0f - m_tpsl_release_value;  //offset if V
+  UpdateData(false); //copy data from variables to dialog
+  OnChangeNotify();
+ }
+ else
+ {
+  SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_TPSLEARN_ERROR).c_str(), MB_OK | MB_ICONERROR);
  }
 }
 

@@ -43,7 +43,7 @@ const UINT CEEPROMTabDlg::IDD = IDD_EEPROM_DATA;
 
 CEEPROMTabDlg::CEEPROMTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CEEPROMTabDlg::IDD, pParent)
-, mp_ParamDeskDlg(new CParamDeskDlg(NULL, true)) //<-- используем вкладку параметров детонации
+, mp_ParamDeskDlg(new CParamDeskDlg(NULL, true, false)) //<-- use knock parameters tab, don't use TPS learning
 , mp_ContextMenuManager(new CEEPROMContextMenuManager())
 , mp_TablesPanel(new CButtonsPanel(0, NULL))
 , m_is_bl_items_available(false)

@@ -69,6 +69,7 @@ class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
   void OnParamDeskTabActivate(void);
   void OnParamDeskChangeInTab(void);
   void OnPDSaveButton(void);
+  void OnPDTPSLearning(int state);
   //from m_pd_changes_timer
   void OnParamDeskChangesTimer(void);
 

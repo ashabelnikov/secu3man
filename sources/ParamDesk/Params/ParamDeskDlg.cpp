@@ -68,7 +68,7 @@ using namespace fastdelegate;
 
 const UINT CParamDeskDlg::IDD = IDD_PARAMETERS_DESK;
 
-CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/)
+CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/, bool tps_learning /*= true*/)
 : Super(CParamDeskDlg::IDD, pParent)
 , m_pImgList(NULL)
 , m_enabled(false)
@@ -78,6 +78,7 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_choke(false)
 , m_choke_ctrls(false)
 , m_show_knock_page(i_show_knock_page)
+, m_tps_learning(tps_learning)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 , mp_reservparsLink(new CLabel())
 {
@@ -98,8 +99,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
  m_pIdlRegPageDlg = new CIdlRegPageDlg();
  m_pIdlRegPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
- m_pFunSetPageDlg = new CFunSetPageDlg();
+ m_pFunSetPageDlg = new CFunSetPageDlg(NULL, m_tps_learning);
  m_pFunSetPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pFunSetPageDlg->setOnTPSLearning(MakeDelegate(this, &CParamDeskDlg::OnTPSLearning));
 
  m_pTemperPageDlg = new CTemperPageDlg();
  m_pTemperPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
@@ -911,4 +913,15 @@ void CParamDeskDlg::SetITEdMode(int mode)
 void CParamDeskDlg::OnReservparsLinkClick(void)
 {
  SECUMessageBox(IDS_RESERVE_PARS_INFO, MB_OK | MB_ICONINFORMATION);
+}
+
+void CParamDeskDlg::SetOnTPSLearning(EventWithCode OnCB)
+{
+ m_OnTPSLearning = OnCB;
+}
+
+void CParamDeskDlg::OnTPSLearning(int state)
+{
+ if (m_OnTPSLearning)
+  m_OnTPSLearning(state);
 }

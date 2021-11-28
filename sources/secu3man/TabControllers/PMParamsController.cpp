@@ -52,6 +52,7 @@ CPMParamsController::CPMParamsController(VIEW* ip_view, CCommunicationManager* i
  mp_view->SetOnTabActivate(MakeDelegate(this, &CPMParamsController::OnParamDeskTabActivate));
  mp_view->SetOnChangeInTab(MakeDelegate(this, &CPMParamsController::OnParamDeskChangeInTab));
  mp_view->SetOnSaveButton(MakeDelegate(this, &CPMParamsController::OnPDSaveButton));
+ mp_view->SetOnTPSLearning(MakeDelegate(this, &CPMParamsController::OnPDTPSLearning));
 }
 
 CPMParamsController::~CPMParamsController()
@@ -117,6 +118,20 @@ bool CPMParamsController::CollectData(const BYTE i_descriptor, const void* i_pac
     m_operation_state = -1; //останов КА - операции выполнены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
     return true; //операции выполнены
+   }
+  }
+  break;
+
+  case 1:
+  {
+   BYTE descr = FUNSET_PAR;
+   if (i_descriptor != FUNSET_PAR)
+   {
+    mp_comm->m_pControlApp->ChangeContext(descr);
+   }
+   else
+   {
+    mp_view->SetValues(i_descriptor, i_packet_data);
    }
   }
   break;
@@ -223,5 +238,18 @@ void CPMParamsController::OnParamDeskChangesTimer(void)
 
 
   m_parameters_changed = false; //обработали событие - сбрасываем признак
+ }
+}
+
+void CPMParamsController::OnPDTPSLearning(int state)
+{
+ if (state)
+ {
+  m_RequestDataCollection();
+  m_operation_state = 1;
+ }
+ else
+ {
+  m_operation_state = 0;
  }
 }

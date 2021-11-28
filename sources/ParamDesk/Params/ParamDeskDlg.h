@@ -45,7 +45,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
  typedef CModelessUpdatableDialog Super;
 
  public:
-  CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false);
+  CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false, bool tps_learning = true);
   virtual ~CParamDeskDlg();
   static const UINT IDD;
 
@@ -99,6 +99,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void SetOnTabActivate(EventHandler OnTabActivate);
   virtual void SetOnChangeInTab(EventHandler OnChangeInTab);
   virtual void SetOnSaveButton(EventHandler OnSaveButton);
+  virtual void SetOnTPSLearning(EventWithCode OnCB);
 
   //Get/Set current selection
   virtual bool SetCurSel(int sel);
@@ -132,6 +133,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   DECLARE_MESSAGE_MAP()
 
  private:
+  // from CFunSetPageDlg
+  void OnTPSLearning(int state);
   // ITabControllerEvent
   virtual void OnSelchangeTabctl(void);
   virtual bool OnSelchangingTabctl(void);
@@ -178,6 +181,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   bool m_choke_ctrls;
 
   const bool m_show_knock_page;
+  const bool m_tps_learning;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;
   int m_fuel_inject_idx;
@@ -190,6 +194,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   EventHandler m_OnTabActivate;
   EventHandler m_OnChangeInTab;
   EventHandler m_OnSaveButton;
+  EventWithCode m_OnTPSLearning;
   CSize m_tabLRMargin;
 };
 

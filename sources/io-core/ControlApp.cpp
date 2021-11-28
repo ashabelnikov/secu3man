@@ -842,7 +842,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 61 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 65 : 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -956,6 +956,12 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex32ToBin(raw_packet, &mafload_const))
   return false;
  funSetPar.mafload_const = (float)mafload_const;
+
+ //Throttle position sensor
+ signed int tps_raw = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_raw, true))
+  return false;
+ funSetPar.tps_raw = tps_raw * m_adc_discrete;
 
  return true;
 }

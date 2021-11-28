@@ -174,15 +174,17 @@ BEGIN
 
     GROUPBOX        "Настройка ДПДЗ",IDC_PD_FUNSET_TPS_SENSOR_GROUP,1,130,157,39,0,WS_EX_TRANSPARENT
 
-    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT,9,149,35,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,148,11,16
+    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT,9,149,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,148,11,16
     LTEXT           "Смещение кривой",IDC_PD_FUNSET_TPS_CURVE_OFFSET_CAPTION,6,139,63,8
-    LTEXT           "В",IDC_PD_FUNSET_TPS_CURVE_OFFSET_UNIT,61,152,12,10
+    LTEXT           "В",IDC_PD_FUNSET_TPS_CURVE_OFFSET_UNIT,53,152,12,10
 
-    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT,86,149,35,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,148,11,16
-    LTEXT           "Наклон кривой",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_CAPTION,86,139,66,8
-    LTEXT           "%/В",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,138,152,18,11
+    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT,76,149,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,148,11,16
+    LTEXT           "Наклон кривой",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_CAPTION,76,139,66,8
+    LTEXT           "%/В",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,118,152,18,11
+
+    CONTROL         "",IDC_PD_TPS_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,149,15,18
 
     LTEXT           "Определ. нагрузку по:",IDC_PD_FUNSET_LOAD_SRC_COMBO_CAPTION,2,179,83,8
     COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,177,58,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
@@ -1900,6 +1902,15 @@ BEGIN
     IDS_PD_ANGLES_ZEROAAOCT_CHECK_TT "Нулевой угол опережения с октан коррекцией. Игнорируются все таблицы и коррекции УОЗ кроме параметра 'Октан коррекция'. Также, в этом режиме не действуют ограничения накладываемые параметрами 'Минимальный УОЗ' и 'Максимальный УОЗ'."
 END
 
+STRINGTABLE
+BEGIN
+    IDS_PD_FUNSET_TPSLEARN_PUSH    "Нажмите педаль акселератора до упора и держите."
+    IDS_PD_FUNSET_TPSLEARN_RELEASE "Отпустите педаль акселератора и уберите с нее ногу."
+    IDS_PD_FUNSET_TPSLEARN_FINISH  "Калибровка ДПДЗ окончена!"
+    IDS_PD_FUNSET_TPSLEARN_ERROR   "ОШИБКА!\nРазница напряжений при нажатой и отпущеной педали слишком маленькая!\nПроверьте подключение ДПДЗ."
+    IDS_PD_TPS_CALC_BUTTON_TT      "Автоматический расчет параметров смещения и наклона ДПДЗ. Следуйте указаниям из появляющихся сообщений (всего 2 шага). Программа попросит вас нажать педаль акселератора и затем отпустить ее."
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -2070,15 +2081,17 @@ BEGIN
 
     GROUPBOX        "TPS tuning",IDC_PD_FUNSET_TPS_SENSOR_GROUP,3,128,155,39,0,WS_EX_TRANSPARENT
 
-    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT,11,147,35,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,48,146,11,16
-    LTEXT           "Curve offset",IDC_PD_FUNSET_TPS_CURVE_OFFSET_CAPTION,8,137,63,8
-    LTEXT           "V",IDC_PD_FUNSET_TPS_CURVE_OFFSET_UNIT,63,150,12,10
+    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT,9,149,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,148,11,16
+    LTEXT           "Curve offset",IDC_PD_FUNSET_TPS_CURVE_OFFSET_CAPTION,6,139,63,8
+    LTEXT           "V",IDC_PD_FUNSET_TPS_CURVE_OFFSET_UNIT,53,152,12,10
 
-    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT,86,147,35,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,146,11,16
-    LTEXT           "Curve gradient",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_CAPTION,86,137,66,8
-    LTEXT           "%/V",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,138,150,19,11
+    EDITTEXT        IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT,76,149,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,148,11,16
+    LTEXT           "Curve gradient",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_CAPTION,76,139,66,8
+    LTEXT           "%/V",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,118,152,18,11
+
+    CONTROL         "",IDC_PD_TPS_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,149,15,18
 
     LTEXT           "Load measurement:",IDC_PD_FUNSET_LOAD_SRC_COMBO_CAPTION,2,177,83,8
     COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,175,58,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
@@ -3821,6 +3834,15 @@ BEGIN
     IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT "0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"
     IDS_PD_STARTER_STBLSTRCNT_EDIT_TT "Number of strokes from the moment the starter's blocking threshold is reached until starter is actually turned off. Set the value to 0 if you want the table to be used instead of this simple constant."
     IDS_PD_STARTER_FLDCLRSTART_CHECK_TT "If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_FUNSET_TPSLEARN_PUSH    "Press the accelerator pedal all the way and hold."
+    IDS_PD_FUNSET_TPSLEARN_RELEASE "Release the gas pedal and take your foot off it."
+    IDS_PD_FUNSET_TPSLEARN_FINISH  "TPS calibration is over!"
+    IDS_PD_FUNSET_TPSLEARN_ERROR   "ERROR!\nVoltage difference between pressed and released pedal is too small!\nCheck TPS connection."
+    IDS_PD_TPS_CALC_BUTTON_TT      "Automatic calculation of the offset and gradient parameters of the TPS. Follow the directions from the messages that appear (only 2 steps). The program will ask you to press the accelerator pedal and then to release it."
 END
 
 /////////////////////////////////////////////////////////////////////////////

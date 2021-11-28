@@ -114,7 +114,7 @@ CMAPCalcController::CMAPCalcController(VIEW* ip_view, float i_offset, float i_gr
    PtValue p2(cntr.mp_view->Get2ndptPress(), cntr.m_2ndptPressUnit);
    PtValue v2(cntr.mp_view->Get2ndptVolt(), cntr.m_2ndptVoltUnit);
 
-   //firast of all, convert values to SI form  (Pa, V)
+   //first of all, convert values to SI form  (Pa, V)
    float p1Press = cntr._ConvertUnit(p1.first, p1.second, true);
    float p1Volt = cntr._ConvertUnit(v1.first, v1.second, true);
    float p2Press = cntr._ConvertUnit(p2.first, p2.second, true);
