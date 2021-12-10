@@ -875,6 +875,8 @@ const int INPAVNUM = 14;
   float  ltft_cell_band;  //!< cell band in %
   float  ltft_stab_time;  //!< Learn stability time
   float  ltft_learn_grad; //!< Learning gradient
+  float  ltft_learn_gpa;
+  float  ltft_learn_gpd;
 
   int  pwrrelay_uni;
  };

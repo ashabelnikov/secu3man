@@ -2174,6 +2174,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Learning gradient"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Determines the rate of change of adjacent cells. The higher the value, the more neighboring cells change when learning the current cell."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Абс. давление газа разрешения адаптации"), _T("кПа"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpa, _T("Процесс адаптации включится только когда абсолютное давление газа превысит этот порог."));
+ else
+  dfd.AppendItem(_T("Abs. gas pressure threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpa, _T("LTFT learning will work only when absolute gas pressure is above this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Дифф. давление газа разрешения адаптации"), _T("кПа"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpd, _T("Процесс адаптации включится только когда дифференциальное давление газа (ДДГ - ДАД) превысит этот порог."));
+ else
+  dfd.AppendItem(_T("Diff. gas pressure threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpd, _T("LTFT learning will work only when differential gas pressure (GPS - MAP) is above this threshold."));
+
  //miscellaneous
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Прочие константы:"));
