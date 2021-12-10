@@ -661,14 +661,14 @@ void CCheckEngineTabController::OnTrimtabExport(int setIdx)
  if (setIdx < TABLES_NUMBER)
  {
   CFirmwareDataMediator *p_fwdm = mp_fwdcntr->GetFWDM();
-  p_fwdm->GetVEMap(setIdx, ve, false);
+  p_fwdm->GetVEMap(setIdx, ve, true);
   ApplyTrimtabToVE(ve);
   p_fwdm->SetVEMap(setIdx, ve); //save modified map
  }
  else
  {
   EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
-  p_eedm->GetVEMap(0, ve, false);
+  p_eedm->GetVEMap(0, ve, true);
   ApplyTrimtabToVE(ve);
   p_eedm->SetVEMap(0, ve);
  }

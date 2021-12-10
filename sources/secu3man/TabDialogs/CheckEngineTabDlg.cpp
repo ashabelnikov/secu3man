@@ -606,12 +606,12 @@ void CCheckEngineTabDlg::SetTrimtabExpMenuStrings(const std::vector<_TSTRING> &s
   for(size_t i = 0; i < strings.size(); ++i)
   {
    CMenu *pSub = m_ltftexp_menu.GetSubMenu(0);
-   pSub->ModifyMenu(ID_LTFTEXP_POPUP_FIRMWARE0 + i, MF_STRING | MF_BYCOMMAND, 0, strings[i].c_str());
+   pSub->ModifyMenu(ID_LTFTEXP_POPUP_FIRMWARE0 + i, MF_STRING | MF_BYCOMMAND, ID_LTFTEXP_POPUP_FIRMWARE0 + i, strings[i].c_str());
   }
  }
  else
  {
   CMenu *pSub = m_ltftexp_menu.GetSubMenu(0);
-  pSub->ModifyMenu(ID_LTFTEXP_POPUP_EEPROM, MF_STRING | MF_BYCOMMAND, 0, strings[0].c_str()); //4 sets from flash + separator
- } 
+  pSub->ModifyMenu(ID_LTFTEXP_POPUP_EEPROM, MF_STRING | MF_BYCOMMAND, ID_LTFTEXP_POPUP_EEPROM, strings[0].c_str()); //4 sets from flash + separator
+ }
 }
