@@ -1357,15 +1357,15 @@ bool CAppSettingsModel::WriteSettings(void)
  os.WriteInt(m_optAlwaysWriteLog);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  os.WriteComment(_T("Symbol used to separate fields in the CSV file."));
+  os.WriteComment(_T("Symbol used to separate fields in the CSV file. Accepted values: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
  else
-  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файле."));
+  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файле. Допустимые значения: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
  os.WriteInt(m_optCSVSepSymbol);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  os.WriteComment(_T("Symbol used to separate fields in the Map CSV file."));
+  os.WriteComment(_T("Symbol used to separate fields in the Map CSV file. Accepted values: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
  else
-  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файлах таблиц."));
+  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файлах таблиц. Допустимые значения: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
  os.WriteInt(m_optMapCSVSepSymbol);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)

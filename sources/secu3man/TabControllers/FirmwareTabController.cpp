@@ -237,6 +237,7 @@ void CFirmwareTabController::OnActivate(void)
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
+ mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
