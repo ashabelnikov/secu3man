@@ -877,6 +877,7 @@ const int INPAVNUM = 14;
   float  ltft_learn_grad; //!< Learning gradient
   float  ltft_learn_gpa;
   float  ltft_learn_gpd;
+  int    ltft_neigh_rad;
 
   int  pwrrelay_uni;
  };

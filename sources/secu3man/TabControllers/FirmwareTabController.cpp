@@ -2180,9 +2180,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Abs. gas pressure threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpa, _T("LTFT learning will work only when absolute gas pressure is above this threshold."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Дифф. давление газа разрешения адаптации"), _T("кПа"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpd, _T("Процесс адаптации включится только когда дифференциальное давление газа (ДДГ - ДАД) превысит этот порог."));
+  dfd.AppendItem(_T("Дифф. давление газа разрешения адаптации"), _T("кПа"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpd, _T("Процесс адаптации включится только когда дифференциальное давление газа (ДДГ - ДАД) превысит этот порог. Для запрещения этого порога установите значение = 0."));
  else
-  dfd.AppendItem(_T("Diff. gas pressure threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpd, _T("LTFT learning will work only when differential gas pressure (GPS - MAP) is above this threshold."));
+  dfd.AppendItem(_T("Diff. gas pressure threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpd, _T("LTFT learning will work only when differential gas pressure (GPS - MAP) is above this threshold. To disable this threshold set value to zero."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Радиус обучения соседей"), _T(""), 0, 16, 1, 1, &d.ltft_neigh_rad, _T("Определяет удаление (от текущей ячейки в таблице) в пределах которого обучаются соседние ячейки. Чем выше значение, тем на более дальние окружающие ячейки оказывается влияние."));
+ else
+  dfd.AppendItem(_T("Neighbours' learning radius"), _T(""), 0, 16, 1, 1, &d.ltft_neigh_rad, _T("Determines the distance (from the current cell in the table) within which adjacent cells are trained(altered). The higher the value, the more distant surrounding cells are affected."));
 
  //miscellaneous
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
