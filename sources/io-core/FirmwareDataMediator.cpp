@@ -322,11 +322,12 @@ typedef struct
  _uint   ltft_learn_gpa;
  _uint   ltft_learn_gpd;
  _uchar  ltft_neigh_rad;
+ _uchar  ltft_sigswt_num;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1991];
+ _uchar reserved[1990];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2940,6 +2941,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.ltft_learn_gpa = ((float)exd.ltft_learn_gpa) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.ltft_learn_gpd = ((float)exd.ltft_learn_gpd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.ltft_neigh_rad = exd.ltft_neigh_rad;
+ o_data.ltft_sigswt_num = exd.ltft_sigswt_num;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3020,4 +3022,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.ltft_learn_gpa = MathHelpers::Round(i_data.ltft_learn_gpa * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.ltft_learn_gpd = MathHelpers::Round(i_data.ltft_learn_gpd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.ltft_neigh_rad = i_data.ltft_neigh_rad;
+ exd.ltft_sigswt_num = i_data.ltft_sigswt_num;
 }

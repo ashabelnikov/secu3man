@@ -2189,6 +2189,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Neighbours' learning radius"), _T(""), 0, 16, 1, 1, &d.ltft_neigh_rad, _T("Determines the distance (from the current cell in the table) within which adjacent cells are trained(altered). The higher the value, the more distant surrounding cells are affected."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Число устойчивых переключений уровня сигнала ДК"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("Требуемое число устойчивых переключений уровня сигнала ДК во время нахождения рабочей точки в зоне ячейки. Чем выше значение, тем медленнее будет происходть адаптация."));
+ else
+  dfd.AppendItem(_T("Number of successive switches of EGO sensor's signal"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("The required number of successive switchings of the EGO sensor's signal level while the operating point is in the cell area. The higher the value, the slower the learning will be."));
+
  //miscellaneous
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Прочие константы:"));

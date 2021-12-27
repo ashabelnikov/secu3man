@@ -878,6 +878,7 @@ const int INPAVNUM = 14;
   float  ltft_learn_gpa;
   float  ltft_learn_gpd;
   int    ltft_neigh_rad;
+  int    ltft_sigswt_num;
 
   int  pwrrelay_uni;
  };
