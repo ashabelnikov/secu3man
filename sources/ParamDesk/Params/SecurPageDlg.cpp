@@ -177,6 +177,7 @@ BOOL CSecurPageDlg::OnInitDialog()
  m_bt_type_combo.AddString(_T("BC417"));
  m_bt_type_combo.AddString(_T("BK3231"));
  m_bt_type_combo.AddString(_T("BK3231S(JDY-31)"));
+ m_bt_type_combo.AddString(_T("BC352(HC-05)"));
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
