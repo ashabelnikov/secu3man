@@ -163,6 +163,9 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
   m_fwdm->GetKnockZoneMap(mp_fwd->knock_zone);
 
+ if (mp_view->GetFWDFlag(FLAG_LAMBDAZONE_MAP))
+  m_fwdm->GetLambdaZoneMap(mp_fwd->lambda_zone);
+
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
   m_fwdm->GetGrtsCurveMap(mp_fwd->grts_curve);
 
@@ -396,6 +399,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_LAMBDAZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
@@ -550,6 +554,9 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
   m_fwdm->SetKnockZoneMap(mp_fwd->knock_zone);
+
+ if (mp_view->GetFWDFlag(FLAG_LAMBDAZONE_MAP))
+  m_fwdm->SetLambdaZoneMap(mp_fwd->lambda_zone);
 
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
   m_fwdm->SetGrtsCurveMap(mp_fwd->grts_curve);
@@ -791,6 +798,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_LAMBDAZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);

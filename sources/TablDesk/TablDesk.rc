@@ -129,6 +129,7 @@ BEGIN
     CONTROL         "Ручн.корр.впрыска",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,597,96,18
     CONTROL         "Кривая расхода ДМРВ",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,616,96,18
     CONTROL         "Коррекция ДУТ",IDC_TD_FTLSCOR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,616,96,18
+    CONTROL         "Зона лямбда-коррекции",IDC_TD_LAMBDA_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,635,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -814,7 +815,9 @@ BEGIN
     IDS_PWM2_MAP            "Скважность ШИМ на выходе PWM2"
     IDS_MAPS_DUTY_UNIT      "Скважность (%)"
     IDS_MAPS_KNOCK_ZONE_UNIT "Состояние флага (0,1)"
+    IDS_MAPS_LAMBDA_ZONE_UNIT "Состояние флага (0,1)"
     IDS_KNOCK_ZONE_MAP       "Зоны контроля детонации"
+    IDS_LAMBDA_ZONE_MAP      "Зоны работы лямбда-коррекции"
     IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Задает зоны контроля детонации. Используйте значения 0 (нет контроля детонации) и 1 (есть контроль детонации). Зона начинается со значений оборотов и нагрузки где стоит 1 и заканчивается в следующем узле сетки (в сторону возрастания) если там стоит 0."
     IDS_SPLIT_ANGLE_MAP     "Сплитинг УОЗ"
     IDS_GME_IGN_CLTSEL_TT   "Редактированть таблицу для ХХ"
@@ -838,6 +841,7 @@ BEGIN
     IDS_GME_WM_CAPTION_STRTEXT "Пуск"
     IDS_TD_FTLSCOR_MAP_TT "Таблица коррекции показаний датчика уровня топлива. В таблице задан коэффициент коррекции в зависимости от напряжения бортовой сети."
     IDS_FTLSCOR_MAP "Коррекция уровня топлива от напряжения бортовой сети"
+    IDS_TD_LAMBDA_ZONES_MAP_TT "Задает зоны коррекции смеси по ДК. Используйте значения 0 (нет контроля смеси) и 1 (есть контроль смеси). Зона начинается со значений оборотов и нагрузки где стоит 1 и заканчивается в следующем узле сетки (в сторону возрастания) если там стоит 0."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -964,6 +968,7 @@ BEGIN
     CONTROL         "Manual inj.PW corr.",IDC_TD_MANINJPWC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,597,96,18
     CONTROL         "MAF flow curve",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,616,96,18
     CONTROL         "FTLS correction",IDC_TD_FTLSCOR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,616,96,18
+    CONTROL         "EGO correction zone",IDC_TD_LAMBDA_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,635,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1645,7 +1650,9 @@ BEGIN
     IDS_PWM2_MAP            "PWM duty for PWM2 output"
     IDS_MAPS_DUTY_UNIT      "Duty (%)"
     IDS_MAPS_KNOCK_ZONE_UNIT "State of flag (0,1)"
+    IDS_MAPS_LAMBDA_ZONE_UNIT "State of flag (0,1)"
     IDS_KNOCK_ZONE_MAP       "Detonation control zones"
+    IDS_LAMBDA_ZONE_MAP      "EGO correction's zones"
     IDS_TD_VIEW_KNOCK_ZONE_MAP_TT "Sets the knock control zones. Use values 0 (no knock control) and 1 (knock control available). Zone starts with RPM and load values where there is 1 and ends at the next grid node (upward) if there is 0."
     IDS_SPLIT_ANGLE_MAP     "Splitting angle (rotary engines)"
     IDS_TD_VIEW_PWM1_MAP   "PWM1 duty"
@@ -1674,6 +1681,7 @@ BEGIN
     IDS_GME_WM_CAPTION_STRTEXT "Start"
     IDS_TD_FTLSCOR_MAP_TT "Table of correction of fuel tank level sensor. The table contains correction factor depending on the board voltage."
     IDS_FTLSCOR_MAP "Fuel tank level correction vs board voltage"
+    IDS_TD_LAMBDA_ZONES_MAP_TT "Sets the EGO correction zones. Use values 0 (no EGO correction) and 1 (EGO correction). Zone starts with RPM and load values where there is 1 and ends at the next grid node (upward) if there is 0."
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0122 //01.22
+#define CURRENT_VERSION 0x0123 //01.23
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -87,6 +87,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.20 - Added MAF flow curve (25.07.2021)
 // 01.21 - Added MAP/TPS load axis allocation table (14.10.2021)
 // 01.22 - Added FTLS correction map (20.11.2021)
+// 01.23 - Added EGO correction zones map (01.01.2022)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -283,7 +284,10 @@ struct S3FSepMaps
  //since v01.22
  s3f_int32_t ftls_corr[FTLSCOR_UCOEF_SIZE];             //FTLS correction vs board voltage
 
- s3f_int32_t reserved[3923];       //reserved bytes, = 0
+ //since v01.23
+ s3f_int32_t lambda_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //lambda zones map
+
+ s3f_int32_t reserved[3667];       //reserved bytes, = 0
 };
 
 
@@ -697,6 +701,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->smapaban_thrd[i] = MathHelpers::Round(m_data.smapaban_thrd[i] * INT_MULTIPLIER);
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
   p_sepMaps->knock_zone[i] = MathHelpers::Round(m_data.knock_zone[i] * INT_MULTIPLIER);
+ for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+  p_sepMaps->lambda_zone[i] = MathHelpers::Round(m_data.lambda_zone[i] * INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   p_sepMaps->grts_curve[i] = MathHelpers::Round(m_data.grts_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
@@ -961,6 +967,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
   m_data.knock_zone[i] = p_sepMaps->knock_zone[i] / INT_MULTIPLIER;
+ for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+  m_data.lambda_zone[i] = p_sepMaps->lambda_zone[i] / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < F_TMP_POINTS; ++i)

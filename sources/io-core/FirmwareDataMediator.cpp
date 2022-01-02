@@ -259,7 +259,10 @@ typedef struct
  //FTLS correction coefficient vs board voltage
  _uint ftlscor_ucoef[FTLSCOR_UCOEF_SIZE];
 
- _uchar reserved1[1361];
+ //EGO correction zones map
+ _uint lambda_zone[EGOZONE_LOAD_SIZE];
+
+ _uchar reserved1[1329];
 
  //firmware constants:
  _int evap_clt;
@@ -1526,6 +1529,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetSmapabanThrdMap(op_fwd->smapaban_thrd);
  GetCESettingsData(op_fwd->cesd);
  GetKnockZoneMap(op_fwd->knock_zone);
+ GetLambdaZoneMap(op_fwd->lambda_zone);
  GetGrHeatDutyMap(op_fwd->grheat_duty);
  GetPwmIacUCoefMap(op_fwd->pwmiac_ucoef);
  GetAftstrStrk0Map(op_fwd->aftstr_strk0);
@@ -1616,6 +1620,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetSmapabanThrdMap(ip_fwd->smapaban_thrd);
  SetCESettingsData(ip_fwd->cesd);
  SetKnockZoneMap(ip_fwd->knock_zone);
+ SetLambdaZoneMap(ip_fwd->lambda_zone);
  SetGrHeatDutyMap(ip_fwd->grheat_duty);
  SetPwmIacUCoefMap(ip_fwd->pwmiac_ucoef);
  SetAftstrStrk0Map(ip_fwd->aftstr_strk0);
@@ -2279,6 +2284,30 @@ void CFirmwareDataMediator::SetKnockZoneMap(const float* ip_values)
  for (int i = 0; i < F_WRK_POINTS_L; i++)
   for (int b = 0; b < F_WRK_POINTS_F; b++)   
    WRITEBIT16(p_fd->exdata.knock_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
+}
+
+void CFirmwareDataMediator::GetLambdaZoneMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < F_WRK_POINTS_L; i++)
+  for (int b = 0; b < F_WRK_POINTS_F; b++)
+   op_values[(i*F_WRK_POINTS_F)+b] = (float)CHECKBIT16(p_fd->exdata.lambda_zone[i], b);
+}
+
+void CFirmwareDataMediator::SetLambdaZoneMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < F_WRK_POINTS_L; i++)
+  for (int b = 0; b < F_WRK_POINTS_F; b++)   
+   WRITEBIT16(p_fd->exdata.lambda_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
 }
 
 void CFirmwareDataMediator::GetGrHeatDutyMap(float* op_values, bool i_original /* = false */)

@@ -591,3 +591,7 @@
 #define IDC_TD_FTLSCOR_MAP              5947
 #define IDS_TD_FTLSCOR_MAP_TT           5948
 #define IDS_FTLSCOR_MAP                 5949
+#define IDC_TD_LAMBDA_ZONES_MAP         5950
+#define IDS_TD_LAMBDA_ZONES_MAP_TT      5951
+#define IDS_MAPS_LAMBDA_ZONE_UNIT       5952
+#define IDS_LAMBDA_ZONE_MAP             5953

@@ -52,6 +52,7 @@
 #define SMAPABAN_THRD_SIZE     16
 #define AFTSTR_STRK_SIZE       16
 #define KNKZONE_TPS_SIZE       16
+#define EGOZONE_LOAD_SIZE      16
 
 #define INJ_VE_POINTS_L        16
 #define INJ_VE_POINTS_F        16
@@ -248,6 +249,7 @@ struct FWMapsDataHolder
  float injpw_coef[INJPWCOEF_LUT_SIZE];
  float maf_curve[MAF_FLOW_CURVE_SIZE+1+2];
  float ftls_corr[FTLSCOR_UCOEF_SIZE];
+ float lambda_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //lambda zones vs rpm & load
 
  CESettingsData cesd;
 
@@ -288,6 +290,7 @@ struct FWMapsDataHolder
   std::fill(injpw_coef, injpw_coef + INJPWCOEF_LUT_SIZE, .0f);
   std::fill(maf_curve, maf_curve + MAF_FLOW_CURVE_SIZE + 1 + 2, .0f);
   std::fill(ftls_corr, ftls_corr + FTLSCOR_UCOEF_SIZE, .0f);
+  std::fill(lambda_zone, lambda_zone + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

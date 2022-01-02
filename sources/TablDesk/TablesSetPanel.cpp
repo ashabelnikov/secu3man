@@ -1432,6 +1432,51 @@ void __cdecl CTablesSetPanel::OnWndActivationFtlsCorTable(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeLambdaZoneMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_LAMBDA_ZONE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseLambdaZoneMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_LAMBDA_ZONE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_LAMBDA_ZONE].handle, TYPE_MAP_LAMBDA_ZONE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationLambdaZoneMap(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_LAMBDA_ZONE].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -1451,8 +1496,9 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_egts_curve_enabled(false)
 , m_ops_curve_enabled(false)
 , m_maninjpwc_enabled(false)
+, m_lambdazone_enabled(false)
 {
- m_scrl_view = 1040;
+ m_scrl_view = 1075;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
@@ -1498,6 +1544,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_CRANKING_TIME_MAP, m_view_cranking_time_map_btn);
  DDX_Control(pDX, IDC_TD_SMAPABAN_THRD_MAP, m_view_smapaban_thrd_map_btn);
  DDX_Control(pDX, IDC_TD_KNOCK_ZONES_MAP, m_view_knock_zone_map_btn);
+ DDX_Control(pDX, IDC_TD_LAMBDA_ZONES_MAP, m_view_lambda_zone_map_btn);
  DDX_Control(pDX, IDC_TD_GRTS_CURVE, m_view_grts_curve_map_btn);
  DDX_Control(pDX, IDC_TD_GRHEAT_DUTY_MAP, m_view_grheat_duty_map_btn);
  DDX_Control(pDX, IDC_TD_PWMIAC_UCOEF_MAP, m_view_pwmiac_ucoef_map_btn);
@@ -1532,6 +1579,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_CRANKING_TIME_MAP, OnViewCrankingTimeMap)
  ON_BN_CLICKED(IDC_TD_SMAPABAN_THRD_MAP, OnViewSmapabanThrdMap)
  ON_BN_CLICKED(IDC_TD_KNOCK_ZONES_MAP, OnViewKnockZoneMap)
+ ON_BN_CLICKED(IDC_TD_LAMBDA_ZONES_MAP, OnViewLambdaZoneMap)
  ON_BN_CLICKED(IDC_TD_GRTS_CURVE, OnViewGrtsCurveMap)
  ON_BN_CLICKED(IDC_TD_GRHEAT_DUTY_MAP, OnViewGrHeatDutyMap)
  ON_BN_CLICKED(IDC_TD_PWMIAC_UCOEF_MAP, OnViewPwmIacUCoefMap)
@@ -1566,6 +1614,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_CRANKING_TIME_MAP, OnUpdateViewCrankingTimeMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_SMAPABAN_THRD_MAP, OnUpdateViewSmapabanThrdMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_KNOCK_ZONES_MAP, OnUpdateViewKnockZoneMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_LAMBDA_ZONES_MAP, OnUpdateViewLambdaZoneMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GRTS_CURVE, OnUpdateViewGrtsCurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GRHEAT_DUTY_MAP, OnUpdateViewGrHeatDutyMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_PWMIAC_UCOEF_MAP, OnUpdateViewPwmIacUCoefMap)
@@ -1620,6 +1669,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_cranking_time_map_btn, MLL::GetString(IDS_TD_CRANKING_TIME_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_smapaban_thrd_map_btn, MLL::GetString(IDS_TD_SMAPABAN_THRD_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_knock_zone_map_btn, MLL::GetString(IDS_TD_VIEW_KNOCK_ZONE_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_lambda_zone_map_btn, MLL::GetString(IDS_TD_LAMBDA_ZONES_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_grts_curve_map_btn, MLL::GetString(IDS_TD_GRTS_CURVE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_grheat_duty_map_btn, MLL::GetString(IDS_TD_GRHEAT_DUTY_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_pwmiac_ucoef_map_btn, MLL::GetString(IDS_TD_PWMIAC_UCOEF_MAP_TT)));
@@ -1779,6 +1829,14 @@ void CTablesSetPanel::OnUpdateViewKnockZoneMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_KNOCK_ZONE].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewLambdaZoneMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_LAMBDA_ZONE].state) ? TRUE : FALSE );
+}
+
 //Updates controls which state depends on whether or not data is
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -1921,6 +1979,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_KNOCK_ZONE].state)
   DLL::Chart3DUpdate(m_md[TYPE_MAP_KNOCK_ZONE].handle, GetKnockZoneMap(true), GetKnockZoneMap(false));
+
+ if (m_md[TYPE_MAP_LAMBDA_ZONE].state)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_LAMBDA_ZONE].handle, GetLambdaZoneMap(true), GetLambdaZoneMap(false));
 
  if (m_md[TYPE_MAP_GRTS_CURVE].state)
  {
@@ -2086,6 +2147,15 @@ void CTablesSetPanel::EnableManInjPwc(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_MANINJPWC].state && ::IsWindow(m_md[TYPE_MAP_MANINJPWC].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_MANINJPWC].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableLambdaZones(bool enable)
+{
+ m_lambdazone_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_LAMBDA_ZONE].state && ::IsWindow(m_md[TYPE_MAP_LAMBDA_ZONE].handle))
+  DLL::Chart3DEnable(m_md[TYPE_MAP_LAMBDA_ZONE].handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -2737,6 +2807,42 @@ void CTablesSetPanel::OnViewKnockZoneMap()
  }
 }
 
+void CTablesSetPanel::OnViewLambdaZoneMap()
+{
+ MapData &md = m_md[TYPE_MAP_LAMBDA_ZONE];
+ //if button has been turned off, then close editor's window
+ if (m_view_lambda_zone_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart3DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetLambdaZoneMap(true),GetLambdaZoneMap(false),GetRPMGrid(),16,16,0,1.0,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_LAMBDA_ZONE_UNIT).c_str(),
+    MLL::GetString(IDS_LAMBDA_ZONE_MAP).c_str());
+  DLL::Chart3DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(md.handle,OnChangeLambdaZoneMap,this);
+  DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(md.handle,OnCloseLambdaZoneMap,this);
+  DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationLambdaZoneMap, this);
+  DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_LAMBDA_ZONE);
+
+  DLL::Chart3DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
 void CTablesSetPanel::OnViewGrHeatDutyMap()
 {
  MapData &md = m_md[TYPE_MAP_GRHEAT_DUTY];
@@ -3339,6 +3445,14 @@ float* CTablesSetPanel::GetKnockZoneMap(bool i_original)
   return m_md[TYPE_MAP_KNOCK_ZONE].original;
  else
   return m_md[TYPE_MAP_KNOCK_ZONE].active;
+}
+
+float* CTablesSetPanel::GetLambdaZoneMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_LAMBDA_ZONE].original;
+ else
+  return m_md[TYPE_MAP_LAMBDA_ZONE].active;
 }
 
 float* CTablesSetPanel::GetPwmIacUCoefMap(bool i_original)

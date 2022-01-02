@@ -81,6 +81,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetManInjPwcMap(bool i_original);
   float* GetMAFCurveMap(bool i_original);
   float* GetFtlsCorMap(bool i_original);
+  float* GetLambdaZoneMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -101,6 +102,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableEgtsCurve(bool enable);
   void EnableOpsCurve(bool enable);
   void EnableManInjPwc(bool enable);
+  void EnableLambdaZones(bool enable);
 
   virtual void CloseCharts(void);
 
@@ -139,6 +141,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewCrankingTimeMap();
   afx_msg void OnViewSmapabanThrdMap();
   afx_msg void OnViewKnockZoneMap();
+  afx_msg void OnViewLambdaZoneMap();
   afx_msg void OnViewGrtsCurveMap();
   afx_msg void OnViewGrHeatDutyMap();
   afx_msg void OnViewPwmIacUCoefMap();
@@ -167,6 +170,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewCrankingTimeMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewSmapabanThrdMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewKnockZoneMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewLambdaZoneMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGrtsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGrHeatDutyMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewPwmIacUCoefMap(CCmdUI* pCmdUI);
@@ -204,6 +208,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_cranking_time_map_btn;
   CButton   m_view_smapaban_thrd_map_btn;
   CButton   m_view_knock_zone_map_btn;
+  CButton   m_view_lambda_zone_map_btn;
   CButton   m_view_grts_curve_map_btn;
   CButton   m_view_grheat_duty_map_btn;
   CButton   m_view_pwmiac_ucoef_map_btn;
@@ -296,6 +301,10 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseKnockZoneMap(void* i_param);
   static void __cdecl OnWndActivationKnockZoneMap(void* i_param, long cmd);
 
+  static void __cdecl OnChangeLambdaZoneMap(void* i_param);
+  static void __cdecl OnCloseLambdaZoneMap(void* i_param);
+  static void __cdecl OnWndActivationLambdaZoneMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeGrtsCurveTable(void* i_param);
   static void __cdecl OnCloseGrtsCurveTable(void* i_param);
   static void __cdecl OnChangeGrtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
@@ -360,6 +369,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   bool m_egts_curve_enabled;
   bool m_ops_curve_enabled;
   bool m_maninjpwc_enabled;
+  bool m_lambdazone_enabled;
 
   float m_attenuator_table_slots[128];
   float m_cts_curve_x_axis_limits[2];

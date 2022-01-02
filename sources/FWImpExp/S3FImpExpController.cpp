@@ -173,6 +173,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
   memcpy(mp_fwd->knock_zone, mp_s3f_io->GetData().knock_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 
+ if (mp_view->GetFWDFlag(FLAG_LAMBDAZONE_MAP))
+  memcpy(mp_fwd->lambda_zone, mp_s3f_io->GetData().lambda_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
   memcpy(mp_fwd->grts_curve, mp_s3f_io->GetData().grts_curve, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
 
@@ -381,6 +384,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0120 = (mp_s3f_io->GetVersion() > 0x0119);
  bool sv0121 = (mp_s3f_io->GetVersion() > 0x0120);
  bool sv0122 = (mp_s3f_io->GetVersion() > 0x0121);
+ bool sv0123 = (mp_s3f_io->GetVersion() > 0x0122);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -457,6 +461,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_LAMBDAZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
@@ -497,6 +502,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_MANINJPWC_MAP, sv0119 && sepmap); //since v01.19
  mp_view->EnableFWDFlag(FLAG_MAFCURVE_MAP, sv0120 && sepmap); //since v01.20
  mp_view->EnableFWDFlag(FLAG_FTLSCOR_MAP, sv0122 && sepmap);  //since v01.22
+ mp_view->EnableFWDFlag(FLAG_LAMBDAZONE_MAP, sv0123 && sepmap); //since v01.23
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -641,6 +647,9 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().knock_zone, mp_fwd->knock_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_LAMBDAZONE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().lambda_zone, mp_fwd->lambda_zone, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().grts_curve, mp_fwd->grts_curve, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
@@ -867,6 +876,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_LAMBDAZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
  mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
