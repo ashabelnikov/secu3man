@@ -1947,6 +1947,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Use special algorithm for cold engine"), _T(""), 0, 1, 1, 1, &d.cold_eng_int, _T("Use separate closed loop algorithm when engine is cold (1). Set to 0 for using same algorithm for cold and hot engine."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Выбор алгоритма входа в режим ХХ"), _T(""), 0, 1, 1, 1, &d.thrass_algo,_T("Если установлен 0: положение РДВ плавно уменьшается каждые 100мс на 'Шаг уменьшения добавки после выхода РХХ' eсли дроссель закрыт и обороты ниже 2-го порога оборотов\nЕсли установлена 1: условием является только закрытый дроссель (обороты не принимаются во внимание)."));
+ else
+  dfd.AppendItem(_T("Selection of idling entering's algorithm"), _T(""), 0, 1, 1, 1, &d.thrass_algo, _T("If 0 is set: the IAC position smoothly decreases every 100ms by 'Decrease step of the IAC idle to run additive' if the throttle is closed and the rpm is below the 2nd rpm threshold\nIf 1 is set: the condition is only a closed throttle (rpm is not taken into account)."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Период вызова кода closed loop РДВ/ВЗ"), _T("сек"), 0.00f, 1.0f, 0.01f, 2, &d.iacreg_period, _T("Период вызова кода closed loop РДВ/ВЗ. Определяет частоту вызова регулятора. Используется в коде управления РДВ и в коде управления ВЗ"));
  else
   dfd.AppendItem(_T("Period of calling IAC's/Choke closed loop code"), _T("sec"), 0.00f, 1.0f, 0.01f, 2, &d.iacreg_period, _T("Period of calling IAC's/Choke closed loop code. Used in the IAC's regulator code and in the choke regulator code."));
