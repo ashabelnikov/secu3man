@@ -963,7 +963,12 @@ void CMapEditorCtrl::SetArguments(float i_arg, float j_arg)
 
    if (!mp_horizLabels)
     ball.x = cp1.x;
-   ball.y = (int)(cp1.y - (((i_arg - _GetVGrid(p1)) / (_GetVGrid(p2) - _GetVGrid(p1))) * (cp1.y - cp2.y)));
+
+   float pd = _GetVGrid(p2) - _GetVGrid(p1);
+   if (pd != 0) //prevent division by zero
+    ball.y = (int)(cp1.y - (((i_arg - _GetVGrid(p1)) / pd) * (cp1.y - cp2.y)));
+   else
+    ball.y = cp1.y;
   }
   if (mp_horizLabels)
   { //look up through columns
@@ -980,7 +985,12 @@ void CMapEditorCtrl::SetArguments(float i_arg, float j_arg)
    CPoint cp1 = _GetItemRect(&dc, 0, p1).CenterPoint();
    CPoint cp2 = _GetItemRect(&dc, 0, p2).CenterPoint();
 
-   ball.x = (int)(cp1.x + (((j_arg - mp_horizLabels[p1]) / (mp_horizLabels[p2] - mp_horizLabels[p1])) * (cp2.x - cp1.x)));
+   float pd = mp_horizLabels[p2] - mp_horizLabels[p1];
+   if (pd != 0) //prevent division by zero
+    ball.x = (int)(cp1.x + (((j_arg - mp_horizLabels[p1]) / pd) * (cp2.x - cp1.x)));
+   else
+    ball.x = cp1.x;
+
    if (!mp_vertLabels)
     ball.y = cp1.y;
   }
