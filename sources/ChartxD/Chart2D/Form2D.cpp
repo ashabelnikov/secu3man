@@ -1046,6 +1046,9 @@ void __fastcall TForm2D::OnImportCSV(TObject *Sender)
   for (;Series2->Count() > 0;)
    Series2->Delete(Series2->Count()-1);
   DataPrepare();
+
+  if (m_pOnChange)
+   m_pOnChange(m_param_on_change);  
  }
 }
 

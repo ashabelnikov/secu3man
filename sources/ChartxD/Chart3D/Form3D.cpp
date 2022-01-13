@@ -1290,6 +1290,9 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
    for (;Chart1->Series[i]->Count() > 0;)
     Chart1->Series[i]->Delete(Chart1->Series[i]->Count()-1);
   DataPrepare();
+
+  if (m_pOnChange)
+   m_pOnChange(m_param_on_change);
  }
 }
 
