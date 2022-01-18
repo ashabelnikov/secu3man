@@ -46,7 +46,7 @@ BEGIN
     POPUP "&Помощь"
     BEGIN
         MENUITEM "Справка", ID_HELP 
-        MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
+        MENUITEM "&О программе SECU-3 Manager...", ID_APP_ABOUT
         MENUITEM "Сайт разработчиков", ID_APP_DEV_SITE
         MENUITEM "Поддержка на форуме", ID_APP_DEV_FORUM
         MENUITEM "ВКонтакте", ID_APP_VK
@@ -1991,7 +1991,7 @@ BEGIN
     BLOCK "040904e4"
     BEGIN
       VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007-2021 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2007-2022 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
       VALUE "ProductName", "SECU-3 Manager"
     END
   END
