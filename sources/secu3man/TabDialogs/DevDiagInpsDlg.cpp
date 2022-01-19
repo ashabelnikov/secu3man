@@ -260,7 +260,7 @@ void CDevDiagInpsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(250) : da.ScaleY(440));
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(250) : da.ScaleY(477));
 }
 
 void CDevDiagInpsDlg::OnSize( UINT nType, int cx, int cy )

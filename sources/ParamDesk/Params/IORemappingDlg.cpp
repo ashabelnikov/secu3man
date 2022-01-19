@@ -411,7 +411,7 @@ void CIORemappingDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(450) : da.ScaleY(860));
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(485) : da.ScaleY(940));
 }
 
 void CIORemappingDlg::OnSize( UINT nType, int cx, int cy )

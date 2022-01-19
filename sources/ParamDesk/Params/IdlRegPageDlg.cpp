@@ -587,5 +587,5 @@ void CIdlRegPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(795));
+  mp_scr->SetViewSize(cx, da.ScaleY(865));
 }

@@ -405,5 +405,5 @@ void CTemperPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(400));
+  mp_scr->SetViewSize(cx, da.ScaleY(430));
 }

@@ -628,5 +628,5 @@ void CADCCompenPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(500));
+  mp_scr->SetViewSize(cx, da.ScaleY(530));
 }

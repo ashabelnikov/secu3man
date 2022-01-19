@@ -632,7 +632,7 @@ void CInjDriverTabDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(da.ScaleX(1010), da.ScaleY(528));
+  mp_scr->SetViewSize(da.ScaleX(1120), da.ScaleY(580));
 }
 
 void CInjDriverTabDlg::SetVoltLineColor(DWORD color)

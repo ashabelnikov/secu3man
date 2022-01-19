@@ -303,5 +303,5 @@ void CAnglesPageDlg::OnSize(UINT nType, int cx, int cy)
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(360));
+  mp_scr->SetViewSize(cx, da.ScaleY(395));
 }

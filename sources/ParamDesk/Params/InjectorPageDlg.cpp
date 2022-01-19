@@ -916,7 +916,7 @@ void CInjectorPageDlg::OnSize(UINT nType, int cx, int cy)
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(840));
+  mp_scr->SetViewSize(cx, da.ScaleY(910));
 }
 
 void CInjectorPageDlg::SetITEdMode(int mode)
