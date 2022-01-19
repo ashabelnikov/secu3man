@@ -35,8 +35,10 @@
  typedef std::wstring _TSTRING;
  typedef std::wstringstream _TSSTREAM;
 #define _TDECIMAL_POINT(lconv) ((lconv)->_W_decimal_point)
+#define ADDFONTRESOURCEEX_NAME "AddFontResourceExW"
 #else
  typedef std::string  _TSTRING;
  typedef std::stringstream _TSSTREAM;
 #define _TDECIMAL_POINT(lconv) ((lconv)->decimal_point)
+#define ADDFONTRESOURCEEX_NAME "AddFontResourceExA"
 #endif

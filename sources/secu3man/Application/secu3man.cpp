@@ -30,6 +30,7 @@
 #include "About/Version.h"
 #include "About/secu-3about.h"
 #include "common/ModuleName.h"
+#include "common/unicodesupport.h"
 #include "CommunicationManager.h"
 #include "io-core/ccomport.h"
 #include "io-core/logwriter.h"
@@ -54,7 +55,37 @@ void AllowVisualTheme(bool i_allow)
  if (pSetThemeAppProperties && false==i_allow)
   pSetThemeAppProperties(0);
  if (handle)
- ::FreeLibrary(handle);
+  ::FreeLibrary(handle);
+}
+
+typedef int (WINAPI *ADDFONTRESOURCEEX)(LPCSTR, DWORD, PVOID);
+bool LoadFonts(void)
+{
+ ADDFONTRESOURCEEX pAddFontResourceEx = NULL;
+ HINSTANCE handle = ::LoadLibrary(_T("gdi32"));
+ if (handle)
+  pAddFontResourceEx = (ADDFONTRESOURCEEX) ::GetProcAddress(handle, ADDFONTRESOURCEEX_NAME); //load UNICODE version
+
+ bool status = false;
+ if (pAddFontResourceEx) //Check for AddFontResourceEx() function is absent (Windows 98)
+ {
+  //load MS Sans Serif font
+  TCHAR szDirectory[MAX_PATH] = "";
+  ::GetCurrentDirectory(sizeof(szDirectory) - 1, szDirectory);
+  _TSTRING fontPath = _TSTRING(szDirectory) + _T("\\") + _TSTRING(_T("sserifer.fon"));
+  if (0==pAddFontResourceEx(fontPath.c_str(), FR_PRIVATE, 0))
+  {
+   _TSSTREAM str; str << _T("Can't load ") << fontPath <<  _T(" file with 'MS Sans Serif' font!");
+   ::MessageBox(NULL, str.str().c_str(), _T("Error"), MB_OK | MB_ICONWARNING);
+  }
+  else
+   status  = true; //OK
+ }
+
+ if (handle)
+  ::FreeLibrary(handle);
+
+ return status;
 }
 
 //Functionality of the SetThreadLocale() function is broken beginning from Windows Vista
@@ -159,7 +190,7 @@ bool CheckAppIntegrity(void)
  GetModuleFileName(GetModuleHandle(ModuleName::about), szFileName, MAX_PATH);
 
  BYTE digest[32];
- BYTE hash1[32] = {0xe0,0xd4,0xc2,0xce,0x5a,0x5b,0x9e,0x26,0xde,0xe3,0x17,0x77,0x3a,0xac,0x4e,0x12,0x15,0x44,0x3a,0x24,0x28,0x26,0xec,0x2e,0xa9,0x4d,0xfc,0x1c,0x60,0x69,0xa0,0x86};
+ BYTE hash1[32] = {0xa4,0xd6,0xc7,0x8e,0xe0,0x18,0x0e,0x3e,0x7b,0x1a,0xf4,0x4c,0x30,0x16,0xc2,0xac,0x80,0x2e,0x29,0x01,0x91,0x0d,0x56,0x45,0x59,0xa2,0x6e,0x5f,0x52,0xbc,0x28,0xba};
  if (!CalcFileDigest(szFileName, digest))
   return false;
 
@@ -224,14 +255,7 @@ BOOL CSecu3manApp::InitInstance()
   RA_WaitForPreviousProcessFinish();
 
  //load MS Sans Serif font
- TCHAR szDirectory[MAX_PATH] = "";
- ::GetCurrentDirectory(sizeof(szDirectory) - 1, szDirectory);
- _TSTRING fontPath = _TSTRING(szDirectory) + _T("\\") + _TSTRING(_T("sserifer.fon"));
- if (0==AddFontResourceEx(fontPath.c_str(), FR_PRIVATE, 0))
- {
-  _TSSTREAM str; str << _T("Can't load ") << fontPath <<  _T(" file with 'MS Sans Serif' font!");
-  ::MessageBox(NULL, str.str().c_str(), _T("Error"), MB_OK | MB_ICONWARNING);
- }
+ VERIFY(LoadFonts());
 
  AfxEnableControlContainer();
 
