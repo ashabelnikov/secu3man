@@ -56,6 +56,8 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void SetITEdMode(int mode);
 
+  void SetFuelDensity(float fd1, float fd2);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support

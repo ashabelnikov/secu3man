@@ -205,6 +205,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_comm->m_pBootLoader->EnableBlockedEEPROMOps(mp_settings->GetBldrEEPROMBlocks());
  m_active = true;
  mp_view->mp_ParamDeskDlg->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_ParamDeskDlg->SetFuelDensity(mp_settings->GetFuelDensity1(), mp_settings->GetFuelDensity2());
  mp_view->mp_TablesPanel->ShowOpenedCharts(true);
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);

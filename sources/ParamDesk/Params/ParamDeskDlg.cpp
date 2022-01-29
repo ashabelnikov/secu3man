@@ -925,3 +925,11 @@ void CParamDeskDlg::OnTPSLearning(int state)
  if (m_OnTPSLearning)
   m_OnTPSLearning(state);
 }
+
+void CParamDeskDlg::SetFuelDensity(float fd1, float fd2)
+{
+ if (m_pInjectorPageDlg)
+ {
+  m_pInjectorPageDlg->SetFuelDensity(fd1, fd2);
+ }
+}

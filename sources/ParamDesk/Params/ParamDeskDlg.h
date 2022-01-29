@@ -106,6 +106,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual int GetCurSel(void);
 
   void SetITEdMode(int mode);
+
+  void SetFuelDensity(float fd1, float fd2);
   //-------------------------------------------------------------
 
  // Implementation

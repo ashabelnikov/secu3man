@@ -104,6 +104,8 @@ class CAppSettingsModel : public ISettingsData
   virtual void SetToggleMapWnd(bool toggle);
   virtual int GetIniEditorSyntax(void) const;
   virtual int GetBldrEEPROMBlocks(void) const;
+  virtual float GetFuelDensity1(void) const;
+  virtual float GetFuelDensity2(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -308,6 +310,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optToolTipTime;
   OptField_t<bool> m_optIniEdSyntax;
   OptField_t<bool> m_optBldrEEPROMBlocks;
+  OptField_t<float> m_optFuelDensity1;
+  OptField_t<float> m_optFuelDensity2;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;

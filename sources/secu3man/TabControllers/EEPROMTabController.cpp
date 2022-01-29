@@ -171,6 +171,7 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_ParamDeskDlg->SetFuelDensity(mp_settings->GetFuelDensity1(), mp_settings->GetFuelDensity2());
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
  mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
 

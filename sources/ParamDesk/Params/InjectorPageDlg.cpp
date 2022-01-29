@@ -952,3 +952,9 @@ void CInjectorPageDlg::_GetITModeRange(float& y1, float& y2)
  y1 = (m_itmode < 2) ? .0f : -360.0f;
  y2 = (m_itmode < 2) ? 720.0f : 360.0f;
 }
+
+void CInjectorPageDlg::SetFuelDensity(float fd1, float fd2)
+{
+ m_fuel_density[0] = fd1;
+ m_fuel_density[1] = fd2;
+}

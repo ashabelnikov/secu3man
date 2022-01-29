@@ -69,6 +69,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optToolTipTime(_T("ToolTipTime"))
 , m_optIniEdSyntax(_T("IniEditorSyntax"))
 , m_optBldrEEPROMBlocks(_T("BldrEEPROMBlocks"))
+, m_optFuelDensity1(_T("FuelDensity1"))
+, m_optFuelDensity2(_T("FuelDensity2"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -751,6 +753,8 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optToolTipTime, _T("5000"), 1000, 60000);
  os.ReadInt(m_optIniEdSyntax, _T("1"), 0, 1);
  os.ReadInt(m_optBldrEEPROMBlocks, _T("1"), 0, 1);
+ os.ReadFlt(m_optFuelDensity1,_T("0.710"), 0.2f, 2.0f); //1-st fuel (e.g. petrol)
+ os.ReadFlt(m_optFuelDensity2,_T("0.536"), 0.2f, 2.0f); //2-nd fuel (e.g. LPG)
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -1495,6 +1499,18 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Использовать блочный режим обмена данными с загрузчиком при чтении/записи EEPROM. 0 - не использовать блочный режим, 1 - использовать блочный режим."));
  os.WriteInt(m_optBldrEEPROMBlocks); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Density of fuel 1 (e.g. petrol), g/cc. Used when GAS_V = 0"));
+ else
+  os.WriteComment(_T("Плотность топлива 1 (бензин), г/см3. Используется когда GAS_V = 0"));
+ os.WriteFlt(m_optFuelDensity1, 4);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Density of fuel 2 (e.g. petrol), g/cc. Used when GAS_V = 1"));
+ else
+  os.WriteComment(_T("Плотность топлива 2 (бензин), г/см3. Используется когда GAS_V = 1"));
+ os.WriteFlt(m_optFuelDensity2, 4);
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section); 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -5829,4 +5845,14 @@ float CAppSettingsModel::GetSpotMarkersSize(void) const
 int CAppSettingsModel::GetBldrEEPROMBlocks(void) const
 {
  return m_optBldrEEPROMBlocks.value;
+}
+
+float CAppSettingsModel::GetFuelDensity1(void) const
+{
+ return m_optFuelDensity1.value;
+}
+
+float CAppSettingsModel::GetFuelDensity2(void) const
+{
+ return m_optFuelDensity2.value;
 }
