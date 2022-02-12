@@ -3854,7 +3854,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 /////////////////////////////////////////////////////////////////////////////
 //Version information
 VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    4,9,0,0
+  PRODUCTVERSION    5,0,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
