@@ -329,10 +329,12 @@ typedef struct
 
  _uchar  thrass_algo;
 
+ _uchar btbaud_use[5];    //!< 9600,19200,38400,57600,115200
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1989];
+ _uchar reserved[1984];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2975,6 +2977,9 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.ltft_sigswt_num = exd.ltft_sigswt_num;
 
  o_data.thrass_algo = exd.thrass_algo;
+
+ for(int i = 0; i < 5; ++i)
+  o_data.btbaud_use[i] = exd.btbaud_use[i];
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3058,4 +3063,7 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.ltft_sigswt_num = i_data.ltft_sigswt_num;
 
  exd.thrass_algo = i_data.thrass_algo;
+
+ for(int i = 0; i < 5; ++i)
+  exd.btbaud_use[i] = i_data.btbaud_use[i];
 }

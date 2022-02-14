@@ -103,8 +103,15 @@ BOOL CDynFieldsDialog::OnInitDialog()
    it->p_capt->SetFont(&m_boldDlgFont);
    continue;
   }
-  VERIFY(mp_ttc->AddWindow(it->p_edit, (LPCTSTR)it->tooltip));
-  VERIFY(mp_ttc->AddWindow(it->p_spin, (LPCTSTR)it->tooltip));
+  if (it->p_edit)
+  {
+   VERIFY(mp_ttc->AddWindow(it->p_edit, (LPCTSTR)it->tooltip));
+   VERIFY(mp_ttc->AddWindow(it->p_spin, (LPCTSTR)it->tooltip));
+  }
+  else if (it->p_check)
+  {
+   VERIFY(mp_ttc->AddWindow(it->p_check, (LPCTSTR)it->tooltip));
+  }
  }
  mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
  mp_ttc->ActivateToolTips(m_allowToolTips);
@@ -148,6 +155,7 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.decPls = decPls;
  id.fltVal = NULL;
  id.intVal = p_value;
+ id.blVal = NULL;
  id.tooltip = tooltip.c_str();
  id.separator = false;
  m_fl.push_back(id);
@@ -165,6 +173,7 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.decPls = decPls;
  id.fltVal = p_value;
  id.intVal = NULL;
+ id.blVal = NULL;
  id.tooltip = tooltip.c_str();
  id.separator = false;
  m_fl.push_back(id);
@@ -176,6 +185,19 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption)
  ItemData id;
  id.caption = caption.c_str();
  id.separator = true; //item is separator
+ m_fl.push_back(id);
+ return true;
+}
+
+bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, bool* p_value, const _TSTRING& tooltip)
+{
+ ItemData id;
+ id.caption = caption.c_str();
+ id.fltVal = NULL;
+ id.intVal = NULL;
+ id.blVal = p_value;
+ id.tooltip = tooltip.c_str();
+ id.separator = false;
  m_fl.push_back(id);
  return true;
 }
@@ -318,6 +340,11 @@ bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const _TSTRING& un
 bool CDynFieldsContainer::AppendItem(const _TSTRING& caption)
 {
  return m_dlg.AppendItem(caption); //add separator
+}
+
+bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, bool* p_value, const _TSTRING& tooltip)
+{
+ return m_dlg.AppendItem(caption, p_value, tooltip);
 }
 
 void CDynFieldsContainer::OnOK()

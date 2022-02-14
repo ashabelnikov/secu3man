@@ -29,6 +29,7 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/UpdatableDialog.h"
+#include "ui-core/ddx_helpers.h"
 
 class CWndScroller;
 class CToolTipCtrlEx;
@@ -44,10 +45,21 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
  protected:
   friend class CDynFieldsContainer;
+ 
+  //Sets window's position
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
+
+  //Adds an edit box for integer values
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip);
+
+  //Adds an edit box for floating point values
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip);
-  bool AppendItem(const _TSTRING& caption); //adds separator
+
+  //Adds a separator
+  bool AppendItem(const _TSTRING& caption);
+
+  //Adds a check box
+  bool AppendItem(const _TSTRING& caption, bool* p_value, const _TSTRING& tooltip);
 
   void AllowToolTips(bool allowToolTips);
   void Apply(void);
@@ -67,7 +79,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
   struct ItemData
   {
    ItemData()
-   : p_edit(NULL), p_spin(NULL), p_capt(NULL), p_unit(NULL), intVal(NULL), fltVal(NULL), separator(false)
+   : p_edit(NULL), p_spin(NULL), p_capt(NULL), p_unit(NULL), p_check(NULL), intVal(NULL), fltVal(NULL), separator(false), blVal(NULL)
    {
    }
 
@@ -77,6 +89,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
     delete p_spin;
     delete p_capt;
     delete p_unit;
+    delete p_check;
    }
 
    bool Init(void)
@@ -96,6 +109,13 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
     {
      p_edit = new CEditEx(CEditEx::MODE_FLOAT, true);
      fltValm = *fltVal;
+    }
+    else if (blVal)
+    {
+     p_check = new CButton;
+     p_capt = new CStatic;
+     blValm = *blVal;
+     return true;
     }
     else
     {
@@ -127,6 +147,21 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
      VERIFY(p_capt->Create(caption,WS_CHILD | WS_VISIBLE, captRect, parent, idCntr++));
      p_capt->SetWindowText(caption);
      p_capt->SetFont(parent->GetFont());     
+     groupIdx++;  //increment group index
+     return true;
+    }
+    else if (blVal)
+    { //check box
+     int topOffset = 5;
+     int captWidth = 175;
+     //define coordinates
+     CRect captRect(leftOffset, topOffset+(groupIdx*(groupHeight+vertClearance)), leftOffset+captWidth, topOffset+(groupIdx*(groupHeight+vertClearance))+groupHeight);
+     //caption
+     ::MapDialogRect(parent->GetSafeHwnd(), &captRect);
+     VERIFY(p_check->Create(caption, BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT | WS_CHILD, captRect, parent, idCntr++));
+     p_check->SetWindowText(caption);
+     p_check->ShowWindow(SW_SHOW); 
+     p_check->SetFont(parent->GetFont());     
      groupIdx++;  //increment group index
      return true;
     }
@@ -182,6 +217,8 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
      p_edit->DDX_Value(pDX, p_edit->GetDlgCtrlID(), intValm);
     else if (fltVal)
      p_edit->DDX_Value(pDX, p_edit->GetDlgCtrlID(), fltValm);
+    else if (blVal)
+     DDX_Check_bool(pDX, p_check->GetDlgCtrlID(), blValm);
     else {ASSERT(0);}
    }
 
@@ -193,20 +230,25 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
      *intVal = intValm;
     if (fltVal)
      *fltVal = fltValm;
+    if (blVal)
+     *blVal = blValm;
    }
 
    CEditEx* p_edit;
    CSpinButtonCtrlEx* p_spin;
    CStatic* p_capt;
    CStatic* p_unit;
+   CButton* p_check;
 
    CString caption;
    CString unit;
    CString tooltip;
    int*   intVal;
    float* fltVal;
+   bool*  blVal;
    int   intValm;
    float fltValm;
+   bool blValm;
    bool separator;
 
    float vMin;
@@ -240,6 +282,7 @@ class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value, const _TSTRING& tooltip = _TSTRING());
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip = _TSTRING());
   bool AppendItem(const _TSTRING& caption); //adds separator
+  bool AppendItem(const _TSTRING& caption, bool* p_value, const _TSTRING& tooltip = _TSTRING()); //adds a check box
 
   virtual INT_PTR DoModal();
 

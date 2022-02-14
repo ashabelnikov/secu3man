@@ -2209,6 +2209,37 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Number of successive switches of EGO sensor's signal"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("The required number of successive switchings of the EGO sensor's signal level while the operating point is in the cell area. The higher the value, the slower the learning will be."));
 
+ //Bluetooth
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Параметры Bluetooth:"));
+ else
+  dfd.AppendItem(_T("Bluetooth parameters:"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Слать АТ-команды в Bluetooth на скорости 9600"), &d.btbaud_use[0], _T("Слать АТ-команды в Bluetooth на скорости 9600 бод. Команды дублируются на разных скоростях. Чем больше скоростей разрешено, тем дольше происходит конфигурирование Bluetooth."));
+ else
+  dfd.AppendItem(_T("Send AT-commands to Bluetooth using 9600 baud"), &d.btbaud_use[0], _T("Send AT-commands to Bluetooth using 9600 baud rate. Commands are duplicated with different baud rates. The more baud rates are allowed, the longer it takes to configure Bluetooth."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Слать АТ-команды в Bluetooth на скорости 19200"), &d.btbaud_use[1], _T("Слать АТ-команды в Bluetooth на скорости 19200 бод. Команды дублируются на разных скоростях. Чем больше скоростей разрешено, тем дольше происходит конфигурирование Bluetooth."));
+ else
+  dfd.AppendItem(_T("Send AT-commands to Bluetooth using 19200 baud"), &d.btbaud_use[1], _T("Send AT-commands to Bluetooth using 19200 baud rate. Commands are duplicated with different baud rates. The more baud rates are allowed, the longer it takes to configure Bluetooth."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Слать АТ-команды в Bluetooth на скорости 38400"), &d.btbaud_use[2], _T("Слать АТ-команды в Bluetooth на скорости 38400 бод. Команды дублируются на разных скоростях. Чем больше скоростей разрешено, тем дольше происходит конфигурирование Bluetooth."));
+ else
+  dfd.AppendItem(_T("Send AT-commands to Bluetooth using 38400 baud"), &d.btbaud_use[2], _T("Send AT-commands to Bluetooth using 38400 baud rate. Commands are duplicated with different baud rates. The more baud rates are allowed, the longer it takes to configure Bluetooth."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Слать АТ-команды в Bluetooth на скорости 57600"), &d.btbaud_use[3], _T("Слать АТ-команды в Bluetooth на скорости 57600 бод. Команды дублируются на разных скоростях. Чем больше скоростей разрешено, тем дольше происходит конфигурирование Bluetooth."));
+ else
+  dfd.AppendItem(_T("Send AT-commands to Bluetooth using 57600 baud"), &d.btbaud_use[3], _T("Send AT-commands to Bluetooth using 57600 baud rate. Commands are duplicated with different baud rates. The more baud rates are allowed, the longer it takes to configure Bluetooth."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Слать АТ-команды в Bluetooth на скорости 115200"), &d.btbaud_use[4], _T("Слать АТ-команды в Bluetooth на скорости 115200 бод. Команды дублируются на разных скоростях. Чем больше скоростей разрешено, тем дольше происходит конфигурирование Bluetooth."));
+ else
+  dfd.AppendItem(_T("Send AT-commands to Bluetooth using 115200 baud"), &d.btbaud_use[4], _T("Send AT-commands to Bluetooth using 115200 baud rate. Commands are duplicated with different baud rates. The more baud rates are allowed, the longer it takes to configure Bluetooth."));
+
  //miscellaneous
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Прочие константы:"));
