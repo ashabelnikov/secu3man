@@ -673,8 +673,9 @@ namespace SECU3IO
   bool ee_status;        //from LZID: true - idle, false - busy. To LZID: true - says to save settings into the EEPROM
   bool set0_corrupted;   //from LZID only 
   bool set1_corrupted;   //from LZID only 
-  bool dev_address;      //to/from LZID
-  float voltage;         //from LZID only 
+  bool dev_address;      //to/from LZID. This flag is ignored if broadcast flag is set
+  float voltage;         //from LZID only
+  bool broadcast;        //to LZID only - if this flag is set then all devices must accept this packet (edit settings simultaneously)
 
   int type;              //from LZID only
   int version;           //from LZID only

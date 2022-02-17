@@ -2787,6 +2787,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
  recv.gas_v = CHECKBIT8(ee_status, 3);
  recv.dev_address = CHECKBIT8(ee_status, 4);
  recv.set_idx = CHECKBIT8(ee_status, 7);
+ recv.broadcast = false;
 
  unsigned char type = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &type))
@@ -4380,6 +4381,7 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
  WRITEBIT8(command, 1, packet_data->start_bldr);
  WRITEBIT8(command, 2, packet_data->reset_eeprom);
  WRITEBIT8(command, 3, packet_data->dev_address);
+ WRITEBIT8(command, 4, packet_data->broadcast);
 
  mp_pdp->resetCRC();
 

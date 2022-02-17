@@ -488,6 +488,7 @@ BEGIN
     LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,20,305,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     RTEXT           "Драйвер:",IDC_INJDRV_CAPTION,568,13,40,8
     COMBOBOX        IDC_INJDRV_COMBO,613,12,30,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Одновременно",IDC_INJDRV_SIMULTAN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,655,12,65,15
     EDITTEXT        IDC_INJDRV_TESTCH_FRQ_EDIT,115,240,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_INJDRV_TESTCH_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,240,11,16
     RTEXT           "Частота тест. сигнала (Гц)",IDC_INJDRV_TESTCH_FRQ_CAPTION,12,243,100,10
@@ -890,6 +891,7 @@ BEGIN
     IDS_HOLD_DUTY_TABSEL_CHECK_TT "Скважность ШИМ удерж.(%). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
     IDS_PEAK_FULL_TABSEL_CHECK_TT "Время Вкл.+время ШИМ (мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
     IDS_PTH_PAUSE_TABSEL_CHECK_TT "Пауза включ.-удерж.(мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
+    IDS_INJDRV_SIMULTAN_CHECK_TT "Редактировать две половинки драйвера одновременно (SECU-LZID8). Чтение данных будет происходить из той половинки, которая выбрана в выпадающем списке слева, а запись данных будет происходить сразу в две половинки. Обратите внимание, действие этой галочки не распространяется на работу с загрузчиком. Работа с загрузчиком (например обновление прошивки) осуществляется отдельно для каждой половинки!"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1441,6 +1443,7 @@ BEGIN
     RTEXT           "Set of settings:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     RTEXT           "Driver:",IDC_INJDRV_CAPTION,568,13,40,8
     COMBOBOX        IDC_INJDRV_COMBO,613,12,30,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Simultaneously",IDC_INJDRV_SIMULTAN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,655,12,65,15
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
     LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,20,305,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     EDITTEXT        IDC_INJDRV_TESTCH_FRQ_EDIT,115,240,40,16,ES_AUTOHSCROLL
@@ -1845,6 +1848,7 @@ BEGIN
     IDS_HOLD_DUTY_TABSEL_CHECK_TT "Hold PWM duty (%). This table is used by the firmware only if corresponding 'Table' checkbox is set"
     IDS_PEAK_FULL_TABSEL_CHECK_TT "Peak ON + PWM time (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
     IDS_PTH_PAUSE_TABSEL_CHECK_TT "Peak-to-hold pause (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
+    IDS_INJDRV_SIMULTAN_CHECK_TT "Edit two halves of driver simultaneously (SECU-LZID8). Data will be read from the halve that is selected in the drop-down list on the left, and data will be written to two halves at once. Please note that this check box does not apply to working with the bootloader. Work with the bootloader (for example, updating the firmware) is carried out separately for each halve!"
 END
 
 STRINGTABLE DISCARDABLE 

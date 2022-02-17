@@ -62,6 +62,7 @@ class CInjDriverTabDlg : public CTabDialog
   void EnableBLItems(bool enable);
   void SetShowGraphLabels(bool show);
   int GetInjDrvSel(void);
+  bool GetEditSimultanCheck(void);
 
   void setOnChange(EventHandler onCB);
   void setOnSaveButton(EventHandler onCB);
@@ -193,6 +194,8 @@ class CInjDriverTabDlg : public CTabDialog
   CButton m_tst_hold_pwm_check;
 
   CButton m_load_flash_check;
+
+  CButton m_edit_simultan_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CChart2D> mp_chart;

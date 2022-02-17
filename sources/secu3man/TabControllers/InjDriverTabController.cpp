@@ -340,6 +340,7 @@ void CInjDriverTabController::OnChange(void)
  params.start_bldr = false;
  params.reset_eeprom = false;
  params.dev_address = mp_view->GetInjDrvSel();
+ params.broadcast = mp_view->GetEditSimultanCheck();
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -351,10 +352,11 @@ void CInjDriverTabController::OnSaveParameters(void)
  SECU3IO::InjDrvPar params;
  params.set_idx = set_idx; //specify desired set to obtain
  mp_view->GetValues(&params);
- params.ee_status = true; //this will say firmware to save data int EEPROM
+ params.ee_status = true; //this will say firmware to save data into EEPROM
  params.start_bldr = false;
  params.reset_eeprom = false;
  params.dev_address = mp_view->GetInjDrvSel();
+ params.broadcast = mp_view->GetEditSimultanCheck();
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -381,6 +383,7 @@ void CInjDriverTabController::OnImportFromAFile(void)
  params.start_bldr = false;
  params.reset_eeprom = false;
  params.dev_address = mp_view->GetInjDrvSel();
+ params.broadcast = mp_view->GetEditSimultanCheck();
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -401,8 +404,11 @@ void CInjDriverTabController::OnLoadFromFirmware(void)
   return;
  params[0].set_idx = 0;
  params[0].dev_address = mp_view->GetInjDrvSel();
+ params[0].broadcast = mp_view->GetEditSimultanCheck();
+
  params[1].set_idx = 1;
  params[1].dev_address = mp_view->GetInjDrvSel();
+ params[1].broadcast = mp_view->GetEditSimultanCheck();
 
  if (mp_comm->m_pControlApp->GetOnlineStatus())
  {
@@ -811,6 +817,7 @@ void CInjDriverTabController::OnResetEEPROM(void)
   params.start_bldr = false; //no command
   params.reset_eeprom = true; //reset eeprom command
   params.dev_address = mp_view->GetInjDrvSel();
+  params.broadcast = mp_view->GetEditSimultanCheck();
   mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
   mp_view->RedrawWindow();
   AfxGetMainWnd()->BeginWaitCursor();
@@ -889,5 +896,6 @@ void CInjDriverTabController::OnImportFromStock()
  params.start_bldr = false;
  params.reset_eeprom = false;
  params.dev_address = mp_view->GetInjDrvSel();
+ params.broadcast = mp_view->GetEditSimultanCheck();
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }

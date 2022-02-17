@@ -209,6 +209,8 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_LOAD_FLASH_CHECK, m_load_flash_check);
 
+ DDX_Control(pDX, IDC_INJDRV_SIMULTAN_CHECK, m_edit_simultan_check);
+
  m_pwm_period_edit.DDX_Value(pDX, IDC_PWM_PERIOD_EDIT, m_params[m_set_of_sett_idx].m_pwm_period);
  m_peak_duty_edit.DDX_Value(pDX, IDC_PEAK_DUTY_EDIT, m_params[m_set_of_sett_idx].m_peak_duty);
  m_hold_duty_edit.DDX_Value(pDX, IDC_HOLD_DUTY_EDIT, m_params[m_set_of_sett_idx].m_hold_duty);
@@ -574,6 +576,8 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_hold_duty_tabsel_check, MLL::GetString(IDS_HOLD_DUTY_TABSEL_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_peak_full_tabsel_check, MLL::GetString(IDS_PEAK_FULL_TABSEL_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_pth_pause_tabsel_check, MLL::GetString(IDS_PTH_PAUSE_TABSEL_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_edit_simultan_check, MLL::GetString(IDS_INJDRV_SIMULTAN_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(150); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1463,4 +1467,9 @@ void CInjDriverTabDlg::OnFirmwareMaster()
 void CInjDriverTabDlg::OnBLRecoverLinkClick()
 {
  SECUMessageBox(IDS_INJDRV_BLRECOVER_TEXT, MB_OK | MB_ICONINFORMATION);
+}
+
+bool CInjDriverTabDlg::GetEditSimultanCheck(void)
+{
+ return (m_edit_simultan_check.GetCheck()==BST_CHECKED);
 }
