@@ -127,6 +127,10 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
    return p_maps->iac_mat_corr;
   case TYPE_MAP_INJ_TPSZON:
    return p_maps->inj_tpszon;
+  case TYPE_MAP_INJ_CYLMULT:
+   return p_maps->inj_cylmult;
+  case TYPE_MAP_INJ_CYLADD:
+   return p_maps->inj_cyladd;
  }
  return NULL; //undefined type of map
 }
@@ -198,6 +202,9 @@ size_t _GetMapSize(int i_mapType)
    return INJ_ATS_CORR_SIZE;
   case TYPE_MAP_INJ_TPSZON:
    return INJ_TPSZON_SIZE;
+  case TYPE_MAP_INJ_CYLMULT:
+  case TYPE_MAP_INJ_CYLADD:
+   return INJ_CYLADD_SIZE;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -351,6 +358,8 @@ void CPMTablesController::OnActivate(void)
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_TPSZON, mptms.m_tpszon_map);
+ mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CYLMULT, mptms.m_cylmult_map);
+ mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CYLADD, mptms.m_cyladd_map);
 }
 
 void CPMTablesController::OnDeactivate(void)
@@ -603,6 +612,12 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
    break;
   case ETMT_TPSZON_MAP: //MAP/TPS load axis allocation
    UpdateMap(m_maps->inj_tpszon, m_maps_flags->inj_tpszon, data);
+   break;
+  case ETMT_CYLMULT_MAP: //Injection PW multiplier
+   UpdateMap(m_maps->inj_cylmult, m_maps_flags->inj_cylmult, data);
+   break;
+  case ETMT_CYLADD_MAP: //Injection PW addition
+   UpdateMap(m_maps->inj_cyladd, m_maps_flags->inj_cyladd, data);
    break;
 
   default: ASSERT(0);
@@ -956,7 +971,8 @@ void CPMTablesController::OnChangeSettings(void)
  mptms.m_pwm2_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_PWM2);
  mptms.m_iacmat_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
  mptms.m_tpszon_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_TPSZON);
-
+ mptms.m_cylmult_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CYLMULT);
+ mptms.m_cyladd_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CYLADD);
  mp_settings->SetMapPtMovStep(mptms);
 
  if (m_OnChangeSettings)

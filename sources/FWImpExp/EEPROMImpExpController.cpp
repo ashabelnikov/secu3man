@@ -227,6 +227,12 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
   m_eedm->GetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
+  m_eedm->GetInjCylMultMap(other_sel, mp_fwd->maps[current_sel].inj_cylmult);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
+  m_eedm->GetInjCylAddMap(other_sel, mp_fwd->maps[current_sel].inj_cyladd);
 }
 
 //Modal window has been activated - perform its initialization
@@ -277,6 +283,8 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
  mp_view->SetFWDFlag(FLAG_TPSZON_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CYLMULT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CYLADD_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);

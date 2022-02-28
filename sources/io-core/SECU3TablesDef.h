@@ -89,7 +89,10 @@ typedef struct
 
  _uchar inj_tpszon[INJ_TPSZON_SIZE];                  // MAP/TPS load axis allocation
 
- _uchar reserved[69];                                 // reserved bytes - for compatibility
+ _uchar inj_cylmult[INJ_CYLADD_SIZE];                 //!< per cylinder inj. correction multiplier
+ _char  inj_cyladd[INJ_CYLADD_SIZE];                  //!< per cylinder inj. correction addition
+
+ _uchar reserved[53];                                 // reserved bytes - for compatibility
  _uint  checksum;
 }f_data_t;
 

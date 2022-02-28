@@ -455,6 +455,12 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   case TYPE_MAP_INJ_TPSZON:
    return mp_ButtonsPanel->GetTpszonMap(i_original);
 
+  case TYPE_MAP_INJ_CYLMULT:
+   return mp_ButtonsPanel->GetCylMultMap(i_original);
+
+  case TYPE_MAP_INJ_CYLADD:
+   return mp_ButtonsPanel->GetCylAddMap(i_original);
+
   default:
   return NULL;
  }

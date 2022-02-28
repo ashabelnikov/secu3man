@@ -41,7 +41,7 @@ class CGMEInjOther1Dlg : public CTabDialog
  ~CGMEInjOther1Dlg();
   static const UINT IDD;
 
-  void BindMaps(float* pTpsswt, float* pTpszon);
+  void BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd);
   void BindRPMGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
   void UpdateView(bool axisLabels = false);
@@ -63,17 +63,25 @@ class CGMEInjOther1Dlg : public CTabDialog
 
   void OnChangeTpsswt(void);
   void OnChangeTpszon(void);
+  void OnChangeCylMult(void);
+  void OnChangeCylAdd(void);
 
   void OnAbroadMoveTpsswt(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveTpszon(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveCylMult(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveCylAdd(CMapEditorCtrl::AbroadDir direction, int column);
 
  private:
   CMapEditorCtrl m_tpsswt_map;
   CMapEditorCtrl m_tpszon_map;
-  CStatic m_ctrls[2];
+  CMapEditorCtrl m_cylmult_map;
+  CMapEditorCtrl m_cyladd_map;
+  CStatic m_ctrls[4];
 
   float* mp_TpsswtMap;
   float* mp_TpszonMap;
+  float* mp_CylMultMap;
+  float* mp_CylAddMap;
 
   float* mp_rpmGrid;
   std::auto_ptr<CtrlScaler> mp_cscl;

@@ -1510,6 +1510,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetPwm2Map(i,op_fwd->maps[i].pwm_duty2);
   GetIACMATMap(i, op_fwd->maps[i].iac_mat_corr);
   GetTpszonMap(i, op_fwd->maps[i].inj_tpszon);
+  GetInjCylMultMap(i, op_fwd->maps[i].inj_cylmult);
+  GetInjCylAddMap(i, op_fwd->maps[i].inj_cyladd);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1601,6 +1603,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetPwm2Map(i,ip_fwd->maps[i].pwm_duty2);
   SetIACMATMap(i, ip_fwd->maps[i].iac_mat_corr);
   SetTpszonMap(i, ip_fwd->maps[i].inj_tpszon);
+  SetInjCylMultMap(i, ip_fwd->maps[i].inj_cylmult);
+  SetInjCylAddMap(i, ip_fwd->maps[i].inj_cyladd);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
@@ -3066,4 +3070,48 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  for(int i = 0; i < 5; ++i)
   exd.btbaud_use[i] = i_data.btbaud_use[i];
+}
+
+void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_CYLADD_SIZE; i++ )
+  op_values[i] = (((float)p_fd->tables[i_index].inj_cylmult[i]) / 256.0f) + 0.5f;
+}
+
+void CFirmwareDataMediator::SetInjCylMultMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_CYLADD_SIZE; i++ )
+  p_fd->tables[i_index].inj_cylmult[i] = MathHelpers::Round((ip_values[i] - 0.5f) * 256.0f);
+}
+
+void CFirmwareDataMediator::GetInjCylAddMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_CYLADD_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_cyladd[i]) * 0.0256f;
+}
+
+void CFirmwareDataMediator::SetInjCylAddMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_CYLADD_SIZE; i++ )
+  p_fd->tables[i_index].inj_cyladd[i] = MathHelpers::Round(ip_values[i] / 0.0256f);
 }

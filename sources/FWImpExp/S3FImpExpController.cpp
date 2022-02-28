@@ -337,6 +337,12 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
   memcpy(mp_fwd->maps[current_sel].iac_mat_corr, mp_s3f_io->GetData().maps[other_sel].iac_mat_corr, sizeof(float) * INJ_ATS_CORR_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_cylmult, mp_s3f_io->GetData().maps[other_sel].inj_cylmult,sizeof(float) * INJ_CYLADD_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_cyladd, mp_s3f_io->GetData().maps[other_sel].inj_cyladd, sizeof(float) * INJ_CYLADD_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -385,6 +391,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0121 = (mp_s3f_io->GetVersion() > 0x0120);
  bool sv0122 = (mp_s3f_io->GetVersion() > 0x0121);
  bool sv0123 = (mp_s3f_io->GetVersion() > 0x0122);
+ bool sv0124 = (mp_s3f_io->GetVersion() > 0x0123);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -443,7 +450,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_VE2_MAP, sv0118);       //since v01.18
  mp_view->SetFWDFlag(FLAG_TPSZON_MAP, sv0121);       //since v01.21
  mp_view->EnableFWDFlag(FLAG_TPSZON_MAP, sv0121);    //since v01.21
-
+ mp_view->SetFWDFlag(FLAG_CYLMULT_MAP, sv0124);      //since v01.24
+ mp_view->EnableFWDFlag(FLAG_CYLMULT_MAP, sv0124);   //since v01.24
+ mp_view->SetFWDFlag(FLAG_CYLADD_MAP, sv0124);       //since v01.24
+ mp_view->EnableFWDFlag(FLAG_CYLADD_MAP, sv0124);    //since v01.24
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -809,6 +819,12 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].iac_mat_corr, mp_fwd->maps[current_sel].iac_mat_corr, sizeof(float) * INJ_ATS_CORR_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_cylmult, mp_fwd->maps[current_sel].inj_cylmult, sizeof(float) * INJ_CYLADD_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_cyladd, mp_fwd->maps[current_sel].inj_cyladd, sizeof(float) * INJ_CYLADD_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -859,6 +875,8 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_PWM1_MAP, true);
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CYLMULT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CYLADD_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

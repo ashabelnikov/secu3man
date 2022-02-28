@@ -208,6 +208,8 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_TPSZON, mptms.m_tpszon_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CYLMULT, mptms.m_cylmult_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CYLADD, mptms.m_cyladd_map);
 
  //disable "Load grids" menu item if firmware is not opened
  CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
@@ -684,6 +686,12 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  m_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(false),false);
  m_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(true),true);
+
+ m_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(false),false);
+ m_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(true),true);
+
+ m_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(false),false);
+ m_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(true),true);
 }
 
 
@@ -821,6 +829,12 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_INJ_TPSZON:
    m_eedm->SetTpszonMap(funset_index, mp_view->mp_TablesPanel->GetTpszonMap(false));
+   break;
+  case TYPE_MAP_INJ_CYLMULT:
+   m_eedm->SetInjCylMultMap(funset_index, mp_view->mp_TablesPanel->GetCylMultMap(false));
+   break;
+  case TYPE_MAP_INJ_CYLADD:
+   m_eedm->SetInjCylAddMap(funset_index, mp_view->mp_TablesPanel->GetCylAddMap(false));
    break;
  }
 }
@@ -1100,6 +1114,8 @@ void CEEPROMTabController::OnChangeSettingsMapEd(void)
  mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
  mptms.m_iacmat_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
  mptms.m_tpszon_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_TPSZON);
+ mptms.m_cylmult_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CYLMULT);
+ mptms.m_cyladd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CYLADD);
  mp_settings->SetMapPtMovStep(mptms);
 }
 

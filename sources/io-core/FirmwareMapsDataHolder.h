@@ -81,6 +81,7 @@
 #define INJPWCOEF_LUT_SIZE     17
 #define MAF_FLOW_CURVE_SIZE    64          //Size of MAF flow curve lookup table
 #define FTLSCOR_UCOEF_SIZE     32
+#define INJ_CYLADD_SIZE        8
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -211,6 +212,8 @@ struct SECU3FWMapsItem
  float iac_mat_corr[INJ_ATS_CORR_SIZE];         //IAC position's correction vs MAT
  float inj_ve2[INJ_VE_POINTS_L * INJ_VE_POINTS_F]; // Secondary VE
  float inj_tpszon[INJ_TPSZON_SIZE];             // MAP/TPS load axis allocation
+ float inj_cylmult[INJ_CYLADD_SIZE];            // Inj. PW multiplier
+ float inj_cyladd[INJ_CYLADD_SIZE];             // Inj. PW addition
 };
 
 //Аппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
@@ -256,7 +259,7 @@ struct FWMapsDataHolder
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
  {
-  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
+  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
   maps.assign(setNum, defval);
   std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);

@@ -429,6 +429,18 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_TpszonMapWnd_W = rc.right - rc.left;
    sz.m_TpszonMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_INJ_CYLMULT:
+   ws.m_CylMultMapWnd_X = rc.left;
+   ws.m_CylMultMapWnd_Y = rc.top;
+   sz.m_CylMultMapWnd_W = rc.right - rc.left;
+   sz.m_CylMultMapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_INJ_CYLADD:
+   ws.m_CylAddMapWnd_X = rc.left;
+   ws.m_CylAddMapWnd_Y = rc.top;
+   sz.m_CylAddMapWnd_W = rc.right - rc.left;
+   sz.m_CylAddMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -709,6 +721,15 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    X = ws.m_TpszonMapWnd_X, Y = ws.m_TpszonMapWnd_Y;
    W = sz.m_TpszonMapWnd_W, H = sz.m_TpszonMapWnd_H;
    break;
+  case TYPE_MAP_INJ_CYLMULT:
+   X = ws.m_CylMultMapWnd_X, Y = ws.m_CylMultMapWnd_Y;
+   W = sz.m_CylMultMapWnd_W, H = sz.m_CylMultMapWnd_H;
+   break;
+  case TYPE_MAP_INJ_CYLADD:
+   X = ws.m_CylAddMapWnd_X, Y = ws.m_CylAddMapWnd_Y;
+   W = sz.m_CylAddMapWnd_W, H = sz.m_CylAddMapWnd_H;
+   break;
+
   default:
    return; //undefined case...
  };

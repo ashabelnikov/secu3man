@@ -430,6 +430,8 @@ namespace SECU3IO
  const int ETMT_IACMAT_MAP = 29;        //IAC position's correction vs MAT
  const int ETMT_VE2_MAP = 30;           //Secondary VE map
  const int ETMT_TPSZON_MAP = 31;        //MAP/TPS load axis allocation map
+ const int ETMT_CYLMULT_MAP = 32;       //Inj. Multiplier
+ const int ETMT_CYLADD_MAP = 33;        //Inj. Addition
 
  struct SepTabPar
  {
@@ -901,6 +903,8 @@ const int INPAVNUM = 14;
  const float voltage_map_slots[16] = {5.4f,6.2f,7.0f,7.8f,8.6f,9.4f,10.2f,11.0f,11.8f,12.6f,13.4f,14.2f,15.0f,15.8f,16.6f,17.4f};
 
  const float work_map_lod_slots[16]  = {100,95,90,85,80,75,70,65,60,55,50,45,40,35,30,25}; //reverse order
+
+ const float inj_cyladd_map_slots[8] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
 
  const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 32;
  //<bitnumber, name>

@@ -211,8 +211,11 @@ void CDynFieldsDialog::OnChangeData(UINT nID)
 {
  for(std::list<ItemData>::iterator it = m_fl.begin(); it != m_fl.end(); ++it)
  {
-  if (!it->separator && nID == it->p_edit->GetDlgCtrlID())
-   UpdateData();
+  if (!it->separator)
+  {
+   if ((it->p_edit && nID == it->p_edit->GetDlgCtrlID()) || (it->p_check && it->p_check->GetDlgCtrlID()))
+    UpdateData();
+  }
  }
 }
 

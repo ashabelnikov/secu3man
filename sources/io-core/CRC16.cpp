@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "CRC16.h"
 
+/**CRC16 Polynom */
 #define      P_16        0xA001
 
 unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num)
@@ -33,36 +34,36 @@ unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num)
  unsigned int i;
  unsigned short crc = 0xffff;
 
- while ( num-- )
+ while (num--)
  {
   crc ^= *buf++;
   i = 8;
   do
   {
-   if ( crc & 1 )
-    crc = ( crc >> 1 ) ^ P_16;
+   if (crc & 1)
+    crc = (crc >> 1) ^ P_16;
    else
     crc >>= 1;
-  } while ( --i );
+  } while (--i);
  }
- return( crc );
+ return crc;
 }
 
 unsigned short crc16(unsigned short crc, const unsigned char *buf, unsigned long num)
 {
  unsigned int i;
 
- while ( num-- )
+ while (num--)
  {
   crc ^= *buf++;
   i = 8;
   do
   {
-   if ( crc & 1 )
-    crc = ( crc >> 1 ) ^ P_16;
+   if (crc & 1)
+    crc = (crc >> 1) ^ P_16;
    else
     crc >>= 1;
-  } while ( --i );
+  } while (--i);
  }
  return crc;
 }

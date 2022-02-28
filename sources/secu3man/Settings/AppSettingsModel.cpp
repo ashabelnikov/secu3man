@@ -188,6 +188,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optTpszonMapWnd(_T("TpsMapZonesMapWnd"))
 , m_optFtlsCorMapWnd(_T("FtlsCorrMapWnd"))
 , m_optLambdaZoneMapWnd(_T("LambdaZoneMapWnd"))
+, m_optCylMultMapWnd(_T("InjCylMultMapWnd"))
+, m_optCylAddMapWnd(_T("InjCylAddMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -223,6 +225,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwm2MapWnd1(_T("Pwm2MapWnd"))
 , m_optIACMATMapWnd1(_T("IACMATCorrMapWnd"))
 , m_optTpszonMapWnd1(_T("TpsMapZonesMapWnd"))
+, m_optCylMultMapWnd1(_T("InjCylMultMapWnd"))
+, m_optCylAddMapWnd1(_T("InjCylAddMapWnd"))
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
@@ -288,6 +292,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optTpszonMapWndSize(_T("TpsMapZonesMapWnd"))
 , m_optFtlsCorMapWndSize(_T("FtlsCorrMapWnd"))
 , m_optLambdaZoneMapWndSize(_T("LambdaZoneMapWnd"))
+, m_optCylMultMapWndSize(_T("InjCylMultMapWnd"))
+, m_optCylAddMapWndSize(_T("InjCylAddMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -323,6 +329,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPwm2MapWndSize1(_T("Pwm2MapWnd"))
 , m_optIACMATMapWndSize1(_T("IACMATCorrMapWnd"))
 , m_optTpszonMapWndSize1(_T("TpsMapZonesMapWnd"))
+, m_optCylMultMapWndSize1(_T("InjCylMultMapWnd"))
+, m_optCylAddMapWndSize1(_T("InjCylAddMapWnd"))
 //state of windows (minimized, normal, maximized)
 , m_Name_WndState_Section(_T("WndState"))
 , m_optMainFrmWndState(_T("MainFrmWnd"))
@@ -425,6 +433,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepPwm2Map(_T("Pwm2MapWnd"))
 , m_optPtMovStepIACMATMap(_T("IACMATCorrMapWnd"))
 , m_optPtMovStepTpszonMap(_T("TpsMapZonesMapWnd"))
+, m_optPtMovStepCylMultMap(_T("InjCylMultMapWnd"))
+, m_optPtMovStepCylAddMap(_T("InjCylAddMapWnd"))
 //separate
 , m_optPtMovStepCrkTempMap(_T("CrkTempMapWnd"))
 , m_optPtMovStepEHPauseMap(_T("EHPauseMapWnd"))
@@ -876,6 +886,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optTpszonMapWnd);
  ws.ReadWndPos(m_optFtlsCorMapWnd);
  ws.ReadWndPos(m_optLambdaZoneMapWnd);
+ ws.ReadWndPos(m_optCylMultMapWnd);
+ ws.ReadWndPos(m_optCylAddMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -913,7 +925,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optPwm2MapWnd1);
  ws1.ReadWndPos(m_optIACMATMapWnd1);
  ws1.ReadWndPos(m_optTpszonMapWnd1);
-
+ ws1.ReadWndPos(m_optCylMultMapWnd1);
+ ws1.ReadWndPos(m_optCylAddMapWnd1);
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
  sz.ReadWndPos(m_optMainFrmWndSize, 0, 10000); //Main frame window
@@ -979,6 +992,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optTpszonMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optFtlsCorMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optLambdaZoneMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCylMultMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optCylAddMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1015,6 +1030,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optPwm2MapWndSize1);
  sz1.ReadWndPos(m_optIACMATMapWndSize1);
  sz1.ReadWndPos(m_optTpszonMapWndSize1);
+ sz1.ReadWndPos(m_optCylMultMapWndSize1);
+ sz1.ReadWndPos(m_optCylAddMapWndSize1);
 
  //State of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -1199,6 +1216,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepPwm2Map,  _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepIACMATMap, _T("0.25"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepTpszonMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepCylMultMap, _T("0.1"), 0.005f, 1.0f);
+ ms.ReadFlt(m_optPtMovStepCylAddMap, _T("0.1"), 0.025f, 1.0f);
+
  //separate
  ms.ReadFlt(m_optPtMovStepCrkTempMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepEHPauseMap, _T("0.01"), 0.0f, 10.0f);
@@ -2135,6 +2155,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optLambdaZoneMapWnd, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCylMultMapWnd, _T("Per cylinder injection PW multiplier"));
+ else
+  ws.WriteWndPos(m_optCylMultMapWnd, _T("Поцилиндровый множитель длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCylAddMapWnd, _T("Per cylinder injection PW addition"));
+ else
+  ws.WriteWndPos(m_optCylAddMapWnd, _T("Поцилиндровая добавка к длительности впрыска"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2307,6 +2337,16 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optTpszonMapWnd1, _T("Load axis allocation between MAP and TPS"));
  else
   ws1.WriteWndPos(m_optTpszonMapWnd1, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optCylMultMapWnd1, _T("Per cylinder injection PW multiplier"));
+ else
+  ws1.WriteWndPos(m_optCylMultMapWnd1, _T("Поцилиндровый множитель длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optCylAddMapWnd1, _T("Per cylinder injection PW addition"));
+ else
+  ws1.WriteWndPos(m_optCylAddMapWnd1, _T("Поцилиндровая добавка к длительности впрыска"));
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -2631,6 +2671,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   sz.WriteWndPos(m_optLambdaZoneMapWndSize, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCylMultMapWndSize, _T("Per cylinder injection PW multiplier"));
+ else
+  sz.WriteWndPos(m_optCylMultMapWndSize, _T("Поцилиндровый множитель длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optCylAddMapWndSize, _T("Per cylinder injection PW addition"));
+ else
+  sz.WriteWndPos(m_optCylAddMapWndSize, _T("Поцилиндровая добавка к длительности впрыска"));
+
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2803,6 +2853,16 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optTpszonMapWndSize1, _T("Load axis allocation between MAP and TPS"));
  else
   sz1.WriteWndPos(m_optTpszonMapWndSize1, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optCylMultMapWndSize1, _T("Per cylinder injection PW multiplier"));
+ else
+  sz1.WriteWndPos(m_optCylMultMapWndSize1, _T("Поцилиндровый множитель длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optCylAddMapWndSize1, _T("Per cylinder injection PW addition"));
+ else
+  sz1.WriteWndPos(m_optCylAddMapWndSize1, _T("Поцилиндровая добавка к длительности впрыска"));
 
  //States of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -3663,6 +3723,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepTpszonMap, 3, _T("Распределение оси нагрузки между ДАД и ДПДЗ"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepCylMultMap, 3, _T("Per cylinder injection PW multiplier"));
+ else
+  ms.WriteFlt(m_optPtMovStepCylMultMap, 3, _T("Поцилиндровый множитель длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepCylAddMap, 3, _T("Per cylinder injection PW addition"));
+ else
+  ms.WriteFlt(m_optPtMovStepCylAddMap, 3, _T("Поцилиндровая добавка к длительности впрыска"));
+
  //separate maps
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, _T("Ign.timing vs CLT correction on cranking"));
@@ -4128,6 +4198,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optFtlsCorMapWnd.value.y = i_wndSettings.m_FtlsCorMapWnd_Y; 
  m_optLambdaZoneMapWnd.value.x = i_wndSettings.m_LambdaZoneMapWnd_X;
  m_optLambdaZoneMapWnd.value.y = i_wndSettings.m_LambdaZoneMapWnd_Y; 
+ m_optCylMultMapWnd.value.x = i_wndSettings.m_CylMultMapWnd_X;
+ m_optCylMultMapWnd.value.y = i_wndSettings.m_CylMultMapWnd_Y;
+ m_optCylAddMapWnd.value.x = i_wndSettings.m_CylAddMapWnd_X;
+ m_optCylAddMapWnd.value.y = i_wndSettings.m_CylAddMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -4258,6 +4332,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_FtlsCorMapWnd_Y = m_optFtlsCorMapWnd.value.y;
  o_wndSettings.m_LambdaZoneMapWnd_X = m_optLambdaZoneMapWnd.value.x;
  o_wndSettings.m_LambdaZoneMapWnd_Y = m_optLambdaZoneMapWnd.value.y;
+ o_wndSettings.m_CylMultMapWnd_X = m_optCylMultMapWnd.value.x;
+ o_wndSettings.m_CylMultMapWnd_Y = m_optCylMultMapWnd.value.y;
+ o_wndSettings.m_CylAddMapWnd_X = m_optCylAddMapWnd.value.x;
+ o_wndSettings.m_CylAddMapWnd_Y = m_optCylAddMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4328,6 +4406,10 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optIACMATMapWnd1.value.y = i_wndSettings.m_IACMATMapWnd_Y;
  m_optTpszonMapWnd1.value.x = i_wndSettings.m_TpszonMapWnd_X;
  m_optTpszonMapWnd1.value.y = i_wndSettings.m_TpszonMapWnd_Y;
+ m_optCylMultMapWnd1.value.x = i_wndSettings.m_CylMultMapWnd_X;
+ m_optCylMultMapWnd1.value.y = i_wndSettings.m_CylMultMapWnd_Y;
+ m_optCylAddMapWnd1.value.x = i_wndSettings.m_CylAddMapWnd_X;
+ m_optCylAddMapWnd1.value.y = i_wndSettings.m_CylAddMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
@@ -4398,6 +4480,10 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_IACMATMapWnd_Y = m_optIACMATMapWnd1.value.y;
  o_wndSettings.m_TpszonMapWnd_X = m_optTpszonMapWnd1.value.x;
  o_wndSettings.m_TpszonMapWnd_Y = m_optTpszonMapWnd1.value.y;
+ o_wndSettings.m_CylMultMapWnd_X = m_optCylMultMapWnd1.value.x;
+ o_wndSettings.m_CylMultMapWnd_Y = m_optCylMultMapWnd1.value.y;
+ o_wndSettings.m_CylAddMapWnd_X = m_optCylAddMapWnd1.value.x;
+ o_wndSettings.m_CylAddMapWnd_Y = m_optCylAddMapWnd1.value.y;
 }
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
@@ -4528,6 +4614,10 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optFtlsCorMapWndSize.value.y = i_wndSize.m_FtlsCorMapWnd_H; 
  m_optLambdaZoneMapWndSize.value.x = i_wndSize.m_LambdaZoneMapWnd_W;
  m_optLambdaZoneMapWndSize.value.y = i_wndSize.m_LambdaZoneMapWnd_H; 
+ m_optCylMultMapWndSize.value.x = i_wndSize.m_CylMultMapWnd_W;
+ m_optCylMultMapWndSize.value.y = i_wndSize.m_CylMultMapWnd_H;
+ m_optCylAddMapWndSize.value.x = i_wndSize.m_CylAddMapWnd_W;
+ m_optCylAddMapWndSize.value.y = i_wndSize.m_CylAddMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4658,6 +4748,10 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_FtlsCorMapWnd_H = m_optFtlsCorMapWndSize.value.y;
  o_wndSize.m_LambdaZoneMapWnd_W = m_optLambdaZoneMapWndSize.value.x;
  o_wndSize.m_LambdaZoneMapWnd_H = m_optLambdaZoneMapWndSize.value.y;
+ o_wndSize.m_CylMultMapWnd_W = m_optCylMultMapWndSize.value.x;
+ o_wndSize.m_CylMultMapWnd_H = m_optCylMultMapWndSize.value.y;
+ o_wndSize.m_CylAddMapWnd_W = m_optCylAddMapWndSize.value.x;
+ o_wndSize.m_CylAddMapWnd_H = m_optCylAddMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -4728,6 +4822,10 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optIACMATMapWndSize1.value.y = i_wndSize.m_IACMATMapWnd_H;
  m_optTpszonMapWndSize1.value.x = i_wndSize.m_TpszonMapWnd_W;
  m_optTpszonMapWndSize1.value.y = i_wndSize.m_TpszonMapWnd_H;
+ m_optCylMultMapWndSize1.value.x = i_wndSize.m_CylMultMapWnd_W;
+ m_optCylMultMapWndSize1.value.y = i_wndSize.m_CylMultMapWnd_H;
+ m_optCylAddMapWndSize1.value.x = i_wndSize.m_CylAddMapWnd_W;
+ m_optCylAddMapWndSize1.value.y = i_wndSize.m_CylAddMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
@@ -4798,6 +4896,10 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_IACMATMapWnd_H = m_optIACMATMapWndSize1.value.y;
  o_wndSize.m_TpszonMapWnd_W = m_optTpszonMapWndSize1.value.x;
  o_wndSize.m_TpszonMapWnd_H = m_optTpszonMapWndSize1.value.y;
+ o_wndSize.m_CylMultMapWnd_W = m_optCylMultMapWndSize1.value.x;
+ o_wndSize.m_CylMultMapWnd_H = m_optCylMultMapWndSize1.value.y;
+ o_wndSize.m_CylAddMapWnd_W = m_optCylAddMapWndSize1.value.x;
+ o_wndSize.m_CylAddMapWnd_H = m_optCylAddMapWndSize1.value.y;
 }
 
 void CAppSettingsModel::SetWndState(const WndState& i_wndState)
@@ -5531,6 +5633,8 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepPwm2Map.value = i_ptMovStep.m_pwm2_map;
  m_optPtMovStepIACMATMap.value = i_ptMovStep.m_iacmat_map;
  m_optPtMovStepTpszonMap.value = i_ptMovStep.m_tpszon_map;
+ m_optPtMovStepCylMultMap.value = i_ptMovStep.m_cylmult_map;
+ m_optPtMovStepCylAddMap.value = i_ptMovStep.m_cyladd_map;
  //separate
  m_optPtMovStepAttenMap.value = i_ptMovStep.m_attenuator_map;
  m_optPtMovStepDwellCntrlMap.value = i_ptMovStep.m_dwellcntrl_map;
@@ -5595,6 +5699,9 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_pwm2_map = m_optPtMovStepPwm2Map.value;
  o_ptMovStep.m_iacmat_map = m_optPtMovStepIACMATMap.value;
  o_ptMovStep.m_tpszon_map = m_optPtMovStepTpszonMap.value;
+ o_ptMovStep.m_cylmult_map = m_optPtMovStepCylMultMap.value;
+ o_ptMovStep.m_cyladd_map = m_optPtMovStepCylAddMap.value;
+
  //separate
  o_ptMovStep.m_attenuator_map = m_optPtMovStepAttenMap.value;
  o_ptMovStep.m_dwellcntrl_map = m_optPtMovStepDwellCntrlMap.value;

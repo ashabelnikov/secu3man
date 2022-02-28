@@ -1819,7 +1819,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.tab_id != ETMT_IATCLT_MAP && editTabPar.tab_id != ETMT_TPSSWT_MAP && editTabPar.tab_id != ETMT_GTSC_MAP &&
      editTabPar.tab_id != ETMT_GPSC_MAP && editTabPar.tab_id != ETMT_ATSC_MAP && editTabPar.tab_id != ETMT_PWM1_MAP &&
      editTabPar.tab_id != ETMT_PWM2_MAP && editTabPar.tab_id != ETMT_TEMPI_MAP && editTabPar.tab_id != ETMT_IACMAT_MAP && 
-     editTabPar.tab_id != ETMT_VE2_MAP && editTabPar.tab_id != ETMT_TPSZON_MAP)
+     editTabPar.tab_id != ETMT_VE2_MAP && editTabPar.tab_id != ETMT_TPSZON_MAP && editTabPar.tab_id != ETMT_CYLMULT_MAP && editTabPar.tab_id != ETMT_CYLADD_MAP)
   return false;
 
  //check for 16-byte packets
@@ -1947,6 +1947,10 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.table_data[i] = ((float)value) / 128.0f;
      else if (editTabPar.tab_id == ETMT_IACMAT_MAP)
       editTabPar.table_data[i] = ((float)((signed char)value)) / 4.0f;
+     else if (editTabPar.tab_id == ETMT_CYLMULT_MAP)
+      editTabPar.table_data[i] = (((float)(value)) / 256.0f) + 0.5f;
+     else if (editTabPar.tab_id == ETMT_CYLADD_MAP)
+      editTabPar.table_data[i] = ((float)((signed char)value)) * 0.0256f;
      else
       editTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -4101,6 +4105,16 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    else if (packet_data->tab_id == ETMT_IACMAT_MAP)
    {
     signed char value = MathHelpers::Round(packet_data->table_data[i] * 4.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_CYLMULT_MAP)
+   {
+    unsigned char value = MathHelpers::Round((packet_data->table_data[i] - 0.5f) * 256.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_CYLADD_MAP)
+   {
+    signed char value = MathHelpers::Round(packet_data->table_data[i] / 0.0256f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else

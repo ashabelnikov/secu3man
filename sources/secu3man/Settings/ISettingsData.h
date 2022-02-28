@@ -156,6 +156,10 @@ struct WndSettings
  int m_FtlsCorMapWnd_Y;
  int m_LambdaZoneMapWnd_X;
  int m_LambdaZoneMapWnd_Y;
+ int m_CylMultMapWnd_X;
+ int m_CylMultMapWnd_Y;
+ int m_CylAddMapWnd_X;
+ int m_CylAddMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -287,6 +291,10 @@ struct WndSize
  int m_FtlsCorMapWnd_H;
  int m_LambdaZoneMapWnd_W;
  int m_LambdaZoneMapWnd_H;
+ int m_CylMultMapWnd_W;
+ int m_CylMultMapWnd_H;
+ int m_CylAddMapWnd_W;
+ int m_CylAddMapWnd_H;
 };
 
 //Holds windows's state data
@@ -407,6 +415,8 @@ struct MapPtMovStep
  float m_pwm2_map;
  float m_iacmat_map;
  float m_tpszon_map;
+ float m_cylmult_map;
+ float m_cyladd_map;
  //separate
  float m_attenuator_map;
  float m_dwellcntrl_map;

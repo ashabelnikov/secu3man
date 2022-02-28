@@ -332,6 +332,12 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
   m_fwdm->GetTpszonMap(other_sel, mp_fwd->maps[current_sel].inj_tpszon);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
+  m_fwdm->GetInjCylMultMap(other_sel, mp_fwd->maps[current_sel].inj_cylmult);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
+  m_fwdm->GetInjCylAddMap(other_sel, mp_fwd->maps[current_sel].inj_cyladd);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -382,6 +388,8 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
  mp_view->SetFWDFlag(FLAG_TPSZON_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CYLMULT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CYLADD_MAP, true);
  //separate maps
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -730,6 +738,12 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
   m_fwdm->SetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
+  m_fwdm->SetInjCylMultMap(other_sel, mp_fwd->maps[current_sel].inj_cylmult);
+
+ if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
+  m_fwdm->SetInjCylAddMap(other_sel, mp_fwd->maps[current_sel].inj_cyladd);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -780,7 +794,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_PWM2_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACMAT_MAP, true);
  mp_view->SetFWDFlag(FLAG_TPSZON_MAP, true);
-
+ mp_view->SetFWDFlag(FLAG_CYLMULT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CYLADD_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

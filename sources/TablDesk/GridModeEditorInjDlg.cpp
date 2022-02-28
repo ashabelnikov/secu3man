@@ -233,7 +233,7 @@ void CGridModeEditorInjDlg::OnClose()
  DestroyWindow();
 }
 
-void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2, float* pTpszon)
+void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2, float* pTpszon, float* pCylMult, float* pCylAdd)
 {
  m_pVEPageDlg->BindMaps(pVE, pVE2);
  m_pAFRPageDlg->BindMaps(pAFR);
@@ -241,7 +241,7 @@ void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float*
  m_pIRegPageDlg->BindMaps(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW, pIACMAT);
  m_pEnrPageDlg->BindMaps(pAftstr, pWrmp, pAETPS, pAERPM);
  m_pOtherPageDlg->BindMaps(pCrnk, pDead, pEGOCrv, pIATCLT, pAtsc, pGtsc, pGpsc);
- m_pOther1PageDlg->BindMaps(pTpsswt, pTpszon);
+ m_pOther1PageDlg->BindMaps(pTpsswt, pTpszon, pCylMult, pCylAdd);
  m_pPwm1PageDlg->BindMaps(pPwm1);
  m_pPwm2PageDlg->BindMaps(pPwm2);
 }
