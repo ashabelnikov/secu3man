@@ -32,7 +32,7 @@ class CDiagnostContextMenuManager
   virtual ~CDiagnostContextMenuManager();
 
   void Attach(CWnd* pWnd);
-  void CreateContent(void);
+  void CreateContent(bool recreate = false, bool secu3t = false);
   void TrackPopupMenu(int x, int y);
 
   CMenu& GetParentMenu(void);

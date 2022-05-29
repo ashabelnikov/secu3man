@@ -318,6 +318,7 @@ void CDevDiagnostTabDlg::EnableSECU3TFeatures(bool i_enable)
 {
  mp_inpsDlg->EnableSECU3TFeatures(i_enable);
  mp_outsDlg->EnableSECU3TFeatures(i_enable);
+ mp_ContextMenuManager->CreateContent(true, i_enable); //recreate pupup menu
  UpdateDialogControls(this,TRUE);
 }
 

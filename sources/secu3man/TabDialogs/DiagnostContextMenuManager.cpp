@@ -49,16 +49,21 @@ void CDiagnostContextMenuManager::Attach(CWnd* pWnd)
 }
 
 //Fill menu with items and submenus
-void CDiagnostContextMenuManager::CreateContent(void)
+void CDiagnostContextMenuManager::CreateContent(bool recreate /*= false*/, bool secu3t /*= false*/)
 {
+ if (recreate)
+  m_ParentMenu.DestroyMenu();
  m_ParentMenu.CreatePopupMenu();
 
  m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_START_OUTAUTO_TST,MLL::LoadString(IDS_DEV_DIAG_START_OUTAUTO_TST));
  m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_STOP_OUTAUTO_TST,MLL::LoadString(IDS_DEV_DIAG_STOP_OUTAUTO_TST));
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
  m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_ENABLE_BLDE_TST,MLL::LoadString(IDS_DEV_DIAG_ENABLE_BLDE_TST));
- m_ParentMenu.AppendMenu(MF_SEPARATOR);
- m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_ENABLE_TACH_O_TST,MLL::LoadString(IDS_DEV_DIAG_ENABLE_TACH_O_TST));
+ if (!secu3t)
+ {
+  m_ParentMenu.AppendMenu(MF_SEPARATOR);
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_ENABLE_TACH_O_TST,MLL::LoadString(IDS_DEV_DIAG_ENABLE_TACH_O_TST));  
+ }
 }
 
 //показывает контекстное меню
