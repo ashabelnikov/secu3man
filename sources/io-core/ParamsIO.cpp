@@ -459,6 +459,11 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_ae_decay_time = p_in->ae_decay_time; //strokes
     p_params->inj_ae_type = p_in->ae_type; //0 or 1
     p_params->inj_ae_time = p_in->ae_time; //strokes
+    unsigned int b =  MathHelpers::Round(p_in->ae_ballance * 2.56f);
+    if (b > 255)
+     b = 255;
+    p_params->inj_ae_ballance = b;
+    p_params->inj_ae_mapdot_thrd = MathHelpers::Round(p_in->ae_mapdot_thrd);
    }
    break;
 
@@ -949,6 +954,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->ae_decay_time = p_params->inj_ae_decay_time; //strokes
     p_out->ae_type = p_params->inj_ae_type; //0 or 1
     p_out->ae_time = p_params->inj_ae_time; //strokes
+    p_out->ae_ballance = p_params->inj_ae_ballance / 2.56f;
+    p_out->ae_mapdot_thrd = p_params->inj_ae_mapdot_thrd;
    }
    break;
 

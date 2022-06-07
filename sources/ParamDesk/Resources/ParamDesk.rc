@@ -1169,6 +1169,15 @@ BEGIN
     CONTROL         "",IDC_PD_ACCELENR_AETIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,93,13,17
     LTEXT           "Длительность обогащения",IDC_PD_ACCELENR_AETIME_CAPTION,3,94,94,10
     LTEXT           "т",IDC_PD_ACCELENR_AETIME_UNIT,146,94,30,10
+
+    CTEXT           "Баланс обогащений ДАД/ДПДЗ",IDC_PD_ACCELENR_BLEND_CAPTION,4,115,147,10
+    CONTROL         "Slider1",IDC_PD_ACCELENR_BLEND_SLIDER,"msctls_trackbar32",TBS_AUTOTICKS | TBS_HORZ | TBS_TOP | WS_TABSTOP,4,124,152,20
+    CTEXT           "%",IDC_PD_ACCELENR_BLEND_VALUE,65,148,30,10
+
+    EDITTEXT        IDC_PD_ACCELENR_MAPTHRD_EDIT,98,158,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_MAPTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,158,13,17
+    LTEXT           "Порог по ДАД",IDC_PD_ACCELENR_MAPTHRD_CAPTION,3,159,94,10
+    LTEXT           "кПа/ сек",IDC_PD_ACCELENR_MAPTHRD_UNIT,146,159,30,18
 END
 
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
@@ -1713,7 +1722,7 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Порог включения обогащения по ДПДЗ. Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
+    IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Порог включения обогащения по ДПДЗ (%/сек). Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
     IDS_PD_INJECTOR_TIMING_EDIT_TT "Указывает при каком угле поворота КВ система должна начинать впрыск. Режим редактирования фазы задается в настройках. Данный параметр будет иметь эффект только при синхронизации от ДПКВ"
     IDS_PD_LOAD_OPT_TPS            "ДПДЗ"
     IDS_PD_LOAD_OPT_MAP            "ДАД"
@@ -1909,6 +1918,13 @@ BEGIN
     IDS_PD_FUNSET_TPSLEARN_FINISH  "Калибровка ДПДЗ окончена!"
     IDS_PD_FUNSET_TPSLEARN_ERROR   "ОШИБКА!\nРазница напряжений при нажатой и отпущеной педали слишком маленькая!\nПроверьте подключение ДПДЗ."
     IDS_PD_TPS_CALC_BUTTON_TT      "Автоматический расчет параметров смещения и наклона ДПДЗ. Следуйте указаниям из появляющихся сообщений (всего 2 шага). Программа попросит вас нажать педаль акселератора и затем отпустить ее."
+END
+
+
+STRINGTABLE
+BEGIN
+    IDS_PD_ACCELENR_BLEND_SLIDER_TT "Баланс между ДАД и ДПДЗ при вычислении обогащения. 0% соответствует обогащению только по ДАД, 100% соответствует обогащению только по ДПДЗ."
+    IDS_PD_ACCELENR_MAPTHRD_EDIT_TT "Порог включения обогащения по ДАД (кПа/сек). Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3079,6 +3095,15 @@ BEGIN
     CONTROL         "",IDC_PD_ACCELENR_AETIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,93,13,17
     LTEXT           "AE time",IDC_PD_ACCELENR_AETIME_CAPTION,3,94,94,10
     LTEXT           "str.",IDC_PD_ACCELENR_AETIME_UNIT,146,94,30,10
+
+    CTEXT           "MAP/TPS enr. blend",IDC_PD_ACCELENR_BLEND_CAPTION,4,115,147,10
+    CONTROL         "Slider1",IDC_PD_ACCELENR_BLEND_SLIDER,"msctls_trackbar32",TBS_AUTOTICKS | TBS_HORZ | TBS_TOP | WS_TABSTOP,4,124,152,20
+    CTEXT           "%",IDC_PD_ACCELENR_BLEND_VALUE,65,148,30,10
+
+    EDITTEXT        IDC_PD_ACCELENR_MAPTHRD_EDIT,98,158,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_MAPTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,158,13,17
+    LTEXT           "Accel. MAPdot threshold",IDC_PD_ACCELENR_MAPTHRD_CAPTION,3,159,94,10
+    LTEXT           "kPa/ sec",IDC_PD_ACCELENR_MAPTHRD_UNIT,146,159,25,18
 END
 
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
@@ -3843,6 +3868,12 @@ BEGIN
     IDS_PD_FUNSET_TPSLEARN_FINISH  "TPS calibration is over!"
     IDS_PD_FUNSET_TPSLEARN_ERROR   "ERROR!\nVoltage difference between pressed and released pedal is too small!\nCheck TPS connection."
     IDS_PD_TPS_CALC_BUTTON_TT      "Automatic calculation of the offset and gradient parameters of the TPS. Follow the directions from the messages that appear (only 2 steps). The program will ask you to press the accelerator pedal and then to release it."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_ACCELENR_BLEND_SLIDER_TT "Ballance between MAPdot and TPSdot for acceleration enrichment. 0% correspond to enrighment only by MAP, 100% correspond to enrichment only by TPS."
+    IDS_PD_ACCELENR_MAPTHRD_EDIT_TT "Accel.enrichment activation threshold (by MAP), %/sec. The higher the value, the quickly you need to press the gas pedal to activate enrichment."
 END
 
 /////////////////////////////////////////////////////////////////////////////

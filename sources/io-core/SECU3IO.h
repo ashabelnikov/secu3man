@@ -660,6 +660,8 @@ namespace SECU3IO
   int ae_decay_time;                  //Decay time in strokes
   int ae_type;                        //Type of AE
   int ae_time;                        //time of active phase of AE
+  float ae_mapdot_thrd;               //MAP kPa/sec threshold
+  float ae_ballance;                  //MAP/TPS balance for acceleration enrichment (%)
  };
 
 

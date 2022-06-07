@@ -61,7 +61,11 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAET(CCmdUI* pCmdUI);
  /* afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);*/
+  afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
   DECLARE_MESSAGE_MAP()
+
+ private:
+  void _UpdateEnrBlendValue(void);
 
  private:
   SECU3IO::AccelPar m_params;
@@ -76,7 +80,10 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_decaytime_edit;
   CSpinButtonCtrlEx m_aetime_spin;
   CEditEx m_aetime_edit;
-
+  CSliderCtrl m_enrblend_slider;
+  CSpinButtonCtrlEx m_mapdot_thrd_spin;
+  CEditEx m_mapdot_thrd_edit;
+  CStatic m_enrblend_value;
   CComboBox m_aetype_combo;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
