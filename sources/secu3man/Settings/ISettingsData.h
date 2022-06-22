@@ -633,6 +633,7 @@ class ISettingsData
   virtual bool GetShowGraphsCursor(void) = 0;
   virtual int GetGraphShtPixels(void) = 0;
   virtual int GetGraphShowValue(void) = 0;
+  virtual int GetGraphValueHeight(void) = 0;
   
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;

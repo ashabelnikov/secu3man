@@ -108,6 +108,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optInjTimEAverage(_T("InjTimEAverage"))
 , m_optGraphShtPixels(_T("GraphShtPixels"))
 , m_optGraphShowValue(_T("GraphShowValue"))
+, m_optGraphValueHeight(_T("GraphValueHeight"))
 , m_optFuelConsumFAverage(_T("FuelConsumFAverage"))
 , m_optGrtsAverage(_T("GrtsAverage"))
 , m_optFtlsAverage(_T("FtlsAverage"))
@@ -829,6 +830,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optShowGraphCursor, _T("1"), 0, 1);
  fs.ReadInt(m_optGraphShtPixels, _T("2"), 2, 10);
  fs.ReadInt(m_optGraphShowValue, _T("0"), 0, 1);
+ fs.ReadInt(m_optGraphValueHeight, _T("100"), 2, 200);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -1825,6 +1827,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Показывать числовые значения на графиках. 0 - не показывать (по умолчанию), 1 - показывать"));
  fs.WriteInt(m_optGraphShowValue); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Font height of digital value on graphs. Value of height in %"));
+ else
+  fs.WriteComment(_T("Высота шрифта числовых значений на графиках. Значение высоты в %"));
+ fs.WriteInt(m_optGraphValueHeight); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Size of the moving average filter used for fuel consumption values (Hz). Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
@@ -5988,6 +5996,11 @@ int CAppSettingsModel::GetGraphShtPixels(void)
 int CAppSettingsModel::GetGraphShowValue(void)
 {
  return m_optGraphShowValue.value;
+}
+
+int CAppSettingsModel::GetGraphValueHeight(void)
+{
+ return m_optGraphValueHeight.value;
 }
 
 int CAppSettingsModel::GetToolTipTime(void) const

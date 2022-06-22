@@ -517,6 +517,12 @@ void CDevDiagnostTabDlg::SetGraphShowValue(bool show)
  mp_OScopeCtrl2->ShowValue(show);
 }
 
+void CDevDiagnostTabDlg::SetGraphValueHeight(int height)
+{
+ mp_OScopeCtrl1->SetValueHeight(height);
+ mp_OScopeCtrl2->SetValueHeight(height);
+}
+
 void CDevDiagnostTabDlg::FillTestChanCombo(bool secu3t)
 {
  m_testch_combo.ResetContent();

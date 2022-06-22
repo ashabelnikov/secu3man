@@ -58,6 +58,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   size_t GetMaxPtCount(void);
   void SetShtPixels(int n); //n >= 2
   void ShowValue(bool show);
+  void SetValueHeight(int height); //value in %
 
  //Implementation
  protected:
@@ -122,4 +123,5 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   int m_num_y_chars;
   bool m_show_cursor;  
   bool m_show_value;
+  int m_value_height;         //%
 };

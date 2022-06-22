@@ -133,6 +133,7 @@ void CKnockChannelTabController::OnActivate(void)
 {
  mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->SetGraphShowValue(mp_settings->GetGraphShowValue());
+ mp_view->SetGraphValueHeight(mp_settings->GetGraphValueHeight());
  mp_view->ResetOscilloscope();
  mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
  mp_comm->setOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));

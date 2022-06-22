@@ -144,6 +144,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_it_mode(0)
 , m_show_graph_cursor(false)
 , m_graphShowValue(false)
+, m_graphValueHeight(100) //100%
 , m_graphShtPixels(2)
 , m_tachoMax(8000)
 , m_pressMax(110)
@@ -1447,6 +1448,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_rpmQVal[1], NULL, NULL);
    widget->SetLimits(0, (float)m_tachoMax);
@@ -1478,6 +1480,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mapQVal[1], NULL, NULL);
    widget->SetLimits(0, (float)m_pressMax);
@@ -1508,6 +1511,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_vbatQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1537,6 +1541,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_igntimQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1573,6 +1578,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_cltQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1603,6 +1609,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_ai1QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1632,6 +1639,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_ai2QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1662,6 +1670,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[1], NULL, NULL);  
    widget->SetLimits(0, (float)m_injpwMax);
@@ -1693,6 +1702,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_iatQVal[1], NULL, NULL);  
    widget->SetShtPixels(m_graphShtPixels);
@@ -1723,6 +1733,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_egocQVal[1], NULL, NULL);  
    widget->SetShtPixels(m_graphShtPixels);
@@ -1753,6 +1764,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_tpsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1782,6 +1794,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_airflQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1812,6 +1825,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_vssQVal[1], NULL, NULL);
    widget->SetMeterUnit(m_speedUnit);
@@ -1842,6 +1856,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_tpsdotQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1871,6 +1886,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mapdotQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1900,6 +1916,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_map2QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1929,6 +1946,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mapdQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1959,6 +1977,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1990,6 +2009,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_grtsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2022,6 +2042,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_fuelcQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2051,6 +2072,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_knkretQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2080,6 +2102,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_knockQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2109,6 +2132,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_senafrQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2138,6 +2162,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_chposQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2167,6 +2192,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_gdposQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2196,6 +2222,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_synldQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2226,6 +2253,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_itbQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
@@ -2257,6 +2285,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_iteQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
@@ -2287,6 +2316,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_fuelcfQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2317,6 +2347,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_ftlsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2348,6 +2379,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_egtsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2379,6 +2411,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_opsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2409,6 +2442,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_injdutyQVal, NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2438,6 +2472,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mafQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2467,6 +2502,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);
    widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_ventdutyQVal, NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
@@ -2905,4 +2941,9 @@ void CMIDeskDlg::SetGraphShtPixels(int n)
 void CMIDeskDlg::SetGraphShowValue(bool show)
 {
  m_graphShowValue = show;
+}
+
+void CMIDeskDlg::SetGraphValueHeight(int height)
+{
+ m_graphValueHeight = height;
 }

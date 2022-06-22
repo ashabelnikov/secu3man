@@ -253,6 +253,7 @@ void CDevDiagnostTabController::OnActivate(void)
 
  mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->SetGraphShowValue(mp_settings->GetGraphShowValue());
+ mp_view->SetGraphValueHeight(mp_settings->GetGraphValueHeight());
  mp_view->ResetOscilloscopes();
  m_comm_state = 0;
  m_diagnost_mode_active = false;

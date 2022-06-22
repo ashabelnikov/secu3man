@@ -66,8 +66,9 @@ COscillCtrl::COscillCtrl()
 , m_pBmpOldPlot(NULL)
 , m_pBmpOldValue(NULL)
 , m_cursBrush(RGB(255,0,0))
-, m_show_cursor(false)
-, m_show_value(false)
+, m_show_cursor(false)                  //don't show cursor
+, m_show_value(false)                   //don't show value
+, m_value_height(100)                   //100%
 {
  m_COLOR_3DFACE = GetSysColor(COLOR_3DFACE);
 }
@@ -304,7 +305,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
   _DrawPoint(false, index);
  }
 
- //Create DC, bitmap and font for displaying of value
+ //Create DC, bitmap and font for displaying value
  if (m_show_value)
  {
   if (m_dcValue.GetSafeHdc() == NULL)
@@ -328,7 +329,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
   DPIAware dpi;
   if (m_valueFont.GetSafeHandle())
    m_valueFont.DeleteObject();
-  m_valueFont.CreateFont(dpi.FontHeight(m_rcPlot.Height()/3), 0, 0, 0, 300, FALSE, FALSE, 0, RUSSIAN_CHARSET,OUT_DEFAULT_PRECIS,
+  m_valueFont.CreateFont(dpi.FontHeight((m_rcPlot.Height()*m_value_height)/(3*100)), 0, 0, 0, 300, FALSE, FALSE, 0, RUSSIAN_CHARSET,OUT_DEFAULT_PRECIS,
                        CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, _T("Arial"));
  }
 
@@ -606,6 +607,12 @@ void COscillCtrl::ShowValue(bool show)
 BOOL COscillCtrl::OnEraseBkgnd(CDC* pDC) 
 {
  return TRUE; //prevent flickering
+}
+
+//-------------------------------------------------------------
+void COscillCtrl::SetValueHeight(int height)
+{
+ m_value_height = height;
 }
 
 //-------------------------------------------------------------

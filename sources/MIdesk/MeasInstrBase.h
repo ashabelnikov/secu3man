@@ -256,6 +256,11 @@ class MeasInstrBase
    m_scope.ShowValue(show);
   }
 
+  virtual SetValueHeight(int height)
+  {
+   m_scope.SetValueHeight(height);
+  }
+
   bool isGraph(void)
   {
    return (m_scope.GetSafeHwnd() != NULL);

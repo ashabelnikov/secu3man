@@ -191,6 +191,7 @@ void CLogPlayerTabController::OnActivate(void)
 {
  mp_view->mp_MIDeskDlg->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->mp_MIDeskDlg->SetGraphShowValue(mp_settings->GetGraphShowValue());
+ mp_view->mp_MIDeskDlg->SetGraphValueHeight(mp_settings->GetGraphValueHeight());
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->mp_MIDeskDlg->SetTemperatureMax(mp_settings->GetTemperatureMax());

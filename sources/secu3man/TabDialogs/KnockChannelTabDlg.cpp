@@ -611,3 +611,8 @@ void CKnockChannelTabDlg::SetGraphShowValue(bool show)
 {
  mp_OScopeCtrl->ShowValue(show);
 }
+
+void CKnockChannelTabDlg::SetGraphValueHeight(int height)
+{
+ mp_OScopeCtrl->SetValueHeight(height);
+}
