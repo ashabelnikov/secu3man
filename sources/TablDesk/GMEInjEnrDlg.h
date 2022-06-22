@@ -41,12 +41,12 @@ class CGMEInjEnrDlg : public CTabDialog
  ~CGMEInjEnrDlg();
   static const UINT IDD;
 
-  void BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM);
+  void BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pAEMAP);
   void BindCLTGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
   void UpdateView(bool axisLabels = false);
 
-  void SetArguments(bool strt_use, float clt, int tpsdot, int rpm, bool aftstr_enr);
+  void SetArguments(bool strt_use, float clt, int tpsdot, int rpm, bool aftstr_enr, int mapdot);
 
  public:
 
@@ -65,24 +65,28 @@ class CGMEInjEnrDlg : public CTabDialog
   void OnChangeWrmp(void);
   void OnChangeAETPS(void);
   void OnChangeAERPM(void);
+  void OnChangeAEMAP(void);
 
   void OnAbroadMoveAftstr(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveWrmp(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveAETPS(CMapEditorCtrl::AbroadDir direction, int column);
   void OnAbroadMoveAERPM(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveAEMAP(CMapEditorCtrl::AbroadDir direction, int column);
 
  private:
   CMapEditorCtrl m_aftstr_map;
   CMapEditorCtrl m_wrmp_map;
   CMapEditorCtrl m_aetps_map;
   CMapEditorCtrl m_aerpm_map;
-  CStatic m_ctrls[4];
+  CMapEditorCtrl m_aemap_map;
+  CStatic m_ctrls[5];
   std::auto_ptr<CtrlScaler> mp_cscl;  
 
   float* mp_AftstrMap;
   float* mp_WrmpMap;
   float* mp_AETPSMap;
   float* mp_AERPMMap;
+  float* mp_AEMAPMap;
 
   float* mp_cltGrid;
 

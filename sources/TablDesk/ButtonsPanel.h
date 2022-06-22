@@ -96,6 +96,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetTpszonMap(bool i_original);
   float* GetCylMultMap(bool i_original);
   float* GetCylAddMap(bool i_original);
+  float* GetAEMAPMap(bool i_original);
 
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);  
@@ -184,6 +185,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewIdlrMap();
   afx_msg void OnViewIdlcMap();
   afx_msg void OnViewAETPSMap();
+  afx_msg void OnViewAEMAPMap();
   afx_msg void OnViewAERPMMap();
   afx_msg void OnViewAftstrMap();
   afx_msg void OnViewITMap();
@@ -219,6 +221,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewIdlrMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIdlcMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAETPSMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewAEMAPMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAERPMMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAftstrMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewITMap(CCmdUI* pCmdUI);
@@ -277,6 +280,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_idlr_map_btn;
   CButton m_view_idlc_map_btn;
   CButton m_view_aetps_map_btn;
+  CButton m_view_aemap_map_btn;
   CButton m_view_aerpm_map_btn;
   CButton m_view_aftstr_map_btn;
   CButton m_view_it_map_btn;
@@ -356,6 +360,8 @@ private:
   static void __cdecl OnCloseIdlcMap(void* i_param);
   static void __cdecl OnChangeAETPSMap(void* i_param);
   static void __cdecl OnCloseAETPSMap(void* i_param);
+  static void __cdecl OnChangeAEMAPMap(void* i_param);
+  static void __cdecl OnCloseAEMAPMap(void* i_param);
   static void __cdecl OnChangeAERPMMap(void* i_param);
   static void __cdecl OnCloseAERPMMap(void* i_param);
   static void __cdecl OnChangeAftstrMap(void* i_param);
@@ -410,6 +416,7 @@ private:
   static void __cdecl OnWndActivationIdlrMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationIdlcMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAETPSMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationAEMAPMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAERPMMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAftstrMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationITMap(void* i_param, long cmd);

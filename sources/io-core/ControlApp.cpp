@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 170 : 85))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 174 : 87))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -523,7 +523,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  sensorDat.inj_pw = (inj_pw * 3.2f) / 1000.0f;
 
- //TPS opening/clising speed (d%/dt = %/s), signed value
+ //TPS opening/closing speed (d%/dt = %/s), signed value
  int tpsdot = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tpsdot, true))
   return false;
@@ -652,6 +652,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  //universal output's state flags
  for(int i = 0; i < UNI_OUTPUT_NUM; ++i)
   sensorDat.uniout[i]   = CHECKBIT8(uniout, i);
+
+ //MAPdot (dP/dt = kPa/s), signed value
+ int mapdot = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &mapdot, true))
+  return false;
+ sensorDat.mapdot = mapdot;
 
  return true;
 }
@@ -1819,7 +1825,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.tab_id != ETMT_IATCLT_MAP && editTabPar.tab_id != ETMT_TPSSWT_MAP && editTabPar.tab_id != ETMT_GTSC_MAP &&
      editTabPar.tab_id != ETMT_GPSC_MAP && editTabPar.tab_id != ETMT_ATSC_MAP && editTabPar.tab_id != ETMT_PWM1_MAP &&
      editTabPar.tab_id != ETMT_PWM2_MAP && editTabPar.tab_id != ETMT_TEMPI_MAP && editTabPar.tab_id != ETMT_IACMAT_MAP && 
-     editTabPar.tab_id != ETMT_VE2_MAP && editTabPar.tab_id != ETMT_TPSZON_MAP && editTabPar.tab_id != ETMT_CYLMULT_MAP && editTabPar.tab_id != ETMT_CYLADD_MAP)
+     editTabPar.tab_id != ETMT_VE2_MAP && editTabPar.tab_id != ETMT_TPSZON_MAP && editTabPar.tab_id != ETMT_CYLMULT_MAP && 
+     editTabPar.tab_id != ETMT_CYLADD_MAP && editTabPar.tab_id != ETMT_AEMAP_MAP)
   return false;
 
  //check for 16-byte packets
@@ -1951,6 +1958,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.table_data[i] = (((float)(value)) / 256.0f) + 0.5f;
      else if (editTabPar.tab_id == ETMT_CYLADD_MAP)
       editTabPar.table_data[i] = ((float)((signed char)value)) * 0.0256f;
+     else if (editTabPar.tab_id == ETMT_AEMAP_MAP)
+      editTabPar.table_data[i] = (i >= INJ_AE_MAP_LOOKUP_TABLE_SIZE)?(float((signed char)value)/AEMAPB_MAPS_M_FACTOR):(float(value)-AEMAPV_MAPS_ADDER);
      else
       editTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -4125,6 +4134,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    else if (packet_data->tab_id == ETMT_CYLADD_MAP)
    {
     signed char value = MathHelpers::Round(packet_data->table_data[i] / 0.0256f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_AEMAP_MAP)
+   {
+    unsigned char value = MathHelpers::Round((packet_data->address>=INJ_AE_MAP_LOOKUP_TABLE_SIZE)?(packet_data->table_data[i]*AEMAPB_MAPS_M_FACTOR):(packet_data->table_data[i]+AEMAPV_MAPS_ADDER));
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else

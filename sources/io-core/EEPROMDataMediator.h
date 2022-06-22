@@ -114,6 +114,8 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void SetInjCylMultMap(int i_index, const float* i_values);
   void GetInjCylAddMap(int i_index, float* op_values, bool i_original = false);
   void SetInjCylAddMap(int i_index, const float* i_values);
+  void GetAEMAPMap(int i_index, float* o_values, bool i_original = false);
+  void SetAEMAPMap(int i_index, const float* i_values);
 
   void SetStartMap(int i_index,const float* i_values);
   void SetIdleMap(int i_index, const float* i_values);

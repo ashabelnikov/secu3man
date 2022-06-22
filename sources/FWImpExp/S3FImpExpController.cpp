@@ -287,6 +287,9 @@ void S3FImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ae_tps, mp_s3f_io->GetData().maps[other_sel].inj_ae_tps,sizeof(float) * INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2);
 
+ if (mp_view->GetFWDFlag(FLAG_AEMAP_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_ae_map, mp_s3f_io->GetData().maps[other_sel].inj_ae_map,sizeof(float) * INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2);
+
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ae_rpm, mp_s3f_io->GetData().maps[other_sel].inj_ae_rpm,sizeof(float) * INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2);
 
@@ -392,6 +395,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0122 = (mp_s3f_io->GetVersion() > 0x0121);
  bool sv0123 = (mp_s3f_io->GetVersion() > 0x0122);
  bool sv0124 = (mp_s3f_io->GetVersion() > 0x0123);
+ bool sv0125 = (mp_s3f_io->GetVersion() > 0x0124);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -454,6 +458,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CYLMULT_MAP, sv0124);   //since v01.24
  mp_view->SetFWDFlag(FLAG_CYLADD_MAP, sv0124);       //since v01.24
  mp_view->EnableFWDFlag(FLAG_CYLADD_MAP, sv0124);    //since v01.24
+ mp_view->SetFWDFlag(FLAG_AEMAP_MAP, sv0125);        //since v01.25
+ mp_view->EnableFWDFlag(FLAG_AEMAP_MAP, sv0125);     //since v01.25
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -769,6 +775,9 @@ void S3FExportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ae_tps, mp_fwd->maps[current_sel].inj_ae_tps, sizeof(float) * INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2);
 
+ if (mp_view->GetFWDFlag(FLAG_AEMAP_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ae_map, mp_fwd->maps[current_sel].inj_ae_map, sizeof(float) * INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2);
+
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ae_rpm, mp_fwd->maps[current_sel].inj_ae_rpm, sizeof(float) * INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2);
 
@@ -858,6 +867,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AEMAP_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IT_MAP, true);

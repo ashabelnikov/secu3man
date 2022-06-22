@@ -66,43 +66,44 @@ enum EFWDFlags
  FLAG_TPSZON_MAP    = 30,    //inj/ign
  FLAG_CYLMULT_MAP   = 31,    //inj
  FLAG_CYLADD_MAP    = 32,    //inj
+ FLAG_AEMAP_MAP     = 33,    //inj
 
- FLAG_DWLCNTR_MAP   = 33,    //separate
- FLAG_ATTEN_MAP     = 34,    //separate
- FLAG_CTS_MAP       = 35,    //separate
- FLAG_ATS_MAP       = 36,    //separate
- FLAG_ATSAAC_MAP    = 37,    //separate
- FLAG_GASDOSE_MAP   = 38,    //separate
- FLAG_BAROCORR_MAP  = 39,    //separate
- FLAG_MANIT_MAP     = 40,    //separate
- FLAG_TMP2CURVE_MAP = 41,    //separate
- FLAG_CRKTEMP_MAP   = 42,    //separate
- FLAG_EHPAUSE_MAP   = 43,    //separate
- FLAG_CRNKTHRD_MAP  = 44,    //separate
- FLAG_CRNKTIME_MAP  = 45,    //separate
- FLAG_ABANTHRD_MAP  = 46,    //separate
- FLAG_KNOCKZONE_MAP = 47,    //separate
- FLAG_CESETT_DAT    = 48,    //separate (pseudomap)
- FLAG_GRTSCURVE_MAP = 49,    //separate
- FLAG_GRHEAT_MAP    = 50,    //separate
- FLAG_IACUCOEF_MAP  = 51,    //separate
- FLAG_AFTSTRK0_MAP  = 52,    //separate
- FLAG_AFTSTRK1_MAP  = 53,    //separate
- FLAG_GRVDELAY_MAP  = 54,    //separate
- FLAG_FTLSCURVE_MAP = 55,    //separate
- FLAG_EGTSCURVE_MAP = 56,    //separate
- FLAG_OPSCURVE_MAP  = 57,    //separate
- FLAG_MANINJPWC_MAP = 58,    //separate
- FLAG_MAFCURVE_MAP  = 59,    //separate
- FLAG_FTLSCOR_MAP   = 60,    //separate
- FLAG_LAMBDAZONE_MAP = 61,   //separate
+ FLAG_DWLCNTR_MAP   = 34,    //separate
+ FLAG_ATTEN_MAP     = 35,    //separate
+ FLAG_CTS_MAP       = 36,    //separate
+ FLAG_ATS_MAP       = 37,    //separate
+ FLAG_ATSAAC_MAP    = 38,    //separate
+ FLAG_GASDOSE_MAP   = 39,    //separate
+ FLAG_BAROCORR_MAP  = 40,    //separate
+ FLAG_MANIT_MAP     = 41,    //separate
+ FLAG_TMP2CURVE_MAP = 42,    //separate
+ FLAG_CRKTEMP_MAP   = 43,    //separate
+ FLAG_EHPAUSE_MAP   = 44,    //separate
+ FLAG_CRNKTHRD_MAP  = 45,    //separate
+ FLAG_CRNKTIME_MAP  = 46,    //separate
+ FLAG_ABANTHRD_MAP  = 47,    //separate
+ FLAG_KNOCKZONE_MAP = 48,    //separate
+ FLAG_CESETT_DAT    = 49,    //separate (pseudomap)
+ FLAG_GRTSCURVE_MAP = 50,    //separate
+ FLAG_GRHEAT_MAP    = 51,    //separate
+ FLAG_IACUCOEF_MAP  = 52,    //separate
+ FLAG_AFTSTRK0_MAP  = 53,    //separate
+ FLAG_AFTSTRK1_MAP  = 54,    //separate
+ FLAG_GRVDELAY_MAP  = 55,    //separate
+ FLAG_FTLSCURVE_MAP = 56,    //separate
+ FLAG_EGTSCURVE_MAP = 57,    //separate
+ FLAG_OPSCURVE_MAP  = 58,    //separate
+ FLAG_MANINJPWC_MAP = 59,    //separate
+ FLAG_MAFCURVE_MAP  = 60,    //separate
+ FLAG_FTLSCOR_MAP   = 61,    //separate
+ FLAG_LAMBDAZONE_MAP = 62,   //separate
 
- FLAG_NR_OF_FLAGS   = 62,    //total number of flags
+ FLAG_NR_OF_FLAGS   = 63,    //total number of flags
 
  FLAG_SET_START     = 0,
- FLAG_SET_END       = 32,
- FLAG_SEP_START     = 33,
- FLAG_SEP_END       = 61,
+ FLAG_SET_END       = 33,
+ FLAG_SEP_START     = 34,
+ FLAG_SEP_END       = 62,
 };
 
 class CToolTipCtrlEx;

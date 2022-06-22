@@ -34,7 +34,7 @@
 const UINT CGMEInjEnrDlg::IDD = IDD_GME_INJ_ENR;
 
 static const UINT StaticCtrlBegin = IDC_GME_INJ_AFTSTR_TEXT;
-static const UINT StaticCtrlEnd = IDC_GME_INJ_AERPM_TEXT;
+static const UINT StaticCtrlEnd = IDC_GME_INJ_AEMAP_TEXT;
 
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjEnrDlg dialog
@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CGMEInjEnrDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_WRMP, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_AETPS, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_AERPM, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_AEMAP, OnUpdateControls)
  ON_WM_SIZE()
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -54,10 +55,12 @@ CGMEInjEnrDlg::CGMEInjEnrDlg(CWnd* pParent /*=NULL*/)
 , m_wrmp_map(1, 16)
 , m_aetps_map(1, 8)
 , m_aerpm_map(1, 4)
+, m_aemap_map(1, 8)
 , mp_AftstrMap(NULL)
 , mp_WrmpMap(NULL)
 , mp_AETPSMap(NULL)
 , mp_AERPMMap(NULL)
+, mp_AEMAPMap(NULL)
 , mp_cltGrid(NULL)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
@@ -66,6 +69,7 @@ CGMEInjEnrDlg::CGMEInjEnrDlg(CWnd* pParent /*=NULL*/)
  m_wrmp_map.SetDecimalPlaces(1, 0, 0);
  m_aetps_map.SetDecimalPlaces(1, 0, 0);
  m_aerpm_map.SetDecimalPlaces(1, 0, 0);
+ m_aemap_map.SetDecimalPlaces(1, 0, 0);
 }
 
 CGMEInjEnrDlg::~CGMEInjEnrDlg()
@@ -81,6 +85,7 @@ void CGMEInjEnrDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_WRMP, m_wrmp_map);
  DDX_Control(pDX, IDC_GME_INJ_AETPS, m_aetps_map);
  DDX_Control(pDX, IDC_GME_INJ_AERPM, m_aerpm_map);
+ DDX_Control(pDX, IDC_GME_INJ_AEMAP, m_aemap_map);
  for(int i = StaticCtrlBegin; i <= StaticCtrlEnd; ++i)
   DDX_Control(pDX, i, m_ctrls[i-StaticCtrlBegin]);
 }
@@ -135,12 +140,23 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_aerpm_map.EnableAbroadMove(true, false);
  m_aerpm_map.SetValueIncrement(1.0f);
 
+ m_aemap_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnChangeAEMAP));
+ m_aemap_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveAEMAP));
+ m_aemap_map.SetRange(-55.0f, 199.0f);
+ m_aemap_map.AttachMap(mp_AEMAPMap);
+ m_aemap_map.AttachLabels(mp_AEMAPMap + 8, NULL);
+ m_aemap_map.ShowLabels(true, false);
+ m_aemap_map.SetFont(&m_font);
+ m_aemap_map.EnableAbroadMove(true, true);
+ m_aemap_map.SetValueIncrement(1.0f);
+
  //initialize scaler
  mp_cscl->Init(this);
  mp_cscl->Add(&m_aftstr_map);
  mp_cscl->Add(&m_wrmp_map);
  mp_cscl->Add(&m_aetps_map);
  mp_cscl->Add(&m_aerpm_map);
+ mp_cscl->Add(&m_aemap_map);
  mp_cscl->Add(m_ctrls, (StaticCtrlEnd - StaticCtrlBegin) + 1);
 
  m_initialized = true;
@@ -160,7 +176,7 @@ LPCTSTR CGMEInjEnrDlg::GetDialogID(void) const
  return (LPCTSTR)IDD;
 }
 
-void CGMEInjEnrDlg::BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM)
+void CGMEInjEnrDlg::BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pAEMAP)
 {
  ASSERT(pAftstr);
  mp_AftstrMap = pAftstr;
@@ -173,6 +189,9 @@ void CGMEInjEnrDlg::BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float*
 
  ASSERT(pAERPM);
  mp_AERPMMap = pAERPM;
+
+ ASSERT(pAEMAP);
+ mp_AEMAPMap = pAEMAP;
 }
 
 void CGMEInjEnrDlg::BindCLTGrid(float* pGrid)
@@ -196,15 +215,17 @@ void CGMEInjEnrDlg::UpdateView(bool axisLabels /*= false*/)
 
  m_aetps_map.AttachLabels(mp_AETPSMap + 8, NULL);
  m_aerpm_map.AttachLabels(mp_AERPMMap + 4, NULL);
+ m_aemap_map.AttachLabels(mp_AEMAPMap + 8, NULL);
 
  m_aftstr_map.UpdateDisplay();
  m_wrmp_map.UpdateDisplay();
  m_aetps_map.UpdateDisplay();
  m_aerpm_map.UpdateDisplay();
+ m_aemap_map.UpdateDisplay();
 }
 
 
-void CGMEInjEnrDlg::SetArguments(bool strt_use, float clt, int tpsdot, int rpm, bool aftstr_enr)
+void CGMEInjEnrDlg::SetArguments(bool strt_use, float clt, int tpsdot, int rpm, bool aftstr_enr, int mapdot)
 {
  if (m_wrmp_map.GetSafeHwnd())
  {
@@ -228,6 +249,12 @@ void CGMEInjEnrDlg::SetArguments(bool strt_use, float clt, int tpsdot, int rpm, 
  {
   m_aerpm_map.ShowMarkers(!strt_use, true);
   m_aerpm_map.SetArguments(0, (float)rpm);
+ }
+
+ if (m_aemap_map.GetSafeHwnd())
+ {
+  m_aemap_map.ShowMarkers(!strt_use, true);
+  m_aemap_map.SetArguments(0, (float)mapdot);
  }
 }
 
@@ -253,6 +280,12 @@ void CGMEInjEnrDlg::OnChangeAERPM(void)
 {
  if (m_OnChange)
   m_OnChange(TYPE_MAP_INJ_AERPM);
+}
+
+void CGMEInjEnrDlg::OnChangeAEMAP(void)
+{
+ if (m_OnChange)
+  m_OnChange(TYPE_MAP_INJ_AEMAP);
 }
 
 void CGMEInjEnrDlg::OnAbroadMoveAftstr(CMapEditorCtrl::AbroadDir direction, int column)
@@ -281,6 +314,14 @@ void CGMEInjEnrDlg::OnAbroadMoveAERPM(CMapEditorCtrl::AbroadDir direction, int c
 {
  if (direction==CMapEditorCtrl::ABROAD_UP)
   m_aetps_map.SetSelection(0, column);
+ if (direction==CMapEditorCtrl::ABROAD_DOWN)
+  m_aemap_map.SetSelection(0, column);
+}
+
+void CGMEInjEnrDlg::OnAbroadMoveAEMAP(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_UP)
+  m_aerpm_map.SetSelection(0, column);
 }
 
 void CGMEInjEnrDlg::OnSize( UINT nType, int cx, int cy )

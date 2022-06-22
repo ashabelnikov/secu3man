@@ -56,6 +56,7 @@ BEGIN
     CONTROL         "ДАД/ДПДЗ по оси нагр.",IDC_TD_VIEW_TPSZON_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,595,96,18
     CONTROL         "Множитель впрыска",IDC_TD_VIEW_CYLMULT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,614,96,18
     CONTROL         "Добавка к впрыску",IDC_TD_VIEW_CYLADD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,633,96,18
+    CONTROL         "Ускор.обог.ДАД",IDC_TD_VIEW_AEMAP_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,652,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -101,6 +102,7 @@ BEGIN
     CONTROL         "ДАД/ДПДЗ по оси нагр.",IDC_TD_VIEW_TPSZON_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,338,96,18
     CONTROL         "Множитель впрыска",IDC_TD_VIEW_CYLMULT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,338,96,18
     CONTROL         "Добавка к впрыску",IDC_TD_VIEW_CYLADD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,357,96,18
+    CONTROL         "Ускор.обог.ДАД",IDC_TD_VIEW_AEMAP_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,357,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,3,390,16,18
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,389,96,18
@@ -368,6 +370,9 @@ BEGIN
 
     LTEXT           "Обогащ. при ускорении по оборотам",IDC_GME_INJ_AERPM_TEXT,180,145,180,9
     CONTROL         "AERPM",IDC_GME_INJ_AERPM,"MFCMapEditorCtrl",WS_TABSTOP,5,155,510,25,WS_EX_STATICEDGE
+
+    LTEXT           "Обогащ. при ускорении по ДАД",IDC_GME_INJ_AEMAP_TEXT,180,190,180,9
+    CONTROL         "AEMAP",IDC_GME_INJ_AEMAP,"MFCMapEditorCtrl",WS_TABSTOP,5,200,510,25,WS_EX_STATICEDGE
 END
 
 IDD_GME_INJ_OTHER DIALOGEX 0, 0, 519, 320
@@ -630,7 +635,9 @@ BEGIN
     IDS_MAPS_STROKE_UNIT    "Время в тактах"
     IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_DPDT_UNIT      "d%/dt"
+    IDS_MAPS_DPRDT_UNIT     "dP/dt"
     IDS_MAPS_AETPS_UNIT     "Коэффициент (%)"
+    IDS_MAPS_AEMAP_UNIT     "Коэффициент (%)"
     IDS_MAPS_AERPM_UNIT     "Коэффициент (%)"
     IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
     IDS_MAPS_INJTIM_UNIT    "Фаза впрыска (град. до ВМТ)"
@@ -654,6 +661,7 @@ BEGIN
     IDS_IDLR_MAP            "Положение РХХ от температуры охлаждающей жидкости"
     IDS_IDLC_MAP            "Положение РХХ на пуске"
     IDS_AETPS_MAP           "Обогащение в зависимости от скорости дроссельной заслонки"
+    IDS_AEMAP_MAP           "Обогащение в зависимости от скорости изменения ДАД"
     IDS_AERPM_MAP           "Обогащение в зависимости от оборотов двигателя"
     IDS_ITRPM_MAP           "Обороты ХХ (closed loop)"
     IDS_RIGID_MAP           "Функция жесткости регулятора"
@@ -741,6 +749,7 @@ BEGIN
     IDS_TD_VIEW_WRMP_MAP_TT "Используется для коррекции длительности впрыска от температуры двигателя. Данная таблица также используется для коррекции положения газового дозатора. Длительность впрыска умножается на значение этой коррекции."
     IDS_TD_VIEW_ATSC_MAP_TT "Коррекция длительности впрыска по температуре воздуха (плотность воздуха меняется с изменением температуры). Данная таблица также используется для коррекции положения дозатора газа и воздушной заслонки карбюратора."
     IDS_TD_VIEW_AETPS_MAP_TT "Используется для вычисления обогащения при ускорении для впрыска топлива. Данная таблица также используется для газового дозатора. Формула: Добавка к дительности впрыска = Константа * (Обогащение от скорости ДЗ * Коррекция по ДТОЖ * Обогащение от оборотов)"
+    IDS_TD_VIEW_AEMAP_MAP_TT "Используется для вычисления обогащения при ускорении для впрыска топлива. Данная таблица также используется для газового дозатора. Формула: Добавка к дительности впрыска = Константа * (Обогащение от скорости ДАД * Коррекция по ДТОЖ * Обогащение от оборотов)"
     IDS_TD_VIEW_AERPM_MAP_TT "Используется для коррекции обогащения при ускорении для впрыска топлива. Данная таблица также используется для газового дозатора. Формула: Добавка к дительности впрыска = Константа * (Обогащение от скорости ДЗ * Коррекция по ДТОЖ * Обогащение от оборотов)"
     IDS_TD_VIEW_AFTSTR_MAP_TT "Обогащение после пуска. Используется для коррекции времени впрыска и положения газового дозатора. Значение данной коррекции прибавляется к длительности впрыска и плавно убывает до 0 после пуска (см. параметр 'Время обогащения после пуска в тактах')."
     IDS_TD_VIEW_BAROCORR_MAP_TT "Используется для коррекции длительности впрыска и коррекции положения дозатора газа."
@@ -915,6 +924,7 @@ BEGIN
     CONTROL         "MAP/TPS on load axis",IDC_TD_VIEW_TPSZON_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,595,96,18
     CONTROL         "Injection multiplier",IDC_TD_VIEW_CYLMULT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,614,96,18
     CONTROL         "Injection addition",IDC_TD_VIEW_CYLADD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,633,96,18
+    CONTROL         "Accel.enr.MAP",IDC_TD_VIEW_AEMAP_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,652,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -960,6 +970,7 @@ BEGIN
     CONTROL         "MAP/TPS on load axis",IDC_TD_VIEW_TPSZON_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,338,96,18
     CONTROL         "Injection multiplier",IDC_TD_VIEW_CYLMULT_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,338,96,18
     CONTROL         "Injection addition",IDC_TD_VIEW_CYLADD_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,357,96,18
+    CONTROL         "Accel.enr.MAP",IDC_TD_VIEW_AEMAP_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,357,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,3,390,16,18
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,389,96,18
@@ -1225,6 +1236,9 @@ BEGIN
 
     LTEXT           "Enrichment vs engine speed",IDC_GME_INJ_AERPM_TEXT,180,145,150,9
     CONTROL         "AERPM",IDC_GME_INJ_AERPM,"MFCMapEditorCtrl",WS_TABSTOP,5,155,510,25,WS_EX_STATICEDGE
+
+    LTEXT           "Enrichment vs MAPdot",IDC_GME_INJ_AEMAP_TEXT,180,190,180,9
+    CONTROL         "AEMAP",IDC_GME_INJ_AEMAP,"MFCMapEditorCtrl",WS_TABSTOP,5,200,510,25,WS_EX_STATICEDGE
 END
 
 IDD_GME_INJ_OTHER DIALOGEX 0, 0, 519, 320
@@ -1487,7 +1501,9 @@ BEGIN
     IDS_MAPS_STROKE_UNIT    "Time in strokes"
     IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_DPDT_UNIT      "d%/dt"
+    IDS_MAPS_DPRDT_UNIT     "dP/dt"
     IDS_MAPS_AETPS_UNIT     "Coefficient (%)"
+    IDS_MAPS_AEMAP_UNIT     "Coefficient (%)"
     IDS_MAPS_AERPM_UNIT     "Coefficient (%)"
     IDS_MAPS_ADVANGLE_UNIT  "Angle (degr.)"
     IDS_MAPS_INJTIM_UNIT    "Injection timing (degr. BTDC)"
@@ -1510,7 +1526,8 @@ BEGIN
     IDS_DEAD_MAP            "Injector's dead time"
     IDS_IDLR_MAP            "IAC position vs coolant temperature"
     IDS_IDLC_MAP            "IAC position on cranking"
-    IDS_AETPS_MAP           "Enrichment vs throttle movement speed"
+    IDS_AETPS_MAP           "Enrichment vs TPSdot"
+    IDS_AEMAP_MAP           "Enrichment vs MAPdot"
     IDS_AERPM_MAP           "Enrichment vs engine speed"
     IDS_ITRPM_MAP           "Idling RPM (closed loop)"
     IDS_RIGID_MAP           "Idling regulator's rigidity function"
@@ -1598,6 +1615,7 @@ BEGIN
     IDS_TD_VIEW_WRMP_MAP_TT "Used to correct injection PW vs CLT. This table is also used to correct the position of gas dispenser. Injection PW is multiplied by this correction."
     IDS_TD_VIEW_ATSC_MAP_TT "Correction of injection PW vs intake air temperature (air density changes with temperature). This table is also used to correct the position of gas dispenser and carburetor's choke."
     IDS_TD_VIEW_AETPS_MAP_TT "Used to calculate acceleration enrichment for fuel injection. This table is also used for gas dispenser. Formula: Inj. PW addition = Constant * (Enrichment vs throttle speed * Coolant temperature correction * Enrichment vs engine speed)"
+    IDS_TD_VIEW_AEMAP_MAP_TT "Used to calculate acceleration enrichment for fuel injection. This table is also used for gas dispenser. Formula: Inj. PW addition = Constant * (Enrichment vs MAP speed * Coolant temperature correction * Enrichment vs engine speed)"
     IDS_TD_VIEW_AERPM_MAP_TT "Used to correct acceleration enrichment for fuel injection. This table is also used for gas dispenser. Formula: Inj. PW addition = Constant * (Enrichment vs throttle speed * Coolant temperature correction * Enrichment vs engine speed)"
     IDS_TD_VIEW_AFTSTR_MAP_TT "After start enrichment. Used to correct the injection PW and the position of the gas dispenser. The value of this correction is added to the injection PW and gradually decreases to 0 after cranking (see the parameter 'Afterstart enrichment time in strokes')."
     IDS_TD_VIEW_BAROCORR_MAP_TT "It is used to correct of injection PW and to correct the position of gas dispenser."

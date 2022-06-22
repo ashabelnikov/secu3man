@@ -177,6 +177,9 @@ void EEPROMImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
   m_eedm->GetAETPSMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
 
+ if (mp_view->GetFWDFlag(FLAG_AEMAP_MAP))
+  m_eedm->GetAEMAPMap(other_sel, mp_fwd->maps[current_sel].inj_ae_map);
+
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
   m_eedm->GetAERPMMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
 
@@ -266,6 +269,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AEMAP_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IT_MAP, true);

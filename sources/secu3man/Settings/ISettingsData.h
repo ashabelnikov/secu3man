@@ -74,6 +74,8 @@ struct WndSettings
  int m_ATSCorrMapWnd_Y;
  int m_AETPSMapWnd_X;
  int m_AETPSMapWnd_Y;
+ int m_AEMAPMapWnd_X;
+ int m_AEMAPMapWnd_Y;
  int m_AERPMMapWnd_X;
  int m_AERPMMapWnd_Y;
  int m_AftstrMapWnd_X;
@@ -209,6 +211,8 @@ struct WndSize
  int m_ATSCorrMapWnd_H;
  int m_AETPSMapWnd_W;
  int m_AETPSMapWnd_H;
+ int m_AEMAPMapWnd_W;
+ int m_AEMAPMapWnd_H;
  int m_AERPMMapWnd_W;
  int m_AERPMMapWnd_H;
  int m_AftstrMapWnd_W;
@@ -398,6 +402,7 @@ struct MapPtMovStep
  float m_idlr_map;
  float m_idlc_map;
  float m_aetps_map;
+ float m_aemap_map;
  float m_aerpm_map;
  float m_aftstr_map;
  float m_it_map;
@@ -518,6 +523,7 @@ struct LogFileFields
  _TSTRING m_fldMAF;
  _TSTRING m_fldVentDuty;
  _TSTRING m_fldUniOuts;
+ _TSTRING m_fldMAPdot;
 };
 
 //Functionality

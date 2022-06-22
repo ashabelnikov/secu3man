@@ -92,7 +92,11 @@ typedef struct
  _uchar inj_cylmult[INJ_CYLADD_SIZE];                 //!< per cylinder inj. correction multiplier
  _char  inj_cyladd[INJ_CYLADD_SIZE];                  //!< per cylinder inj. correction addition
 
- _uchar reserved[53];                                 // reserved bytes - for compatibility
+ //note! inj_ae_map_enr must be followed by inj_ae_map_bins.
+  _uchar inj_ae_map_enr[INJ_AE_MAP_LOOKUP_TABLE_SIZE];  //!< values of the AE's MAP lookup table (additive factor), value + 55, e.g. 155 = 1.00, this means AE = 100% (so PW will be increased by 100%))
+  _char  inj_ae_map_bins[INJ_AE_MAP_LOOKUP_TABLE_SIZE]; //!< bins of the AE's MAP lookup table (dP/dt, (signed value in kPa) / 100ms)
+
+ _uchar reserved[37];                                 // reserved bytes - for compatibility
  _uint  checksum;
 }f_data_t;
 

@@ -1079,3 +1079,27 @@ void EEPROMDataMediator::SetInjCylAddMap(int i_index, const float* ip_values)
  for (int i = 0; i < INJ_CYLADD_SIZE; i++ )
   p_maps->inj_cyladd[i] = MathHelpers::Round(ip_values[i] / 0.0256f);
 }
+
+void EEPROMDataMediator::GetAEMAPMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_ae_map_enr[i]) - AEMAPV_MAPS_ADDER; //shift by 55
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i+INJ_AE_MAP_LOOKUP_TABLE_SIZE] = ((float)p_maps[i_index].inj_ae_map_bins[i]) / AEMAPB_MAPS_M_FACTOR;   //convert from %/100ms to %/s
+}
+
+void EEPROMDataMediator::SetAEMAPMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  p_maps[i_index].inj_ae_map_enr[i] = MathHelpers::Round((ip_values[i] + AEMAPV_MAPS_ADDER));
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  p_maps[i_index].inj_ae_map_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_MAP_LOOKUP_TABLE_SIZE]*AEMAPB_MAPS_M_FACTOR));
+}

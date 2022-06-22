@@ -144,6 +144,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetInjCylMultMap(int i_index, const float* i_values);
   void GetInjCylAddMap(int i_index, float* op_values, bool i_original = false);
   void SetInjCylAddMap(int i_index, const float* i_values);
+  void GetAEMAPMap(int i_index, float* op_values, bool i_original = false);
+  void SetAEMAPMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);

@@ -1047,6 +1047,32 @@ void CFirmwareDataMediator::SetAETPSMap(int i_index, const float* ip_values)
   p_fd->tables[i_index].inj_ae_tps_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE]*AETPSB_MAPS_M_FACTOR));
 }
 
+void CFirmwareDataMediator::GetAEMAPMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_map_enr[i]) - AEMAPV_MAPS_ADDER; //shift by 55
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i+INJ_AE_MAP_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_map_bins[i]) / AEMAPB_MAPS_M_FACTOR;   //convert from %/100ms to %/s
+}
+
+void CFirmwareDataMediator::SetAEMAPMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_ae_map_enr[i] = MathHelpers::Round((ip_values[i] + AEMAPV_MAPS_ADDER));
+ for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_ae_map_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_MAP_LOOKUP_TABLE_SIZE]*AEMAPB_MAPS_M_FACTOR));
+}
+
 void CFirmwareDataMediator::GetAERPMMap(int i_index, float* op_values, bool i_original /* = false */)
 {
  ASSERT(op_values);

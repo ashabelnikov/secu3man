@@ -387,6 +387,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optATSCurvMapWnd;
   OptField_t<POINT> m_optATSCorrMapWnd;
   OptField_t<POINT> m_optAETPSMapWnd;
+  OptField_t<POINT> m_optAEMAPMapWnd;
   OptField_t<POINT> m_optAERPMMapWnd;
   OptField_t<POINT> m_optAftstrMapWnd;
   OptField_t<POINT> m_optGasdoseMapWnd;
@@ -448,6 +449,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optIdlrMapWnd1;
   OptField_t<POINT> m_optIdlcMapWnd1;
   OptField_t<POINT> m_optAETPSMapWnd1;
+  OptField_t<POINT> m_optAEMAPMapWnd1;
   OptField_t<POINT> m_optAERPMMapWnd1;
   OptField_t<POINT> m_optAftstrMapWnd1;
   OptField_t<POINT> m_optITMapWnd1;
@@ -491,6 +493,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optATSCurvMapWndSize;
   OptField_t<POINT> m_optATSCorrMapWndSize;
   OptField_t<POINT> m_optAETPSMapWndSize;
+  OptField_t<POINT> m_optAEMAPMapWndSize;
   OptField_t<POINT> m_optAERPMMapWndSize;
   OptField_t<POINT> m_optAftstrMapWndSize;
   OptField_t<POINT> m_optGasdoseMapWndSize;
@@ -552,6 +555,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optIdlrMapWndSize1;
   OptField_t<POINT> m_optIdlcMapWndSize1;
   OptField_t<POINT> m_optAETPSMapWndSize1;
+  OptField_t<POINT> m_optAEMAPMapWndSize1;
   OptField_t<POINT> m_optAERPMMapWndSize1;
   OptField_t<POINT> m_optAftstrMapWndSize1;
   OptField_t<POINT> m_optITMapWndSize1;
@@ -720,6 +724,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepIdlrMap;
   OptField_t<float> m_optPtMovStepIdlcMap;
   OptField_t<float> m_optPtMovStepAetpsMap;
+  OptField_t<float> m_optPtMovStepAemapMap;
   OptField_t<float> m_optPtMovStepAerpmMap;
   OptField_t<float> m_optPtMovStepAftstrMap;
   OptField_t<float> m_optPtMovStepItMap;
@@ -837,6 +842,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldMAF;
   OptField_t<_TSTRING> m_optLogFieldVentDuty;
   OptField_t<_TSTRING> m_optLogFieldUniOuts;
+  OptField_t<_TSTRING> m_optLogFieldMAPdot;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

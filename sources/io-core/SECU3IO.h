@@ -94,6 +94,7 @@ namespace SECU3IO
   float inj_pw;                         //injector pulse width in ms
 
   int tpsdot;                           //TPS dot (d%/dt)
+  int mapdot;                           //MAP dot (dP%/dt)
 
   float map2;                           // MAP2 (gas pressure)
   float tmp2;                           // TMP2 (gas temperature)
@@ -432,6 +433,7 @@ namespace SECU3IO
  const int ETMT_TPSZON_MAP = 31;        //MAP/TPS load axis allocation map
  const int ETMT_CYLMULT_MAP = 32;       //Inj. Multiplier
  const int ETMT_CYLADD_MAP = 33;        //Inj. Addition
+ const int ETMT_AEMAP_MAP = 34;         //AE MAP map
 
  struct SepTabPar
  {

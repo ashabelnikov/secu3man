@@ -525,6 +525,38 @@ void __cdecl CButtonsPanel::OnCloseAETPSMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeAEMAPMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_AEMAP);
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseAEMAPMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_INJ_AEMAP].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_AEMAP].handle, TYPE_MAP_INJ_AEMAP);
+}
+
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeAERPMMap(void* i_param)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -1262,6 +1294,20 @@ void __cdecl CButtonsPanel::OnWndActivationAETPSMap(void* i_param, long cmd)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationAEMAPMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_AEMAP].handle, cmd);
+}
+
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnWndActivationAERPMMap(void* i_param, long cmd)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -1550,6 +1596,8 @@ void CButtonsPanel::OnGridMapChangedInj(int mapType)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLC].handle, GetIdlcMap(true), GetIdlcMap(false));
  if (m_md[TYPE_MAP_INJ_AETPS].state && mapType == TYPE_MAP_INJ_AETPS)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AETPS].handle, GetAETPSMap(true), GetAETPSMap(false));
+ if (m_md[TYPE_MAP_INJ_AEMAP].state && mapType == TYPE_MAP_INJ_AEMAP)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AEMAP].handle, GetAEMAPMap(true), GetAEMAPMap(false));
  if (m_md[TYPE_MAP_INJ_AERPM].state && mapType == TYPE_MAP_INJ_AERPM)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AERPM].handle, GetAERPMMap(true), GetAERPMMap(false));
  if (m_md[TYPE_MAP_INJ_AFTSTR].state && mapType == TYPE_MAP_INJ_AFTSTR)
@@ -1824,7 +1872,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_view(1160)
+, m_scrl_view(1180)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_carb_afr(false)
@@ -1880,6 +1928,7 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_IDLR_MAP,  m_view_idlr_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IDLC_MAP,  m_view_idlc_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_AETPS_MAP,  m_view_aetps_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_AEMAP_MAP,  m_view_aemap_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_AERPM_MAP,  m_view_aerpm_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_AFTSTR_MAP,  m_view_aftstr_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IT_MAP,  m_view_it_map_btn);
@@ -1918,6 +1967,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_IDLR_MAP, OnViewIdlrMap)
  ON_BN_CLICKED(IDC_TD_VIEW_IDLC_MAP, OnViewIdlcMap)
  ON_BN_CLICKED(IDC_TD_VIEW_AETPS_MAP, OnViewAETPSMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_AEMAP_MAP, OnViewAEMAPMap)
  ON_BN_CLICKED(IDC_TD_VIEW_AERPM_MAP, OnViewAERPMMap)
  ON_BN_CLICKED(IDC_TD_VIEW_AFTSTR_MAP, OnViewAftstrMap)
  ON_BN_CLICKED(IDC_TD_VIEW_IT_MAP, OnViewITMap)
@@ -1952,6 +2002,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLR_MAP, OnUpdateViewIdlrMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLC_MAP, OnUpdateViewIdlcMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_AETPS_MAP, OnUpdateViewAETPSMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_AEMAP_MAP, OnUpdateViewAEMAPMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_AERPM_MAP, OnUpdateViewAERPMMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_AFTSTR_MAP, OnUpdateViewAftstrMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IT_MAP, OnUpdateViewITMap)
@@ -2008,6 +2059,7 @@ BOOL CButtonsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_wrmp_map_btn, MLL::GetString(IDS_TD_VIEW_WRMP_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_atsc_map_btn, MLL::GetString(IDS_TD_VIEW_ATSC_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_aetps_map_btn, MLL::GetString(IDS_TD_VIEW_AETPS_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_view_aemap_map_btn, MLL::GetString(IDS_TD_VIEW_AEMAP_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_aerpm_map_btn, MLL::GetString(IDS_TD_VIEW_AERPM_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_aftstr_map_btn, MLL::GetString(IDS_TD_VIEW_AFTSTR_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_view_gtsc_map_btn, MLL::GetString(IDS_TD_VIEW_GTSC_MAP_TT))); 
@@ -2542,6 +2594,43 @@ void CButtonsPanel::OnViewAETPSMap()
   ::SetFocus(md.handle);
  }
 }
+
+void CButtonsPanel::OnViewAEMAPMap()
+{
+ MapData &md = m_md[TYPE_MAP_INJ_AEMAP];
+ //if button was released, then close editor's window
+ if (m_view_aemap_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  const float bins_lims[5] = {-1000.0f, 1000.0f, 1.0f, 0.0f, 10.0f}; //min -1000kPa, max 1000kPa, inc 1kPa, 0 dec places, min diff 10kPa
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAEMAPMap(true),GetAEMAPMap(false),-55.0f,199.0f,bins_lims,8,
+    MLL::GetString(IDS_MAPS_DPRDT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_AEMAP_UNIT).c_str(),
+    MLL::GetString(IDS_AEMAP_MAP).c_str(), true); //<-- use horizontal axis bins
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationAEMAPMap,this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeAEMAPMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseAEMAPMap,this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_INJ_AEMAP);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
 
 void CButtonsPanel::OnViewAERPMMap()
 {
@@ -3300,7 +3389,7 @@ void CButtonsPanel::OnGridModeEditingInj()
                                     GetIACCMap(false), GetIACCWMap(false), GetAftstrMap(false), GetWrmpMap(false), GetAETPSMap(false), GetAERPMMap(false),
                                     GetCrnkMap(false), GetDeadMap(false), GetEGOCurveMap(false), GetIATCLTMap(false), GetTpsswtMap(false), GetAtscMap(false),
                                     GetGtscMap(false), GetGpscMap(false), GetPwm1Map(false), GetPwm2Map(false), GetIACMATMap(false), GetVE2Map(false), GetTpszonMap(false),
-                                    GetCylMultMap(false), GetCylAddMap(false));
+                                    GetCylMultMap(false), GetCylAddMap(false), GetAEMAPMap(false));
   mp_gridModeEditorInjDlg->BindRPMGrid(GetRPMGrid());
   mp_gridModeEditorInjDlg->BindCLTGrid(GetCLTGrid());
   mp_gridModeEditorInjDlg->BindLoadGrid(GetLoadGrid(), &m_ve2_map_load_slots[0]);
@@ -3452,6 +3541,14 @@ void CButtonsPanel::OnUpdateViewAETPSMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
  pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_AETPS].state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewAEMAPMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_AEMAP].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewAERPMMap(CCmdUI* pCmdUI)
@@ -3651,6 +3748,8 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLC].handle, GetIdlcMap(true), GetIdlcMap(false));
  if (m_md[TYPE_MAP_INJ_AETPS].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AETPS].handle, GetAETPSMap(true), GetAETPSMap(false));
+ if (m_md[TYPE_MAP_INJ_AEMAP].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AEMAP].handle, GetAEMAPMap(true), GetAEMAPMap(false));
  if (m_md[TYPE_MAP_INJ_AERPM].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AERPM].handle, GetAERPMMap(true), GetAERPMMap(false));
  if (m_md[TYPE_MAP_INJ_AFTSTR].state)
@@ -3754,6 +3853,8 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLC].handle, (i_enable || m_choke_op_enabled) && IsAllowed());
  if (m_md[TYPE_MAP_INJ_AETPS].state && ::IsWindow(m_md[TYPE_MAP_INJ_AETPS].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AETPS].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AEMAP].state && ::IsWindow(m_md[TYPE_MAP_INJ_AEMAP].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AEMAP].handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_md[TYPE_MAP_INJ_AERPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_AERPM].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AERPM].handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_md[TYPE_MAP_INJ_AFTSTR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFTSTR].handle))
@@ -3797,6 +3898,8 @@ void CButtonsPanel::EnableGasdose(bool i_enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_INJ_AETPS].state && ::IsWindow(m_md[TYPE_MAP_INJ_AETPS].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AETPS].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AEMAP].state && ::IsWindow(m_md[TYPE_MAP_INJ_AEMAP].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AEMAP].handle, (i_enable || m_fuel_injection) && IsAllowed());
  if (m_md[TYPE_MAP_INJ_AERPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_AERPM].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AERPM].handle, (i_enable || m_fuel_injection) && IsAllowed());
  if (m_md[TYPE_MAP_INJ_VE].state && ::IsWindow(m_md[TYPE_MAP_INJ_VE].handle))
@@ -3969,6 +4072,14 @@ float* CButtonsPanel::GetAETPSMap(bool i_original)
   return m_md[TYPE_MAP_INJ_AETPS].original;
  else
   return m_md[TYPE_MAP_INJ_AETPS].active;
+}
+
+float* CButtonsPanel::GetAEMAPMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_INJ_AEMAP].original;
+ else
+  return m_md[TYPE_MAP_INJ_AEMAP].active;
 }
 
 float* CButtonsPanel::GetAERPMMap(bool i_original)
@@ -4184,6 +4295,8 @@ void CButtonsPanel::_EnableCharts(bool enable)
    DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLC].handle, enable && IsAllowed());
   if (m_md[TYPE_MAP_INJ_AETPS].state && ::IsWindow(m_md[TYPE_MAP_INJ_AETPS].handle))
    DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AETPS].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_AEMAP].state && ::IsWindow(m_md[TYPE_MAP_INJ_AEMAP].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AEMAP].handle, enable && IsAllowed());
   if (m_md[TYPE_MAP_INJ_AERPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_AERPM].handle))
    DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AERPM].handle, enable && IsAllowed());
   if (m_md[TYPE_MAP_INJ_AFTSTR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFTSTR].handle))

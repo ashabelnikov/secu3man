@@ -233,13 +233,13 @@ void CGridModeEditorInjDlg::OnClose()
  DestroyWindow();
 }
 
-void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2, float* pTpszon, float* pCylMult, float* pCylAdd)
+void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2, float* pTpszon, float* pCylMult, float* pCylAdd, float* pAEMAP)
 {
  m_pVEPageDlg->BindMaps(pVE, pVE2);
  m_pAFRPageDlg->BindMaps(pAFR);
  m_pITPageDlg->BindMaps(pIT);
  m_pIRegPageDlg->BindMaps(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW, pIACMAT);
- m_pEnrPageDlg->BindMaps(pAftstr, pWrmp, pAETPS, pAERPM);
+ m_pEnrPageDlg->BindMaps(pAftstr, pWrmp, pAETPS, pAERPM, pAEMAP);
  m_pOtherPageDlg->BindMaps(pCrnk, pDead, pEGOCrv, pIATCLT, pAtsc, pGtsc, pGpsc);
  m_pOther1PageDlg->BindMaps(pTpsswt, pTpszon, pCylMult, pCylAdd);
  m_pPwm1PageDlg->BindMaps(pPwm1);
@@ -398,7 +398,7 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_pAFRPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pITPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos, dv.rigid_arg, dv.rigid_use, dv.air_temp);
- m_pEnrPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tpsdot, dv.rpm, dv.aftstr_enr);
+ m_pEnrPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tpsdot, dv.rpm, dv.aftstr_enr, dv.mapdot);
  m_pOtherPageDlg->SetArguments(dv.strt_use, dv.temp, dv.voltage, dv.add_i1, dv.rpm, dv.tmp2, dv.air_temp, dv.map2, dv.rxlaf);
  m_pOther1PageDlg->SetArguments(dv.strt_use, dv.rpm);
  m_pPwm1PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);

@@ -165,6 +165,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_AETPSMapWnd_W = rc.right - rc.left;
    sz.m_AETPSMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_INJ_AEMAP:
+   ws.m_AEMAPMapWnd_X = rc.left;
+   ws.m_AEMAPMapWnd_Y = rc.top;
+   sz.m_AEMAPMapWnd_W = rc.right - rc.left;
+   sz.m_AEMAPMapWnd_H = rc.bottom - rc.top;
+   break;
   case TYPE_MAP_INJ_AERPM:
    ws.m_AERPMMapWnd_X = rc.left;
    ws.m_AERPMMapWnd_Y = rc.top;
@@ -544,6 +550,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_INJ_AETPS:
    X = ws.m_AETPSMapWnd_X, Y = ws.m_AETPSMapWnd_Y;
    W = sz.m_AETPSMapWnd_W, H = sz.m_AETPSMapWnd_H;
+   break;
+  case TYPE_MAP_INJ_AEMAP:
+   X = ws.m_AEMAPMapWnd_X, Y = ws.m_AEMAPMapWnd_Y;
+   W = sz.m_AEMAPMapWnd_W, H = sz.m_AEMAPMapWnd_H;
    break;
   case TYPE_MAP_INJ_AERPM:
    X = ws.m_AERPMMapWnd_X, Y = ws.m_AERPMMapWnd_Y;

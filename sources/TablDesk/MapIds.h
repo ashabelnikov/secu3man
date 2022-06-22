@@ -60,44 +60,45 @@ enum EMapTypes
  TYPE_MAP_INJ_TPSZON    = 31, //must be = 31
  TYPE_MAP_INJ_CYLMULT   = 32, //must be = 32
  TYPE_MAP_INJ_CYLADD    = 33, //must be = 33
+ TYPE_MAP_INJ_AEMAP     = 34, //must be = 34
 
  //separate maps
- TYPE_MAP_ATTENUATOR    = 34, //
- TYPE_MAP_DWELLCNTRL    = 35, //
- TYPE_MAP_CTS_CURVE     = 36, //
- TYPE_MAP_ATS_CURVE     = 37, //
- TYPE_MAP_ATS_CORR      = 38, //
- TYPE_MAP_GASDOSE       = 39, //
- TYPE_MAP_BAROCORR      = 40, //
- TYPE_MAP_MANIGNTIM     = 41, //
- TYPE_MAP_TMP2_CURVE    = 42, //
- TYPE_MAP_CRKCLT_CORR   = 43, //
- TYPE_MAP_EH_PAUSE      = 44, //
- TYPE_MAP_CRANKING_THRD = 45, //
- TYPE_MAP_CRANKING_TIME = 46, //
- TYPE_MAP_SMAPABAN_THRD = 47, //
- TYPE_MAP_KNOCK_ZONE    = 48, //
- TYPE_MAP_GRTS_CURVE    = 49, //
- TYPE_MAP_GRHEAT_DUTY   = 50, //
- TYPE_MAP_PWMIAC_UCOEF  = 51, //
- TYPE_MAP_AFTSTR_STRK0  = 52, //
- TYPE_MAP_AFTSTR_STRK1  = 53, //
- TYPE_MAP_GRVDELAY      = 54, //
- TYPE_MAP_FTLS_CURVE    = 55, //
- TYPE_MAP_EGTS_CURVE    = 56, //
- TYPE_MAP_OPS_CURVE     = 57, //
- TYPE_MAP_MANINJPWC     = 58, //
- TYPE_MAP_MAF_CURVE     = 59, //
- TYPE_MAP_FTLSCOR       = 60, //
- TYPE_MAP_LAMBDA_ZONE   = 61, //
+ TYPE_MAP_ATTENUATOR    = 35, //
+ TYPE_MAP_DWELLCNTRL    = 36, //
+ TYPE_MAP_CTS_CURVE     = 37, //
+ TYPE_MAP_ATS_CURVE     = 38, //
+ TYPE_MAP_ATS_CORR      = 39, //
+ TYPE_MAP_GASDOSE       = 40, //
+ TYPE_MAP_BAROCORR      = 41, //
+ TYPE_MAP_MANIGNTIM     = 42, //
+ TYPE_MAP_TMP2_CURVE    = 43, //
+ TYPE_MAP_CRKCLT_CORR   = 44, //
+ TYPE_MAP_EH_PAUSE      = 45, //
+ TYPE_MAP_CRANKING_THRD = 46, //
+ TYPE_MAP_CRANKING_TIME = 47, //
+ TYPE_MAP_SMAPABAN_THRD = 48, //
+ TYPE_MAP_KNOCK_ZONE    = 49, //
+ TYPE_MAP_GRTS_CURVE    = 50, //
+ TYPE_MAP_GRHEAT_DUTY   = 51, //
+ TYPE_MAP_PWMIAC_UCOEF  = 52, //
+ TYPE_MAP_AFTSTR_STRK0  = 53, //
+ TYPE_MAP_AFTSTR_STRK1  = 54, //
+ TYPE_MAP_GRVDELAY      = 55, //
+ TYPE_MAP_FTLS_CURVE    = 56, //
+ TYPE_MAP_EGTS_CURVE    = 57, //
+ TYPE_MAP_OPS_CURVE     = 58, //
+ TYPE_MAP_MANINJPWC     = 59, //
+ TYPE_MAP_MAF_CURVE     = 60, //
+ TYPE_MAP_FTLSCOR       = 61, //
+ TYPE_MAP_LAMBDA_ZONE   = 62, //
 
- TYPE_MAP_GME_IGN_WND   = 62, //pseudo map, grid mode editing window for ignition maps
- TYPE_MAP_GME_INJ_WND   = 63, //pseudo map, grid mode editing window for injection maps
+ TYPE_MAP_GME_IGN_WND   = 63, //pseudo map, grid mode editing window for ignition maps
+ TYPE_MAP_GME_INJ_WND   = 64, //pseudo map, grid mode editing window for injection maps
 
  TYPE_MAP_SET_START     = 1,
- TYPE_MAP_SET_END       = 33,
- TYPE_MAP_SEP_START     = 34,
- TYPE_MAP_SEP_END       = 61,
+ TYPE_MAP_SET_END       = 34,
+ TYPE_MAP_SEP_START     = 35,
+ TYPE_MAP_SEP_END       = 62,
  TYPE_MAP_ALL_START     = 1,
- TYPE_MAP_ALL_END       = 63
+ TYPE_MAP_ALL_END       = 64
 };

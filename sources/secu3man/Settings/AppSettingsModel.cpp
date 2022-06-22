@@ -147,6 +147,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optATSCurvMapWnd(_T("ATSCurvMapWnd"))
 , m_optATSCorrMapWnd(_T("ATSCorrMapWnd"))
 , m_optAETPSMapWnd(_T("AETPSMapWnd"))
+, m_optAEMAPMapWnd(_T("AEMAPMapWnd"))
 , m_optAERPMMapWnd(_T("AERPMMapWnd"))
 , m_optAftstrMapWnd(_T("AftstrMapWnd"))
 , m_optGasdoseMapWnd(_T("GasdoseMapWnd"))
@@ -208,6 +209,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optIdlrMapWnd1(_T("IdlrMapWnd"))
 , m_optIdlcMapWnd1(_T("IdlcMapWnd"))
 , m_optAETPSMapWnd1(_T("AETPSMapWnd"))
+, m_optAEMAPMapWnd1(_T("AEMAPMapWnd"))
 , m_optAERPMMapWnd1(_T("AERPMMapWnd"))
 , m_optAftstrMapWnd1(_T("AftstrMapWnd"))
 , m_optITMapWnd1(_T("ITMapWnd"))
@@ -251,6 +253,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optATSCurvMapWndSize(_T("ATSCurvMapWnd"))
 , m_optATSCorrMapWndSize(_T("ATSCorrMapWnd"))
 , m_optAETPSMapWndSize(_T("AETPSMapWnd"))
+, m_optAEMAPMapWndSize(_T("AEMAPMapWnd"))
 , m_optAERPMMapWndSize(_T("AERPMMapWnd"))
 , m_optAftstrMapWndSize(_T("AftstrMapWnd"))
 , m_optGasdoseMapWndSize(_T("GasdoseMapWnd"))
@@ -312,6 +315,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optIdlrMapWndSize1(_T("IdlrMapWnd"))
 , m_optIdlcMapWndSize1(_T("IdlcMapWnd"))
 , m_optAETPSMapWndSize1(_T("AETPSMapWnd"))
+, m_optAEMAPMapWndSize1(_T("AEMAPMapWnd"))
 , m_optAERPMMapWndSize1(_T("AERPMMapWnd"))
 , m_optAftstrMapWndSize1(_T("AftstrMapWnd"))
 , m_optITMapWndSize1(_T("ITMapWnd"))
@@ -416,6 +420,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepIdlrMap(_T("IdlrMapWnd"))
 , m_optPtMovStepIdlcMap(_T("IdlcMapWnd"))
 , m_optPtMovStepAetpsMap(_T("AETPSMapWnd"))
+, m_optPtMovStepAemapMap(_T("AEMAPMapWnd"))
 , m_optPtMovStepAerpmMap(_T("AERPMMapWnd"))
 , m_optPtMovStepAftstrMap(_T("AftstrMapWnd"))
 , m_optPtMovStepItMap(_T("ITMapWnd"))
@@ -510,6 +515,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldEGOCorr(_T("EGOcorr"))
 , m_optLogFieldInjPW(_T("InjPW"))
 , m_optLogFieldTPSdot(_T("TPSdot"))
+, m_optLogFieldMAPdot(_T("MAPdot"))
 , m_optLogFieldMAP2(_T("MAP2"))
 , m_optLogFieldTmp2(_T("Tmp2"))
 , m_optLogFieldDiffMAP(_T("DiffMAP"))
@@ -843,6 +849,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optIdlrMapWnd);
  ws.ReadWndPos(m_optIdlcMapWnd);
  ws.ReadWndPos(m_optAETPSMapWnd);
+ ws.ReadWndPos(m_optAEMAPMapWnd);
  ws.ReadWndPos(m_optAERPMMapWnd);
  ws.ReadWndPos(m_optAftstrMapWnd);
  ws.ReadWndPos(m_optATSCurvMapWnd);
@@ -908,6 +915,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optIdlrMapWnd1);
  ws1.ReadWndPos(m_optIdlcMapWnd1);
  ws1.ReadWndPos(m_optAETPSMapWnd1);
+ ws1.ReadWndPos(m_optAEMAPMapWnd1);
  ws1.ReadWndPos(m_optAERPMMapWnd1);
  ws1.ReadWndPos(m_optAftstrMapWnd1);
  ws1.ReadWndPos(m_optITMapWnd1);
@@ -949,6 +957,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optIdlrMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optIdlcMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAETPSMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optAEMAPMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAERPMMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAftstrMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optATSCurvMapWndSize, 0, 10000);
@@ -1013,6 +1022,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optIdlrMapWndSize1);
  sz1.ReadWndPos(m_optIdlcMapWndSize1);
  sz1.ReadWndPos(m_optAETPSMapWndSize1);
+ sz1.ReadWndPos(m_optAEMAPMapWndSize1);
  sz1.ReadWndPos(m_optAERPMMapWndSize1);
  sz1.ReadWndPos(m_optAftstrMapWndSize1);
  sz1.ReadWndPos(m_optITMapWndSize1);
@@ -1199,6 +1209,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepIdlrMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepIdlcMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAetpsMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepAemapMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAerpmMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAftstrMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepItMap, _T("1.0"), 0.0f, 10.0f);
@@ -1318,6 +1329,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldMAF, _T("MAF"));
  lf.ReadString(m_optLogFieldVentDuty, _T("VentDuty"));
  lf.ReadString(m_optLogFieldUniOuts, _T("UnivOuts"));
+ lf.ReadString(m_optLogFieldMAPdot, _T("MAPdot"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -1941,6 +1953,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optAETPSMapWnd, _T("Обогащение по скорости ДЗ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAEMAPMapWnd, _T("Enrichment vs MAPdot map"));
+ else
+  ws.WriteWndPos(m_optAEMAPMapWnd, _T("Обогащение по скорости ДАД"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ws.WriteWndPos(m_optAERPMMapWnd, _T("Enrichment vs engine speed map"));
  else
   ws.WriteWndPos(m_optAERPMMapWnd, _T("Обогащение по оборотам"));
@@ -2254,6 +2271,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optAETPSMapWnd1, _T("Обогащение по скорости ДЗ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optAEMAPMapWnd1, _T("Enrichment vs MAPdot map"));
+ else
+  ws1.WriteWndPos(m_optAEMAPMapWnd1, _T("Обогащение по скорости ДАД"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ws1.WriteWndPos(m_optAERPMMapWnd1, _T("Enrichment vs engine speed"));
  else
   ws1.WriteWndPos(m_optAERPMMapWnd1, _T("Обогащение по оборотам"));
@@ -2455,6 +2477,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optAETPSMapWndSize, _T("Enrichment vs throttle speed map"));
  else
   sz.WriteWndPos(m_optAETPSMapWndSize, _T("Обогащение по скорости ДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optAEMAPMapWndSize, _T("Enrichment vs MAPdot"));
+ else
+  sz.WriteWndPos(m_optAEMAPMapWndSize, _T("Обогащение по скорости ДАД"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz.WriteWndPos(m_optAERPMMapWndSize, _T("Enrichment vs engine speed map"));
@@ -2768,6 +2795,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optAETPSMapWndSize1, _T("Enrichment vs throttle speed map"));
  else
   sz1.WriteWndPos(m_optAETPSMapWndSize1, _T("Обогащение по скорости ДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optAEMAPMapWndSize1, _T("Enrichment vs MAPdot"));
+ else
+  sz1.WriteWndPos(m_optAEMAPMapWndSize1, _T("Обогащение по скорости ДАД"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz1.WriteWndPos(m_optAERPMMapWndSize1, _T("Enrichment vs engine speed"));
@@ -3639,6 +3671,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepAetpsMap, 3, _T("Обогащение по скорости ДЗ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAemapMap, 3, _T("Enrichment vs MAPdot"));
+ else
+  ms.WriteFlt(m_optPtMovStepAemapMap, 3, _T("Обогащение по скорости ДАД"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepAerpmMap, 3, _T("Enrichment vs engine speed"));
  else
   ms.WriteFlt(m_optPtMovStepAerpmMap, 3, _T("Обогащение по оборотам"));
@@ -3949,6 +3986,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldMAF);
  lf.WriteString(m_optLogFieldVentDuty);
  lf.WriteString(m_optLogFieldUniOuts);
+ lf.WriteString(m_optLogFieldMAPdot);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -4112,6 +4150,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optIdlcMapWnd.value.y = i_wndSettings.m_IdlcMapWnd_Y;
  m_optAETPSMapWnd.value.x = i_wndSettings.m_AETPSMapWnd_X;
  m_optAETPSMapWnd.value.y = i_wndSettings.m_AETPSMapWnd_Y; 
+ m_optAEMAPMapWnd.value.x = i_wndSettings.m_AEMAPMapWnd_X;
+ m_optAEMAPMapWnd.value.y = i_wndSettings.m_AEMAPMapWnd_Y; 
  m_optAERPMMapWnd.value.x = i_wndSettings.m_AERPMMapWnd_X;
  m_optAERPMMapWnd.value.y = i_wndSettings.m_AERPMMapWnd_Y; 
  m_optAftstrMapWnd.value.x = i_wndSettings.m_AftstrMapWnd_X;
@@ -4246,6 +4286,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd.value.y;
  o_wndSettings.m_AETPSMapWnd_X = m_optAETPSMapWnd.value.x;
  o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd.value.y;
+ o_wndSettings.m_AEMAPMapWnd_X = m_optAEMAPMapWnd.value.x;
+ o_wndSettings.m_AEMAPMapWnd_Y = m_optAEMAPMapWnd.value.y;
  o_wndSettings.m_AERPMMapWnd_X = m_optAERPMMapWnd.value.x;
  o_wndSettings.m_AERPMMapWnd_Y = m_optAERPMMapWnd.value.y;
  o_wndSettings.m_AftstrMapWnd_X = m_optAftstrMapWnd.value.x;
@@ -4372,6 +4414,8 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optIdlcMapWnd1.value.y = i_wndSettings.m_IdlcMapWnd_Y;
  m_optAETPSMapWnd1.value.x = i_wndSettings.m_AETPSMapWnd_X;
  m_optAETPSMapWnd1.value.y = i_wndSettings.m_AETPSMapWnd_Y; 
+ m_optAEMAPMapWnd1.value.x = i_wndSettings.m_AEMAPMapWnd_X;
+ m_optAEMAPMapWnd1.value.y = i_wndSettings.m_AEMAPMapWnd_Y; 
  m_optAERPMMapWnd1.value.x = i_wndSettings.m_AERPMMapWnd_X;
  m_optAERPMMapWnd1.value.y = i_wndSettings.m_AERPMMapWnd_Y; 
  m_optAftstrMapWnd1.value.x = i_wndSettings.m_AftstrMapWnd_X;
@@ -4446,6 +4490,8 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd1.value.y;
  o_wndSettings.m_AETPSMapWnd_X = m_optAETPSMapWnd1.value.x;
  o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd1.value.y;
+ o_wndSettings.m_AEMAPMapWnd_X = m_optAEMAPMapWnd1.value.x;
+ o_wndSettings.m_AEMAPMapWnd_Y = m_optAEMAPMapWnd1.value.y;
  o_wndSettings.m_AERPMMapWnd_X = m_optAERPMMapWnd1.value.x;
  o_wndSettings.m_AERPMMapWnd_Y = m_optAERPMMapWnd1.value.y;
  o_wndSettings.m_AftstrMapWnd_X = m_optAftstrMapWnd1.value.x;
@@ -4528,6 +4574,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optIdlcMapWndSize.value.y = i_wndSize.m_IdlcMapWnd_H;
  m_optAETPSMapWndSize.value.x = i_wndSize.m_AETPSMapWnd_W;
  m_optAETPSMapWndSize.value.y = i_wndSize.m_AETPSMapWnd_H; 
+ m_optAEMAPMapWndSize.value.x = i_wndSize.m_AEMAPMapWnd_W;
+ m_optAEMAPMapWndSize.value.y = i_wndSize.m_AEMAPMapWnd_H; 
  m_optAERPMMapWndSize.value.x = i_wndSize.m_AERPMMapWnd_W;
  m_optAERPMMapWndSize.value.y = i_wndSize.m_AERPMMapWnd_H; 
  m_optAftstrMapWndSize.value.x = i_wndSize.m_AftstrMapWnd_W;
@@ -4662,6 +4710,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_IdlcMapWnd_H = m_optIdlcMapWndSize.value.y;
  o_wndSize.m_AETPSMapWnd_W = m_optAETPSMapWndSize.value.x;
  o_wndSize.m_AETPSMapWnd_H = m_optAETPSMapWndSize.value.y;
+ o_wndSize.m_AEMAPMapWnd_W = m_optAEMAPMapWndSize.value.x;
+ o_wndSize.m_AEMAPMapWnd_H = m_optAEMAPMapWndSize.value.y;
  o_wndSize.m_AERPMMapWnd_W = m_optAERPMMapWndSize.value.x;
  o_wndSize.m_AERPMMapWnd_H = m_optAERPMMapWndSize.value.y;
  o_wndSize.m_AftstrMapWnd_W = m_optAftstrMapWndSize.value.x;
@@ -4788,6 +4838,8 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optIdlcMapWndSize1.value.y = i_wndSize.m_IdlcMapWnd_H;
  m_optAETPSMapWndSize1.value.x = i_wndSize.m_AETPSMapWnd_W;
  m_optAETPSMapWndSize1.value.y = i_wndSize.m_AETPSMapWnd_H; 
+ m_optAEMAPMapWndSize1.value.x = i_wndSize.m_AEMAPMapWnd_W;
+ m_optAEMAPMapWndSize1.value.y = i_wndSize.m_AEMAPMapWnd_H; 
  m_optAERPMMapWndSize1.value.x = i_wndSize.m_AERPMMapWnd_W;
  m_optAERPMMapWndSize1.value.y = i_wndSize.m_AERPMMapWnd_H; 
  m_optAftstrMapWndSize1.value.x = i_wndSize.m_AftstrMapWnd_W;
@@ -4862,6 +4914,8 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_IdlcMapWnd_H = m_optIdlcMapWndSize1.value.y;
  o_wndSize.m_AETPSMapWnd_W = m_optAETPSMapWndSize1.value.x;
  o_wndSize.m_AETPSMapWnd_H = m_optAETPSMapWndSize1.value.y;
+ o_wndSize.m_AEMAPMapWnd_W = m_optAEMAPMapWndSize1.value.x;
+ o_wndSize.m_AEMAPMapWnd_H = m_optAEMAPMapWndSize1.value.y;
  o_wndSize.m_AERPMMapWnd_W = m_optAERPMMapWndSize1.value.x;
  o_wndSize.m_AERPMMapWnd_H = m_optAERPMMapWndSize1.value.y;
  o_wndSize.m_AftstrMapWnd_W = m_optAftstrMapWndSize1.value.x;
@@ -5616,6 +5670,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepIdlrMap.value = i_ptMovStep.m_idlr_map;
  m_optPtMovStepIdlcMap.value = i_ptMovStep.m_idlc_map;
  m_optPtMovStepAetpsMap.value = i_ptMovStep.m_aetps_map;
+ m_optPtMovStepAemapMap.value = i_ptMovStep.m_aemap_map;
  m_optPtMovStepAerpmMap.value = i_ptMovStep.m_aerpm_map;
  m_optPtMovStepAftstrMap.value = i_ptMovStep.m_aftstr_map;
  m_optPtMovStepItMap.value = i_ptMovStep.m_it_map;
@@ -5682,6 +5737,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_idlr_map = m_optPtMovStepIdlrMap.value;
  o_ptMovStep.m_idlc_map = m_optPtMovStepIdlcMap.value;
  o_ptMovStep.m_aetps_map = m_optPtMovStepAetpsMap.value;
+ o_ptMovStep.m_aemap_map = m_optPtMovStepAemapMap.value;
  o_ptMovStep.m_aerpm_map = m_optPtMovStepAerpmMap.value;
  o_ptMovStep.m_aftstr_map = m_optPtMovStepAftstrMap.value;
  o_ptMovStep.m_it_map = m_optPtMovStepItMap.value;
@@ -5801,6 +5857,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldMAF.value = i_flds.m_fldMAF;
  m_optLogFieldVentDuty.value = i_flds.m_fldVentDuty;
  m_optLogFieldUniOuts.value = i_flds.m_fldUniOuts;
+ m_optLogFieldMAPdot.value = i_flds.m_fldMAPdot;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -5871,6 +5928,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldMAF = m_optLogFieldMAF.value;
  o_flds.m_fldVentDuty = m_optLogFieldVentDuty.value;
  o_flds.m_fldUniOuts = m_optLogFieldUniOuts.value;
+ o_flds.m_fldMAPdot = m_optLogFieldMAPdot.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

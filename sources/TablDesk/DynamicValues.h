@@ -74,5 +74,6 @@ namespace TablDesk
 
   int rxlaf;
   bool aftstr_enr;
+  int mapdot;
  };
 }
