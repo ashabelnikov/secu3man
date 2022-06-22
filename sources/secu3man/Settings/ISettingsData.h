@@ -372,6 +372,7 @@ struct MetersCfg
  int m_optMetInjDuty[2];
  int m_optMetMAF[2];
  int m_optMetVentDuty[2];
+ int m_optMetMAPDot[2];
 };
 
 typedef enum EInterLang

@@ -47,6 +47,7 @@ set(HEADERS
   MIVoltMeter.h
   MIVehicleSpeed.h
   MITPSDot.h
+  MIMAPDot.h
   MIMap2.h
   MIMapD.h
   MIMaf.h
@@ -91,6 +92,7 @@ set (SOURCES
   MIVoltMeter.cpp
   MIVehicleSpeed.cpp
   MITPSDot.cpp
+  MIMAPDot.cpp
   MIMap2.cpp
   MIMapD.cpp
   MIMaf.cpp

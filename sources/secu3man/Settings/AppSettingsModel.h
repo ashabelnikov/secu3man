@@ -150,6 +150,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetAirFlowAverage(void) const;
   virtual int GetVehicleSpeedAverage(void) const;
   virtual int GetTPSDotAverage(void) const;
+  virtual int GetMAPDotAverage(void) const;
   virtual int GetMAP2Average(void) const;
   virtual int GetMAPDAverage(void) const;
   virtual int GetTmp2Average(void) const;
@@ -335,6 +336,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optAirFlowAverage;
   OptField_t<int>  m_optVehicleSpeedAverage;
   OptField_t<int>  m_optTPSDotAverage;
+  OptField_t<int>  m_optMAPDotAverage;
   OptField_t<int>  m_optMAP2Average;
   OptField_t<int>  m_optMAPDAverage;
   OptField_t<int>  m_optTmp2Average;
@@ -621,6 +623,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetAirFlow[2][2];
   OptField_t<int> m_optMetVehicleSpeed[2][2];
   OptField_t<int> m_optMetTPSDot[2][2];
+  OptField_t<int> m_optMetMAPDot[2][2];
   OptField_t<int> m_optMetMAP2[2][2];
   OptField_t<int> m_optMetMAPD[2][2];
   OptField_t<int> m_optMetTmp2[2][2];

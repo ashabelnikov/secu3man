@@ -105,6 +105,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetAirFlowAverageNum(int avnum);
   void SetVehicleSpeedAverageNum(int avnum);
   void SetTPSDotAverageNum(int avnum);
+  void SetMAPDotAverageNum(int avnum);
   void SetMAP2AverageNum(int avnum);
   void SetMAPDAverageNum(int avnum);
   void SetTmp2AverageNum(int avnum);
@@ -135,13 +136,13 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
                     int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
                     int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
+                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
 
   void GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
                     int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
                     int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
+                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
 
   void SetMetersDragNDrop(bool enable);
   bool GetMetersDragNDrop(void) const;
@@ -293,6 +294,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   RingBuffItem m_ringAirFlow;
   RingBuffItem m_ringVehicleSpeed;
   RingBuffItem m_ringTPSDot;
+  RingBuffItem m_ringMAPDot;
   RingBuffItem m_ringMAP2;
   RingBuffItem m_ringMAPD;
   RingBuffItem m_ringTmp2;
@@ -327,6 +329,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   GraphVal_t m_airflQVal[2];
   GraphVal_t m_vssQVal[2];
   GraphVal_t m_tpsdotQVal[2];
+  GraphVal_t m_mapdotQVal[2];
   GraphVal_t m_map2QVal[2];
   GraphVal_t m_mapdQVal[2];
   GraphVal_t m_tmp2QVal[2];

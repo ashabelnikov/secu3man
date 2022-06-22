@@ -94,6 +94,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAirFlowAverage(_T("AirFlowAverage"))
 , m_optVehicleSpeedAverage(_T("VehicleSpeedAverage"))
 , m_optTPSDotAverage(_T("TPSDotAverage"))
+, m_optMAPDotAverage(_T("MAPDotAverage"))
 , m_optMAP2Average(_T("MAP2Average"))
 , m_optMAPDAverage(_T("MAPDAverage"))
 , m_optTmp2Average(_T("Tmp2Average"))
@@ -609,6 +610,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetVehicleSpeed[i][1].name = _T("GrhVehicleSpeed");
   m_optMetTPSDot[i][0].name = _T("MetTPSDot");
   m_optMetTPSDot[i][1].name = _T("GrhTPSDot");
+  m_optMetMAPDot[i][0].name = _T("MetMAPDot");
+  m_optMetMAPDot[i][1].name = _T("GrhMAPDot");
   m_optMetMAP2[i][0].name = _T("MetMAP2");
   m_optMetMAP2[i][1].name = _T("GrhMAP2");
   m_optMetMAPD[i][0].name = _T("MetMAPD");
@@ -791,6 +794,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optAirFlowAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optVehicleSpeedAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optTPSDotAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optMAPDotAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optMAP2Average, _T("4"), 0, 16);
  fs.ReadInt(m_optMAPDAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optTmp2Average, _T("4"), 0, 16);
@@ -1102,8 +1106,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColUniOut6,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][34*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][35*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -1125,6 +1129,7 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetAirFlow[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetVehicleSpeed[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetTPSDot[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetMAPDot[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetMAP2[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetMAPD[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetTmp2[i][g],metDef[i][d++], 0, vmax, true);
@@ -1646,6 +1651,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений скорости изменения положения ДЗ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optTPSDotAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for MAP dot values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений скорости изменения ДАД. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optMAPDotAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Size of the moving average filter used for MAP2 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
@@ -3258,9 +3269,14 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetVehicleSpeed[i][g], _T("Скорость авто."));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTPSDot[i][g], _T("TPS speed"));
+   mm.WriteInt(m_optMetTPSDot[i][g], _T("TPS dot"));
   else
    mm.WriteInt(m_optMetTPSDot[i][g], _T("Скорость ДПДЗ (d%/dt)"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetMAPDot[i][g], _T("MAP dot"));
+  else
+   mm.WriteInt(m_optMetMAPDot[i][g], _T("Скорость ДАД (dP/dt)"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
    mm.WriteInt(m_optMetMAP2[i][g], _T("MAP2 sensor"));
@@ -5121,6 +5137,11 @@ int CAppSettingsModel::GetTPSDotAverage(void) const
  return m_optTPSDotAverage.value;
 }
 
+int CAppSettingsModel::GetMAPDotAverage(void) const
+{
+ return m_optMAPDotAverage.value;
+}
+
 int CAppSettingsModel::GetMAP2Average(void) const
 {
  return m_optMAP2Average.value;
@@ -5306,6 +5327,7 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAPDot, &m_optMetMAPDot[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0]);
@@ -5348,6 +5370,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAPDot, &m_optMetMAPDot[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0]);
