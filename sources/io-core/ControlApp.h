@@ -79,7 +79,6 @@ class IOCORE_API CControlApp
   bool Initialize(CComPort* p_port, const DWORD uart_seed, const DWORD);
   bool Terminate(void);
   void SwitchOn(bool state, bool i_force_reinit = false);
-  void SetProtocolDataMode(bool i_mode);
   void SetQuartzFrq(long frq);
   void SetPortAutoReopen(bool reopen);
   bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);

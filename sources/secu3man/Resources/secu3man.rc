@@ -161,7 +161,6 @@ BEGIN
     CONTROL         "Существ. порты",IDC_APP_SETTINGS_PRESPORTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_MULTILINE,100,15,70,10
     COMBOBOX        IDC_APP_SETTINGS_PORT_SELECTION1_COMBO,15,27,165,139,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP | CBS_AUTOHSCROLL
     COMBOBOX        IDC_APP_SETTINGS_PORT_SELECTION2_COMBO,15,27,165,139,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP | CBS_AUTOHSCROLL | NOT WS_VISIBLE
-    CONTROL         "Данные передаются в Hex",IDC_APP_SETTINGS_HEXMODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_MULTILINE,60,43,120,15
     LTEXT           "Скорость COM-порта (прошивка):",IDC_STATIC,15,62,85,17
     COMBOBOX        IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO,15,80,65,82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Скорость COM-порта (загрузчик):",IDC_STATIC,109,61,78,17
@@ -885,7 +884,6 @@ BEGIN
     IDS_APP_SETTINGS_EXFIXTURES_TT "Установите для выбора 2-го профиля настроек панели приборов и индикаторов. Продублировано галочкой 'Переключить панели приборов' в разделе 'Вид' главного меню программы."
     IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT "Если подключен датчик скорости, установите количество импульсов с датчика скорости, приходящееся на 1 км пути"
     IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT "Включить отладочную панель для отображения переменных из прошивки. Прошивка должна быть скомпилирована с опцией DEBUG_VARIABLES, см. заголовочный файл dbgvar.h"
-    IDS_APP_SETTINGS_HEXMODE_TT "Включает режим кодирования данных в hex. Устанавливать галочку только если прошивка НЕ собрана с опцией UART_BINARY (прошивки из официальных релизов собраны с этой опцией)."
     IDS_PEAK_ON_TABSEL_CHECK_TT   "Время полного включ.(мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
     IDS_PEAK_DUTY_TABSEL_CHECK_TT "Скважн. ШИМ на включ.(%). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
     IDS_HOLD_DUTY_TABSEL_CHECK_TT "Скважность ШИМ удерж.(%). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
@@ -1121,7 +1119,6 @@ BEGIN
     CONTROL         "Existing ports",IDC_APP_SETTINGS_PRESPORTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_MULTILINE,100,15,70,10
     COMBOBOX        IDC_APP_SETTINGS_PORT_SELECTION1_COMBO,15,27,165,139,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP | CBS_AUTOHSCROLL
     COMBOBOX        IDC_APP_SETTINGS_PORT_SELECTION2_COMBO,15,27,165,139,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP | CBS_AUTOHSCROLL | NOT WS_VISIBLE
-    CONTROL         "Transmitting data in Hex",IDC_APP_SETTINGS_HEXMODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_MULTILINE,60,43,120,15
     LTEXT           "COM-port speed (firmware):",IDC_STATIC,15,62,70,17
     COMBOBOX        IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO,15,80,65,82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "COM-port speed (Boot loader):",IDC_STATIC,109,61,70,17
@@ -1842,7 +1839,6 @@ BEGIN
     IDS_APP_SETTINGS_EXFIXTURES_TT "Set checkbox to select the 2nd profile of settings of the panel of gauges and indicators. Duplicated by a check mark 'Switch dash boards' in the 'View' section of the main menu of the program."
     IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT "If a speed sensor is connected, set the number of pulses from the vehicle speed sensor per 1 km of traveled distance"
     IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT "Turn on debug panel for displaying of variables from the firmware. Firmware must be compiled with DEBUG_VARIABLES option, see dbgvar.h header file."
-    IDS_APP_SETTINGS_HEXMODE_TT "Enables hex data encoding mode. Check only if firmware is NOT compiled with the UART_BINARY option (firmwares from official releases are compiled with this option)."
     IDS_PEAK_ON_TABSEL_CHECK_TT   "Peak full ON time (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
     IDS_PEAK_DUTY_TABSEL_CHECK_TT "Peak PWM duty (%). This table is used by the firmware only if corresponding 'Table' checkbox is set"
     IDS_HOLD_DUTY_TABSEL_CHECK_TT "Hold PWM duty (%). This table is used by the firmware only if corresponding 'Table' checkbox is set"

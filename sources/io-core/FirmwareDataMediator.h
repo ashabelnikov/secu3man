@@ -611,7 +611,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V33 = 0x33,           //V3.3  New slots were added (added possibility to remap ADD_I5/7 as MAP2, GASVAL_O plug added)
    IOV_V34 = 0x34,           //V3.4  New plugs: FTLS_I, EGTS_I, OPS_I, INJPWC_I; Plus extra reserved plugs
    IOV_V35 = 0x35,           //v3.5  New plugs: INPUT1, INPUT2, REFPRS_I
-   IOV_V36 = 0x36            //v3.6  New slots: MAP_x; new plugs: MAF
+   IOV_V36 = 0x36,           //v3.6  New slots: MAP_x; new plugs: MAF
+   IOV_V37 = 0x37,           //v3.7  ADD_I3 --> FTLS_I
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

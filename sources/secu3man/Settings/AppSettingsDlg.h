@@ -61,7 +61,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetDVDeskUpdatePeriod(int i_period);
   virtual void SetShowToolTips(bool i_show);
   virtual void SetShowExFixtures(bool i_show);
-  virtual void SetHexDataMode(bool i_hex);
   virtual void SetNumPulsesPer1Km(int i_pp1km);
   virtual void SetInjDrvTabActive(bool i_active);
 
@@ -78,7 +77,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual int GetDVDeskUpdatePeriod(void);
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
-  virtual bool GetHexDataMode(void) const;
   virtual int GetNumPulsesPer1Km(void) const;
   virtual bool GetInjDrvTabActive(void) const;
 
@@ -149,7 +147,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CButton   m_use_dv_features_button;
   CButton   m_show_tooltips_button;
   CButton   m_exfixtures_button;
-  CButton   m_hexdatamode_button;
   CButton   m_presports_button;
   CButton   m_injdrvtab_button;
   CEdit     m_log_files_folder_edit;
@@ -176,7 +173,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_use_dv_features;
   int m_show_tooltips;
   int m_exfixtures;
-  int m_hexdatamode;
   int m_log_csv_sepsymbol_index;
   int m_midesk_update_period;
   int m_dv_update_period;

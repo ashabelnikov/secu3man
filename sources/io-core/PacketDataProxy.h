@@ -48,16 +48,6 @@ class PacketDataProxy
   bool Bin32ToHex(const unsigned long i_dword, std::vector<BYTE>& o_hex_number);
   bool Bin32ToHex(const signed long i_dword, std::vector<BYTE>& o_hex_number);
 
-  //Get size of one byte in protocol
-  size_t getHex8Size(void) const;
-
-  //Returns current mode
-  bool isHex(void) const;
-
-  //Sets proxy mode
-  //true - Hex, false - Bin
-  void SetMode(bool i_mode);
-
   void resetCRC(void);
   int getCRC(void);
 
@@ -65,7 +55,6 @@ class PacketDataProxy
   bool isCRCEnabled(void);
 
  private:
-  bool m_mode; //operation mode: false - binary, true - hex
   volatile bool m_useCrc;
   unsigned short m_crc;
 };

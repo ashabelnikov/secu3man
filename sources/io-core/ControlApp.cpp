@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 174 : 87))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 87)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -666,22 +666,22 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DbgvarDat& m_DbgvarDat = m_recepted_packet.m_DbgvarDat;
- if (size != (mp_pdp->isHex() ? 16 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size !=  8)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- //переменная 1
+ //variable 1
  if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var1))
   return false;
 
- //переменная 2
+ //variable 2
  if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var2))
   return false;
 
- //переменная 3
+ //variable 3
  if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var3))
   return false;
 
- //переменная 4
+ //variable 4
  if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var4))
   return false;
 
@@ -692,7 +692,7 @@ bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FnNameDat& fnNameDat = m_recepted_packet.m_FnNameDat;
- if (size != (mp_pdp->isHex() ? 20 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 18)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Общее кол-во наборов (семейств характеристик)
@@ -704,7 +704,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
   return false;
 
  //имя этого набора характеристик
- size_t fn_name_size = size - (mp_pdp->getHex8Size()*2);
+ size_t fn_name_size = size - 2;
  mp_pdp->HexStrToBin(raw_packet, fn_name_size, fnNameDat.name);
 
  //Заменяем символы FF на 0x20 
@@ -719,7 +719,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& startrPar = m_recepted_packet.m_StartrPar;
- if (size != (mp_pdp->isHex() ? 32 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 16)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -790,7 +790,7 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::AnglesPar& anglesPar = m_recepted_packet.m_AnglesPar;
- if (size != (mp_pdp->isHex() ? 27 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 14)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Максимальный, допустимый УОЗ (число со знаком)
@@ -848,7 +848,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 65 : 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 33)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -977,7 +977,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& idlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != (mp_pdp->isHex() ? 68 : 34))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 34)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Idling regulator flags
@@ -1114,7 +1114,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CarburPar& carburPar = m_recepted_packet.m_CarburPar;
- if (size != (mp_pdp->isHex() ? 45 : 23))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 23)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
@@ -1194,7 +1194,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::TemperPar& temperPar = m_recepted_packet.m_TemperPar;
- if (size != (mp_pdp->isHex() ? 30 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 15)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Temperature flags
@@ -1260,7 +1260,7 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::RawSensDat& rawSensDat = m_recepted_packet.m_RawSensDat;
- if (size != (mp_pdp->isHex() ? 52 : 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 26)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //MAP sensor
@@ -1350,7 +1350,7 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ADCCompenPar& adcCompenPar = m_recepted_packet.m_ADCCompenPar;
- if (size != (mp_pdp->isHex() ? 146 : 73))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 73)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //ADC flags
@@ -1507,7 +1507,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& ckpsPar = m_recepted_packet.m_CKPSPar;
- if (size != (mp_pdp->isHex() ? 20 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 10)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Количество зубьев до в.м.т.
@@ -1559,7 +1559,7 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::OPCompNc& opCompNc = m_recepted_packet.m_OPCompNc;
- if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 2)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Код завершенной операции
@@ -1575,7 +1575,7 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::KnockPar& knockPar = m_recepted_packet.m_KnockPar;
- if (size != (mp_pdp->isHex() ? (14+23) : 19))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 19)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Разрешен/запрещен
@@ -1657,7 +1657,7 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& ceErrors = m_recepted_packet.m_CEErrors;
- if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned long flags = 0;
@@ -1672,7 +1672,7 @@ bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& ceErrors = m_recepted_packet.m_CEErrors;
- if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned long flags = 0;
@@ -1687,7 +1687,7 @@ bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FWInfoDat& fwInfoDat = m_recepted_packet.m_FWInfoDat;
- if (size != (FW_SIGNATURE_INFO_SIZE + (mp_pdp->isHex() ? 10 : 5)))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (FW_SIGNATURE_INFO_SIZE + 5))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //строка с информацией 
@@ -1714,7 +1714,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& miscPar = m_recepted_packet.m_MiscelPar;
- if (size != (mp_pdp->isHex() ? 39 : 20))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 20)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1808,7 +1808,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::EditTabPar& editTabPar = m_recepted_packet.m_EditTabPar;
  //check for 16 and 24 byte packets
- if (mp_pdp->isHex() ? (size < 6 || size > 52) : (size < 3 || size > 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size < 3 || size > 26)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //код таблицы в наборе
@@ -1830,16 +1830,16 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //check for 16-byte packets
- if ((editTabPar.tab_id != ETMT_GPSC_MAP) && (editTabPar.tab_id != ETMT_VE_MAP) && (editTabPar.tab_id != ETMT_VE2_MAP) && (editTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
+ if ((editTabPar.tab_id != ETMT_GPSC_MAP) && (editTabPar.tab_id != ETMT_VE_MAP) && (editTabPar.tab_id != ETMT_VE2_MAP) && (editTabPar.tab_id != ETMT_IT_MAP) && (size < 3 || size > 18)) 
   return false;
 
- //адрес фрагмента данных в таблице (смещение в таблице)
+ //address of fragment of data in table (offset in table)
  unsigned char address;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
  editTabPar.address = address;
 
- size-=(2 * mp_pdp->getHex8Size());
+ size-=2;
 
  if (editTabPar.tab_id != ETMT_NAME_STR)
  {
@@ -1848,11 +1848,11 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
   if (editTabPar.tab_id == ETMT_CRNK_MAP || editTabPar.tab_id == ETMT_DEAD_MAP || editTabPar.tab_id == ETMT_RIGID_MAP || editTabPar.tab_id == ETMT_EGOCRV_MAP || editTabPar.tab_id == ETMT_IACC_MAP || editTabPar.tab_id == ETMT_IATCLT_MAP)
   {
-   div = mp_pdp->isHex() ? 4 : 2;
-   if (size % div) // 1 byte in HEX is 2 symbols
+   div = 2;
+   if (size % div)
     return false;
 
-   //фрагмент с данными (float)
+   //fragment with data (float)
    for(size_t i = 0; i < size / div; ++i)
    {
     int value;
@@ -1874,14 +1874,10 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   }
   else
   {
-   div = mp_pdp->isHex() ? 2 : 1;
-   if (size % div) // 1 byte in HEX is 2 symbols
-    return false;
-
    if (editTabPar.tab_id == ETMT_VE_MAP || editTabPar.tab_id == ETMT_VE2_MAP) //volumetric efficiency maps
    { //VE
     BYTE buff[32]; unsigned char value;
-    for(size_t i = 0; i < size / div; ++i)
+    for(size_t i = 0; i < size; ++i)
     {     
      if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
       return false;
@@ -1983,7 +1979,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& attTabPar = m_recepted_packet.m_SepTabPar;
- if (mp_pdp->isHex() ? (size < 4 || size > 34) : (size < 2 || size > 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size < 2 || size > 17)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1992,14 +1988,11 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
   return false;
  attTabPar.address = address;
 
- size-=mp_pdp->getHex8Size();
- size_t div = mp_pdp->isHex() ? 2 : 1;
- if (size % div) // 1 byte in HEX is 2 symbols
-  return false;
+ size-=1;
 
- //фрагмент с данными (коды коэффициентов усиления)
+ //fragment with data (codes of coefficients of attenuation)
  size_t data_size = 0;
- for(size_t i = 0; i < size / div; ++i)
+ for(size_t i = 0; i < size; ++i)
  {
   unsigned char value;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
@@ -2016,7 +2009,7 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LTFT_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& ltftTabPar = m_recepted_packet.m_SepTabPar;
- if (mp_pdp->isHex() ? (size < 4 || size > 36) : (size < 2 || size > 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size < 2 || size > 18)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char reserv;
@@ -2030,14 +2023,11 @@ bool CControlApp::Parse_LTFT_DAT(const BYTE* raw_packet, size_t size)
   return false;
  ltftTabPar.address = address;
 
- size-=(mp_pdp->getHex8Size()*2);
- size_t div = mp_pdp->isHex() ? 2 : 1;
- if (size % div) // 1 byte in HEX is 2 symbols
-  return false;
+ size-=2;
 
  //data fragment
  size_t data_size = 0;
- for(size_t i = 0; i < size / div; ++i)
+ for(size_t i = 0; i < size; ++i)
  {
   int value = 0;
   if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
@@ -2054,7 +2044,7 @@ bool CControlApp::Parse_LTFT_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& rpmGrdPar = m_recepted_packet.m_SepTabPar;
- if (mp_pdp->isHex() ? (size != 66) : (size != 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 33)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -2065,9 +2055,9 @@ bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
  if (0!=address)
   return false;  //address must be always zero
 
- size-=mp_pdp->getHex8Size();
- size_t div = mp_pdp->isHex() ? 2*2 : 1*2;
- if (size % div) // 1 byte in HEX is 2 symbols
+ size-=1;
+ size_t div = 2;
+ if (size % div)
   return false;
 
  //фрагмент с данными (сетка оборотов)
@@ -2092,10 +2082,10 @@ bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& cltGrdPar = m_recepted_packet.m_SepTabPar;
- if (mp_pdp->isHex() ? (size != 66) : (size != 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 33)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- //адрес фрагмента данных в таблице (смещение в таблице)
+ //address of fragment of data in table (offset in table)
  unsigned char address;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
@@ -2103,12 +2093,12 @@ bool CControlApp::Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size)
  if (0!=address)
   return false;  //address must be always zero
 
- size-=mp_pdp->getHex8Size();
- size_t div = mp_pdp->isHex() ? 2*2 : 1*2;
- if (size % div) // 1 byte in HEX is 2 symbols
+ size-=1;
+ size_t div = 2;
+ if (size % div)
   return false;
 
- //фрагмент с данными (сетка оборотов)
+ //fragment with data (CLT grid)
  size_t data_size = 0;
  for(size_t i = 0; i < size / div; ++i)
  {
@@ -2130,7 +2120,7 @@ bool CControlApp::Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LODGRD_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& lodGrdPar = m_recepted_packet.m_SepTabPar;
- if (mp_pdp->isHex() ? (size != 66) : (size != 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 33)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -2141,9 +2131,9 @@ bool CControlApp::Parse_LODGRD_PAR(const BYTE* raw_packet, size_t size)
  if (0!=address)
   return false;  //address must be always zero
 
- size-=mp_pdp->getHex8Size();
- size_t div = mp_pdp->isHex() ? 2*2 : 1*2;
- if (size % div) // 1 byte in HEX is 2 symbols
+ size-=1;
+ size_t div = 2;
+ if (size % div)
   return false;
 
  //load grid data
@@ -2168,7 +2158,7 @@ bool CControlApp::Parse_LODGRD_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& diagInpDat = m_recepted_packet.m_DiagInpDat;
- if (size != (mp_pdp->isHex() ? 62 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 31)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //flags variable
@@ -2285,7 +2275,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& chokePar = m_recepted_packet.m_ChokePar;
- if (size != (mp_pdp->isHex() ? 27 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 14)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -2346,7 +2336,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::GasdosePar& gasdosePar = m_recepted_packet.m_GasdosePar;
- if (size != (mp_pdp->isHex() ? 24 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 13)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -2404,7 +2394,7 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SecurPar& securPar = m_recepted_packet.m_SecurPar;
- if (size != (mp_pdp->isHex() ? 28 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 15)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of characters in name (must be zero)
@@ -2454,7 +2444,7 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::UniOutPar& uniOutPar = m_recepted_packet.m_UniOutPar;
- if (size != (mp_pdp->isHex() ? 133 : 67))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 67)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  CondEncoder cen(m_quartz_frq, m_period_distance);
@@ -2514,7 +2504,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& injctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 92 : 47))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 47)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
@@ -2642,7 +2632,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& lambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != (mp_pdp->isHex() ? 54 : 27))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 27)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -2750,7 +2740,7 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::AccelPar& accelPar = m_recepted_packet.m_AccelPar;
- if (size != (mp_pdp->isHex() ? 16 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 8)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char tpsdot_thrd = 0;
@@ -2795,7 +2785,7 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjDrvPar& recv = m_recepted_packet.m_InjDrvPar;
- if (size != (mp_pdp->isHex() ? 418 : 209))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 209)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  mp_pdp->resetCRC();
@@ -2975,7 +2965,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LZIDBL_HS(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LzidBLHS& recv = m_recepted_packet.m_LzidBLHS;
- if (size != (mp_pdp->isHex() ? 5 : 5))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 5)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  strncpy(recv.data, (const char*)raw_packet, size); //text data
@@ -2994,16 +2984,15 @@ bool CControlApp::ParsePackets()
  for(it = m_pPackets->begin(); it!=m_pPackets->end(); ++it)
  {
   //don't use checksum for LZIDBL_HS packets because a lot of users already have units with bootloader which does't support checksum.
-  //For INJDRV_PAR packets checksum is calculated inside methods of PacketDataProxy class
-  bool use_checksum = (*it)[1]!=INJDRV_PAR && (*it)[1]!=LZIDBL_HS && !mp_pdp->isHex(); //don't use checksum for specified packet types and for Hex mode
+  //For INJDRV_PAR packets' checksum is calculated inside methods of PacketDataProxy class
+  bool use_checksum = (*it)[1]!=INJDRV_PAR && (*it)[1]!=LZIDBL_HS; //don't use checksum for specified packet types
 
   if (it->size() < ((size_t)(use_checksum ? 5 : 3)) || (*it)[0] != '@')
    continue;
   if (it->back() != '\r')
    continue;
 
-  if (!mp_pdp->isHex())
-   Esc_Rx_Packet(*it, 2, it->size() - 3); //byte stuffing
+  Esc_Rx_Packet(*it, 2, it->size() - 3); //byte stuffing
 
   if (use_checksum)
   {
@@ -3405,12 +3394,6 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
 }
 
 //-----------------------------------------------------------------------
-void CControlApp::SetProtocolDataMode(bool i_mode)
-{
- mp_pdp->SetMode(i_mode);
-}
-
-//-----------------------------------------------------------------------
 void CControlApp::SetQuartzFrq(long frq)
 {
  m_quartz_frq = frq;
@@ -3524,7 +3507,7 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 
 
  //don't use checksum for LZIDBL_HS packets because a lot of users already have units with bootloader which does't support checksum.
- if (i_descriptor!=LZIDBL_HS && !mp_pdp->isCRCEnabled() && !mp_pdp->isHex())
+ if (i_descriptor!=LZIDBL_HS && !mp_pdp->isCRCEnabled())
  {
   //calculate and put checksum value
   int checksum = FletcherChecksum(m_outgoing_packet, 2, m_outgoing_packet.size() - 2);
@@ -3533,8 +3516,7 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 
  m_outgoing_packet.push_back('\r');
 
- if (!mp_pdp->isHex())
-  Esc_Tx_Packet(m_outgoing_packet, 2, m_outgoing_packet.size() - 3); //byte stuffing
+ Esc_Tx_Packet(m_outgoing_packet, 2, m_outgoing_packet.size() - 3); //byte stuffing
 
  return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size());
 }

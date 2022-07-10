@@ -198,7 +198,6 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
   virtual void SetShowExFixtures(bool i_show);
-  virtual bool GetHexDataMode(void) const;
   virtual int GetNumPulsesPer1Km(void) const;
   ////////////////////////////////////////////////////
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const;
@@ -320,7 +319,6 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optDVDeskUpdatePeriod;
   OptField_t<bool> m_optShowToolTips;
   OptField_t<bool> m_optShowExFixtures;
-  OptField_t<bool> m_optHexDataMode;
 
   OptField_t<int>  m_optRPMAverage;
   OptField_t<int>  m_optVoltAverage;

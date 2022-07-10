@@ -940,7 +940,7 @@ const int INPAVNUM = 14;
   _SD(22, _T("SM_CONTROL")),
   _SD(23, _T("VREF_5V")),
   _SD(24, _T("HALL_SYNC")),
-  _SD(25, _T("UART_BINARY")),
+  _SD(25, _T("UART_BINARY")),  //obsolete, left for compatibility
   _SD(26, _T("CKPS_2CHIGN")),
   _SD(27, _T("ATMEGA644")),    //obsolete, left for compatibility
   _SD(28, _T("FUEL_INJECT")),
@@ -975,7 +975,7 @@ const int INPAVNUM = 14;
  const int COPT_SM_CONTROL = 22;
  const int COPT_VREF_5V = 23;
  const int COPT_HALL_SYNC = 24;
- const int COPT_UART_BINARY = 25;
+ const int COPT_UART_BINARY = 25;   //obsolete, left for compatibility
  const int COPT_CKPS_2CHIGN = 26;
  const int COPT_ATMEGA644 = 27;     //obsolete, left for compatibility
  const int COPT_FUEL_INJECT = 28;

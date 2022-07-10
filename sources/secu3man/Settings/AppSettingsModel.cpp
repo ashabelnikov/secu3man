@@ -53,7 +53,6 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optUseDVFeatures(_T("UseDVFeatures"))
 , m_optShowToolTips(_T("ShowToolTips"))
 , m_optShowExFixtures(_T("ExFixtures"))
-, m_optHexDataMode(_T("HexDataMode"))
 , m_optDVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
 , m_optCOMPortBother(_T("COMPortBother"))
 , m_optUseHotKeys(_T("UseHotKeys"))
@@ -758,7 +757,6 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optDVDeskUpdatePeriod, _T("40"), 0, 1000);
  os.ReadInt(m_optUseDVFeatures, _T("0"), 0, 1);
  os.ReadInt(m_optShowToolTips, _T("1"), 0, 1);
- os.ReadInt(m_optHexDataMode, _T("0"), 0, 1);
  os.ReadInt(m_optCOMPortBother, _T("1"), 0, 1);
  os.ReadInt(m_optUseHotKeys, _T("1"), 0, 1);
  os.ReadInt(m_optShowWelcome, _T("1"), 0, 1);
@@ -1453,12 +1451,6 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Управление отображением всплывающих подсказок. Установите в 0, если вы не хотите чтобы отображались всплывающие подсказки."));
  os.WriteInt(m_optShowToolTips); 
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  os.WriteComment(_T("Specifies which format of data uses your SECU-3 firmware when sends and receives packets. Set to 0 for binary format (default)."));
- else
-  os.WriteComment(_T("Указывает какой формат данных использует прошивка SECU-3 для приема и передачи данных. Установите в 0 для бинарного формата (исп. по умолчанию)."));
- os.WriteInt(m_optHexDataMode); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Set to 0 if you don't want to be bothred by error messages related to COM port. Recommended only for experienced users."));
@@ -5043,11 +5035,6 @@ bool CAppSettingsModel::GetShowToolTips(void) const
 bool CAppSettingsModel::GetShowExFixtures(void) const
 {
  return m_optShowExFixtures.value;
-}
-
-bool CAppSettingsModel::GetHexDataMode(void) const
-{
- return m_optHexDataMode.value;
 }
 
 int CAppSettingsModel::GetNumPulsesPer1Km(void) const

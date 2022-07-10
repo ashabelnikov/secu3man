@@ -62,7 +62,6 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optDVDeskUpdatePeriod.value = m_pView->GetDVDeskUpdatePeriod();
  m_pModel->m_optShowToolTips.value = m_pView->GetShowToolTips();
  m_pModel->m_optShowExFixtures.value = m_pView->GetShowExFixtures();
- m_pModel->m_optHexDataMode.value = m_pView->GetHexDataMode();
  m_pModel->m_optExistingPorts.value = m_pView->GetExistingPorts();
  m_pModel->m_optInjDrvTabActive.value = m_pView->GetInjDrvTabActive();
 
@@ -105,7 +104,6 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod.value);
  m_pView->SetShowToolTips(m_pModel->m_optShowToolTips.value);
  m_pView->SetShowExFixtures(m_pModel->m_optShowExFixtures.value);
- m_pView->SetHexDataMode(m_pModel->m_optHexDataMode.value);
  m_pView->SetExistingPorts(m_pModel->m_optExistingPorts.value);
  m_pView->SetInjDrvTabActive(m_pModel->m_optInjDrvTabActive.value);
 

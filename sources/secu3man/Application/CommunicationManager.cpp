@@ -95,8 +95,6 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
  //для того чтобы можно было применить новые настройки к порту, необходимо его заново открыть
  m_pComPort->Terminate();
 
- //Set protocol data encoding/decoding mode (Hex or Bin)
- m_pControlApp->SetProtocolDataMode(m_pSettings->GetHexDataMode());
  //Set parameters for speed sensor calculations
  m_pControlApp->SetNumPulsesPer1Km(m_pSettings->GetNumPulsesPer1Km());
  //Set clock frequency (16 or 20 mHz)
