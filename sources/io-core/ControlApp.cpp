@@ -1843,12 +1843,11 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 
  if (editTabPar.tab_id != ETMT_NAME_STR)
  {
-  size_t div;
   size_t data_size = 0;
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
   if (editTabPar.tab_id == ETMT_CRNK_MAP || editTabPar.tab_id == ETMT_DEAD_MAP || editTabPar.tab_id == ETMT_RIGID_MAP || editTabPar.tab_id == ETMT_EGOCRV_MAP || editTabPar.tab_id == ETMT_IACC_MAP || editTabPar.tab_id == ETMT_IATCLT_MAP)
   {
-   div = 2;
+   size_t div = 2;
    if (size % div)
     return false;
 
@@ -1895,7 +1894,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    else if (editTabPar.tab_id == ETMT_IT_MAP) //injection timing map
    {
     BYTE buff[32]; unsigned char value;
-    for(size_t i = 0; i < size / div; ++i)
+    for(size_t i = 0; i < size; ++i)
     {     
      if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
       return false;
@@ -1913,7 +1912,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    else
    {
     //data fragment (float)
-    for(size_t i = 0; i < size / div; ++i)
+    for(size_t i = 0; i < size; ++i)
     {
      unsigned char value;
      if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
