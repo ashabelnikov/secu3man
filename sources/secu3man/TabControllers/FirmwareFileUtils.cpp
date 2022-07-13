@@ -30,6 +30,7 @@
 #include "io-core/FirmwareDataMediator.h"
 #include "io-core/EEPROMDataMediator.h"
 #include "HexUtils/readhex.h"
+#include "HexUtils/writehex.h"
 #include "Resources/resource.h"
 #include "ui-core/FileDialogEx.h"
 #include "ui-core/MsgBox.h"
@@ -84,45 +85,51 @@ bool SaveEEPROMToFile(const BYTE* p_data, const int size, EEPROMDataMediator* p_
 //Save FLASH to file
 bool SaveFLASHToFile(const BYTE* p_data, const int size, CFirmwareDataMediator* p_fwdm, CString* o_file_name /* = NULL*/, bool calculate_and_place_crc16/* = false*/)
 {
- HANDLE   hFile=0;
- BYTE *save_buff = NULL;
-
  if (!p_fwdm) return false;
 
- static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
+ static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|HEX Files (*.hex)|*.hex|All Files (*.*)|*.*||");
  CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("BIN");
  if (save.DoModal()==IDOK)
  {
-  CFile f;
+  CStdioFile f;
   CFileException ex;
   TCHAR szError[1024];
-  if(!f.Open(save.GetPathName(),CFile::modeWrite|CFile::modeCreate,&ex))
+  if(!f.Open(save.GetPathName(), CFile::modeWrite | CFile::modeCreate | CFile::typeBinary, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
    SECUMessageBox(szError);
-   return false; //ошибка - данные не сохранены
+   return false; //error - data has not been saved
   }
 
-  save_buff = new BYTE[size];
-  memcpy(save_buff, p_data,size);
+  std::vector<BYTE> save_buff(size);
+  memcpy(&save_buff[0], p_data, size);
 
-  //вычисляем контрольную сумму и сохраняем ее в массив с прошивкой
+  //calculate and place check sum into buffer with firmware
   if (calculate_and_place_crc16)
-   p_fwdm->CalculateAndPlaceFirmwareCRC(save_buff);
+   p_fwdm->CalculateAndPlaceFirmwareCRC(&save_buff[0]);
 
-  f.Write(save_buff,size);
+  if (save.GetFileExt()==_T("hex")) //check, if selected file name is hex, then save it as hex
+  {
+   f.SetLength(0);
+   if (!WriteHexFile(f.m_pStream, save_buff))
+   {
+    f.Close();
+    return false;
+   }
+  }
+  else
+   f.Write(&save_buff[0], (UINT)save_buff.size());    
+
   f.Close();
-  delete save_buff;
 
   if (o_file_name!=NULL)
    *o_file_name = save.GetFileName();
-  return true; //подтверждение пользователя
+  return true; //user confirm
  }
  else
-  return false; //отказ пользователя
+  return false; //canceled by user
 }
-
 
 namespace {
    struct GenMessage
