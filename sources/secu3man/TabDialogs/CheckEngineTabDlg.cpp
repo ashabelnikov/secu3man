@@ -54,6 +54,7 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 , mp_loadGrid(NULL)
 , m_trimtab_fwexp_enabled(false)
 , m_trimtab_eeexp_enabled(false)
+, m_fuelinj_note(false) //don't show note
 {
  m_image_list.Create(IDB_CE_LIST_ICONS, 16, 2, RGB(255,255,255));
  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT);
@@ -83,6 +84,7 @@ void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CE_TRIMTAB_SAVE, m_ltft_save_button);
  DDX_Control(pDX, IDC_CE_LTFT_UNIT, m_ltft_unit_text);
  DDX_Control(pDX, IDC_CE_TRIMTAB_EXPORT, m_ltft_export_button);
+ DDX_Control(pDX, IDC_CE_LTFT_FUELINJ, m_ltft_fuelinj_text);
 }
 
 LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
@@ -464,6 +466,8 @@ void CCheckEngineTabDlg::OnTrimTableButton()
   m_ltft_save_button.ShowWindow(SW_SHOW);
   m_ltft_unit_text.ShowWindow(SW_SHOW);
   m_ltft_export_button.ShowWindow(SW_SHOW);
+  if (m_fuelinj_note)
+   m_ltft_fuelinj_text.ShowWindow(SW_SHOW);
   if (!m_ltftexp_menu.GetSafeHmenu())
   {
    VERIFY(m_ltftexp_menu.LoadMenu(IDR_LTFTEXP_POPUP_MENU));
@@ -486,6 +490,7 @@ void CCheckEngineTabDlg::OnTrimTableButton()
   m_ltft_save_button.ShowWindow(SW_HIDE);
   m_ltft_unit_text.ShowWindow(SW_HIDE);
   m_ltft_export_button.ShowWindow(SW_HIDE);
+  m_ltft_fuelinj_text.ShowWindow(SW_HIDE);
  }
 
  if (m_OnTrimtabButton)
@@ -614,4 +619,10 @@ void CCheckEngineTabDlg::SetTrimtabExpMenuStrings(const std::vector<_TSTRING> &s
   CMenu *pSub = m_ltftexp_menu.GetSubMenu(0);
   pSub->ModifyMenu(ID_LTFTEXP_POPUP_EEPROM, MF_STRING | MF_BYCOMMAND, ID_LTFTEXP_POPUP_EEPROM, strings[0].c_str()); //4 sets from flash + separator
  }
+}
+
+void CCheckEngineTabDlg::ShowFuelInjNote(bool show)
+{
+ m_fuelinj_note = show;
+ m_ltft_fuelinj_text.ShowWindow((GetTrimtabButtonState() && m_fuelinj_note) ? SW_SHOW : SW_HIDE);
 }

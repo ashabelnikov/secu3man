@@ -238,6 +238,7 @@ BEGIN
     PUSHBUTTON      "Сохранить",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Экспорт",IDC_CE_TRIMTAB_EXPORT,301,3,65,16, NOT WS_VISIBLE
     CTEXT           "Значения\nв таблице\nуказаны\n в %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
+    CTEXT           "Таблица LTFT доступна только в прошивках с впрыском топлива",IDC_CE_LTFT_FUELINJ,370,3,120,20, NOT WS_VISIBLE
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -1196,6 +1197,7 @@ BEGIN
     PUSHBUTTON      "Save",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Export",IDC_CE_TRIMTAB_EXPORT,301,3,65,16, NOT WS_VISIBLE
     CTEXT           "Values\nin table\nare\n in %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
+    CTEXT           "LTFT map is accessible only in firmware with fuel injection",IDC_CE_LTFT_FUELINJ,370,3,120,20, NOT WS_VISIBLE
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218

@@ -517,6 +517,7 @@ bool CCheckEngineTabController::PPS_ReadFWOptions(const BYTE i_descriptor, const
   const FWInfoDat* fw_info = (const FWInfoDat*)i_packet_data;
   m_fw_options = fw_info->options; //save FW options
   m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
+  m_view->ShowFuelInjNote(!CHECKBIT32(m_fw_options, COPT_FUEL_INJECT)); //show note if firmware without fuel injection
   return true; //operations were completed
  }
 

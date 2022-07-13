@@ -85,6 +85,8 @@ class CCheckEngineTabDlg : public CTabDialog
   void EnableTrimtabEEExport(bool en);
   void SetTrimtabExpMenuStrings(const std::vector<_TSTRING> &strings, bool eeprom);
 
+  void ShowFuelInjNote(bool show);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -119,6 +121,7 @@ class CCheckEngineTabDlg : public CTabDialog
 
   CStatic m_quick_help_text;
   CStatic m_ltft_unit_text;
+  CStatic m_ltft_fuelinj_text;
   CListCtrlEx m_errors_list;
   CImageList m_image_list;
   CButton m_realtime_checkbox;
@@ -172,5 +175,6 @@ class CCheckEngineTabDlg : public CTabDialog
 
   bool m_trimtab_fwexp_enabled;
   bool m_trimtab_eeexp_enabled;
+  bool m_fuelinj_note;
 };
 
