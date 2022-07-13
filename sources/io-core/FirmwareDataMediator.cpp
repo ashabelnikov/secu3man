@@ -331,10 +331,13 @@ typedef struct
 
  _uchar btbaud_use[5];    //!< 9600,19200,38400,57600,115200
 
+ _uint  mapdot_mindt;
+ _uchar uart_silent;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1984];
+ _uchar reserved[1981];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3010,6 +3013,9 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  for(int i = 0; i < 5; ++i)
   o_data.btbaud_use[i] = exd.btbaud_use[i];
+
+ o_data.mapdot_mindt = (exd.mapdot_mindt * 3.2f) / 1000.0f; //convert from 3.2 us units to ms
+ o_data.uart_silent = exd.uart_silent;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3096,6 +3102,9 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  for(int i = 0; i < 5; ++i)
   exd.btbaud_use[i] = i_data.btbaud_use[i];
+
+ exd.mapdot_mindt = MathHelpers::Round((i_data.mapdot_mindt * 1000.0f) / 3.2f); //from ms to 3.2us units
+ exd.uart_silent = i_data.uart_silent;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

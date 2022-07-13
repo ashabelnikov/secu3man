@@ -302,13 +302,24 @@ void MainFrameController::OnConnection(const bool i_online)
   //here we can only disable it. It may be enabled only after we get DBGVAR_DAT packet!
   if (mp_view->GetDVDesk())
    mp_view->GetDVDesk()->Enable(false);
+
+  if (m_pCommunicationManager->m_pControlApp->GetWorkState() && m_pCommunicationManager->GetQuietModeExit())
+   m_silent_timer.SetTimer(this, MainFrameController::OnSilentTimer, 100);
  }
  else
  {
   //Start logging if user selected always to write log  
   if (settings->GetAlwaysWriteLog() && IsBeginLoggingAllowed())
    OnAppBeginLog();
+
+  m_silent_timer.KillTimer();
  }
+}
+
+void MainFrameController::OnSilentTimer(void)
+{
+ if (m_pCommunicationManager->GetQuietModeExit())
+  m_pCommunicationManager->m_pControlApp->ChangeContext(SENSOR_DAT);
 }
 
 void MainFrameController::OnFullScreen(bool i_what)

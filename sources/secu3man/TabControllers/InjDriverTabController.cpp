@@ -107,6 +107,7 @@ void CInjDriverTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CInjDriverTabController::OnActivate(void)
 {
+ mp_comm->SetQuietModeExit(false);
  mp_comm->m_pBootLoader->EnableBlockedEEPROMOps(false); //driver's BL doesn't not support blocked data transfer for EEPROM R/W
  m_bl_op = 0;
  m_active = true;
@@ -147,6 +148,7 @@ void CInjDriverTabController::OnActivate(void)
 //from MainTabController
 void CInjDriverTabController::OnDeactivate(void)
 {
+ mp_comm->SetQuietModeExit(true);
  m_active = false;
  mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  mp_comm->m_pBootLoader->AbortOperation();

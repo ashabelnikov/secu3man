@@ -82,7 +82,10 @@ BOOL CDynFieldsDialog::OnInitDialog()
  
  //calculate and store vertical size of dialog
  CRect lr;
- m_fl.back().p_edit->GetWindowRect(&lr);
+ if (m_fl.back().p_edit)
+  m_fl.back().p_edit->GetWindowRect(&lr);
+ else if (m_fl.back().p_check)
+  m_fl.back().p_check->GetWindowRect(&lr);
  ScreenToClient(&lr);
  DPIAware dpi;
  m_contentHeight = lr.bottom + dpi.ScaleY(8);

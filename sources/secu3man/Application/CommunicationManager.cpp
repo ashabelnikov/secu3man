@@ -44,6 +44,7 @@ CCommunicationManager::CCommunicationManager()
 , m_OnSettingsChanged(NULL)
 , m_pAppAdapter(NULL)
 , m_pBldAdapter(NULL)
+, m_quiet_mode_exit(true)
 {
  m_pSettings = ISECU3Man::GetSECU3Man()->GetAppSettingsManager()->GetSettings();
 
@@ -109,7 +110,7 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
  try
  {
   //на скорость переданную в эту функцию не нужно обращать внимания (она будет установлена конкретным контроллером интрерфейса)
-  m_pComPort->Initialize(_TSTRING(m_pSettings->GetPortName()), 9600, NOPARITY, ONESTOPBIT, false, true);
+  m_pComPort->Initialize(_TSTRING(m_pSettings->GetPortName()), 115200, NOPARITY, ONESTOPBIT, false, true);
  }
  catch(CComPort::xInitialize e)
  {
@@ -131,7 +132,7 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
    {
     try
     {
-     m_pComPort->Initialize(pl[i].first, 9600, NOPARITY, ONESTOPBIT, false, true);
+     m_pComPort->Initialize(pl[i].first, 115200, NOPARITY, ONESTOPBIT, false, true);
     }
     catch(CComPort::xInitialize e)
     {  

@@ -123,6 +123,7 @@ set(SOURCES
   TabControllers/DevDiagnostTabController.cpp
   TabControllers/FirmwareFileUtils.cpp
   TabControllers/FirmwareTabController.cpp
+  TabControllers/FirmwareConstants.cpp
   TabControllers/FWIORemappingController.cpp
   TabControllers/FWRPMGridEditController.cpp
   TabControllers/InjDriverTabController.cpp

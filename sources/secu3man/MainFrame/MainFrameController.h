@@ -91,6 +91,8 @@ class MainFrameController : public IAPPEventHandler
 
   void _GrabWindowPos(bool restZoom);
 
+  void OnSilentTimer(void);
+
   CMainFrame*            mp_view;
   CCommunicationManager* m_pCommunicationManager;
   CAppSettingsManager*   m_pAppSettingsManager;
@@ -98,4 +100,5 @@ class MainFrameController : public IAPPEventHandler
   LogWriter*             m_pLogWriter;
   CObjectTimer<MainFrameController> m_welcome_timer;
   CObjectTimer<MainFrameController> m_scr5sec_timer;
+  CObjectTimer<MainFrameController> m_silent_timer;
 };

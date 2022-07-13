@@ -60,6 +60,9 @@ class CCommunicationManager
   //установить флаг i_force_reinit в true.
   bool SwitchOn(size_t i_cntr, bool i_force_reinit = false);
 
+  void SetQuietModeExit(bool allow) { m_quiet_mode_exit = allow; }
+  bool GetQuietModeExit(void) { return m_quiet_mode_exit; }
+
   CControlAppAdapter* m_pAppAdapter;
   CControlApp*        m_pControlApp;
   CBootLoader*        m_pBootLoader;
@@ -73,4 +76,6 @@ class CCommunicationManager
   const int m_send_buff_size;
 
   EventWithCode m_OnSettingsChanged;
+
+  bool m_quiet_mode_exit;
 };
