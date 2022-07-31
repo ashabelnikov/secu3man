@@ -886,6 +886,7 @@ const int INPAVNUM = 14;
   float  ltft_learn_gpd;
   int    ltft_neigh_rad;
   int    ltft_sigswt_num;
+  int    ltft_stab_str;
 
   int  pwrrelay_uni;
 

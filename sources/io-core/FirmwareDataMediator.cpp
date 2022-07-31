@@ -334,10 +334,12 @@ typedef struct
  _uint  mapdot_mindt;
  _uchar uart_silent;
 
+ _uchar  ltft_stab_str;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1981];
+ _uchar reserved[1980];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3016,6 +3018,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.mapdot_mindt = (exd.mapdot_mindt * 3.2f) / 1000.0f; //convert from 3.2 us units to ms
  o_data.uart_silent = exd.uart_silent;
+
+ o_data.ltft_stab_str = exd.ltft_stab_str;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3105,6 +3109,7 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.mapdot_mindt = MathHelpers::Round((i_data.mapdot_mindt * 1000.0f) / 3.2f); //from ms to 3.2us units
  exd.uart_silent = i_data.uart_silent;
+ exd.ltft_stab_str = i_data.ltft_stab_str;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
