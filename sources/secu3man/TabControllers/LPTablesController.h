@@ -102,6 +102,7 @@ class CLPTablesController : public MapWndScrPos
   float cylmultMap[8];
   float cyladdMap[8];
   float aemapMap[8*2]; //map+bins
+  float thrassMap[16];
 
  private:
   CFirmwareTabController* mp_fwdcntr;

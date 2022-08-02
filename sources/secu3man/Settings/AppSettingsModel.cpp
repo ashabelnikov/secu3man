@@ -145,6 +145,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optDeadMapWnd(_T("DeadMapWnd"))
 , m_optIdlrMapWnd(_T("IdlrMapWnd"))
 , m_optIdlcMapWnd(_T("IdlcMapWnd"))
+, m_optThrassMapWnd(_T("ThrassMapWnd"))
 , m_optATSCurvMapWnd(_T("ATSCurvMapWnd"))
 , m_optATSCorrMapWnd(_T("ATSCorrMapWnd"))
 , m_optAETPSMapWnd(_T("AETPSMapWnd"))
@@ -209,6 +210,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optDeadMapWnd1(_T("DeadMapWnd"))
 , m_optIdlrMapWnd1(_T("IdlrMapWnd"))
 , m_optIdlcMapWnd1(_T("IdlcMapWnd"))
+, m_optThrassMapWnd1(_T("ThrassMapWnd"))
 , m_optAETPSMapWnd1(_T("AETPSMapWnd"))
 , m_optAEMAPMapWnd1(_T("AEMAPMapWnd"))
 , m_optAERPMMapWnd1(_T("AERPMMapWnd"))
@@ -251,6 +253,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optDeadMapWndSize(_T("DeadMapWnd"))
 , m_optIdlrMapWndSize(_T("IdlrMapWnd"))
 , m_optIdlcMapWndSize(_T("IdlcMapWnd"))
+, m_optThrassMapWndSize(_T("ThrassMapWnd"))
 , m_optATSCurvMapWndSize(_T("ATSCurvMapWnd"))
 , m_optATSCorrMapWndSize(_T("ATSCorrMapWnd"))
 , m_optAETPSMapWndSize(_T("AETPSMapWnd"))
@@ -315,6 +318,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optDeadMapWndSize1(_T("DeadMapWnd"))
 , m_optIdlrMapWndSize1(_T("IdlrMapWnd"))
 , m_optIdlcMapWndSize1(_T("IdlcMapWnd"))
+, m_optThrassMapWndSize1(_T("ThrassMapWnd"))
 , m_optAETPSMapWndSize1(_T("AETPSMapWnd"))
 , m_optAEMAPMapWndSize1(_T("AEMAPMapWnd"))
 , m_optAERPMMapWndSize1(_T("AERPMMapWnd"))
@@ -420,6 +424,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepDeadMap(_T("DeadMapWnd"))
 , m_optPtMovStepIdlrMap(_T("IdlrMapWnd"))
 , m_optPtMovStepIdlcMap(_T("IdlcMapWnd"))
+, m_optPtMovStepThrassMap(_T("ThrassMapWnd"))
 , m_optPtMovStepAetpsMap(_T("AETPSMapWnd"))
 , m_optPtMovStepAemapMap(_T("AEMAPMapWnd"))
 , m_optPtMovStepAerpmMap(_T("AERPMMapWnd"))
@@ -852,6 +857,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optDeadMapWnd);
  ws.ReadWndPos(m_optIdlrMapWnd);
  ws.ReadWndPos(m_optIdlcMapWnd);
+ ws.ReadWndPos(m_optThrassMapWnd);
  ws.ReadWndPos(m_optAETPSMapWnd);
  ws.ReadWndPos(m_optAEMAPMapWnd);
  ws.ReadWndPos(m_optAERPMMapWnd);
@@ -918,6 +924,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optDeadMapWnd1);
  ws1.ReadWndPos(m_optIdlrMapWnd1);
  ws1.ReadWndPos(m_optIdlcMapWnd1);
+ ws1.ReadWndPos(m_optThrassMapWnd1);
  ws1.ReadWndPos(m_optAETPSMapWnd1);
  ws1.ReadWndPos(m_optAEMAPMapWnd1);
  ws1.ReadWndPos(m_optAERPMMapWnd1);
@@ -960,6 +967,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optDeadMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optIdlrMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optIdlcMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optThrassMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAETPSMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAEMAPMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAERPMMapWndSize, 0, 10000);
@@ -1025,6 +1033,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optDeadMapWndSize1);
  sz1.ReadWndPos(m_optIdlrMapWndSize1);
  sz1.ReadWndPos(m_optIdlcMapWndSize1);
+ sz1.ReadWndPos(m_optThrassMapWndSize1);
  sz1.ReadWndPos(m_optAETPSMapWndSize1);
  sz1.ReadWndPos(m_optAEMAPMapWndSize1);
  sz1.ReadWndPos(m_optAERPMMapWndSize1);
@@ -1213,6 +1222,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepDeadMap, _T("0.1"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepIdlrMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepIdlcMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepThrassMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAetpsMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAemapMap, _T("1.0"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAerpmMap, _T("1.0"), 0.0f, 10.0f);
@@ -1959,6 +1969,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optIdlcMapWnd, _T("Положение РДВ (на пуске)"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optThrassMapWnd, _T("Throttle assist"));
+ else
+  ws.WriteWndPos(m_optThrassMapWnd, _T("Сопроводитель дросселя"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ws.WriteWndPos(m_optAETPSMapWnd, _T("Enrichment vs throttle speed map"));
  else
   ws.WriteWndPos(m_optAETPSMapWnd, _T("Обогащение по скорости ДЗ"));
@@ -2277,6 +2292,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optIdlcMapWnd1, _T("Положение РДВ (на пуске)"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optThrassMapWnd1, _T("Throttle assist"));
+ else
+  ws1.WriteWndPos(m_optThrassMapWnd1, _T("Сопроводитель дросселя"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ws1.WriteWndPos(m_optAETPSMapWnd1, _T("Enrichment vs throttle speed map"));
  else
   ws1.WriteWndPos(m_optAETPSMapWnd1, _T("Обогащение по скорости ДЗ"));
@@ -2483,6 +2503,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optIdlcMapWndSize, _T("IAC position (cranking)"));
  else
   sz.WriteWndPos(m_optIdlcMapWndSize, _T("Положение РДВ (на пуске)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optThrassMapWndSize, _T("Throttle assist"));
+ else
+  sz.WriteWndPos(m_optThrassMapWndSize, _T("Сопроводитель дросселя"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz.WriteWndPos(m_optAETPSMapWndSize, _T("Enrichment vs throttle speed map"));
@@ -2801,6 +2826,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optIdlcMapWndSize1, _T("IAC position (cranking)"));
  else
   sz1.WriteWndPos(m_optIdlcMapWndSize1, _T("Положение РДВ (на пуске)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optThrassMapWndSize1, _T("Throttle assist"));
+ else
+  sz1.WriteWndPos(m_optThrassMapWndSize1, _T("Сопроводитель дросселя"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz1.WriteWndPos(m_optAETPSMapWndSize1, _T("Enrichment vs throttle speed map"));
@@ -3682,6 +3712,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepIdlcMap, 3, _T("Положение РДВ (на пуске)"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepThrassMap, 3, _T("Throttle assist"));
+ else
+  ms.WriteFlt(m_optPtMovStepThrassMap, 3, _T("Сопроводитель дросселя"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepAetpsMap, 3, _T("Enrichment vs throttle speed map"));
  else
   ms.WriteFlt(m_optPtMovStepAetpsMap, 3, _T("Обогащение по скорости ДЗ"));
@@ -4164,6 +4199,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optIdlrMapWnd.value.y = i_wndSettings.m_IdlrMapWnd_Y;
  m_optIdlcMapWnd.value.x = i_wndSettings.m_IdlcMapWnd_X;
  m_optIdlcMapWnd.value.y = i_wndSettings.m_IdlcMapWnd_Y;
+ m_optThrassMapWnd.value.x = i_wndSettings.m_ThrassMapWnd_X;
+ m_optThrassMapWnd.value.y = i_wndSettings.m_ThrassMapWnd_Y;
  m_optAETPSMapWnd.value.x = i_wndSettings.m_AETPSMapWnd_X;
  m_optAETPSMapWnd.value.y = i_wndSettings.m_AETPSMapWnd_Y; 
  m_optAEMAPMapWnd.value.x = i_wndSettings.m_AEMAPMapWnd_X;
@@ -4300,6 +4337,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_IdlrMapWnd_Y = m_optIdlrMapWnd.value.y;
  o_wndSettings.m_IdlcMapWnd_X = m_optIdlcMapWnd.value.x;
  o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd.value.y;
+ o_wndSettings.m_ThrassMapWnd_X = m_optThrassMapWnd.value.x;
+ o_wndSettings.m_ThrassMapWnd_Y = m_optThrassMapWnd.value.y;
  o_wndSettings.m_AETPSMapWnd_X = m_optAETPSMapWnd.value.x;
  o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd.value.y;
  o_wndSettings.m_AEMAPMapWnd_X = m_optAEMAPMapWnd.value.x;
@@ -4428,6 +4467,8 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optIdlrMapWnd1.value.y = i_wndSettings.m_IdlrMapWnd_Y;
  m_optIdlcMapWnd1.value.x = i_wndSettings.m_IdlcMapWnd_X;
  m_optIdlcMapWnd1.value.y = i_wndSettings.m_IdlcMapWnd_Y;
+ m_optThrassMapWnd1.value.x = i_wndSettings.m_ThrassMapWnd_X;
+ m_optThrassMapWnd1.value.y = i_wndSettings.m_ThrassMapWnd_Y;
  m_optAETPSMapWnd1.value.x = i_wndSettings.m_AETPSMapWnd_X;
  m_optAETPSMapWnd1.value.y = i_wndSettings.m_AETPSMapWnd_Y; 
  m_optAEMAPMapWnd1.value.x = i_wndSettings.m_AEMAPMapWnd_X;
@@ -4504,6 +4545,8 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_IdlrMapWnd_Y = m_optIdlrMapWnd1.value.y;
  o_wndSettings.m_IdlcMapWnd_X = m_optIdlcMapWnd1.value.x;
  o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd1.value.y;
+ o_wndSettings.m_ThrassMapWnd_X = m_optThrassMapWnd1.value.x;
+ o_wndSettings.m_ThrassMapWnd_Y = m_optThrassMapWnd1.value.y;
  o_wndSettings.m_AETPSMapWnd_X = m_optAETPSMapWnd1.value.x;
  o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd1.value.y;
  o_wndSettings.m_AEMAPMapWnd_X = m_optAEMAPMapWnd1.value.x;
@@ -4588,6 +4631,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optIdlrMapWndSize.value.y = i_wndSize.m_IdlrMapWnd_H;
  m_optIdlcMapWndSize.value.x = i_wndSize.m_IdlcMapWnd_W;
  m_optIdlcMapWndSize.value.y = i_wndSize.m_IdlcMapWnd_H;
+ m_optThrassMapWndSize.value.x = i_wndSize.m_ThrassMapWnd_W;
+ m_optThrassMapWndSize.value.y = i_wndSize.m_ThrassMapWnd_H;
  m_optAETPSMapWndSize.value.x = i_wndSize.m_AETPSMapWnd_W;
  m_optAETPSMapWndSize.value.y = i_wndSize.m_AETPSMapWnd_H; 
  m_optAEMAPMapWndSize.value.x = i_wndSize.m_AEMAPMapWnd_W;
@@ -4724,6 +4769,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_IdlrMapWnd_H = m_optIdlrMapWndSize.value.y;
  o_wndSize.m_IdlcMapWnd_W = m_optIdlcMapWndSize.value.x;
  o_wndSize.m_IdlcMapWnd_H = m_optIdlcMapWndSize.value.y;
+ o_wndSize.m_ThrassMapWnd_W = m_optThrassMapWndSize.value.x;
+ o_wndSize.m_ThrassMapWnd_H = m_optThrassMapWndSize.value.y;
  o_wndSize.m_AETPSMapWnd_W = m_optAETPSMapWndSize.value.x;
  o_wndSize.m_AETPSMapWnd_H = m_optAETPSMapWndSize.value.y;
  o_wndSize.m_AEMAPMapWnd_W = m_optAEMAPMapWndSize.value.x;
@@ -4852,6 +4899,8 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optIdlrMapWndSize1.value.y = i_wndSize.m_IdlrMapWnd_H;
  m_optIdlcMapWndSize1.value.x = i_wndSize.m_IdlcMapWnd_W;
  m_optIdlcMapWndSize1.value.y = i_wndSize.m_IdlcMapWnd_H;
+ m_optThrassMapWndSize1.value.x = i_wndSize.m_ThrassMapWnd_W;
+ m_optThrassMapWndSize1.value.y = i_wndSize.m_ThrassMapWnd_H;
  m_optAETPSMapWndSize1.value.x = i_wndSize.m_AETPSMapWnd_W;
  m_optAETPSMapWndSize1.value.y = i_wndSize.m_AETPSMapWnd_H; 
  m_optAEMAPMapWndSize1.value.x = i_wndSize.m_AEMAPMapWnd_W;
@@ -4928,6 +4977,8 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_IdlrMapWnd_H = m_optIdlrMapWndSize1.value.y;
  o_wndSize.m_IdlcMapWnd_W = m_optIdlcMapWndSize1.value.x;
  o_wndSize.m_IdlcMapWnd_H = m_optIdlcMapWndSize1.value.y;
+ o_wndSize.m_ThrassMapWnd_W = m_optThrassMapWndSize1.value.x;
+ o_wndSize.m_ThrassMapWnd_H = m_optThrassMapWndSize1.value.y;
  o_wndSize.m_AETPSMapWnd_W = m_optAETPSMapWndSize1.value.x;
  o_wndSize.m_AETPSMapWnd_H = m_optAETPSMapWndSize1.value.y;
  o_wndSize.m_AEMAPMapWnd_W = m_optAEMAPMapWndSize1.value.x;
@@ -5687,6 +5738,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepDeadMap.value = i_ptMovStep.m_dead_map;
  m_optPtMovStepIdlrMap.value = i_ptMovStep.m_idlr_map;
  m_optPtMovStepIdlcMap.value = i_ptMovStep.m_idlc_map;
+ m_optPtMovStepThrassMap.value = i_ptMovStep.m_thrass_map;
  m_optPtMovStepAetpsMap.value = i_ptMovStep.m_aetps_map;
  m_optPtMovStepAemapMap.value = i_ptMovStep.m_aemap_map;
  m_optPtMovStepAerpmMap.value = i_ptMovStep.m_aerpm_map;
@@ -5754,6 +5806,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_dead_map = m_optPtMovStepDeadMap.value;
  o_ptMovStep.m_idlr_map = m_optPtMovStepIdlrMap.value;
  o_ptMovStep.m_idlc_map = m_optPtMovStepIdlcMap.value;
+ o_ptMovStep.m_thrass_map = m_optPtMovStepThrassMap.value;
  o_ptMovStep.m_aetps_map = m_optPtMovStepAetpsMap.value;
  o_ptMovStep.m_aemap_map = m_optPtMovStepAemapMap.value;
  o_ptMovStep.m_aerpm_map = m_optPtMovStepAerpmMap.value;

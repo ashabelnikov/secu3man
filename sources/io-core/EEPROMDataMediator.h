@@ -85,6 +85,7 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void GetDeadMap(int i_index, float* o_values, bool i_original = false);
   void GetIdlrMap(int i_index, float* o_values, bool i_original = false);
   void GetIdlcMap(int i_index, float* o_values, bool i_original = false);
+  void GetThrassMap(int i_index, float* o_values, bool i_original = false);
   void GetAETPSMap(int i_index, float* o_values, bool i_original = false);
   void GetAERPMMap(int i_index, float* o_values, bool i_original = false);
   void GetAftstrMap(int i_index, float* o_values, bool i_original = false);
@@ -131,6 +132,7 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void SetDeadMap(int i_index, const float* i_values);
   void SetIdlrMap(int i_index, const float* i_values);
   void SetIdlcMap(int i_index, const float* i_values);
+  void SetThrassMap(int i_index, const float* i_values);
   void SetAETPSMap(int i_index, const float* i_values);
   void SetAERPMMap(int i_index, const float* i_values);
   void SetAftstrMap(int i_index, const float* i_values);

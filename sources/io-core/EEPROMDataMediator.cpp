@@ -440,6 +440,27 @@ void EEPROMDataMediator::SetIdlcMap(int i_index,const float* ip_values)
   p_maps[i_index].inj_iac_crank_pos[i] = MathHelpers::Round((ip_values[i]*IACPOS_MAPS_M_FACTOR));
 }
 
+void EEPROMDataMediator::GetThrassMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_THRASS_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_thrass[i]) / IACPOS_MAPS_M_FACTOR;
+}
+
+void EEPROMDataMediator::SetThrassMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_THRASS_SIZE; i++ )
+  p_maps[i_index].inj_thrass[i] = MathHelpers::Round((ip_values[i]*IACPOS_MAPS_M_FACTOR));
+}
+
 void EEPROMDataMediator::GetAETPSMap(int i_index, float* op_values, bool i_original /* = false */)
 {
  ASSERT(op_values);

@@ -101,6 +101,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->idl_flags, 2, p_in->closed_loop);   
     WRITEBIT8(p_params->idl_flags, 3, p_in->preg_mode);   
     WRITEBIT8(p_params->idl_flags, 4, p_in->idl_useiacclongas);
+    WRITEBIT8(p_params->idl_flags, 5, p_in->use_thrassmap);
     p_params->idling_rpm = p_in->idling_rpm;
     p_params->MINEFR     = p_in->MINEFR;
     p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * 256.0f);
@@ -531,6 +532,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->closed_loop = CHECKBIT8(p_params->idl_flags, 2);
      p_out->preg_mode = CHECKBIT8(p_params->idl_flags, 3);
      p_out->idl_useiacclongas = CHECKBIT8(p_params->idl_flags, 4);
+     p_out->use_thrassmap = CHECKBIT8(p_params->idl_flags, 5);
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
      p_out->ifac1      = ((float)p_params->ifac1) / 256.0f;

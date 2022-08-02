@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0125 //01.25
+#define CURRENT_VERSION 0x0126 //01.26
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -90,6 +90,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.23 - Added EGO correction zones map (01.01.2022)
 // 01.24 - Added two maps: inj. PW multiplier and inj. PW addition
 // 01.25 - Added MAPdot table (13.06.2022)
+// 01.26 - Added Throttle assist map (02.08.2022)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -157,8 +158,11 @@ struct S3FMapSetItem
  s3f_int32_t inj_cyladd[INJ_CYLADD_SIZE+8];                // Injection PW addition
 
  s3f_int32_t inj_ae_map[INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2]; // AE MAP (values and horizontal axis bins)
+
+ //since v01.26
+ s3f_int32_t inj_thrass[INJ_THRASS_SIZE];                  //throttle assist map
  
- s3f_int32_t reserved[1712]; //reserved bytes, = 0
+ s3f_int32_t reserved[1696]; //reserved bytes, = 0
 };
 
 
@@ -664,6 +668,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].inj_cyladd[i] = MathHelpers::Round(m_data.maps[s].inj_cyladd[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
    p_setItem[s].inj_ae_map[i] = MathHelpers::Round(m_data.maps[s].inj_ae_map[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_THRASS_SIZE; ++i)
+   p_setItem[s].inj_thrass[i] = MathHelpers::Round(m_data.maps[s].inj_thrass[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -939,6 +945,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_cyladd[i] = p_setItem[s].inj_cyladd[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
    m_data.maps[s].inj_ae_map[i] = p_setItem[s].inj_ae_map[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_THRASS_SIZE; ++i)
+   m_data.maps[s].inj_thrass[i] = p_setItem[s].inj_thrass[i] / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];

@@ -96,6 +96,7 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_CYLMULT_MAP] = FALSE;
  m_fwd_flags[FLAG_CYLADD_MAP] = FALSE;
  m_fwd_flags[FLAG_AEMAP_MAP] = FALSE;
+ m_fwd_flags[FLAG_THRASS_MAP] = FALSE;
  //separate maps
  m_fwd_flags[FLAG_DWLCNTR_MAP] = FALSE;
  m_fwd_flags[FLAG_ATTEN_MAP] = FALSE;
@@ -172,6 +173,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_CYLMULT_FLAG, m_fwd_flags[FLAG_CYLMULT_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_CYLADD_FLAG, m_fwd_flags[FLAG_CYLADD_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_AEMAPMAP_FLAG, m_fwd_flags[FLAG_AEMAP_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_THRASS_FLAG, m_fwd_flags[FLAG_THRASS_MAP]);
  //separate
  DDX_Check(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags[FLAG_DWLCNTR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags[FLAG_ATTEN_MAP]);
@@ -238,6 +240,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_CYLMULT_FLAG, m_fwd_flags_buttons[FLAG_CYLMULT_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CYLADD_FLAG, m_fwd_flags_buttons[FLAG_CYLADD_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_AEMAPMAP_FLAG, m_fwd_flags_buttons[FLAG_AEMAP_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_THRASS_FLAG, m_fwd_flags_buttons[FLAG_THRASS_MAP]);
  //separate
  DDX_Control(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags_buttons[FLAG_DWLCNTR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags_buttons[FLAG_ATTEN_MAP]);
@@ -533,6 +536,7 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CYLMULT_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CYLADD_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_AEMAP_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_THRASS_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  //separate
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_DWLCNTR_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATTEN_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
@@ -618,7 +622,7 @@ void CMapImpExpDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(690));
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(710));
 }
 
 void CMapImpExpDlg::OnSize(UINT nType, int cx, int cy)

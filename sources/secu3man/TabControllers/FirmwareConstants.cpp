@@ -407,9 +407,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Stationarity time for regime point in second"), _T("sec"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Learning of a cell will be performed only when regime point resides in its zone during this period of time. This parameter is used only if corresponding parameter in strokes is set to 0."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("¬рем€ стационарности рабочей точки в тактах"), _T("т"), .0f, 255.0f, 1.0f, 0, &d.ltft_stab_str, _T("јдаптаци€ €чейки происходит только когда рабоча€ точка находитс€ в ее зоне в течение этого числа тактов. ≈сли это значение установлено в 0, то вместо тактов используетс€ врем€."));
+  dfd.AppendItem(_T("¬рем€ стационарности рабочей точки в тактах"), _T("т"), 0, 255, 1, 0, &d.ltft_stab_str, _T("јдаптаци€ €чейки происходит только когда рабоча€ точка находитс€ в ее зоне в течение этого числа тактов. ≈сли это значение установлено в 0, то вместо тактов используетс€ врем€."));
  else
-  dfd.AppendItem(_T("Stationarity time for regime point in strokes"), _T("str"), .0f, 255.0f, 1.0f, 0, &d.ltft_stab_str, _T("Learning of a cell will be performed only when regime point resides in its zone during this number of strokes. If this parameter is set to 0, then time is used instead of strokes."));
+  dfd.AppendItem(_T("Stationarity time for regime point in strokes"), _T("str"), 0, 255, 1, 0, &d.ltft_stab_str, _T("Learning of a cell will be performed only when regime point resides in its zone during this number of strokes. If this parameter is set to 0, then time is used instead of strokes."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("√радиент таблицы адаптации"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("ќпределает скорость изменени€ соседних €чеек. „ем выше значение, тем больше мен€ютс€ соседние €чейки при адаптации текущей €чейки."));

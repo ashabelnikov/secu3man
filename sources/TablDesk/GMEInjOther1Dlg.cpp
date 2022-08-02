@@ -34,7 +34,7 @@
 const UINT CGMEInjOther1Dlg::IDD = IDD_GME_INJ_OTHER1;
 
 static const UINT StaticCtrlBegin = IDC_GME_INJ_TPSSWT_TEXT;
-static const UINT StaticCtrlEnd = IDC_GME_INJ_CYLADD_TEXT;
+static const UINT StaticCtrlEnd = IDC_GME_INJ_THRASS_TEXT;
 
 static const float inj_cyladd_slots[8] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
 
@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CGMEInjOther1Dlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_TPSZON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_CYLMULT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_CYLADD, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_THRASS, OnUpdateControls)
  ON_WM_SIZE()
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -56,10 +57,12 @@ CGMEInjOther1Dlg::CGMEInjOther1Dlg(CWnd* pParent /*=NULL*/)
 , m_tpszon_map(1, 16)
 , m_cylmult_map(1, 8)
 , m_cyladd_map(1, 8)
+, m_thrass_map(1, 16)
 , mp_TpsswtMap(NULL)
 , mp_TpszonMap(NULL)
 , mp_CylMultMap(NULL)
 , mp_CylAddMap(NULL)
+, mp_ThrassMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
@@ -68,6 +71,7 @@ CGMEInjOther1Dlg::CGMEInjOther1Dlg(CWnd* pParent /*=NULL*/)
  m_tpszon_map.SetDecimalPlaces(1, 0, 0);
  m_cylmult_map.SetDecimalPlaces(3, 0, 0);
  m_cyladd_map.SetDecimalPlaces(2, 0, 0);
+ m_thrass_map.SetDecimalPlaces(1, 0, 0);
 }
 
 CGMEInjOther1Dlg::~CGMEInjOther1Dlg()
@@ -83,6 +87,7 @@ void CGMEInjOther1Dlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_TPSZON, m_tpszon_map);
  DDX_Control(pDX, IDC_GME_INJ_CYLMULT, m_cylmult_map);
  DDX_Control(pDX, IDC_GME_INJ_CYLADD, m_cyladd_map);
+ DDX_Control(pDX, IDC_GME_INJ_THRASS, m_thrass_map);
 
  for(int i = StaticCtrlBegin; i <= StaticCtrlEnd; ++i)
   DDX_Control(pDX, i, m_ctrls[i-StaticCtrlBegin]);
@@ -135,8 +140,18 @@ BOOL CGMEInjOther1Dlg::OnInitDialog()
  m_cyladd_map.AttachLabels(inj_cyladd_slots, NULL);
  m_cyladd_map.ShowLabels(true, false);
  m_cyladd_map.SetFont(&m_font);
- m_cyladd_map.EnableAbroadMove(true, false);
+ m_cyladd_map.EnableAbroadMove(true, true);
  m_cyladd_map.SetValueIncrement(0.01f);
+
+ m_thrass_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnChangeThrass));
+ m_thrass_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnAbroadMoveThrass));
+ m_thrass_map.SetRange(.0f, 100.0f);
+ m_thrass_map.AttachMap(mp_ThrassMap);
+ m_thrass_map.AttachLabels(mp_rpmGrid, NULL);
+ m_thrass_map.ShowLabels(true, false);
+ m_thrass_map.SetFont(&m_font);
+ m_thrass_map.EnableAbroadMove(true, false);
+ m_thrass_map.SetValueIncrement(0.5f);
 
  //initialize scaler
  mp_cscl->Init(this);
@@ -144,6 +159,7 @@ BOOL CGMEInjOther1Dlg::OnInitDialog()
  mp_cscl->Add(&m_tpszon_map);
  mp_cscl->Add(&m_cylmult_map);
  mp_cscl->Add(&m_cyladd_map);
+ mp_cscl->Add(&m_thrass_map);
  mp_cscl->Add(m_ctrls, (StaticCtrlEnd - StaticCtrlBegin) + 1);
 
  m_initialized = true;
@@ -163,7 +179,7 @@ LPCTSTR CGMEInjOther1Dlg::GetDialogID(void) const
  return (LPCTSTR)IDD;
 }
 
-void CGMEInjOther1Dlg::BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd)
+void CGMEInjOther1Dlg::BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd, float* pThrass)
 {
  ASSERT(pTpsswt);
  mp_TpsswtMap = pTpsswt;
@@ -176,6 +192,9 @@ void CGMEInjOther1Dlg::BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult,
 
  ASSERT(pCylAdd);
  mp_CylAddMap = pCylAdd;
+
+ ASSERT(pThrass);
+ mp_ThrassMap = pThrass;
 }
 
 void CGMEInjOther1Dlg::BindRPMGrid(float* pGrid)
@@ -195,6 +214,7 @@ void CGMEInjOther1Dlg::UpdateView(bool axisLabels /*= false*/)
  m_tpszon_map.UpdateDisplay();
  m_cylmult_map.UpdateDisplay();
  m_cyladd_map.UpdateDisplay();
+ m_thrass_map.UpdateDisplay();
 }
 
 void CGMEInjOther1Dlg::SetArguments(bool strt_use, int rpm)
@@ -209,6 +229,12 @@ void CGMEInjOther1Dlg::SetArguments(bool strt_use, int rpm)
  {
   m_tpszon_map.ShowMarkers(!strt_use, true);
   m_tpszon_map.SetArguments(0, (float)rpm);
+ }
+
+ if (m_thrass_map.GetSafeHwnd())
+ {
+  m_thrass_map.ShowMarkers(!strt_use, true);
+  m_thrass_map.SetArguments(0, (float)rpm);
  }
 }
 
@@ -237,6 +263,12 @@ void CGMEInjOther1Dlg::OnChangeCylAdd(void)
   m_OnChange(TYPE_MAP_INJ_CYLADD);
 }
 
+void CGMEInjOther1Dlg::OnChangeThrass(void)
+{
+ if (m_OnChange)
+  m_OnChange(TYPE_MAP_INJ_THRASS);
+}
+
 void CGMEInjOther1Dlg::OnAbroadMoveTpsswt(CMapEditorCtrl::AbroadDir direction, int column)
 {
  if (direction==CMapEditorCtrl::ABROAD_DOWN)
@@ -263,6 +295,14 @@ void CGMEInjOther1Dlg::OnAbroadMoveCylAdd(CMapEditorCtrl::AbroadDir direction, i
 {
  if (direction==CMapEditorCtrl::ABROAD_UP)
   m_cylmult_map.SetSelection(0, column);
+ if (direction==CMapEditorCtrl::ABROAD_DOWN)
+  m_thrass_map.SetSelection(0, column);
+}
+
+void CGMEInjOther1Dlg::OnAbroadMoveThrass(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_UP)
+  m_cyladd_map.SetSelection(0, column);
 }
 
 void CGMEInjOther1Dlg::OnSize(UINT nType, int cx, int cy)

@@ -50,6 +50,7 @@ set(HEADERS
 set(SOURCES
   AutoTuneController.cpp
   ButtonsPanel.cpp
+  ButtonsPanelEvents.cpp
   CESettingsDlg.cpp
   DLLLinkedFunctions.cpp
   DwellCalcDlg.cpp

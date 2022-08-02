@@ -190,6 +190,7 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_DEAD, mptms.m_dead_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLR, mptms.m_idlr_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLC, mptms.m_idlc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_THRASS, mptms.m_thrass_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AETPS, mptms.m_aetps_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AEMAP, mptms.m_aemap_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AERPM, mptms.m_aerpm_map);
@@ -634,6 +635,9 @@ void CEEPROMTabController::SetViewChartsValues(void)
  m_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(false),false);
  m_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(true),true);
 
+ m_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(false),false);
+ m_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(true),true);
+
  m_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(false),false);
  m_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(true),true);
 
@@ -779,6 +783,9 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_INJ_IDLC:
    m_eedm->SetIdlcMap(funset_index, mp_view->mp_TablesPanel->GetIdlcMap(false));
+   break;
+  case TYPE_MAP_INJ_THRASS:
+   m_eedm->SetThrassMap(funset_index, mp_view->mp_TablesPanel->GetThrassMap(false));
    break;
   case TYPE_MAP_INJ_AETPS:
    m_eedm->SetAETPSMap(funset_index, mp_view->mp_TablesPanel->GetAETPSMap(false));
@@ -1103,6 +1110,7 @@ void CEEPROMTabController::OnChangeSettingsMapEd(void)
  mptms.m_dead_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_DEAD);
  mptms.m_idlr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLR);
  mptms.m_idlc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLC);
+ mptms.m_thrass_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_THRASS);
  mptms.m_aetps_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AETPS);
  mptms.m_aemap_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AEMAP);
  mptms.m_aerpm_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AERPM);

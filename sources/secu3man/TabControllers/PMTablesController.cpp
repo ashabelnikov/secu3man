@@ -91,6 +91,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
    return p_maps->inj_iac_run_pos;
   case TYPE_MAP_INJ_IDLC:
    return p_maps->inj_iac_crank_pos;
+  case TYPE_MAP_INJ_THRASS:
+   return p_maps->inj_thrass;
   case TYPE_MAP_INJ_AETPS:
    return p_maps->inj_ae_tps;
   case TYPE_MAP_INJ_AEMAP:
@@ -168,6 +170,8 @@ size_t _GetMapSize(int i_mapType)
   case TYPE_MAP_INJ_IDLR:
   case TYPE_MAP_INJ_IDLC:
    return INJ_IAC_POS_TABLE_SIZE;
+  case TYPE_MAP_INJ_THRASS:
+   return INJ_THRASS_SIZE;
   case TYPE_MAP_INJ_AETPS:
    return INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; //bins and values
   case TYPE_MAP_INJ_AEMAP:
@@ -344,6 +348,7 @@ void CPMTablesController::OnActivate(void)
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_DEAD, mptms.m_dead_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IDLR, mptms.m_idlr_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IDLC, mptms.m_idlc_map);
+ mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_THRASS, mptms.m_thrass_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AETPS, mptms.m_aetps_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AEMAP, mptms.m_aemap_map);
  mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AERPM, mptms.m_aerpm_map);
@@ -563,6 +568,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
    break;
   case ETMT_IDLC_MAP: //cranking IAC pos map
    UpdateMap(m_maps->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos, data);
+   break;
+  case ETMT_THRASS_MAP: //throttle assistant map
+   UpdateMap(m_maps->inj_thrass, m_maps_flags->inj_thrass, data);
    break;
   case ETMT_AETPS_MAP: //AE TPS map
    UpdateMap(m_maps->inj_ae_tps, m_maps_flags->inj_ae_tps, data);
@@ -961,6 +969,7 @@ void CPMTablesController::OnChangeSettings(void)
  mptms.m_dead_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_DEAD);
  mptms.m_idlr_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IDLR);
  mptms.m_idlc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IDLC);
+ mptms.m_thrass_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_THRASS);
  mptms.m_aetps_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AETPS);
  mptms.m_aemap_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AEMAP);
  mptms.m_aerpm_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AERPM);

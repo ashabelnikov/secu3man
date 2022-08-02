@@ -96,7 +96,9 @@ typedef struct
   _uchar inj_ae_map_enr[INJ_AE_MAP_LOOKUP_TABLE_SIZE];  //!< values of the AE's MAP lookup table (additive factor), value + 55, e.g. 155 = 1.00, this means AE = 100% (so PW will be increased by 100%))
   _char  inj_ae_map_bins[INJ_AE_MAP_LOOKUP_TABLE_SIZE]; //!< bins of the AE's MAP lookup table (dP/dt, (signed value in kPa) / 100ms)
 
- _uchar reserved[37];                                 // reserved bytes - for compatibility
+ _uchar inj_thrass[INJ_THRASS_SIZE];                   //!< throttle assistant map
+
+ _uchar reserved[21];                                 // reserved bytes - for compatibility
  _uint  checksum;
 }f_data_t;
 

@@ -259,6 +259,7 @@ void CLPTablesController::_OnSelectMapSet(void)
    p_fwdm->GetITMap(index, itMap, false);
    p_fwdm->GetIdlrMap(index, idlrMap, false);
    p_fwdm->GetIdlcMap(index, idlcMap, false);
+   p_fwdm->GetThrassMap(index, thrassMap, false);
    p_fwdm->GetITRPMMap(index, itrpmMap, false);
    p_fwdm->GetRigidMap(index, rigidMap, false);
    p_fwdm->GetIACCorrMap(index, iaccMap, false);
@@ -299,6 +300,7 @@ void CLPTablesController::_OnSelectMapSet(void)
    p_eedm->GetITMap(index, itMap, false);
    p_eedm->GetIdlrMap(index, idlrMap, false);
    p_eedm->GetIdlcMap(index, idlcMap, false);
+   p_eedm->GetThrassMap(index, thrassMap, false);
    p_eedm->GetITRPMMap(index, itrpmMap, false);
    p_eedm->GetRigidMap(index, rigidMap, false);
    p_eedm->GetIACCorrMap(index, iaccMap, false);
@@ -409,6 +411,12 @@ void CLPTablesController::_OnMapChanged(int i_mapType)
     p_fwdm->SetIdlcMap(index, idlcMap);
    else
     p_eedm->SetIdlcMap(index, idlcMap);
+   break;
+  case TYPE_MAP_INJ_THRASS:
+   if (source)
+    p_fwdm->SetThrassMap(index, thrassMap);
+   else
+    p_eedm->SetThrassMap(index, thrassMap);
    break;
   case TYPE_MAP_INJ_ITRPM:
    if (source)
@@ -626,7 +634,7 @@ void CLPTablesController::_OnGmeInjButton(void)
   mp_gridModeEditorInjDlg.reset(new CGridModeEditorInjDlg());
   mp_gridModeEditorInjDlg->BindMaps(veMap, afrMap, itMap, idlcMap, idlrMap, itrpmMap, rigidMap, iaccMap, iaccwMap,
                                     aftstrMap, wrmpMap, aetpsMap, aerpmMap, crnkMap, deadMap, egocrvMap, iatcltMap,
-                                    tpsswtMap, atscMap, gtscMap, gpscMap, pwm1Map, pwm2Map, iacmatMap, ve2Map, tpszonMap, cylmultMap, cyladdMap, aemapMap);
+                                    tpsswtMap, atscMap, gtscMap, gpscMap, pwm1Map, pwm2Map, iacmatMap, ve2Map, tpszonMap, cylmultMap, cyladdMap, aemapMap, thrassMap);
   mp_gridModeEditorInjDlg->BindRPMGrid(m_rpm_grid_values);
   mp_gridModeEditorInjDlg->BindCLTGrid(m_clt_grid_values);
   mp_gridModeEditorInjDlg->BindLoadGrid(m_load_grid_values, &m_ve2_map_load_slots[0]);

@@ -60,8 +60,10 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnChangeData();
+  afx_msg void OnChangeDataThrass();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControlsAdd(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -77,6 +79,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_use_closedloop;
   CButton m_preg_mode_check;
   CButton m_use_claicongas_check;
+  CButton m_use_thrassmap_check;
   CSpinButtonCtrlEx m_goal_rpm_spin;
   CEditEx m_goal_rpm_edit;
   CSpinButtonCtrlEx m_factor_pos_spin;

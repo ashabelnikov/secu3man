@@ -68,6 +68,8 @@ struct WndSettings
  int m_IdlrMapWnd_Y;
  int m_IdlcMapWnd_X;
  int m_IdlcMapWnd_Y;
+ int m_ThrassMapWnd_X;
+ int m_ThrassMapWnd_Y;
  int m_ATSCurvMapWnd_X;
  int m_ATSCurvMapWnd_Y;
  int m_ATSCorrMapWnd_X;
@@ -205,6 +207,8 @@ struct WndSize
  int m_IdlrMapWnd_H;
  int m_IdlcMapWnd_W;
  int m_IdlcMapWnd_H;
+ int m_ThrassMapWnd_W;
+ int m_ThrassMapWnd_H;
  int m_ATSCurvMapWnd_W;
  int m_ATSCurvMapWnd_H;
  int m_ATSCorrMapWnd_W;
@@ -402,6 +406,7 @@ struct MapPtMovStep
  float m_dead_map;
  float m_idlr_map;
  float m_idlc_map;
+ float m_thrass_map;
  float m_aetps_map;
  float m_aemap_map;
  float m_aerpm_map;

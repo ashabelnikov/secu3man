@@ -83,7 +83,7 @@
 #define FTLSCOR_UCOEF_SIZE     32
 #define INJ_CYLADD_SIZE        8
 #define INJ_AE_MAP_LOOKUP_TABLE_SIZE 8
-
+#define INJ_THRASS_SIZE        16
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -217,6 +217,7 @@ struct SECU3FWMapsItem
  float inj_cylmult[INJ_CYLADD_SIZE];            // Inj. PW multiplier
  float inj_cyladd[INJ_CYLADD_SIZE];             // Inj. PW addition
  float inj_ae_map[INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2]; // bins and values of the AE's MAP lookup table
+ float inj_thrass[INJ_THRASS_SIZE];             //IAC's throttle assistant map
 };
 
 //Аппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
@@ -262,7 +263,7 @@ struct FWMapsDataHolder
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
  {
-  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
+  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
   maps.assign(setNum, defval);
   std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);

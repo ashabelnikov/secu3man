@@ -401,6 +401,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   case TYPE_MAP_INJ_IDLC:
    return mp_ButtonsPanel->GetIdlcMap(i_original);
 
+  case TYPE_MAP_INJ_THRASS:
+   return mp_ButtonsPanel->GetThrassMap(i_original);
+
   case TYPE_MAP_INJ_AETPS:
    return mp_ButtonsPanel->GetAETPSMap(i_original);
 

@@ -61,6 +61,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_PMODE_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USECLIACONGAS_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_IDLREG_USETHRASSMAP_CHECK, OnChangeDataThrass)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTORS_CAPTION,OnUpdateControls)
 
@@ -103,10 +104,10 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  //closed loop related:
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USECLOSEDLOOP_CHECK,OnUpdateFuelInjectionControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_EDIT,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_SPIN,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_CAPTION,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_UNIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_EDIT,OnUpdateFuelInjectionControlsAdd)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_SPIN,OnUpdateFuelInjectionControlsAdd)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_CAPTION,OnUpdateFuelInjectionControlsAdd)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IDLTORUNADD_UNIT,OnUpdateFuelInjectionControlsAdd)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RPMONRUNADD_EDIT,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RPMONRUNADD_SPIN,OnUpdateFuelInjectionControls)
@@ -170,6 +171,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IAC_DEADBAND_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IAC_DEADBAND_UNIT,OnUpdateControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USETHRASSMAP_CHECK,OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
@@ -224,6 +226,7 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
  m_params.idl_iacmaxpos = 90.0f;
  m_params.idl_useiacclongas = true;
  m_params.iac_reg_db = 10;
+ m_params.use_thrassmap = false;
 }
 
 LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
@@ -251,6 +254,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_TURN_ON_TEMP_SPIN, m_turn_on_temp_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_USE_ONGAS, m_use_regongas);
  DDX_Control(pDX, IDC_PD_IDLREG_PMODE_CHECK, m_preg_mode_check);
+ DDX_Control(pDX, IDC_PD_IDLREG_USETHRASSMAP_CHECK, m_use_thrassmap_check);
  //closed loop related:
  DDX_Control(pDX, IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, m_use_closedloop);
  DDX_Control(pDX, IDC_PD_IDLREG_IDLTORUNADD_SPIN, m_idltorunadd_spin);
@@ -307,6 +311,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  m_iacmaxpos_edit.DDX_Value(pDX, IDC_PD_IDLREG_IACMAXPOS_EDIT, m_params.idl_iacmaxpos);
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USECLIACONGAS_CHECK, m_params.idl_useiacclongas);
  m_iac_deadband_edit.DDX_Value(pDX, IDC_PD_IDLREG_IAC_DEADBAND_EDIT, m_params.iac_reg_db);
+ DDX_Check_bool(pDX, IDC_PD_IDLREG_USETHRASSMAP_CHECK, m_params.use_thrassmap);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -320,6 +325,11 @@ void CIdlRegPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CIdlRegPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_fuel_injection);
+}
+
+void CIdlRegPageDlg::OnUpdateFuelInjectionControlsAdd(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_fuel_injection && false==m_params.use_thrassmap);
 }
 
 BOOL CIdlRegPageDlg::OnInitDialog()
@@ -520,6 +530,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_iac_deadband_edit, MLL::GetString(IDS_PD_IDLREG_IAC_DEADBAND_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_iac_deadband_spin, MLL::GetString(IDS_PD_IDLREG_IAC_DEADBAND_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_use_thrassmap_check, MLL::GetString(IDS_PD_IDLREG_USETHRASSMAP_CHECK_TT)));
       
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);
@@ -538,6 +550,13 @@ void CIdlRegPageDlg::OnChangeData()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CIdlRegPageDlg::OnChangeDataThrass()
+{
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+ UpdateDialogControls(this, TRUE);
 }
 
 //Enable/disable all controls
@@ -587,5 +606,5 @@ void CIdlRegPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(865));
+  mp_scr->SetViewSize(cx, da.ScaleY(885));
 }

@@ -386,6 +386,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optDeadMapWnd;
   OptField_t<POINT> m_optIdlrMapWnd;
   OptField_t<POINT> m_optIdlcMapWnd;
+  OptField_t<POINT> m_optThrassMapWnd;
   OptField_t<POINT> m_optATSCurvMapWnd;
   OptField_t<POINT> m_optATSCorrMapWnd;
   OptField_t<POINT> m_optAETPSMapWnd;
@@ -450,6 +451,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optDeadMapWnd1;
   OptField_t<POINT> m_optIdlrMapWnd1;
   OptField_t<POINT> m_optIdlcMapWnd1;
+  OptField_t<POINT> m_optThrassMapWnd1;
   OptField_t<POINT> m_optAETPSMapWnd1;
   OptField_t<POINT> m_optAEMAPMapWnd1;
   OptField_t<POINT> m_optAERPMMapWnd1;
@@ -492,6 +494,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optDeadMapWndSize;
   OptField_t<POINT> m_optIdlrMapWndSize;
   OptField_t<POINT> m_optIdlcMapWndSize;
+  OptField_t<POINT> m_optThrassMapWndSize;
   OptField_t<POINT> m_optATSCurvMapWndSize;
   OptField_t<POINT> m_optATSCorrMapWndSize;
   OptField_t<POINT> m_optAETPSMapWndSize;
@@ -556,6 +559,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optDeadMapWndSize1;
   OptField_t<POINT> m_optIdlrMapWndSize1;
   OptField_t<POINT> m_optIdlcMapWndSize1;
+  OptField_t<POINT> m_optThrassMapWndSize1;
   OptField_t<POINT> m_optAETPSMapWndSize1;
   OptField_t<POINT> m_optAEMAPMapWndSize1;
   OptField_t<POINT> m_optAERPMMapWndSize1;
@@ -726,6 +730,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepDeadMap;
   OptField_t<float> m_optPtMovStepIdlrMap;
   OptField_t<float> m_optPtMovStepIdlcMap;
+  OptField_t<float> m_optPtMovStepThrassMap;
   OptField_t<float> m_optPtMovStepAetpsMap;
   OptField_t<float> m_optPtMovStepAemapMap;
   OptField_t<float> m_optPtMovStepAerpmMap;

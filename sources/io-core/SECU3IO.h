@@ -223,6 +223,7 @@ namespace SECU3IO
   float idl_iacmaxpos;
   bool  idl_useiacclongas;
   int iac_reg_db;
+  bool use_thrassmap;                   //use throttle assist map
  };
 
  struct CarburPar
@@ -434,6 +435,7 @@ namespace SECU3IO
  const int ETMT_CYLMULT_MAP = 32;       //Inj. Multiplier
  const int ETMT_CYLADD_MAP = 33;        //Inj. Addition
  const int ETMT_AEMAP_MAP = 34;         //AE MAP map
+ const int ETMT_THRASS_MAP = 35;        //Throttle assistant map
 
  struct SepTabPar
  {

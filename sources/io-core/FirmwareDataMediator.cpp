@@ -1026,6 +1026,28 @@ void CFirmwareDataMediator::SetIdlcMap(int i_index,const float* ip_values)
   p_fd->tables[i_index].inj_iac_crank_pos[i] = MathHelpers::Round((ip_values[i]*IACPOS_MAPS_M_FACTOR));
 }
 
+void CFirmwareDataMediator::GetThrassMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_THRASS_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_thrass[i]) / IACPOS_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetThrassMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_THRASS_SIZE; i++ )
+  p_fd->tables[i_index].inj_thrass[i] = MathHelpers::Round((ip_values[i]*IACPOS_MAPS_M_FACTOR));
+}
+
 void CFirmwareDataMediator::GetAETPSMap(int i_index, float* op_values, bool i_original /* = false */)
 {
  ASSERT(op_values);
@@ -1523,6 +1545,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetDeadMap(i,op_fwd->maps[i].inj_dead_time);
   GetIdlrMap(i,op_fwd->maps[i].inj_iac_run_pos);
   GetIdlcMap(i,op_fwd->maps[i].inj_iac_crank_pos);
+  GetThrassMap(i,op_fwd->maps[i].inj_thrass);
   GetAETPSMap(i,op_fwd->maps[i].inj_ae_tps);
   GetAERPMMap(i,op_fwd->maps[i].inj_ae_rpm);
   GetAftstrMap(i,op_fwd->maps[i].inj_aftstr);  
@@ -1616,6 +1639,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetDeadMap(i,ip_fwd->maps[i].inj_dead_time);
   SetIdlrMap(i,ip_fwd->maps[i].inj_iac_run_pos);
   SetIdlcMap(i,ip_fwd->maps[i].inj_iac_crank_pos);
+  SetThrassMap(i,ip_fwd->maps[i].inj_thrass);
   SetAETPSMap(i,ip_fwd->maps[i].inj_ae_tps);
   SetAERPMMap(i,ip_fwd->maps[i].inj_ae_rpm);
   SetAftstrMap(i,ip_fwd->maps[i].inj_aftstr);

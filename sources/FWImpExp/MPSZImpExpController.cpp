@@ -175,6 +175,8 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_IDLR_MAP, false);
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_IDLC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_THRASS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_THRASS_MAP, false);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, false);
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, false);
  mp_view->SetFWDFlag(FLAG_AEMAP_MAP, false);
@@ -463,6 +465,8 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_IDLR_MAP, false);
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_IDLC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_THRASS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_THRASS_MAP, false);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, false);
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, false);
  mp_view->SetFWDFlag(FLAG_AEMAP_MAP, false);

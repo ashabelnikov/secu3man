@@ -159,6 +159,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_IdlcMapWnd_W = rc.right - rc.left;
    sz.m_IdlcMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_INJ_THRASS:
+   ws.m_ThrassMapWnd_X = rc.left;
+   ws.m_ThrassMapWnd_Y = rc.top;
+   sz.m_ThrassMapWnd_W = rc.right - rc.left;
+   sz.m_ThrassMapWnd_H = rc.bottom - rc.top;
+   break;
   case TYPE_MAP_INJ_AETPS:
    ws.m_AETPSMapWnd_X = rc.left;
    ws.m_AETPSMapWnd_Y = rc.top;
@@ -546,6 +552,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_INJ_IDLC:
    X = ws.m_IdlcMapWnd_X, Y = ws.m_IdlcMapWnd_Y;
    W = sz.m_IdlcMapWnd_W, H = sz.m_IdlcMapWnd_H;
+   break;
+  case TYPE_MAP_INJ_THRASS:
+   X = ws.m_ThrassMapWnd_X, Y = ws.m_ThrassMapWnd_Y;
+   W = sz.m_ThrassMapWnd_W, H = sz.m_ThrassMapWnd_H;
    break;
   case TYPE_MAP_INJ_AETPS:
    X = ws.m_AETPSMapWnd_X, Y = ws.m_AETPSMapWnd_Y;

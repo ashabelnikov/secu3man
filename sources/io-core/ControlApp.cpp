@@ -990,6 +990,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  idlRegPar.closed_loop = CHECKBIT8(idl_flags, 2);
  idlRegPar.preg_mode = CHECKBIT8(idl_flags, 3);
  idlRegPar.idl_useiacclongas = CHECKBIT8(idl_flags, 4);
+ idlRegPar.use_thrassmap = CHECKBIT8(idl_flags, 5);
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
@@ -1927,7 +1928,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
      else if (editTabPar.tab_id == ETMT_AFTSTR_MAP)
       editTabPar.table_data[i] = ((float)value) / AFTSTR_MAPS_M_FACTOR;
-     else if (editTabPar.tab_id == ETMT_IDLR_MAP || editTabPar.tab_id == ETMT_IDLC_MAP)
+     else if (editTabPar.tab_id == ETMT_IDLR_MAP || editTabPar.tab_id == ETMT_IDLC_MAP || editTabPar.tab_id == ETMT_THRASS_MAP)
       editTabPar.table_data[i] = ((float)value) / IACPOS_MAPS_M_FACTOR;
      else if (editTabPar.tab_id == ETMT_AETPS_MAP)
       editTabPar.table_data[i] = (i >= INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(float((signed char)value)/AETPSB_MAPS_M_FACTOR):(float(value)-AETPSV_MAPS_ADDER);
@@ -3573,6 +3574,7 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  WRITEBIT8(flags, 2, packet_data->closed_loop);
  WRITEBIT8(flags, 3, packet_data->preg_mode);
  WRITEBIT8(flags, 4, packet_data->idl_useiacclongas);
+ WRITEBIT8(flags, 5, packet_data->use_thrassmap);
  
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
@@ -4025,7 +4027,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * AFTSTR_MAPS_M_FACTOR);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
-   else if (packet_data->tab_id == ETMT_IDLR_MAP || packet_data->tab_id == ETMT_IDLC_MAP)
+   else if (packet_data->tab_id == ETMT_IDLR_MAP || packet_data->tab_id == ETMT_IDLC_MAP || packet_data->tab_id == ETMT_THRASS_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * IACPOS_MAPS_M_FACTOR);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
