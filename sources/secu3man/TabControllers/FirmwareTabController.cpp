@@ -46,6 +46,7 @@
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
 #include "io-core/bitmask.h"
+#include "io-core/CoptDescr.h"
 #include "MainFrame/StatusBarManager.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "Settings/ISettingsData.h"
@@ -1895,6 +1896,8 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options,
    if(CHECKBIT32(options, SECU3IO::secu3_compile_options_bits[i].first))
    {
     str_options+= SECU3IO::secu3_compile_options_bits[i].second;
+    str_options+= _T(" - ");
+    str_options+= SECU3IO::GetCoptDescription(i);
     str_options+=_T("\n");
     ++opt_count;
    }

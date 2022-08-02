@@ -916,46 +916,6 @@ const int INPAVNUM = 14;
 
  const float inj_cyladd_map_slots[8] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
 
- const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 32;
- //<bitnumber, name>
-#define _SD std::pair<int, TCHAR*>
- static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
- {
-  _SD(0,  _T("OBD_SUPPORT")),
-  _SD(1,  _T("ATMEGA1284")),
-  _SD(2,  _T("ODDFIRE_ALGO")),
-  _SD(3,  _T("ATMEGA128")),
-  _SD(4,  _T("SPLIT_ANGLE")),
-  _SD(5,  _T("TPIC8101")),
-  _SD(6,  _T("CAM_SYNC")),
-  _SD(7,  _T("DWELL_CONTROL")),
-  _SD(8,  _T("COOLINGFAN_PWM")),
-  _SD(9,  _T("REALTIME_TABLES")),
-  _SD(10, _T("ICCAVR_COMPILER")),
-  _SD(11, _T("AVRGCC_COMPILER")),
-  _SD(12, _T("DEBUG_VARIABLES")),
-  _SD(13, _T("PHASE_SENSOR")),
-  _SD(14, _T("PHASED_IGNITION")),
-  _SD(15, _T("FUEL_PUMP")),
-  _SD(16, _T("THERMISTOR_CS")),
-  _SD(17, _T("SECU3T")),
-  _SD(18, _T("DIAGNOSTICS")),
-  _SD(19, _T("HALL_OUTPUT")),
-  _SD(20, _T("REV9_BOARD")),
-  _SD(21, _T("STROBOSCOPE")),
-  _SD(22, _T("SM_CONTROL")),
-  _SD(23, _T("VREF_5V")),
-  _SD(24, _T("HALL_SYNC")),
-  _SD(25, _T("UART_BINARY")),  //obsolete, left for compatibility
-  _SD(26, _T("CKPS_2CHIGN")),
-  _SD(27, _T("ATMEGA644")),    //obsolete, left for compatibility
-  _SD(28, _T("FUEL_INJECT")),
-  _SD(29, _T("GD_CONTROL")),
-  _SD(30, _T("CARB_AFR")),
-  _SD(31, _T("CKPS_NPLUS1"))
- };
-#undef _SD
-
  const int COPT_OBD_SUPPORT = 0;
  const int COPT_ATMEGA1284 = 1;
  const int COPT_ODDFIRE_ALGO = 2;
@@ -988,4 +948,45 @@ const int INPAVNUM = 14;
  const int COPT_GD_CONTROL = 29;
  const int COPT_CARB_AFR = 30;
  const int COPT_CKPS_NPLUS1 = 31;
+
+ const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 32;
+ //<bitnumber, name>
+#define _SD std::pair<int, TCHAR*>
+ static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
+ {
+  _SD(COPT_OBD_SUPPORT,     _T("OBD_SUPPORT")),
+  _SD(COPT_ATMEGA1284,      _T("ATMEGA1284")),
+  _SD(COPT_ODDFIRE_ALGO,    _T("ODDFIRE_ALGO")),
+  _SD(COPT_ATMEGA128,       _T("ATMEGA128")),
+  _SD(COPT_SPLIT_ANGLE,     _T("SPLIT_ANGLE")),
+  _SD(COPT_TPIC8101,        _T("TPIC8101")),
+  _SD(COPT_CAM_SYNC,        _T("CAM_SYNC")),
+  _SD(COPT_DWELL_CONTROL,   _T("DWELL_CONTROL")),
+  _SD(COPT_COOLINGFAN_PWM,  _T("COOLINGFAN_PWM")),
+  _SD(COPT_REALTIME_TABLES, _T("REALTIME_TABLES")),
+  _SD(COPT_ICCAVR_COMPILER, _T("ICCAVR_COMPILER")),
+  _SD(COPT_AVRGCC_COMPILER, _T("AVRGCC_COMPILER")),
+  _SD(COPT_DEBUG_VARIABLES, _T("DEBUG_VARIABLES")),
+  _SD(COPT_PHASE_SENSOR,    _T("PHASE_SENSOR")),
+  _SD(COPT_PHASED_IGNITION, _T("PHASED_IGNITION")),
+  _SD(COPT_FUEL_PUMP,       _T("FUEL_PUMP")),
+  _SD(COPT_THERMISTOR_CS,   _T("THERMISTOR_CS")),
+  _SD(COPT_SECU3T,          _T("SECU3T")),
+  _SD(COPT_DIAGNOSTICS,     _T("DIAGNOSTICS")),
+  _SD(COPT_HALL_OUTPUT,     _T("HALL_OUTPUT")),
+  _SD(COPT_REV9_BOARD,      _T("REV9_BOARD")),
+  _SD(COPT_STROBOSCOPE,     _T("STROBOSCOPE")),
+  _SD(COPT_SM_CONTROL,      _T("SM_CONTROL")),
+  _SD(COPT_VREF_5V,         _T("VREF_5V")),
+  _SD(COPT_HALL_SYNC,       _T("HALL_SYNC")),
+  _SD(COPT_UART_BINARY,     _T("UART_BINARY")),  //obsolete, left for compatibility
+  _SD(COPT_CKPS_2CHIGN,     _T("CKPS_2CHIGN")),
+  _SD(COPT_ATMEGA644,       _T("ATMEGA644")),    //obsolete, left for compatibility
+  _SD(COPT_FUEL_INJECT,     _T("FUEL_INJECT")),
+  _SD(COPT_GD_CONTROL,      _T("GD_CONTROL")),
+  _SD(COPT_CARB_AFR,        _T("CARB_AFR")),
+  _SD(COPT_CKPS_NPLUS1,     _T("CKPS_NPLUS1"))
+ };
+#undef _SD
+
 };

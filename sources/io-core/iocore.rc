@@ -2,7 +2,92 @@
 // Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 // http://secu-3.org
 
+#include "resource.h"
 #include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+  IDS_COPT_OBD_SUPPORT      "Поддержка OBD (слать данные в CAN-сеть), используется микросхема MCP2515."
+  IDS_COPT_ATMEGA1284       "Прошивка собрана для процессора ATmega1284/ATmega1284P."
+  IDS_COPT_ODDFIRE_ALGO     "Специальный алгоритм синхронизации для поддержки odd-fire двигателей (V-twin)."
+  IDS_COPT_ATMEGA128        "Прошивка собрана для процессора ATmega128."
+  IDS_COPT_SPLIT_ANGLE      "Сплитинг УОЗ для роторно-поршневых двигателей (2 свечи на цилиндр)."
+  IDS_COPT_TPIC8101         "Для обработки сигнала с ДД используется микросхема TPIC8101, а не HIP9011."
+  IDS_COPT_CAM_SYNC         "Синхронизация от задающего диска на распределительном вале."
+  IDS_COPT_DWELL_CONTROL    "Управление накоплением энергии катушки зажигания."
+  IDS_COPT_COOLINGFAN_PWM   "Использовать ШИМ для управления скоростью вращения вентилятора."
+  IDS_COPT_REALTIME_TABLES  "Редактирование таблиц в реальном времени (онлайн)."
+  IDS_COPT_ICCAVR_COMPILER  "Прошивка собрана компилятором IAR."
+  IDS_COPT_AVRGCC_COMPILER  "Прошивка собрана компилятором GCC (avr-gcc)."
+  IDS_COPT_DEBUG_VARIABLES  "Средства отладки разрешены. Слать значения отладочных переменных пользователя."
+  IDS_COPT_PHASE_SENSOR     "Поддержка датчика фаз газораспределения (ДФ)."
+  IDS_COPT_PHASED_IGNITION  "Поддержка фазированного зажигания."
+  IDS_COPT_FUEL_PUMP        "Управление электрическим бензонасосом. Требуется назначить выход."
+  IDS_COPT_THERMISTOR_CS    "Используется датчик температуры охлаждающей жидкости резистивного типа."
+  IDS_COPT_SECU3T           "Прошивка собрана для блоков SECU-3T/SECU-3 Micro/SECU-3 Lite."
+  IDS_COPT_DIAGNOSTICS      "Включить поддержку диагности аппаратной части (вкладка 'Диагностика')."
+  IDS_COPT_HALL_OUTPUT      "Включить поддержку эмуляции сигнала как с датчика Холла (обманка)."
+  IDS_COPT_REV9_BOARD       "Прошивка собрана для блоков SECU-3T ревизии 9 и выше (REV9, REVA ... REVE)."
+  IDS_COPT_STROBOSCOPE      "Поддержка функции стробоскопа. Светодиод подключается к свободному выходу."
+  IDS_COPT_SM_CONTROL       "Управление приводом воздушной заслонки (шаговый двигатель)."
+  IDS_COPT_VREF_5V          "Для АЦП используется опорное напряжение 5В. Делители на входах не нужны."
+  IDS_COPT_HALL_SYNC        "Синхронизация от бесконтактного датчика трамблера (N импульсов = N цилиндров)."
+  IDS_COPT_UART_BINARY      "Устаревшая опция, больше не используется."
+  IDS_COPT_CKPS_2CHIGN      "Поддержка двухканальных коммутаторов (управление 2 фронтами импульса)."
+  IDS_COPT_ATMEGA644        "Устаревшая опция, больше не используется."
+  IDS_COPT_FUEL_INJECT      "Поддержка впрыска топлива от моно до распределенного фазированного."
+  IDS_COPT_GD_CONTROL       "Управление приводом дозатора газа с обратной связью по ДК."
+  IDS_COPT_CARB_AFR         "Управление составом смеси на карбюраторе электронными актюаторами (ЭПХХ и ЭМР)."
+  IDS_COPT_CKPS_NPLUS1      "Синхронизация от зубчатых диском N+1, например 2 больших зуба и 1 маленький."
+END  
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+  IDS_COPT_OBD_SUPPORT      "OBD support (send data into CAN-network), IC MCP2515 is used."
+  IDS_COPT_ATMEGA1284       "Firmware is built for ATmega1284/ATmega1284P processor."
+  IDS_COPT_ODDFIRE_ALGO     "Special algorithm for support of odd-fire engines (e.g. V-twin)."
+  IDS_COPT_ATMEGA128        "Firmware is built for ATmega128 processor."
+  IDS_COPT_SPLIT_ANGLE      "Split angle for ignition on rotary engines (2 spark plugs per cylinder)."
+  IDS_COPT_TPIC8101         "For processing signals from KS TPIC8101 IC is used instead of HIP9011."
+  IDS_COPT_CAM_SYNC         "Support of synchronization from camshaft trigger wheel."
+  IDS_COPT_DWELL_CONTROL    "Control of dwell time for ignition coils."
+  IDS_COPT_COOLINGFAN_PWM   "Use PWM to control the speed of an electric cooling fan."
+  IDS_COPT_REALTIME_TABLES  "Edit lookup tables in the real-time."
+  IDS_COPT_ICCAVR_COMPILER  "Firmware assembled with IAR compiler."
+  IDS_COPT_AVRGCC_COMPILER  "Firmware assembled with GCC compiler (avr-gcc)."
+  IDS_COPT_DEBUG_VARIABLES  "Debug tools enabled. Send values of debug user's variables."
+  IDS_COPT_PHASE_SENSOR     "Support of the camshaft position sensor."
+  IDS_COPT_PHASED_IGNITION  "Support of the full sequential ignition."
+  IDS_COPT_FUEL_PUMP        "Control of an electric cooling fan. Output must be assigned."
+  IDS_COPT_THERMISTOR_CS    "Use a resistive coolant temperature sensor (CLT)."
+  IDS_COPT_SECU3T           "Firmware is built for SECU-3T/SECU-3 Micro/SECU-3 Lite units (not SECU-3i)."
+  IDS_COPT_DIAGNOSTICS      "Include hardware diagnostics functionality ('Diagnostics' tab)."
+  IDS_COPT_HALL_OUTPUT      "Include Hall sensor emulation functionality. Output must be assigned."
+  IDS_COPT_REV9_BOARD       "Firmware is built for SECU-3T units rev.9 or late (REV9, REVA ... REVE)."
+  IDS_COPT_STROBOSCOPE      "Include stroboscope functionality. Output must be assigned for LED."
+  IDS_COPT_SM_CONTROL       "Control of an air choke or IAC valve (stepper motor or PWM)."
+  IDS_COPT_VREF_5V          "Referenece voltage of 5V is used for ADC. Volt. dividers are not necessary."
+  IDS_COPT_HALL_SYNC        "Synchronization from a contactless sensor in distributor (N pulses = N cyl)."
+  IDS_COPT_UART_BINARY      "Legacy option, not used now."
+  IDS_COPT_CKPS_2CHIGN      "Support of 2-channel igniters (driven by both edges by a single wire)."
+  IDS_COPT_ATMEGA644        "Legacy option. Not used now."
+  IDS_COPT_FUEL_INJECT      "Support of fuel injection from central to full sequential."
+  IDS_COPT_GD_CONTROL       "Control of electronic gas dispenser in closed loop with EGO sensor."
+  IDS_COPT_CARB_AFR         "Enable control of AFR on carburetor by means of valves driven by PWM."
+  IDS_COPT_CKPS_NPLUS1      "Synchronization from N+1 trigger wheels, e.g. 2 big teeth and a 1 small one."
+END  
 
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources

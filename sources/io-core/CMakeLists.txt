@@ -12,6 +12,7 @@ ADD_DEFINITIONS(-DCRC_EXPORTS)
 ADD_DEFINITIONS(-DBITMASK_EXPORTS)
 ADD_DEFINITIONS(-DPARAMSIO_EXPORTS)
 ADD_DEFINITIONS(-DENUMPORTS_EXPORTS)
+ADD_DEFINITIONS(-DCOPTDESCR_EXPORTS)
 
 set(CMAKE_MFC_FLAG 2)
 set(PROJECT io-core)
@@ -36,6 +37,7 @@ set(HEADERS
   ce_errors.h
   ControlApp.h
   ControlAppAdapter.h
+  CoptDescr.h
   CRC16.h
   EEPROMDataMediator.h
   EnumPorts.h
@@ -64,6 +66,7 @@ set(SOURCES
   ccomport.cpp
   ControlApp.cpp
   ControlAppAdapter.cpp
+  CoptDescr.cpp
   CRC16.cpp
   EEPROMDataMediator.cpp
   EnumPorts.cpp

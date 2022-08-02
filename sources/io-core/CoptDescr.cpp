@@ -19,44 +19,21 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file iocore_api.h
+/** \file CoptDescr.cpp
  * \author Alexey A. Shabelnikov
  */
 
-#pragma once
+#include "stdafx.h"
+#include "CoptDescr.h"
+#include "common/langlayer.h"
+#include "resource.h"
 
-#ifdef IOCORE_EXPORTS
- #define IOCORE_API __declspec(dllexport)
-#else
- #define IOCORE_API __declspec(dllimport)
-#endif
+namespace SECU3IO
+{
 
-#ifdef ENUMPORTS_EXPORTS
- #define ENUMPORTS_API __declspec(dllexport)
-#else
- #define ENUMPORTS_API __declspec(dllimport)
-#endif
+_TSTRING COPTDESCR_API GetCoptDescription(int bit_number)
+{
+ return MLL::GetString(IDS_COPT_OBD_SUPPORT + bit_number);
+}
 
-#ifdef CRC_EXPORTS
- #define CRC_API __declspec(dllexport)
-#else
- #define CRC_API __declspec(dllimport)
-#endif
-
-#ifdef BITMASK_EXPORTS
- #define BITMASK_API __declspec(dllexport)
-#else
- #define BITMASK_API __declspec(dllimport)
-#endif
-
-#ifdef PARAMSIO_EXPORTS
- #define PARAMSIO_API __declspec(dllexport)
-#else
- #define PARAMSIO_API __declspec(dllimport)
-#endif
-
-#ifdef COPTDESCR_EXPORTS
- #define COPTDESCR_API __declspec(dllexport)
-#else
- #define COPTDESCR_API __declspec(dllimport)
-#endif
+}
