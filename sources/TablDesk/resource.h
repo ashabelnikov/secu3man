@@ -619,3 +619,6 @@
 #define IDC_TD_VIEW_THRASS_MAP          5974
 #define IDS_THRASS_MAP                  5975
 #define IDS_TD_VIEW_THRASS_MAP_TT       5976
+#define IDC_TD_FTS_CURVE                5977
+#define IDS_FTS_CURVE_MAP               5978
+#define IDS_TD_FTS_CURVE_TT             5979

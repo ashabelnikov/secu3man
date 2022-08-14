@@ -82,6 +82,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetMAFCurveMap(bool i_original);
   float* GetFtlsCorMap(bool i_original);
   float* GetLambdaZoneMap(bool i_original);
+  float* GetFtsCurveMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -103,6 +104,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableOpsCurve(bool enable);
   void EnableManInjPwc(bool enable);
   void EnableLambdaZones(bool enable);
+  void EnableFtsCurve(bool enable);
 
   virtual void CloseCharts(void);
 
@@ -154,6 +156,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewManInjPwcMap();
   afx_msg void OnViewMAFCurveMap();
   afx_msg void OnViewFtlsCorMap();
+  afx_msg void OnViewFtsCurveMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -183,6 +186,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewOpsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewManInjPwcMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewMAFCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewFtsCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -221,6 +225,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_maninjpwc_map_btn;
   CButton   m_view_mafcurve_map_btn;
   CButton   m_view_ftlscor_map_btn;
+  CButton   m_view_fts_curve_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
@@ -358,6 +363,11 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseFtlsCorTable(void* i_param);
   static void __cdecl OnWndActivationFtlsCorTable(void* i_param, long cmd);
 
+  static void __cdecl OnChangeFtsCurveTable(void* i_param);
+  static void __cdecl OnCloseFtsCurveTable(void* i_param);
+  static void __cdecl OnChangeFtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnWndActivationFtsCurveTable(void* i_param, long cmd);
+
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
   bool m_tmp2_curve_enabled;
@@ -370,6 +380,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   bool m_ops_curve_enabled;
   bool m_maninjpwc_enabled;
   bool m_lambdazone_enabled;
+  bool m_fts_curve_enabled;
 
   float m_attenuator_table_slots[128];
   float m_cts_curve_x_axis_limits[2];

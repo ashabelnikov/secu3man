@@ -84,6 +84,7 @@
 #define INJ_CYLADD_SIZE        8
 #define INJ_AE_MAP_LOOKUP_TABLE_SIZE 8
 #define INJ_THRASS_SIZE        16
+#define FTS_LOOKUP_TABLE_SIZE  17
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -257,6 +258,7 @@ struct FWMapsDataHolder
  float maf_curve[MAF_FLOW_CURVE_SIZE+1+2];
  float ftls_corr[FTLSCOR_UCOEF_SIZE];
  float lambda_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //lambda zones vs rpm & load
+ float fts_curve[FTS_LOOKUP_TABLE_SIZE+2]; //FTS curve
 
  CESettingsData cesd;
 
@@ -298,6 +300,7 @@ struct FWMapsDataHolder
   std::fill(maf_curve, maf_curve + MAF_FLOW_CURVE_SIZE + 1 + 2, .0f);
   std::fill(ftls_corr, ftls_corr + FTLSCOR_UCOEF_SIZE, .0f);
   std::fill(lambda_zone, lambda_zone + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
+  std::fill(fts_curve, fts_curve + FTS_LOOKUP_TABLE_SIZE + 2, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

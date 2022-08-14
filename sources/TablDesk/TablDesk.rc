@@ -138,6 +138,7 @@ BEGIN
     CONTROL         "Кривая расхода ДМРВ",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,656,96,18
     CONTROL         "Коррекция ДУТ",IDC_TD_FTLSCOR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,656,96,18
     CONTROL         "Зона лямбда-коррекции",IDC_TD_LAMBDA_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,675,96,18
+    CONTROL         "Настр. крив. ДТТ",IDC_TD_FTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,675,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -777,6 +778,7 @@ BEGIN
     IDS_MAF_UNIT            "Расход воздуха (г/сек)"
     IDS_TPSZON_MAP          "ДАД/ДПДЗ по оси нагрузки"
     IDS_MAPS_TPSZON_UNIT    "Нагрузка (%)"
+    IDS_FTS_CURVE_MAP       "Настройка кривой датчика температуры топлива в рампе (ДТТ)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -811,6 +813,7 @@ BEGIN
     IDS_TD_FTLS_CURVE_TT       "Настройка зависимости уровня топлива в баке от напряжения для ДУТ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение уровня топлива (Л)."
     IDS_TD_EGTS_CURVE_TT       "Настройка зависимости температуры выхлопных газов от напряжения для ДТВГ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение температуры выхлопных газов (°С)."
     IDS_TD_OPS_CURVE_TT        "Настройка зависимости давления масла от напряжения для ДДМ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение давления масла в двигателе (кг/см2)."
+    IDS_TD_FTS_CURVE_TT        "Настройка зависимости температуры топлива в рампе от напряжения для ДТТ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение температуры топлива (°С)."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1013,6 +1016,7 @@ BEGIN
     CONTROL         "MAF flow curve",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,656,96,18
     CONTROL         "FTLS correction",IDC_TD_FTLSCOR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,656,96,18
     CONTROL         "EGO correction zone",IDC_TD_LAMBDA_ZONES_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,675,96,18
+    CONTROL         "Tune FTS curve",IDC_TD_FTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,675,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1648,6 +1652,7 @@ BEGIN
     IDS_MAF_UNIT            "Air flow (g/sec)"
     IDS_TPSZON_MAP          "MAP/TPS on load axis"
     IDS_MAPS_TPSZON_UNIT    "Load (%)"
+    IDS_FTS_CURVE_MAP      "Tune fuel sensor's curve (FTS)"
 END
 
 
@@ -1746,6 +1751,7 @@ BEGIN
     IDS_TD_LAMBDA_ZONES_MAP_TT "Sets the EGO correction zones. Use values 0 (no EGO correction) and 1 (EGO correction). Zone starts with RPM and load values where there is 1 and ends at the next grid node (upward) if there is 0."
     IDS_TD_VIEW_CYLMULT_MAP_TT "Sets the injection PW factor correction separately for each cylinder. Allows you to compensate for differences in injector flow rate, cylinder filling etc. "
     IDS_TD_VIEW_CYLADD_MAP_TT  "Sets the addition to the injection PW for each cylinder. Allows you to compensate for differences in injector lag and other deviations."
+    IDS_TD_FTS_CURVE_TT       "Setting temperature in the fuel ramp versus voltage dependance for the FTS. This table is necessary for the correct conversion of the voltage (V) at the sensor to fuel temperature (°C)."
 END
 
 STRINGTABLE DISCARDABLE 

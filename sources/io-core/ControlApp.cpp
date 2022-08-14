@@ -633,7 +633,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  sensorDat.inj_duty = ((float)inj_duty) / 2.0f;
 
- //mass iar flow (g/sec)
+ //mass air flow (g/sec)
  int maf = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &maf, true))
   return false;
@@ -658,6 +658,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &mapdot, true))
   return false;
  sensorDat.mapdot = mapdot;
+
+ //FTS (Fuel temparature sensor)
+ int fts = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &fts, true))
+  return false;
+ sensorDat.fts = ((float)fts) / FTS_MULT;
 
  return true;
 }

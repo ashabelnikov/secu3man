@@ -426,6 +426,7 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldMAF);
  m_pLogWriter->SetFieldName(i++, lff.m_fldUniOuts);
  m_pLogWriter->SetFieldName(i++, lff.m_fldMAPdot);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldFts);
  m_pLogWriter->SetFieldName(i++, lff.m_fldLogMarks);
  m_pLogWriter->SetFieldName(i++, lff.m_fldServFlag);
  m_pLogWriter->SetFieldName(i++, lff.m_fldCECodes);

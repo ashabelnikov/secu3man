@@ -306,6 +306,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MAF_CURVE, mptms.m_mafcurve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTLSCOR, mptms.m_ftlscor_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_LAMBDA_ZONE, mptms.m_lambda_zone_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTS_CURVE, mptms.m_fts_curve_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -993,6 +994,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->EnableGrtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableFtlsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableEgtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->EnableFtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
  mp_view->mp_TablesPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
@@ -1223,6 +1225,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
+
+ mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(false),false);
+ mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(true),true);
 
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
@@ -1604,6 +1609,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_MAF_CURVE:
    mp_fwdm->SetMAFCurveMap(mp_view->mp_TablesPanel->GetMAFCurveMap(false));
+   break;
+  case TYPE_MAP_FTS_CURVE:
+   mp_fwdm->SetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(false));
    break;
  }
 }
@@ -2094,6 +2102,8 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_mafcurve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MAF_CURVE);
  mptms.m_ftlscor_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTLSCOR);
  mptms.m_lambda_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_LAMBDA_ZONE);
+ mptms.m_fts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTS_CURVE);
+
  mp_settings->SetMapPtMovStep(mptms);
 }
 

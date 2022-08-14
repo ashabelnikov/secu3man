@@ -453,6 +453,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_CylAddMapWnd_W = rc.right - rc.left;
    sz.m_CylAddMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_FTS_CURVE:
+   ws.m_FtsCurveMapWnd_X = rc.left;
+   ws.m_FtsCurveMapWnd_Y = rc.top;
+   sz.m_FtsCurveMapWnd_W = rc.right - rc.left;
+   sz.m_FtsCurveMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -748,6 +754,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_INJ_CYLADD:
    X = ws.m_CylAddMapWnd_X, Y = ws.m_CylAddMapWnd_Y;
    W = sz.m_CylAddMapWnd_W, H = sz.m_CylAddMapWnd_H;
+   break;
+  case TYPE_MAP_FTS_CURVE:
+   X = ws.m_FtsCurveMapWnd_X, Y = ws.m_FtsCurveMapWnd_Y;
+   W = sz.m_FtsCurveMapWnd_W, H = sz.m_FtsCurveMapWnd_H;
    break;
 
   default:

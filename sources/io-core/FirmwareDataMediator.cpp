@@ -262,7 +262,10 @@ typedef struct
  //EGO correction zones map
  _uint lambda_zone[EGOZONE_LOAD_SIZE];
 
- _uchar reserved1[1329];
+ //TFS curve LUT's size
+ _int fts_curve[FTS_LOOKUP_TABLE_SIZE+2];
+
+ _uchar reserved1[1291];
 
  //firmware constants:
  _int evap_clt;
@@ -1601,6 +1604,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetManInjPwcMap(op_fwd->injpw_coef);
  GetMAFCurveMap(op_fwd->maf_curve);
  GetFtlsCorMap(op_fwd->ftls_corr);
+ GetFtsCurveMap(op_fwd->fts_curve);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1695,6 +1699,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetManInjPwcMap(ip_fwd->injpw_coef);
  SetMAFCurveMap(ip_fwd->maf_curve);
  SetFtlsCorMap(ip_fwd->ftls_corr);
+ SetFtsCurveMap(ip_fwd->fts_curve);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2556,6 +2561,35 @@ void CFirmwareDataMediator::SetOpsCurveMap(const float* ip_values)
   p_fd->exdata.ops_curve[i] = MathHelpers::Round(ip_values[i] * 256.0f);
  for (; i < OPS_LOOKUP_TABLE_SIZE+2; i++ )
   p_fd->exdata.ops_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
+void CFirmwareDataMediator::GetFtsCurveMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < FTS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.fts_curve[i]) / 4.0f;
+
+ for (; i < FTS_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->exdata.fts_curve[i]) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetFtsCurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < FTS_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->exdata.fts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+ for (; i < FTS_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->exdata.fts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetManInjPwcMap(float* op_values, bool i_original /* = false */)

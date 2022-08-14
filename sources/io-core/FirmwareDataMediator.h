@@ -264,6 +264,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetMAFCurveMap(float* op_values, bool i_original = false);
   void SetMAFCurveMap(const float* i_values);
 
+  void GetFtsCurveMap(float* op_values, bool i_original = false);
+  void SetFtsCurveMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {
@@ -375,10 +378,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_INPUT2     =  94,     // INPUT2    (input)
    IOP3I_REFPRS_I   =  95,     // REFPRS_I  (input)
    IOP3I_MAF        =  96,     // MAF       (input)
-// IOP3I_RESERVED44 =  97,     // Reserved  ()
+   IOP3I_FTS_I      =  97,     // FTS_I     (input)
 // IOP3I_RESERVED45 =  98,     // Reserved  ()
 // IOP3I_RESERVED46 =  99,     // Reserved  ()
-   IOP3I_COUNT      =  97,     //DON'T forget to update this value
+   IOP3I_COUNT      =  98,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -615,6 +618,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V35 = 0x35,           //v3.5  New plugs: INPUT1, INPUT2, REFPRS_I
    IOV_V36 = 0x36,           //v3.6  New slots: MAP_x; new plugs: MAF
    IOV_V37 = 0x37,           //v3.7  ADD_I3 --> FTLS_I
+   IOV_V38 = 0x38            //v3.8  FTS_I added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

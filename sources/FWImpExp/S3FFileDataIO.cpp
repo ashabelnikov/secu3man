@@ -91,6 +91,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.24 - Added two maps: inj. PW multiplier and inj. PW addition
 // 01.25 - Added MAPdot table (13.06.2022)
 // 01.26 - Added Throttle assist map (02.08.2022)
+//         Added Fuel temperature sensor's curve map (10.08.2022)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -298,7 +299,10 @@ struct S3FSepMaps
  //since v01.23
  s3f_int32_t lambda_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //lambda zones map
 
- s3f_int32_t reserved[3667];       //reserved bytes, = 0
+ //since v01.26
+ s3f_int32_t fts_curve[FTS_LOOKUP_TABLE_SIZE+2];         //FTS curve
+
+ s3f_int32_t reserved[3648];       //reserved bytes, = 0
 };
 
 
@@ -746,6 +750,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->maf_curve[i] = MathHelpers::Round(m_data.maf_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < FTLSCOR_UCOEF_SIZE; ++i)
   p_sepMaps->ftls_corr[i] = MathHelpers::Round(m_data.ftls_corr[i] * INT_MULTIPLIER);
+ for(i = 0; i < FTS_LOOKUP_TABLE_SIZE+2; ++i)
+  p_sepMaps->fts_curve[i] = MathHelpers::Round(m_data.fts_curve[i] * INT_MULTIPLIER);
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
@@ -1020,6 +1026,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.maf_curve[i] = p_sepMaps->maf_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < FTLSCOR_UCOEF_SIZE; ++i)
   m_data.ftls_corr[i] = p_sepMaps->ftls_corr[i] / INT_MULTIPLIER;
+ for(i = 0; i < FTS_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.fts_curve[i] = p_sepMaps->fts_curve[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

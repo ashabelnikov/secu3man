@@ -193,6 +193,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLambdaZoneMapWnd(_T("LambdaZoneMapWnd"))
 , m_optCylMultMapWnd(_T("InjCylMultMapWnd"))
 , m_optCylAddMapWnd(_T("InjCylAddMapWnd"))
+, m_optFtsCurveMapWnd(_T("FtsCurveMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -301,6 +302,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLambdaZoneMapWndSize(_T("LambdaZoneMapWnd"))
 , m_optCylMultMapWndSize(_T("InjCylMultMapWnd"))
 , m_optCylAddMapWndSize(_T("InjCylAddMapWnd"))
+, m_optFtsCurveMapWndSize(_T("FtsCurveMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -475,6 +477,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepMAFCurveMap(_T("MAFCurveMapWnd"))
 , m_optPtMovStepFtlsCorMap(_T("FtlsCorrMapWnd"))
 , m_optPtMovStepLambdaZoneMap(_T("LambdaZoneMapWnd"))
+, m_optPtMovStepFtsCurveMap(_T("FtsCurveMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -545,6 +548,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldMAF(_T("MAF"))
 , m_optLogFieldVentDuty(_T("VentDuty"))
 , m_optLogFieldUniOuts(_T("UnivOuts"))
+, m_optLogFieldFts(_T("FTS"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -905,6 +909,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optLambdaZoneMapWnd);
  ws.ReadWndPos(m_optCylMultMapWnd);
  ws.ReadWndPos(m_optCylAddMapWnd);
+ ws.ReadWndPos(m_optFtsCurveMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -1015,6 +1020,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optLambdaZoneMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optCylMultMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optCylAddMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optFtsCurveMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1274,6 +1280,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepMAFCurveMap, _T("0.01"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepFtlsCorMap, _T("0.01"), 0.001f, 1.0f);
  ms.ReadFlt(m_optPtMovStepLambdaZoneMap, _T("1.0"), 0.0f, 1.0f);
+ ms.ReadFlt(m_optPtMovStepFtsCurveMap, _T("1.0"), 0.0f, 100.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1345,6 +1352,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldVentDuty, _T("VentDuty"));
  lf.ReadString(m_optLogFieldUniOuts, _T("UnivOuts"));
  lf.ReadString(m_optLogFieldMAPdot, _T("MAPdot"));
+ lf.ReadString(m_optLogFieldFts, _T("FTS"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -2208,6 +2216,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optCylAddMapWnd, _T("Поцилиндровая добавка к длительности впрыска"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optFtsCurveMapWnd, _T("Fuel temperature sensor's table"));
+ else
+  ws.WriteWndPos(m_optFtsCurveMapWnd, _T("Кривая датчика температуры топлива (ДТТ)"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2743,6 +2756,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optCylAddMapWndSize, _T("Per cylinder injection PW addition"));
  else
   sz.WriteWndPos(m_optCylAddMapWndSize, _T("Поцилиндровая добавка к длительности впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optFtsCurveMapWndSize, _T("Fuel temperature sensor's table"));
+ else
+  sz.WriteWndPos(m_optFtsCurveMapWndSize, _T("Кривая датчика температуры топлива (ДТТ)"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -3962,6 +3980,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepLambdaZoneMap, 3, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepFtsCurveMap, 1, _T("Fuel temperature sensor's table"));
+ else
+  ms.WriteFlt(m_optPtMovStepFtsCurveMap, 1, _T("Кривая датчика температуры топлива (ДТТ)"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -4038,6 +4061,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldVentDuty);
  lf.WriteString(m_optLogFieldUniOuts);
  lf.WriteString(m_optLogFieldMAPdot);
+ lf.WriteString(m_optLogFieldFts);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -4295,6 +4319,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optCylMultMapWnd.value.y = i_wndSettings.m_CylMultMapWnd_Y;
  m_optCylAddMapWnd.value.x = i_wndSettings.m_CylAddMapWnd_X;
  m_optCylAddMapWnd.value.y = i_wndSettings.m_CylAddMapWnd_Y;
+ m_optFtsCurveMapWnd.value.x = i_wndSettings.m_FtsCurveMapWnd_X;
+ m_optFtsCurveMapWnd.value.y = i_wndSettings.m_FtsCurveMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -4433,6 +4459,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_CylMultMapWnd_Y = m_optCylMultMapWnd.value.y;
  o_wndSettings.m_CylAddMapWnd_X = m_optCylAddMapWnd.value.x;
  o_wndSettings.m_CylAddMapWnd_Y = m_optCylAddMapWnd.value.y;
+ o_wndSettings.m_FtsCurveMapWnd_X = m_optFtsCurveMapWnd.value.x;
+ o_wndSettings.m_FtsCurveMapWnd_Y = m_optFtsCurveMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4727,6 +4755,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optCylMultMapWndSize.value.y = i_wndSize.m_CylMultMapWnd_H;
  m_optCylAddMapWndSize.value.x = i_wndSize.m_CylAddMapWnd_W;
  m_optCylAddMapWndSize.value.y = i_wndSize.m_CylAddMapWnd_H;
+ m_optFtsCurveMapWndSize.value.x = i_wndSize.m_FtsCurveMapWnd_W;
+ m_optFtsCurveMapWndSize.value.y = i_wndSize.m_FtsCurveMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4865,6 +4895,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_CylMultMapWnd_H = m_optCylMultMapWndSize.value.y;
  o_wndSize.m_CylAddMapWnd_W = m_optCylAddMapWndSize.value.x;
  o_wndSize.m_CylAddMapWnd_H = m_optCylAddMapWndSize.value.y;
+ o_wndSize.m_FtsCurveMapWnd_W = m_optFtsCurveMapWndSize.value.x;
+ o_wndSize.m_FtsCurveMapWnd_H = m_optFtsCurveMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -5789,6 +5821,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepMAFCurveMap.value = i_ptMovStep.m_mafcurve_map;
  m_optPtMovStepFtlsCorMap.value = i_ptMovStep.m_ftlscor_map;
  m_optPtMovStepLambdaZoneMap.value = i_ptMovStep.m_lambda_zone_map;
+ m_optPtMovStepFtsCurveMap.value = i_ptMovStep.m_fts_curve_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -5858,6 +5891,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_mafcurve_map = m_optPtMovStepMAFCurveMap.value;
  o_ptMovStep.m_ftlscor_map = m_optPtMovStepFtlsCorMap.value;
  o_ptMovStep.m_lambda_zone_map = m_optPtMovStepLambdaZoneMap.value;
+ o_ptMovStep.m_fts_curve_map = m_optPtMovStepFtsCurveMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
@@ -5929,6 +5963,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldVentDuty.value = i_flds.m_fldVentDuty;
  m_optLogFieldUniOuts.value = i_flds.m_fldUniOuts;
  m_optLogFieldMAPdot.value = i_flds.m_fldMAPdot;
+ m_optLogFieldFts.value = i_flds.m_fldFts;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -6000,6 +6035,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldVentDuty = m_optLogFieldVentDuty.value;
  o_flds.m_fldUniOuts = m_optLogFieldUniOuts.value;
  o_flds.m_fldMAPdot = m_optLogFieldMAPdot.value;
+ o_flds.m_fldFts = m_optLogFieldFts.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

@@ -434,6 +434,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optLambdaZoneMapWnd;
   OptField_t<POINT> m_optCylMultMapWnd;
   OptField_t<POINT> m_optCylAddMapWnd;
+  OptField_t<POINT> m_optFtsCurveMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -542,6 +543,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optLambdaZoneMapWndSize;
   OptField_t<POINT> m_optCylMultMapWndSize;
   OptField_t<POINT> m_optCylAddMapWndSize;
+  OptField_t<POINT> m_optFtsCurveMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -781,6 +783,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepMAFCurveMap;
   OptField_t<float> m_optPtMovStepFtlsCorMap;
   OptField_t<float> m_optPtMovStepLambdaZoneMap;
+  OptField_t<float> m_optPtMovStepFtsCurveMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;
@@ -851,6 +854,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldVentDuty;
   OptField_t<_TSTRING> m_optLogFieldUniOuts;
   OptField_t<_TSTRING> m_optLogFieldMAPdot;
+  OptField_t<_TSTRING> m_optLogFieldFts;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

@@ -202,6 +202,9 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
   m_fwdm->GetFtlsCorMap(mp_fwd->ftls_corr);
 
+ if (mp_view->GetFWDFlag(FLAG_FTSCURVE_MAP))
+  m_fwdm->GetFtsCurveMap(mp_fwd->fts_curve);
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 
@@ -428,6 +431,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_MANINJPWC_MAP, false);
  mp_view->SetFWDFlag(FLAG_MAFCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -609,6 +613,9 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
   m_fwdm->SetFtlsCorMap(mp_fwd->ftls_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_FTSCURVE_MAP))
+  m_fwdm->SetFtsCurveMap(mp_fwd->fts_curve);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -842,6 +849,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_MANINJPWC_MAP, false);
  mp_view->SetFWDFlag(FLAG_MAFCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

@@ -126,6 +126,8 @@ namespace SECU3IO
   float maf;                            //mass air flow in g/sec
   float vent_duty;                      //PWM duty of cooling fan
   bool uniout[UNI_OUTPUT_NUM];          //States of universal outputs
+
+  float fts;                            //Fuel temperature sensor
  };
 
  struct DbgvarDat

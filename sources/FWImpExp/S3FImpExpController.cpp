@@ -212,6 +212,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
   memcpy(mp_fwd->ftls_corr, mp_s3f_io->GetData().ftls_corr, sizeof(float) * FTLSCOR_UCOEF_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_FTSCURVE_MAP))
+  memcpy(mp_fwd->fts_curve, mp_s3f_io->GetData().fts_curve, sizeof(float) * (FTS_LOOKUP_TABLE_SIZE+2));
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -497,6 +500,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_MANINJPWC_MAP, false);
  mp_view->SetFWDFlag(FLAG_MAFCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_LAMBDAZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -526,6 +531,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_MAFCURVE_MAP, sv0120 && sepmap); //since v01.20
  mp_view->EnableFWDFlag(FLAG_FTLSCOR_MAP, sv0122 && sepmap);  //since v01.22
  mp_view->EnableFWDFlag(FLAG_LAMBDAZONE_MAP, sv0123 && sepmap); //since v01.23
+ mp_view->EnableFWDFlag(FLAG_FTSCURVE_MAP, sv0126 && sepmap); //since v01.26
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -709,6 +715,9 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
   memcpy(mp_s3f_io->GetDataLeft().ftls_corr, mp_fwd->ftls_corr, sizeof(float) * FTLSCOR_UCOEF_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_FTSCURVE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().fts_curve, mp_fwd->fts_curve, sizeof(float) * (FTS_LOOKUP_TABLE_SIZE+2));
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -928,6 +937,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_MANINJPWC_MAP, false);
  mp_view->SetFWDFlag(FLAG_MAFCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)
