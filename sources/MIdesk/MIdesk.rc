@@ -202,6 +202,7 @@ BEGIN
     IDS_LOG_MARKS_DESK_TT   "Пользовательские маркеры в логе"
     IDS_MI_VENT_DUTY_TITLE  "Скважность Вент."
     IDS_MI_VENT_DUTY_V_UNIT "Скважн.Вент,%"
+    IDS_MI_FTS_TITLE        "Температура топлива"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -296,6 +297,7 @@ BEGIN
     IDS_MI_EGTSGRAPH_V_UNIT   "Темп.выхлопа,°C"
     IDS_MI_INJ_DUTY_V_UNIT     "Загр.форс,%"
     IDS_MI_MAFGRAPH_V_UNIT    "ДМРВ,г/сек"
+    IDS_MI_FTSGRAPH_V_UNIT    "ДТТ,°C"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -542,6 +544,7 @@ BEGIN
     IDS_LOG_MARKS_DESK_TT   "User's markers in the log"
     IDS_MI_VENT_DUTY_TITLE  "Fan's duty"
     IDS_MI_VENT_DUTY_V_UNIT "Fan's duty,%"
+    IDS_MI_FTS_TITLE        "Fuel temperature"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -636,6 +639,7 @@ BEGIN
     IDS_MI_EGTSGRAPH_V_UNIT   "Exhaust gas,°C"
     IDS_MI_INJ_DUTY_V_UNIT    "Inj.duty,%"
     IDS_MI_MAFGRAPH_V_UNIT    "MAF,g/sec"
+    IDS_MI_FTSGRAPH_V_UNIT    "FTS,°C"
 END
 
 STRINGTABLE DISCARDABLE 

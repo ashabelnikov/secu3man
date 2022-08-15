@@ -381,6 +381,7 @@ struct MetersCfg
  int m_optMetMAF[2];
  int m_optMetVentDuty[2];
  int m_optMetMAPDot[2];
+ int m_optMetFts[2];
 };
 
 typedef enum EInterLang
@@ -623,6 +624,7 @@ class ISettingsData
   virtual int GetEgtsAverage(void) const = 0;
   virtual int GetOpsAverage(void) const = 0;
   virtual int GetMAFAverage(void) const = 0;
+  virtual int GetFtsAverage(void) const = 0;
 
   virtual int GetTitleFontSize(void) const = 0;
   virtual int GetValueFontSize(void) const = 0;

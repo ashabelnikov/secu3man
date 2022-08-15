@@ -35,6 +35,7 @@ set(HEADERS
   MIDeskDlg.h
   MIDwellAngle.h
   MIEGOCorr.h
+  MIFts.h
   MIIAT.h
   MIInjPW.h
   MIInjTim.h
@@ -80,6 +81,7 @@ set (SOURCES
   MIDesk.cpp
   MIDwellAngle.cpp
   MIEGOCorr.cpp
+  MIFts.cpp
   MIIAT.cpp
   MIInjPW.cpp
   MIInjTim.cpp

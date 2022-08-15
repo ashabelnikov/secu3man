@@ -168,6 +168,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetEgtsAverage(void) const;
   virtual int GetOpsAverage(void) const;
   virtual int GetMAFAverage(void) const;
+  virtual int GetFtsAverage(void) const;
 
   virtual int GetTitleFontSize(void) const;
   virtual int GetValueFontSize(void) const;
@@ -353,6 +354,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optEgtsAverage;
   OptField_t<int>  m_optOpsAverage;
   OptField_t<int>  m_optMAFAverage;
+  OptField_t<int>  m_optFtsAverage;
 
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
@@ -650,6 +652,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetInjDuty[2][2];
   OptField_t<int> m_optMetMAF[2][2];
   OptField_t<int> m_optMetVentDuty[2][2];
+  OptField_t<int> m_optMetFts[2][2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
