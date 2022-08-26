@@ -622,3 +622,6 @@
 #define IDC_TD_FTS_CURVE                5977
 #define IDS_FTS_CURVE_MAP               5978
 #define IDS_TD_FTS_CURVE_TT             5979
+#define IDC_TD_FUELDENS_CORR_MAP        5980
+#define IDS_TD_FUELDENS_CORR_MAP_TT     5981
+#define IDS_FUELDENS_CORR_MAP           5982

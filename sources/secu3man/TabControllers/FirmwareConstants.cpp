@@ -532,6 +532,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Разрешить режим молчания для основной прошивки"), &d.uart_silent, _T("Если галочка установлена, то после включения зажигания прошивка не будет отправлять пакеты с данными до получения команды от программы. Режим молчания позволяет экономить вычислительные ресурсы процессора."));
  else
   dfd.AppendItem(_T("Allow silent mode for main firmware"), &d.uart_silent, _T("If the checkbox is checked, then after the ignition is turned on, the firmware will not send data packets until it receives a command from the program. Silent mode allows to spare computational resources of processor."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Использовать таблицу коррекции плотности топлива"), _T(""), 0, 3, 1, 0, &d.fueldens_corr_use, _T("0 - использовать только для бензина (GAS_V=0); 1 - использовать только для газа (GAS_V=1); 2 - использовать и для бензина и для газа; 3 - не использовать вообще."));
+ else
+  dfd.AppendItem(_T("Use fuel density correction map"), _T(""), 0, 3, 1, 0, &d.fueldens_corr_use, _T("0 - use for petrol only (GAS_V=0); 1 - use for gas only (GAS_V=1); 2 - use for both (petrol and gas); 3 - don't use at all."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Использовать датчик температуры топлива"), &d.fts_source, _T("Если галочка установлена, то температура топлива определяется датчиком. В противном случае температура топлива определяется по модели на основе ДТОЖ и ДТВ."));
+ else
+  dfd.AppendItem(_T("Use fuel temperature sensor"), &d.fts_source, _T("If the checkbox is checked, then temperature of fuel is defined by sensor. Otherwise, temperature is defined by model using CLT and IAT."));
    
  if (dfd.DoModal()==IDOK)
  {

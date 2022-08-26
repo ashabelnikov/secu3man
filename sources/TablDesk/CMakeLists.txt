@@ -70,6 +70,7 @@ set(SOURCES
   TablDesk.cpp
   TablDesk.rc
   TablesSetPanel.cpp
+  TablesSetPanelEvents.cpp
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

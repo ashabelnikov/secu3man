@@ -166,6 +166,8 @@ struct WndSettings
  int m_CylAddMapWnd_Y;
  int m_FtsCurveMapWnd_X;
  int m_FtsCurveMapWnd_Y;
+ int m_FuelDensCorrMapWnd_X;
+ int m_FuelDensCorrMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -307,6 +309,8 @@ struct WndSize
  int m_CylAddMapWnd_H;
  int m_FtsCurveMapWnd_W;
  int m_FtsCurveMapWnd_H;
+ int m_FuelDensCorrMapWnd_W;
+ int m_FuelDensCorrMapWnd_H;
 };
 
 //Holds windows's state data
@@ -464,6 +468,7 @@ struct MapPtMovStep
  float m_ftlscor_map;
  float m_lambda_zone_map;
  float m_fts_curve_map;
+ float m_fueldens_corr_map;
 };
 
 //Log file's fileds

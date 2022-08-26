@@ -195,6 +195,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optCylMultMapWnd(_T("InjCylMultMapWnd"))
 , m_optCylAddMapWnd(_T("InjCylAddMapWnd"))
 , m_optFtsCurveMapWnd(_T("FtsCurveMapWnd"))
+, m_optFuelDensCorrMapWnd(_T("FuelDensCorrMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -304,6 +305,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optCylMultMapWndSize(_T("InjCylMultMapWnd"))
 , m_optCylAddMapWndSize(_T("InjCylAddMapWnd"))
 , m_optFtsCurveMapWndSize(_T("FtsCurveMapWnd"))
+, m_optFuelDensCorrMapWndSize(_T("FuelDensCorrMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -479,6 +481,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepFtlsCorMap(_T("FtlsCorrMapWnd"))
 , m_optPtMovStepLambdaZoneMap(_T("LambdaZoneMapWnd"))
 , m_optPtMovStepFtsCurveMap(_T("FtsCurveMapWnd"))
+, m_optPtMovStepFuelDensCorrMap(_T("FuelDensCorrMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -914,6 +917,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optCylMultMapWnd);
  ws.ReadWndPos(m_optCylAddMapWnd);
  ws.ReadWndPos(m_optFtsCurveMapWnd);
+ ws.ReadWndPos(m_optFuelDensCorrMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -1025,6 +1029,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optCylMultMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optCylAddMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optFtsCurveMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optFuelDensCorrMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1286,6 +1291,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepFtlsCorMap, _T("0.01"), 0.001f, 1.0f);
  ms.ReadFlt(m_optPtMovStepLambdaZoneMap, _T("1.0"), 0.0f, 1.0f);
  ms.ReadFlt(m_optPtMovStepFtsCurveMap, _T("1.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepFuelDensCorrMap, _T("0.001"), 0.0001f, 0.1f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -2232,6 +2238,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optFtsCurveMapWnd, _T("Кривая датчика температуры топлива (ДТТ)"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optFuelDensCorrMapWnd, _T("Fuel density correction map"));
+ else
+  ws.WriteWndPos(m_optFuelDensCorrMapWnd, _T("Таблица коррекции плотности топлива"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2772,6 +2783,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optFtsCurveMapWndSize, _T("Fuel temperature sensor's table"));
  else
   sz.WriteWndPos(m_optFtsCurveMapWndSize, _T("Кривая датчика температуры топлива (ДТТ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optFuelDensCorrMapWndSize, _T("Fuel density correction map"));
+ else
+  sz.WriteWndPos(m_optFuelDensCorrMapWndSize, _T("Таблица коррекции плотности топлива"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -4001,6 +4017,11 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepFtsCurveMap, 1, _T("Кривая датчика температуры топлива (ДТТ)"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepFuelDensCorrMap, 1, _T("Fuel density correction map"));
+ else
+  ms.WriteFlt(m_optPtMovStepFuelDensCorrMap, 1, _T("Таблица коррекции плотности топлива"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -4337,6 +4358,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optCylAddMapWnd.value.y = i_wndSettings.m_CylAddMapWnd_Y;
  m_optFtsCurveMapWnd.value.x = i_wndSettings.m_FtsCurveMapWnd_X;
  m_optFtsCurveMapWnd.value.y = i_wndSettings.m_FtsCurveMapWnd_Y; 
+ m_optFuelDensCorrMapWnd.value.x = i_wndSettings.m_FuelDensCorrMapWnd_X;
+ m_optFuelDensCorrMapWnd.value.y = i_wndSettings.m_FuelDensCorrMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -4477,6 +4500,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_CylAddMapWnd_Y = m_optCylAddMapWnd.value.y;
  o_wndSettings.m_FtsCurveMapWnd_X = m_optFtsCurveMapWnd.value.x;
  o_wndSettings.m_FtsCurveMapWnd_Y = m_optFtsCurveMapWnd.value.y;
+ o_wndSettings.m_FuelDensCorrMapWnd_X = m_optFuelDensCorrMapWnd.value.x;
+ o_wndSettings.m_FuelDensCorrMapWnd_Y = m_optFuelDensCorrMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4773,6 +4798,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optCylAddMapWndSize.value.y = i_wndSize.m_CylAddMapWnd_H;
  m_optFtsCurveMapWndSize.value.x = i_wndSize.m_FtsCurveMapWnd_W;
  m_optFtsCurveMapWndSize.value.y = i_wndSize.m_FtsCurveMapWnd_H; 
+ m_optFuelDensCorrMapWndSize.value.x = i_wndSize.m_FuelDensCorrMapWnd_W;
+ m_optFuelDensCorrMapWndSize.value.y = i_wndSize.m_FuelDensCorrMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4913,6 +4940,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_CylAddMapWnd_H = m_optCylAddMapWndSize.value.y;
  o_wndSize.m_FtsCurveMapWnd_W = m_optFtsCurveMapWndSize.value.x;
  o_wndSize.m_FtsCurveMapWnd_H = m_optFtsCurveMapWndSize.value.y;
+ o_wndSize.m_FuelDensCorrMapWnd_W = m_optFuelDensCorrMapWndSize.value.x;
+ o_wndSize.m_FuelDensCorrMapWnd_H = m_optFuelDensCorrMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -5840,6 +5869,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepFtlsCorMap.value = i_ptMovStep.m_ftlscor_map;
  m_optPtMovStepLambdaZoneMap.value = i_ptMovStep.m_lambda_zone_map;
  m_optPtMovStepFtsCurveMap.value = i_ptMovStep.m_fts_curve_map;
+ m_optPtMovStepFuelDensCorrMap.value = i_ptMovStep.m_fueldens_corr_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -5910,6 +5940,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_ftlscor_map = m_optPtMovStepFtlsCorMap.value;
  o_ptMovStep.m_lambda_zone_map = m_optPtMovStepLambdaZoneMap.value;
  o_ptMovStep.m_fts_curve_map = m_optPtMovStepFtsCurveMap.value;
+ o_ptMovStep.m_fueldens_corr_map = m_optPtMovStepFuelDensCorrMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

@@ -267,6 +267,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetFtsCurveMap(float* op_values, bool i_original = false);
   void SetFtsCurveMap(const float* i_values);
 
+  void GetFuelDensCorrMap(float* op_values, bool i_original = false);
+  void SetFuelDensCorrMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

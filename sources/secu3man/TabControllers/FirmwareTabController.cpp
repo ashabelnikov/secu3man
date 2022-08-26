@@ -307,6 +307,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTLSCOR, mptms.m_ftlscor_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_LAMBDA_ZONE, mptms.m_lambda_zone_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTS_CURVE, mptms.m_fts_curve_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FUELDENS_CORR, mptms.m_fueldens_corr_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -1229,6 +1230,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(false),false);
  mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(true),true);
 
+ mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(false),false);
+ mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(true),true);
+
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
  mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
@@ -1612,6 +1616,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_FTS_CURVE:
    mp_fwdm->SetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(false));
+   break;
+  case TYPE_MAP_FUELDENS_CORR:
+   mp_fwdm->SetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(false));
    break;
  }
 }
@@ -2103,6 +2110,7 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_ftlscor_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTLSCOR);
  mptms.m_lambda_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_LAMBDA_ZONE);
  mptms.m_fts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTS_CURVE);
+ mptms.m_fueldens_corr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FUELDENS_CORR);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

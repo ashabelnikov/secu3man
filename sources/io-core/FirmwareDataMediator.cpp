@@ -265,7 +265,10 @@ typedef struct
  //TFS curve LUT's size
  _int fts_curve[FTS_LOOKUP_TABLE_SIZE+2];
 
- _uchar reserved1[1291];
+ //fuel density correction
+ _uint fueldens_corr[FUELDENS_CORR_SIZE];
+
+ _uchar reserved1[1259];
 
  //firmware constants:
  _int evap_clt;
@@ -339,10 +342,14 @@ typedef struct
 
  _uchar  ltft_stab_str;
 
+ _uchar fueldens_corr_use;
+
+ _uchar fts_source;
+
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1980];
+ _uchar reserved[1978];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1605,6 +1612,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetMAFCurveMap(op_fwd->maf_curve);
  GetFtlsCorMap(op_fwd->ftls_corr);
  GetFtsCurveMap(op_fwd->fts_curve);
+ GetFuelDensCorrMap(op_fwd->fueldens_corr);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1700,6 +1708,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetMAFCurveMap(ip_fwd->maf_curve);
  SetFtlsCorMap(ip_fwd->ftls_corr);
  SetFtsCurveMap(ip_fwd->fts_curve);
+ SetFuelDensCorrMap(ip_fwd->fueldens_corr);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2666,6 +2675,24 @@ void CFirmwareDataMediator::SetFtlsCorMap(const float* ip_values)
   p_fd->exdata.ftlscor_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
 }
 
+void CFirmwareDataMediator::GetFuelDensCorrMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < FUELDENS_CORR_SIZE; i++)
+  op_values[i] = (p_fd->exdata.fueldens_corr[i] / 16384.0f);
+}
+
+void CFirmwareDataMediator::SetFuelDensCorrMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < FUELDENS_CORR_SIZE; i++)
+  p_fd->exdata.fueldens_corr[i] = MathHelpers::Round(ip_values[i] * 16384.0f);
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -3078,6 +3105,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.uart_silent = exd.uart_silent;
 
  o_data.ltft_stab_str = exd.ltft_stab_str;
+ o_data.fueldens_corr_use = exd.fueldens_corr_use;
+ o_data.fts_source = exd.fts_source;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3168,6 +3197,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.mapdot_mindt = MathHelpers::Round((i_data.mapdot_mindt * 1000.0f) / 3.2f); //from ms to 3.2us units
  exd.uart_silent = i_data.uart_silent;
  exd.ltft_stab_str = i_data.ltft_stab_str;
+ exd.fueldens_corr_use = i_data.fueldens_corr_use;
+ exd.fts_source = i_data.fts_source;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

@@ -459,6 +459,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_FtsCurveMapWnd_W = rc.right - rc.left;
    sz.m_FtsCurveMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_FUELDENS_CORR:
+   ws.m_FuelDensCorrMapWnd_X = rc.left;
+   ws.m_FuelDensCorrMapWnd_Y = rc.top;
+   sz.m_FuelDensCorrMapWnd_W = rc.right - rc.left;
+   sz.m_FuelDensCorrMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -758,6 +764,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_FTS_CURVE:
    X = ws.m_FtsCurveMapWnd_X, Y = ws.m_FtsCurveMapWnd_Y;
    W = sz.m_FtsCurveMapWnd_W, H = sz.m_FtsCurveMapWnd_H;
+   break;
+  case TYPE_MAP_FUELDENS_CORR:
+   X = ws.m_FuelDensCorrMapWnd_X, Y = ws.m_FuelDensCorrMapWnd_Y;
+   W = sz.m_FuelDensCorrMapWnd_W, H = sz.m_FuelDensCorrMapWnd_H;
    break;
 
   default:

@@ -83,6 +83,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetFtlsCorMap(bool i_original);
   float* GetLambdaZoneMap(bool i_original);
   float* GetFtsCurveMap(bool i_original);
+  float* GetFuelDensCorrMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -157,6 +158,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewMAFCurveMap();
   afx_msg void OnViewFtlsCorMap();
   afx_msg void OnViewFtsCurveMap();
+  afx_msg void OnViewFuelDensCorrMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -187,6 +189,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewManInjPwcMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewMAFCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewFtsCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewFuelDensCorrMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -226,6 +229,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_mafcurve_map_btn;
   CButton   m_view_ftlscor_map_btn;
   CButton   m_view_fts_curve_map_btn;
+  CButton   m_view_fueldens_corr_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
@@ -367,6 +371,10 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseFtsCurveTable(void* i_param);
   static void __cdecl OnChangeFtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationFtsCurveTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeFuelDensCorrTable(void* i_param);
+  static void __cdecl OnCloseFuelDensCorrTable(void* i_param);
+  static void __cdecl OnWndActivationFuelDensCorrTable(void* i_param, long cmd);
 
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
