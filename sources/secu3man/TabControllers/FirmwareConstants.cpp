@@ -184,6 +184,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("CLT threshold for turn on of the IAC closed loop"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.iacreg_turn_on_temp, _T("IAC closed loop will turn on only if the engine temperature is above this threshold or RPM is above target value. This parameter is useful only if special algorithm for cold engine is used."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Вычислять пороги переход. режимов только по целевым оборотам ХХ"), &d.tmrpmtc_mode, _T("Если галочка установлена, то пороги оборотов переходных режимов будут вычисляться только на основе целевых оборотов."));
+ else
+  dfd.AppendItem(_T("Calculate transient mode thretholds using only idl. target RPM"), &d.tmrpmtc_mode, _T("If the checkbox is checked, then transient's mode RPM thresholds will be calculated using idling target RPM only."));
+
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));
