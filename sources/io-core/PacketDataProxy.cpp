@@ -36,13 +36,6 @@ PacketDataProxy::PacketDataProxy()
  //empty
 }
 
-bool PacketDataProxy::Hex4ToBin(const BYTE*& ip_hex_number, BYTE* o_byte)
-{
- *o_byte = *ip_hex_number;
- ip_hex_number+=1;  //takes 1 byte
- return true;
-}
-
 bool PacketDataProxy::Hex8ToBin(const BYTE*& ip_hex_number, BYTE* o_byte)
 {
  *o_byte = *ip_hex_number;
@@ -115,12 +108,6 @@ bool PacketDataProxy::HexStrToBin(const BYTE*& ip_hex_str, int size, char *o_str
  strncpy(o_str, (const char*)ip_hex_str, size);
  o_str[size] = 0;
  ip_hex_str+=size;
- return true;
-}
-
-bool PacketDataProxy::Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number)
-{
- o_hex_number.push_back(i_byte);
  return true;
 }
 

@@ -830,7 +830,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
  anglesPar.inc_speed = ((float)inc_speed) / m_angle_multiplier;
 
  //Признак нулевого УОЗ
- if (false == mp_pdp->Hex4ToBin(raw_packet, &anglesPar.zero_adv_ang))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &anglesPar.zero_adv_ang))
   return false;
 
  //Ignition timing flags
@@ -914,7 +914,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  funSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete * 128.0f);
 
  //Engine load measurement source
- if (false == mp_pdp->Hex4ToBin(raw_packet,&funSetPar.load_src_cfg))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&funSetPar.load_src_cfg))
   return false;
 
  //Uni.outputs selected for map selection
@@ -1133,7 +1133,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //Признак инверсии концевика карбюратора
- if (false == mp_pdp->Hex4ToBin(raw_packet, &carburPar.carb_invers))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &carburPar.carb_invers))
   return false;
 
  //Порог разрежения ЭМР
@@ -1586,7 +1586,7 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //Разрешен/запрещен
- if (false == mp_pdp->Hex4ToBin(raw_packet,&knockPar.knock_use_knock_channel))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&knockPar.knock_use_knock_channel))
   return false;
 
  //Частота ПФ
@@ -1745,7 +1745,7 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  miscPar.period_ms = period_t_ms * 10;
 
  //Отсечка разрешена/запрещена
- if (false == mp_pdp->Hex4ToBin(raw_packet, &miscPar.ign_cutoff))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &miscPar.ign_cutoff))
   return false;
 
  //Обороты отсечки
@@ -1822,6 +1822,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &editTabPar.tab_id))
   return false;
 
+ //TODO: replace by std::map
  if (editTabPar.tab_id != ETMT_STRT_MAP && editTabPar.tab_id != ETMT_IDLE_MAP && editTabPar.tab_id != ETMT_WORK_MAP &&
      editTabPar.tab_id != ETMT_TEMP_MAP && editTabPar.tab_id != ETMT_NAME_STR && editTabPar.tab_id != ETMT_VE_MAP &&
      editTabPar.tab_id != ETMT_AFR_MAP && editTabPar.tab_id != ETMT_CRNK_MAP && editTabPar.tab_id != ETMT_WRMP_MAP &&
@@ -1833,7 +1834,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.tab_id != ETMT_GPSC_MAP && editTabPar.tab_id != ETMT_ATSC_MAP && editTabPar.tab_id != ETMT_PWM1_MAP &&
      editTabPar.tab_id != ETMT_PWM2_MAP && editTabPar.tab_id != ETMT_TEMPI_MAP && editTabPar.tab_id != ETMT_IACMAT_MAP && 
      editTabPar.tab_id != ETMT_VE2_MAP && editTabPar.tab_id != ETMT_TPSZON_MAP && editTabPar.tab_id != ETMT_CYLMULT_MAP && 
-     editTabPar.tab_id != ETMT_CYLADD_MAP && editTabPar.tab_id != ETMT_AEMAP_MAP)
+     editTabPar.tab_id != ETMT_CYLADD_MAP && editTabPar.tab_id != ETMT_AEMAP_MAP && editTabPar.tab_id != ETMT_THRASS_MAP)
   return false;
 
  //check for 16-byte packets
@@ -2289,7 +2290,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //choke testing mode command/state (it is fake parameter)
- if (false == mp_pdp->Hex4ToBin(raw_packet, &chokePar.testing))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &chokePar.testing))
   return false;
 
  //manual position setting delta (it is fake parameter and must be zero in this ingoing packet)
@@ -2350,7 +2351,7 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //choke testing mode command/state (it is fake parameter)
- if (false == mp_pdp->Hex4ToBin(raw_packet, &gasdosePar.testing))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &gasdosePar.testing))
   return false;
 
  //manual position setting delta (it is fake parameter and must be zero in this ingoing packet)
@@ -2405,12 +2406,12 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 
  //Number of characters in name (must be zero)
  BYTE numName = 0;
- if (false == mp_pdp->Hex4ToBin(raw_packet, &numName))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &numName))
   return false;
 
  //Number of characters in password (must be zero)
  BYTE numPass = 0;
- if (false == mp_pdp->Hex4ToBin(raw_packet, &numPass))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &numPass))
   return false;
 
  if (numName || numPass)
@@ -2499,7 +2500,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 
  //logic function for 1st and 2nd outputs
  BYTE lf12 = 0;
- if (false == mp_pdp->Hex4ToBin(raw_packet, &lf12))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &lf12))
   return false;
  uniOutPar.logicFunc12 = lf12;
 
@@ -3550,7 +3551,7 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
 {
  mp_pdp->Bin16ToHex(packet_data->ephh_lot,m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->ephh_hit,m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->carb_invers,m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->carb_invers,m_outgoing_packet);
  int epm_on_threshold = MathHelpers::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(epm_on_threshold,m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->ephh_lot_g,m_outgoing_packet);
@@ -3703,7 +3704,7 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
  mp_pdp->Bin16ToHex(dec_speed,m_outgoing_packet);
  int inc_speed = MathHelpers::Round(packet_data->inc_speed * m_angle_multiplier);
  mp_pdp->Bin16ToHex(inc_speed,m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
  unsigned char flags = 0;
  WRITEBIT8(flags, 0, packet_data->igntim_wrkmap);
  WRITEBIT8(flags, 1, packet_data->manigntim_idl);
@@ -3734,7 +3735,7 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin16ToHex(tps_curve_offset, m_outgoing_packet);
  int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->load_src_cfg, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->load_src_cfg, m_outgoing_packet);
  int uni_gas = (packet_data->uni_gas==UNI_OUTPUT_NUM) ? 0xF : packet_data->uni_gas;
  int uni_benzin = (packet_data->uni_benzin==UNI_OUTPUT_NUM) ? 0xF : packet_data->uni_benzin;
  BYTE mapsel_uni = MAKEBYTE(uni_gas, uni_benzin);
@@ -3858,7 +3859,7 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
 {
- mp_pdp->Bin4ToHex(packet_data->knock_use_knock_channel,m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->knock_use_knock_channel,m_outgoing_packet);
  unsigned char knock_bpf_frequency = (unsigned char)packet_data->knock_bpf_frequency;
  mp_pdp->Bin8ToHex(knock_bpf_frequency,m_outgoing_packet);
  int knock_k_wnd_begin_angle = MathHelpers::Round(packet_data->knock_k_wnd_begin_angle * m_angle_multiplier);
@@ -3918,7 +3919,7 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  mp_pdp->Bin16ToHex(divisor, m_outgoing_packet);
  unsigned char perid_ms = packet_data->period_ms / 10;
  mp_pdp->Bin8ToHex(perid_ms, m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->ign_cutoff, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->ign_cutoff, m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
  int hop_start_ang = MathHelpers::Round(packet_data->hop_start_ang * ANGLE_MULTIPLIER);
  mp_pdp->Bin16ToHex(hop_start_ang, m_outgoing_packet);
@@ -4184,7 +4185,7 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
 void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
 {
  mp_pdp->Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
+ mp_pdp->Bin8ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
  mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
  int choke_rpm_if = MathHelpers::Round(packet_data->choke_rpm_if * 1024.0f);
  mp_pdp->Bin16ToHex(choke_rpm_if, m_outgoing_packet);
@@ -4212,7 +4213,7 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
 void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
 {
  mp_pdp->Bin16ToHex(packet_data->gd_steps, m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
+ mp_pdp->Bin8ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
  mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
  BYTE fc_closing = MathHelpers::Round(packet_data->fc_closing * 2.0f);
  mp_pdp->Bin8ToHex(fc_closing, m_outgoing_packet);
@@ -4237,8 +4238,8 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
  CharToOem(packet_data->bt_pass, raw_pass);
  size_t numPass = strlen(raw_pass);
 
- mp_pdp->Bin4ToHex(numName, m_outgoing_packet); 
- mp_pdp->Bin4ToHex(numPass, m_outgoing_packet); 
+ mp_pdp->Bin8ToHex(numName, m_outgoing_packet); 
+ mp_pdp->Bin8ToHex(numPass, m_outgoing_packet); 
 
  for(size_t i = 0; i < numName; ++i)
   m_outgoing_packet.push_back(raw_name[i]);
@@ -4277,7 +4278,7 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
   mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].on_thrd_2, packet_data->out[oi].condition2), m_outgoing_packet);
   mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].off_thrd_2, packet_data->out[oi].condition2), m_outgoing_packet);
  }
- mp_pdp->Bin4ToHex(packet_data->logicFunc12, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->logicFunc12, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
