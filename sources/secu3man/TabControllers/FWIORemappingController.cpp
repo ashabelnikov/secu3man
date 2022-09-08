@@ -2071,7 +2071,7 @@ bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
           iopId == FWDM::IOP3I_ADD_I4 || iopId == FWDM::IOP3I_IGNTIM || iopId == FWDM::IOP3I_MAP2 || iopId == FWDM::IOP3I_TMP2 || iopId == FWDM::IOP3I_ADD_I5 ||
           iopId == FWDM::IOP3I_AUTO_I || iopId == FWDM::IOP3I_ADD_I6 || iopId == FWDM::IOP3I_ADD_I7 || iopId == FWDM::IOP3I_ADD_I8 || iopId == FWDM::IOP3I_GRTEMP ||
           iopId == FWDM::IOP3I_FTLS_I || iopId == FWDM::IOP3I_EGTS_I || iopId == FWDM::IOP3I_OPS_I || iopId == FWDM::IOP3I_INJPWC_I || iopId == FWDM::IOP3I_INPUT1 ||
-          iopId == FWDM::IOP3I_INPUT2 || iopId == FWDM::IOP3I_REFPRS_I || iopId == FWDM::IOP3I_MAP_I || iopId == FWDM::IOP3I_MAF);
+          iopId == FWDM::IOP3I_INPUT2 || iopId == FWDM::IOP3I_REFPRS_I || iopId == FWDM::IOP3I_MAP_I || iopId == FWDM::IOP3I_MAF || iopId == FWDM::IOP3I_FTS_I);
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const
