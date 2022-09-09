@@ -324,6 +324,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Number of PWM steps used with air conditioner"), _T("N"), 0, 60, 1, 1, &d.vent_maxband, _T("When the air conditioner is on, the duty cycle of the fan's PWM will be determined by this number of steps."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Гистерезис при выключении ШИМ вентилятора"), _T("°C"), 0.0f, 5.0f, 0.25f, 2, &d.vent_pwm_turnoff_hyst, _T("Полное выключение ШИМ вентилятора произойдет только после после того как температура опустится ниже точки выключения минус значение гистерезиса."));
+ else
+  dfd.AppendItem(_T("Hysteresis for turn off of cooling fan"), _T("°C"), 0.0f, 5.0f, 0.25f, 2, &d.vent_pwm_turnoff_hyst, _T("Cooling fan's PWM will be fully turned off only after engine temperature drop below the switch off point minus value of hysteresis."));
+
  //Crankshaft position settings
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Положение коленвала (нов.алгор.)"));

@@ -283,10 +283,10 @@ BOOL CLambdaPageDlg::OnInitDialog()
  Super::OnInitDialog();
 
  m_strperstp_spin.SetBuddy(&m_strperstp_edit);
- m_strperstp_edit.SetLimitText(3);
+ m_strperstp_edit.SetLimitText(4);
  m_strperstp_edit.SetDecimalPlaces(3);
- m_strperstp_spin.SetRangeAndDelta(0, 100, 1);
- m_strperstp_edit.SetRange(0, 100);
+ m_strperstp_spin.SetRangeAndDelta(0, 255, 1);
+ m_strperstp_edit.SetRange(0, 255);
 
  m_msperstp_spin.SetBuddy(&m_msperstp_edit);
  m_msperstp_edit.SetLimitText(4);

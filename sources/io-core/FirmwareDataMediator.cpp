@@ -348,10 +348,12 @@ typedef struct
 
  _uchar tmrpmtc_mode;
 
+ _char vent_pwm_turnoff_hyst;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1977];
+ _uchar reserved[1976];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3110,6 +3112,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.fueldens_corr_use = exd.fueldens_corr_use;
  o_data.fts_source = exd.fts_source;
  o_data.tmrpmtc_mode = exd.tmrpmtc_mode;
+
+ o_data.vent_pwm_turnoff_hyst = ((float)exd.vent_pwm_turnoff_hyst) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3203,6 +3207,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.fueldens_corr_use = i_data.fueldens_corr_use;
  exd.fts_source = i_data.fts_source;
  exd.tmrpmtc_mode = i_data.tmrpmtc_mode;
+
+ exd.vent_pwm_turnoff_hyst = MathHelpers::Round(i_data.vent_pwm_turnoff_hyst * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
