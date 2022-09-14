@@ -762,8 +762,8 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadDword(m_optBaudRateApplication, _T("115200"), m_AllowableBaudRates);
  os.ReadDword(m_optBaudRateBootloader, _T("115200"), m_AllowableBaudRates);
  os.ReadString(m_optLogFilesFolder, m_current_directory);
- os.ReadInt(m_optCSVSepSymbol, _T("44"), m_AllowaleCSVSepSymbols);
- os.ReadInt(m_optMapCSVSepSymbol, _T("44"), m_AllowaleCSVSepSymbols);
+ os.ReadInt(m_optCSVSepSymbol, _T("59"), m_AllowaleCSVSepSymbols);
+ os.ReadInt(m_optMapCSVSepSymbol, _T("59"), m_AllowaleCSVSepSymbols);
  os.ReadInt(m_optUseAppFolder, _T("1"), 0, 1);
  os.ReadInt(m_optAlwaysWriteLog, _T("1"), 0, 1);
  os.ReadInt(m_optMIDeskUpdatePeriod, _T("40"), 0, 1000); 
