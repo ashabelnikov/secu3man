@@ -3601,7 +3601,7 @@ BEGIN
     IDS_UNIOUT_COND_ITTMR  "Timer on ign.turn on(sec.)"
     IDS_UNIOUT_COND_ESTMR  "Timer on eng.turn on(sec.)"
     IDS_UNIOUT_COND_CPOS   "Choke/IAC position (%)"
-    IDS_UNIOUT_COND_AANG   "”Œ« (∞CS)"
+    IDS_UNIOUT_COND_AANG   "Ignition timing (∞CS)"
     IDS_UNIOUT_COND_KLEV   "Knock signal (V)"
     IDS_UNIOUT_COND_TPS    "TPS (%)"
     IDS_UNIOUT_COND_ATS    "Intake ATS (∞C)"
