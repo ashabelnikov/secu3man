@@ -1561,15 +1561,15 @@ bool CAppSettingsModel::WriteSettings(void)
  os.WriteInt(m_optBldrEEPROMBlocks); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  os.WriteComment(_T("Density of fuel 1 (e.g. petrol), g/cc. Used when GAS_V = 0"));
+  os.WriteComment(_T("Density of fuel 1 (e.g. petrol), g/cc. Used when GAS_V = 0. Take into account! For the new density value to take effect, you must change the value of one or more parameters on the Injection tab!"));
  else
-  os.WriteComment(_T("Плотность топлива 1 (бензин), г/см3. Используется когда GAS_V = 0"));
+  os.WriteComment(_T("Плотность топлива 1 (бензин), г/см3. Используется когда GAS_V = 0. Обратите внимание! Чтобы новое значение плотности вступило в силу, необходимо изменить значение одного или нескольких параметров на вкладке Впрыск!"));
  os.WriteFlt(m_optFuelDensity1, 4);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  os.WriteComment(_T("Density of fuel 2 (e.g. petrol), g/cc. Used when GAS_V = 1"));
+  os.WriteComment(_T("Density of fuel 2 (e.g. petrol), g/cc. Used when GAS_V = 1. Take into account! For the new density value to take effect, you must change the value of one or more parameters on the Injection tab!"));
  else
-  os.WriteComment(_T("Плотность топлива 2 (бензин), г/см3. Используется когда GAS_V = 1"));
+  os.WriteComment(_T("Плотность топлива 2 (бензин), г/см3. Используется когда GAS_V = 1. Обратите внимание! Чтобы новое значение плотности вступило в силу, необходимо изменить значение одного или нескольких параметров на вкладке Впрыск!"));
  os.WriteFlt(m_optFuelDensity2, 4);
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section); 
