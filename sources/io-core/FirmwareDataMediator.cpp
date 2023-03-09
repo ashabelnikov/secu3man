@@ -1561,6 +1561,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetIdlcMap(i,op_fwd->maps[i].inj_iac_crank_pos);
   GetThrassMap(i,op_fwd->maps[i].inj_thrass);
   GetAETPSMap(i,op_fwd->maps[i].inj_ae_tps);
+  GetAEMAPMap(i,op_fwd->maps[i].inj_ae_map);
   GetAERPMMap(i,op_fwd->maps[i].inj_ae_rpm);
   GetAftstrMap(i,op_fwd->maps[i].inj_aftstr);  
   GetITMap(i, op_fwd->maps[i].inj_timing);
@@ -1657,6 +1658,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetIdlcMap(i,ip_fwd->maps[i].inj_iac_crank_pos);
   SetThrassMap(i,ip_fwd->maps[i].inj_thrass);
   SetAETPSMap(i,ip_fwd->maps[i].inj_ae_tps);
+  SetAEMAPMap(i,ip_fwd->maps[i].inj_ae_map);
   SetAERPMMap(i,ip_fwd->maps[i].inj_ae_rpm);
   SetAftstrMap(i,ip_fwd->maps[i].inj_aftstr);
   SetITMap(i, ip_fwd->maps[i].inj_timing);

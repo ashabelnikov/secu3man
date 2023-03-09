@@ -255,7 +255,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  std::vector<_TSTRING> strings = m_eedm->GetFunctionsSetNames();
  mp_view->FillFWDOtherList(strings);
-  
+
  //ignition mpa flags
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
@@ -322,8 +322,40 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CRNKTIME_MAP, false);
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
+ mp_view->EnableFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->SetFWDFlag(FLAG_KNOCKZONE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_KNOCKZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_LAMBDAZONE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_LAMBDAZONE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_GRTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRHEAT_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_GRHEAT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IACUCOEF_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IACUCOEF_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK0_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_AFTSTRK0_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTRK1_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_AFTSTRK1_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GRVDELAY_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_GRVDELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_FTLSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_EGTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_OPSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_OPSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_MANINJPWC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_MANINJPWC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_MAFCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_MAFCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_FTLSCOR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_FTSCURVE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_FUELDENSC_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)
