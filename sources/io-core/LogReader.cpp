@@ -34,25 +34,27 @@
 
 using namespace SECU3IO;
 
+//Attention! Please don't forget to check/update all following values
+
 //maximum length of record including possible text header
 #define MAX_REC_BUF 4096
 
-//кол-во переменных в поле времени
+//number of variables in the time field
 #define CSV_COUNT_TIME_VAL 4
 
-//кол-во переменных в поле данных
+//number of variables in the data field
 #define CSV_COUNT_DATA_VAL 67
 
-//смещение данных относительно начала строки
+//offset of data relatively to begin of string
 #define CSV_TIME_PANE_LEN 11
 
 //offset of the marks value in record
-#define CSV_MARKS_OFFSET 411
+#define CSV_MARKS_OFFSET 418
 
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
 
-//"hh:mm:ss.ms", ms - сотые доли секунды
+//"hh:mm:ss.ms", ms - hundreds of second
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
 const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%f%c%%d%c%%d%c%%s\r\n";
