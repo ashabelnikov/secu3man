@@ -552,7 +552,12 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Использовать датчик температуры топлива"), &d.fts_source, _T("Если галочка установлена, то температура топлива определяется датчиком. В противном случае температура топлива определяется по модели на основе ДТОЖ и ДТВ."));
  else
   dfd.AppendItem(_T("Use fuel temperature sensor"), &d.fts_source, _T("If the checkbox is checked, then temperature of fuel is defined by sensor. Otherwise, temperature is defined by model using CLT and IAT."));
-   
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Таймаут автосохранения параметров"), _T("сек"), .0f, 60.0f, 0.1f, 2, &d.save_param_timeout, _T("Блок SECU-3 следит за состоянием параметров и если после последнего редактирования прошло указанное время, то параметры будут автоматически сохранены. Установите 0, если вам нужно запретить автосохранение."));
+ else
+  dfd.AppendItem(_T("Timeout for parameters' automatic saving"), _T("sec"), .0f, 60.0f, 0.1f, 2, &d.save_param_timeout, _T("SECU-3 unit monitors the state of the parameters and if the specified time has passed since the last editing, the parameters will be automatically saved. Set to 0 if you need to disable autosaving."));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);

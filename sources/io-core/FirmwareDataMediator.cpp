@@ -350,10 +350,12 @@ typedef struct
 
  _char vent_pwm_turnoff_hyst;
 
+ _uint save_param_timeout;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1976];
+ _uchar reserved[1974];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3116,6 +3118,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.tmrpmtc_mode = exd.tmrpmtc_mode;
 
  o_data.vent_pwm_turnoff_hyst = ((float)exd.vent_pwm_turnoff_hyst) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ o_data.save_param_timeout = ((float)exd.save_param_timeout) / 100.0f; //convert to seconds
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3211,6 +3215,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.tmrpmtc_mode = i_data.tmrpmtc_mode;
 
  exd.vent_pwm_turnoff_hyst = MathHelpers::Round(i_data.vent_pwm_turnoff_hyst * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ exd.save_param_timeout = MathHelpers::Round(i_data.save_param_timeout * 100.0f); //convert to 1/100 second units
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
