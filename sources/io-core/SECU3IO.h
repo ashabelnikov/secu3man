@@ -909,6 +909,8 @@ const int INPAVNUM = 14;
   float vent_pwm_turnoff_hyst;
 
   float save_param_timeout;
+  
+  float fuelcut_vss_thrd;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

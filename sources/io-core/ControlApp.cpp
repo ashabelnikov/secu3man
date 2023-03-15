@@ -406,17 +406,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int speed = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &speed))
   return false;
- if (0 != speed)
- { //speed sensor is used, value is correct
-  sensorDat.speed =   ((float)speed) / 32.0f;
-  if (sensorDat.speed > 999.9f)
-   sensorDat.speed = 999.9f;
+ sensorDat.speed = ((float)speed) / 32.0f;
+ if (sensorDat.speed > 999.9f)
+  sensorDat.speed = 999.9f;
   //convert to selected unit
-  if (m_speedUnit == 1)
-   sensorDat.speed/= 1.609344f;
- }
- else //speed sensor is not used or speed is too low
-  sensorDat.speed = 0;
+ if (m_speedUnit == 1)
+  sensorDat.speed/= 1.609344f;
 
  //Distance
  unsigned long distance = 0;
