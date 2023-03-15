@@ -189,6 +189,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Calculate transient mode thretholds using only idl. target RPM"), &d.tmrpmtc_mode, _T("If the checkbox is checked, then transient's mode RPM thresholds will be calculated using idling target RPM only."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог начала движения для РХХ"), _T("км/ч"), 1.0f, 100.0f, 0.1f, 1, &d.iac_addonrun_vss_thrd, _T("Если скорость авто превысит этот порог, то РХХ повысит обороты двигателя на значение 'Добавка к обор. на ходу'."));
+ else
+  dfd.AppendItem(_T("Start of running threshold for IAC"), _T("km/h"), 1.0f, 100.0f, 0.1f, 1, &d.iac_addonrun_vss_thrd, _T("If the speed of vehicle is exceed this threshold, then IAC regulator will increase RPM by 'RPM add on run' value."));
+
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));
@@ -276,6 +281,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Абсол. давление выключения продувки адсорбера"), _T("кПа"), 0.0f, 500.0f, 1.0f, 1, &d.evap_map_thrd, _T("Порог абсолютного давления на впуске, при превышении которого клапан продувки будет выключен."));
  else
   dfd.AppendItem(_T("Absolute pressure threshold for valve's turn off"), _T("kPa"), 0.0f, 500.0f, 1.0f, 1, &d.evap_map_thrd, _T("Manifold absolute pressure threshold, above which canister purge valve will be turned off."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог скорости разрешения включения продувки адсорбера"), _T("км/ч"), 1.0f, 100.0f, 0.1f, 1, &d.evap_on_vss_thrd, _T("Продувка адсорбера будет разрешена только когда скорость авто будет выше этого порога"));
+ else
+  dfd.AppendItem(_T("VSS threshold for enabling purge of absorber"), _T("km/h"), 1.0f, 100.0f, 0.1f, 1, &d.evap_on_vss_thrd, _T("Canister purge valve will be enabled to purge only if vehicle speed is above this threshold"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог скорости запрещения включения продувки адсорбера"), _T("км/ч"), 1.0f, 50.0f, 0.1f, 1, &d.evap_off_vss_thrd, _T("Продувка адсорбера будет запрещена когда скорость авто будет ниже этого порога"));
+ else
+  dfd.AppendItem(_T("VSS threshold for disabling purge of absorber"), _T("km/h"), 1.0f, 50.0f, 0.1f, 1, &d.evap_off_vss_thrd, _T("Canister purge valve will be disabled to purge if vehicle speed is below this threshold"));
 
  //heating control
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
