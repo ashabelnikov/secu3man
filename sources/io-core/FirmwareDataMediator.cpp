@@ -311,8 +311,8 @@ typedef struct
  _uchar maninjpw_idl;
  _uchar oilpress_cut;
  _uint  tpsdot_mindt;
- _uchar irr_k_load;
- _uchar irr_k_rpm;
+ _uint irr_k_load;
+ _uint irr_k_rpm;
  _uchar cold_eng_int;
  _uchar iacreg_period;
  _int iacreg_turn_on_temp;
@@ -355,7 +355,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1974];
+ _uchar reserved[1972];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
