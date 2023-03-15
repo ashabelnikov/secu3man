@@ -47,6 +47,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_MISC_FLPMP_TIMEOUT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_PWM1_FRQ_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_PWM2_FRQ_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_MISC_VSS_PP1KM_EDIT, OnChangeData)
 
  ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MISC_IGNCUTOFF_CHECK, OnIgncutoffCheck)
@@ -103,6 +104,10 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PWM2_FRQ_SPIN, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PWM2_FRQ_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PWM2_FRQ_UNIT, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_VSS_PP1KM_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_VSS_PP1KM_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_VSS_PP1KM_CAPTION, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
@@ -121,6 +126,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 , m_fp_timeout_strt_edit(CEditEx::MODE_FLOAT, true)
 , m_pwm1frq_edit(CEditEx::MODE_INT, true)
 , m_pwm2frq_edit(CEditEx::MODE_INT, true)
+, m_vss_pp1km_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.baud_rate = CBR_57600;
@@ -136,6 +142,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
  m_params.fp_timeout_strt = 5.0f;
  m_params.pwm2_pwmfrq[0] = 5000;
  m_params.pwm2_pwmfrq[1] = 5000;
+ m_params.vss_pp1km = 6000.0f;
 }
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
@@ -198,6 +205,9 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_MISC_PWM2_FRQ_SPIN, m_pwm2frq_spin);
  DDX_Control(pDX, IDC_PD_MISC_PWM2_FRQ_EDIT, m_pwm2frq_edit);
 
+ DDX_Control(pDX, IDC_PD_MISC_VSS_PP1KM_SPIN, m_vss_pp1km_spin);
+ DDX_Control(pDX, IDC_PD_MISC_VSS_PP1KM_EDIT, m_vss_pp1km_edit);
+
  DDX_CBIndex(pDX, IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_cb_index);
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
  m_igncutoff_rpm_edit.DDX_Value(pDX, IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, m_params.ign_cutoff_thrd);
@@ -217,6 +227,8 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
 
  m_pwm1frq_edit.DDX_Value(pDX, IDC_PD_MISC_PWM1_FRQ_EDIT, m_params.pwm2_pwmfrq[0]);
  m_pwm2frq_edit.DDX_Value(pDX, IDC_PD_MISC_PWM2_FRQ_EDIT, m_params.pwm2_pwmfrq[1]);
+
+ m_vss_pp1km_edit.DDX_Value(pDX, IDC_PD_MISC_VSS_PP1KM_EDIT, m_params.vss_pp1km);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -339,6 +351,12 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_pwm2frq_spin.SetRangeAndDelta(10, 5000, 1);
  m_pwm2frq_edit.SetRange(10, 5000);
 
+ m_vss_pp1km_spin.SetBuddy(&m_vss_pp1km_edit);
+ m_vss_pp1km_edit.SetLimitText(6);
+ m_vss_pp1km_edit.SetDecimalPlaces(0);
+ m_vss_pp1km_spin.SetRangeAndDelta(100, 60000, 1);
+ m_vss_pp1km_edit.SetRange(100, 60000);
+
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   br.push_back(SECU3IO::secu3_allowable_uart_divisors[i].first);
@@ -386,6 +404,9 @@ BOOL CMiscPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_pwm2frq_edit, MLL::GetString(IDS_PD_MISC_PWM2_FRQ_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_pwm2frq_spin, MLL::GetString(IDS_PD_MISC_PWM2_FRQ_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_vss_pp1km_edit, MLL::GetString(IDS_PD_MISC_VSS_PP1KM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vss_pp1km_spin, MLL::GetString(IDS_PD_MISC_VSS_PP1KM_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);

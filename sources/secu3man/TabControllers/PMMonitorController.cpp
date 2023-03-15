@@ -70,7 +70,7 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetInjPWMax(mp_settings->GetInjPWMax());
  mp_view->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->SetDistanceUnit(mp_settings->GetSpeedUnit()); //same option for distance
- mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
+ mp_view->ShowSpeedAndDistance(mp_settings->GetShowSpeedAndDist());
  mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
  mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
@@ -118,7 +118,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->SetDistanceUnit(mp_settings->GetSpeedUnit()); //same option for distance
  mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
- mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
+ mp_view->ShowSpeedAndDistance(mp_settings->GetShowSpeedAndDist());
  mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
  mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());

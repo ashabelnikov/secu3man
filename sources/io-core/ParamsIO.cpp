@@ -37,8 +37,7 @@
 using namespace SECU3IO;
 
 ParamsIO::ParamsIO()
-: m_period_distance(0.166666f)//for speed sensor calculations
-, m_quartz_frq(20000000)      //default clock is 20mHz
+: m_quartz_frq(20000000)      //default clock is 20mHz
 {
  //empty
 }
@@ -325,6 +324,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->fp_timeout_strt = MathHelpers::Round(p_in->fp_timeout_strt * 10.0f);
     p_params->pwm2_pwmfrq[0] = MathHelpers::Round((1.0/p_in->pwm2_pwmfrq[0]) * 524288.0);
     p_params->pwm2_pwmfrq[1] = MathHelpers::Round((1.0/p_in->pwm2_pwmfrq[1]) * 524288.0);
+    p_params->vss_period_dist = MathHelpers::Round((1000.0f * 32768.0f) / p_in->vss_pp1km);
    }
    break;
   case CHOKE_PAR:
@@ -368,7 +368,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
    break;
   case UNIOUT_PAR:
    {
-    CondEncoder cen(m_quartz_frq, m_period_distance);
+    CondEncoder cen(m_quartz_frq);
     UniOutPar* p_in = (UniOutPar*)ip_values;
     for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
     {
@@ -809,6 +809,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
       p_out->pwm2_pwmfrq[1] = 5000; //prevent division by zero
      else
       p_out->pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)p_params->pwm2_pwmfrq[1]) / 524288.0));
+
+     p_out->vss_pp1km = (1000.0f * 32768.0f) / p_params->vss_period_dist;
     }
     break;
    case CHOKE_PAR:
@@ -852,7 +854,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     break;
   case UNIOUT_PAR:
    {
-    CondEncoder cen(m_quartz_frq, m_period_distance);
+    CondEncoder cen(m_quartz_frq);
     UniOutPar* p_out = (UniOutPar*)op_values;
     for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
     {
@@ -966,12 +968,6 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
   }//switch
 
   return true;
-}
-
-void ParamsIO::SetNumPulsesPer1Km(int pp1km)
-{
- double value = MathHelpers::RestrictValue(pp1km, 1, 60000);
- m_period_distance = (float)(1000.0 / value); //distance of one period in meters
 }
 
 void ParamsIO::SetQuartzFrq(long frq)

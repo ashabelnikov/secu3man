@@ -62,6 +62,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optDVDeskUpdatePeriod.value = m_pView->GetDVDeskUpdatePeriod();
  m_pModel->m_optShowToolTips.value = m_pView->GetShowToolTips();
  m_pModel->m_optShowExFixtures.value = m_pView->GetShowExFixtures();
+ m_pModel->m_optShowSpeedAndDist.value = m_pView->GetShowSpeedAndDist();
  m_pModel->m_optExistingPorts.value = m_pView->GetExistingPorts();
  m_pModel->m_optInjDrvTabActive.value = m_pView->GetInjDrvTabActive();
 
@@ -73,8 +74,6 @@ void CAppSettingsController::OnOk(void)
 
  m_pModel->m_optTachometerMax.value = m_pView->GetTachometerMax();
  m_pModel->m_optPressureMax.value = m_pView->GetPressureMax();
-
- m_pModel->m_optPulsesPer1Km.value = m_pView->GetNumPulsesPer1Km();
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -104,6 +103,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod.value);
  m_pView->SetShowToolTips(m_pModel->m_optShowToolTips.value);
  m_pView->SetShowExFixtures(m_pModel->m_optShowExFixtures.value);
+ m_pView->SetShowSpeedAndDist(m_pModel->m_optShowSpeedAndDist.value);
  m_pView->SetExistingPorts(m_pModel->m_optExistingPorts.value);
  m_pView->SetInjDrvTabActive(m_pModel->m_optInjDrvTabActive.value);
 
@@ -117,8 +117,6 @@ void CAppSettingsController::OnActivate(void)
 
  m_pView->SetTachometerMax(m_pModel->m_optTachometerMax.value);
  m_pView->SetPressureMax(m_pModel->m_optPressureMax.value);
-
- m_pView->SetNumPulsesPer1Km(m_pModel->m_optPulsesPer1Km.value);
 }
 
 int CAppSettingsController::ShowDialog(void)

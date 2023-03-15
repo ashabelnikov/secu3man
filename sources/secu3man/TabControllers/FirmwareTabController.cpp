@@ -90,11 +90,9 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_epp = holder.GetEepromParameters();
  mp_fwdm = new CFirmwareDataMediator(holder.GetFlashParameters());
  ASSERT(mp_fwdm);
- //Set parameters for speed sensor calculations and set clock frequency (16 or 20 mHz)
- mp_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
+ //Set parameters for clock frequency (16 or 20 mHz)
  mp_fwdm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
  mp_edm = new EEPROMDataMediator(holder.GetEepromParameters());
- mp_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  mp_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
  ASSERT(mp_edm);
 
@@ -186,12 +184,9 @@ void CFirmwareTabController::OnSettingsChanged(int action)
  //включаем необходимый для данного контекста коммуникационный контроллер
  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 
- //Set parameters for speed sensor calculations
- mp_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  //Set clock frequency (16 or 20 MHz)
  mp_fwdm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
- mp_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  mp_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());

@@ -99,7 +99,6 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_dv_update_period_edit(CEditEx::MODE_INT)
 , m_tachometer_max_edit(CEditEx::MODE_INT)
 , m_pressure_max_edit(CEditEx::MODE_INT)
-, m_wheel_pulses_edit(CEditEx::MODE_INT)
 , mp_port_selection_combo(&m_port_selection1_combo)
 , m_always_write_log(BST_UNCHECKED)
 , m_write_log_fields(BST_UNCHECKED)
@@ -117,8 +116,8 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_dv_update_period = 40;
  m_show_tooltips = BST_CHECKED;
  m_exfixtures = BST_CHECKED;
+ m_showvss = BST_CHECKED;
  m_injdrvtab_active = BST_UNCHECKED;
- m_wheel_pulses = 6000;   //Number of pulses per 1km
 }
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
@@ -176,15 +175,14 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max_edit);
  m_pressure_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max);
 
- DDX_Control(pDX, IDC_APP_SETTINGS_WHEEL_PULSES_SPIN, m_wheel_pulses_spin);
- DDX_Control(pDX, IDC_APP_SETTINGS_WHEEL_PULSES_EDIT, m_wheel_pulses_edit);
- m_wheel_pulses_edit.DDX_Value(pDX, IDC_APP_SETTINGS_WHEEL_PULSES_EDIT, m_wheel_pulses);
-
  DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION, m_dv_update_period_caption);
  DDX_Control(pDX, IDC_APP_SETTINGS_INFO_TEXT, m_info_text);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_INJDRV_TAB, m_injdrvtab_button);
  DDX_Check(pDX, IDC_APP_SETTINGS_INJDRV_TAB, m_injdrvtab_active);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_SHOWVSS_CHECK, m_showvss_button);
+ DDX_Check(pDX, IDC_APP_SETTINGS_SHOWVSS_CHECK, m_showvss);
 }
 
 
@@ -267,11 +265,6 @@ BOOL CAppSettingsDlg::OnInitDialog()
  m_pressure_max_spin.SetBuddy(&m_pressure_max_edit);
  m_pressure_max_spin.SetRangeAndDelta(50, 500, 10);
 
- m_wheel_pulses_edit.SetLimitText(5);
- m_wheel_pulses_edit.SetDecimalPlaces(5);
- m_wheel_pulses_spin.SetBuddy(&m_wheel_pulses_edit);
- m_wheel_pulses_spin.SetRangeAndDelta(0, 60000, 1);
-
  if (m_OnActivate)
   m_OnActivate(); //информируем слушателя о том, что мы готовы к приему данных
 
@@ -307,9 +300,8 @@ BOOL CAppSettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_midesk_update_period_edit, MLL::GetString(IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_midesk_update_period_spin, MLL::GetString(IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_exfixtures_button, MLL::GetString(IDS_APP_SETTINGS_EXFIXTURES_TT)));
- VERIFY(mp_ttc->AddWindow(&m_wheel_pulses_edit, MLL::GetString(IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_wheel_pulses_spin, MLL::GetString(IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_use_dv_features_button, MLL::GetString(IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_showvss_button, MLL::GetString(IDS_APP_SETTINGS_SHOWVSS_CHECK_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -662,14 +654,14 @@ bool CAppSettingsDlg::GetShowExFixtures(void) const
  return (m_exfixtures == BST_CHECKED) ? true : false;
 }
 
-void CAppSettingsDlg::SetNumPulsesPer1Km(int i_pp1km)
+void CAppSettingsDlg::SetShowSpeedAndDist(bool i_show)
 {
- m_wheel_pulses = i_pp1km;
+ m_showvss = i_show ? BST_CHECKED : BST_UNCHECKED;
 }
 
-int CAppSettingsDlg::GetNumPulsesPer1Km(void) const
+bool CAppSettingsDlg::GetShowSpeedAndDist(void) const
 {
- return m_wheel_pulses;
+ return (m_showvss == BST_CHECKED) ? true : false;
 }
 
 void CAppSettingsDlg::_ShowCB(void)

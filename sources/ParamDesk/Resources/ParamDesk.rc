@@ -701,6 +701,10 @@ BEGIN
     CONTROL         "",IDC_PD_MISC_PWM2_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,243,13,17
     LTEXT           "Чaстота ШИМ PWM2",IDC_PD_MISC_PWM2_FRQ_CAPTION,0,244,94,10
     LTEXT           "Гц",IDC_PD_MISC_PWM2_FRQ_UNIT,140,244,30,10
+
+    EDITTEXT        IDC_PD_MISC_VSS_PP1KM_EDIT,95,263,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_MISC_VSS_PP1KM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,263,13,17
+    LTEXT           "Число импульсов датчика скорости на 1км",IDC_PD_MISC_VSS_PP1KM_CAPTION,0,264,94,10
 END
 
 IDD_PD_CHOKE_PAGE DIALOGEX 0, 0, 155, 183
@@ -1928,6 +1932,7 @@ STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_BLEND_SLIDER_TT "Баланс между ДАД и ДПДЗ при вычислении обогащения. 0% соответствует обогащению только по ДАД, 100% соответствует обогащению только по ДПДЗ."
     IDS_PD_ACCELENR_MAPTHRD_EDIT_TT "Порог включения обогащения по ДАД (кПа/сек). Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
+    IDS_PD_MISC_VSS_PP1KM_EDIT_TT "Если подключен датчик скорости, установите количество импульсов с датчика скорости, приходящееся на 1 км пути"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2628,6 +2633,10 @@ BEGIN
     CONTROL         "",IDC_PD_MISC_PWM2_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,243,13,17
     LTEXT           "PWM freqyency for PWM2",IDC_PD_MISC_PWM2_FRQ_CAPTION,0,244,94,10
     LTEXT           "Hz",IDC_PD_MISC_PWM2_FRQ_UNIT,140,244,30,10
+
+    EDITTEXT        IDC_PD_MISC_VSS_PP1KM_EDIT,95,263,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_MISC_VSS_PP1KM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,263,13,17
+    LTEXT           "Number of VSS pulses per 1km",IDC_PD_MISC_VSS_PP1KM_CAPTION,0,264,94,10
 END
 
 IDD_PD_CHOKE_PAGE DIALOGEX 0, 0, 155, 183
@@ -3880,6 +3889,7 @@ STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_BLEND_SLIDER_TT "Ballance between MAPdot and TPSdot for acceleration enrichment. 0% correspond to enrighment only by MAP, 100% correspond to enrichment only by TPS."
     IDS_PD_ACCELENR_MAPTHRD_EDIT_TT "Accel.enrichment activation threshold (by MAP), %/sec. The higher the value, the quickly you need to press the gas pedal to activate enrichment."
+    IDS_PD_MISC_VSS_PP1KM_EDIT_TT "If a speed sensor is connected, set the number of pulses from the vehicle speed sensor per 1 km of traveled distance"
 END
 
 /////////////////////////////////////////////////////////////////////////////

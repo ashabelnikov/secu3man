@@ -668,7 +668,8 @@ class ISettingsData
   virtual bool GetShowToolTips(void) const = 0;
   virtual bool GetShowExFixtures(void) const = 0;
   virtual void SetShowExFixtures(bool i_show) = 0;
-  virtual int GetNumPulsesPer1Km(void) const = 0;
+  virtual bool GetShowSpeedAndDist(void) const = 0;
+  virtual void SetShowSpeedAndDist(bool i_show) = 0;
 
   //Indicators
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const = 0;

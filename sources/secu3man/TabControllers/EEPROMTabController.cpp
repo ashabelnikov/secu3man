@@ -74,7 +74,6 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_epp = holder.GetEepromParameters();
  m_eedm = new EEPROMDataMediator(holder.GetEepromParameters());
- m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  ASSERT(m_eedm);
@@ -129,7 +128,6 @@ void CEEPROMTabController::OnSettingsChanged(int action)
   return;
  }
 
- m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());

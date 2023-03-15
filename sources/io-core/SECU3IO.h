@@ -388,6 +388,7 @@ namespace SECU3IO
   float evap_afslope;
   float fp_timeout_strt;                //Fuel pump timeout for cranking (sec.)
   int pwm2_pwmfrq[2];                   //Frequencies for PWM channels
+  float vss_pp1km;                      //number of VSS pulses per 1km of passed distance
  };
 
  struct EditTabPar

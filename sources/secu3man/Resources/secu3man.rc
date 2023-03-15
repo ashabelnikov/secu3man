@@ -199,9 +199,8 @@ BEGIN
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,153,43,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,153,11,15
     CONTROL         "Дополнительные приборы",IDC_APP_SETTINGS_EXFIXTURES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,171,110,10
-    LTEXT           "Число импульсов датч. скорости на 1км:",IDC_STATIC,266,187,80,20
-    EDITTEXT        IDC_APP_SETTINGS_WHEEL_PULSES_EDIT,204,187,43,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_APP_SETTINGS_WHEEL_PULSES_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,187,11,15
+
+    CONTROL         "Отображать скорость и расстояние",IDC_APP_SETTINGS_SHOWVSS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,185,140,10
 
     DEFPUSHBUTTON   "OK",IDOK,139,215,50,18
     PUSHBUTTON      "Cancel",IDCANCEL,195,215,50,18
@@ -882,8 +881,8 @@ BEGIN
     IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT "Максимальное значение на шкале виртуального прибора 'Обороты' и по вертикальной оси на соответствующем графике"
     IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT "Максимальное значение на шкале виртуального прибора 'Абсолютное давление' и по вертикальной оси на соответствующем графике"
     IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT "Период обновления панели приборов. Чем меньше значение, тем чаще прорисовываются приборы, но тем больше процессорного времени компьютера для этого необходимо"
-    IDS_APP_SETTINGS_EXFIXTURES_TT "Установите для выбора 2-го профиля настроек панели приборов и индикаторов. Продублировано галочкой 'Переключить панели приборов' в разделе 'Вид' главного меню программы."
-    IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT "Если подключен датчик скорости, установите количество импульсов с датчика скорости, приходящееся на 1 км пути"
+    IDS_APP_SETTINGS_EXFIXTURES_TT "Установите для выбора 2-го профиля настроек панели приборов и индикаторов. Продублировано галочкой 'Переключить панели приборов' в разделе 'Вид' главного меню программы."    
+    IDS_APP_SETTINGS_SHOWVSS_CHECK_TT "В верхних углах прибора 'Обороты' будут отображаться скорость и пройденное расстояние"    
     IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT "Включить отладочную панель для отображения переменных из прошивки. Прошивка должна быть скомпилирована с опцией DEBUG_VARIABLES, см. заголовочный файл dbgvar.h"
     IDS_PEAK_ON_TABSEL_CHECK_TT   "Время полного включ.(мкс). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
     IDS_PEAK_DUTY_TABSEL_CHECK_TT "Скважн. ШИМ на включ.(%). Данная таблица используется прошивкой только если установлена соответствующая галочка 'Табл.'"
@@ -1158,9 +1157,8 @@ BEGIN
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,153,43,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,153,11,15
     CONTROL         "Additional fixtures",IDC_APP_SETTINGS_EXFIXTURES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,171,110,10
-    LTEXT           "Number of speed sensor pulses per 1km:",IDC_STATIC,266,187,80,20
-    EDITTEXT        IDC_APP_SETTINGS_WHEEL_PULSES_EDIT,204,187,43,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_APP_SETTINGS_WHEEL_PULSES_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,187,11,15
+
+    CONTROL         "Display speed and distance",IDC_APP_SETTINGS_SHOWVSS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,185,110,10
 
     DEFPUSHBUTTON   "OK",IDOK,139,215,50,18
     PUSHBUTTON      "Cancel",IDCANCEL,195,215,50,18
@@ -1839,7 +1837,7 @@ BEGIN
     IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT "Maximum value on the scale of the virtual gauge 'Absolute pressure' and along the vertical axis in the corresponding graph"
     IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT "Update period of dashboard. The smaller the value, more often gauges are redrawn, but more computer processor's time is needed for this"
     IDS_APP_SETTINGS_EXFIXTURES_TT "Set checkbox to select the 2nd profile of settings of the panel of gauges and indicators. Duplicated by a check mark 'Switch dash boards' in the 'View' section of the main menu of the program."
-    IDS_APP_SETTINGS_WHEEL_PULSES_EDIT_TT "If a speed sensor is connected, set the number of pulses from the vehicle speed sensor per 1 km of traveled distance"
+    IDS_APP_SETTINGS_SHOWVSS_CHECK_TT "In upper corners of the 'Speed' gauge vehicle spped and passed distance will be displayed."    
     IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT "Turn on debug panel for displaying of variables from the firmware. Firmware must be compiled with DEBUG_VARIABLES option, see dbgvar.h header file."
     IDS_PEAK_ON_TABSEL_CHECK_TT   "Peak full ON time (us). This table is used by the firmware only if corresponding 'Table' checkbox is set"
     IDS_PEAK_DUTY_TABSEL_CHECK_TT "Peak PWM duty (%). This table is used by the firmware only if corresponding 'Table' checkbox is set"

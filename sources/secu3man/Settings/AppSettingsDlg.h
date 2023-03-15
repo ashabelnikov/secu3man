@@ -61,7 +61,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetDVDeskUpdatePeriod(int i_period);
   virtual void SetShowToolTips(bool i_show);
   virtual void SetShowExFixtures(bool i_show);
-  virtual void SetNumPulsesPer1Km(int i_pp1km);
+  virtual void SetShowSpeedAndDist(bool i_show);
   virtual void SetInjDrvTabActive(bool i_active);
 
   //"Get" methods (view => model data transfer)
@@ -77,7 +77,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual int GetDVDeskUpdatePeriod(void);
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
-  virtual int GetNumPulsesPer1Km(void) const;
+  virtual bool GetShowSpeedAndDist(void) const;
   virtual bool GetInjDrvTabActive(void) const;
 
   //logs
@@ -147,6 +147,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CButton   m_use_dv_features_button;
   CButton   m_show_tooltips_button;
   CButton   m_exfixtures_button;
+  CButton   m_showvss_button;
   CButton   m_presports_button;
   CButton   m_injdrvtab_button;
   CEdit     m_log_files_folder_edit;
@@ -154,12 +155,10 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CEditEx   m_dv_update_period_edit;
   CEditEx   m_tachometer_max_edit;
   CEditEx   m_pressure_max_edit;
-  CEditEx   m_wheel_pulses_edit;
   CSpinButtonCtrlEx m_midesk_update_period_spin;
   CSpinButtonCtrlEx m_dv_update_period_spin;
   CSpinButtonCtrlEx m_tachometer_max_spin;
   CSpinButtonCtrlEx m_pressure_max_spin;
-  CSpinButtonCtrlEx m_wheel_pulses_spin;
   CStatic m_dv_update_period_caption;
   CStatic m_info_text;
   int m_app_baudrate;
@@ -173,6 +172,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_use_dv_features;
   int m_show_tooltips;
   int m_exfixtures;
+  int m_showvss;
   int m_log_csv_sepsymbol_index;
   int m_midesk_update_period;
   int m_dv_update_period;
@@ -182,7 +182,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_ecu_platform_selection_orig;
   int m_tachometer_max;
   int m_pressure_max;
-  int m_wheel_pulses;
   int m_injdrvtab_active;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;

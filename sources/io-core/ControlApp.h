@@ -91,10 +91,6 @@ class IOCORE_API CControlApp
   inline bool GetOnlineStatus(void) { return m_online_state; }
   inline bool GetWorkState(void) { return m_work_state; };
 
-  //Required by speed sensor
-  //pp1km - number of pulses per 1 km
-  void SetNumPulsesPer1Km(int pp1km);
-
   void SetSpeedUnit(int i_unit); // 0 - km/h, 1 - mi/h
  
   void SetFFFConst(int fffConst);
@@ -150,7 +146,6 @@ class IOCORE_API CControlApp
 
   PacketDataProxy* mp_pdp;
 
-  volatile float m_period_distance;     //distance of one period in meters (speed sensor), used in calculations
   volatile long m_quartz_frq;           //MCU clock frequency
   volatile int m_speedUnit;
   volatile bool m_splitAng;
@@ -230,14 +225,13 @@ class IOCORE_API CControlApp
 class CondEncoder
 {
  public:
-  CondEncoder(long quartz_frq, float period_distance);
+  CondEncoder(long quartz_frq);
  public:
   float UniOutDecodeCondVal(int val, int cond);
   int UniOutEncodeCondVal(float val, int cond);
   bool isSigned(int cond) const;
  private:
   long m_quartz_frq;
-  float m_period_distance;
 };
 
 #endif //_CONTROLAPP_

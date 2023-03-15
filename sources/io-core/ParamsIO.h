@@ -40,13 +40,11 @@ public:
  virtual bool GetDefParamValues(BYTE i_descriptor, void* op_values);
  //-----------------------------------------------------------------------
 
- void SetNumPulsesPer1Km(int pp1km);
  void SetQuartzFrq(long frq);
 
 protected:
  virtual SECU3IO::params_t* GetParamsPtr(void) = 0;
  virtual EECUPlatform GetPlatformId(void) = 0;
 
- float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
  long m_quartz_frq;                    //MCU clock frequency
 };

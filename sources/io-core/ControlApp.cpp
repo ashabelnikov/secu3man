@@ -129,7 +129,6 @@ CControlApp::CControlApp()
 , m_hTimer(NULL)
 , mp_csection(NULL)
 , m_work_state(false)
-, m_period_distance(0.166666f)   //for speed sensor calculations
 , m_quartz_frq(20000000)    //default clock is 20mHz
 , m_speedUnit(0) //km/h
 , m_fffConst(16000)
@@ -405,12 +404,11 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 
  //Vehicle speed
  int speed = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&speed))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &speed))
   return false;
- if (0 != speed && 65535 != speed)
+ if (0 != speed)
  { //speed sensor is used, value is correct
-  float period_s = ((float)speed / ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f)); //period in seconds
-  sensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
+  sensorDat.speed =   ((float)speed) / 32.0f;
   if (sensorDat.speed > 999.9f)
    sensorDat.speed = 999.9f;
   //convert to selected unit
@@ -422,11 +420,11 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 
  //Distance
  unsigned long distance = 0;
- if (false == mp_pdp->Hex24ToBin(raw_packet,&distance))
+ if (false == mp_pdp->Hex24ToBin(raw_packet, &distance))
   return false;
- sensorDat.distance = (m_period_distance * distance) / 1000.0f;
- if (sensorDat.distance > 9999.99f)
-  sensorDat.distance = 9999.99f;
+ sensorDat.distance = distance / 125.0f; //km
+ if (sensorDat.distance > 99999.99f)
+  sensorDat.distance = 99999.99f;
  //convert to selected unit
  if (m_speedUnit == 1)
   sensorDat.distance/= 1.609344f;
@@ -447,7 +445,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 
  //Intake air temperature
  int air_temp = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&air_temp,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &air_temp,true))
   return false;
 
  if (air_temp!=0x7FFF)
@@ -1721,7 +1719,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& miscPar = m_recepted_packet.m_MiscelPar;
- if (size != 20)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 22)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1806,6 +1804,12 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
   miscPar.pwm2_pwmfrq[1] = 5000; //prevent division by zero
  else
   miscPar.pwm2_pwmfrq[1] = MathHelpers::Round(1.0/(((double)pwmfrq2) / 524288.0));
+
+ //Number of VSS pulses per 1km
+ int vss_period_dist = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &vss_period_dist))
+  return false;
+ miscPar.vss_pp1km = (1000.0f * 32768.0f) / vss_period_dist;
 
  return true;
 }
@@ -2454,7 +2458,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
  if (size != 67)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- CondEncoder cen(m_quartz_frq, m_period_distance);
+ CondEncoder cen(m_quartz_frq);
 
  for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
  {
@@ -3945,6 +3949,9 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
 
  int pwmfrq2 = MathHelpers::Round((1.0/packet_data->pwm2_pwmfrq[1]) * 524288.0);
  mp_pdp->Bin16ToHex(pwmfrq2, m_outgoing_packet);
+
+ int vss_period_dist = MathHelpers::Round((1000.0f * 32768.0f) / packet_data->vss_pp1km);
+ mp_pdp->Bin16ToHex(vss_period_dist, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -4266,7 +4273,7 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
 {
- CondEncoder cen(m_quartz_frq, m_period_distance);
+ CondEncoder cen(m_quartz_frq);
  for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
  {
   unsigned char flags = ((packet_data->out[oi].logicFunc) << 4) | ((int)packet_data->out[oi].invers << 3) | ((int)packet_data->out[oi].use << 2) | ((int)packet_data->out[oi].invers_2 << 1) | ((int)packet_data->out[oi].invers_1);
@@ -4584,14 +4591,6 @@ inline void CControlApp::LeaveCriticalSection(void)
 }
 
 //-----------------------------------------------------------------------
-void CControlApp::SetNumPulsesPer1Km(int pp1km)
-{
- double value = MathHelpers::RestrictValue(pp1km, 1, 60000);
- m_period_distance = (float)(1000.0 / value); //distance of one period in meters
-}
-
-
-//-----------------------------------------------------------------------
 void CControlApp::SetSpeedUnit(int i_unit)
 {
  m_speedUnit = i_unit;
@@ -4619,9 +4618,8 @@ void CControlApp::SetSplitAngMode(bool mode)
 
 //-----------------------------------------------------------------------
 
-CondEncoder::CondEncoder(long quartz_frq, float period_distance)
+CondEncoder::CondEncoder(long quartz_frq)
 : m_quartz_frq(quartz_frq)
-, m_period_distance(period_distance)
 {
  //empty
 }
@@ -4636,7 +4634,7 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_UBAT: return MathHelpers::Round(val * UBAT_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_CARB: return MathHelpers::Round(val);
   case UNIOUT_COND_VSPD:
-   return MathHelpers::Round(((m_period_distance * (3600.0f / 1000.0f)) / val) * ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f));
+   return MathHelpers::Round(val*32.0f);
   case UNIOUT_COND_AIRFL: return MathHelpers::Round(val);
   case UNIOUT_COND_TMR: return MathHelpers::Round(val * 100.0f);
   case UNIOUT_COND_ITTMR: return MathHelpers::Round(val * 100.0f);
@@ -4681,8 +4679,7 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_CARB: return (float)val;
   case UNIOUT_COND_VSPD:
   {
-   float period_s = ((float)val / ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f)); //period in seconds
-   float speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
+   float speed = val / 32.0f; //Km/h
    if (speed > 999.9f) speed = 999.9f;
    return speed;
   }

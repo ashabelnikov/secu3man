@@ -53,6 +53,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optUseDVFeatures(_T("UseDVFeatures"))
 , m_optShowToolTips(_T("ShowToolTips"))
 , m_optShowExFixtures(_T("ExFixtures"))
+, m_optShowSpeedAndDist(_T("ShowSpeedAndDist"))
 , m_optDVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
 , m_optCOMPortBother(_T("COMPortBother"))
 , m_optUseHotKeys(_T("UseHotKeys"))
@@ -76,7 +77,6 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPressureMax(_T("Pressure_Max"))
 , m_optTemperatureMax(_T("Temperature_Max"))
 , m_optInjPWMax(_T("InjPW_Max"))
-, m_optPulsesPer1Km(_T("PulsesPer1Km"))
 , m_optSpeedUnit(_T("SpeedUnit"))
 , m_optRPMAverage(_T("RPMAverage"))
 , m_optVoltAverage(_T("VoltAverage"))
@@ -793,6 +793,7 @@ bool CAppSettingsModel::ReadSettings(void)
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
 
  fs.ReadInt(m_optShowExFixtures, _T("0"), 0, 1);
+ fs.ReadInt(m_optShowSpeedAndDist, _T("1"), 0, 1);
  fs.ReadInt(m_optRPMAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optVoltAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optMAPAverage, _T("4"), 0, 16);
@@ -832,7 +833,6 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
  fs.ReadInt(m_optTemperatureMax, _T("120"), 0, 300);
  fs.ReadInt(m_optInjPWMax, _T("24"), 5, 100);
- fs.ReadInt(m_optPulsesPer1Km, _T("6000"), 0, 60000);
  fs.ReadEnum(m_optSpeedUnit, 0, m_AllowableSpeedUnits);
  fs.ReadInt(m_optTitleFontSize, _T("100"), 10, 200);
  fs.ReadInt(m_optValueFontSize, _T("130"), 10, 200);
@@ -1586,6 +1586,12 @@ bool CAppSettingsModel::WriteSettings(void)
  fs.WriteInt(m_optShowExFixtures); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Display vehicle spped and passed distance in uppers corners of the 'Speed' gauge. Allowed values: 0 and 1"));
+ else
+  fs.WriteComment(_T("ќтображать скорость и пройденное рассто€ние в верхних углах прибора 'ќбороты'. ƒопустимые значени€: 0 или 1"));
+ fs.WriteInt(m_optShowSpeedAndDist); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Size of the moving average filter used for RPM values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
   fs.WriteComment(_T("–азмер €дра фильтра \"скольз€щее среднее\" используемого дл€ усреднени€ значений оборотов. ”становите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
@@ -1776,12 +1782,6 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("“ут указываетс€ максимальное значение дл€ шкалы прибора длит. впрыска (например 24 мс)."));
  fs.WriteInt(m_optInjPWMax); 
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("This value used in calculations of speed and distance using VSS. Number of pulses from VSS sensor per 1km of passed distance."));
- else
-  fs.WriteComment(_T("Ёто значение используетс€ в вычислени€х скорости и пройденного рассто€ни€. „исло импульсов с датчика скорости на 1 км пройденного пути."));
- fs.WriteInt(m_optPulsesPer1Km); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Defines which unit should be used for displaying of vehicle speed and distance. Supported values are: kmh and mph"));
@@ -5165,9 +5165,9 @@ bool CAppSettingsModel::GetShowExFixtures(void) const
  return m_optShowExFixtures.value;
 }
 
-int CAppSettingsModel::GetNumPulsesPer1Km(void) const
+bool CAppSettingsModel::GetShowSpeedAndDist(void) const
 {
- return m_optPulsesPer1Km.value;
+ return m_optShowSpeedAndDist.value;
 }
 
 bool CAppSettingsModel::GetCOMPortBother(void) const
@@ -5615,6 +5615,11 @@ float CAppSettingsModel::GetTunSoftness(void)
 void CAppSettingsModel::SetShowExFixtures(bool i_show)
 {
  m_optShowExFixtures.value = i_show;
+}
+
+void CAppSettingsModel::SetShowSpeedAndDist(bool i_show)
+{
+ m_optShowSpeedAndDist.value = i_show;
 }
 
 bool CAppSettingsModel::GetPortAutoReopen(void) const

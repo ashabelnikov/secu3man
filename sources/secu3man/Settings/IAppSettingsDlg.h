@@ -58,7 +58,7 @@ class IAppSettingsDlg
   virtual void SetDVDeskUpdatePeriod(int i_period) = 0;
   virtual void SetShowToolTips(bool i_show) = 0;
   virtual void SetShowExFixtures(bool i_show) = 0;
-  virtual void SetNumPulsesPer1Km(int i_pp1km) = 0;
+  virtual void SetShowSpeedAndDist(bool i_show) = 0;
   virtual void SetExistingPorts(bool exp) = 0;
   virtual void SetInjDrvTabActive(bool i_active) = 0;
 
@@ -78,7 +78,7 @@ class IAppSettingsDlg
   virtual int GetDVDeskUpdatePeriod(void) = 0;
   virtual bool GetShowToolTips(void) const = 0;
   virtual bool GetShowExFixtures(void) const = 0;
-  virtual int GetNumPulsesPer1Km(void) const = 0;
+  virtual bool GetShowSpeedAndDist(void) const = 0;
   virtual bool GetExistingPorts(void) const = 0;
   virtual bool GetInjDrvTabActive(void) const = 0;
 

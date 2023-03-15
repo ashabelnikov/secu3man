@@ -199,7 +199,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
   virtual void SetShowExFixtures(bool i_show);
-  virtual int GetNumPulsesPer1Km(void) const;
+  virtual bool GetShowSpeedAndDist(void) const;
+  virtual void SetShowSpeedAndDist(bool i_show);
   ////////////////////////////////////////////////////
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const;
   virtual void SetIndicatorsConfig(const IndicatorsCfg& i_cfg);
@@ -296,7 +297,6 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optPressureMax;
   OptField_t<int> m_optTemperatureMax;
   OptField_t<int> m_optInjPWMax;
-  OptField_t<int> m_optPulsesPer1Km;
   OptField_t<int> m_optSpeedUnit;
   OptField_t<bool> m_optCOMPortBother;
   OptField_t<bool> m_optUseHotKeys;
@@ -320,6 +320,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optDVDeskUpdatePeriod;
   OptField_t<bool> m_optShowToolTips;
   OptField_t<bool> m_optShowExFixtures;
+  OptField_t<bool> m_optShowSpeedAndDist;
 
   OptField_t<int>  m_optRPMAverage;
   OptField_t<int>  m_optVoltAverage;
