@@ -30,6 +30,7 @@
 #include "SECU3IO.h"
 #include "SECU3ParametersDef.h"
 #include "SECU3TablesDef.h"
+#include "SECU3Types.h"
 #include "common/MathHelpers.h"
 #include "ufcodes.h"
 #include "BitMask.h"
@@ -45,8 +46,11 @@ using namespace SECU3IO::SECU3Types;
 //Address of errors's array (Check Engine) in EEPROM
 #define EEPROM_ECUERRORS_START (EEPROM_PARAM_START + (sizeof(params_t)))
 
-//Address of tables which can be edited in real time
-#define EEPROM_REALTIME_TABLES_START (EEPROM_ECUERRORS_START + 8)
+//Start of odometer's data
+#define EEPROM_ODOMETER_START (EEPROM_ECUERRORS_START + 4)
+
+//Address of tables which can be edited in the real time
+#define EEPROM_REALTIME_TABLES_START (EEPROM_ODOMETER_START + 4)
 
 EEPROMDataMediator::EEPROMDataMediator(const PPEepromParam& i_epp)
 : m_epp(i_epp)
@@ -1123,4 +1127,16 @@ void EEPROMDataMediator::SetAEMAPMap(int i_index, const float* ip_values)
   p_maps[i_index].inj_ae_map_enr[i] = MathHelpers::Round((ip_values[i] + AEMAPV_MAPS_ADDER));
  for (int i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE; i++ )
   p_maps[i_index].inj_ae_map_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_MAP_LOOKUP_TABLE_SIZE]*AEMAPB_MAPS_M_FACTOR));
+}
+
+float EEPROMDataMediator::GetOdometer(void)
+{
+ SECU3Types::_ulong *p_odv = (SECU3Types::_ulong*)(getBytes() + EEPROM_ODOMETER_START);
+ return (*p_odv) / (32.0f * 1000.0f);
+}
+
+void EEPROMDataMediator::SetOdometer(float odv)
+{
+ SECU3Types::_ulong *p_odv = (SECU3Types::_ulong*)(getBytes() + EEPROM_ODOMETER_START);
+ (*p_odv) = MathHelpers::Round(odv * (1000.0f * 32.0f));
 }

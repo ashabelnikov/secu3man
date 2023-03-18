@@ -202,7 +202,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
     groupIdx++;
     //set buddy and limits
     p_spin->SetBuddy(p_edit);
-    p_edit->SetLimitText(10);
+    p_edit->SetLimitText(12);
     p_edit->SetDecimalPlaces(decPls);
     p_spin->SetRangeAndDelta(vMin, vMax, vStp);
     p_edit->SetRange(vMin, vMax);

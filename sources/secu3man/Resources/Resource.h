@@ -755,3 +755,5 @@
 #define IDC_INJDRV_SIMULTAN_CHECK       4882
 #define IDS_INJDRV_SIMULTAN_CHECK_TT    4883
 #define IDC_CE_LTFT_FUELINJ             4884
+#define IDC_EE_ODOMETER_BTN             4885
+#define IDS_EE_ODOMETER_BTN_TT          4886

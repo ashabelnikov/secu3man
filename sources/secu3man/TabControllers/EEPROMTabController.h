@@ -50,7 +50,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   virtual ~CEEPROMTabController();
 
   bool IsEEPROMOpened(void);
-  EEPROMDataMediator* GetEEDM(void) {return m_eedm;}
+  EEPROMDataMediator* GetEEDM(void) {return mp_eedm;}
 
  private:
   typedef std::map<size_t, std::pair<_TSTRING, DWORD> > ErrorsIDContainer;
@@ -90,6 +90,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   void OnShowCEErrors();
   bool IsLoadGridsAvailable();
   void OnLoadGrids();
+  void OnEditOdometer();
 
   void PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRING& i_file_name);
   bool CheckChangesAskAndSaveEEPROM(void);
@@ -113,7 +114,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   CControlAppAdapter* m_pAdapter;
   ISettingsData* mp_settings;
 
-  EEPROMDataMediator* m_eedm;
+  EEPROMDataMediator* mp_eedm;
   PPEepromParam m_epp;
   CObjectTimer<CEEPROMTabController> m_modification_check_timer;
   CObjectTimer<CEEPROMTabController> m_waiting_bl_timer;

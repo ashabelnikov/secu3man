@@ -69,6 +69,7 @@ class CEEPROMTabDlg : public CTabDialog
   void setOnShowCEErrors(EventHandler OnFunction);
   void setOnLoadGrids(EventHandler OnFunction);
   void setOnResetEeprom(EventHandler OnFunction);
+  void setOnEditOdometer(EventHandler OnFunction);
 
   void EnableMakingChartsChildren(bool enable);
   void EnableToggleMapWnd(bool toggle);
@@ -99,6 +100,7 @@ class CEEPROMTabDlg : public CTabDialog
   afx_msg void OnChangeMapsetName();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnCEErrorsButton();
+  afx_msg void OnEditOdometerButton();
   afx_msg void OnLoadGrids();
   afx_msg void OnResetEeprom();
   DECLARE_MESSAGE_MAP()
@@ -120,6 +122,7 @@ class CEEPROMTabDlg : public CTabDialog
   CStatic   m_modification_flag;
   CButton   m_ee_popup_menu_button;
   CButton   m_ee_ce_errors_btn;
+  CButton   m_ee_odometer_btn;
 
   bool m_is_bl_items_available;
   bool m_initialized;
@@ -135,4 +138,5 @@ class CEEPROMTabDlg : public CTabDialog
   EventHandler m_OnLoadGrids;
   EventResult  m_IsLoadGridsAvailable;
   EventHandler m_OnResetEeprom;
+  EventHandler m_OnEditOdometer;
 };

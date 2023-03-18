@@ -71,6 +71,7 @@ void CEEPROMTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_EE_EERESET_LINK, *mp_eeresetLink);
  DDX_Control(pDX, IDC_EE_CONTENT_LINK, *mp_eecontLink);
  DDX_Control(pDX, IDC_EE_USING_LINK, *mp_eeusingLink);
+ DDX_Control(pDX, IDC_EE_ODOMETER_BTN, m_ee_odometer_btn);
 }
 
 LPCTSTR CEEPROMTabDlg::GetDialogID(void) const
@@ -86,6 +87,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_WM_SIZE()
  ON_BN_CLICKED(IDC_EE_POPUPMENU_BUTTON, OnPopupMenuButton)
  ON_BN_CLICKED(IDC_EE_CE_ERRORS_BTN, OnCEErrorsButton)
+ ON_BN_CLICKED(IDC_EE_ODOMETER_BTN, OnEditOdometerButton)
  ON_COMMAND(IDM_EE_OPEN_EEPROM, OnOpenEEPROMFromFile)
  ON_COMMAND(IDM_EE_SAVE_EEPROM, OnSaveEEPROMToFile)
  ON_COMMAND(IDM_EE_READ_EEPROM, OnReadEEPROMFromSECU)
@@ -103,6 +105,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_EE_GRID_WARNING, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDM_EE_LOAD_GRIDS, OnUpdatePopupMenu_grids)
  ON_UPDATE_COMMAND_UI(IDM_EE_RESET_EEPROM, OnUpdatePopupMenu_bl)
+ ON_UPDATE_COMMAND_UI(IDC_EE_ODOMETER_BTN, OnUpdateControls)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -154,6 +157,7 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_ee_name, MLL::GetString(IDS_EE_EE_NAME_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ee_mapset_name, MLL::GetString(IDS_EE_MAPSET_NAME_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ee_ce_errors_btn, MLL::GetString(IDS_EE_CE_ERRORS_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ee_odometer_btn, MLL::GetString(IDS_EE_ODOMETER_BTN_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -376,6 +380,12 @@ void CEEPROMTabDlg::OnLoadGrids()
   m_OnLoadGrids();
 }
 
+void CEEPROMTabDlg::OnEditOdometerButton()
+{
+ if (m_OnEditOdometer)
+  m_OnEditOdometer();
+}
+
 void CEEPROMTabDlg::setIsEEPROMOpened(EventResult IsFunction)
 {m_IsEEPROMOpened = IsFunction;}
 
@@ -408,6 +418,9 @@ void CEEPROMTabDlg::setOnLoadGrids(EventHandler OnFunction)
 
 void CEEPROMTabDlg::setOnResetEeprom(EventHandler OnFunction)
 {m_OnResetEeprom = OnFunction; }
+
+void CEEPROMTabDlg::setOnEditOdometer(EventHandler OnFunction)
+{m_OnEditOdometer = OnFunction;}
 
 void CEEPROMTabDlg::OnSize(UINT nType, int cx, int cy)
 {

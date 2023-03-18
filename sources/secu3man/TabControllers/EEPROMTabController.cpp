@@ -46,6 +46,7 @@
 #include "CEErrorIdStr.h"
 #include "ErrorMsg.h"
 #include "ui-core/MsgBox.h"
+#include "ui-core/DynFieldsDialog.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -73,10 +74,10 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_epp = holder.GetEepromParameters();
- m_eedm = new EEPROMDataMediator(holder.GetEepromParameters());
- m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
+ mp_eedm = new EEPROMDataMediator(holder.GetEepromParameters());
+ mp_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
- ASSERT(m_eedm);
+ ASSERT(mp_eedm);
 
  mp_bl_data = new BYTE[m_epp.m_size + 1];
  ASSERT(mp_bl_data);
@@ -89,6 +90,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  mp_view->setOnMapsetNameChanged(MakeDelegate(this, &CEEPROMTabController::OnMapselNameChanged));
  mp_view->setIsEEPROMOpened(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
  mp_view->setOnShowCEErrors(MakeDelegate(this, &CEEPROMTabController::OnShowCEErrors));
+ mp_view->setOnEditOdometer(MakeDelegate(this, &CEEPROMTabController::OnEditOdometer));
  mp_view->setIsLoadGridsAvailable(MakeDelegate(this, &CEEPROMTabController::IsLoadGridsAvailable));
  mp_view->setOnLoadGrids(MakeDelegate(this, &CEEPROMTabController::OnLoadGrids));
  mp_view->setOnResetEeprom(MakeDelegate(this, &CEEPROMTabController::OnResetEeprom));
@@ -109,7 +111,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 
 CEEPROMTabController::~CEEPROMTabController()
 {
- delete m_eedm;
+ delete mp_eedm;
  delete[] mp_bl_data;
 }
 
@@ -128,7 +130,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
   return;
  }
 
- m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
+ mp_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
@@ -148,9 +150,9 @@ void CEEPROMTabController::OnActivate(void)
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
- if (m_eedm->IsLoaded())
+ if (mp_eedm->IsLoaded())
  {
-  bool splitAng = m_eedm->GetSplitAngMode(0);
+  bool splitAng = mp_eedm->GetSplitAngMode(0);
   mp_view->mp_TablesPanel->SetSplitAngMode(splitAng);
  }
 
@@ -387,13 +389,13 @@ void CEEPROMTabController::OnOpenEEPROMFromFile(void)
   return;
 
  //проверка контрольной суммы загружаемых параметров и вывод предупреждения
- if (!m_eedm->VerifyParamsCheckSum(buff))
+ if (!mp_eedm->VerifyParamsCheckSum(buff))
  {
   if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
  }
 
- if (!m_eedm->VerifyTablesCheckSum(buff))
+ if (!mp_eedm->VerifyTablesCheckSum(buff))
  {
   if (IDCANCEL==SECUMessageBox(IDS_EE_EEPROM_TABLES_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
@@ -425,13 +427,13 @@ void CEEPROMTabController::OnDropFile(_TSTRING fileName)
   return;
 
  //проверка контрольной суммы загружаемых параметров и вывод предупреждения
- if (!m_eedm->VerifyParamsCheckSum(buff))
+ if (!mp_eedm->VerifyParamsCheckSum(buff))
  {
   if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
  }
 
- if (!m_eedm->VerifyTablesCheckSum(buff))
+ if (!mp_eedm->VerifyTablesCheckSum(buff))
  {
   if (IDCANCEL==SECUMessageBox(IDS_EE_EEPROM_TABLES_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
@@ -446,24 +448,24 @@ void CEEPROMTabController::OnSaveEEPROMToFile(void)
  BYTE *buff = &buff_container[0];
  CString opened_file_name = _T("");
 
- m_eedm->StoreBytes(buff);
+ mp_eedm->StoreBytes(buff);
 
  //в случае подтверждения пользователя, также будует
  //вычислена контрольная сумма и сохранена в массив с EEPROM
- bool result = FirmwareFileUtils::SaveEEPROMToFile(buff, m_epp.m_size, m_eedm, &opened_file_name, true);
+ bool result = FirmwareFileUtils::SaveEEPROMToFile(buff, m_epp.m_size, mp_eedm, &opened_file_name, true);
  if (result)
  {
   //контрольная сумма была сохранена только в массив с EEPROM, которое сохранялось,
   //так как сохранение было подтверждено, то теперь можно обновить и массив с активным EEPROM
-  m_eedm->CalculateAndPlaceParamsCRC();
-  m_eedm->CalculateAndPlaceTablesCRC();
+  mp_eedm->CalculateAndPlaceParamsCRC();
+  mp_eedm->CalculateAndPlaceTablesCRC();
 
   //данные были успешно сохранены - можно сбрасывать признак модификации
-  m_eedm->ResetModified();
+  mp_eedm->ResetModified();
 
   //после сохранения "Save As" обновляем имя открытого файла
-  m_eedm->SetEEFileName(_TSTRING(opened_file_name));
-  mp_view->SetEEFileName(m_eedm->GetEEFileName());
+  mp_eedm->SetEEFileName(_TSTRING(opened_file_name));
+  mp_view->SetEEFileName(mp_eedm->GetEEFileName());
 
   //устанавливаем значения только в графики
   SetViewChartsValues();
@@ -492,10 +494,10 @@ void CEEPROMTabController::OnReadEEPROMFromSECU(void)
 
 void CEEPROMTabController::OnWriteEEPROMToSECU(void)
 {
- m_eedm->StoreBytes(mp_bl_data); //fill m_bl_date with bytes of EEPROM 
+ mp_eedm->StoreBytes(mp_bl_data); //fill m_bl_date with bytes of EEPROM 
 
- m_eedm->CalculateAndPlaceParamsCRC(mp_bl_data); //update CRC before sending data to SECU-3
- m_eedm->CalculateAndPlaceTablesCRC(mp_bl_data);
+ mp_eedm->CalculateAndPlaceParamsCRC(mp_bl_data); //update CRC before sending data to SECU-3
+ mp_eedm->CalculateAndPlaceTablesCRC(mp_bl_data);
 
  ASSERT(mp_comm);
 
@@ -511,9 +513,9 @@ void CEEPROMTabController::OnWriteEEPROMToSECU(void)
 void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRING& i_file_name)
 {
  if (i_buff) //Do we need to load?
-  m_eedm->LoadBytes(i_buff);
+  mp_eedm->LoadBytes(i_buff);
  if (i_file_name!=_T(""))
-  m_eedm->SetEEFileName(_TSTRING(i_file_name));
+  mp_eedm->SetEEFileName(_TSTRING(i_file_name));
  else
  {
   CString string;
@@ -521,7 +523,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
   GetLocalTime(&time);
   string.Format(_T("EE%02u%02u%02u-%02u%02u%04u.bin"),
     time.wHour,time.wMinute,time.wSecond,time.wDay,time.wMonth,time.wYear);
-  m_eedm->SetEEFileName(_TSTRING(string));
+  mp_eedm->SetEEFileName(_TSTRING(string));
  }
 
  //enable all tables
@@ -550,7 +552,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  mp_view->mp_ParamDeskDlg->EnableChoke(true);
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(true);
 
- bool splitAng = m_eedm->GetSplitAngMode(0);
+ bool splitAng = mp_eedm->GetSplitAngMode(0);
  mp_view->mp_TablesPanel->SetSplitAngMode(splitAng);
  
  SetViewValues();
@@ -558,7 +560,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
 
 bool CEEPROMTabController::CheckChangesAskAndSaveEEPROM(void)
 {
- bool modified = m_eedm->IsModified();
+ bool modified = mp_eedm->IsModified();
  if (modified && mp_settings->GetSaveWarning())
  {
   int result = SECUMessageBox(MLL::LoadString(IDS_EE_MODIFICATION_WARNING), MB_YESNOCANCEL);
@@ -588,130 +590,130 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
- m_eedm->GetDefParamValues(FUNSET_PAR, &params);
+ mp_eedm->GetDefParamValues(FUNSET_PAR, &params);
  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
 
  int funset_index = 0;
 
- m_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
- m_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(true),true);
+ mp_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
+ mp_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(true),true);
 
- m_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(false),false);
- m_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(true),true);
+ mp_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(false),false);
+ mp_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(true),true);
 
- m_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(false),false);
- m_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(true),true);
+ mp_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(false),false);
+ mp_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(true),true);
 
- m_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(false),false);
- m_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(true),true);
+ mp_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(false),false);
+ mp_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(true),true);
 
- m_eedm->GetTempIdlMap(funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(false),false);
- m_eedm->GetTempIdlMap(funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(true),true);
+ mp_eedm->GetTempIdlMap(funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(false),false);
+ mp_eedm->GetTempIdlMap(funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(true),true);
 
  //fuel injection
- m_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(false),false);
- m_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(true),true);
+ mp_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(false),false);
+ mp_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(true),true);
 
- m_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(false),false);
- m_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(true),true);
+ mp_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(false),false);
+ mp_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(true),true);
 
- m_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(false),false);
- m_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(true),true);
+ mp_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(false),false);
+ mp_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(true),true);
 
- m_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(false),false);
- m_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(true),true);
+ mp_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(false),false);
+ mp_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(true),true);
 
- m_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(false),false);
- m_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(true),true);
+ mp_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(false),false);
+ mp_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(true),true);
 
- m_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(false),false);
- m_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(true),true);
+ mp_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(false),false);
+ mp_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(true),true);
 
- m_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(false),false);
- m_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(true),true);
+ mp_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(false),false);
+ mp_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(true),true);
 
- m_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(false),false);
- m_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(true),true);
+ mp_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(false),false);
+ mp_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(true),true);
 
- m_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(false),false);
- m_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(true),true);
+ mp_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(false),false);
+ mp_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(true),true);
 
- m_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(false),false);
- m_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(true),true);
+ mp_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(false),false);
+ mp_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(true),true);
 
- m_eedm->GetAEMAPMap(funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(false),false);
- m_eedm->GetAEMAPMap(funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(true),true);
+ mp_eedm->GetAEMAPMap(funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(false),false);
+ mp_eedm->GetAEMAPMap(funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(true),true);
 
- m_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(false),false);
- m_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(true),true);
+ mp_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(false),false);
+ mp_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(true),true);
 
- m_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(false),false);
- m_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(true),true);
+ mp_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(false),false);
+ mp_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(true),true);
 
- m_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(false),false);
- m_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(true),true);
+ mp_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(false),false);
+ mp_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(true),true);
 
- m_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(false),false);
- m_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(true),true);
+ mp_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(false),false);
+ mp_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(true),true);
 
- m_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(false),false);
- m_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(true),true);
+ mp_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(false),false);
+ mp_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(true),true);
 
- m_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(false),false);
- m_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(true),true);
+ mp_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(false),false);
+ mp_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(true),true);
 
- m_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(false),false);
- m_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(true),true);
+ mp_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(false),false);
+ mp_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(true),true);
 
- m_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(false),false);
- m_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(true),true);
+ mp_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(false),false);
+ mp_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(true),true);
 
- m_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(false),false);
- m_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(true),true);
+ mp_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(false),false);
+ mp_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(true),true);
 
- m_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(false),false);
- m_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(true),true);
+ mp_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(false),false);
+ mp_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(true),true);
 
- m_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(false),false);
- m_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(true),true);
+ mp_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(false),false);
+ mp_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(true),true);
 
- m_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(false),false);
- m_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(true),true);
+ mp_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(false),false);
+ mp_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(true),true);
 
- m_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
- m_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
+ mp_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
+ mp_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
 
- m_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(false),false);
- m_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(true),true);
+ mp_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(false),false);
+ mp_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(true),true);
 
- m_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
- m_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
+ mp_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
+ mp_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
 
- m_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(false),false);
- m_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(true),true);
+ mp_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(false),false);
+ mp_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(true),true);
 
- m_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(false),false);
- m_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(true),true);
+ mp_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(false),false);
+ mp_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(true),true);
 
- m_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(false),false);
- m_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(true),true);
+ mp_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(false),false);
+ mp_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(true),true);
 
- m_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(false),false);
- m_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(true),true);
+ mp_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(false),false);
+ mp_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(true),true);
 }
 
 
 void CEEPROMTabController::SetViewValues(void)
 {
- if (m_eedm->IsLoaded()==false)
+ if (mp_eedm->IsLoaded()==false)
   return;
 
- std::vector<_TSTRING> str = m_eedm->GetFunctionsSetNames();
+ std::vector<_TSTRING> str = mp_eedm->GetFunctionsSetNames();
  mp_view->SetMapsetName(str[0].c_str());
  SetViewChartsValues();
  mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
- mp_view->SetEEFileName(m_eedm->GetEEFileName());
+ mp_view->SetEEFileName(mp_eedm->GetEEFileName());
 
  std::vector<_TSTRING> funset_names = m_funset_names;
 
@@ -727,13 +729,13 @@ void CEEPROMTabController::SetViewValues(void)
  mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
  BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
- m_eedm->GetDefParamValues(descriptor, paramdata);
+ mp_eedm->GetDefParamValues(descriptor, paramdata);
  mp_view->mp_ParamDeskDlg->SetValues(descriptor, paramdata);
 }
 
 bool CEEPROMTabController::IsEEPROMOpened()
 {
- return m_eedm->IsLoaded();
+ return mp_eedm->IsLoaded();
 }
 
 void CEEPROMTabController::OnMapChanged(int i_type)
@@ -743,124 +745,124 @@ void CEEPROMTabController::OnMapChanged(int i_type)
  {
    //ignition maps
   case TYPE_MAP_DA_START:
-   m_eedm->SetStartMap(funset_index, mp_view->mp_TablesPanel->GetStartMap(false));
+   mp_eedm->SetStartMap(funset_index, mp_view->mp_TablesPanel->GetStartMap(false));
    break;
   case TYPE_MAP_DA_IDLE:
-   m_eedm->SetIdleMap(funset_index, mp_view->mp_TablesPanel->GetIdleMap(false));
+   mp_eedm->SetIdleMap(funset_index, mp_view->mp_TablesPanel->GetIdleMap(false));
    break;
   case TYPE_MAP_DA_WORK:
-   m_eedm->SetWorkMap(funset_index, mp_view->mp_TablesPanel->GetWorkMap(false));
+   mp_eedm->SetWorkMap(funset_index, mp_view->mp_TablesPanel->GetWorkMap(false));
    break;
   case TYPE_MAP_DA_TEMP_CORR:
-   m_eedm->SetTempMap(funset_index, mp_view->mp_TablesPanel->GetTempMap(false));
+   mp_eedm->SetTempMap(funset_index, mp_view->mp_TablesPanel->GetTempMap(false));
    break;
   case TYPE_MAP_DA_TEMPI_CORR:
-   m_eedm->SetTempIdlMap(funset_index, mp_view->mp_TablesPanel->GetTempIdlMap(false));
+   mp_eedm->SetTempIdlMap(funset_index, mp_view->mp_TablesPanel->GetTempIdlMap(false));
    break;
    //fuel injection maps
   case TYPE_MAP_INJ_VE:
-   m_eedm->SetVEMap(funset_index, mp_view->mp_TablesPanel->GetVEMap(false));
+   mp_eedm->SetVEMap(funset_index, mp_view->mp_TablesPanel->GetVEMap(false));
    break;
   case TYPE_MAP_INJ_VE2:
-   m_eedm->SetVE2Map(funset_index, mp_view->mp_TablesPanel->GetVE2Map(false));
+   mp_eedm->SetVE2Map(funset_index, mp_view->mp_TablesPanel->GetVE2Map(false));
    break;
   case TYPE_MAP_INJ_AFR:
-   m_eedm->SetAFRMap(funset_index, mp_view->mp_TablesPanel->GetAFRMap(false));
+   mp_eedm->SetAFRMap(funset_index, mp_view->mp_TablesPanel->GetAFRMap(false));
    break;
   case TYPE_MAP_INJ_CRNK:
-   m_eedm->SetCrnkMap(funset_index, mp_view->mp_TablesPanel->GetCrnkMap(false));
+   mp_eedm->SetCrnkMap(funset_index, mp_view->mp_TablesPanel->GetCrnkMap(false));
    break;
   case TYPE_MAP_INJ_WRMP:
-   m_eedm->SetWrmpMap(funset_index, mp_view->mp_TablesPanel->GetWrmpMap(false));
+   mp_eedm->SetWrmpMap(funset_index, mp_view->mp_TablesPanel->GetWrmpMap(false));
    break;
   case TYPE_MAP_INJ_DEAD:
-   m_eedm->SetDeadMap(funset_index, mp_view->mp_TablesPanel->GetDeadMap(false));
+   mp_eedm->SetDeadMap(funset_index, mp_view->mp_TablesPanel->GetDeadMap(false));
    break;
   case TYPE_MAP_INJ_IDLR:
-   m_eedm->SetIdlrMap(funset_index, mp_view->mp_TablesPanel->GetIdlrMap(false));
+   mp_eedm->SetIdlrMap(funset_index, mp_view->mp_TablesPanel->GetIdlrMap(false));
    break;
   case TYPE_MAP_INJ_IDLC:
-   m_eedm->SetIdlcMap(funset_index, mp_view->mp_TablesPanel->GetIdlcMap(false));
+   mp_eedm->SetIdlcMap(funset_index, mp_view->mp_TablesPanel->GetIdlcMap(false));
    break;
   case TYPE_MAP_INJ_THRASS:
-   m_eedm->SetThrassMap(funset_index, mp_view->mp_TablesPanel->GetThrassMap(false));
+   mp_eedm->SetThrassMap(funset_index, mp_view->mp_TablesPanel->GetThrassMap(false));
    break;
   case TYPE_MAP_INJ_AETPS:
-   m_eedm->SetAETPSMap(funset_index, mp_view->mp_TablesPanel->GetAETPSMap(false));
+   mp_eedm->SetAETPSMap(funset_index, mp_view->mp_TablesPanel->GetAETPSMap(false));
    break;
   case TYPE_MAP_INJ_AEMAP:
-   m_eedm->SetAEMAPMap(funset_index, mp_view->mp_TablesPanel->GetAEMAPMap(false));
+   mp_eedm->SetAEMAPMap(funset_index, mp_view->mp_TablesPanel->GetAEMAPMap(false));
    break;
   case TYPE_MAP_INJ_AERPM:
-   m_eedm->SetAERPMMap(funset_index, mp_view->mp_TablesPanel->GetAERPMMap(false));
+   mp_eedm->SetAERPMMap(funset_index, mp_view->mp_TablesPanel->GetAERPMMap(false));
    break;
   case TYPE_MAP_INJ_AFTSTR:
-   m_eedm->SetAftstrMap(funset_index, mp_view->mp_TablesPanel->GetAftstrMap(false));
+   mp_eedm->SetAftstrMap(funset_index, mp_view->mp_TablesPanel->GetAftstrMap(false));
    break;
   case TYPE_MAP_INJ_IT:
-   m_eedm->SetITMap(funset_index, mp_view->mp_TablesPanel->GetITMap(false));
+   mp_eedm->SetITMap(funset_index, mp_view->mp_TablesPanel->GetITMap(false));
    break;
   case TYPE_MAP_INJ_ITRPM:
-   m_eedm->SetITRPMMap(funset_index, mp_view->mp_TablesPanel->GetITRPMMap(false));
+   mp_eedm->SetITRPMMap(funset_index, mp_view->mp_TablesPanel->GetITRPMMap(false));
    break;
   case TYPE_MAP_INJ_RIGID:
-   m_eedm->SetRigidMap(funset_index, mp_view->mp_TablesPanel->GetRigidMap(false));
+   mp_eedm->SetRigidMap(funset_index, mp_view->mp_TablesPanel->GetRigidMap(false));
    break;
   case TYPE_MAP_INJ_EGOCRV:
-   m_eedm->SetEGOCurveMap(funset_index, mp_view->mp_TablesPanel->GetEGOCurveMap(false));
+   mp_eedm->SetEGOCurveMap(funset_index, mp_view->mp_TablesPanel->GetEGOCurveMap(false));
    break;
   case TYPE_MAP_INJ_IACC:
-   m_eedm->SetIACCorrMap(funset_index, mp_view->mp_TablesPanel->GetIACCMap(false));
+   mp_eedm->SetIACCorrMap(funset_index, mp_view->mp_TablesPanel->GetIACCMap(false));
    break;
   case TYPE_MAP_INJ_IACCW:
-   m_eedm->SetIACCorrWMap(funset_index, mp_view->mp_TablesPanel->GetIACCWMap(false));
+   mp_eedm->SetIACCorrWMap(funset_index, mp_view->mp_TablesPanel->GetIACCWMap(false));
    break;
   case TYPE_MAP_INJ_IATCLT:
-   m_eedm->SetIATCLTMap(funset_index, mp_view->mp_TablesPanel->GetIATCLTMap(false));
+   mp_eedm->SetIATCLTMap(funset_index, mp_view->mp_TablesPanel->GetIATCLTMap(false));
    break;
   case TYPE_MAP_INJ_TPSSWT:
-   m_eedm->SetTpsswtMap(funset_index, mp_view->mp_TablesPanel->GetTpsswtMap(false));
+   mp_eedm->SetTpsswtMap(funset_index, mp_view->mp_TablesPanel->GetTpsswtMap(false));
    break;
   case TYPE_MAP_INJ_GTSC:
-   m_eedm->SetGtscMap(funset_index, mp_view->mp_TablesPanel->GetGtscMap(false));
+   mp_eedm->SetGtscMap(funset_index, mp_view->mp_TablesPanel->GetGtscMap(false));
    break;
   case TYPE_MAP_INJ_GPSC:
-   m_eedm->SetGpscMap(funset_index, mp_view->mp_TablesPanel->GetGpscMap(false));
+   mp_eedm->SetGpscMap(funset_index, mp_view->mp_TablesPanel->GetGpscMap(false));
    break;
   case TYPE_MAP_INJ_ATSC:
-   m_eedm->SetAtscMap(funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
+   mp_eedm->SetAtscMap(funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
    break;
   case TYPE_MAP_PWM1:
-   m_eedm->SetPwm1Map(funset_index, mp_view->mp_TablesPanel->GetPwm1Map(false));
+   mp_eedm->SetPwm1Map(funset_index, mp_view->mp_TablesPanel->GetPwm1Map(false));
    break;
   case TYPE_MAP_PWM2:
-   m_eedm->SetPwm2Map(funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
+   mp_eedm->SetPwm2Map(funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
    break;
   case TYPE_MAP_INJ_IACMAT:
-   m_eedm->SetIACMATMap(funset_index, mp_view->mp_TablesPanel->GetIACMATMap(false));
+   mp_eedm->SetIACMATMap(funset_index, mp_view->mp_TablesPanel->GetIACMATMap(false));
    break;
   case TYPE_MAP_INJ_TPSZON:
-   m_eedm->SetTpszonMap(funset_index, mp_view->mp_TablesPanel->GetTpszonMap(false));
+   mp_eedm->SetTpszonMap(funset_index, mp_view->mp_TablesPanel->GetTpszonMap(false));
    break;
   case TYPE_MAP_INJ_CYLMULT:
-   m_eedm->SetInjCylMultMap(funset_index, mp_view->mp_TablesPanel->GetCylMultMap(false));
+   mp_eedm->SetInjCylMultMap(funset_index, mp_view->mp_TablesPanel->GetCylMultMap(false));
    break;
   case TYPE_MAP_INJ_CYLADD:
-   m_eedm->SetInjCylAddMap(funset_index, mp_view->mp_TablesPanel->GetCylAddMap(false));
+   mp_eedm->SetInjCylAddMap(funset_index, mp_view->mp_TablesPanel->GetCylAddMap(false));
    break;
  }
 }
 
 void CEEPROMTabController::OnModificationCheckTimer(void)
 {
- bool modified = m_eedm->IsModified();
+ bool modified = mp_eedm->IsModified();
  mp_view->SetModified(modified);
 }
 
 void CEEPROMTabController::OnMapselNameChanged(void)
 {
  CString string = mp_view->GetMapsetName();
- m_eedm->SetFunctionsSetName(0, _TSTRING(string));
+ mp_eedm->SetFunctionsSetName(0, _TSTRING(string));
 }
 
 //from ParamDesk
@@ -868,7 +870,7 @@ void CEEPROMTabController::OnParamDeskTabActivate(void)
 {
  BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
- m_eedm->GetDefParamValues(descriptor,paramdata);
+ mp_eedm->GetDefParamValues(descriptor,paramdata);
  mp_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 }
 
@@ -878,7 +880,7 @@ void CEEPROMTabController::OnParamDeskChangeInTab(void)
  BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
  mp_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);
- m_eedm->SetDefParamValues(descriptor,paramdata);
+ mp_eedm->SetDefParamValues(descriptor,paramdata);
 
  //update load axis's grids in all related maps
  if (descriptor==FUNSET_PAR)
@@ -890,7 +892,7 @@ void CEEPROMTabController::OnParamDeskChangeInTab(void)
 
 void CEEPROMTabController::OnShowCEErrors()
 {
- std::set<int> errors = m_eedm->GetCEErrorsList();
+ std::set<int> errors = mp_eedm->GetCEErrorsList();
  std::set<int>::const_iterator it = errors.begin();
  CString str; 
 
@@ -931,7 +933,7 @@ void CEEPROMTabController::OnShowCEErrors()
   int result = SECUMessageBox(str, MB_YESNO | MB_DEFBUTTON2 | MB_ICONINFORMATION);
   if (result == IDYES) 
   {
-   m_eedm->ResetCEErrorsList();
+   mp_eedm->ResetCEErrorsList();
   }
  }
 }
@@ -1006,13 +1008,13 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
     //-----------------------------------------------------------------------------------
     //проверка контрольной суммы загружаемых параметров и вывод предупреждения
     bool chk_sum_status = true;
-    if (!m_eedm->VerifyParamsCheckSum(mp_bl_data))
+    if (!mp_eedm->VerifyParamsCheckSum(mp_bl_data))
     {
      if (IDCANCEL==SECUMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
       chk_sum_status = false; //user canceled
     }
 
-    if (!m_eedm->VerifyTablesCheckSum(mp_bl_data))
+    if (!mp_eedm->VerifyTablesCheckSum(mp_bl_data))
     {
      if (IDCANCEL==SECUMessageBox(IDS_EE_EEPROM_TABLES_CRC_INVALID, MB_OKCANCEL))
       chk_sum_status = false; //user canceled
@@ -1152,14 +1154,14 @@ void CEEPROMTabController::OnLoadGrids(void)
 
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
- m_eedm->GetDefParamValues(FUNSET_PAR, &params);
+ mp_eedm->GetDefParamValues(FUNSET_PAR, &params);
  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
 
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
 
  //load functions' set names from firmware
  std::vector<_TSTRING> funset_names = p_fwdm->GetFunctionsSetNames();
- std::vector<_TSTRING> str = m_eedm->GetFunctionsSetNames();
+ std::vector<_TSTRING> str = mp_eedm->GetFunctionsSetNames();
  m_funset_names = funset_names; //save for further use
  funset_names.push_back(str[0]);
  mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
@@ -1175,5 +1177,22 @@ void CEEPROMTabController::OnResetEeprom(void)
   packet_data.opcode = SECU3IO::OPCODE_RESET_EEPROM;
   packet_data.opdata = 0xAA;
   mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ }
+}
+
+void CEEPROMTabController::OnEditOdometer(void)
+{
+ CDynFieldsContainer dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование одометра") : _T("Editing odometer"), 200, true);
+
+ float odometer_value = mp_eedm->GetOdometer();
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Текущий пробег"), _T("км"), 0, 99999.999f, 1, 4, &odometer_value, _T("Текущий пробег сохраненный в памяти. Укажите требуемое значение"));
+ else
+  dfd.AppendItem(_T("Current mileage"), _T("km"), 0, 99999.999f, 1, 4, &odometer_value, _T("Current mileage stored in memory. Specify required value"));
+
+ if (dfd.DoModal()==IDOK)
+ {
+  mp_eedm->SetOdometer(odometer_value);
  }
 }

@@ -145,6 +145,9 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void GetPwm2Map(int i_index, float* o_values, bool i_original = false);
   void SetPwm2Map(int i_index, const float* i_values);
 
+  float GetOdometer(void); //TODO: use double for better accuracy
+  void SetOdometer(float odv); //TODO: use double for better accuracy
+
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
 
