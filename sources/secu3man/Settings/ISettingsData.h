@@ -542,6 +542,7 @@ struct LogFileFields
  _TSTRING m_fldUniOuts;
  _TSTRING m_fldMAPdot;
  _TSTRING m_fldFts;
+ _TSTRING m_fldConsFuel;
 };
 
 //Functionality

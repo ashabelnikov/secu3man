@@ -239,7 +239,7 @@ BEGIN
     IDS_MI_GRTS_TITLE       "ДТГР"
     IDS_MI_FUELCONSUM_TITLE "Расход топлива"
     IDS_MI_FUELCONSUM_UNIT  "Л/100км"
-    IDS_MI_FUELCONSUMH_UNIT "Л/час"
+    IDS_MI_FUELCONSUMH_UNIT "Л/ч"
     IDS_MI_KNOCKRETARD_TITLE "Корр. УОЗ от ДД"
     IDS_MI_SENSAFR_TITLE     "Воздух/топливо ШДК"
     IDS_MI_SENSAFR_UNIT      "в/т"
@@ -298,6 +298,7 @@ BEGIN
     IDS_MI_INJ_DUTY_V_UNIT     "Загр.форс,%"
     IDS_MI_MAFGRAPH_V_UNIT    "ДМРВ,г/сек"
     IDS_MI_FTSGRAPH_V_UNIT    "ДТТ,°C"
+    IDS_MI_CONSFUEL_UNIT      "Л"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -600,6 +601,7 @@ BEGIN
     IDS_MI_OPS_UNIT          "kg/cm2"
     IDS_MI_MAF_TITLE         "MAF"
     IDS_MI_MAF_UNIT          "g/sec"
+    IDS_MI_CONSFUEL_UNIT     "L"
 END
 
 STRINGTABLE DISCARDABLE 

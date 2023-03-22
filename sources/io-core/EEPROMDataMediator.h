@@ -148,6 +148,9 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   float GetOdometer(void); //TODO: use double for better accuracy
   void SetOdometer(float odv); //TODO: use double for better accuracy
 
+  float GetConsFuel(void); //TODO: use double for better accuracy
+  void SetConsFuel(float cf); //TODO: use double for better accuracy
+
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
 

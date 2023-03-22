@@ -47,10 +47,12 @@ using namespace SECU3IO::SECU3Types;
 #define EEPROM_ECUERRORS_START (EEPROM_PARAM_START + (sizeof(params_t)))
 
 //Start of odometer's data
-#define EEPROM_ODOMETER_START (EEPROM_ECUERRORS_START + 4)
+// EEPROM_ODOMETER_START    passed distance
+// EEPROM_ODOMETER_START+5  consumed fuel
+#define EEPROM_ODOMETER_START (EEPROM_ECUERRORS_START + 8)
 
 //Address of tables which can be edited in the real time
-#define EEPROM_REALTIME_TABLES_START (EEPROM_ODOMETER_START + 4)
+#define EEPROM_REALTIME_TABLES_START (EEPROM_ODOMETER_START + 10)
 
 EEPROMDataMediator::EEPROMDataMediator(const PPEepromParam& i_epp)
 : m_epp(i_epp)
@@ -1139,4 +1141,16 @@ void EEPROMDataMediator::SetOdometer(float odv)
 {
  SECU3Types::_ulong *p_odv = (SECU3Types::_ulong*)(getBytes() + EEPROM_ODOMETER_START);
  (*p_odv) = MathHelpers::Round(odv * (1000.0f * 32.0f));
+}
+
+float EEPROMDataMediator::GetConsFuel(void)
+{
+ SECU3Types::_ulong *p_cf = (SECU3Types::_ulong*)(getBytes() + EEPROM_ODOMETER_START + 5);
+ return (*p_cf) / 262144.0f; //262144 = 2^18
+}
+
+void EEPROMDataMediator::SetConsFuel(float cf)
+{
+ SECU3Types::_ulong *p_cf = (SECU3Types::_ulong*)(getBytes() + EEPROM_ODOMETER_START + 5);
+ (*p_cf) = MathHelpers::Round(cf * 262144.0f); //262144 = 2^18
 }

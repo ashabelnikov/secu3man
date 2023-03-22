@@ -553,6 +553,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldVentDuty(_T("VentDuty"))
 , m_optLogFieldUniOuts(_T("UnivOuts"))
 , m_optLogFieldFts(_T("FTS"))
+, m_optLogFieldConsFuel(_T("FuelConsumed"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -1364,6 +1365,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldUniOuts, _T("UnivOuts"));
  lf.ReadString(m_optLogFieldMAPdot, _T("MAPdot"));
  lf.ReadString(m_optLogFieldFts, _T("FTS"));
+ lf.ReadString(m_optLogFieldConsFuel, _T("FuelConsumed"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -4099,6 +4101,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldUniOuts);
  lf.WriteString(m_optLogFieldMAPdot);
  lf.WriteString(m_optLogFieldFts);
+ lf.WriteString(m_optLogFieldConsFuel);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -6018,6 +6021,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldUniOuts.value = i_flds.m_fldUniOuts;
  m_optLogFieldMAPdot.value = i_flds.m_fldMAPdot;
  m_optLogFieldFts.value = i_flds.m_fldFts;
+ m_optLogFieldConsFuel.value = i_flds.m_fldConsFuel;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -6090,6 +6094,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldUniOuts = m_optLogFieldUniOuts.value;
  o_flds.m_fldMAPdot = m_optLogFieldMAPdot.value;
  o_flds.m_fldFts = m_optLogFieldFts.value;
+ o_flds.m_fldConsFuel = m_optLogFieldConsFuel.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

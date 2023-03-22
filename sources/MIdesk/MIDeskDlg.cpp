@@ -233,6 +233,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
  m_ventdutyQVal.reserve(r);
  m_ftsQVal[0].reserve(r);
  m_ftsQVal[1].reserve(r);
+ m_conflQVal.push_back(std::make_pair(0.0f, false));
 }
 
 CMIDeskDlg::~CMIDeskDlg()
@@ -515,6 +516,8 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
  m_ftsQVal[1].push_back(std::make_pair(i_values->fts, i_revdir));
 
  m_ventdutyQVal.push_back(std::make_pair(i_values->vent_duty, i_revdir)); //cooling fan's duty
+
+ m_conflQVal[0].first = i_values->cons_fuel; //fuel consumed
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -2045,9 +2048,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
-   widget->BindVars(&m_fuelcQVal[0], &m_fuelchQVal[0], NULL);
+   widget->BindVars(&m_fuelcQVal[0], &m_fuelchQVal[0], &m_conflQVal);
    widget->ShowTLP(true);
-   widget->SetPaneUnit(MLL::GetString(IDS_MI_FUELCONSUMH_UNIT), _T(""));
+   widget->ShowTRP(true);
+   widget->SetPaneUnit(MLL::GetString(IDS_MI_FUELCONSUMH_UNIT), MLL::GetString(IDS_MI_CONSFUEL_UNIT));
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;

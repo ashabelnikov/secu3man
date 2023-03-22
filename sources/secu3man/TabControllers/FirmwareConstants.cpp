@@ -574,9 +574,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Timeout for parameters' automatic saving"), _T("sec"), .0f, 60.0f, 0.1f, 2, &d.save_param_timeout, _T("SECU-3 unit monitors the state of the parameters and if the specified time has passed since the last editing, the parameters will be automatically saved. Set to 0 if you need to disable autosaving."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог отсечки топлива по скорости авто"), _T("км/ч"), 1.0f, 100.0f, 0.1f, 1, &d.fuelcut_vss_thrd, _T("Отсечка топлива на ходу (ЭПХХ) не будет применяться если скорость авто ниже этого порога"));
+  dfd.AppendItem(_T("Порог отсечки топлива по скорости авто"), _T("км/ч"), 0.0f, 100.0f, 0.1f, 1, &d.fuelcut_vss_thrd, _T("Отсечка топлива на ходу (ЭПХХ) не будет применяться если скорость авто ниже этого порога"));
  else
-  dfd.AppendItem(_T("Vehicle speed threshold for fuel cut"), _T("km/h"), 1.0f, 100.0f, 0.1f, 1, &d.fuelcut_vss_thrd, _T("Fuel cut off on run will not be applied if vehicle's speed is less than this threshold"));
+  dfd.AppendItem(_T("Vehicle speed threshold for fuel cut"), _T("km/h"), 0.0f, 100.0f, 0.1f, 1, &d.fuelcut_vss_thrd, _T("Fuel cut off on run will not be applied if vehicle's speed is less than this threshold"));
 
  if (dfd.DoModal()==IDOK)
  {

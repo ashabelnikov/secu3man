@@ -494,3 +494,4 @@
 #define IDS_MI_FTS_TITLE                2576
 #define IDC_MI_FTSGRAPH                 2577
 #define IDS_MI_FTSGRAPH_V_UNIT          2578
+#define IDS_MI_CONSFUEL_UNIT            2579

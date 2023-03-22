@@ -1185,14 +1185,21 @@ void CEEPROMTabController::OnEditOdometer(void)
  CDynFieldsContainer dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование одометра") : _T("Editing odometer"), 200, true);
 
  float odometer_value = mp_eedm->GetOdometer();
+ float consfuel_value = mp_eedm->GetConsFuel();
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Текущий пробег"), _T("км"), 0, 99999.999f, 1, 4, &odometer_value, _T("Текущий пробег сохраненный в памяти. Укажите требуемое значение"));
  else
   dfd.AppendItem(_T("Current mileage"), _T("km"), 0, 99999.999f, 1, 4, &odometer_value, _T("Current mileage stored in memory. Specify required value"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Израсходовано топлива"), _T("Л"), 0, 9999.999f, 1, 4, &consfuel_value, _T("Объем израсходованного топлива сохраненный в памяти. Укажите требуемое значение"));
+ else
+  dfd.AppendItem(_T("Fuel consumed"), _T("L"), 0, 9999.999f, 1, 4, &consfuel_value, _T("Volume of consumed fuel stored in memory. Specify required value"));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_eedm->SetOdometer(odometer_value);
+  mp_eedm->SetConsFuel(consfuel_value);
  }
 }

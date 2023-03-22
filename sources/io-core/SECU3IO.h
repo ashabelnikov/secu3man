@@ -128,6 +128,7 @@ namespace SECU3IO
   bool uniout[UNI_OUTPUT_NUM];          //States of universal outputs
 
   float fts;                            //Fuel temperature sensor
+  float cons_fuel;                      //Consumed fuel (L)
  };
 
  struct DbgvarDat

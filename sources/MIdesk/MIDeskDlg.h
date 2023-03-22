@@ -357,6 +357,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   GraphVal_t m_mafQVal[2];
   GraphVal_t m_ventdutyQVal;
   GraphVal_t m_ftsQVal[2];
+  GraphVal_t m_conflQVal;
 };
 
 /////////////////////////////////////////////////////////////////////////////

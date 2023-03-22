@@ -47,6 +47,7 @@ void CMIFuelConsum::Create(CWnd* pParent)
  MeasInstrBase::Create(pParent, IDC_MI_FUELCONSUM); //create window
 
  m_tlpFmt = _T("%0.2f ");
+ m_trpFmt = _T("%0.3f ");
 
  m_meter.SetRange (0.0, 50.0);
  m_meter.SetLabelsDecimals(0);
