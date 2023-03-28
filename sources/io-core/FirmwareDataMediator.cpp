@@ -359,10 +359,12 @@ typedef struct
 
  _uint iac_addonrun_vss_thrd;
 
+ _uint iac_min_rpm_on_run;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1974];
+ _uchar reserved[1972];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3133,6 +3135,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.evap_on_vss_thrd = ((float)exd.evap_on_vss_thrd) / 32.0f;
  o_data.evap_off_vss_thrd = ((float)exd.evap_off_vss_thrd) / 32.0f;
  o_data.iac_addonrun_vss_thrd = ((float)exd.iac_addonrun_vss_thrd) / 32.0f;
+
+ o_data.iac_min_rpm_on_run = exd.iac_min_rpm_on_run;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3236,6 +3240,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.evap_on_vss_thrd = MathHelpers::Round(i_data.evap_on_vss_thrd * 32.0f);
  exd.evap_off_vss_thrd = MathHelpers::Round(i_data.evap_off_vss_thrd * 32.0f);
  exd.iac_addonrun_vss_thrd = MathHelpers::Round(i_data.iac_addonrun_vss_thrd * 32.0f);
+
+ exd.iac_min_rpm_on_run = i_data.iac_min_rpm_on_run;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

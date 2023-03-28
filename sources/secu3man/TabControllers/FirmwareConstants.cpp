@@ -194,6 +194,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Start of running threshold for IAC"), _T("km/h"), 1.0f, 100.0f, 0.1f, 1, &d.iac_addonrun_vss_thrd, _T("If the speed of vehicle is exceed this threshold, then IAC regulator will increase RPM by 'RPM add on run' value."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Минимальные обороты на ходу"), _T("мин-1"), 0, 3000, 1, 0, &d.iac_min_rpm_on_run, _T("Если скорость авто превысит этот порог, то РХХ будет поддерживать обороты двигателя на уровне не меньше этого значения."));
+ else
+  dfd.AppendItem(_T("Minimum RPM on running"), _T("min-1"), 0, 3000, 1, 0, &d.iac_min_rpm_on_run, _T("If the speed of vehicle is exceed this threshold, then IAC regulator will keep RPM not less that this value."));
+
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));
