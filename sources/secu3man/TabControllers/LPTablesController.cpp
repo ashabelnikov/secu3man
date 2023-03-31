@@ -62,7 +62,7 @@ CLPTablesController::CLPTablesController(CLPControlPanelDlg* ip_view, ISettingsD
 , m_eeprom_opened(false)
 {
  m_ve2_map_load_slots.reserve(32);
- m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16, true); //<--reverse order
+ m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16);
 
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
  memset(m_clt_grid_values, 0, 16 * sizeof(float));

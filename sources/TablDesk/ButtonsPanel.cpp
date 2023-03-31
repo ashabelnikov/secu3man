@@ -85,7 +85,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
  memset(m_load_grid_values, 0, 16 * sizeof(float));
 
  m_ve2_map_load_slots.reserve(32);
- m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16, true); //<--reverse order
+ m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16);
 }
 
 CButtonsPanel::~CButtonsPanel()

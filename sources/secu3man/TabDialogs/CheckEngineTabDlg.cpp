@@ -42,7 +42,7 @@ const UINT CCheckEngineTabDlg::IDD = IDD_CHECK_ENGINE;
 
 CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CCheckEngineTabDlg::IDD, pParent)
-, m_ltft_map(16, 16, true, true, NULL, 3, true) //inverted order of rows and vertical labels' data, read-only
+, m_ltft_map(16, 16, false, false, NULL, 3, true) // read-only
 , m_all_enabled(false)
 , m_trimtab_enabled(false)
 , m_rw_buttons_enabled(false)

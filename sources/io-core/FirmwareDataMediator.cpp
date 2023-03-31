@@ -2032,9 +2032,9 @@ void CFirmwareDataMediator::SetLoadGridMap(const float* ip_values)
  for(size_t i = 0; i < F_LOAD_SLOTS; i++)
   p_fd->exdata.load_grid_points[i] = MathHelpers::Round(ip_values[i] * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
- //calculate sizes (note: reverse order)
+ //calculate sizes
  for(size_t i = 0; i < F_LOAD_SLOTS-1; i++)
-  p_fd->exdata.load_grid_sizes[i] = p_fd->exdata.load_grid_points[i] - p_fd->exdata.load_grid_points[i+1];
+  p_fd->exdata.load_grid_sizes[i] = p_fd->exdata.load_grid_points[i+1] - p_fd->exdata.load_grid_points[i];
 }
 
 void CFirmwareDataMediator::GetATSAACMap(float* op_values, bool i_original /* = false */)

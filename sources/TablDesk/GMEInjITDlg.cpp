@@ -46,7 +46,7 @@ END_MESSAGE_MAP()
 
 CGMEInjITDlg::CGMEInjITDlg(CWnd* pParent /*=NULL*/)
 : Super(CGMEInjITDlg::IDD, pParent)
-, m_it_map(16, 16, true, true, NULL, 3)
+, m_it_map(16, 16, false, false, NULL, 3)
 , mp_ITMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)

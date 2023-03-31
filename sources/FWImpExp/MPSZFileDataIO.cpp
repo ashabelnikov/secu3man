@@ -216,7 +216,7 @@ void MPSZDataMPX_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_d
   op_data->maps[i].name = A2T(raw_str);
  }
 
- //104 - дeбильное магическое число
+ //104 - magic naumber
  //вытягиваем пусковую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
@@ -234,11 +234,10 @@ void MPSZDataMPX_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_d
  //вытягиваем рабочую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
-  int k = 0;
-  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
   {
    for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-    op_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] = (104 - HIBYTE(p_raws->work[i][j][f])) / 2.0f;
+    op_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] = (104 - HIBYTE(p_raws->work[i][j][f])) / 2.0f;
   }
  }
 
@@ -272,7 +271,7 @@ void MPSZDataMPX_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawd
    p_raws->names[i][j] = MAKEWORD(0,raw_str[j]);
  }
 
- //104 - дeбильное магическое число
+ //104 - magic number
  //засовываем пусковую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
@@ -290,11 +289,10 @@ void MPSZDataMPX_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawd
  //засовываем рабочую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
-  int k = 0;
-  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
   {
    for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-    p_raws->work[i][j][f] = MAKEWORD(0,(104 - MathHelpers::Round(ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f)));
+    p_raws->work[i][j][f] = MAKEWORD(0,(104 - MathHelpers::Round(ip_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f)));
   }
  }
 }
@@ -354,11 +352,10 @@ void MPSZDataMPXv2_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op
  //вытягиваем рабочую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
-  int k = 0;
-  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
   {
    for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-    op_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] = (120 - (p_raws->work[i][j][f])) / 2.0f;
+    op_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] = (120 - (p_raws->work[i][j][f])) / 2.0f;
   }
  }
 
@@ -423,11 +420,10 @@ void MPSZDataMPXv2_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_ra
  //засовываем рабочую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
-  int k = 0;
-  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
   {
    for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-    p_raws->work[i][j][f] = (120 - MathHelpers::Round(ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f));
+    p_raws->work[i][j][f] = (120 - MathHelpers::Round(ip_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f));
   }
  }
 
@@ -499,11 +495,10 @@ void MPSZDataMPX4864_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* 
  //вытягиваем рабочую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
-  int k = 0;
-  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
   {
    for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-    op_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] = (120 - (p_raws->work[i][j][f])) / 2.0f;
+    op_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] = (120 - (p_raws->work[i][j][f])) / 2.0f;
   }
  }
 
@@ -568,11 +563,10 @@ void MPSZDataMPX4864_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_
  //засовываем рабочую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
-  int k = 0;
-  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
   {
    for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-    p_raws->work[i][j][f] = (120 - MathHelpers::Round(ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f));
+    p_raws->work[i][j][f] = (120 - MathHelpers::Round(ip_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f));
   }
  }
 }
@@ -596,11 +590,10 @@ void MPSZDataMPZ_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_d
  int i = 0, j;
 
  //вытягиваем рабочую карту
- int k = 0;
- for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+ for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
  {
   for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-   op_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] = (p_raws->work[j][f]) / 2.0f;
+   op_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] = (p_raws->work[j][f]) / 2.0f;
  }
 
  //вытягиваем пусковую карту
@@ -639,11 +632,10 @@ void MPSZDataMPZ_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawd
  int i = 0, j;
 
  //засовываем рабочую карту
- int k = 0;
- for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+ for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
  {
   for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-   p_raws->work[j][f] = MathHelpers::Round((ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f]) * 2.0f);
+   p_raws->work[j][f] = MathHelpers::Round((ip_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f]) * 2.0f);
  }
 
  //засовываем пусковую карту
@@ -681,11 +673,10 @@ void MPSZDataMPZ288_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* o
  int i = 0, j;
 
  //вытягиваем рабочую карту
- int k = 0;
- for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+ for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
  {
   for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-   op_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] = (p_raws->work[j][f]) / 2.0f;
+   op_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f] = (p_raws->work[j][f]) / 2.0f;
  }
 
  //вытягиваем пусковую карту
@@ -723,11 +714,10 @@ void MPSZDataMPZ288_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_r
  int i = 0, j;
 
  //засовываем рабочую карту
- int k = 0;
- for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+ for(j = 0; j < MPSZ_WORK_MAP_SIZE_L; j++)
  {
   for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-   p_raws->work[j][f] = MathHelpers::Round((ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f]) * 2.0f);
+   p_raws->work[j][f] = MathHelpers::Round((ip_data->maps[i].f_wrk[(j*MPSZ_WORK_MAP_SIZE_F)+f]) * 2.0f);
  }
 
  //засовываем пусковую карту

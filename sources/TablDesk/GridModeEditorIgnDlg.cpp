@@ -93,7 +93,7 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , m_en_aa_indication(false)
 , m_start_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_idle_map(1, 16, false, false, DLL::GetModuleHandle())
-, m_work_map(16, 16, true, true, DLL::GetModuleHandle(), 3)
+, m_work_map(16, 16, false, false, DLL::GetModuleHandle(), 3)
 , m_temp_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_tempi_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_ldaxMin(1.0f)
@@ -106,7 +106,7 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 {
  _ResetUseFlags();
  m_work_map_load_slots.reserve(32);
- m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16, true);  //<--reverse order
+ m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
  m_curDV.baro_press = 101.3f; //sea level atmospheric pressure by default
 
  wrk_caption_wrk = MLL::GetString(IDS_GME_WM_CAPTION_WRKTEXT);
@@ -427,7 +427,7 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
  if (m_ldaxNeedsUpdate || (baroChanged && useBaroMax))
  {
-  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? m_curDV.baro_press : m_ldaxMax, 16, true); //<-- reverse order
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? m_curDV.baro_press : m_ldaxMax, 16);
   m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
   m_work_map.UpdateDisplay();
   m_ldaxNeedsUpdate = false;
@@ -447,7 +447,7 @@ void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useT
 
  if (m_ldaxNeedsUpdate && forceUpdate)
  {
-  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16);
   m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
   m_work_map.UpdateDisplay(); 
   m_ldaxNeedsUpdate = false;

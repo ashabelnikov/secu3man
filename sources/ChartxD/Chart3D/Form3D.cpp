@@ -42,7 +42,7 @@
 char TForm3D::m_csvsep_symb = ',';
 
 //---------------------------------------------------------------------------
-//цвета для 3D графика
+//colours for 3D chart
 long col[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491,
                0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
                0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF,
@@ -112,8 +112,8 @@ void TForm3D::DataPrepare()
  Chart1->LeftAxis->Minimum = m_fnc_min - range / 20.0f;
 
  Chart1->Chart3DPercent = 29;
- FillChart(0,0);
-
+ FillChart(0, 0);
+ 
  SetAirFlow(m_air_flow_position); //set trackbar position
  CheckBox3dClick(NULL);
 
@@ -378,7 +378,7 @@ void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
 void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
 {
  if (CheckBox3d->Checked)
- {
+ { //3D
   ShowPoints(false);
   Chart1->View3D  = true;
   MakeAllVisible();
@@ -394,14 +394,14 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   PM_Import->Enabled = true;
  }
  else
- {
+ { //2D
   ShowPoints(true);
   Chart1->View3D = false;
   MakeOneVisible(m_air_flow_position);
   TrackBarAf->Enabled = true;
   LabelAfv->Enabled = true;
   CheckBoxBv->Enabled = false;
-  FillChart(0,0);
+  FillChart(0, 0);
   for (int i = 0; i < PopupMenu->Items->Count; i++)
    PopupMenu->Items->Items[i]->Enabled = true;
  }
@@ -527,11 +527,10 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
 float TForm3D::GetItem_o(int z, int x) const
 {
  if ((z >= m_count_z) || (x >= m_count_x)) return 0.0f;
- int i  = (m_count_z - 1) - z;
  if (m_pOnValueTransform)
-  return m_pOnValueTransform(m_param_on_value_transform, *(mp_original_function + ((i * m_count_x) + x)), 0); //get
+  return m_pOnValueTransform(m_param_on_value_transform, *(mp_original_function + ((z * m_count_x) + x)), 0); //get
  else
-  return *(mp_original_function + ((i * m_count_x) + x));
+  return *(mp_original_function + ((z * m_count_x) + x));
 }
 
 //---------------------------------------------------------------------------
@@ -539,19 +538,17 @@ float TForm3D::GetItem_o(int z, int x) const
 float TForm3D::GetItem_m(int z, int x) const
 {
  if ((z >= m_count_z) || (x >= m_count_x)) return 0.0f;
- int i  = (m_count_z - 1) - z;
  if (m_pOnValueTransform)
-  return m_pOnValueTransform(m_param_on_value_transform, *(mp_modified_function + ((i * m_count_x) + x)), 0); //get
+  return m_pOnValueTransform(m_param_on_value_transform, *(mp_modified_function + ((z * m_count_x) + x)), 0); //get
  else
-  return *(mp_modified_function + ((i * m_count_x) + x));
+  return *(mp_modified_function + ((z * m_count_x) + x));
 }
 
 //---------------------------------------------------------------------------
 float* TForm3D::GetItem_mp(int z, int x)
 {
  if ((z >= m_count_z) || (x >= m_count_x)) return NULL;
- int i  = (m_count_z - 1) - z;
- return (mp_modified_function + ((i * m_count_x) + x));
+ return (mp_modified_function + ((z * m_count_x) + x));
 }
 
 //---------------------------------------------------------------------------
@@ -559,11 +556,10 @@ float* TForm3D::GetItem_mp(int z, int x)
 int TForm3D::SetItem(int z, int x, float value)
 {
  if ((z >= m_count_z) || (x >= m_count_x)) return 0;
- int i  = (m_count_z - 1) - z;
  if (m_pOnValueTransform)
-  *(mp_modified_function + ((i * m_count_x) + x)) = m_pOnValueTransform(m_param_on_value_transform, value, 1); //set
+  *(mp_modified_function + ((z * m_count_x) + x)) = m_pOnValueTransform(m_param_on_value_transform, value, 1); //set
  else
-  *(mp_modified_function + ((i * m_count_x) + x)) = value;
+  *(mp_modified_function + ((z * m_count_x) + x)) = value;
  return 1;
 }
 
@@ -612,7 +608,7 @@ void TForm3D::ShowPoints(bool show)
 }
 
 //---------------------------------------------------------------------------
-void TForm3D::FillChart(bool dir,int cm)
+void TForm3D::FillChart(bool dir, int cm)
 {
  int d, k; AnsiString as;
  if (!dir)
@@ -620,25 +616,26 @@ void TForm3D::FillChart(bool dir,int cm)
  else
   d = -1, k = m_count_z - 1;
 
+ //Clear all series
  for(int j = 0; j < m_count_z; j++)
  {
-  Chart1->Series[j]->Clear();
-  Chart1->Series[j+m_count_z]->Clear();
+  Chart1->Series[j]->Clear(); //original
+  Chart1->Series[j + m_count_z]->Clear(); //modified
  }
-
+ //Add series again
  for(int j = 0; j < m_count_z; j++)
  {
   for(int i = 0; i < m_count_x; i++)
   {
    as.sprintf(m_values_format_x.c_str(),m_u_slots[i]);
    if (cm)
-   {
-    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,TColor(col[j]));
+   {//add only modified series, each serie has its own color
+    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i), as, TColor(col[j]));
    }
    else
-   {
-    Chart1->Series[k]->Add(GetItem_o(j,i),as,clAqua);
-    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,clRed);
+   {//add original and modified series
+    Chart1->Series[k]->Add(GetItem_o(j,i), as, clAqua); //original
+    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i), as, clRed); //modified
    }
   }
   k+=d;

@@ -42,7 +42,7 @@ END_MESSAGE_MAP()
 
 CGMEInjAFRDlg::CGMEInjAFRDlg(CWnd* pParent /*=NULL*/)
 : Super(CGMEInjAFRDlg::IDD, pParent)
-, m_afr_map(16, 16, true, true, NULL, 3)
+, m_afr_map(16, 16, false, false, NULL, 3)
 , mp_AFRMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)

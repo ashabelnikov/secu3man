@@ -932,7 +932,7 @@ const int INPAVNUM = 14;
 
  const float voltage_map_slots[16] = {5.4f,6.2f,7.0f,7.8f,8.6f,9.4f,10.2f,11.0f,11.8f,12.6f,13.4f,14.2f,15.0f,15.8f,16.6f,17.4f};
 
- const float work_map_lod_slots[16]  = {100,95,90,85,80,75,70,65,60,55,50,45,40,35,30,25}; //reverse order
+ const float work_map_lod_slots[16]  = {25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
 
  const float inj_cyladd_map_slots[8] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
 

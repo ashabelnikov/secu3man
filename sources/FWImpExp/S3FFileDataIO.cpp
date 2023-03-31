@@ -117,11 +117,11 @@ struct S3FMapSetItem
  //ignition
  s3f_int32_t f_str[F_STR_POINTS];                          //start
  s3f_int32_t f_idl[F_IDL_POINTS];                          //idle 
- s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F];       //work
+ s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F];       //work, lines are stored in reverse direction!
  s3f_int32_t f_tmp[F_TMP_POINTS];                          //temperature
  //fuel injection, since v01.03
- s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];    // VE
- s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // AFR
+ s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];    // VE, lines are stored in reverse direction!
+ s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // AFR, lines are stored in reverse direction!
  s3f_int32_t inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE]; // Cranking PW
  s3f_int32_t inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];     // Warmup enrichment
  s3f_int32_t inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];      // Injector's dead time
@@ -131,7 +131,7 @@ struct S3FMapSetItem
  s3f_int32_t inj_ae_rpm[INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2]; // AE RPM (values and horizontal axis bins)
  s3f_int32_t inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE];     // Afterstart enrichment
  //injection timing and EGO curve, since v01.05
- s3f_int32_t inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F];// Injection timing
+ s3f_int32_t inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F];// Injection timing, lines are stored in reverse direction!
  s3f_int32_t inj_ego_curve[INJ_EGO_CURVE_SIZE+2];          // EGO curve
  //since v01.06
  s3f_int32_t inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE];    // Target RPM
@@ -145,14 +145,14 @@ struct S3FMapSetItem
  s3f_int32_t inj_gps_corr[INJ_GPS_CORR_SIZE+2];            // PW correction vs gas pressure
  s3f_int32_t inj_ats_corr[INJ_ATS_CORR_SIZE];              // PW correction vs air temperature
  //since v01.13
- s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty
- s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty
+ s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty, lines are stored in reverse direction!
+ s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty, lines are stored in reverse direction!
  //since v01.16
  s3f_int32_t f_tmp_idl[F_TMP_POINTS];                      //temperature (idling)
  //since v01.17
  s3f_int32_t iac_mat_corr[INJ_ATS_CORR_SIZE];              // IAC position's correction vs MAT
  //since v01.18
- s3f_int32_t inj_ve2[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // Secondary VE
+ s3f_int32_t inj_ve2[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // Secondary VE, lines are stored in reverse direction!
  //since v01.21
  s3f_int32_t inj_tpszon[INJ_TPSZON_SIZE];                  // MAP/TPS load axis allocation
  //since v01.24
@@ -256,7 +256,7 @@ struct S3FSepMaps
  s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
  s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
  s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
- s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map
+ s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map, lines are stored in reverse direction!
  s3f_int32_t tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //TEMP2 temperature sensor look up table, since v01.07
  //since v01.09
  s3f_int32_t barocorr_table[BAROCORR_SIZE+2]; //barometric correction
@@ -271,7 +271,7 @@ struct S3FSepMaps
  s3f_int32_t clt_slots[F_TMP_SLOTS]; //CLT grid (appeared in version 01.11, reserved bytes were utilized)
  s3f_ce_sett_t cesd; //CE settings' data
  //since v01.13
- s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map
+ s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map, lines are stored in reverse direction!
  //since v01.14
  s3f_int32_t grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //GRTS temperature sensor look up table, since v01.14 
  s3f_int32_t grheat_duty[F_TMP_POINTS];                       //temperature
@@ -298,7 +298,7 @@ struct S3FSepMaps
  s3f_int32_t ftls_corr[FTLSCOR_UCOEF_SIZE];             //FTLS correction vs board voltage
 
  //since v01.23
- s3f_int32_t lambda_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //lambda zones map
+ s3f_int32_t lambda_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //lambda zones map, lines are stored in reverse direction!
 
  //since v01.26
  s3f_int32_t fts_curve[FTS_LOOKUP_TABLE_SIZE+2];        //FTS curve
@@ -317,11 +317,11 @@ struct S3FMapSetItem_v0115
  //ignition
  s3f_int32_t f_str[F_STR_POINTS];                          //start
  s3f_int32_t f_idl[F_IDL_POINTS];                          //idle 
- s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F];       //work
+ s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F];       //work, lines are stored in reverse direction!
  s3f_int32_t f_tmp[F_TMP_POINTS];                          //temperature
  //fuel injection, since v01.03
- s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];    // VE
- s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // AFR
+ s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];    // VE, lines are stored in reverse direction!
+ s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // AFR, lines are stored in reverse direction!
  s3f_int32_t inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE]; // Cranking PW
  s3f_int32_t inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];     // Warmup enrichment
  s3f_int32_t inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];      // Injector's dead time
@@ -331,7 +331,7 @@ struct S3FMapSetItem_v0115
  s3f_int32_t inj_ae_rpm[INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2]; // AE RPM (values and horizontal axis bins)
  s3f_int32_t inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE];     // Afterstart enrichment
  //injection timing and EGO curve, since v01.05
- s3f_int32_t inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F];// Injection timing
+ s3f_int32_t inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F];// Injection timing, lines are stored in reverse direction!
  s3f_int32_t inj_ego_curve[INJ_EGO_CURVE_SIZE+2];          // EGO curve
  //since v01.06
  s3f_int32_t inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE];    // Target RPM
@@ -345,8 +345,8 @@ struct S3FMapSetItem_v0115
  s3f_int32_t inj_gps_corr[9+2];                            // PW correction vs gas pressure
  s3f_int32_t inj_ats_corr[INJ_ATS_CORR_SIZE];              // PW correction vs air temperature
  //since v01.13
- s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty
- s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty
+ s3f_int32_t pwm_duty1[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM1 duty, lines are stored in reverse direction!
+ s3f_int32_t pwm_duty2[F_WRK_POINTS_L * F_WRK_POINTS_F];   // PWM2 duty, lines are stored in reverse direction!
  //since v01.16
  s3f_int32_t f_tmp_idl[F_TMP_POINTS];                      //temperature (idling)
 
@@ -439,7 +439,7 @@ struct S3FSepMaps_v0115
  s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
  s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
  s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
- s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map
+ s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map, lines are stored in reverse direction!
  s3f_int32_t tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //TEMP2 temperature sensor look up table, since v01.07
  //since v01.09
  s3f_int32_t barocorr_table[BAROCORR_SIZE+2]; //barometric correction
@@ -454,7 +454,7 @@ struct S3FSepMaps_v0115
  s3f_int32_t clt_slots[F_TMP_SLOTS]; //CLT grid (appeared in version 01.11, reserved bytes were utilized)
  s3f_ce_sett_t_v0115 cesd; //CE settings' data
  //since v01.13
- s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map
+ s3f_int32_t knock_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //knock zones map, lines are stored in reverse direction!
  //since v01.14
  s3f_int32_t grts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //GRTS temperature sensor look up table, since v01.14 
  s3f_int32_t grheat_duty[F_TMP_POINTS];                       //temperature
@@ -497,6 +497,20 @@ struct S3FSepMaps_v0102
 };
 
 #pragma pack( pop, enter_S3FFileMap )
+
+//get item from array with reversing order of lines
+template <class T>
+T _RLG(T* p_arr, size_t i)
+{
+ return MathHelpers::RevLineGet<T, F_WRK_POINTS_L, F_WRK_POINTS_F>(p_arr, i);
+}
+
+//get item from array with reversing order of items
+template <class T>
+T _RIG(T* p_arr, size_t i)
+{
+ return MathHelpers::RevItemGet<T, F_WRK_POINTS_L>(p_arr, i);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 S3FFileDataIO::S3FFileDataIO(bool sepmaps /*= true*/)
@@ -605,18 +619,18 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   for(i = 0; i < F_IDL_POINTS; ++i)
    p_setItem[s].f_idl[i] = MathHelpers::Round(m_data.maps[s].f_idl[i] * INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   p_setItem[s].f_wrk[i] = MathHelpers::Round(m_data.maps[s].f_wrk[i] * INT_MULTIPLIER);
+   p_setItem[s].f_wrk[i] = MathHelpers::Round(_RLG(m_data.maps[s].f_wrk, i) * INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
    p_setItem[s].f_tmp[i] = MathHelpers::Round(m_data.maps[s].f_tmp[i] * INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
    p_setItem[s].f_tmp_idl[i] = MathHelpers::Round(m_data.maps[s].f_tmp_idl[i] * INT_MULTIPLIER);
   //fuel injection
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   p_setItem[s].inj_ve[i] = MathHelpers::Round(m_data.maps[s].inj_ve[i] * INT_MULTIPLIER);
+   p_setItem[s].inj_ve[i] = MathHelpers::Round(_RLG(m_data.maps[s].inj_ve, i) * INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   p_setItem[s].inj_ve2[i] = MathHelpers::Round(m_data.maps[s].inj_ve2[i] * INT_MULTIPLIER);
+   p_setItem[s].inj_ve2[i] = MathHelpers::Round(_RLG(m_data.maps[s].inj_ve2, i) * INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   p_setItem[s].inj_afr[i] = MathHelpers::Round(m_data.maps[s].inj_afr[i] * INT_MULTIPLIER);
+   p_setItem[s].inj_afr[i] = MathHelpers::Round(_RLG(m_data.maps[s].inj_afr, i) * INT_MULTIPLIER);
   for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
    p_setItem[s].inj_cranking[i] = MathHelpers::Round(m_data.maps[s].inj_cranking[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
@@ -634,7 +648,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
    p_setItem[s].inj_aftstr[i] = MathHelpers::Round(m_data.maps[s].inj_aftstr[i] * INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   p_setItem[s].inj_timing[i] = MathHelpers::Round(m_data.maps[s].inj_timing[i] * INT_MULTIPLIER);
+   p_setItem[s].inj_timing[i] = MathHelpers::Round(_RLG(m_data.maps[s].inj_timing, i) * INT_MULTIPLIER);
   for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
    p_setItem[s].inj_ego_curve[i] = MathHelpers::Round(m_data.maps[s].inj_ego_curve[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
@@ -661,9 +675,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    p_setItem[s].inj_ats_corr[i] = MathHelpers::Round(m_data.maps[s].inj_ats_corr[i] * INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   p_setItem[s].pwm_duty1[i] = MathHelpers::Round(m_data.maps[s].pwm_duty1[i] * INT_MULTIPLIER);
+   p_setItem[s].pwm_duty1[i] = MathHelpers::Round(_RLG(m_data.maps[s].pwm_duty1, i) * INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   p_setItem[s].pwm_duty2[i] = MathHelpers::Round(m_data.maps[s].pwm_duty2[i] * INT_MULTIPLIER);
+   p_setItem[s].pwm_duty2[i] = MathHelpers::Round(_RLG(m_data.maps[s].pwm_duty2, i) * INT_MULTIPLIER);
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    p_setItem[s].iac_mat_corr[i] = MathHelpers::Round(m_data.maps[s].iac_mat_corr[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_TPSZON_SIZE; ++i)
@@ -707,7 +721,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->ats_corr_table[i] = MathHelpers::Round(m_data.ats_corr_table[i] * INT_MULTIPLIER);
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
-  p_sepMaps->gasdose_pos_table[i] = MathHelpers::Round(m_data.gasdose_pos_table[i] * INT_MULTIPLIER);
+  p_sepMaps->gasdose_pos_table[i] = MathHelpers::Round(_RLG(m_data.gasdose_pos_table, i) * INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   p_sepMaps->tmp2_curve[i] = MathHelpers::Round(m_data.tmp2_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < BAROCORR_SIZE+2; ++i)
@@ -725,9 +739,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
   p_sepMaps->smapaban_thrd[i] = MathHelpers::Round(m_data.smapaban_thrd[i] * INT_MULTIPLIER);
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  p_sepMaps->knock_zone[i] = MathHelpers::Round(m_data.knock_zone[i] * INT_MULTIPLIER);
+  p_sepMaps->knock_zone[i] = MathHelpers::Round(_RLG(m_data.knock_zone, i) * INT_MULTIPLIER);
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  p_sepMaps->lambda_zone[i] = MathHelpers::Round(m_data.lambda_zone[i] * INT_MULTIPLIER);
+  p_sepMaps->lambda_zone[i] = MathHelpers::Round(_RLG(m_data.lambda_zone, i) * INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   p_sepMaps->grts_curve[i] = MathHelpers::Round(m_data.grts_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
@@ -764,7 +778,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->clt_slots[i] = MathHelpers::Round(m_data.clt_slots[i] * INT_MULTIPLIER);
  //convert load grid
  for(i = 0; i < F_LOAD_SLOTS; ++i)
-  p_sepMaps->load_slots[i] = MathHelpers::Round(m_data.load_slots[i] * INT_MULTIPLIER);
+  p_sepMaps->load_slots[i] = MathHelpers::Round(_RIG(m_data.load_slots, i) * INT_MULTIPLIER);
 
  //CE settings
  p_sepMaps->cesd.map_v_min = MathHelpers::Round(m_data.cesd.map_v_min * INT_MULTIPLIER);
@@ -886,18 +900,18 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   for(i = 0; i < F_IDL_POINTS; ++i)
    m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_wrk[i] = _RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
    m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
    m_data.maps[s].f_tmp_idl[i] = p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER;
   //fuel injection
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_ve[i] = p_setItem[s].inj_ve[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ve[i] = _RLG(p_setItem[s].inj_ve, i) / INT_MULTIPLIER;
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_ve2[i] = p_setItem[s].inj_ve2[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ve2[i] = _RLG(p_setItem[s].inj_ve2, i) / INT_MULTIPLIER;
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_afr[i] = p_setItem[s].inj_afr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_afr[i] = _RLG(p_setItem[s].inj_afr, i) / INT_MULTIPLIER;
   for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
    m_data.maps[s].inj_cranking[i] = p_setItem[s].inj_cranking[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
@@ -915,7 +929,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
    m_data.maps[s].inj_aftstr[i] = p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER;
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_timing[i] = p_setItem[s].inj_timing[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_timing[i] = _RLG(p_setItem[s].inj_timing, i) / INT_MULTIPLIER;
   for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
    m_data.maps[s].inj_ego_curve[i] = p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
@@ -942,9 +956,9 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty1[i] = p_setItem[s].pwm_duty1[i] / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty1[i] = _RLG(p_setItem[s].pwm_duty1, i) / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty2[i] = p_setItem[s].pwm_duty2[i] / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty2[i] = _RLG(p_setItem[s].pwm_duty2, i) / INT_MULTIPLIER;
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    m_data.maps[s].iac_mat_corr[i] = p_setItem[s].iac_mat_corr[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_TPSZON_SIZE; ++i)
@@ -985,7 +999,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
-  m_data.gasdose_pos_table[i] = p_sepMaps->gasdose_pos_table[i] / INT_MULTIPLIER;
+  m_data.gasdose_pos_table[i] = _RLG(p_sepMaps->gasdose_pos_table, i) / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.tmp2_curve[i] = p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < BAROCORR_SIZE+2; ++i)
@@ -1003,9 +1017,9 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
   m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  m_data.knock_zone[i] = p_sepMaps->knock_zone[i] / INT_MULTIPLIER;
+  m_data.knock_zone[i] = _RLG(p_sepMaps->knock_zone, i) / INT_MULTIPLIER;
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  m_data.lambda_zone[i] = p_sepMaps->lambda_zone[i] / INT_MULTIPLIER;
+  m_data.lambda_zone[i] = _RLG(p_sepMaps->lambda_zone, i) / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < F_TMP_POINTS; ++i)
@@ -1054,7 +1068,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  {
   if (0 != p_sepMaps->load_slots[i])
    empty = false;
-  m_data.load_slots[i] = p_sepMaps->load_slots[i] / INT_MULTIPLIER;
+  m_data.load_slots[i] = _RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER;
  }
 
  if (empty) //copy standard CLT grid if source is empty
@@ -1157,16 +1171,16 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   for(i = 0; i < F_IDL_POINTS; ++i)
    m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_wrk[i] = _RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
    m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
    m_data.maps[s].f_tmp_idl[i] = p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER;
   //fuel injection
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_ve[i] = p_setItem[s].inj_ve[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ve[i] = _RLG(p_setItem[s].inj_ve, i) / INT_MULTIPLIER;
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_afr[i] = p_setItem[s].inj_afr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_afr[i] = _RLG(p_setItem[s].inj_afr, i) / INT_MULTIPLIER;
   for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
    m_data.maps[s].inj_cranking[i] = p_setItem[s].inj_cranking[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
@@ -1184,7 +1198,7 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
    m_data.maps[s].inj_aftstr[i] = p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER;
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_timing[i] = p_setItem[s].inj_timing[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_timing[i] = _RLG(p_setItem[s].inj_timing, i) / INT_MULTIPLIER;
   for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
    m_data.maps[s].inj_ego_curve[i] = p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
@@ -1245,9 +1259,9 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
    m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty1[i] = p_setItem[s].pwm_duty1[i] / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty1[i] = _RLG(p_setItem[s].pwm_duty1, i) / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty2[i] = p_setItem[s].pwm_duty2[i] / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty2[i] = _RLG(p_setItem[s].pwm_duty2, i) / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];
@@ -1276,7 +1290,7 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
-  m_data.gasdose_pos_table[i] = p_sepMaps->gasdose_pos_table[i] / INT_MULTIPLIER;
+  m_data.gasdose_pos_table[i] = _RLG(p_sepMaps->gasdose_pos_table, i) / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.tmp2_curve[i] = p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < BAROCORR_SIZE+2; ++i)
@@ -1294,7 +1308,7 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
   m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  m_data.knock_zone[i] = p_sepMaps->knock_zone[i] / INT_MULTIPLIER;
+  m_data.knock_zone[i] = _RLG(p_sepMaps->knock_zone, i) / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < F_TMP_POINTS; ++i)
@@ -1327,7 +1341,7 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  {
   if (0 != p_sepMaps->load_slots[i])
    empty = false;
-  m_data.load_slots[i] = p_sepMaps->load_slots[i] / INT_MULTIPLIER;
+  m_data.load_slots[i] = _RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER;
  }
 
  if (empty || (p_fileHdr->version < 0x0111)) //copy standard CLT grid if old version of S3F is being loaded
@@ -1427,7 +1441,7 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
   for(i = 0; i < F_IDL_POINTS; ++i)
    m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_wrk[i] = _RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
    m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
   //convert name

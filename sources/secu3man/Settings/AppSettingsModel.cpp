@@ -5525,7 +5525,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
 void CAppSettingsModel::SetLamDelMap(float* map, float* rb, float* lb)
 {
  for(size_t i = 0; i < m_optLambdaDelay.value.size(); ++i)
-  m_optLambdaDelay.value[i] = MathHelpers::Round(map[i]); 
+  m_optLambdaDelay.value[i] = MathHelpers::Round(MathHelpers::RevLineGet<float, 3, 3>(map, i)); //convert from normal order to reverse order
  for(size_t i = 0; i < m_optLambdaDelayL.value.size(); ++i)
   m_optLambdaDelayL.value[i] = MathHelpers::Round(lb[i]); 
  for(size_t i = 0; i < m_optLambdaDelayR.value.size(); ++i)
@@ -5535,7 +5535,7 @@ void CAppSettingsModel::SetLamDelMap(float* map, float* rb, float* lb)
 void CAppSettingsModel::GetLamDelMap(float* map, float* rb, float* lb)
 {
  for(size_t i = 0; i < m_optLambdaDelay.value.size(); ++i)
-  map[i] = (float)m_optLambdaDelay.value[i];
+  map[i] = (float)MathHelpers::RevLineGet<int, 3, 3>(&m_optLambdaDelay.value[0], i); //convert from reverse order to normal order
  for(size_t i = 0; i < m_optLambdaDelayL.value.size(); ++i)
   lb[i] = (float)m_optLambdaDelayL.value[i];
  for(size_t i = 0; i < m_optLambdaDelayR.value.size(); ++i)

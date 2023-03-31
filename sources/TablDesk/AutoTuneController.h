@@ -80,7 +80,7 @@ class CAutoTuneController
 
  void BindMaps(float* pVE, float* pAFR, float* pVE2);
  void BindRPMGrid(float* pGrid);
- void BindLoadGrid(const float* pGrid, const float* pGrid2);
+ void BindLoadGrid(const float* pGrid1, const float* pGrid2);
  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable);
  void SetVE2MapFunc(int func); // 0 - 1st map, 1 - mult, 2 - add
  void SetAFRError(float afrError);
@@ -123,7 +123,7 @@ class CAutoTuneController
   void OnTimer(void);
   void OnSelectVEMap(int vemap); //0 - 1st, 1 - 2nd
   int _GetActiveVEMapId(void);
-  std::vector<float>& _GetLoadGrid(int grid = -1);
+  const float* _GetLoadGrid(int grid = -1);
 
  private:
   CObjectTimer<CAutoTuneController> m_timer;
@@ -146,15 +146,16 @@ class CAutoTuneController
 
   bool m_active;
   float* mp_rpmGrid;
-  const float* mp_lodGrid;
+  const float* mp_lodGrid1; //load grid set for VE1
+  const float* mp_lodGrid2; //load grid set for VE2
 
   float m_ldaxMin;
   float m_ldaxMax;
   float m_baro_press;
   bool m_ldaxNeedsUpdate;
   bool m_ldaxUseTable;
-  std::vector<float> m_loadGrid;
-  std::vector<float> m_loadGrid2;
+  const float* mp_lodGridx; //current load grid selected for VE1 (mp_lodGrid1 or m_dynGrid)
+  std::vector<float> m_dynGrid; //dynamically generated load grid
   float m_afrerr;
 
   CGMEInjVEDlg* mp_view;

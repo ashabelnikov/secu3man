@@ -312,20 +312,16 @@ namespace MathHelpers
   p1 = i, p2 = i + 1; //save results
  }
 
- //NOTE: this function uses inverted order of rows in function
  template<int ySize, int xSize>
  float static BilinearInterpolation(float x, float y, float (&function)[ySize][xSize], const float* xBins, const float* yBins)
  {
-  int xi, yi, xi1, yi1, j, j1;
+  int xi, yi, xi1, yi1;
 
   AxisCellLookup(x, xBins, xSize, xi, xi1);
   AxisCellLookup(y, yBins, ySize, yi, yi1);
 
-  j  = (ySize-1) - yi;  //inverted order of rows in function array
-  j1 = (ySize-1) - yi1; //
-
-  float f2 = function[j1][xi] + ((function[j1][xi1] - function[j1][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
-  float f1 = function[j][xi] + ((function[j][xi1] - function[j][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
+  float f2 = function[yi1][xi] + ((function[yi1][xi1] - function[yi1][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
+  float f1 = function[yi][xi] + ((function[yi][xi1] - function[yi][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
   return f1 + ((f2 - f1) * (y - yBins[yi])) / (yBins[yi1] - yBins[yi]);
  }
 
@@ -399,6 +395,22 @@ namespace MathHelpers
  bool IsEqualFlt(T a, T b, T e)
  {
   return fabs(a - b) < e;
+ }
+
+ //get item from array as if its order of rows is reversed
+ //nrow - number of array's rows, ncol - number of array's columns
+ template <class T, size_t nrow, size_t ncol>
+ T RevLineGet(T* p_arr, size_t i)
+ {
+  return p_arr[(((nrow - 1) - (i / ncol)) * ncol) + (i % ncol)];
+ }
+
+ //get items from array in reverse order
+ //nitems - size of array
+ template <class T, size_t nitems>
+ T RevItemGet(T* p_arr, size_t i)
+ {
+  return p_arr[(nitems - 1) - i];
  }
 
 }

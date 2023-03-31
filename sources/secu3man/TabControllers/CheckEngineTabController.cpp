@@ -125,7 +125,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
 
  m_rdLTFTMapFlags.resize(F_WRK_POINTS_L*F_WRK_POINTS_F, 0);
  m_ltft_load_slots.reserve(32);
- m_ltft_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16, true);  //<--reverse order
+ m_ltft_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
 }
 
 CCheckEngineTabController::~CCheckEngineTabController()
@@ -297,7 +297,7 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     SensorDat* sd = (SensorDat*)(ip_packet);    
     if (m_baroPrev!=sd->baro_press && m_ldaxBaro) //update upper pressure value here if MAP(baro) is selected as load and baro value is changed
     {
-     m_ltft_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMinVal, sd->baro_press, 16, true); //<-- reverse order
+     m_ltft_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMinVal, sd->baro_press, 16);
      m_view->BindLoadGrid(&m_ltft_load_slots[0]);  
      m_view->UpdateView(true);
      m_baroPrev = sd->baro_press; //update cached value
@@ -627,7 +627,7 @@ bool CCheckEngineTabController::PPS_ReadFunset(const BYTE i_descriptor, const vo
    }
    else
    { //just use lower and upper static limits
-    m_ltft_load_slots = MathHelpers::BuildGridFromRange(data->map_lower_pressure, data->map_upper_pressure, 16, true); //<-- reverse order
+    m_ltft_load_slots = MathHelpers::BuildGridFromRange(data->map_lower_pressure, data->map_upper_pressure, 16);
     m_view->BindLoadGrid(&m_ltft_load_slots[0]);
     m_ldaxBaro = false;
    }

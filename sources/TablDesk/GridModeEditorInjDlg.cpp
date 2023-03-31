@@ -68,9 +68,9 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
 , m_initialized(false)
 {
  m_work_map_load_slots.reserve(32);
- m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16, true); //<--reverse order
+ m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
  m_ve2_map_load_slots.reserve(32);
- m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16, true); //<--reverse order
+ m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16);
 
  m_pVEPageDlg.reset(new CGMEInjVEDlg());
  m_pVEPageDlg->BindLoadGrid(&m_work_map_load_slots[0]);
@@ -267,7 +267,7 @@ void CGridModeEditorInjDlg::BindCLTGrid(float* pGrid)
 void CGridModeEditorInjDlg::BindLoadGrid(float* pGrid, float* pGrid2)
 {
  mp_lodGrid = pGrid; //save to use later
- m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
+ m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16);
  const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
  m_pVEPageDlg->BindLoadGrid(pLoadGrid);
  m_pVEPageDlg->BindLoadGrid2(pGrid2);
@@ -382,7 +382,7 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
  if (m_ldaxNeedsUpdate || ((m_baro_press != dv.baro_press) && useBaroMax))
  {
-  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, 16, true); //<-- reverse order
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, 16);
   const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
   m_pVEPageDlg->BindLoadGrid(pLoadGrid, true);
   m_pAFRPageDlg->BindLoadGrid(pLoadGrid, true);
@@ -415,7 +415,7 @@ void CGridModeEditorInjDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useT
 
  if (m_ldaxNeedsUpdate && forceUpdate)
  {
-  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16, true); //<-- reverse order
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16);
   const float* pLoadGrid = m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0];
   m_pVEPageDlg->BindLoadGrid(pLoadGrid, true);
   m_pAFRPageDlg->BindLoadGrid(pLoadGrid, true);

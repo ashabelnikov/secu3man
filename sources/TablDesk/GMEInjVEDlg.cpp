@@ -66,10 +66,10 @@ END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 : Super(CGMEInjVEDlg::IDD, pParent)
-, m_ve_map(16, 16, true, true, NULL, 3) //inverted order of rows and vertical labels' data
-, m_ve2_map(16, 16, true, true, NULL, 3) //inverted order of rows and vertical labels' data
-, m_lamdel_map(3, 3, true, false, NULL, 3) //inverted order of rows
-, m_celwgt_map(16, 16, false, true, NULL, 3, true) //normal order of rows, inverted order of vertical labels' data, read-only
+, m_ve_map(16, 16, false, false, NULL, 3) 
+, m_ve2_map(16, 16, false, false, NULL, 3) 
+, m_lamdel_map(3, 3, false, false, NULL, 3)
+, m_celwgt_map(16, 16, false, false, NULL, 3, true) //read-only
 , mp_VEMap(NULL)
 , mp_VEMap2(NULL)
 , mp_rpmGrid(NULL)
@@ -80,7 +80,7 @@ CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 , mp_rpmGridLD(NULL)
 , mp_loadGridLD(NULL)
 , mp_CelBlkMap(NULL)
-, m_active_ve(0) //VE1 is active byt default
+, m_active_ve(0) //VE1 is active by default
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {

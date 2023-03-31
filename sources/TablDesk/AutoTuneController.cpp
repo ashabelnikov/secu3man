@@ -49,7 +49,9 @@ CAutoTuneController::CAutoTuneController()
 , mp_ve2(NULL)
 , mp_afr(NULL)
 , mp_rpmGrid(NULL)
-, mp_lodGrid(NULL)
+, mp_lodGrid1(NULL)
+, mp_lodGrid2(NULL)
+, mp_lodGridx(NULL)
 , m_active(false)
 , m_ldaxMin(1.0f)
 , m_ldaxMax(16.0f)
@@ -74,17 +76,19 @@ CAutoTuneController::CAutoTuneController()
 , m_active_ve(0) //1st VE map is active by default
 , m_tunSoft(1.0f)
 {
- m_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
- m_loadGrid2 = MathHelpers::BuildGridFromRange(0.0f, 100.0f, VEMAP_LOAD_SIZE);
+ m_dynGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
+ mp_lodGridx = &m_dynGrid[0]; //select default load grid for VE1
 
- for (int l = 0; l < VEMAP_LOAD_SIZE; ++l){
-  for (int r = 0; r < VEMAP_RPM_SIZE; ++r){
+ for (int l = 0; l < VEMAP_LOAD_SIZE; ++l)
+ {
+  for (int r = 0; r < VEMAP_RPM_SIZE; ++r)
+  {
    m_avdists[l][r] = std::numeric_limits<float>::max();
    m_afrhits[l][r] = 0;
    m_lastchg[l][r] = 0;
    m_scatter[l][r].reserve(32);
-  }}
-
+  }
+ }
 }
 
 CAutoTuneController::~CAutoTuneController()
@@ -115,9 +119,14 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  if (m_ldaxNeedsUpdate || (!MathHelpers::IsEqualFlt(m_baro_press, dv.baro_press, 0.01f) && useBaroMax))
  {
   if (m_ldaxUseTable)
-   reverse_copy(mp_lodGrid, mp_lodGrid + VEMAP_LOAD_SIZE, _GetLoadGrid(0).begin()); //change order of items
+  {
+   mp_lodGridx = mp_lodGrid1;   //use for VE1 load grid map set by BindLoadGrid()
+  }
   else
-   _GetLoadGrid(0) = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, VEMAP_LOAD_SIZE);
+  {
+   m_dynGrid = MathHelpers::BuildGridFromRange(m_ldaxMin, (useBaroMax ? dv.baro_press : m_ldaxMax), VEMAP_LOAD_SIZE);
+   mp_lodGridx = &m_dynGrid[0];//use for VE1 dynamically generated load grid map
+  }
   m_ldaxNeedsUpdate = false;
  }
  m_baro_press = dv.baro_press;
@@ -179,7 +188,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  }
 
  //calculate correction factor using actual and target AFRs
- float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, &_GetLoadGrid(0)[0]);
+ float target_afr = MathHelpers::BilinearInterpolation<VEMAP_RPM_SIZE, VEMAP_LOAD_SIZE>(e.rpm, e.load, *(F3DM_t*)mp_afr, mp_rpmGrid, _GetLoadGrid(0));
  if (target_afr < 0.0001f)
  {
   SECUMessageBox(_T("Internal program error: division by zero. CAutoTuneController::SetDynamicValues"));
@@ -204,7 +213,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
 
  //Add point to our map of scattered points
  int r_idx = _FindNearestGridPoint(e.rpm, mp_rpmGrid, VEMAP_RPM_SIZE);
- int l_idx = _FindNearestGridPoint(e_load, &_GetLoadGrid()[0], VEMAP_LOAD_SIZE);
+ int l_idx = _FindNearestGridPoint(e_load, _GetLoadGrid(), VEMAP_LOAD_SIZE);
 
  //if growing mode enabled, state depends on relationship of current and previous RPMs
  bool growing = (!m_growingMode || (((i+1) < m_logdata.size()) && e.rpm > m_logdata[i+1].rpm));
@@ -456,7 +465,7 @@ void CAutoTuneController::Smoothing(void)
  //assign time to associated changed VE cells
  for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
   for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
-   if (!MathHelpers::IsEqualFlt(_GetVEItem(l, r), orig[(((VEMAP_LOAD_SIZE - 1) - l)*VEMAP_RPM_SIZE)+r], 0.0001f)) // !=
+   if (!MathHelpers::IsEqualFlt(_GetVEItem(l, r), orig[(l*VEMAP_RPM_SIZE)+r], 0.0001f)) // !=
     m_lastchg[l][r] = GetTickCount();
 
  mp_view->UpdateView(); //Update our view
@@ -508,13 +517,12 @@ float CAutoTuneController::_ShepardInterpolation(float rpm, float load, const Sc
 float& CAutoTuneController::_GetVEItem(int i, int j, int vemap /*=-1*/)
 {
  ASSERT(mp_ve);
- int ii = (VEMAP_LOAD_SIZE - 1) - i;
  if (vemap==-1)
   vemap = m_active_ve;
  if (0==vemap) //1st
-  return mp_ve[(ii*VEMAP_RPM_SIZE)+j];
+  return mp_ve[(i*VEMAP_RPM_SIZE)+j];
  else          //2nd
-  return mp_ve2[(ii*VEMAP_RPM_SIZE)+j];
+  return mp_ve2[(i*VEMAP_RPM_SIZE)+j];
 }
 
 float* CAutoTuneController::_GetVEMap(int vemap /*=-1*/)
@@ -546,11 +554,11 @@ int CAutoTuneController::_GetActiveVEMapId(void)
  return (0==m_active_ve) ? TYPE_MAP_INJ_VE : TYPE_MAP_INJ_VE2;
 }
 
-std::vector<float>& CAutoTuneController::_GetLoadGrid(int grid /* = -1*/)
+const float* CAutoTuneController::_GetLoadGrid(int grid /* = -1*/)
 {
  if (grid == -1)
   grid = m_active_ve;
- return (0==grid) ? m_loadGrid : m_loadGrid2;
+ return (0==grid) ? mp_lodGridx : mp_lodGrid2; //select between VE1 and VE2 load grids
 }
 
 void CAutoTuneController::Init(void)
@@ -615,10 +623,10 @@ void CAutoTuneController::BindRPMGrid(float* pGrid)
  mp_rpmGrid = pGrid;
 }
 
-void CAutoTuneController::BindLoadGrid(const float* pGrid, const float* pGrid2)
+void CAutoTuneController::BindLoadGrid(const float* pGrid1, const float* pGrid2)
 {
- mp_lodGrid = pGrid;
- reverse_copy(pGrid2, pGrid2 + VEMAP_LOAD_SIZE, m_loadGrid2.begin()); //change order of items while copying
+ mp_lodGrid1 = pGrid1;
+ mp_lodGrid2 = pGrid2;
 }
 
 void CAutoTuneController::BindMaps(float* pVE, float* pAFR, float* pVE2)

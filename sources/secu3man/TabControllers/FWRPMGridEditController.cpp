@@ -75,7 +75,7 @@ int CFWRPMGridEditController::Edit(void)
  mp_view->SetValues(1, valuesCLT);
  float valuesLod[itemNumberLod] = {0};
  mp_fwdm->GetLoadGridMap(valuesLod);
- mp_view->SetValues(2, valuesLod, true); //reverse
+ mp_view->SetValues(2, valuesLod, false);
 
  int result = mp_view->DoModal();
  if (result==IDOK)
@@ -84,7 +84,7 @@ int CFWRPMGridEditController::Edit(void)
   mp_fwdm->SetRPMGridMap(valuesRPM);
   mp_view->GetValues(1, valuesCLT);
   mp_fwdm->SetCLTGridMap(valuesCLT);
-  mp_view->GetValues(2, valuesLod, true); //reverse
+  mp_view->GetValues(2, valuesLod, false);
   mp_fwdm->SetLoadGridMap(valuesLod);
  }
  mp_view.reset();
@@ -203,7 +203,7 @@ void CFWRPMGridEditController::OnLoadDefVal(int mode)
  else if (1==mode)
   mp_view->SetValues(mode, SECU3IO::temp_map_tmp_slots);
  else if (2==mode)
-  mp_view->SetValues(mode, SECU3IO::work_map_lod_slots, true); //reverse
+  mp_view->SetValues(mode, SECU3IO::work_map_lod_slots, false);
 
  mp_view->SetErrMessage(mode, _T(""));
  for(size_t i = 0; i < itemNumber; i++)
