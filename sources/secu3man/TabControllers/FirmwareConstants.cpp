@@ -509,9 +509,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Algorithm of crankshaft position prediction for hall"), _T(""), 0, 1, 1, 0, &d.hall_predict, _T("Selection of algorithm of crankshaft position prediction for firmwares with synchronization from a Hall sensor (Nteeth=Ncyl). 0 - Last interval. 1 - First derivative."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Множитель частоты импульсов на выходе для тахометра (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("Данный множитель определяет соотношение оборотов и частоты импульсов для тахометра выдаваемых на выход VTACHOM. Например, 1.000 означает, что за один оборот коленвала выдается 1 импульс. Чем выше значение множителя, тем выше частота."));
+  dfd.AppendItem(_T("Множитель частоты импульсов на выходе для тахометра (VTACHOM)"), _T("*"), 0.125f, 16.0f, 0.001f, 3, &d.vtachom_mult, _T("Данный множитель определяет соотношение оборотов и частоты импульсов для тахометра выдаваемых на выход VTACHOM. Например, 1.000 означает, что за один оборот коленвала выдается 1 импульс. Чем выше значение множителя, тем выше частота."));
  else
-  dfd.AppendItem(_T("Frequency multiplier for tachometer output (VTACHOM)"), _T("*"), 0.125f, 7.9f, 0.001f, 3, &d.vtachom_mult, _T("This multiplier specify ratio of RPM and frequency of pulses produced at VTACHOM output. For example, 1.000 means that for 1 revolution of crankshaft 1 pulse is produced. The higher the value of multiplier, the higher the frequency."));
+  dfd.AppendItem(_T("Frequency multiplier for tachometer output (VTACHOM)"), _T("*"), 0.125f, 16.0f, 0.001f, 3, &d.vtachom_mult, _T("This multiplier specify ratio of RPM and frequency of pulses produced at VTACHOM output. For example, 1.000 means that for 1 revolution of crankshaft 1 pulse is produced. The higher the value of multiplier, the higher the frequency."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Передавать вместо ADD_I1 значение другого входа"), _T(""), 1, 8, 1, 0, &d.add_i1_sub, _T("Выбор что прошивка передает вместо значения входа ADD_I1. 1 - вход ADD_I1 (по умолчанию), 2 - вход ADD_I2, 3 - вход ADD_I3, 4 - вход ADD_I4 и т.д."));
