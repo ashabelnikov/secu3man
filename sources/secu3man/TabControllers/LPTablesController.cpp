@@ -615,9 +615,14 @@ void CLPTablesController::_OnGmeIgnButton(void)
    EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
    p_eedm->GetDefParamValues(FUNSET_PAR, &funsetPar);
   }
-  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, (funsetPar.load_src_cfg == 1) ? std::numeric_limits<float>::max() : funsetPar.map_upper_pressure, funsetPar.use_load_grid, true);
+  float upper_pressure = (funsetPar.load_src_cfg == 1) ? std::numeric_limits<float>::max() : funsetPar.map_upper_pressure;
+  //do not force update if MAP(baro) is selected! Because if MAP(baro) is selected, upper pressure will be updated in CGridModeEditorIgnDlg::SetDynamicValues()
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, upper_pressure, funsetPar.use_load_grid, funsetPar.load_src_cfg != 1);
 
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
+
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd();
  }
  else
  {
@@ -660,11 +665,16 @@ void CLPTablesController::_OnGmeInjButton(void)
    EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
    p_eedm->GetDefParamValues(FUNSET_PAR, &funsetPar);
   }
-  mp_gridModeEditorInjDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, (funsetPar.load_src_cfg == 1) ? std::numeric_limits<float>::max() : funsetPar.map_upper_pressure, funsetPar.use_load_grid, true);
+  float upper_pressure = (funsetPar.load_src_cfg == 1) ? std::numeric_limits<float>::max() : funsetPar.map_upper_pressure;
+  //do not force update if MAP(baro) is selected! Because if MAP(baro) is selected, upper pressure will be updated in CGridModeEditorIgnDlg::SetDynamicValues()
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, upper_pressure, funsetPar.use_load_grid, funsetPar.load_src_cfg != 1);
 
   mp_gridModeEditorInjDlg->SetITMode(mp_settings->GetITEdMode());
   mp_gridModeEditorInjDlg->SetSplitAngMode(_GetSplitAngMode()); //splitting
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
+
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd();
  }
  else
  {

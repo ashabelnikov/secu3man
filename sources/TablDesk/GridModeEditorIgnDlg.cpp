@@ -447,6 +447,8 @@ void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useT
 
  if (m_ldaxNeedsUpdate && forceUpdate)
  {
+  if (m_ldaxMax > 500.0f) //prevent program crach
+   m_ldaxMax = 500.0f; //kPa
   m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16);
   m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
   m_work_map.UpdateDisplay(); 

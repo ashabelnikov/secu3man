@@ -78,6 +78,8 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   void OnMIDeskSettingsChanged(void);
 
+  void OnOpenMapWnd(void);
+
  private:
   void OnStopOnMarksCheck();
   void OnStopOnErrorsCheck();

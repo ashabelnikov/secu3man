@@ -28,6 +28,7 @@
 #include <memory>
 #include <vector>
 #include "common/unicodesupport.h"
+#include "common/fastdelegate.h"
 #include "TablDesk/DynamicValues.h"
 #include "MapWndScrPos.h"
 
@@ -41,6 +42,7 @@ namespace SECU3IO {struct SensorDat;}
 
 class CLPTablesController : public MapWndScrPos
 {
+  typedef fastdelegate::FastDelegate0<> EventHandler;
  public:
   CLPTablesController(CLPControlPanelDlg* i_view, ISettingsData* ip_settings);
   virtual ~CLPTablesController();
@@ -49,6 +51,8 @@ class CLPTablesController : public MapWndScrPos
   virtual void OnDeactivate(void);
   void DisplayCurrentRecord(SECU3IO::SensorDat* sd);
   void OnSettingsChanged(int action);
+
+  void setOnOpenMapWnd(EventHandler OnFunction) {m_OnOpenMapWnd = OnFunction;}
 
  private:
   void _OnSelectMapSet(void);
@@ -119,4 +123,6 @@ class CLPTablesController : public MapWndScrPos
   bool m_firmware_opened;
   bool m_eeprom_opened;
   std::vector<float> m_ve2_map_load_slots;
+
+  EventHandler  m_OnOpenMapWnd;
 };

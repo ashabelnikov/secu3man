@@ -120,6 +120,8 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
 
  mp_view->mp_MIDeskDlg->setOnMISettingsChanged(MakeDelegate(this, &CLogPlayerTabController::OnMIDeskSettingsChanged));
  mp_view->mp_MIDeskDlg->ShowGraphCursor(mp_settings->GetShowGraphsCursor());
+
+ mp_tabCntr->setOnOpenMapWnd(MakeDelegate(this, &CLogPlayerTabController::OnOpenMapWnd));
 }
 
 CLogPlayerTabController::~CLogPlayerTabController()
@@ -891,4 +893,10 @@ void CLogPlayerTabController::_BuildMarksBitmap(void)
 
  mp_view->mp_LPPanelDlg->InvalidateHatch();
  mp_log_reader->SetCurPos(prev_pos); //restore previous position
+}
+
+void CLogPlayerTabController::OnOpenMapWnd(void)
+{
+ if (mp_log_reader->IsOpened())
+  mp_tabCntr->DisplayCurrentRecord(&m_curr_record.second);
 }
