@@ -465,6 +465,10 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
      b = 255;
     p_params->inj_ae_ballance = b;
     p_params->inj_ae_mapdot_thrd = MathHelpers::Round(p_in->ae_mapdot_thrd);
+
+    p_params->inj_xtau_s_thrd = -MathHelpers::Round(p_in->xtau_s_thrd);
+    p_params->inj_xtau_f_thrd = -MathHelpers::Round(p_in->xtau_f_thrd);
+    p_params->wallwet_model = MathHelpers::Round(p_in->wallwet_model);
    }
    break;
 
@@ -960,6 +964,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->ae_time = p_params->inj_ae_time; //strokes
     p_out->ae_ballance = p_params->inj_ae_ballance / 2.56f;
     p_out->ae_mapdot_thrd = p_params->inj_ae_mapdot_thrd;
+    p_out->xtau_s_thrd = -(float)p_params->inj_xtau_s_thrd;
+    p_out->xtau_f_thrd = -(float)p_params->inj_xtau_f_thrd;
+    p_out->wallwet_model = p_params->wallwet_model;
    }
    break;
 

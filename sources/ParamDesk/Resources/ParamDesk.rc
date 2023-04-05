@@ -1184,6 +1184,19 @@ BEGIN
     CONTROL         "",IDC_PD_ACCELENR_MAPTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,158,13,17
     LTEXT           "Порог по ДАД",IDC_PD_ACCELENR_MAPTHRD_CAPTION,3,159,94,10
     LTEXT           "кПа/ сек",IDC_PD_ACCELENR_MAPTHRD_UNIT,146,159,30,18
+
+    LTEXT           "Модель топливной пленки:",IDC_PD_ACCELENR_WWMTYPE_CAPTION,3,178,75,18
+    COMBOBOX        IDC_PD_ACCELENR_WWMTYPE_COMBO,80,179,70,30,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
+
+    EDITTEXT        IDC_PD_ACCELENR_XTAUSTHRD_EDIT,98,195,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_XTAUSTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,195,13,17
+    LTEXT           "Начало перехода",IDC_PD_ACCELENR_XTAUSTHRD_CAPTION,3,196,94,10
+    LTEXT           "кПа/ сек",IDC_PD_ACCELENR_XTAUSTHRD_UNIT,146,196,30,18
+
+    EDITTEXT        IDC_PD_ACCELENR_XTAUFTHRD_EDIT,98,215,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_XTAUFTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,215,13,17
+    LTEXT           "Конец перехода",IDC_PD_ACCELENR_XTAUFTHRD_CAPTION,3,216,94,10
+    LTEXT           "кПа/ сек",IDC_PD_ACCELENR_XTAUFTHRD_UNIT,146,216,30,18
 END
 
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
@@ -1933,6 +1946,9 @@ BEGIN
     IDS_PD_ACCELENR_BLEND_SLIDER_TT "Баланс между ДАД и ДПДЗ при вычислении обогащения. 0% соответствует обогащению только по ДАД, 100% соответствует обогащению только по ДПДЗ."
     IDS_PD_ACCELENR_MAPTHRD_EDIT_TT "Порог включения обогащения по ДАД (кПа/сек). Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
     IDS_PD_MISC_VSS_PP1KM_EDIT_TT "Если подключен датчик скорости, установите количество импульсов с датчика скорости, приходящееся на 1 км пути"
+    IDS_PD_ACCELENR_WWMTYPE_COMBO_TT  "Тип используемой модели топливной пленки"
+    IDS_PD_ACCELENR_XTAUSTHRD_EDIT_TT "Порог начала перехода"
+    IDS_PD_ACCELENR_XTAUFTHRD_EDIT_TT "Порог завершения перехода"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3118,6 +3134,19 @@ BEGIN
     CONTROL         "",IDC_PD_ACCELENR_MAPTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,158,13,17
     LTEXT           "Accel. MAPdot threshold",IDC_PD_ACCELENR_MAPTHRD_CAPTION,3,159,94,10
     LTEXT           "kPa/ sec",IDC_PD_ACCELENR_MAPTHRD_UNIT,146,159,25,18
+
+    LTEXT           "Fuel film model:",IDC_PD_ACCELENR_WWMTYPE_CAPTION,3,180,75,10
+    COMBOBOX        IDC_PD_ACCELENR_WWMTYPE_COMBO,80,179,70,30,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
+
+    EDITTEXT        IDC_PD_ACCELENR_XTAUSTHRD_EDIT,98,195,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_XTAUSTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,195,13,17
+    LTEXT           "Start transition",IDC_PD_ACCELENR_XTAUSTHRD_CAPTION,3,196,94,10
+    LTEXT           "kPa/ sec",IDC_PD_ACCELENR_XTAUSTHRD_UNIT,146,196,30,18
+
+    EDITTEXT        IDC_PD_ACCELENR_XTAUFTHRD_EDIT,98,215,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ACCELENR_XTAUFTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,215,13,17
+    LTEXT           "Finish transition",IDC_PD_ACCELENR_XTAUFTHRD_CAPTION,3,216,94,10
+    LTEXT           "kPa/ sec",IDC_PD_ACCELENR_XTAUFTHRD_UNIT,146,216,30,18
 END
 
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
@@ -3890,6 +3919,9 @@ BEGIN
     IDS_PD_ACCELENR_BLEND_SLIDER_TT "Ballance between MAPdot and TPSdot for acceleration enrichment. 0% correspond to enrighment only by MAP, 100% correspond to enrichment only by TPS."
     IDS_PD_ACCELENR_MAPTHRD_EDIT_TT "Accel.enrichment activation threshold (by MAP), %/sec. The higher the value, the quickly you need to press the gas pedal to activate enrichment."
     IDS_PD_MISC_VSS_PP1KM_EDIT_TT "If a speed sensor is connected, set the number of pulses from the vehicle speed sensor per 1 km of traveled distance"
+    IDS_PD_ACCELENR_WWMTYPE_COMBO_TT  "Type of used model of fuel film"
+    IDS_PD_ACCELENR_XTAUSTHRD_EDIT_TT "Start transition threshold"
+    IDS_PD_ACCELENR_XTAUFTHRD_EDIT_TT "Finish transition threshold"
 END
 
 /////////////////////////////////////////////////////////////////////////////

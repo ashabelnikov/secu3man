@@ -465,6 +465,30 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_FuelDensCorrMapWnd_W = rc.right - rc.left;
    sz.m_FuelDensCorrMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_XTAU_XFACC:
+   ws.m_XtauXfAccMapWnd_X = rc.left;
+   ws.m_XtauXfAccMapWnd_Y = rc.top;
+   sz.m_XtauXfAccMapWnd_W = rc.right - rc.left;
+   sz.m_XtauXfAccMapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_XTAU_XFDEC:
+   ws.m_XtauXfDecMapWnd_X = rc.left;
+   ws.m_XtauXfDecMapWnd_Y = rc.top;
+   sz.m_XtauXfDecMapWnd_W = rc.right - rc.left;
+   sz.m_XtauXfDecMapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_XTAU_TFACC:
+   ws.m_XtauTfAccMapWnd_X = rc.left;
+   ws.m_XtauTfAccMapWnd_Y = rc.top;
+   sz.m_XtauTfAccMapWnd_W = rc.right - rc.left;
+   sz.m_XtauTfAccMapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_XTAU_TFDEC:
+   ws.m_XtauTfDecMapWnd_X = rc.left;
+   ws.m_XtauTfDecMapWnd_Y = rc.top;
+   sz.m_XtauTfDecMapWnd_W = rc.right - rc.left;
+   sz.m_XtauTfDecMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -768,6 +792,22 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_FUELDENS_CORR:
    X = ws.m_FuelDensCorrMapWnd_X, Y = ws.m_FuelDensCorrMapWnd_Y;
    W = sz.m_FuelDensCorrMapWnd_W, H = sz.m_FuelDensCorrMapWnd_H;
+   break;
+  case TYPE_MAP_XTAU_XFACC:
+   X = ws.m_XtauXfAccMapWnd_X, Y = ws.m_XtauXfAccMapWnd_Y;
+   W = sz.m_XtauXfAccMapWnd_W, H = sz.m_XtauXfAccMapWnd_H;
+   break;
+  case TYPE_MAP_XTAU_XFDEC:
+   X = ws.m_XtauXfDecMapWnd_X, Y = ws.m_XtauXfDecMapWnd_Y;
+   W = sz.m_XtauXfDecMapWnd_W, H = sz.m_XtauXfDecMapWnd_H;
+   break;
+  case TYPE_MAP_XTAU_TFACC:
+   X = ws.m_XtauTfAccMapWnd_X, Y = ws.m_XtauTfAccMapWnd_Y;
+   W = sz.m_XtauTfAccMapWnd_W, H = sz.m_XtauTfAccMapWnd_H;
+   break;
+  case TYPE_MAP_XTAU_TFDEC:
+   X = ws.m_XtauTfDecMapWnd_X, Y = ws.m_XtauTfDecMapWnd_Y;
+   W = sz.m_XtauTfDecMapWnd_W, H = sz.m_XtauTfDecMapWnd_H;
    break;
 
   default:

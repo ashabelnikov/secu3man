@@ -55,6 +55,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_maninjpwc_enabled(false)
 , m_lambdazone_enabled(false)
 , m_fts_curve_enabled(false)
+, m_xtau_maps_enabled(false)
 {
  m_scrl_view = 1264;
 
@@ -117,6 +118,10 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_FTLSCOR_MAP, m_view_ftlscor_map_btn);
  DDX_Control(pDX, IDC_TD_FTS_CURVE, m_view_fts_curve_map_btn);
  DDX_Control(pDX, IDC_TD_FUELDENS_CORR_MAP, m_view_fueldens_corr_map_btn);
+ DDX_Control(pDX, IDC_TD_XTAU_XFACC_MAP, m_view_xtauxfacc_map_btn);
+ DDX_Control(pDX, IDC_TD_XTAU_XFDEC_MAP, m_view_xtauxfdec_map_btn);
+ DDX_Control(pDX, IDC_TD_XTAU_TFACC_MAP, m_view_xtautfacc_map_btn);
+ DDX_Control(pDX, IDC_TD_XTAU_TFDEC_MAP, m_view_xtautfdec_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -154,6 +159,10 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_FTLSCOR_MAP, OnViewFtlsCorMap)
  ON_BN_CLICKED(IDC_TD_FTS_CURVE, OnViewFtsCurveMap)
  ON_BN_CLICKED(IDC_TD_FUELDENS_CORR_MAP, OnViewFuelDensCorrMap)
+ ON_BN_CLICKED(IDC_TD_XTAU_XFACC_MAP, OnViewXtauXfAccMap)
+ ON_BN_CLICKED(IDC_TD_XTAU_XFDEC_MAP, OnViewXtauXfDecMap)
+ ON_BN_CLICKED(IDC_TD_XTAU_TFACC_MAP, OnViewXtauTfAccMap)
+ ON_BN_CLICKED(IDC_TD_XTAU_TFDEC_MAP, OnViewXtauTfDecMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -191,6 +200,10 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_FTLSCOR_MAP, OnUpdateViewFtlsCorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_FTS_CURVE, OnUpdateViewFtsCurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUELDENS_CORR_MAP, OnUpdateViewFuelDensCorrMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_XFACC_MAP, OnUpdateViewXtauXfAccMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_XFDEC_MAP, OnUpdateViewXtauXfDecMap) 
+ ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_TFACC_MAP, OnUpdateViewXtauTfAccMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_TFDEC_MAP, OnUpdateViewXtauTfDecMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -248,6 +261,10 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_ftlscor_map_btn, MLL::GetString(IDS_TD_FTLSCOR_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_fts_curve_map_btn, MLL::GetString(IDS_TD_FTS_CURVE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_fueldens_corr_map_btn, MLL::GetString(IDS_TD_FUELDENS_CORR_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_xtauxfacc_map_btn, MLL::GetString(IDS_TD_XTAU_XFACC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_xtauxfdec_map_btn, MLL::GetString(IDS_TD_XTAU_XFDEC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_xtautfacc_map_btn, MLL::GetString(IDS_TD_XTAU_TFACC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_xtautfdec_map_btn, MLL::GetString(IDS_TD_XTAU_TFDEC_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -514,6 +531,38 @@ void CTablesSetPanel::OnUpdateViewFuelDensCorrMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_FUELDENS_CORR].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewXtauXfAccMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_xtau_maps_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_XTAU_XFACC].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewXtauXfDecMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_xtau_maps_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_XTAU_XFDEC].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewXtauTfAccMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_xtau_maps_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_XTAU_TFACC].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewXtauTfDecMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_xtau_maps_enabled);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_XTAU_TFDEC].state) ? TRUE : FALSE );
+}
+
 void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
@@ -603,6 +652,18 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_FUELDENS_CORR].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_FUELDENS_CORR].handle, GetFuelDensCorrMap(true), GetFuelDensCorrMap(false));
+
+ if (m_md[TYPE_MAP_XTAU_XFACC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_XTAU_XFACC].handle, GetXtauXfAccMap(true), GetXtauXfAccMap(false));
+
+ if (m_md[TYPE_MAP_XTAU_XFDEC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_XTAU_XFDEC].handle, GetXtauXfDecMap(true), GetXtauXfDecMap(false));
+
+ if (m_md[TYPE_MAP_XTAU_TFACC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_XTAU_TFACC].handle, GetXtauTfAccMap(true), GetXtauTfAccMap(false));
+
+ if (m_md[TYPE_MAP_XTAU_TFDEC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_XTAU_TFDEC].handle, GetXtauTfDecMap(true), GetXtauTfDecMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -755,6 +816,21 @@ void CTablesSetPanel::EnableFtsCurve(bool enable)
   DLL::Chart2DEnable(m_md[TYPE_MAP_FTS_CURVE].handle, enable && Super::IsAllowed());
  if (m_md[TYPE_MAP_FUELDENS_CORR].state && ::IsWindow(m_md[TYPE_MAP_FUELDENS_CORR].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_FUELDENS_CORR].handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableXtauMaps(bool enable)
+{
+ m_xtau_maps_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[TYPE_MAP_XTAU_XFACC].state && ::IsWindow(m_md[TYPE_MAP_XTAU_XFACC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_XTAU_XFACC].handle, enable && Super::IsAllowed());
+ if (m_md[TYPE_MAP_XTAU_XFDEC].state && ::IsWindow(m_md[TYPE_MAP_XTAU_XFDEC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_XTAU_XFDEC].handle, enable && Super::IsAllowed());
+ if (m_md[TYPE_MAP_XTAU_TFACC].state && ::IsWindow(m_md[TYPE_MAP_XTAU_TFACC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_XTAU_TFACC].handle, enable && Super::IsAllowed());
+ if (m_md[TYPE_MAP_XTAU_TFDEC].state && ::IsWindow(m_md[TYPE_MAP_XTAU_TFDEC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_XTAU_TFDEC].handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -1938,6 +2014,154 @@ void CTablesSetPanel::OnViewFuelDensCorrMap()
  }
 }
 
+//-----------------------------------------------------------------------------------------------
+void CTablesSetPanel::OnViewXtauXfAccMap()
+{
+ MapData &md = m_md[TYPE_MAP_XTAU_XFACC];
+ //If button was released, then close editor's window
+ if (m_view_xtauxfacc_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetXtauXfAccMap(true), GetXtauXfAccMap(false), 5.0, 95.0, GetRPMGrid(), 16,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_XTAU_XF_UNIT).c_str(),
+    MLL::GetString(IDS_TD_XTAU_XFACC_MAP).c_str(), false);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationXtauXfAccMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeXtauXfAccMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseXtauXfAccMap,this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_XTAU_XFACC);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+//-----------------------------------------------------------------------------------------------
+void CTablesSetPanel::OnViewXtauXfDecMap()
+{
+ MapData &md = m_md[TYPE_MAP_XTAU_XFDEC];
+ //If button was released, then close editor's window
+ if (m_view_xtauxfdec_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetXtauXfDecMap(true), GetXtauXfDecMap(false), 5.0, 95.0, GetRPMGrid(), 16,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_XTAU_XF_UNIT).c_str(),
+    MLL::GetString(IDS_TD_XTAU_XFDEC_MAP).c_str(), false);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationXtauXfDecMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeXtauXfDecMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseXtauXfDecMap,this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_XTAU_XFDEC);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+//-----------------------------------------------------------------------------------------------
+void CTablesSetPanel::OnViewXtauTfAccMap()
+{
+ MapData &md = m_md[TYPE_MAP_XTAU_TFACC];
+ //If button was released, then close editor's window
+ if (m_view_xtautfacc_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetXtauTfAccMap(true), GetXtauTfAccMap(false), 2.0, 6000.0, GetRPMGrid(), 16,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_XTAU_TF_UNIT).c_str(),
+    MLL::GetString(IDS_TD_XTAU_TFACC_MAP).c_str(), false);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationXtauTfAccMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeXtauTfAccMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseXtauTfAccMap,this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_XTAU_TFACC);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+//-----------------------------------------------------------------------------------------------
+void CTablesSetPanel::OnViewXtauTfDecMap()
+{
+ MapData &md = m_md[TYPE_MAP_XTAU_TFDEC];
+ //If button was released, then close editor's window
+ if (m_view_xtautfdec_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetXtauTfDecMap(true), GetXtauTfDecMap(false), 2.0, 6000.0, GetRPMGrid(), 16,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_XTAU_TF_UNIT).c_str(),
+    MLL::GetString(IDS_TD_XTAU_TFDEC_MAP).c_str(), false);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationXtauTfDecMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnChange(md.handle,OnChangeXtauTfDecMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseXtauTfDecMap,this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_XTAU_TFDEC);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -2225,6 +2449,38 @@ float* CTablesSetPanel::GetFuelDensCorrMap(bool i_original)
   return m_md[TYPE_MAP_FUELDENS_CORR].original;
  else
   return m_md[TYPE_MAP_FUELDENS_CORR].active;
+}
+
+float* CTablesSetPanel::GetXtauXfAccMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_XTAU_XFACC].original;
+ else
+  return m_md[TYPE_MAP_XTAU_XFACC].active;
+}
+
+float* CTablesSetPanel::GetXtauXfDecMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_XTAU_XFDEC].original;
+ else
+  return m_md[TYPE_MAP_XTAU_XFDEC].active;
+}
+
+float* CTablesSetPanel::GetXtauTfAccMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_XTAU_TFACC].original;
+ else
+  return m_md[TYPE_MAP_XTAU_TFACC].active;
+}
+
+float* CTablesSetPanel::GetXtauTfDecMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_XTAU_TFDEC].original;
+ else
+  return m_md[TYPE_MAP_XTAU_TFDEC].active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)

@@ -625,3 +625,17 @@
 #define IDC_TD_FUELDENS_CORR_MAP        5980
 #define IDS_TD_FUELDENS_CORR_MAP_TT     5981
 #define IDS_FUELDENS_CORR_MAP           5982
+#define IDC_TD_XTAU_XFACC_MAP           5983
+#define IDC_TD_XTAU_XFDEC_MAP           5984
+#define IDC_TD_XTAU_TFACC_MAP           5985
+#define IDC_TD_XTAU_TFDEC_MAP           5986
+#define IDS_TD_XTAU_XFACC_MAP_TT        5987
+#define IDS_TD_XTAU_XFDEC_MAP_TT        5988
+#define IDS_TD_XTAU_TFACC_MAP_TT        5989
+#define IDS_TD_XTAU_TFDEC_MAP_TT        5990
+#define IDS_XTAU_XF_UNIT                5991
+#define IDS_XTAU_TF_UNIT                5992
+#define IDS_TD_XTAU_XFACC_MAP           5993
+#define IDS_TD_XTAU_XFDEC_MAP           5994
+#define IDS_TD_XTAU_TFACC_MAP           5995
+#define IDS_TD_XTAU_TFDEC_MAP           5996

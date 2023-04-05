@@ -140,6 +140,10 @@ BEGIN
     CONTROL         "Настр. крив. ДТВГ",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,675,96,18
     CONTROL         "Настр. крив. ДДМ",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,675,96,18
     CONTROL         "Кривая расхода ДМРВ",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,694,96,18
+    CONTROL         "Коэфф.топл.пл.ускор.",IDC_TD_XTAU_XFACC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,713,96,18
+    CONTROL         "Коэфф.топл.пл.замед.",IDC_TD_XTAU_XFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,713,96,18
+    CONTROL         "Врем.испар.пл.ускор.",IDC_TD_XTAU_TFACC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,732,96,18
+    CONTROL         "Врем.испар.пл.замед.",IDC_TD_XTAU_TFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,732,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -884,6 +888,16 @@ BEGIN
     IDS_MAPS_CYLADDY_UNIT      "Добавка (мс)"
     IDS_INJ_CYLMULT_MAP        "Поцилиндровый множитель длительности впрыска"
     IDS_INJ_CYLADD_MAP         "Поцилидровая добавка к длительности впрыска"
+    IDS_TD_XTAU_XFACC_MAP_TT   "Коэффициент топлива выпадающего в пленку для режима ускорения"
+    IDS_TD_XTAU_XFDEC_MAP_TT   "Коэффициент топлива выпадающего в пленку для режима замедления"
+    IDS_TD_XTAU_TFACC_MAP_TT   "Постоянная времени испарения плeнки для режима ускорения"
+    IDS_TD_XTAU_TFDEC_MAP_TT   "Постоянная времени испарения плeнки для режима замедления"
+    IDS_XTAU_XF_UNIT           "Коррекция (%)"
+    IDS_XTAU_TF_UNIT           "Время (мс)"
+    IDS_TD_XTAU_XFACC_MAP      "Коэфф. топлива выпадающего в пленку (ускорение)"
+    IDS_TD_XTAU_XFDEC_MAP      "Коэфф. топлива выпадающего в пленку (замедление)"
+    IDS_TD_XTAU_TFACC_MAP      "Время испарения топлива плeнки (ускорение)"
+    IDS_TD_XTAU_TFDEC_MAP      "Время испарения топлива плeнки (замедление)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1021,6 +1035,10 @@ BEGIN
     CONTROL         "Tune EGTS curve",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,675,96,18
     CONTROL         "Tune OPS curve",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,675,96,18
     CONTROL         "MAF flow curve",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,694,96,18
+    CONTROL         "Fuel film coeff. accel.",IDC_TD_XTAU_XFACC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,713,96,18
+    CONTROL         "Fuel film coeff. decel.",IDC_TD_XTAU_XFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,713,96,18
+    CONTROL         "Evap.time const. accel",IDC_TD_XTAU_TFACC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,732,96,18
+    CONTROL         "Evap.time const. decel",IDC_TD_XTAU_TFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,732,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1766,6 +1784,16 @@ BEGIN
     IDS_MAPS_CYLADDY_UNIT      "Addition (ms)"
     IDS_INJ_CYLMULT_MAP        "Per cylinder injection PW multiplier"
     IDS_INJ_CYLADD_MAP         "Per cylinder injection PW addition"
+    IDS_TD_XTAU_XFACC_MAP_TT   "Coefficient of injected fuel which goes into port wall's film (acceleration)"
+    IDS_TD_XTAU_XFDEC_MAP_TT   "Coefficient of injected fuel which goes into port wall's film (deceleration)"
+    IDS_TD_XTAU_TFACC_MAP_TT   "Constant of fuel's film dissipation time (accelaration)"
+    IDS_TD_XTAU_TFDEC_MAP_TT   "Constant of fuel's film dissipation time (decelaration)"
+    IDS_XTAU_XF_UNIT           "Correction (%)"
+    IDS_XTAU_TF_UNIT           "Time (мс)"
+    IDS_TD_XTAU_XFACC_MAP      "Coeff. of fuel condensating in film (acceleration)"
+    IDS_TD_XTAU_XFDEC_MAP      "Coeff. of fuel condensating in film (deceleration)"
+    IDS_TD_XTAU_TFACC_MAP      "Fuel's film dissipation time constant (acceleration)"
+    IDS_TD_XTAU_TFDEC_MAP      "Fuel's film dissipation time constant (deceleration)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

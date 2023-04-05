@@ -270,6 +270,18 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetFuelDensCorrMap(float* op_values, bool i_original = false);
   void SetFuelDensCorrMap(const float* i_values);
 
+  void GetXtauXfAccMap(float* op_values, bool i_original = false);
+  void SetXtauXfAccMap(const float* i_values);
+
+  void GetXtauXfDecMap(float* op_values, bool i_original = false);
+  void SetXtauXfDecMap(const float* i_values);
+
+  void GetXtauTfAccMap(float* op_values, bool i_original = false);
+  void SetXtauTfAccMap(const float* i_values);
+
+  void GetXtauTfDecMap(float* op_values, bool i_original = false);
+  void SetXtauTfDecMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

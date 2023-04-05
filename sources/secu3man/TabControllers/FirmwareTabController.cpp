@@ -303,6 +303,10 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_LAMBDA_ZONE, mptms.m_lambda_zone_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTS_CURVE, mptms.m_fts_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FUELDENS_CORR, mptms.m_fueldens_corr_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_XFACC, mptms.m_xtau_xfacc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_XFDEC, mptms.m_xtau_xfdec_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_TFACC, mptms.m_xtau_tfacc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_TFDEC, mptms.m_xtau_tfdec_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -992,6 +996,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->EnableEgtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableFtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->EnableXtauMaps(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
  mp_view->mp_TablesPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
  mp_view->mp_TablesPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
@@ -1227,6 +1232,18 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(false),false);
  mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(true),true);
+
+ mp_fwdm->GetXtauXfAccMap(mp_view->mp_TablesPanel->GetXtauXfAccMap(false),false);
+ mp_fwdm->GetXtauXfAccMap(mp_view->mp_TablesPanel->GetXtauXfAccMap(true),true);
+
+ mp_fwdm->GetXtauXfDecMap(mp_view->mp_TablesPanel->GetXtauXfDecMap(false),false);
+ mp_fwdm->GetXtauXfDecMap(mp_view->mp_TablesPanel->GetXtauXfDecMap(true),true);
+
+ mp_fwdm->GetXtauTfAccMap(mp_view->mp_TablesPanel->GetXtauTfAccMap(false),false);
+ mp_fwdm->GetXtauTfAccMap(mp_view->mp_TablesPanel->GetXtauTfAccMap(true),true);
+
+ mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(false),false);
+ mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(true),true);
 
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
@@ -1614,6 +1631,18 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_FUELDENS_CORR:
    mp_fwdm->SetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(false));
+   break;
+  case TYPE_MAP_XTAU_XFACC:
+   mp_fwdm->SetXtauXfAccMap(mp_view->mp_TablesPanel->GetXtauXfAccMap(false));
+   break;
+  case TYPE_MAP_XTAU_XFDEC:
+   mp_fwdm->SetXtauXfDecMap(mp_view->mp_TablesPanel->GetXtauXfDecMap(false));
+   break;
+  case TYPE_MAP_XTAU_TFACC:
+   mp_fwdm->SetXtauTfAccMap(mp_view->mp_TablesPanel->GetXtauTfAccMap(false));
+   break;
+  case TYPE_MAP_XTAU_TFDEC:
+   mp_fwdm->SetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(false));
    break;
  }
 }
@@ -2106,6 +2135,10 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_lambda_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_LAMBDA_ZONE);
  mptms.m_fts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTS_CURVE);
  mptms.m_fueldens_corr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FUELDENS_CORR);
+ mptms.m_xtau_xfacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_XFACC);
+ mptms.m_xtau_xfdec_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_XFDEC);
+ mptms.m_xtau_tfacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_TFACC);
+ mptms.m_xtau_tfdec_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_TFDEC);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

@@ -2752,7 +2752,7 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::AccelPar& accelPar = m_recepted_packet.m_AccelPar;
- if (size != 8)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 11)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char tpsdot_thrd = 0;
@@ -2789,6 +2789,21 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &mapdot_thrd))
   return false;
  accelPar.ae_mapdot_thrd = (float)mapdot_thrd;
+
+ unsigned char xtau_s_thrd = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &xtau_s_thrd))
+  return false;
+ accelPar.xtau_s_thrd = -(float)xtau_s_thrd;
+
+ unsigned char xtau_f_thrd = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &xtau_f_thrd))
+  return false;
+ accelPar.xtau_f_thrd = -(float)xtau_f_thrd;
+
+ unsigned char wallwet_model = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &wallwet_model))
+  return false;
+ accelPar.wallwet_model = wallwet_model;
 
  return true;
 }
@@ -4416,6 +4431,15 @@ void CControlApp::Build_ACCEL_PAR(AccelPar* packet_data)
 
  unsigned char mapdot_thrd = MathHelpers::Round(packet_data->ae_mapdot_thrd);
  mp_pdp->Bin8ToHex(mapdot_thrd, m_outgoing_packet);
+
+ unsigned char xtau_s_thrd = -MathHelpers::Round(packet_data->xtau_s_thrd);
+ mp_pdp->Bin8ToHex(xtau_s_thrd, m_outgoing_packet);
+
+ unsigned char xtau_f_thrd = -MathHelpers::Round(packet_data->xtau_f_thrd);
+ mp_pdp->Bin8ToHex(xtau_f_thrd, m_outgoing_packet);
+
+ unsigned char wallwet_model = MathHelpers::Round(packet_data->wallwet_model);
+ mp_pdp->Bin8ToHex(wallwet_model, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

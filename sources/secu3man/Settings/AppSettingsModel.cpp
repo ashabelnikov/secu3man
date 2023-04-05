@@ -196,6 +196,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optCylAddMapWnd(_T("InjCylAddMapWnd"))
 , m_optFtsCurveMapWnd(_T("FtsCurveMapWnd"))
 , m_optFuelDensCorrMapWnd(_T("FuelDensCorrMapWnd"))
+, m_optXtauXfAccMapWnd(_T("XtauXfAccMapWnd"))
+, m_optXtauXfDecMapWnd(_T("XtauXfDecMapWnd"))
+, m_optXtauTfAccMapWnd(_T("XtauTfAccMapWnd"))
+, m_optXtauTfDecMapWnd(_T("XtauTfDecMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -306,6 +310,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optCylAddMapWndSize(_T("InjCylAddMapWnd"))
 , m_optFtsCurveMapWndSize(_T("FtsCurveMapWnd"))
 , m_optFuelDensCorrMapWndSize(_T("FuelDensCorrMapWnd"))
+, m_optXtauXfAccMapWndSize(_T("XtauXfAccMapWnd"))
+, m_optXtauXfDecMapWndSize(_T("XtauXfDecMapWnd"))
+, m_optXtauTfAccMapWndSize(_T("XtauTfAccMapWnd"))
+, m_optXtauTfDecMapWndSize(_T("XtauTfDecMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -482,6 +490,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepLambdaZoneMap(_T("LambdaZoneMapWnd"))
 , m_optPtMovStepFtsCurveMap(_T("FtsCurveMapWnd"))
 , m_optPtMovStepFuelDensCorrMap(_T("FuelDensCorrMapWnd"))
+, m_optPtMovStepXtauXfAccMap(_T("XtauXfAccMapWnd"))
+, m_optPtMovStepXtauXfDecMap(_T("XtauXfDecMapWnd"))
+, m_optPtMovStepXtauTfAccMap(_T("XtauTfAccMapWnd"))
+, m_optPtMovStepXtauTfDecMap(_T("XtauTfDecMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -919,6 +931,10 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optCylAddMapWnd);
  ws.ReadWndPos(m_optFtsCurveMapWnd);
  ws.ReadWndPos(m_optFuelDensCorrMapWnd);
+ ws.ReadWndPos(m_optXtauXfAccMapWnd);
+ ws.ReadWndPos(m_optXtauXfDecMapWnd);
+ ws.ReadWndPos(m_optXtauTfAccMapWnd);
+ ws.ReadWndPos(m_optXtauTfDecMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -1031,6 +1047,10 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optCylAddMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optFtsCurveMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optFuelDensCorrMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optXtauXfAccMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optXtauXfDecMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optXtauTfAccMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optXtauTfDecMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1293,6 +1313,10 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepLambdaZoneMap, _T("1.0"), 0.0f, 1.0f);
  ms.ReadFlt(m_optPtMovStepFtsCurveMap, _T("1.0"), 0.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepFuelDensCorrMap, _T("0.001"), 0.0001f, 0.1f);
+ ms.ReadFlt(m_optPtMovStepXtauXfAccMap, _T("1.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepXtauXfDecMap, _T("1.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepXtauTfAccMap, _T("1.0"), 0.0f, 1000.0f);
+ ms.ReadFlt(m_optPtMovStepXtauTfDecMap, _T("1.0"), 0.0f, 1000.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -2245,6 +2269,26 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optFuelDensCorrMapWnd, _T("Таблица коррекции плотности топлива"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optXtauXfAccMapWnd, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
+ else
+  ws.WriteWndPos(m_optXtauXfAccMapWnd, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optXtauXfDecMapWnd, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
+ else
+  ws.WriteWndPos(m_optXtauXfDecMapWnd, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optXtauTfAccMapWnd, _T("Constant of fuel's film dissipation time (accelaration)"));
+ else
+  ws.WriteWndPos(m_optXtauTfAccMapWnd, _T("Постоянная времени испарения плeнки для режима ускорения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optXtauTfDecMapWnd, _T("Constant of fuel's film dissipation time (decelaration)"));
+ else
+  ws.WriteWndPos(m_optXtauTfDecMapWnd, _T("Постоянная времени испарения плeнки для режима замедления"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2790,6 +2834,26 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optFuelDensCorrMapWndSize, _T("Fuel density correction map"));
  else
   sz.WriteWndPos(m_optFuelDensCorrMapWndSize, _T("Таблица коррекции плотности топлива"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optXtauXfAccMapWndSize, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
+ else
+  sz.WriteWndPos(m_optXtauXfAccMapWndSize, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optXtauXfDecMapWndSize, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
+ else
+  sz.WriteWndPos(m_optXtauXfDecMapWndSize, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optXtauTfAccMapWndSize, _T("Constant of fuel's film dissipation time (accelaration)"));
+ else
+  sz.WriteWndPos(m_optXtauTfAccMapWndSize, _T("Постоянная времени испарения плeнки для режима ускорения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optXtauTfDecMapWndSize, _T("Constant of fuel's film dissipation time (decelaration)"));
+ else
+  sz.WriteWndPos(m_optXtauTfDecMapWndSize, _T("Постоянная времени испарения плeнки для режима замедления"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -4024,6 +4088,26 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepFuelDensCorrMap, 1, _T("Таблица коррекции плотности топлива"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepXtauXfAccMap, 1, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
+ else
+  ms.WriteFlt(m_optPtMovStepXtauXfAccMap, 1, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepXtauXfDecMap, 1, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
+ else
+  ms.WriteFlt(m_optPtMovStepXtauXfDecMap, 1, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepXtauTfAccMap, 1, _T("Constant of fuel's film dissipation time (accelaration)"));
+ else
+  ms.WriteFlt(m_optPtMovStepXtauTfAccMap, 1, _T("Постоянная времени испарения плeнки для режима ускорения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepXtauTfDecMap, 1, _T("Constant of fuel's film dissipation time (decelaration)"));
+ else
+  ms.WriteFlt(m_optPtMovStepXtauTfDecMap, 1, _T("Постоянная времени испарения плeнки для режима замедления"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -4363,6 +4447,14 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optFtsCurveMapWnd.value.y = i_wndSettings.m_FtsCurveMapWnd_Y; 
  m_optFuelDensCorrMapWnd.value.x = i_wndSettings.m_FuelDensCorrMapWnd_X;
  m_optFuelDensCorrMapWnd.value.y = i_wndSettings.m_FuelDensCorrMapWnd_Y; 
+ m_optXtauXfAccMapWnd.value.x = i_wndSettings.m_XtauXfAccMapWnd_X;
+ m_optXtauXfAccMapWnd.value.y = i_wndSettings.m_XtauXfAccMapWnd_Y; 
+ m_optXtauXfDecMapWnd.value.x = i_wndSettings.m_XtauXfDecMapWnd_X;
+ m_optXtauXfDecMapWnd.value.y = i_wndSettings.m_XtauXfDecMapWnd_Y; 
+ m_optXtauTfAccMapWnd.value.x = i_wndSettings.m_XtauTfAccMapWnd_X;
+ m_optXtauTfAccMapWnd.value.y = i_wndSettings.m_XtauTfAccMapWnd_Y; 
+ m_optXtauTfDecMapWnd.value.x = i_wndSettings.m_XtauTfDecMapWnd_X;
+ m_optXtauTfDecMapWnd.value.y = i_wndSettings.m_XtauTfDecMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -4505,6 +4597,14 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_FtsCurveMapWnd_Y = m_optFtsCurveMapWnd.value.y;
  o_wndSettings.m_FuelDensCorrMapWnd_X = m_optFuelDensCorrMapWnd.value.x;
  o_wndSettings.m_FuelDensCorrMapWnd_Y = m_optFuelDensCorrMapWnd.value.y;
+ o_wndSettings.m_XtauXfAccMapWnd_X = m_optXtauXfAccMapWnd.value.x;
+ o_wndSettings.m_XtauXfAccMapWnd_Y = m_optXtauXfAccMapWnd.value.y;
+ o_wndSettings.m_XtauXfDecMapWnd_X = m_optXtauXfDecMapWnd.value.x;
+ o_wndSettings.m_XtauXfDecMapWnd_Y = m_optXtauXfDecMapWnd.value.y;
+ o_wndSettings.m_XtauTfAccMapWnd_X = m_optXtauTfAccMapWnd.value.x;
+ o_wndSettings.m_XtauTfAccMapWnd_Y = m_optXtauTfAccMapWnd.value.y;
+ o_wndSettings.m_XtauTfDecMapWnd_X = m_optXtauTfDecMapWnd.value.x;
+ o_wndSettings.m_XtauTfDecMapWnd_Y = m_optXtauTfDecMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4803,6 +4903,14 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optFtsCurveMapWndSize.value.y = i_wndSize.m_FtsCurveMapWnd_H; 
  m_optFuelDensCorrMapWndSize.value.x = i_wndSize.m_FuelDensCorrMapWnd_W;
  m_optFuelDensCorrMapWndSize.value.y = i_wndSize.m_FuelDensCorrMapWnd_H; 
+ m_optXtauXfAccMapWndSize.value.x = i_wndSize.m_XtauXfAccMapWnd_W;
+ m_optXtauXfAccMapWndSize.value.y = i_wndSize.m_XtauXfAccMapWnd_H; 
+ m_optXtauXfDecMapWndSize.value.x = i_wndSize.m_XtauXfDecMapWnd_W;
+ m_optXtauXfDecMapWndSize.value.y = i_wndSize.m_XtauXfDecMapWnd_H; 
+ m_optXtauTfAccMapWndSize.value.x = i_wndSize.m_XtauTfAccMapWnd_W;
+ m_optXtauTfAccMapWndSize.value.y = i_wndSize.m_XtauTfAccMapWnd_H; 
+ m_optXtauTfDecMapWndSize.value.x = i_wndSize.m_XtauTfDecMapWnd_W;
+ m_optXtauTfDecMapWndSize.value.y = i_wndSize.m_XtauTfDecMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -4945,6 +5053,14 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_FtsCurveMapWnd_H = m_optFtsCurveMapWndSize.value.y;
  o_wndSize.m_FuelDensCorrMapWnd_W = m_optFuelDensCorrMapWndSize.value.x;
  o_wndSize.m_FuelDensCorrMapWnd_H = m_optFuelDensCorrMapWndSize.value.y;
+ o_wndSize.m_XtauXfAccMapWnd_W = m_optXtauXfAccMapWndSize.value.x;
+ o_wndSize.m_XtauXfAccMapWnd_H = m_optXtauXfAccMapWndSize.value.y;
+ o_wndSize.m_XtauXfDecMapWnd_W = m_optXtauXfDecMapWndSize.value.x;
+ o_wndSize.m_XtauXfDecMapWnd_H = m_optXtauXfDecMapWndSize.value.y;
+ o_wndSize.m_XtauTfAccMapWnd_W = m_optXtauTfAccMapWndSize.value.x;
+ o_wndSize.m_XtauTfAccMapWnd_H = m_optXtauTfAccMapWndSize.value.y;
+ o_wndSize.m_XtauTfDecMapWnd_W = m_optXtauTfDecMapWndSize.value.x;
+ o_wndSize.m_XtauTfDecMapWnd_H = m_optXtauTfDecMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -5878,6 +5994,10 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepLambdaZoneMap.value = i_ptMovStep.m_lambda_zone_map;
  m_optPtMovStepFtsCurveMap.value = i_ptMovStep.m_fts_curve_map;
  m_optPtMovStepFuelDensCorrMap.value = i_ptMovStep.m_fueldens_corr_map;
+ m_optPtMovStepXtauXfAccMap.value = i_ptMovStep.m_xtau_xfacc_map;
+ m_optPtMovStepXtauXfDecMap.value = i_ptMovStep.m_xtau_xfdec_map;
+ m_optPtMovStepXtauTfAccMap.value = i_ptMovStep.m_xtau_tfacc_map;
+ m_optPtMovStepXtauTfDecMap.value = i_ptMovStep.m_xtau_tfdec_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -5949,6 +6069,10 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_lambda_zone_map = m_optPtMovStepLambdaZoneMap.value;
  o_ptMovStep.m_fts_curve_map = m_optPtMovStepFtsCurveMap.value;
  o_ptMovStep.m_fueldens_corr_map = m_optPtMovStepFuelDensCorrMap.value;
+ o_ptMovStep.m_xtau_xfacc_map = m_optPtMovStepXtauXfAccMap.value;
+ o_ptMovStep.m_xtau_xfdec_map = m_optPtMovStepXtauXfDecMap.value;
+ o_ptMovStep.m_xtau_tfacc_map = m_optPtMovStepXtauTfAccMap.value;
+ o_ptMovStep.m_xtau_tfdec_map = m_optPtMovStepXtauTfDecMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

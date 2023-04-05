@@ -35,6 +35,7 @@
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -60,8 +61,11 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeDataAEType();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAET(CCmdUI* pCmdUI);
- /* afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);*/
+  afx_msg void OnUpdateControlsXtau(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+  afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -86,5 +90,12 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CStatic m_enrblend_value;
   CComboBox m_aetype_combo;
 
+  CComboBox m_wwmtype_combo;
+  CSpinButtonCtrlEx m_xtau_s_thrd_spin;
+  CEditEx m_xtau_s_thrd_edit;
+  CSpinButtonCtrlEx m_xtau_f_thrd_spin;
+  CEditEx m_xtau_f_thrd_edit;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 };

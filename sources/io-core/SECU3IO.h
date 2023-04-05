@@ -670,6 +670,9 @@ namespace SECU3IO
   int ae_time;                        //time of active phase of AE
   float ae_mapdot_thrd;               //MAP kPa/sec threshold
   float ae_ballance;                  //MAP/TPS balance for acceleration enrichment (%)
+  float xtau_s_thrd;
+  float xtau_f_thrd;
+  int wallwet_model;
  };
 
 

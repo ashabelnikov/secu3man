@@ -312,10 +312,14 @@ typedef struct params_t
  _uchar inj_ae_ballance;
  _uchar inj_ae_mapdot_thrd;
 
+ _uchar inj_xtau_s_thrd;
+ _uchar inj_xtau_f_thrd;
+ _uchar wallwet_model;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[136];
+ _uchar reserved[133];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

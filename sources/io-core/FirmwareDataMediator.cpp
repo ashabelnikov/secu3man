@@ -268,7 +268,19 @@ typedef struct
  //fuel density correction
  _uint fueldens_corr[FUELDENS_CORR_SIZE];
 
- _uchar reserved1[1259];
+ //Film factors for accelaration, 0...0.99, value * 1024
+ _uint xtau_xfacc[XTAU_FACT_SIZE];
+
+ //Film factors for deceleration, 0...0.99, value * 1024
+ _uint xtau_xfdec[XTAU_FACT_SIZE];
+
+ //Time factors for accelaration, value in 102.4 us units (3.2us * 32)
+ _uint xtau_tfacc[XTAU_FACT_SIZE];
+
+ //Time factors for deceleration, value in 102.4 us units (3.2us * 32)
+ _uint xtau_tfdec[XTAU_FACT_SIZE];
+
+ _uchar reserved1[1131];
 
  //firmware constants:
  _int evap_clt;
@@ -1629,6 +1641,10 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetFtlsCorMap(op_fwd->ftls_corr);
  GetFtsCurveMap(op_fwd->fts_curve);
  GetFuelDensCorrMap(op_fwd->fueldens_corr);
+ GetXtauXfAccMap(op_fwd->xtau_xfacc);
+ GetXtauXfDecMap(op_fwd->xtau_xfdec);
+ GetXtauTfAccMap(op_fwd->xtau_tfacc);
+ GetXtauTfDecMap(op_fwd->xtau_tfdec);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1726,6 +1742,10 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetFtlsCorMap(ip_fwd->ftls_corr);
  SetFtsCurveMap(ip_fwd->fts_curve);
  SetFuelDensCorrMap(ip_fwd->fueldens_corr);
+ SetXtauXfAccMap(ip_fwd->xtau_xfacc);
+ SetXtauXfDecMap(ip_fwd->xtau_xfdec);
+ SetXtauTfAccMap(ip_fwd->xtau_tfacc);
+ SetXtauTfDecMap(ip_fwd->xtau_tfdec);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2708,6 +2728,78 @@ void CFirmwareDataMediator::SetFuelDensCorrMap(const float* ip_values)
 
  for(size_t i = 0; i < FUELDENS_CORR_SIZE; i++)
   p_fd->exdata.fueldens_corr[i] = MathHelpers::Round(ip_values[i] * 16384.0f);
+}
+
+void CFirmwareDataMediator::GetXtauXfAccMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  op_values[i] = (((float)p_fd->exdata.xtau_xfacc[i]) / 1024.0f) * 100.0f; //%
+}
+
+void CFirmwareDataMediator::SetXtauXfAccMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  p_fd->exdata.xtau_xfacc[i] = MathHelpers::Round((ip_values[i] / 100.0f) * 1024.0f);
+}
+
+void CFirmwareDataMediator::GetXtauXfDecMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  op_values[i] = (((float)p_fd->exdata.xtau_xfdec[i]) / 1024.0f) * 100.0f; //%
+}
+
+void CFirmwareDataMediator::SetXtauXfDecMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  p_fd->exdata.xtau_xfdec[i] = MathHelpers::Round((ip_values[i] / 100.0f) * 1024.0f);
+}
+
+void CFirmwareDataMediator::GetXtauTfAccMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.xtau_tfacc[i]) * 0.1024f; //convert to ms
+}
+
+void CFirmwareDataMediator::SetXtauTfAccMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  p_fd->exdata.xtau_tfacc[i] = MathHelpers::Round(ip_values[i] / 0.1024f); //convert to 0.1024 ms units
+}
+
+void CFirmwareDataMediator::GetXtauTfDecMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.xtau_tfdec[i]) * 0.1024f; //convert to ms
+}
+
+void CFirmwareDataMediator::SetXtauTfDecMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+ for (int i = 0; i < XTAU_FACT_SIZE; i++ )
+  p_fd->exdata.xtau_tfdec[i] = MathHelpers::Round(ip_values[i] / 0.1024f); //convert to 0.1024 ms units
 }
 
 //--------------------------------------------------------------------------------
