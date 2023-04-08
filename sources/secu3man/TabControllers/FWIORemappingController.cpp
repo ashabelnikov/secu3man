@@ -67,7 +67,6 @@ void CFWIORemappingController::AttachFWDM(FWDM* ip_fwdm)
 
 void CFWIORemappingController::OnActivate(void)
 {
- _PrepareLogic();
 }
 
 void CFWIORemappingController::OnDeactivate(void)
