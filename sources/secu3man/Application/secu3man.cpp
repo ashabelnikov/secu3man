@@ -315,14 +315,14 @@ BOOL CSecu3manApp::InitInstance()
  //create main window. It must be created first of all (before any other initialization)
  m_pMainWnd = m_pMainFrameManager->GreateMainWindow();
 
+ //Set title of main window
+ SetMainWindowTitle();
+
  //initialize communication manager
  m_pCommunicationManager->Init(true);
 
  //Initialize content of main window (child controls)
  m_pMainFrameManager->Init(m_pMainWnd);
-
- //Set title of main window
- SetMainWindowTitle();
 
  //========================================================
  if (!CheckAppTitle(m_pMainWnd) || !CheckAppMenu())

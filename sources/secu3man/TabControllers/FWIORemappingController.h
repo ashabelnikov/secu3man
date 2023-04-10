@@ -50,7 +50,7 @@ class CFWIORemappingController
 
   void Enable(bool state);
 
-  void EnableSECU3TFeatures(bool i_enable);
+  void EnableSECU3TFeatures(bool i_enable, bool updateLogic = false);
   void EnableExtraIO(bool i_enable);
   void EnableSpiAdc(bool i_enable);
 

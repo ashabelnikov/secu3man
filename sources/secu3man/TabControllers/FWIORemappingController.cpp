@@ -71,7 +71,6 @@ void CFWIORemappingController::OnActivate(void)
 
 void CFWIORemappingController::OnDeactivate(void)
 {
- mp_view->ResetContent();
 }
 
 void CFWIORemappingController::Enable(bool state)
@@ -79,12 +78,12 @@ void CFWIORemappingController::Enable(bool state)
  mp_view->Enable(state);
 }
 
-void CFWIORemappingController::EnableSECU3TFeatures(bool i_enable)
+void CFWIORemappingController::EnableSECU3TFeatures(bool i_enable, bool updateLogic /*=false*/)
 {
  m_enable_secu3t_features = i_enable;
  mp_view->EnableSECU3TItems(i_enable);
  //update logic
- if (mp_fwdm)
+ if (mp_fwdm && updateLogic)
  {
   _PrepareLogic();
   _CheckForErrors();
