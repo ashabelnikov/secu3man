@@ -65,6 +65,9 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //Get handle of file which is currently used for writing of data
   FILE* GetFileHandle(void);
 
+  //Log file format: false - text, true - binary
+  void SetFormat(bool logfmt);
+
  public:
 
   //через эти обработчики данные поступают в механизм записи
@@ -85,4 +88,6 @@ class IOCORE_API LogWriter : public IAPPEventHandler
 
   int m_pending_marks;
   bool m_writeFields;
+
+  bool m_logFmt;
 };

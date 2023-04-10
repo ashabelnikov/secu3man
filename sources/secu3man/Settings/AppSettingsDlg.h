@@ -92,6 +92,9 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetExistingPorts(bool i_exp);
   virtual bool GetExistingPorts(void) const;
 
+  virtual void SetLogBinaryFmt(bool i_exp);
+  virtual bool GetLogBinaryFmt(void) const;
+
   void SetWriteLogFields(bool i_always);
   bool GetWriteLogFields(void) const;
 
@@ -150,6 +153,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CButton   m_showvss_button;
   CButton   m_presports_button;
   CButton   m_injdrvtab_button;
+  CButton   m_logbinfmt_button;
   CEdit     m_log_files_folder_edit;
   CEditEx   m_midesk_update_period_edit;
   CEditEx   m_dv_update_period_edit;

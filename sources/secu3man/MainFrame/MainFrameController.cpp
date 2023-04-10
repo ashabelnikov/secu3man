@@ -159,6 +159,7 @@ void MainFrameController::OnAppSettings()
   //уведомляем логгер об изменениях в настройках.
   const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
   m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol());
+  m_pLogWriter->SetFormat(settings->GetLogBinaryFmt());
 
   mp_view->BeginWaitCursor();
   m_pCommunicationManager->Init();
@@ -210,6 +211,7 @@ void MainFrameController::OnAppBeginLog()
 
  //устнанавливаем разделительный символ для CSV-файла указанный в настройках
  m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol());
+ m_pLogWriter->SetFormat(settings->GetLogBinaryFmt());
 
  if (!settings->GetUseAppFolder())
   full_path_to_folder = settings->GetLogFilesFolder();

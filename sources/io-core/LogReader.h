@@ -104,4 +104,6 @@ class IOCORE_API LogReader
   char *mp_recBuff;
 
   int m_fffConst;
+
+  bool m_logFmt;
 };

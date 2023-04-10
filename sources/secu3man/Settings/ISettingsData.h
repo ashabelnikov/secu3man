@@ -611,6 +611,7 @@ class ISettingsData
   virtual int GetBldrEEPROMBlocks(void) const = 0;
   virtual float GetFuelDensity1(void) const = 0;
   virtual float GetFuelDensity2(void) const = 0;
+  virtual bool GetLogBinaryFmt(void) const = 0;
 
   //Fixtures's customization settings
   virtual int GetTachometerMax(void) const = 0;

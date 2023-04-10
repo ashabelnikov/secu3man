@@ -470,7 +470,7 @@ void CLogPlayerTabController::OnDropFile(_TSTRING fileName)
 void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
 {
  HANDLE   hFile = NULL;
- static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
+ static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|S3L Files (*.s3l)|*.s3l|All Files (*.*)|*.*||");
  CFileDialogEx open(TRUE, NULL, NULL, NULL, szFilter, NULL);
 
  if (fileName.empty() && open.DoModal() != IDOK)

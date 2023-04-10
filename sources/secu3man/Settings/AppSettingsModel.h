@@ -106,6 +106,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetBldrEEPROMBlocks(void) const;
   virtual float GetFuelDensity1(void) const;
   virtual float GetFuelDensity2(void) const;
+  virtual bool GetLogBinaryFmt(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -314,6 +315,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optBldrEEPROMBlocks;
   OptField_t<float> m_optFuelDensity1;
   OptField_t<float> m_optFuelDensity2;
+  OptField_t<bool> m_optLogBinaryFmt;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;

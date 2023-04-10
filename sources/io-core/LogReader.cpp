@@ -31,6 +31,7 @@
 #include <math.h>
 #include "SECU3IO.h"
 #include "BitMask.h"
+#include "s3lrecord.h"
 
 using namespace SECU3IO;
 
@@ -66,6 +67,7 @@ LogReader::LogReader()
 , m_current_record(0)
 , m_csv_separating_symbol(',')
 , m_fileOffset(0)
+, m_logFmt(false) //csv format
 {
  mp_recBuff = new char[MAX_REC_BUF + 1];
  SetSeparatingSymbol(m_csv_separating_symbol);
@@ -100,50 +102,7 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
  m_file_handle = f_handle;
  m_current_record = 0;
 
- //check content of the first line of file
- SYSTEMTIME o_time;
- SECU3IO::SensorDat o_data;
- int o_marks;
- bool result = GetRecord(o_time, o_data, o_marks);
- if (result) 
- {
-  fseek(m_file_handle, 0, SEEK_SET);
-  m_fileOffset = 0;
- }
- else
- {//first line contains title, so we will just skip it
-  fseek(m_file_handle, 0, SEEK_SET);
-  int n = 0, c = 0;
-  do 
-  {
-   c = fgetc(m_file_handle);
-   n++;
-   if (c == '\n')
-    break;
-  } while (c != EOF);
-  m_fileOffset = n;
- }
-
- char string[MAX_REC_BUF + 1];
- //определяем кол-во строк в файле и проверяем чтобы они были одинаковой длины
- int prev_length = -1, length = 0;
- unsigned long count = 0;
- while(fgets(string, MAX_REC_BUF, f_handle) != NULL)
- {
-  length = strlen(string);
-  if (prev_length != -1 && length != prev_length)
-  {
-   o_error = FE_FORMAT;
-   fclose(f_handle);
-   m_file_handle = NULL;
-   return false;
-  }
-  prev_length = length;
-  ++count;
-  if (!i_check && count > 1000) //check only first 1000 records if checking is not specified
-   break;
- }
-
+ //get file size
  fseek(f_handle, 0L, SEEK_END);
  long int fsize = ftell(f_handle);
  fseek(f_handle, 0L, SEEK_SET);
@@ -156,25 +115,82 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
   return false;
  }
 
- //save record count
- if (i_check)
- {
-  m_record_count = (fsize - m_fileOffset) / (length);
-  if (count != m_record_count)
-  {
-   o_error = FE_FORMAT;
-   fclose(f_handle);
-   m_file_handle = NULL;
-   return false;
-  }
+ size_t pos = i_file_name.rfind(_T(".s3l"));
+ if (pos!=_TSTRING::npos && pos == i_file_name.size()-4) //check file extension
+ {//binary format (.s3l)
+  m_record_size = sizeof(s3l::s3lRecord);
+  m_record_count = fsize / m_record_size;
+  o_error = FE_NA;
+  m_logFmt = true;
+  m_fileOffset = 0; //no title - no offset
  }
  else
- {
-  m_record_count = (fsize - m_fileOffset) / (length);
+ {//text format (.csv)
+  m_logFmt = false;
+  //check content of the first line of file
+  SYSTEMTIME o_time;
+  SECU3IO::SensorDat o_data;
+  int o_marks;
+  bool result = GetRecord(o_time, o_data, o_marks);
+  if (result) 
+  {
+   fseek(m_file_handle, 0, SEEK_SET);
+   m_fileOffset = 0;
+  }
+  else
+  {//first line contains title, so we will just skip it
+   fseek(m_file_handle, 0, SEEK_SET);
+   int n = 0, c = 0;
+   do 
+   {
+    c = fgetc(m_file_handle);
+    n++;
+    if (c == '\n')
+     break;
+   } while (c != EOF);
+   m_fileOffset = n;
+  }
+
+  char string[MAX_REC_BUF + 1];
+  //определяем кол-во строк в файле и проверяем чтобы они были одинаковой длины
+  int prev_length = -1, length = 0;
+  unsigned long count = 0;
+  while(fgets(string, MAX_REC_BUF, f_handle) != NULL)
+  {
+   length = strlen(string);
+   if (prev_length != -1 && length != prev_length)
+   {
+    o_error = FE_FORMAT;
+    fclose(f_handle);
+    m_file_handle = NULL;
+    return false;
+   }
+   prev_length = length;
+   ++count;
+   if (!i_check && count > 1000) //check only first 1000 records if checking is not specified
+    break;
+  }
+
+  //save record count
+  if (i_check)
+  {
+   m_record_count = (fsize - m_fileOffset) / (length);
+   if (count != m_record_count)
+   {
+    o_error = FE_FORMAT;
+    fclose(f_handle);
+    m_file_handle = NULL;
+    return false;
+   }
+  }
+  else
+  {
+   m_record_count = (fsize - m_fileOffset) / (length);
+  }
+  m_record_size = length;
+  o_error = FE_NA;
+  fseek(m_file_handle, 0, SEEK_SET);
  }
- m_record_size = length;
- o_error = FE_NA;
- fseek(m_file_handle, 0, SEEK_SET);
  return true;
 }
 
@@ -202,6 +218,95 @@ bool LogReader::IsOpened(void) const
 bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o_marks)
 {
  VERIFY(!fseek(m_file_handle, m_fileOffset + (m_record_size*m_current_record), SEEK_SET));
+
+ int service_flags = 0;
+ int uniout_flags = 0;
+
+ if (m_logFmt)
+ { //binary format
+  s3l::s3lRecord s3l;
+  size_t real_count = fread(&s3l, m_record_size, 1, m_file_handle);
+  if (real_count != 1)
+   return false;
+
+  o_time.wHour = s3l.hh;
+  o_time.wMinute = s3l.mm;
+  o_time.wSecond = s3l.ss;
+  o_time.wMilliseconds = s3l.ms;
+
+  o_data.carb = CHECKBIT16(s3l.flags, 15);
+  o_data.gas = CHECKBIT16(s3l.flags, 14);
+  o_data.ephh_valve = CHECKBIT16(s3l.flags, 13);
+  o_data.epm_valve = CHECKBIT16(s3l.flags, 12);
+  o_data.cool_fan = CHECKBIT16(s3l.flags, 11);
+  o_data.st_block = CHECKBIT16(s3l.flags, 10);
+  o_data.acceleration = CHECKBIT16(s3l.flags, 9);
+  o_data.fc_revlim = CHECKBIT16(s3l.flags, 8);
+  o_data.floodclear = CHECKBIT16(s3l.flags, 7);
+  o_data.sys_locked = CHECKBIT16(s3l.flags, 6);
+  o_data.ce_state = CHECKBIT16(s3l.flags, 5);
+  o_data.ign_i = CHECKBIT16(s3l.flags, 4);
+  o_data.cond_i = CHECKBIT16(s3l.flags, 3);
+  o_data.epas_i = CHECKBIT16(s3l.flags, 2);
+  o_data.aftstr_enr = CHECKBIT16(s3l.flags, 1);
+  o_data.iac_cl_loop = CHECKBIT16(s3l.flags, 0);
+
+  o_data.frequen = s3l.frequen;
+  o_data.adv_angle = s3l.adv_angle;
+  o_data.pressure = s3l.pressure;
+  o_data.voltage = s3l.voltage;
+  o_data.temperat = s3l.temperat;
+  o_data.knock_k = s3l.knock_k;
+  o_data.knock_retard = s3l.knock_retard;
+  o_data.air_flow = s3l.air_flow;
+
+  o_data.ce_errors = s3l.ce_errors;
+  o_data.tps = s3l.tps;
+  o_data.add_i1 = s3l.add_i1;
+  o_data.add_i2 = s3l.add_i2;
+  o_data.choke_pos = s3l.choke_pos;
+  o_data.gasdose_pos = s3l.gasdose_pos;
+  o_data.speed = s3l.speed;
+  o_data.distance = s3l.distance;
+  o_data.inj_ffd = s3l.inj_ffd;
+  o_data.inj_fff = s3l.inj_fff;
+  o_data.add_i2_mode = (fabs(s3l.air_temp - 999.99f) > 0.0001); //Comparing with epsilon
+  o_data.air_temp = o_data.add_i2_mode ? s3l.air_temp : .0f;
+  o_data.strt_aalt = s3l.strt_aalt;
+  o_data.idle_aalt = s3l.idle_aalt;
+  o_data.work_aalt = s3l.work_aalt;
+  o_data.temp_aalt = s3l.temp_aalt;
+  o_data.airt_aalt = s3l.airt_aalt;
+  o_data.idlreg_aac = s3l.idlreg_aac;
+  o_data.octan_aac = s3l.octan_aac;
+  o_marks = s3l.log_marks;  //save log marks
+  o_data.inj_pw = s3l.inj_pw;
+  o_data.lambda_corr = s3l.lambda_corr;
+  o_data.tpsdot = s3l.tpsdot;
+  o_data.map2 = s3l.map2;
+  o_data.tmp2 = s3l.tmp2;
+  o_data.mapd = s3l.mapd;
+  o_data.afr = s3l.afr;
+  o_data.load = s3l.load;
+  o_data.baro_press = s3l.baro_press;
+  o_data.inj_tim_begin = s3l.inj_tim_begin;
+  o_data.inj_tim_end = s3l.inj_tim_end;
+  o_data.inj_ffh = (3600.0f * s3l.inj_fff) / ((float)m_fffConst);
+  o_data.grts = s3l.grts;
+  o_data.ftls = s3l.ftls;
+  o_data.egts = s3l.egts;
+  o_data.ops = s3l.ops;
+  o_data.inj_duty = s3l.inj_duty;
+  o_data.rigid_arg = s3l.rigid_arg;
+  o_data.rxlaf = s3l.rxlaf;
+  o_data.maf = s3l.maf;
+  o_data.vent_duty = s3l.vent_duty;
+  o_data.fts = s3l.fts;
+  o_data.cons_fuel = s3l.cons_fuel;
+  o_data.mapdot = s3l.mapdot;
+ }
+ else
+ {
 
  if (m_record_size == 0)
  {
@@ -236,8 +341,6 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
  float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel;
  char ce_errors[35] = {0};
- int service_flags = 0;
- int uniout_flags = 0;
 
  result = sscanf(mp_recBuff + CSV_TIME_PANE_LEN, m_csv_data_template,
                 &frequen,
@@ -388,6 +491,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.vent_duty = vent_duty;
  o_data.fts = fts;
  o_data.cons_fuel = cons_fuel;
+ o_data.mapdot = mapdot;
+ }
 
  //universal outputs
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
@@ -403,8 +508,6 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.idlreg_use = CHECKBIT32(service_flags, 6);
  o_data.octan_use =  CHECKBIT32(service_flags, 7);
  o_data.rigid_use =  CHECKBIT32(service_flags, 8);
-
- o_data.mapdot = mapdot;
 
  //all read without errors
  return true;
@@ -490,11 +593,23 @@ void LogReader::SetFFFConst(int fffConst)
 
 bool LogReader::GetMRecord(int &o_marks, bool &o_errors)
 {
- size_t real_count = fread(mp_recBuff, sizeof(char), m_record_size, m_file_handle);
- if (real_count != m_record_size)
-  return false;
+ if (m_logFmt)
+ { //binary format
+  s3l::s3lRecord s3l;
+  size_t real_count = fread(&s3l, m_record_size, 1, m_file_handle);
+  if (real_count != 1)
+   return false;
+  o_marks = s3l.log_marks;
+  o_errors = CHECKBIT16(s3l.flags, 5); //ce_state
+ }
+ else
+ { //text format
+  size_t real_count = fread(mp_recBuff, sizeof(char), m_record_size, m_file_handle);
+  if (real_count != m_record_size)
+   return false;
 
- o_marks = mp_recBuff[CSV_MARKS_OFFSET] - 0x30;
- o_errors = mp_recBuff[CSV_CE_OFFSET] - 0x30;
+  o_marks = mp_recBuff[CSV_MARKS_OFFSET] - 0x30;
+  o_errors = mp_recBuff[CSV_CE_OFFSET] - 0x30;
+ }
  return true;
 }

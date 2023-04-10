@@ -143,6 +143,8 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_EXFIXTURES, m_exfixtures_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_PRESPORTS, m_presports_button);
 
+ DDX_Control(pDX, IDC_APP_SETTINGS_BINARYFMT, m_logbinfmt_button);
+
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
  DDX_CBStringPort(pDX, mp_port_selection_combo, m_port_number);
@@ -302,6 +304,7 @@ BOOL CAppSettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_exfixtures_button, MLL::GetString(IDS_APP_SETTINGS_EXFIXTURES_TT)));
  VERIFY(mp_ttc->AddWindow(&m_use_dv_features_button, MLL::GetString(IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT)));
  VERIFY(mp_ttc->AddWindow(&m_showvss_button, MLL::GetString(IDS_APP_SETTINGS_SHOWVSS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_logbinfmt_button, MLL::GetString(IDS_APP_SETTINGS_BINARYFMT_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -764,4 +767,14 @@ void CAppSettingsDlg::SetInjDrvTabActive(bool i_active)
 bool CAppSettingsDlg::GetInjDrvTabActive(void) const
 {
  return m_injdrvtab_active == BST_CHECKED;
+}
+
+void CAppSettingsDlg::SetLogBinaryFmt(bool i_exp)
+{
+ m_logbinfmt_button.SetCheck(i_exp ? BST_CHECKED : BST_UNCHECKED);
+}
+
+bool CAppSettingsDlg::GetLogBinaryFmt(void) const
+{
+ return m_logbinfmt_button.GetCheck() == BST_CHECKED;
 }
