@@ -111,9 +111,9 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
    WRITEBIT16(flags, 0,  p_sensors->iac_cl_loop);
                                             
    s3l::s3lRecord s3l = {
-   time.wHour,
-   time.wMinute,
-   time.wSecond,
+   (BYTE)time.wHour,
+   (BYTE)time.wMinute,
+   (BYTE)time.wSecond,
    time.wMilliseconds,
    p_sensors->frequen,
    p_sensors->adv_angle,
