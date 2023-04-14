@@ -757,4 +757,6 @@ class ISettingsData
 
   virtual bool GetSpotMarkers(void) const = 0;
   virtual float GetSpotMarkersSize(void) const = 0;
+
+  virtual bool GetCreateWindows(void) const = 0;
 };

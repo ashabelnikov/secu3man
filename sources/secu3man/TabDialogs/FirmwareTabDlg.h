@@ -171,6 +171,8 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   virtual void OnSelchangeTabctl(void);
   virtual bool OnSelchangingTabctl(void);
 
+  virtual void OnShow(bool show);
+
  private:
   CButton   m_bl_started_emergency;
   CButton   m_prog_only_code_checkbox;

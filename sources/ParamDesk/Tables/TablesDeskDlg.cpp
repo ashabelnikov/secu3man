@@ -651,3 +651,7 @@ void CTablesDeskDlg::EnableToggleMapWnd(bool toggle)
  mp_ButtonsPanel->EnableToggleMapWnd(toggle);
 }
 
+void CTablesDeskDlg::OnShow(bool show)
+{
+ mp_ButtonsPanel->OnShow(show);
+}

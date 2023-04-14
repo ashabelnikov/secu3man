@@ -72,6 +72,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFuelDensity1(_T("FuelDensity1"))
 , m_optFuelDensity2(_T("FuelDensity2"))
 , m_optLogBinaryFmt(_T("LogBinaryFmt"))
+, m_optCreateWindows(_T("CreateWindows"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -803,6 +804,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadFlt(m_optFuelDensity1,_T("0.710"), 0.2f, 2.0f); //1-st fuel (e.g. petrol)
  os.ReadFlt(m_optFuelDensity2,_T("0.536"), 0.2f, 2.0f); //2-nd fuel (e.g. LPG)
  os.ReadInt(m_optLogBinaryFmt, _T("0"), 0, 1);
+ os.ReadInt(m_optCreateWindows, _T("1"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -1447,6 +1449,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Записывать лог файл в бинарном формате"));
  os.WriteInt(m_optLogBinaryFmt); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Create all windows on start up of the programm. This will speed up the programm, but will take more memory and resources."));
+ else
+  os.WriteComment(_T("Создавать все окна программы в момент ее запуска. Это ускорит работу программы, но потребуется больше памяти и ресурсов."));
+ os.WriteInt(m_optCreateWindows); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Full path to folder for writing CSV log files. UseAppFolder must be set to 0."));
@@ -6333,4 +6341,9 @@ float CAppSettingsModel::GetFuelDensity2(void) const
 bool CAppSettingsModel::GetLogBinaryFmt(void) const
 {
  return m_optLogBinaryFmt.value;
+}
+
+bool CAppSettingsModel::GetCreateWindows(void) const
+{
+ return m_optCreateWindows.value;
 }

@@ -67,7 +67,6 @@ class CDevDiagOutsDlg : public CDialog
   virtual void DoDataExchange(CDataExchange* pDX);
   afx_msg void OnUpdateDiagControls(CCmdUI* pCmdUI);
   afx_msg void OnOutputCheckToggle(UINT nID);
-  afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()

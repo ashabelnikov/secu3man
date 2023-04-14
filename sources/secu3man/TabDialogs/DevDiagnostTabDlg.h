@@ -171,6 +171,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   DECLARE_MESSAGE_MAP()
 
  private:
+  virtual void OnShow(bool show);
   void OnOutputCheckToggle(int output_id, bool state);
 
   void _InitializeOscilloscopeControls(void);

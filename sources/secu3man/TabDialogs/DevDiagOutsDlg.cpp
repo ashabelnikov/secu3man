@@ -33,8 +33,6 @@
 #include "ui-core/WndScroller.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-#define TIMER_ID 0
-
 using namespace fastdelegate;
 
 const UINT CDevDiagOutsDlg::IDD = IDD_DEVDIAG_OUTPUTS;
@@ -46,7 +44,6 @@ const UINT OutputsCheckEnd1 = IDC_DEV_DIAG_TACH_O_CHECK;      //secu-3i
 
 BEGIN_MESSAGE_MAP(CDevDiagOutsDlg, Super)
  ON_WM_DESTROY()
- ON_WM_TIMER()
  ON_WM_SIZE()
  ON_COMMAND_RANGE(OutputsCheckStart, OutputsCheckEnd, OnOutputCheckToggle)
  ON_COMMAND_RANGE(OutputsCheckStart1, OutputsCheckEnd1, OnOutputCheckToggle) //secu-3i
@@ -80,8 +77,6 @@ BOOL CDevDiagOutsDlg::OnInitDialog()
 {
  Super::OnInitDialog();
   
- SetTimer(TIMER_ID, 250, NULL);
-
  UpdateDialogControls(this,TRUE);
 
  //initialize window scroller
@@ -162,17 +157,9 @@ void CDevDiagOutsDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
   pCmdUI->Enable(state);
 }
 
-void CDevDiagOutsDlg::OnTimer(UINT nIDEvent)
-{
- //dirty hack
- UpdateDialogControls(this,TRUE);
- Super::OnTimer(nIDEvent);
-}
-
 void CDevDiagOutsDlg::OnDestroy()
 {
  Super::OnDestroy();
- KillTimer(TIMER_ID);
  mp_scr->Close();
 }
 

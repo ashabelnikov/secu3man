@@ -119,6 +119,8 @@ class CKnockChannelTabDlg : public CTabDialog
 
   void OnFrqCalculate(float frq);
 
+  virtual void OnShow(bool show);
+
  private:
   CButton  m_param_save_button;
   std::auto_ptr<CChart2D> mp_RTChart;

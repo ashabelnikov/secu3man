@@ -41,6 +41,8 @@ class AFX_EXT_CLASS CTabDialog : public CUpdatableDialog
   //возвращает идентификатор диалога
   virtual LPCTSTR GetDialogID(void) const = 0;
 
+  virtual void OnShow(bool show) {};
+
   //диалоговые вкладки в Tab-контроле нельзя закрывать по IDOK или IDCANCEL
   virtual void OnOK();
   virtual void OnCancel();

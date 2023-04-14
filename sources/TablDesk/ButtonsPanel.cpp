@@ -224,8 +224,6 @@ BOOL CButtonsPanel::OnInitDialog()
 {
  Super::OnInitDialog();
 
- SetTimer(TIMER_ID, 250, NULL);
-
  //initialize window scroller
  mp_scr->Init(this);
 
@@ -2958,4 +2956,12 @@ void CButtonsPanel::SetCSVSepSymbol(char sepsymb)
 {
  DLL::Chart2DSetCSVSepSymbol(sepsymb);
  DLL::Chart3DSetCSVSepSymbol(sepsymb);
+}
+
+void CButtonsPanel::OnShow(bool show)
+{
+ if (show)
+  SetTimer(TIMER_ID, 250, NULL);
+ else
+  KillTimer(TIMER_ID);
 }

@@ -55,6 +55,13 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CTabController
 
+bool CTabController::m_liveWnd = true;
+
+void CTabController::SetSettings(bool liveWnd)
+{
+ CTabController::m_liveWnd = liveWnd;
+}
+
 CTabController::CTabController()
 : m_tab_item_index(0)
 , mp_CurDlg(NULL)
@@ -134,50 +141,64 @@ int CTabController::GetTCOrientation(void)
  return TCO_TOP; //default
 }
 
-void CTabController::CreateTabPage(void)
+void CTabController::CreateTabPage(bool create /* = false*/)
 {
- int selection = GetCurSel();
-
- //создание окна вкладки и ее отображение
- TabPageData* pPageData = GetItemData(selection);
- if (!pPageData->pDialogClass || ::IsWindow(pPageData->pDialogClass->m_hWnd))
-  return; //предотвращаем повторное создание вкладки
-
- ASSERT(pPageData);
- BOOL result = pPageData->pDialogClass->CreateIndirect(pPageData->pDialogTemplate, this->GetParent());
-
- if (0==result)
+ if (m_liveWnd && !create)
  {
-  AfxMessageBox(_T("Error creating Tab control page dialog!"));
-  return;
+  int selection = GetCurSel();
+  TabPageData* pPageData = GetItemData(selection);
+
+  mp_CurDlg = pPageData->pDialogClass;  
+  if (mp_CurDlg && IsWindow(mp_CurDlg->m_hWnd))
+  {
+   FitDialogSize(selection, true);
+   mp_CurDlg->OnShow(true);
+  }
  }
+ else
+ {
+  int selection = m_liveWnd ? m_tab_item_index : GetCurSel();
+  TabPageData* pPageData = GetItemData(selection);
 
- CRect c_rc(0,0,0,0);
- CalculatePageRect(selection, c_rc);
+  if (!pPageData->pDialogClass || ::IsWindow(pPageData->pDialogClass->m_hWnd))
+   return; //предотвращаем повторное создание вкладки
 
- //вкладка диалога находится в одной системе координат с таб-контроллом (у них общий parent!)
- CRect parent_rect;
- GetWindowRect(parent_rect);
- this->GetParent()->ScreenToClient(parent_rect);
- c_rc.OffsetRect(parent_rect.left, parent_rect.top);
+  ASSERT(pPageData);
+  BOOL result = pPageData->pDialogClass->CreateIndirect(pPageData->pDialogTemplate, this->GetParent());
 
- //подогнали размер диалога и сохранили указатель на текущий диалог
- pPageData->pDialogClass->SetWindowPos(&wndTop, c_rc.left, c_rc.top, c_rc.Width(), c_rc.Height(), SWP_SHOWWINDOW);
- mp_CurDlg = pPageData->pDialogClass;
+  if (0==result)
+  {
+   AfxMessageBox(_T("Error creating Tab control page dialog!"));
+   return;
+  }
+
+  mp_CurDlg = pPageData->pDialogClass;
+  FitDialogSize(selection, !m_liveWnd);
+  if (!create)
+   mp_CurDlg->OnShow(true);
+ }
 }
 
 void CTabController::DestroyTabPage(void)
 {
- if (mp_CurDlg)
+ if (mp_CurDlg && IsWindow(mp_CurDlg->m_hWnd))
  {
-  if (IsWindow(mp_CurDlg->m_hWnd)) //только если окно было создано (предотвращаем повторное закрытие окна)
+  if (m_liveWnd)
+  {
+   mp_CurDlg->ShowWindow(SW_HIDE);
+   mp_CurDlg->OnShow(false);
+  }
+  else
+  {
+   mp_CurDlg->OnShow(false);
    mp_CurDlg->DestroyWindow();
-  mp_CurDlg = NULL;
+   mp_CurDlg = NULL;
+  }
  }
 }
 
 //добавление вкладки, !!! ВНИЗУ смотреть похожую функцию !!!
-int CTabController::AddPage(CString name,CTabDialog* pPageDlg)
+int CTabController::AddPage(CString name, CTabDialog* pPageDlg)
 {
  TabPageData* pPageData = new TabPageData;
  pPageData->pDialogClass = pPageDlg;
@@ -204,11 +225,15 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg)
  }
  //добавление непосредственно вкладки
  InsertItem(TCIF_TEXT|TCIF_PARAM,m_tab_item_index,name,0,(LPARAM)pPageData);
+
+ if (m_liveWnd)
+  CreateTabPage(true); //create window, do not call OnShow()
+
  return m_tab_item_index++;
 }
 
 //!!! ВВЕРХУ смотреть похожую функцию !!!
-int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
+int CTabController::AddPage(CString name, CTabDialog* pPageDlg, const int nImage)
 {
  TabPageData* pPageData = new TabPageData;
  pPageData->pDialogClass = pPageDlg;
@@ -237,6 +262,10 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
 
  //добавление непосредственно вкладки
  InsertItem(TCIF_TEXT|TCIF_PARAM|TCIF_IMAGE,m_tab_item_index,name,nImage,(LPARAM)pPageData);
+
+ if (m_liveWnd)
+  CreateTabPage(true); //create window, do not call OnShow()
+
  return m_tab_item_index++;
 }
 
@@ -606,4 +635,20 @@ void CTabController::SetPageCaption(int iTab, CString text)
  tcItem.pszText = text.LockBuffer();
  SetItem(iTab, &tcItem);
  text.UnlockBuffer();
+}
+
+void CTabController::FitDialogSize(int sel, bool show)
+{
+ CRect c_rc(0,0,0,0);
+ CalculatePageRect(sel, c_rc);
+
+ //вкладка диалога находится в одной системе координат с таб-контроллом (у них общий parent!)
+ CRect parent_rect;
+ GetWindowRect(parent_rect);
+ this->GetParent()->ScreenToClient(parent_rect);
+ c_rc.OffsetRect(parent_rect.left, parent_rect.top);
+
+ //подогнали размер диалога и сохранили указатель на текущий диалог
+ TabPageData* pPageData = GetItemData(sel);
+ pPageData->pDialogClass->SetWindowPos(&wndTop, c_rc.left, c_rc.top, c_rc.Width(), c_rc.Height(), show ? SWP_SHOWWINDOW : SWP_HIDEWINDOW);
 }

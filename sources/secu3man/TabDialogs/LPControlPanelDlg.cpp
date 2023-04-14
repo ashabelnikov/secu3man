@@ -415,6 +415,7 @@ bool CLPControlPanelDlg::GetStopOnErrorsCheck(void)
 
 void CLPControlPanelDlg::FillMapSetCombo(std::vector<_TSTRING>& mapsets)
 {
+ m_mapset_combo.ResetContent();
  for(size_t i = 0; i < mapsets.size(); ++i)
   m_mapset_combo.AddString(mapsets[i].c_str());
 }

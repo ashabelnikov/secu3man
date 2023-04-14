@@ -66,6 +66,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
 
   void SetPageCaption(int ITab, CString text);
 
+  static void SetSettings(bool liveWnd);
+
  protected:
   // Generated message map functions
   afx_msg void OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult);
@@ -84,11 +86,12 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
  private:
   class TabPageData;
   TabPageData* GetItemData(int item) const;
-  void CreateTabPage(void);
+  void CreateTabPage(bool create = false);
   void DestroyTabPage(void);
+  void FitDialogSize(int sel, bool show);
   void CalculatePageRect(int nItem, CRect& o_rect);
   int GetTCOrientation(void);
-
+  
   CTabDialog*  mp_CurDlg;
   HMODULE m_hResourceModule;
   HMODULE _GetResourceModule(void);
@@ -97,6 +100,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   int   m_tab_item_index;
   int   m_tcmn;
   bool  m_tabNavWrap;
+
+  static bool m_liveWnd;
 };
 
 /////////////////////////////////////////////////////////////////////////////

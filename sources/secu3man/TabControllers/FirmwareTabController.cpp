@@ -226,7 +226,9 @@ void CFirmwareTabController::OnActivate(void)
  //Activate children controllers
  mp_iorCntr->OnActivate();
 
- SetViewFirmwareValues();
+ //some tables may be changed from other tabs, so, we need to update all tables
+ 
+ SetViewFirmwareValues(!mp_settings->GetCreateWindows()); //don't update IO remapping in live mode because it can't be changed from outside of this tab
 
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
@@ -1359,7 +1361,7 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetInjCylAddMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCylAddMap(true),true);
 }
 
-void CFirmwareTabController::SetViewFirmwareValues(void)
+void CFirmwareTabController::SetViewFirmwareValues(bool updateIOR /*=true*/)
 {
  if (mp_fwdm->IsLoaded()==false)
   return;
@@ -1390,7 +1392,8 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  mp_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 
  //Attach fwdm to children controllers
- this->mp_iorCntr->AttachFWDM(mp_fwdm);
+ if (updateIOR)
+  this->mp_iorCntr->AttachFWDM(mp_fwdm);
 }
 
 //вкладка может быть закрыта, а график может быть по прежнему в открытом состоянии и изменен.

@@ -81,6 +81,8 @@ class CParamMonTabDlg : public CTabDialog
   afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
   DECLARE_MESSAGE_MAP()
 
+  virtual void OnShow(bool show);
+
  private:
   CButton m_raw_sensors_check;
   CButton m_edit_tables_check;

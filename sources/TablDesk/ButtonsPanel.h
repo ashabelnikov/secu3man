@@ -59,6 +59,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
 
+  void OnShow(bool show);
+
   //Read/Write access
   float* GetStartMap(bool i_original);
   float* GetIdleMap(bool i_original);

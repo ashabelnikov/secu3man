@@ -156,8 +156,6 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  mp_knock_frq_calc_dlg->SetWindowPos(GetDlgItem(IDC_KC_COPY_TO_ATTENUATOR_TABLE), rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
  mp_knock_frq_calc_dlg->ShowWindow(SW_SHOWNORMAL);
 
- SetTimer(TIMER_ID, 200, NULL);
-
  //Инициализируем построитель функций
  _InitializeRPMKnockSignalControl();
 
@@ -615,4 +613,12 @@ void CKnockChannelTabDlg::SetGraphShowValue(bool show)
 void CKnockChannelTabDlg::SetGraphValueHeight(int height)
 {
  mp_OScopeCtrl->SetValueHeight(height);
+}
+
+void CKnockChannelTabDlg::OnShow(bool show)
+{
+ if (show)
+  SetTimer(TIMER_ID, 200, NULL);
+ else
+  KillTimer(TIMER_ID);
 }

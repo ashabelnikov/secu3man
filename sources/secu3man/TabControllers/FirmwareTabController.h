@@ -80,7 +80,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnSettingsChanged(int action);
 
   bool CheckChangesAskAndSaveFirmware(void);
-  void SetViewFirmwareValues(void);
+  void SetViewFirmwareValues(bool updateIOR = true);
   void SetViewChartsValues(void);
 
   void PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name);

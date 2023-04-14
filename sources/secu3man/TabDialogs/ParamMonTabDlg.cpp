@@ -371,3 +371,8 @@ void CParamMonTabDlg::_MoveSplitter(int x, int start_x)
 
  UpdateWindow();
 }
+
+void CParamMonTabDlg::OnShow(bool show)
+{
+ mp_TablesDeskDlg->OnShow(show);
+}

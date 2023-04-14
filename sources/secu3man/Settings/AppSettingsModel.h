@@ -259,6 +259,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetSpotMarkers(void) const;
   virtual float GetSpotMarkersSize(void) const;
 
+  virtual bool GetCreateWindows(void) const;
+
  private:
   bool _CheckAndCorrectLFCRs(void);
 
@@ -316,6 +318,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optFuelDensity1;
   OptField_t<float> m_optFuelDensity2;
   OptField_t<bool> m_optLogBinaryFmt;
+  OptField_t<bool> m_optCreateWindows;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;

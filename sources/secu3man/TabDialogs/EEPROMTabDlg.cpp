@@ -135,8 +135,6 @@ BOOL CEEPROMTabDlg::OnInitDialog()
 
  mp_ContextMenuManager->Attach(this);
 
- SetTimer(TIMER_ID,250,NULL);
-
  UpdateDialogControls(this,TRUE);
 
  m_ee_mapset_name.SetLimitText(16);
@@ -481,4 +479,14 @@ void CEEPROMTabDlg::OnResetEeprom()
 
  if (m_OnResetEeprom)
   m_OnResetEeprom();
+}
+
+void CEEPROMTabDlg::OnShow(bool show)
+{
+ if (show)
+  SetTimer(TIMER_ID, 250, NULL);
+ else
+  KillTimer(TIMER_ID);
+
+ mp_TablesPanel->OnShow(show);
 }

@@ -169,8 +169,6 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  mp_inpsDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_inpsDlg->ShowWindow(SW_SHOW);
 
- SetTimer(TIMER_ID, 250, NULL);
-
  //initialize oscilloscopes
  _InitializeOscilloscopeControls();
 
@@ -617,4 +615,12 @@ void CDevDiagnostTabDlg::OnSelendokTestCh()
 void CDevDiagnostTabDlg::EnableOutputItem(int id, bool state)
 {
  mp_outsDlg->EnableOutputItem(id, state);
+}
+
+void CDevDiagnostTabDlg::OnShow(bool show)
+{
+ if (show)
+  SetTimer(TIMER_ID, 250, NULL);
+ else
+  KillTimer(TIMER_ID);
 }

@@ -41,6 +41,7 @@
 #include "Settings/ISettingsData.h"
 #include "TablDesk/DLLLinkedFunctions.h"
 #include "ui-core/HotKeysManager.h"
+#include "ui-core/TabController.h"
 #include "RestartAPI.h"
 
 namespace {
@@ -190,7 +191,7 @@ bool CheckAppIntegrity(void)
  GetModuleFileName(GetModuleHandle(ModuleName::about), szFileName, MAX_PATH);
 
  BYTE digest[32];
- BYTE hash1[32] = {0xa4,0xd6,0xc7,0x8e,0xe0,0x18,0x0e,0x3e,0x7b,0x1a,0xf4,0x4c,0x30,0x16,0xc2,0xac,0x80,0x2e,0x29,0x01,0x91,0x0d,0x56,0x45,0x59,0xa2,0x6e,0x5f,0x52,0xbc,0x28,0xba};
+ BYTE hash1[32] = {0x2d,0xf9,0x0f,0xbe,0xbb,0xe9,0x6e,0x48,0x94,0x97,0x26,0xe2,0xfc,0x66,0xeb,0xed,0xc0,0x59,0x42,0x5e,0xd2,0xdb,0x41,0xa6,0xf9,0xb1,0x5b,0xe7,0xbd,0x74,0x26,0x4f};
  if (!CalcFileDigest(szFileName, digest))
   return false;
 
@@ -283,16 +284,20 @@ BOOL CSecu3manApp::InitInstance()
 
  //read settings
  m_pAppSettingsManager->ReadSettings();
+ ISettingsData* p_settings = m_pAppSettingsManager->GetSettings();
+
+ //Set tab control behaviour (windows can be created on start up of the programm)
+ CTabController::SetSettings(p_settings->GetCreateWindows());
 
  //enable/disable hot keys depending on settings
- HotKeysManager::GetInstance()->Enable(m_pAppSettingsManager->GetSettings()->GetUseHotKeys());
+ HotKeysManager::GetInstance()->Enable(p_settings->GetUseHotKeys());
 
  //load functions from dynamically linked DLL (TablDesk)
  DLL::LoadDLLsAndLinkToFunctions();
 
  //Localization
- DLL::SetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
- switch(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage())
+ DLL::SetLanguage(p_settings->GetInterfaceLanguage());
+ switch(p_settings->GetInterfaceLanguage())
  {
   case IL_ENGLISH:
    SetThreadLocalSettings(LANG_ENGLISH, SUBLANG_ENGLISH_US);
@@ -310,7 +315,7 @@ BOOL CSecu3manApp::InitInstance()
  //========================================================
 
  //Visual theme on/off
- AllowVisualTheme(m_pAppSettingsManager->GetSettings()->GetAllowVisualTheme());
+ AllowVisualTheme(p_settings->GetAllowVisualTheme());
 
  //create main window. It must be created first of all (before any other initialization)
  m_pMainWnd = m_pMainFrameManager->GreateMainWindow();

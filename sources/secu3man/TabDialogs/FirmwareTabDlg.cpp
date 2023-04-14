@@ -256,8 +256,6 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  mp_ContextMenuManager->Attach(this);
 
- SetTimer(TIMER_ID, 250, NULL);
-
  //в коде прошивки выдeлено ограниченное количество байтов для строки иныормации
  m_fw_information_edit.SetLimitText(48);
 
@@ -887,4 +885,14 @@ void CFirmwareTabDlg::OnEeresetLinkClick(void)
 void CFirmwareTabDlg::OnNoanswerLinkClick()
 {
  SECUMessageBox(IDS_FW_NOANSWER_LINK, MB_OK | MB_ICONINFORMATION);
+}
+
+void CFirmwareTabDlg::OnShow(bool show)
+{
+ if (show)
+  SetTimer(TIMER_ID, 250, NULL);
+ else
+  KillTimer(TIMER_ID);
+
+ mp_TablesPanel->OnShow(show);
 }

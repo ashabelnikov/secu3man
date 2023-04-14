@@ -34,8 +34,6 @@
 #include "ui-core/WndScroller.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-#define TIMER_ID 0
-
 using namespace fastdelegate;
 
 const UINT CDevDiagInpsDlg::IDD = IDD_DEVDIAG_INPUTS;
@@ -52,14 +50,11 @@ const UINT InputsCaptionEnd1 = IDC_DEV_DIAG_ADD_I8_CAPTION;    //secu-3i
 
 BEGIN_MESSAGE_MAP(CDevDiagInpsDlg, Super)
  ON_WM_DESTROY()
- ON_WM_TIMER()
  ON_WM_SIZE()
-
  ON_UPDATE_COMMAND_UI_RANGE(InputsTextStart, InputsTextEnd, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI_RANGE(InputsCaptionStart, InputsCaptionEnd, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI_RANGE(InputsTextStart1, InputsTextEnd1, OnUpdateDiagControls)        //secu-3i
  ON_UPDATE_COMMAND_UI_RANGE(InputsCaptionStart1, InputsCaptionEnd1, OnUpdateDiagControls)  //secu-3i
-
 END_MESSAGE_MAP()
 
 CDevDiagInpsDlg::CDevDiagInpsDlg(CWnd* pParent /*=NULL*/)
@@ -116,8 +111,6 @@ BOOL CDevDiagInpsDlg::OnInitDialog()
  for(size_t i = InputsTextStart1; i <= InputsTextEnd1; ++i)
   GetDlgItem(i)->SetFont(&m_textFont);
   
- SetTimer(TIMER_ID, 250, NULL);
-
  UpdateDialogControls(this,TRUE);
 
  //initialize window scroller
@@ -187,17 +180,9 @@ void CDevDiagInpsDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
  }
 }
 
-void CDevDiagInpsDlg::OnTimer(UINT nIDEvent)
-{
- //dirty hack
- UpdateDialogControls(this,TRUE);
- Super::OnTimer(nIDEvent);
-}
-
 void CDevDiagInpsDlg::OnDestroy()
 {
  Super::OnDestroy();
- KillTimer(TIMER_ID);
  mp_scr->Close();
 }
 

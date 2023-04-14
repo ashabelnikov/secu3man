@@ -117,6 +117,7 @@ class CCheckEngineTabDlg : public CTabDialog
   DECLARE_MESSAGE_MAP()
 
  private:
+  virtual void OnShow(bool show);
   void OnCeresetLinkClick(void);
 
   CStatic m_quick_help_text;

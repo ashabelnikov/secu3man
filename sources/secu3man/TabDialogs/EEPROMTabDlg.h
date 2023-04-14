@@ -108,6 +108,7 @@ class CEEPROMTabDlg : public CTabDialog
   bool IsEEPROMOpened(void);
 
  private:
+  virtual void OnShow(bool show);
   void OnEeresetLinkClick(void);
   void OnEeContLinkClick(void);
   void OnEeUsingLinkClick(void);

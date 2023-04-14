@@ -158,8 +158,6 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  m_errors_list.InsertColumn(1, _T("BC"), LVCFMT_LEFT, 35);
  m_errors_list.InsertColumn(2, MLL::LoadString(IDS_CEPAGE_ERROR_DESCRIPTION), LVCFMT_LEFT, 450);
 
- SetTimer(TIMER_ID,250,NULL);
-
  ResetErrorsList();
 
  m_header_ctrl->Init(m_errors_list.GetHeaderCtrl());
@@ -625,4 +623,12 @@ void CCheckEngineTabDlg::ShowFuelInjNote(bool show)
 {
  m_fuelinj_note = show;
  m_ltft_fuelinj_text.ShowWindow((GetTrimtabButtonState() && m_fuelinj_note) ? SW_SHOW : SW_HIDE);
+}
+
+void CCheckEngineTabDlg::OnShow(bool show)
+{
+ if (show)
+  SetTimer(TIMER_ID, 250, NULL);
+ else
+  KillTimer(TIMER_ID);
 }

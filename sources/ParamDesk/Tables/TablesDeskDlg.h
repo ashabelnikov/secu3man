@@ -96,6 +96,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void EnableAdvanceAngleIndication(bool i_enable);
   //-------------------------------------------------------------
 
+  void OnShow(bool show);
+
   //CButtonsPanel
   std::auto_ptr<CButtonsPanel> mp_ButtonsPanel;
 
