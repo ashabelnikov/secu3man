@@ -45,6 +45,7 @@
 #include "io-core/EEPROMDataMediator.h"
 #include "io-core/FirmwareDataMediator.h"
 #include "io-core/FirmwareMapsDataHolder.h"
+#include "ui-core/DynFieldsDialog.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -118,12 +119,14 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
  std::fill(m_rpmGrid, m_rpmGrid+F_WRK_POINTS_F, .0f);
  std::fill(m_loadGrid, m_loadGrid+F_WRK_POINTS_L, .0f);
  std::fill(m_trimTab, m_trimTab+(F_WRK_POINTS_L*F_WRK_POINTS_F), .0f);
+ std::fill(m_trimTab2, m_trimTab2+(F_WRK_POINTS_L*F_WRK_POINTS_F), .0f);
 
- m_view->BindMaps(m_trimTab);
+ m_view->BindMaps(m_trimTab, m_trimTab2);
  m_view->BindRPMGrid(m_rpmGrid);
  m_view->BindLoadGrid(m_loadGrid);
 
  m_rdLTFTMapFlags.resize(F_WRK_POINTS_L*F_WRK_POINTS_F, 0);
+ m_rdLTFTMapFlags2.resize(F_WRK_POINTS_L*F_WRK_POINTS_F, 0);
  m_ltft_load_slots.reserve(32);
  m_ltft_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
 }
@@ -242,6 +245,7 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    case OPCODE_RESET_LTFT: //LTFT table had been reset
     m_sbar->SetInformationText(MLL::LoadString(IDS_CE_LTFT_HAS_BEEN_RESET));
     std::fill(m_trimTab, m_trimTab + 256, .0f);
+    std::fill(m_trimTab2, m_trimTab2 + 256, .0f);
     m_view->UpdateView();
     return;
    case OPCODE_SAVE_LTFT: //LTFT table had been saved
@@ -479,7 +483,8 @@ void CCheckEngineTabController::OnTrimtabButton(void)
 {
  if (m_view->GetTrimtabButtonState() && CHECKBIT32(m_fw_options, COPT_FUEL_INJECT))
  {
-  if (std::find(m_rdLTFTMapFlags.begin(), m_rdLTFTMapFlags.end(), 0) != m_rdLTFTMapFlags.end())
+  if (std::find(m_rdLTFTMapFlags.begin(), m_rdLTFTMapFlags.end(), 0) != m_rdLTFTMapFlags.end() ||
+      std::find(m_rdLTFTMapFlags2.begin(), m_rdLTFTMapFlags2.end(), 0) != m_rdLTFTMapFlags2.end())
   { //start new reading only if cache is not up to date
    PPS_SetOperation(PPS_READ_RPMGRID, false);
   }
@@ -573,8 +578,12 @@ bool CCheckEngineTabController::PPS_ReadLTFTMap(const BYTE i_descriptor, const v
    else
    { //clear acquisition flags and save received piece of data
     std::fill(m_rdLTFTMapFlags.begin(), m_rdLTFTMapFlags.end(), 0);
+    std::fill(m_rdLTFTMapFlags2.begin(), m_rdLTFTMapFlags2.end(), 0);
     const SepTabPar* data = (const SepTabPar*)i_packet_data;
-    UpdateMap(&m_trimTab[0], &m_rdLTFTMapFlags[0], data);
+    if (data->reserv)
+     UpdateMap(&m_trimTab2[0], &m_rdLTFTMapFlags2[0], data);
+    else
+     UpdateMap(&m_trimTab[0], &m_rdLTFTMapFlags[0], data);
     m_operation_state = 1; //next state
    }   
    break;
@@ -587,8 +596,12 @@ bool CCheckEngineTabController::PPS_ReadLTFTMap(const BYTE i_descriptor, const v
     }
     //update chache and perform checking
     const SepTabPar* data = (const SepTabPar*)i_packet_data;
-    UpdateMap(&m_trimTab[0], &m_rdLTFTMapFlags[0], data);
-    if (std::find(m_rdLTFTMapFlags.begin(), m_rdLTFTMapFlags.end(), 0) == m_rdLTFTMapFlags.end())
+    if (data->reserv)
+     UpdateMap(&m_trimTab2[0], &m_rdLTFTMapFlags2[0], data);
+    else
+     UpdateMap(&m_trimTab[0], &m_rdLTFTMapFlags[0], data);
+    if (std::find(m_rdLTFTMapFlags.begin(), m_rdLTFTMapFlags.end(), 0) == m_rdLTFTMapFlags.end() &&
+        std::find(m_rdLTFTMapFlags2.begin(), m_rdLTFTMapFlags2.end(), 0) == m_rdLTFTMapFlags2.end())
     { //cache is already up to date
      m_operation_state = -1; //all operations have been completed
      m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
@@ -642,7 +655,10 @@ bool CCheckEngineTabController::PPS_ReadFunset(const BYTE i_descriptor, const vo
 void CCheckEngineTabController::PPS_SetOperation(int pps, bool clear_ltft_chache /*= false*/)
 {
  if (clear_ltft_chache)
+ {
   std::fill(m_rdLTFTMapFlags.begin(), m_rdLTFTMapFlags.end(), 0);
+  std::fill(m_rdLTFTMapFlags2.begin(), m_rdLTFTMapFlags2.end(), 0);
+ }
  m_packet_processing_state = pps;
  m_operation_state = 0;
 }
@@ -677,9 +693,33 @@ void CCheckEngineTabController::OnTrimtabExport(int setIdx)
 
 void CCheckEngineTabController::ApplyTrimtabToVE(float *ve)
 {
- for(int i = 0; i < INJ_VE_POINTS_L*INJ_VE_POINTS_F; ++i)
+ CDynFieldsContainer tms(m_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Выбор таблицы") : _T("select a table"), 200, true);
+ bool use_ltft1 = true, use_ltft2 = false;
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  tms.AppendItem(_T("Выбрать таблицу 1"), &use_ltft1, _T("Если галочка установлена, то для корректировки таблицы наопления будет использована только 1-я LTFT таблица. Если установлены галочки обеих таблиц, то будет вычисляться среднее значение."));
+ else
+  tms.AppendItem(_T("Select 1st table"), &use_ltft1, _T("If the checkbox is checked, then only 1st LTFT table will be used for correction of VE map. If both check marks are set, the arithmetic mean will be used."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  tms.AppendItem(_T("Выбрать таблицу 2"), &use_ltft2, _T("Если галочка установлена, то для корректировки таблицы наопления будет использована только 2-я LTFT таблица. Если установлены галочки обеих таблиц, то будет вычисляться среднее значение."));
+ else
+  tms.AppendItem(_T("Select 2nd table"), &use_ltft2, _T("If the checkbox is checked, then only 2nd LTFT table will be used for correction of VE map. If both check marks are set, the arithmetic mean will be used."));
+
+ if (tms.DoModal()==IDOK)
  {
-  ve[i]+= (ve[i] * m_trimTab[i] / 100.0f);
-  ve[i] = MathHelpers::RestrictValue(ve[i], 0.01f, 1.99f);
+  for(int i = 0; i < INJ_VE_POINTS_L*INJ_VE_POINTS_F; ++i)
+  {
+   float trimTab = .0f;
+   if (use_ltft1 && use_ltft2)
+    trimTab = (m_trimTab[i] + m_trimTab2[i]) / 2.0f; //mix values from two tables into a single value
+   else if (use_ltft2)
+    trimTab = m_trimTab2[i]; //only #2
+   else
+    trimTab = m_trimTab[i];  //only #1
+
+   ve[i]+= (ve[i] * trimTab / 100.0f);
+   ve[i] = MathHelpers::RestrictValue(ve[i], 0.01f, 1.99f);
+  }
  }
 }

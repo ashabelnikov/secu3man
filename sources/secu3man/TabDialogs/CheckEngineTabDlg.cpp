@@ -43,6 +43,7 @@ const UINT CCheckEngineTabDlg::IDD = IDD_CHECK_ENGINE;
 CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CCheckEngineTabDlg::IDD, pParent)
 , m_ltft_map(16, 16, false, false, NULL, 3, true) // read-only
+, m_ltft2_map(16, 16, false, false, NULL, 3, true) // read-only
 , m_all_enabled(false)
 , m_trimtab_enabled(false)
 , m_rw_buttons_enabled(false)
@@ -79,12 +80,15 @@ void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CE_CERESET_LINK, *mp_ceresetLink);
  DDX_Control(pDX, IDC_CE_TRIMTAB_BUTTON, m_trimtab_button);
  DDX_Control(pDX, IDC_CE_TRIMTAB_MAP, m_ltft_map);
+ DDX_Control(pDX, IDC_CE_TRIMTAB2_MAP, m_ltft2_map);
  DDX_Control(pDX, IDC_CE_TRIMTAB_READ, m_ltft_read_button);
  DDX_Control(pDX, IDC_CE_TRIMTAB_RESET, m_ltft_reset_button);
  DDX_Control(pDX, IDC_CE_TRIMTAB_SAVE, m_ltft_save_button);
  DDX_Control(pDX, IDC_CE_LTFT_UNIT, m_ltft_unit_text);
  DDX_Control(pDX, IDC_CE_TRIMTAB_EXPORT, m_ltft_export_button);
  DDX_Control(pDX, IDC_CE_LTFT_FUELINJ, m_ltft_fuelinj_text);
+ DDX_Control(pDX, IDC_CE_TRIMTAB1_RADIOBOX, m_ltft_radio);
+ DDX_Control(pDX, IDC_CE_TRIMTAB2_RADIOBOX, m_ltft2_radio);
 }
 
 LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
@@ -107,6 +111,8 @@ BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_BN_CLICKED(IDC_CE_TRIMTAB_RESET, OnTrimtabResetButton)
  ON_BN_CLICKED(IDC_CE_TRIMTAB_SAVE, OnTrimtabSaveButton)
  ON_BN_CLICKED(IDC_CE_TRIMTAB_EXPORT, OnTrimtabExportButton)
+ ON_BN_CLICKED(IDC_CE_TRIMTAB1_RADIOBOX, OnTrimTab1Button)
+ ON_BN_CLICKED(IDC_CE_TRIMTAB2_RADIOBOX, OnTrimTab2Button)
  ON_UPDATE_COMMAND_UI(IDC_CE_QUICK_HELP, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_CE_ERRORS_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_CE_READ_REALTIME_CHECKBOX, OnUpdateControls)
@@ -120,6 +126,7 @@ BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_READ, OnUpdateControlsLTFT)
  ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_RESET, OnUpdateControlsLTFT)
  ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_MAP, OnUpdateControlsLTFT)
+ ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB2_MAP, OnUpdateControlsLTFT)
  ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_SAVE, OnUpdateControlsLTFT)
  ON_UPDATE_COMMAND_UI(IDC_CE_TRIMTAB_EXPORT, OnUpdateControlsLTFT)
  ON_UPDATE_COMMAND_UI(IDC_CE_LTFT_UNIT, OnUpdateControlsLTFT)
@@ -134,6 +141,8 @@ END_MESSAGE_MAP()
 BOOL CCheckEngineTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ m_ltft_radio.SetCheck(BST_CHECKED);
 
  if (m_locale==0)
  {
@@ -184,6 +193,8 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_ltft_reset_button, MLL::GetString(IDS_CE_TRIMTAB_RESET_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ltft_save_button, MLL::GetString(IDS_CE_TRIMTAB_SAVE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ltft_export_button, MLL::GetString(IDS_CE_TRIMTAB_EXPORT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ltft_radio, MLL::GetString(IDS_CE_TRIMTAB1_RADIOBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ltft2_radio, MLL::GetString(IDS_CE_TRIMTAB2_RADIOBOX_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -206,6 +217,16 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  m_ltft_map.EnableAbroadMove(false, false);
  m_ltft_map.SetValueIncrement(0.1f);
  m_ltft_map.SetSelection(0, 0, false);
+
+ m_ltft2_map.SetRange(-24.7f, 24.7f);
+ m_ltft2_map.AttachMap(const_cast<float*>(mp_trimTab2));
+ m_ltft2_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+ m_ltft2_map.ShowLabels(true, true);
+ m_ltft2_map.SetDecimalPlaces(1, 0, 0);
+ m_ltft2_map.SetFont(&m_font);
+ m_ltft2_map.EnableAbroadMove(false, false);
+ m_ltft2_map.SetValueIncrement(0.1f);
+ m_ltft2_map.SetSelection(0, 0, false);
 
  m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -421,6 +442,9 @@ void CCheckEngineTabDlg::OnSize(UINT nType, int cx, int cy)
 
   rc1 = GDIHelpers::GetChildWndRect(&m_ltft_map);
   m_ltft_map.SetWindowPos(NULL, 0, 0, cx - rc1.left - da.ScaleX(7), cy - rc1.top - da.ScaleY(7), SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_ltft2_map);
+  m_ltft2_map.SetWindowPos(NULL, 0, 0, cx - rc1.left - da.ScaleX(7), cy - rc1.top - da.ScaleY(7), SWP_NOMOVE | SWP_NOZORDER);
  }
 
  Super::OnSize(nType, cx, cy);
@@ -458,12 +482,15 @@ void CCheckEngineTabDlg::OnTrimTableButton()
   m_list_set_all_button.ShowWindow(SW_HIDE);
   m_list_clear_all_button.ShowWindow(SW_HIDE);
   mp_ceresetLink->ShowWindow(SW_HIDE);
-  m_ltft_map.ShowWindow(SW_SHOW);
+  m_ltft_map.ShowWindow(m_ltft_radio.GetCheck()==BST_CHECKED ? SW_SHOW : SW_HIDE);
+  m_ltft2_map.ShowWindow(m_ltft2_radio.GetCheck()==BST_CHECKED ? SW_SHOW : SW_HIDE);
   m_ltft_read_button.ShowWindow(SW_SHOW);
   m_ltft_reset_button.ShowWindow(SW_SHOW);
   m_ltft_save_button.ShowWindow(SW_SHOW);
   m_ltft_unit_text.ShowWindow(SW_SHOW);
   m_ltft_export_button.ShowWindow(SW_SHOW);
+  m_ltft_radio.ShowWindow(SW_SHOW);
+  m_ltft2_radio.ShowWindow(SW_SHOW);
   if (m_fuelinj_note)
    m_ltft_fuelinj_text.ShowWindow(SW_SHOW);
   if (!m_ltftexp_menu.GetSafeHmenu())
@@ -483,12 +510,15 @@ void CCheckEngineTabDlg::OnTrimTableButton()
   m_list_clear_all_button.ShowWindow(SW_SHOW);
   mp_ceresetLink->ShowWindow(SW_SHOW);
   m_ltft_map.ShowWindow(SW_HIDE);
+  m_ltft2_map.ShowWindow(SW_HIDE);
   m_ltft_read_button.ShowWindow(SW_HIDE);
   m_ltft_reset_button.ShowWindow(SW_HIDE);
   m_ltft_save_button.ShowWindow(SW_HIDE);
   m_ltft_unit_text.ShowWindow(SW_HIDE);
   m_ltft_export_button.ShowWindow(SW_HIDE);
   m_ltft_fuelinj_text.ShowWindow(SW_HIDE);
+  m_ltft_radio.ShowWindow(SW_HIDE);
+  m_ltft2_radio.ShowWindow(SW_HIDE);
  }
 
  if (m_OnTrimtabButton)
@@ -535,9 +565,10 @@ void CCheckEngineTabDlg::OnTrimtabExportButton()
  pSub->TrackPopupMenu(TPM_LEFTALIGN, rc.left, rc.bottom, this);
 }
 
-void CCheckEngineTabDlg::BindMaps(float* pTrimtab)
+void CCheckEngineTabDlg::BindMaps(float* pTrimtab, float* pTrimtab2)
 {
  mp_trimTab = pTrimtab;
+ mp_trimTab2 = pTrimtab2;
 }
 
 void CCheckEngineTabDlg::BindRPMGrid(float* pGrid)
@@ -558,8 +589,12 @@ void CCheckEngineTabDlg::EnableTrimtab(bool i_enable)
 void CCheckEngineTabDlg::UpdateView(bool axisLabels /*= false*/)
 {
  if (axisLabels)
-  m_ltft_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //update axis labels
+ {
+  m_ltft_map.AttachLabels(mp_rpmGrid, mp_loadGrid);  //update axis labels
+  m_ltft2_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //update axis labels
+ }
  m_ltft_map.UpdateDisplay();
+ m_ltft2_map.UpdateDisplay();
 }
 
 void CCheckEngineTabDlg::SetArguments(int rpm, float load, bool strt_use)
@@ -568,6 +603,11 @@ void CCheckEngineTabDlg::SetArguments(int rpm, float load, bool strt_use)
  {
   m_ltft_map.ShowMarkers(!strt_use, true);
   m_ltft_map.SetArguments(load, (float)rpm);
+ }
+ if (m_ltft2_map.GetSafeHwnd() && m_ltft2_map.IsWindowVisible())
+ {
+  m_ltft2_map.ShowMarkers(!strt_use, true);
+  m_ltft2_map.SetArguments(load, (float)rpm);
  }
 }
 
@@ -631,4 +671,16 @@ void CCheckEngineTabDlg::OnShow(bool show)
   SetTimer(TIMER_ID, 250, NULL);
  else
   KillTimer(TIMER_ID);
+}
+
+void CCheckEngineTabDlg::OnTrimTab1Button()
+{
+ m_ltft_map.ShowWindow(SW_SHOW); //show 1st LTFT map
+ m_ltft2_map.ShowWindow(SW_HIDE);
+}
+
+void CCheckEngineTabDlg::OnTrimTab2Button()
+{
+ m_ltft_map.ShowWindow(SW_HIDE); //show 1st LTFT map
+ m_ltft2_map.ShowWindow(SW_SHOW);
 }

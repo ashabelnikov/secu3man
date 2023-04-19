@@ -74,7 +74,7 @@ class CCheckEngineTabDlg : public CTabDialog
 
   void SetLocale(int locale);
   bool GetTrimtabButtonState(void);
-  void BindMaps(float* pTrimtab);
+  void BindMaps(float* pTrimtab, float* pTrimtab2);
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(float* pGrid);
   void EnableTrimtab(bool i_enable);
@@ -114,6 +114,8 @@ class CCheckEngineTabDlg : public CTabDialog
   afx_msg void OnTrimtabSaveButton();
   afx_msg void OnTrimtabExportButton();
   afx_msg void OnTrimtabExportMenu(UINT id);
+  afx_msg void OnTrimTab1Button();
+  afx_msg void OnTrimTab2Button();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -133,12 +135,15 @@ class CCheckEngineTabDlg : public CTabDialog
   CButton m_list_clear_all_button;
   CButton m_trimtab_button;
   CMapEditorCtrl m_ltft_map;
+  CMapEditorCtrl m_ltft2_map;
   CButton m_ltft_read_button;
   CButton m_ltft_reset_button;
   CButton m_ltft_save_button;
   CButton m_ltft_export_button;
   CMenu m_ltftexp_menu;
   CFont m_font;
+  CButton m_ltft_radio;
+  CButton m_ltft2_radio;
 
   EventHandler  m_OnRealTimeErrors;
   EventHandler  m_OnReadSavedErrors;
@@ -170,6 +175,7 @@ class CCheckEngineTabDlg : public CTabDialog
   int m_locale; //0 - english, 1 - russian
 
   const float* mp_trimTab;
+  const float* mp_trimTab2;
   const float* mp_rpmGrid;
   const float* mp_loadGrid;
   bool m_trimtab_enabled; //trim table functionality

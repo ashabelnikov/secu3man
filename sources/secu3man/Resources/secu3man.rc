@@ -233,13 +233,16 @@ BEGIN
     CONTROL         "Считывать ошибки в реальном времени",IDC_CE_READ_REALTIME_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
     CTEXT           "Как стереть ошибки?",IDC_CE_CERESET_LINK,393,196,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
-    CONTROL         "LTFT map",IDC_CE_TRIMTAB_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,48,25,433,215,WS_EX_STATICEDGE
+    CONTROL         "LTFT1 map",IDC_CE_TRIMTAB_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,48,25,433,215,WS_EX_STATICEDGE
+    CONTROL         "LTFT2 map",IDC_CE_TRIMTAB2_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,48,25,433,215,WS_EX_STATICEDGE
     PUSHBUTTON      "Прочитать",IDC_CE_TRIMTAB_READ,52,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Сбросить",IDC_CE_TRIMTAB_RESET,135,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Сохранить",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Экспорт",IDC_CE_TRIMTAB_EXPORT,301,3,65,16, NOT WS_VISIBLE
     CTEXT           "Значения\nв таблице\nуказаны\n в %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
     CTEXT           "Таблица LTFT доступна только в прошивках с впрыском топлива",IDC_CE_LTFT_FUELINJ,370,3,120,20, NOT WS_VISIBLE
+    CONTROL         "Табл.1",IDC_CE_TRIMTAB1_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP | NOT WS_VISIBLE,400,5,35,10
+    CONTROL         "Табл.2",IDC_CE_TRIMTAB2_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP | NOT WS_VISIBLE,440,5,35,10
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -910,15 +913,15 @@ BEGIN
     IDS_LOG_PLAYER_GME_IGN_CHECK_TT "Открыть для просмотра и редактирования таблицы зажигания"
     IDS_LOG_PLAYER_MAPSET_COMBO_TT  "Выбор набора таблиц. На вкладке 'Данные прошивки' должна быть открыта прошивка, на вкладке 'EEPROM' должно быть открыто EEPROM. Первые сверху 4 набора таблиц - это таблицы из прошивки, последний набор таблиц - из EEPROM."
     IDS_CE_TRIMTAB_BUTTON_TT "Открыть/закрыть таблицу обучения (долговременная коррекция по ДК)"
-    IDS_CE_TRIMTAB_READ_TT  "Прочитать таблицу долговременной коррекции по ДК (LTFT) из блока SECU-3"
-    IDS_CE_TRIMTAB_RESET_TT "Отправить команду сброса содержимого таблицы долговременной коррекции по ДК блоку SECU-3."
-    IDS_RESET_LTFT_COMFIRMATION "Вы действительно хотите сбросить содержимое таблицы долговременной коррекции по ДК?"
-    IDS_CE_LTFT_HAS_BEEN_RESET "Таблица обучения была успешно сброшена."
-    IDS_CE_RESETTING_LTFT "Идет сброс таблицы обучения..."
-    IDS_CE_READING_LTFTMAP  "Чтение таблицы обучения..."
-    IDS_CE_TRIMTAB_SAVE_TT "Сохранить таблицу долговременной коррекции по ДК в EEPROM"
-    IDS_CE_SAVING_LTFT "Сохранение таблицы обучения..."
-    IDS_CE_LTFT_HAS_BEEN_SAVED "Таблица обучения была успешно сохранена."
+    IDS_CE_TRIMTAB_READ_TT  "Прочитать таблицы долговременной коррекции по ДК (LTFT) из блока SECU-3. Будут прочитаны обе таблицы."
+    IDS_CE_TRIMTAB_RESET_TT "Отправить команду сброса содержимого таблиц долговременной коррекции по ДК блоку SECU-3. Обе таблицы будут обнулены."
+    IDS_RESET_LTFT_COMFIRMATION "Вы действительно хотите сбросить содержимое таблиц долговременной коррекции по ДК?"
+    IDS_CE_LTFT_HAS_BEEN_RESET "Таблицы обучения были успешно сброшены."
+    IDS_CE_RESETTING_LTFT "Идет сброс таблиц обучения..."
+    IDS_CE_READING_LTFTMAP  "Чтение таблиц обучения..."
+    IDS_CE_TRIMTAB_SAVE_TT "Сохранить таблицы долговременной коррекции по ДК в EEPROM. Будут сохранены обе таблицы."
+    IDS_CE_SAVING_LTFT "Сохранение таблиц обучения..."
+    IDS_CE_LTFT_HAS_BEEN_SAVED "Таблицы обучения были успешно сохранены."
     IDS_LOG_PLAYER_STOPONERRORS_CHECKBOX_TT "Автоматически ставить проигрывание на паузу для записей содержащих ошибки Check Engine"
     IDS_CE_TRIMTAB_EXPORT_TT "Экспорт данных таблицы обучения в таблицу наполнения выбранного набора таблиц. Таблица наполнения (VE) будет скорректирована в соответствии со значениями из таблицы обучения. Не забудьте сбросить таблицу обучения. Первые 4 набора таблиц находятся в прошивке, последний находится в EEPROM. Откройте прошивку на вкладке 'Данные прошивки' и EEPROM на вкладке 'EEPROM'."
 END
@@ -965,6 +968,12 @@ BEGIN
  IDS_DEV_DIAG_ADD_I7_TT          "Аналоговый вход ADD_I7 (расширитель MCP3204)"
  IDS_DEV_DIAG_ADD_I8_TT          "Аналоговый вход ADD_I8 (расширитель MCP3204)"
  IDS_APP_SETTINGS_BINARYFMT_TT   "Выбор формата лог-файла. Запись лога может производиться в двух форматах: текстовый (.csv) и бинарный (.s3l). При чтении лога программа автоматически определяет фоормат."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_CE_TRIMTAB1_RADIOBOX_TT     "Показать таблицу долговременной коррекции по ДК 1. Данная таблица хранит коррекцию смеси по ДК 1."
+ IDS_CE_TRIMTAB2_RADIOBOX_TT     "Показать таблицу долговременной коррекции по ДК 2. Данная таблица хранит коррекцию смеси по ДК 2."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1196,12 +1205,15 @@ BEGIN
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
     CTEXT           "How to clear errors?",IDC_CE_CERESET_LINK,393,196,100,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     CONTROL         "LTFT map",IDC_CE_TRIMTAB_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,48,25,433,215,WS_EX_STATICEDGE
+    CONTROL         "LTFT2 map",IDC_CE_TRIMTAB2_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,48,25,433,215,WS_EX_STATICEDGE
     PUSHBUTTON      "Read",IDC_CE_TRIMTAB_READ,52,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Reset",IDC_CE_TRIMTAB_RESET,135,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Save",IDC_CE_TRIMTAB_SAVE,218,3,65,16, NOT WS_VISIBLE
     PUSHBUTTON      "Export",IDC_CE_TRIMTAB_EXPORT,301,3,65,16, NOT WS_VISIBLE
     CTEXT           "Values\nin table\nare\n in %",IDC_CE_LTFT_UNIT,0,165,45,40, NOT WS_VISIBLE
     CTEXT           "LTFT map is accessible only in firmware with fuel injection",IDC_CE_LTFT_FUELINJ,370,3,120,20, NOT WS_VISIBLE
+    CONTROL         "Table 1",IDC_CE_TRIMTAB1_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP | NOT WS_VISIBLE,400,5,35,10
+    CONTROL         "Table 2",IDC_CE_TRIMTAB2_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP | NOT WS_VISIBLE,440,5,35,10
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -1924,6 +1936,12 @@ BEGIN
  IDS_DEV_DIAG_ADD_I7_TT          "Analog input ADD_I7 (MCP3204 expander)"
  IDS_DEV_DIAG_ADD_I8_TT          "Analog input ADD_I8 (MCP3204 expander)"
  IDS_APP_SETTINGS_BINARYFMT_TT   "Select log-file format. Logging can be done in two formats: text (.csv) and binary (.s3l). When reading the log, the program automatically determines the format."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_CE_TRIMTAB1_RADIOBOX_TT     "Show Long Term Fiel Trim table of EGO sensor 1. This table storing EGO correction from EGO sensor 1."
+ IDS_CE_TRIMTAB2_RADIOBOX_TT     "Show Long Term Fiel Trim table of EGO sensor 2. This table storing EGO correction from EGO sensor 2."
 END
 
 /////////////////////////////////////////////////////////////////////////////

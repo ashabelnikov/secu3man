@@ -106,7 +106,8 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
 
   float m_rpmGrid[16];       //RPM grid for LTFT map
   float m_loadGrid[16];      //load grid for LTFT map
-  float m_trimTab[256];      //contents of the LTFT map
+  float m_trimTab[256];      //contents of the LTFT 1 map
+  float m_trimTab2[256];     //contents of the LTFT 2 map
 
   int m_packet_processing_state;
   int m_operation_state;
@@ -122,7 +123,8 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   };
 
   DWORD m_fw_options; //Firmware options' bits read from SECU
-  std::vector<int> m_rdLTFTMapFlags; //LTFT map acquisition flags
+  std::vector<int> m_rdLTFTMapFlags; //LTFT 1 map acquisition flags
+  std::vector<int> m_rdLTFTMapFlags2;//LTFT 2 map acquisition flags
   std::vector<float> m_ltft_load_slots; //load axis's grid
   float m_ldaxMinVal;  //minimum value on the load axis
   bool m_ldaxBaro;     //use dynamic upper value on the load axis
