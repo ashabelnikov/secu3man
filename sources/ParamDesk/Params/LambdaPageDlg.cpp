@@ -52,6 +52,17 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_LAMBDA_HTGDET_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_LAMBDA_IDLCORR_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_LAMBDA_CRKHEAT_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_MIXSEN_CHECK, OnChangeData)
+
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH1, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH2, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH3, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH4, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH5, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH6, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH7, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_SELCH8, OnChangeData)
+
  ON_EN_CHANGE(IDC_PD_LAMBDA_2STOICHAFR_EDIT, OnChangeData)
  //heating:
  ON_EN_CHANGE(IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, OnChangeData)
@@ -135,6 +146,18 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_AFLOW_THRD_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_AFLOW_THRD_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_AFLOW_THRD_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH1, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH2, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH3, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH4, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH5, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH6, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH7, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SELCH8, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_MIXSEN_CHECK, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
@@ -176,6 +199,10 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
  m_params.lam_htgdet = false;
  m_params.lam_2stoichval = 15.6f;
  m_params.lam_crkheat = false;
+ m_params.lam_mixsen = false;
+ for (int i = 0; i < 8; ++i)
+  m_params.lam_selch[i] = 0;
+
  //heating
  m_params.eh_heating_time[0] = 15.0f;
  m_params.eh_heating_time[1] = 30.0f;
@@ -235,6 +262,10 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_LAMBDA_EH_HEATING_ACT_SPIN, m_eh_heating_act_spin);
  DDX_Control(pDX, IDC_PD_LAMBDA_EH_AFLOW_THRD_EDIT, m_eh_aflow_thrd_edit);
  DDX_Control(pDX, IDC_PD_LAMBDA_EH_AFLOW_THRD_SPIN, m_eh_aflow_thrd_spin);
+ DDX_Control(pDX, IDC_PD_LAMBDA_MIXSEN_CHECK, m_mixsen_check);
+
+ for(int i = 0; i < 8; ++i)
+  DDX_Control(pDX, IDC_PD_LAMBDA_SELCH1+i, m_selch[i]);
 
  DDX_CBIndex_UCHAR(pDX, IDC_PD_LAMBDA_SENSTYPE_COMBO, m_params.lam_senstype);
  m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
@@ -252,6 +283,10 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_LAMBDA_HTGDET_CHECK, m_params.lam_htgdet);
  DDX_Check_bool(pDX, IDC_PD_LAMBDA_IDLCORR_CHECK, m_params.lam_idlcorr);
  DDX_Check_bool(pDX, IDC_PD_LAMBDA_CRKHEAT_CHECK, m_params.lam_crkheat);
+ for(int i = 0; i < 8; ++i)
+  DDX_Check_bool(pDX, IDC_PD_LAMBDA_SELCH1+i, m_params.lam_selch[i]);
+ DDX_Check_bool(pDX, IDC_PD_LAMBDA_MIXSEN_CHECK, m_params.lam_mixsen);
+
  //heating:
  m_eh_ht_cold_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, m_params.eh_heating_time[0]);
  m_eh_ht_hot_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_TIME_HOT_EDIT, m_params.eh_heating_time[1]);
@@ -431,7 +466,11 @@ BOOL CLambdaPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_eh_aflow_thrd_edit, MLL::GetString(IDS_PD_LAMBDA_EH_AFLOW_THRD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_eh_aflow_thrd_spin, MLL::GetString(IDS_PD_LAMBDA_EH_AFLOW_THRD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_crkheat_check, MLL::GetString(IDS_PD_LAMBDA_CRKHEAT_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_mixsen_check, MLL::GetString(IDS_PD_LAMBDA_MIXSEN_CHECK_TT)));
  
+ for (int i = 0; i < 8; ++i)
+ VERIFY(mp_ttc->AddWindow(&m_selch[i], MLL::GetString(IDS_PD_LAMBDA_SELCH1_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -504,5 +543,5 @@ void CLambdaPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(765));
+  mp_scr->SetViewSize(cx, da.ScaleY(828));
 }

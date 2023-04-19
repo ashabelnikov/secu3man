@@ -62,6 +62,7 @@ namespace TablDesk
   float load;
 
   float afr;
+  float afr2;
   bool acceleration; //acceleration/deceleration
   bool ie; //fuel cut if = 0
 

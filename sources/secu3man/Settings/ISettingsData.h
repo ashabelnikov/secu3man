@@ -402,6 +402,8 @@ struct MetersCfg
  int m_optMetVentDuty[2];
  int m_optMetMAPDot[2];
  int m_optMetFts[2];
+ int m_optMetEGOCorr2[2];
+ int m_optMetSensAFR2[2];
 };
 
 typedef enum EInterLang
@@ -563,6 +565,8 @@ struct LogFileFields
  _TSTRING m_fldMAPdot;
  _TSTRING m_fldFts;
  _TSTRING m_fldConsFuel;
+ _TSTRING m_fldEGOCorr2;
+ _TSTRING m_fldAFR2;
 };
 
 //Functionality

@@ -1146,6 +1146,18 @@ BEGIN
     LTEXT           "RxL",IDC_PD_LAMBDA_EH_AFLOW_THRD_UNIT,141,386,20,20
 
     CONTROL         "Подогрев перед пуском",IDC_PD_LAMBDA_CRKHEAT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,405,138,10
+
+    LTEXT           "Выбор датчика кислорода",IDC_PD_LAMBDA_SELCH_CAPTION,1,423,50,30
+    CONTROL         "1",IDC_PD_LAMBDA_SELCH1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,420,20,12
+    CONTROL         "2",IDC_PD_LAMBDA_SELCH2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,420,20,12
+    CONTROL         "3",IDC_PD_LAMBDA_SELCH3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,420,20,12
+    CONTROL         "4",IDC_PD_LAMBDA_SELCH4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,420,20,12    
+    CONTROL         "5",IDC_PD_LAMBDA_SELCH5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,440,20,12
+    CONTROL         "6",IDC_PD_LAMBDA_SELCH6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,440,20,12
+    CONTROL         "7",IDC_PD_LAMBDA_SELCH7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,440,20,12
+    CONTROL         "8",IDC_PD_LAMBDA_SELCH8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,440,20,12    
+
+    CONTROL         "Усреднять сигналы с 2 датчиков в датчик 1",IDC_PD_LAMBDA_MIXSEN_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,460,138,16
 END
 
 IDD_PD_ACCELENR_PAGE DIALOGEX 0, 0, 155, 158
@@ -1929,6 +1941,7 @@ BEGIN
     IDS_PD_STARTER_STBLSTRCNT_EDIT_TT "Количество тактов от момента достижения порога оборотов блокировки стартера до момента его фактического выключения. Установите значение 0, если хотите чтобы использовалась таблица вместо этой простой константы."
     IDS_PD_STARTER_FLDCLRSTART_CHECK_TT "Если запуск в режиме продувки двигателя разрешен (1), то при достижении оборотов перехода с пусковой карты впрыск топлива возобновится и двигатель запустится."
     IDS_PD_ANGLES_ZEROAAOCT_CHECK_TT "Нулевой угол опережения с октан коррекцией. Игнорируются все таблицы и коррекции УОЗ кроме параметра 'Октан коррекция'. Также, в этом режиме не действуют ограничения накладываемые параметрами 'Минимальный УОЗ' и 'Максимальный УОЗ'."
+    IDS_PD_LAMBDA_SELCH1_TT "Укажите какой датчик кислорода использовать для этого канала. Нет галочки - 1-й датчик. Есть галочка - 2-й датчик"
 END
 
 STRINGTABLE
@@ -1949,6 +1962,7 @@ BEGIN
     IDS_PD_ACCELENR_WWMTYPE_COMBO_TT  "Тип используемой модели топливной пленки"
     IDS_PD_ACCELENR_XTAUSTHRD_EDIT_TT "Порог начала перехода. Таблицы для ускорения используются когда MAPdot больше этого значения (менее отрицателен или положителен). Если значение попадает по середине, тогда используется интерполяция между таблицами ускорения и замедления."
     IDS_PD_ACCELENR_XTAUFTHRD_EDIT_TT "Порог завершения перехода. Таблицы для ускорения используются когда MAPdot меньше этого значения (более отрицателен). Если значение попадает по середине, тогда используется интерполяция между таблицами ускорения и замедления."
+    IDS_PD_LAMBDA_MIXSEN_CHECK_TT "Выход с 1 датчика будет посчитан как среднее арифметическое датчиков кислорода 1 и 2."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3096,6 +3110,18 @@ BEGIN
     LTEXT           "RxL",IDC_PD_LAMBDA_EH_AFLOW_THRD_UNIT,141,386,20,20
 
     CONTROL         "Heating before cranking",IDC_PD_LAMBDA_CRKHEAT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,405,138,10
+
+    LTEXT           "Select an oxygen sensor",IDC_PD_LAMBDA_SELCH_CAPTION,1,423,50,30
+    CONTROL         "1",IDC_PD_LAMBDA_SELCH1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,420,20,12
+    CONTROL         "2",IDC_PD_LAMBDA_SELCH2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,420,20,12
+    CONTROL         "3",IDC_PD_LAMBDA_SELCH3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,420,20,12
+    CONTROL         "4",IDC_PD_LAMBDA_SELCH4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,420,20,12    
+    CONTROL         "5",IDC_PD_LAMBDA_SELCH5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,55,440,20,12
+    CONTROL         "6",IDC_PD_LAMBDA_SELCH6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,440,20,12
+    CONTROL         "7",IDC_PD_LAMBDA_SELCH7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,105,440,20,12
+    CONTROL         "8",IDC_PD_LAMBDA_SELCH8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,440,20,12    
+
+    CONTROL         "Average signals from two sensors to sensor 1",IDC_PD_LAMBDA_MIXSEN_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,460,138,16
 END
 
 IDD_PD_ACCELENR_PAGE DIALOGEX 0, 0, 155, 158
@@ -3903,6 +3929,7 @@ BEGIN
     IDS_PD_ANGLES_MANIGNTIM_IDL_CHECK_TT "0 - don't apply manual ignition timing correction on idling, 1 - enable applying of manual ignition timing correction on idling"
     IDS_PD_STARTER_STBLSTRCNT_EDIT_TT "Number of strokes from the moment the starter's blocking threshold is reached until starter is actually turned off. Set the value to 0 if you want the table to be used instead of this simple constant."
     IDS_PD_STARTER_FLDCLRSTART_CHECK_TT "If start in flood clear mode is enabled (1), then after engine speed reach 'Switch from cranking ignition map RPM' supply of fuel will be resumed and engine will start."
+    IDS_PD_LAMBDA_SELCH1_TT "Specify which oxygen sensor should be used for this channel. No check - 1st sensor. Set check - 2nd sensor"
 END
 
 STRINGTABLE
@@ -3922,6 +3949,7 @@ BEGIN
     IDS_PD_ACCELENR_WWMTYPE_COMBO_TT  "Type of used model of fuel film"
     IDS_PD_ACCELENR_XTAUSTHRD_EDIT_TT "Start transition threshold"
     IDS_PD_ACCELENR_XTAUFTHRD_EDIT_TT "Finish transition threshold"
+    IDS_PD_LAMBDA_MIXSEN_CHECK_TT "Output from the 1st sensor will be calculated as arithmetic mean of oxygen sensors 1 and 2."
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -90,6 +90,7 @@ namespace SECU3IO
   float octan_aac;                      //octane correction value
   bool octan_use;
   float lambda_corr;                    //lambda correction in %
+  float lambda_corr2;                   //lambda correction in %
 
   float inj_pw;                         //injector pulse width in ms
 
@@ -102,6 +103,7 @@ namespace SECU3IO
   float grts;                           // Gas reducer's temperature sensor
 
   float afr;                            // AFR calculated from lambda sensor
+  float afr2;                           // AFR calculated from lambda sensor
 
   float load;                           // Load value (MAP or TPS or synthetic MAP+TPS)
   float baro_press;                     // Baro pressure
@@ -654,11 +656,13 @@ namespace SECU3IO
   bool lam_idlcorr;                   //Use lambda correction on idling
   bool  lam_crkheat;
   float lam_2stoichval;               //Stoichiometric value for 2-nd fuel
+  bool lam_selch[8];                  //selection of KS for each channel (cylinder)
+  bool lam_mixsen;                    //Mix signals from 2 sensors to sensor #1
   //heating:
   float eh_heating_time[2];
   float eh_temper_thrd;
   float eh_heating_act;
-  float eh_aflow_thrd;
+  float eh_aflow_thrd;  
  };
 
  struct AccelPar

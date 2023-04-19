@@ -568,6 +568,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldUniOuts(_T("UnivOuts"))
 , m_optLogFieldFts(_T("FTS"))
 , m_optLogFieldConsFuel(_T("FuelConsumed"))
+, m_optLogFieldEGOCorr2(_T("EGOcorr2"))
+, m_optLogFieldAFR2(_T("AFR2"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -682,6 +684,10 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetVentDuty[i][1].name = _T("GrhVentDuty");
   m_optMetFts[i][0].name = _T("MetFts");
   m_optMetFts[i][1].name = _T("GrhFts");
+  m_optMetEGOCorr2[i][0].name = _T("MetEGOCorr2");
+  m_optMetEGOCorr2[i][1].name = _T("GrhEGOCorr2");
+  m_optMetSensAFR2[i][0].name = _T("MetSensAFR2");
+  m_optMetSensAFR2[i][1].name = _T("GrhSensAFR2");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -1155,8 +1161,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColUniOut6,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][36*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][38*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -1200,6 +1206,8 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetMAF[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetVentDuty[i][g], metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetFts[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetEGOCorr2[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetSensAFR2[i][g],metDef[i][d++], 0, vmax, true);
   }
  }
 
@@ -1394,6 +1402,8 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldMAPdot, _T("MAPdot"));
  lf.ReadString(m_optLogFieldFts, _T("FTS"));
  lf.ReadString(m_optLogFieldConsFuel, _T("FuelConsumed"));
+ lf.ReadString(m_optLogFieldEGOCorr2, _T("EGOcorr2"));
+ lf.ReadString(m_optLogFieldAFR2, _T("AFR2"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -1700,9 +1710,9 @@ bool CAppSettingsModel::WriteSettings(void)
  fs.WriteInt(m_optIATAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Size of the moving average filter used for lambda correction values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+  fs.WriteComment(_T("Size of the moving average filter used for lambda correction values (sensors 1 and 2). Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
-  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений коррекции по ДК. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений коррекции по ДК1 и ДК2. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optEGOCorrAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -1760,9 +1770,9 @@ bool CAppSettingsModel::WriteSettings(void)
  fs.WriteInt(m_optKnockRetardAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Size of the moving average filter used for AFR values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+  fs.WriteComment(_T("Size of the moving average filter used for AFR values 1 and 2. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
-  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений состава смеси. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений состава смеси 1 и 2. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optSensAFRAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -3539,6 +3549,16 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetFts[i][g], _T("Temperature in the fuel ramp"));
   else
    mm.WriteInt(m_optMetFts[i][g], _T("Температура в топливной рампе"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetEGOCorr2[i][g], _T("Lambda correction 2"));
+  else
+   mm.WriteInt(m_optMetEGOCorr2[i][g], _T("Лямбда коррекция 2"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetSensAFR2[i][g], _T("AFR sensor 2"));
+  else
+   mm.WriteInt(m_optMetSensAFR2[i][g], _T("Воздух/топливо с ДК 2"));
   }
  }
 
@@ -4202,6 +4222,8 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldMAPdot);
  lf.WriteString(m_optLogFieldFts);
  lf.WriteString(m_optLogFieldConsFuel);
+ lf.WriteString(m_optLogFieldEGOCorr2);
+ lf.WriteString(m_optLogFieldAFR2);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -5607,6 +5629,8 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetFts, &m_optMetFts[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0]);
  }
 }
 
@@ -5651,6 +5675,8 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetFts, &m_optMetFts[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0]);
  }
 }
 
@@ -6134,12 +6160,14 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldIdlRegIgnTim.value = i_flds.m_fldIdlRegIgnTim;
  m_optLogFieldOctanCorr.value = i_flds.m_fldOctanCorr;
  m_optLogFieldEGOCorr.value = i_flds.m_fldEGOCorr;
+ m_optLogFieldEGOCorr2.value = i_flds.m_fldEGOCorr2;
  m_optLogFieldInjPW.value = i_flds.m_fldInjPW;
  m_optLogFieldTPSdot.value = i_flds.m_fldTPSdot;
  m_optLogFieldMAP2.value = i_flds.m_fldMAP2;
  m_optLogFieldTmp2.value = i_flds.m_fldTmp2;
  m_optLogFieldDiffMAP.value = i_flds.m_fldDiffMAP;
  m_optLogFieldAFR.value = i_flds.m_fldAFR;
+ m_optLogFieldAFR2.value = i_flds.m_fldAFR2;
  m_optLogFieldSynLoad.value = i_flds.m_fldSynLoad;
  m_optLogFieldBaroPress.value = i_flds.m_fldBaroPress;
  m_optLogFieldInjTimBeg.value = i_flds.m_fldInjTimBeg;
@@ -6207,12 +6235,14 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldIdlRegIgnTim = m_optLogFieldIdlRegIgnTim.value;
  o_flds.m_fldOctanCorr = m_optLogFieldOctanCorr.value;
  o_flds.m_fldEGOCorr = m_optLogFieldEGOCorr.value;
+ o_flds.m_fldEGOCorr2 = m_optLogFieldEGOCorr2.value;
  o_flds.m_fldInjPW = m_optLogFieldInjPW.value;
  o_flds.m_fldTPSdot = m_optLogFieldTPSdot.value;
  o_flds.m_fldMAP2 = m_optLogFieldMAP2.value;
  o_flds.m_fldTmp2 = m_optLogFieldTmp2.value;
  o_flds.m_fldDiffMAP = m_optLogFieldDiffMAP.value;
  o_flds.m_fldAFR = m_optLogFieldAFR.value;
+ o_flds.m_fldAFR2 = m_optLogFieldAFR2.value;
  o_flds.m_fldSynLoad = m_optLogFieldSynLoad.value;
  o_flds.m_fldBaroPress = m_optLogFieldBaroPress.value;
  o_flds.m_fldInjTimBeg = m_optLogFieldInjTimBeg.value;

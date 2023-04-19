@@ -82,6 +82,8 @@ struct s3lRecord
  int   mapdot; 
  float fts;
  float cons_fuel;                       
+ float lambda_corr2;
+ float afr2;
  BYTE  log_marks;
  WORD  service_flags;
  DWORD ce_errors;

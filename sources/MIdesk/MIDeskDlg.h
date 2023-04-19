@@ -137,13 +137,15 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
                     int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
                     int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
+                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2,
+                    int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
 
   void GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
                     int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
                     int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
+                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2,
+                    int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
 
   void SetMetersDragNDrop(bool enable);
   bool GetMetersDragNDrop(void) const;
@@ -295,6 +297,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   RingBuffItem m_ringInjPW;
   RingBuffItem m_ringIAT;
   RingBuffItem m_ringEGOCorr;
+  RingBuffItem m_ringEGOCorr2;
   RingBuffItem m_ringAirFlow;
   RingBuffItem m_ringVehicleSpeed;
   RingBuffItem m_ringTPSDot;
@@ -306,6 +309,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   RingBuffItem m_ringFuelConsumH;
   RingBuffItem m_ringKnockRetard;
   RingBuffItem m_ringSensAFR;
+  RingBuffItem m_ringSensAFR2;
   RingBuffItem m_ringChokePos;
   RingBuffItem m_ringGDPos;
   RingBuffItem m_ringSynLoad;
@@ -358,6 +362,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   GraphVal_t m_ventdutyQVal;
   GraphVal_t m_ftsQVal[2];
   GraphVal_t m_conflQVal;
+  GraphVal_t m_egoc2QVal[2];
+  GraphVal_t m_senafr2QVal[2];
 };
 
 /////////////////////////////////////////////////////////////////////////////

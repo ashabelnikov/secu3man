@@ -799,7 +799,7 @@ void CLogPlayerTabController::ConfigureIndicators(void)
   cfg1[idx].m_optMetInjPW, cfg1[idx].m_optMetIAT, cfg1[idx].m_optMetEGOCorr, cfg1[idx].m_optMetTPS, cfg1[idx].m_optMetAirFlow, cfg1[idx].m_optMetVehicleSpeed, cfg1[idx].m_optMetTPSDot, cfg1[idx].m_optMetMAP2, cfg1[idx].m_optMetMAPD,
   cfg1[idx].m_optMetTmp2, cfg1[idx].m_optMetFuelConsum, cfg1[idx].m_optMetKnockRetard, cfg1[idx].m_optMetKnockGraph, cfg1[idx].m_optMetSensAFR, cfg1[idx].m_optMetChokePos, cfg1[idx].m_optMetGDPos, cfg1[idx].m_optMetSynLoad,
   cfg1[idx].m_optMetInjTimB, cfg1[idx].m_optMetInjTimE, cfg1[idx].m_optMetFuelConsumF, cfg1[idx].m_optMetGrts,  cfg1[idx].m_optMetFtls, cfg1[idx].m_optMetEgts, cfg1[idx].m_optMetOps, cfg1[idx].m_optMetInjDuty, cfg1[idx].m_optMetMAF,
-  cfg1[idx].m_optMetVentDuty, cfg1[idx].m_optMetMAPDot, cfg1[idx].m_optMetFts,
+  cfg1[idx].m_optMetVentDuty, cfg1[idx].m_optMetMAPDot, cfg1[idx].m_optMetFts, cfg1[idx].m_optMetEGOCorr2, cfg1[idx].m_optMetSensAFR2, 
   mp_settings->GetTitleFontSize(), mp_settings->GetValueFontSize(), mp_settings->GetPaneFontSize(), mp_settings->GetLabelFontSize());
 
  mp_view->mp_MIDeskDlg->SetMetersDragNDrop(mp_settings->GetMetersDragNDrop());
@@ -837,7 +837,7 @@ void CLogPlayerTabController::OnMIDeskSettingsChanged(void)
   cfg1[idx].m_optMetInjPW, cfg1[idx].m_optMetIAT, cfg1[idx].m_optMetEGOCorr, cfg1[idx].m_optMetTPS, cfg1[idx].m_optMetAirFlow, cfg1[idx].m_optMetVehicleSpeed, cfg1[idx].m_optMetTPSDot, cfg1[idx].m_optMetMAP2,
   cfg1[idx].m_optMetMAPD, cfg1[idx].m_optMetTmp2, cfg1[idx].m_optMetFuelConsum, cfg1[idx].m_optMetKnockRetard, cfg1[idx].m_optMetKnockGraph, cfg1[idx].m_optMetSensAFR, cfg1[idx].m_optMetChokePos,
   cfg1[idx].m_optMetGDPos, cfg1[idx].m_optMetSynLoad, cfg1[idx].m_optMetInjTimB, cfg1[idx].m_optMetInjTimE, cfg1[idx].m_optMetFuelConsumF, cfg1[idx].m_optMetGrts, cfg1[idx].m_optMetFtls, cfg1[idx].m_optMetEgts, cfg1[idx].m_optMetOps,
-  cfg1[idx].m_optMetMAF, cfg1[idx].m_optMetVentDuty, cfg1[idx].m_optMetMAPDot, cfg1[idx].m_optMetFts,
+  cfg1[idx].m_optMetMAF, cfg1[idx].m_optMetVentDuty, cfg1[idx].m_optMetMAPDot, cfg1[idx].m_optMetFts, cfg1[idx].m_optMetEGOCorr2, cfg1[idx].m_optMetSensAFR2,
   cfg1[idx].m_optMetInjDuty, TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
 
  mp_settings->SetMetersConfig(cfg1);

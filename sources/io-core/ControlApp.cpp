@@ -294,7 +294,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 92)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 96)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -663,6 +663,18 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex24ToBin(raw_packet, &cons_fuel))
   return false;
  sensorDat.cons_fuel = cons_fuel / 1024.0f; //L
+
+ //AFR value #2
+ int afr2 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &afr2))
+  return false;
+ sensorDat.afr2 = ((float)afr2) / AFR_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ // Lambda correction value #2 (signed value)
+ int lambda_corr2 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &lambda_corr2, true))
+  return false;
+ sensorDat.lambda_corr2 = (((float)lambda_corr2) / 512.0f) * 100.0f; //obtain value in %
 
  return true;
 }
@@ -2644,7 +2656,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& lambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != 27)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 28)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -2713,6 +2725,7 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  lambdaPar.lam_htgdet = CHECKBIT8(lam_flags, 0);
  lambdaPar.lam_idlcorr = CHECKBIT8(lam_flags, 1);
  lambdaPar.lam_crkheat = CHECKBIT8(lam_flags, 2);
+ lambdaPar.lam_mixsen = CHECKBIT8(lam_flags, 3);
 
  //Stoichiometric value for second fuel
  int lam_2stoichval = 0;
@@ -2744,6 +2757,13 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &eh_aflow_thrd))
   return false;
  lambdaPar.eh_aflow_thrd = float(eh_aflow_thrd) * 32.0f;
+
+ //selection of lambda sensor for each channel (cylinder)
+ unsigned char lam_selch;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &lam_selch))
+  return false;
+ for (int i = 0; i < 8; ++i)
+  lambdaPar.lam_selch[i] = CHECKBIT8(lam_selch, i);
 
  return true;
 }
@@ -4392,6 +4412,7 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  WRITEBIT8(lam_flags, 0, packet_data->lam_htgdet);
  WRITEBIT8(lam_flags, 1, packet_data->lam_idlcorr);
  WRITEBIT8(lam_flags, 2, packet_data->lam_crkheat);
+ WRITEBIT8(lam_flags, 3, packet_data->lam_mixsen);
  mp_pdp->Bin8ToHex(lam_flags, m_outgoing_packet);
  int lam_2stoichval = MathHelpers::Round(packet_data->lam_2stoichval * 128.0f);
  mp_pdp->Bin16ToHex(lam_2stoichval, m_outgoing_packet);
@@ -4403,6 +4424,11 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  mp_pdp->Bin8ToHex(eh_heating_act, m_outgoing_packet);
  int eh_aflow_thrd = MathHelpers::Round(packet_data->eh_aflow_thrd / 32.0f);
  mp_pdp->Bin16ToHex(eh_aflow_thrd, m_outgoing_packet);
+
+ unsigned char lam_selch = 0;
+ for (int i = 0; i < 8; ++i)
+  WRITEBIT8(lam_selch, i, packet_data->lam_selch[i]); 
+ mp_pdp->Bin8ToHex(lam_selch, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

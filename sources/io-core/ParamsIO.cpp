@@ -443,6 +443,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->inj_lambda_flags, 0, p_in->lam_htgdet);
     WRITEBIT8(p_params->inj_lambda_flags, 1, p_in->lam_idlcorr);
     WRITEBIT8(p_params->inj_lambda_flags, 2, p_in->lam_crkheat);
+    WRITEBIT8(p_params->inj_lambda_flags, 3, p_in->lam_mixsen);
     p_params->gd_lambda_stoichval = MathHelpers::Round(p_in->lam_2stoichval * 128.0f);
     //heating:
     p_params->eh_heating_time[0] = MathHelpers::Round(p_in->eh_heating_time[0]);
@@ -450,6 +451,11 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->eh_temper_thrd = MathHelpers::Round(p_in->eh_temper_thrd);
     p_params->eh_heating_act = MathHelpers::Round(p_in->eh_heating_act * 100.0f);
     p_params->eh_aflow_thrd = MathHelpers::Round(p_in->eh_aflow_thrd / 32.0f);
+
+    unsigned char lam_selch = 0;
+    for (int i = 0; i < 8; ++i)
+     WRITEBIT8(lam_selch, i, p_in->lam_selch[i]); 
+    p_params->lambda_selch = lam_selch;
    }
    break;
   case ACCEL_PAR:
@@ -945,6 +951,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->lam_htgdet = CHECKBIT8(p_params->inj_lambda_flags, 0);
     p_out->lam_idlcorr = CHECKBIT8(p_params->inj_lambda_flags, 1);
     p_out->lam_crkheat = CHECKBIT8(p_params->inj_lambda_flags, 2);
+    p_out->lam_mixsen = CHECKBIT8(p_params->inj_lambda_flags, 3);
     p_out->lam_2stoichval = ((float)p_params->gd_lambda_stoichval) / 128.0f;
     //heating:
     p_out->eh_heating_time[0] = (float)p_params->eh_heating_time[0];
@@ -952,6 +959,10 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->eh_temper_thrd = (float)p_params->eh_temper_thrd;
     p_out->eh_heating_act = (float)p_params->eh_heating_act / 100.0f;
     p_out->eh_aflow_thrd = (float)p_params->eh_aflow_thrd * 32.0f;
+
+    //selection of lambda sensor for each channel (cylinder)
+    for (int i = 0; i < 8; ++i)
+     p_out->lam_selch[i] = CHECKBIT8(p_params->lambda_selch, i);
    }
    break;
   case ACCEL_PAR:

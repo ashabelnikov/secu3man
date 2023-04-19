@@ -63,6 +63,37 @@ void CMIEGOCorr::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+CMIEGOCorr2::CMIEGOCorr2()
+{
+ //empty
+}
+
+CMIEGOCorr2::~CMIEGOCorr2()
+{
+ //empty
+}
+
+void CMIEGOCorr2::Create(CWnd* pParent)
+{
+ MeasInstrBase::Create(pParent, IDC_MI_EGO_CORR2); //create window
+
+ m_meter.SetRange (-50.0, 50.0);
+ m_meter.SetLabelsDecimals(1);
+ m_meter.SetValueDecimals(1);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_EGO_CORR2_TITLE));
+ m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
+ m_meter.SetUnit(MLL::LoadString(IDS_MI_PERCENT_UNIT));
+ m_meter.SetTickNumber(16);
+ m_meter.AddAlertZone(-50,-20,RGB(230,130,130));
+ m_meter.AddAlertZone(-20,20,RGB(120,190,120));
+ m_meter.AddAlertZone(20,50,RGB(230,130,130));
+ m_meter.SetTRPane(_T("n/a"));
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -88,6 +119,33 @@ void CMIEGOCorrGraph::Create(CWnd* pParent)
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_EGO_CORRGRAPH_V_UNIT));
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.SetBackgroundColor(RGB(0, 64, 0));
+ m_scope.SetGridColor(RGB(192, 192, 255));
+ m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+CMIEGOCorr2Graph::CMIEGOCorr2Graph()
+{
+ //empty
+}
+
+CMIEGOCorr2Graph::~CMIEGOCorr2Graph()
+{
+ //empty
+}
+
+void CMIEGOCorr2Graph::Create(CWnd* pParent)
+{
+ // create the window of control
+ CRect rect(0,0, 100,100);
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_EGO_CORR2GRAPH));
+
+ // customize the control
+ m_scope.SetRange(-50, 50, 0, 2);
+ m_scope.SetGridNumberY(10);
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_EGO_CORR2GRAPH_V_UNIT));
  m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));

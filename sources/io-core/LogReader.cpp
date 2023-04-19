@@ -44,13 +44,13 @@ using namespace SECU3IO;
 #define CSV_COUNT_TIME_VAL 4
 
 //number of variables in the data field
-#define CSV_COUNT_DATA_VAL 68
+#define CSV_COUNT_DATA_VAL 70
 
 //offset of data relatively to begin of string
 #define CSV_TIME_PANE_LEN 11
 
 //offset of the marks value in record
-#define CSV_MARKS_OFFSET 429
+#define CSV_MARKS_OFFSET 444
 
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
@@ -58,7 +58,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - hundreds of second
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -304,6 +304,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   o_data.fts = s3l.fts;
   o_data.cons_fuel = s3l.cons_fuel;
   o_data.mapdot = s3l.mapdot;
+  o_data.lambda_corr2 = s3l.lambda_corr2;
+  o_data.afr2 = s3l.afr2;
  }
  else
  {
@@ -339,7 +341,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
  float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
  float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
- float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel;
+ float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel, lambda_corr2, afr2;
  char ce_errors[35] = {0};
 
  result = sscanf(mp_recBuff + CSV_TIME_PANE_LEN, m_csv_data_template,
@@ -408,6 +410,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
                 &mapdot,
                 &fts,
                 &cons_fuel,
+                &lambda_corr2,
+                &afr2,
                 &log_mark,
                 &service_flags,
                 &ce_errors);
@@ -460,12 +464,14 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_marks = log_mark;  //save log marks
  o_data.inj_pw = inj_pw;
  o_data.lambda_corr = lambda_corr;
+ o_data.lambda_corr2 = lambda_corr2;
  o_data.tpsdot = tpsdot;
  o_data.acceleration = acceleration;
  o_data.map2 = map2;
  o_data.tmp2 = tmp2;
  o_data.mapd = mapd;
  o_data.afr = afr;
+ o_data.afr2 = afr2;
  o_data.fc_revlim = fc_revlim;
  o_data.floodclear = floodclear;
  o_data.sys_locked = sys_locked;
@@ -542,7 +548,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const

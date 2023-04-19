@@ -476,7 +476,7 @@ void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float a
  float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
  float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use, float tps, float iac_pos,
  int tpsdot, float voltage, float add_i1, float tmp2, float baro_press, float load, float afr, bool acceleration, bool ie,
- float air_temp, float rigid_arg, bool rigid_use, float map2, int rxlaf, bool aftstr_enr, int mapdot)
+ float air_temp, float rigid_arg, bool rigid_use, float map2, int rxlaf, bool aftstr_enr, int mapdot, float afr2)
 {
  if (!mp_ButtonsPanel.get()) return;
  TablDesk::DynVal dv;
@@ -509,6 +509,7 @@ void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float a
  dv.baro_press = baro_press;
  dv.load = load;
  dv.afr = afr;
+ dv.afr2 = afr2;
  dv.acceleration = acceleration;
  dv.ie = ie;
  dv.air_temp = air_temp;

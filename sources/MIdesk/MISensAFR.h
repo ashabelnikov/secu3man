@@ -38,11 +38,33 @@ class AFX_EXT_CLASS CMISensAFR : public MeasInstrBase
   //---------------------------------------
 };
 
+class AFX_EXT_CLASS CMISensAFR2 : public MeasInstrBase
+{
+ public:
+  CMISensAFR2();
+  virtual ~CMISensAFR2();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};
+
 class AFX_EXT_CLASS CMISensAFRGraph : public MeasInstrBase
 {
  public:
   CMISensAFRGraph();
   virtual ~CMISensAFRGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};
+
+class AFX_EXT_CLASS CMISensAFR2Graph : public MeasInstrBase
+{
+ public:
+  CMISensAFR2Graph();
+  virtual ~CMISensAFR2Graph();
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);

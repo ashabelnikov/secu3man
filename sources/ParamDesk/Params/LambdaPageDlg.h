@@ -98,6 +98,10 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_htgdet_check;
   CButton m_idlcorr_check;
   CButton m_crkheat_check;
+  CButton m_mixsen_check;  
+
+  CButton m_selch[8];
+
   //heating
   CSpinButtonCtrlEx m_eh_ht_cold_spin;
   CEditEx m_eh_ht_cold_edit;

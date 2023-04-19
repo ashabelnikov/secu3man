@@ -44,6 +44,16 @@
 
 #pragma warning(disable : 4355)  
 
+float blendAfr(const TablDesk::DynVal& dv)
+{
+ if (dv.afr!=.0f && dv.afr2!=.0f)
+  return (dv.afr + dv.afr2) / 2.0f;
+ else if (dv.afr2!=.0f)
+  return dv.afr2;
+ else
+  return dv.afr;
+}
+
 CAutoTuneController::CAutoTuneController()
 : mp_ve(NULL)
 , mp_ve2(NULL)
@@ -135,7 +145,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  LogDataEntry lde, e;
  lde.rpm = (float)dv.rpm;
  lde.load = dv.load;
- lde.afr = dv.afr;
+ lde.afr = blendAfr(dv); //because we have single VE map, but two oxygen sensors
  lde.ae = dv.acceleration; //acceleration/deceleration
  lde.ie = dv.ie;  //fuel cut
  lde.tps = dv.tps;
