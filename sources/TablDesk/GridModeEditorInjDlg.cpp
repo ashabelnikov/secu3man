@@ -399,7 +399,7 @@ void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_pITPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos, dv.rigid_arg, dv.rigid_use, dv.air_temp);
  m_pEnrPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tpsdot, dv.rpm, dv.aftstr_enr, dv.mapdot);
- m_pOtherPageDlg->SetArguments(dv.strt_use, dv.temp, dv.voltage, dv.add_i1, dv.rpm, dv.tmp2, dv.air_temp, dv.map2, dv.rxlaf);
+ m_pOtherPageDlg->SetArguments(dv.strt_use, dv.temp, dv.voltage, dv.lambda_mx, dv.rpm, dv.tmp2, dv.air_temp, dv.map2, dv.rxlaf);
  m_pOther1PageDlg->SetArguments(dv.strt_use, dv.rpm);
  m_pPwm1PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pPwm2PageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);

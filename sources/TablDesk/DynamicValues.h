@@ -56,7 +56,7 @@ namespace TablDesk
   float iac_pos;
   int tpsdot;
   float voltage;
-  float add_i1;  //lambda sensor
+  float lambda_mx;  //lambda sensor (mixed voltages from 2 sensors)
   float tmp2;
   float baro_press;
   float load;

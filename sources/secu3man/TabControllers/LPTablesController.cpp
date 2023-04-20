@@ -194,7 +194,7 @@ void CLPTablesController::DisplayCurrentRecord(SECU3IO::SensorDat* sd)
   dv.iac_pos = sd->choke_pos;
   dv.tpsdot = sd->tpsdot;
   dv.voltage = sd->voltage;
-  dv.add_i1 = sd->add_i1;
+  dv.lambda_mx = sd->lambda_mx;
   dv.tmp2 = sd->tmp2;      //GTS
   dv.baro_press = sd->baro_press;
   dv.load = sd->load;

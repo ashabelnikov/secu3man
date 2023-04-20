@@ -294,7 +294,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 96)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 98)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -675,6 +675,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &lambda_corr2, true))
   return false;
  sensorDat.lambda_corr2 = (((float)lambda_corr2) / 512.0f) * 100.0f; //obtain value in %
+
+ //mixed voltages from two EGO sensors
+ int lambda_mx = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &lambda_mx))
+  return false;
+ sensorDat.lambda_mx = ((float)lambda_mx) * m_adc_discrete;
 
  return true;
 }

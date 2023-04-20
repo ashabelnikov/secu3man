@@ -310,7 +310,7 @@ void CGMEInjOtherDlg::UpdateView(bool axisLabels /*= false*/)
 }
 
 
-void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat, float map2, int rxlaf)
+void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, float lambda_mx, int rpm, float tmp2, float iat, float map2, int rxlaf)
 {
  if (m_crnk_map.GetSafeHwnd())
  {
@@ -342,7 +342,7 @@ void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, floa
  if (m_egocrv_map.GetSafeHwnd())
  {
   m_egocrv_map.ShowMarkers(true, true);
-  m_egocrv_map.SetArguments(0, add_i1);
+  m_egocrv_map.SetArguments(0, lambda_mx);
  }
  
  if (m_iatclt_map.GetSafeHwnd())

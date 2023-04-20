@@ -131,6 +131,8 @@ namespace SECU3IO
 
   float fts;                            //Fuel temperature sensor
   float cons_fuel;                      //Consumed fuel (L)
+
+  float lambda_mx;                      //mixed voltages from two EGO sensors
  };
 
  struct DbgvarDat
