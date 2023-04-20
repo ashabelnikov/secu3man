@@ -27,7 +27,7 @@
 
 #include <numeric>
 
-#define RINGBUFF_SIZE 32
+#define RINGBUFF_SIZE 64
 
 struct RingBuffItem
 {
@@ -35,33 +35,44 @@ struct RingBuffItem
  : m_idx(0)
  , m_result(0)
  , m_avnum(0)
+ , m_size(0)
+ , m_sum(.0f)
  {
   std::fill(m_buff, m_buff + RINGBUFF_SIZE, 0.0f);
  }
 
- void Append(float value) //update ring buffer
+ void Append(float value)    //update ring buffer
  {
   if (m_avnum > 0)
   {
-   m_buff[m_idx++] = value;
+   m_sum-=m_buff[m_idx];     //"remove" old value
+   m_sum+= value;            //add new value
+
+   m_buff[m_idx++] = value;  //remember new value 
    if (m_idx >= m_avnum)
-    m_idx = 0;
+    m_idx = 0;   
+                             //limit size to the specified value
+   if (m_size < m_avnum)
+    ++m_size;  
   }
   else
+  {
    m_result = value;
+  }
  }
 
  void Calculate(void)
  {
-  if (m_avnum > 0)
+  if (m_size > 0)
   {
-   float sum = std::accumulate(m_buff, m_buff + m_avnum, 0.0f);
-   m_result = sum / m_avnum;
+   m_result = m_sum / m_size;
   }
  }
 
- float m_buff[RINGBUFF_SIZE];
- int m_idx;
- int m_avnum;
- float m_result;
+ float m_buff[RINGBUFF_SIZE]; //allocate memory statically to decrease loss of speed
+ int m_idx;      //current index in the ring buffer
+ int m_avnum;    //set maximum size of the ring buffer
+ int m_size;     //actual size of data in the ring buffer
+ float m_sum;    //sum of values in the ring buffer
+ float m_result; //arithmetic mean result
 };
