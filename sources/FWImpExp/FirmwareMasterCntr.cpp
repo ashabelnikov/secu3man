@@ -114,8 +114,6 @@ void FirmwareMasterCntr::OnViewActivate(void)
  mp_view->SetFwmFlag(FWM_CAFR, false);
  mp_view->SetFwmFlag(FWM_SPLIT, false);
  mp_view->SetFwmFlag(FWM_ODDF, false);
-
- mp_view->EnableFwmFlag(FWM_TPIC, false);
 }
 
 void FirmwareMasterCntr::OnChangeFwmCheck(int id)
@@ -163,16 +161,6 @@ void FirmwareMasterCntr::OnChangeFwmCheck(int id)
 
 void FirmwareMasterCntr::OnChangeUnit(void)
 {
- if (mp_view->GetUnitCombo() != UNIT_SECU3I)
- { //TPIC8101 supported only in the SECU-3i
-  mp_view->EnableFwmFlag(FWM_TPIC, false);
-  mp_view->SetFwmFlag(FWM_TPIC, false);
- }
- else
- {
-  mp_view->EnableFwmFlag(FWM_TPIC, true);
- }
-
  if (mp_view->GetUnitCombo() == UNIT_SECU3TR6)
  { //OBD is not supported in SECU-3t rev.6
   mp_view->EnableFwmFlag(FWM_OBD, false);

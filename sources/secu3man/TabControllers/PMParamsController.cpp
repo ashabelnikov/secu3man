@@ -153,7 +153,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableUseCTSCurveMap(CHECKBIT32(opt, COPT_THERMISTOR_CS));
  mp_view->EnableHallOutputParams(CHECKBIT32(opt, COPT_HALL_OUTPUT) && !CHECKBIT32(opt, COPT_HALL_SYNC) && !CHECKBIT32(opt, COPT_CKPS_NPLUS1));
  mp_view->EnableSECU3TItems(CHECKBIT32(opt, COPT_SECU3T));
- mp_view->EnableExtraIO(!CHECKBIT32(opt, COPT_SECU3T) && CHECKBIT32(opt, COPT_TPIC8101));
+ mp_view->EnableExtraIO(CHECKBIT32(opt, COPT_TPIC8101));
 
  if (CHECKBIT32(opt, COPT_SECU3T))
   mp_view->SetMaxCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) ? 8 : 8);

@@ -78,11 +78,11 @@ void CRSDeskDlg::Input::StoreRects(void)
  meter->Update();
 }
 
-void CRSDeskDlg::Input::Scale(float Xf, float Yf)
+void CRSDeskDlg::Input::Scale(float Xf, float Yf, Input* p_other /*=NULL*/)
 {
  for(int i = 0; i < InpFldNum; ++i)
  {
-  CRect rc = rect[i];
+  CRect rc = p_other ? p_other->rect[i] : rect[i];
   GDIHelpers::ScaleRect(rc, Xf, Yf);
   ctrl[i]->MoveWindow(rc);
   ctrl[i]->Invalidate();
@@ -221,7 +221,7 @@ BOOL CRSDeskDlg::OnInitDialog()
  Enable(false);
  UpdateData(FALSE);
 
- //Store iriginal rects
+ //Store original rects
  for(size_t i = 0; i < m_fields.size(); ++i)
   m_fields[i]->StoreRects();
 
@@ -256,7 +256,7 @@ void CRSDeskDlg::Enable(bool enable)
  m_add_i1_inp.EnableWindow(enable);
  m_add_i2_inp.EnableWindow(enable);
  m_add_i3_inp.EnableWindow(enable && !m_enable_secu3t_features);
- m_add_i4_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
+ m_add_i4_inp.EnableWindow(enable && m_enable_extraio);
  m_add_i5_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
  m_add_i6_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
  m_add_i7_inp.EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
@@ -276,7 +276,7 @@ void CRSDeskDlg::Show(bool show)
  m_add_i1_inp.ShowWindow(sw);
  m_add_i2_inp.ShowWindow(sw);
  m_add_i3_inp.ShowWindow(sw3i);
- m_add_i4_inp.ShowWindow(sw3i);
+ m_add_i4_inp.ShowWindow(sw);
  m_add_i5_inp.ShowWindow(sw3i);
  m_add_i6_inp.ShowWindow(sw3i);
  m_add_i7_inp.ShowWindow(sw3i);
@@ -332,16 +332,20 @@ void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
 
  updateScrollerSize();
 
+ //Move Add_i4
+ CRect rect;
+ GetClientRect(&rect);
+ if (!rect.IsRectNull())
+  _Resize(rect, true);
+
  //in the SECU-3i only
  m_add_i3_inp.EnableWindow(m_enabled && !i_enable);
- m_add_i4_inp.EnableWindow(m_enabled && !i_enable && m_enable_extraio);
  m_add_i5_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
  m_add_i6_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
  m_add_i7_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
  m_add_i8_inp.EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
  int sw3i = ((!i_enable) ? SW_SHOW : SW_HIDE);
  m_add_i3_inp.ShowWindow(sw3i);
- m_add_i4_inp.ShowWindow(sw3i);
  m_add_i5_inp.ShowWindow(sw3i);
  m_add_i6_inp.ShowWindow(sw3i);
  m_add_i7_inp.ShowWindow(sw3i);
@@ -354,7 +358,7 @@ void CRSDeskDlg::EnableExtraIO(bool i_enable)
   return; //already has needed state
  m_enable_extraio = i_enable;
  //in the SECU-3i only
- m_add_i4_inp.EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+ m_add_i4_inp.EnableWindow(m_enabled && i_enable);
 }
 
 void CRSDeskDlg::EnableSpiAdc(bool i_enable)
@@ -369,22 +373,36 @@ void CRSDeskDlg::EnableSpiAdc(bool i_enable)
  m_add_i8_inp.EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
 }
 
-void CRSDeskDlg::Resize(const CRect& i_rect)
+void CRSDeskDlg::_Resize(const CRect& i_rect, bool add_i4_only /*= false*/)
 {
  //Calculate scale factors basing on the previous size of window
  float Xf, Yf;
  GDIHelpers::CalcRectToRectRatio(i_rect, m_origRect, Xf, Yf);
 
+ Input* p_inp = m_enable_secu3t_features ? &m_add_i3_inp : NULL;
+
  //Resize controls
- for(size_t i = 0; i < m_fields.size(); ++i)
-  m_fields[i]->Scale(Xf, Yf);
+ if (add_i4_only)
+ {
+  m_add_i4_inp.Scale(Xf, Yf, p_inp);
+ }
+ else
+ {
+  for(size_t i = 0; i < m_fields.size(); ++i)
+  {
+   if (m_fields[i]==&m_add_i4_inp)
+    m_fields[i]->Scale(Xf, Yf, p_inp);
+   else
+    m_fields[i]->Scale(Xf, Yf);
+  }
+ }
 
  UpdateWindow();
 }
 
 void CRSDeskDlg::updateScrollerSize(void)
 {
- mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.0f : 1.75f);
+ mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.1f : 1.75f);
 }
 
 void CRSDeskDlg::OnSize(UINT nType, int cx, int cy)
@@ -398,7 +416,7 @@ void CRSDeskDlg::OnSize(UINT nType, int cx, int cy)
   CRect rect;
   GetClientRect(&rect);
   if (!rect.IsRectNull())
-   Resize(rect);
+   _Resize(rect);
  }
 }
 
@@ -414,3 +432,4 @@ void CRSDeskDlg::OnPaint()
    m_fields[i]->UpdateColors();
  }
 }
+

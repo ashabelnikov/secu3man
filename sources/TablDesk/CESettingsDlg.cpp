@@ -417,7 +417,7 @@ void CCESettingsDlg::OnUpdateSECU3i(CCmdUI* pCmdUI)
 
 void CCESettingsDlg::OnUpdateSECU3iEx(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(!m_enable_secu3t_features && m_enable_extraio);
+ pCmdUI->Enable(m_enable_extraio);
 }
 
 BOOL CCESettingsDlg::OnInitDialog()

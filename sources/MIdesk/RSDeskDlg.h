@@ -55,9 +55,6 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   virtual void EnableSpiAdc(bool i_enable);
   //-----------------------------------------------
 
-  //изменение размеров окна
-  void Resize(const CRect& i_rect);
-
   // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -70,6 +67,9 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   void updateScrollerSize(void);
 
  private:
+  //Change size of a window
+  void _Resize(const CRect& i_rect, bool add_i4_only = false);
+
   int  m_enabled;
   bool m_enable_secu3t_features;
   bool m_enable_extraio;
@@ -81,7 +81,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
    Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRange = 6.0f, int ticsNum = 6);
   ~Input();
    void StoreRects(void);
-   void Scale(float Xf, float Yf);
+   void Scale(float Xf, float Yf, Input* p_other = NULL);
    void UpdateMeter(void);
    void UpdateColors(void);
    void DDX_Control(CDataExchange *pDX);

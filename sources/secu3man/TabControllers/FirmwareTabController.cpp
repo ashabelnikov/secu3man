@@ -1012,7 +1012,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(opt, SECU3IO::COPT_THERMISTOR_CS));
  mp_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(opt, SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
  mp_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
- mp_view->mp_ParamDeskDlg->EnableExtraIO(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_TPIC8101));
+ mp_view->mp_ParamDeskDlg->EnableExtraIO(CHECKBIT32(opt, SECU3IO::COPT_TPIC8101));
  if (CHECKBIT32(opt, SECU3IO::COPT_SECU3T))
   mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
  else //SECU-3i:
@@ -1023,7 +1023,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC));
 
  this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
- this->mp_iorCntr->EnableExtraIO(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_TPIC8101)); 
+ this->mp_iorCntr->EnableExtraIO(CHECKBIT32(opt, SECU3IO::COPT_TPIC8101)); 
  this->mp_iorCntr->EnableSpiAdc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284)); 
  this->mp_iorCntr->Enable(true);
 
@@ -2040,7 +2040,7 @@ void CFirmwareTabController::OnCESettingsButton(void)
  mp_fwdm->GetCESettingsData(data);
  dialog.SetValues(data);
  dialog.EnableSECU3TItems(CHECKBIT32(mp_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
- dialog.EnableExtraIO(!CHECKBIT32(mp_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(mp_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
+ dialog.EnableExtraIO(CHECKBIT32(mp_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
  WndSettings ws;
  WndSize sz;
  mp_settings->GetWndSettings(ws);

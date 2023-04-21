@@ -275,7 +275,7 @@ void CPMMonitorController::ApplyFWOptions(DWORD opt)
  mp_settings->GetFunctionality(fnc);
 
  mp_rsdview->EnableSECU3TItems(CHECKBIT32(opt, COPT_SECU3T));
- mp_rsdview->EnableExtraIO(CHECKBIT32(opt, COPT_TPIC8101) && !CHECKBIT32(opt, COPT_SECU3T));
+ mp_rsdview->EnableExtraIO(CHECKBIT32(opt, COPT_TPIC8101));
  mp_rsdview->EnableSpiAdc(CHECKBIT32(opt, COPT_ATMEGA1284) && !CHECKBIT32(opt, COPT_SECU3T));
  mp_view->ShowChokePos(fnc.SM_CONTROL && CHECKBIT32(opt, COPT_SM_CONTROL));
  mp_view->ShowGDPos(fnc.GD_CONTROL && CHECKBIT32(opt, COPT_GD_CONTROL));

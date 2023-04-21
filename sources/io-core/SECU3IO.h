@@ -304,7 +304,7 @@ namespace SECU3IO
   float add_i1_value;
   float add_i2_value;
   float add_i3_value;   //secu-3i only
-  float add_i4_value;   //secu-3i only and TPIC8101 option used
+  float add_i4_value;   //only if TPIC8101 option used
   float add_i5_value;   //secu-3i only and MCP3204 option used
   float add_i6_value;   //secu-3i only and MCP3204 option used
   float add_i7_value;   //secu-3i only and MCP3204 option used

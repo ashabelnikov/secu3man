@@ -419,7 +419,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_REF_S      =  17,     // REF_S       (input)
    IOP_CKPS       =  18,     // CKPS        (input)
    IOP_MAP_S      =  19,     // MAP_S       (input)
-   IOP_RESERVED1  =  20,     // Reserved    ()
+   IOP_ADD_I4     =  20,     // ADD_I4      (input)
    IOP_RESERVED2  =  21,     // Reserved    ()
    IOP_RESERVED3  =  22,     // Reserved    ()
    IOP_RESERVED4  =  23,     // Reserved    ()
@@ -491,7 +491,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_INPUT2     =  88,     // INPUT2      (input)
    IOP_MAF        =  89,     // MAF         (input)
    IOP_LAMBDA2    =  90,     // LAMBDA2     (input)
-// IOP_RESERVED34 =  91,     // Reserved    ()
+   IOP_IGNTIM     =  91,     // IOP_IGNTIM  (input)
 // IOP_RESERVED35 =  92,     // Reserved    ()
 // IOP_RESERVED36 =  93,     // Reserved    ()
 // IOP_RESERVED37 =  94,     // Reserved    ()
@@ -500,7 +500,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP_RESERVED40 =  97,     // Reserved    ()
 // IOP_RESERVED41 =  98,     // Reserved    ()
 // IOP_RESERVED42 =  99,     // Reserved    ()
-   IOP_COUNT      =  91,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  92,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
@@ -581,7 +581,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS_REF_S        =  17,     // REF_S       (input)
    IOS_CKPS         =  18,     // CKPS        (input)
    IOS_MAP_S        =  19,     // MAP_S       (input)
-// IOS_RESERVED1    =  20,     // Reserved    ()
+   IOS_ADD_I4       =  20,     // ADD_I4      (input)
 // IOS_RESERVED2    =  21,     // Reserved    ()
 // IOS_RESERVED3    =  22,     // Reserved    ()
 // IOS_RESERVED4    =  23,     // Reserved    ()
@@ -610,7 +610,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOS_RESERVED18   =  46,     // Reserved    ()
 // IOS_RESERVED18   =  47,     // Reserved    ()
 // IOS_RESERVED18   =  48,     // Reserved    ()
-   IOS_COUNT        =  20,     // Number of slots used for I/O remapping
+   IOS_COUNT        =  21,     // Number of slots used for I/O remapping
    IOS_NA           =  255     //
   };
 
@@ -634,7 +634,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V36 = 0x36,           //v3.6  New slots: MAP_x; new plugs: MAF
    IOV_V37 = 0x37,           //v3.7  ADD_I3 --> FTLS_I
    IOV_V38 = 0x38,           //v3.8  FTS_I added
-   IOV_V39 = 0x39            //v3.9  LAMBDA2 added
+   IOV_V39 = 0x39            //v3.9  LAMBDA2 added, ADD_I4 and IGNTIM for SECU3T added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

@@ -29,6 +29,7 @@
 
 #include "common/DPIAware.h"
 #include "common/FastDelegate.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/WndScroller.h"
@@ -82,11 +83,11 @@ void CDevDiagInpsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_PS, m_inputValues.ps, _T("%d"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_BL, m_inputValues.bl, _T("%d"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_DE, m_inputValues.de, _T("%d"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I4, m_inputValues.add_i4, _T("%.3f"));
 
  if (!m_enable_secu3t_features) //SECU-3i
  {
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I3, m_inputValues.add_i3, _T("%.3f"));
-  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I4, m_inputValues.add_i4, _T("%.3f"));
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_IGN_I, m_inputValues.ign_i, _T("%d"));
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_COND_I, m_inputValues.cond_i, _T("%d"));
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_EPAS_I, m_inputValues.epas_i, _T("%d"));
@@ -145,6 +146,10 @@ BOOL CDevDiagInpsDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
+ //remember original position
+ m_add_i4_rc[0] = GDIHelpers::GetChildWndRect(GetDlgItem(IDC_DEV_DIAG_ADD_I4));
+ m_add_i4_rc[1] = GDIHelpers::GetChildWndRect(GetDlgItem(IDC_DEV_DIAG_ADD_I4_CAPTION));
+
  return TRUE;
 }
 
@@ -198,6 +203,18 @@ void CDevDiagInpsDlg::EnableSECU3TFeatures(bool i_enable)
 
  _UpdateScrlViewSize();
 
+ //Move ADD_I4
+ if (m_enable_secu3t_features)
+ {
+  GetDlgItem(IDC_DEV_DIAG_ADD_I4)->MoveWindow(&GDIHelpers::GetChildWndRect(GetDlgItem(IDC_DEV_DIAG_ADD_I3)));
+  GetDlgItem(IDC_DEV_DIAG_ADD_I4_CAPTION)->MoveWindow(&GDIHelpers::GetChildWndRect(GetDlgItem(IDC_DEV_DIAG_ADD_I3_CAPTION)));
+ }
+ else
+ {
+  GetDlgItem(IDC_DEV_DIAG_ADD_I4)->MoveWindow(&m_add_i4_rc[0]);
+  GetDlgItem(IDC_DEV_DIAG_ADD_I4_CAPTION)->MoveWindow(&m_add_i4_rc[1]);
+ }
+
  GetDlgItem(IDC_DEV_DIAG_ADD_I5)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I5_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I6)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
@@ -207,12 +224,10 @@ void CDevDiagInpsDlg::EnableSECU3TFeatures(bool i_enable)
  GetDlgItem(IDC_DEV_DIAG_ADD_I8)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I8_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I3)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
- GetDlgItem(IDC_DEV_DIAG_ADD_I4)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_IGN_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_COND_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_EPAS_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I3_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
- GetDlgItem(IDC_DEV_DIAG_ADD_I4_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_IGN_I_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_COND_I_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_EPAS_I_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);

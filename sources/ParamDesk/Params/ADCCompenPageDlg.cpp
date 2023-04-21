@@ -319,7 +319,7 @@ void CADCCompenPageDlg::OnUpdateControlsSECU3i(CCmdUI* pCmdUI)
 
 void CADCCompenPageDlg::OnUpdateControlsSECU3iEx(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && !m_enable_secu3t_features && m_enable_extraio);
+ pCmdUI->Enable(m_enabled && m_enable_extraio);
 }
 
 /////////////////////////////////////////////////////////////////////////////

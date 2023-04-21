@@ -69,4 +69,5 @@ class CDevDiagInpsDlg : public CDialog
   CFont m_textFont;
   std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  CRect m_add_i4_rc[2];
 };
