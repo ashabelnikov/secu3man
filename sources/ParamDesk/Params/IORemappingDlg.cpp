@@ -26,9 +26,12 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "common/dpiaware.h"
+#include "common/Dll.h"
 #include "IORemappingDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/Label.h"
+#include "ui-core/ScrlMessageBox.h"
 
 CComboBox* CIORemappingDlg::_GetCBbyIOSID(const std::map<UINT, int>& map, int iosId) const
 {
@@ -90,6 +93,7 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_enable_secu3t_features(false)
 , mp_scr(new CWndScroller)
+, mp_ioremhelpLink(new CLabel())
 {
  _FillControls();
 }
@@ -97,6 +101,12 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 CIORemappingDlg::~CIORemappingDlg()
 {
  //empty
+}
+
+void CIORemappingDlg::DoDataExchange(CDataExchange* pDX)
+{
+ Super::DoDataExchange(pDX);
+ DDX_Control(pDX, IDC_IOREMHELP_LINK, *mp_ioremhelpLink);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -117,6 +127,13 @@ BOOL CIORemappingDlg::OnInitDialog()
  mp_scr->Init(this);
  
  _ShowControls();
+
+ //init HTTP link
+ mp_ioremhelpLink->SetLink(true);
+ mp_ioremhelpLink->SetTextColor(RGB(0, 0, 255));
+ mp_ioremhelpLink->SetFontUnderline(true);
+ mp_ioremhelpLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+ mp_ioremhelpLink->SetOnClick(fastdelegate::MakeDelegate(this, &CIORemappingDlg::OnIoremHelpLinkClick));
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -425,4 +442,10 @@ void CIORemappingDlg::SetRedraw(bool redraw)
  std::map<UINT, int>::const_iterator it;
  for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
   ((CComboBox*)GetDlgItem(it->first))->SetRedraw(redraw);
+}
+
+void CIORemappingDlg::OnIoremHelpLinkClick()
+{
+ CScrlMessageBox msgbox(NULL, AfxGetAppName(), MLL::GetString(IDS_IOREMAPPING_DESC), IDI_INFORMATION, 200, 200);
+ msgbox.DoModal();
 }

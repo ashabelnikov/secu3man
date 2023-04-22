@@ -32,6 +32,7 @@
 
 class CToolTipCtrlEx;
 class CWndScroller;
+class CLabel;
 
 /////////////////////////////////////////////////////////////////////////////
 // CIORemapping dialog
@@ -68,6 +69,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
 
   // Implementation
  protected:
+  virtual void DoDataExchange(CDataExchange* pDX);// DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -77,6 +79,8 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   afx_msg void OnChangeSelection(UINT nID);
   afx_msg void OnChangeInversion(UINT nID);
   DECLARE_MESSAGE_MAP()
+
+  void OnIoremHelpLinkClick();
 
  private:
   void _FillControls(void);
@@ -96,6 +100,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CLabel> mp_ioremhelpLink;
 };
 
 /////////////////////////////////////////////////////////////////////////////

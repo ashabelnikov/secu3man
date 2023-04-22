@@ -43,12 +43,14 @@ void CScrlMessageBox::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDOK, m_ok_btn);
 }
 
-CScrlMessageBox::CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon)
+CScrlMessageBox::CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon, int xPercMax, int yPercMax)
 : Super(IDD_SCRLMSGBOX, pParentWnd)
 , m_caption(caption)
 , m_text(text)
 , m_icon(icon)
 , m_initialized(false)
+, m_xPercMax(xPercMax)
+, m_yPercMax(yPercMax)
 {
  m_hIcon = (HICON)LoadImage(NULL, m_icon, IMAGE_ICON, 0, 0, LR_SHARED);
 }
@@ -56,6 +58,19 @@ CScrlMessageBox::CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, cons
 BOOL CScrlMessageBox::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ //correct possible LFCR issue (convert from UNIX to DOS format is necessary)
+ TCHAR prev = 0;
+ for(size_t i = 0; i < m_text.size(); ++i)
+ {
+  TCHAR cur = m_text[i];
+  if (cur==_T('\n') && prev != _T('\r') && prev != 0)
+  {
+   m_text.insert(i, 1, _T('\r'));
+   i++;
+  }
+  prev = cur;
+ }
 
  SetWindowText(m_caption.c_str());
  m_edit.SetWindowText(m_text.c_str());
@@ -97,8 +112,8 @@ void CScrlMessageBox::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMinTrackSize.x = m_createSize.cx;
   lpMMI->ptMinTrackSize.y = m_createSize.cy;
 
-  lpMMI->ptMaxTrackSize.x = m_createSize.cx;
-  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.7f);
+  lpMMI->ptMaxTrackSize.x = (m_createSize.cx * m_xPercMax) / 100;
+  lpMMI->ptMaxTrackSize.y = (m_createSize.cy * m_yPercMax) / 100;
  }
 }
 
@@ -112,6 +127,11 @@ void CScrlMessageBox::_AlignControls(int cx, int cy)
 
  CRect rced = GDIHelpers::GetChildWndRect(&m_edit);
  rced.bottom = rcok.top - dpi.ScaleY(3);
+
+ DPIAware da;
+ CRect rc2;
+ GetClientRect(&rc2);
+ rced.right = rc2.right - da.ScaleX(5);
  m_edit.MoveWindow(rced);
 }
 

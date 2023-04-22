@@ -248,7 +248,7 @@ void MainFrameController::OnAppLogMark(int mark)
 
 void MainFrameController::OnAppLogFormat()
 {
- CScrlMessageBox msgbox(NULL, AfxGetAppName(), MLL::GetString(IDS_LOG_FORMAT_DESC), IDI_INFORMATION);
+ CScrlMessageBox msgbox(NULL, AfxGetAppName(), MLL::GetString(IDS_LOG_FORMAT_DESC), IDI_INFORMATION, 100, 170);
  msgbox.DoModal();
 }
 

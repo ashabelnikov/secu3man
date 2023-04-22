@@ -31,7 +31,7 @@ class AFX_EXT_CLASS CScrlMessageBox : public CDialog
  typedef CDialog Super;
 
  public:
-  CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon);
+  CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon, int xPercMax, int yPercMax);
 
   virtual INT_PTR DoModal();
 
@@ -48,10 +48,12 @@ class AFX_EXT_CLASS CScrlMessageBox : public CDialog
  private:
   CEdit m_edit;
   const _TSTRING m_caption;
-  const _TSTRING m_text;
+  _TSTRING m_text;
   LPCSTR m_icon;
   HICON m_hIcon;
   bool m_initialized;
   CSize m_createSize;
   CButton m_ok_btn;
+  int m_xPercMax;
+  int m_yPercMax;
 };
