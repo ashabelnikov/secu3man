@@ -353,6 +353,11 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     bool f_secu3t = ((const SECU3IO::DiagInpDat*)ip_packet)->f_secu3t;
     mp_view->EnableSECU3TFeatures(f_secu3t);
     mp_view->FillTestChanCombo(f_secu3t);
+
+    //set for easy users of SECU-2 Lite (transistor and coil burning)
+    SetOutputValue(CDevDiagnostTabDlg::OID_IGN_OUT1, f_secu3t);
+    SetOutputValue(CDevDiagnostTabDlg::OID_IGN_OUT2, f_secu3t);
+
     mp_view->SetTestParameters(m_outputs.diag_chan, m_outputs.diag_frq, m_outputs.diag_duty);
     //Set correct states of outputs
     UpdateOutputs();
@@ -385,6 +390,11 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     bool f_secu3t = CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_SECU3T);
     mp_view->EnableSECU3TFeatures(f_secu3t);
     mp_view->FillTestChanCombo(f_secu3t);
+
+    //set for easy users of SECU-2 Lite (transistor and coil burning)
+    SetOutputValue(CDevDiagnostTabDlg::OID_IGN_OUT1, f_secu3t);
+    SetOutputValue(CDevDiagnostTabDlg::OID_IGN_OUT2, f_secu3t);
+
     mp_view->EnableExtraIO(CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_TPIC8101));
     mp_view->SetTestParameters(m_outputs.diag_chan, m_outputs.diag_frq, m_outputs.diag_duty);
     m_comm_state = 2;
