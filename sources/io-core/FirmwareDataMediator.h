@@ -492,7 +492,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_MAF        =  89,     // MAF         (input)
    IOP_LAMBDA2    =  90,     // LAMBDA2     (input)
    IOP_IGNTIM     =  91,     // IOP_IGNTIM  (input)
-// IOP_RESERVED35 =  92,     // Reserved    ()
+   IOP_MAP2       =  92,     // MAP2        (input)
 // IOP_RESERVED36 =  93,     // Reserved    ()
 // IOP_RESERVED37 =  94,     // Reserved    ()
 // IOP_RESERVED38 =  95,     // Reserved    ()
@@ -500,7 +500,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP_RESERVED40 =  97,     // Reserved    ()
 // IOP_RESERVED41 =  98,     // Reserved    ()
 // IOP_RESERVED42 =  99,     // Reserved    ()
-   IOP_COUNT      =  92,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  93,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
@@ -634,7 +634,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V36 = 0x36,           //v3.6  New slots: MAP_x; new plugs: MAF
    IOV_V37 = 0x37,           //v3.7  ADD_I3 --> FTLS_I
    IOV_V38 = 0x38,           //v3.8  FTS_I added
-   IOV_V39 = 0x39            //v3.9  LAMBDA2 added, ADD_I4 and IGNTIM for SECU3T added
+   IOV_V39 = 0x39            //v3.9  LAMBDA2 added, ADD_I4, IGNTIM and MAP2 for SECU3T added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
