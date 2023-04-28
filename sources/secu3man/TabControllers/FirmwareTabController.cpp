@@ -981,6 +981,8 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
   mp_fwdm->SetFWFileName(_TSTRING(string));
  }
 
+ //----------------------------------------------------------------------------------------
+ //see also CEEPROMTabController::OnLoadGrids()
  DWORD opt = mp_fwdm->GetFWOptions();
  Functionality fnc;
  mp_settings->GetFunctionality(fnc);
@@ -1004,9 +1006,9 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  mp_view->mp_TablesPanel->EnableAftstrStrkMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  mp_view->mp_TablesPanel->EnableLambdaZones(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
+ mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
 
- bool en_for_gd = (CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
- mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && en_for_gd);
  mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
  mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(opt, SECU3IO::COPT_COOLINGFAN_PWM));
  mp_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(opt, SECU3IO::COPT_THERMISTOR_CS));
@@ -1021,12 +1023,6 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  //in full-sequential ignition mode odd cylinder number engines are also supported,
  //also if hall sensor synchronization is used
  mp_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC));
-
- this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
- this->mp_iorCntr->EnableExtraIO(CHECKBIT32(opt, SECU3IO::COPT_TPIC8101)); 
- this->mp_iorCntr->EnableSpiAdc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284)); 
- this->mp_iorCntr->Enable(true);
-
  mp_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
  mp_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
  mp_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
@@ -1037,10 +1033,14 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)));
  mp_view->mp_ParamDeskDlg->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)); //GD
  mp_view->mp_ParamDeskDlg->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
-
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
 
- mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
+ //I/O remapping
+ this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ this->mp_iorCntr->EnableExtraIO(CHECKBIT32(opt, SECU3IO::COPT_TPIC8101)); 
+ this->mp_iorCntr->EnableSpiAdc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284)); 
+ this->mp_iorCntr->Enable(true);
+ //----------------------------------------------------------------------------------------
 
  SetViewFirmwareValues();
 }

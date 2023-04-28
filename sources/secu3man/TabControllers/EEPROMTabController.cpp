@@ -35,6 +35,8 @@
 #include "MainFrame/StatusBarManager.h"
 #include "TabDialogs/EEPROMTabDlg.h"
 #include "Settings/ISettingsData.h"
+#include "io-core/bitmask.h"
+#include "io-core/ce_errors.h"
 #include "io-core/EEPROMDataMediator.h"
 #include "io-core/FirmwareDataMediator.h"
 #include "FirmwareFileUtils.h"
@@ -42,7 +44,6 @@
 #include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/MapIds.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
-#include "io-core/ce_errors.h"
 #include "CEErrorIdStr.h"
 #include "ErrorMsg.h"
 #include "ui-core/MsgBox.h"
@@ -1165,6 +1166,47 @@ void CEEPROMTabController::OnLoadGrids(void)
  m_funset_names = funset_names; //save for further use
  funset_names.push_back(str[0]);
  mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
+
+ //-----------------------------------------------------------------------------------------------------
+ //see also CFirmwareTabController::PrepareOnLoadFLASH()
+ DWORD opt = p_fwdm->GetFWOptions();
+ Functionality fnc;
+ mp_settings->GetFunctionality(fnc);
+
+ //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
+ mp_view->mp_TablesPanel->EnableChokeOp(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
+ mp_view->mp_TablesPanel->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL));
+ mp_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR));
+ mp_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+
+ mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(opt, SECU3IO::COPT_COOLINGFAN_PWM));
+ mp_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(opt, SECU3IO::COPT_THERMISTOR_CS));
+ mp_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(opt, SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ mp_view->mp_ParamDeskDlg->EnableExtraIO(CHECKBIT32(opt, SECU3IO::COPT_TPIC8101));
+ if (CHECKBIT32(opt, SECU3IO::COPT_SECU3T))
+  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
+ else //SECU-3i:
+  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
+
+ //in full-sequential ignition mode odd cylinder number engines are also supported,
+ //also if hall sensor synchronization is used
+ mp_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC));
+ mp_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableRisingSpark(CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableUseCamRef(CHECKBIT32(opt, SECU3IO::COPT_PHASE_SENSOR));
+ mp_view->mp_ParamDeskDlg->EnableCogsBTDC(!CHECKBIT32(opt, SECU3IO::COPT_ODDFIRE_ALGO));
+ mp_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)));
+ mp_view->mp_ParamDeskDlg->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)); //GD
+ mp_view->mp_ParamDeskDlg->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
+ mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
+ //-----------------------------------------------------------------------------------------------------
 
  AfxGetMainWnd()->EndWaitCursor();
 }
