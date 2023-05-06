@@ -927,6 +927,11 @@ const int INPAVNUM = 14;
   float iac_addonrun_vss_thrd;
 
   int iac_min_rpm_on_run;
+
+  bool ltft_on_idling;
+
+  float ltft_min;
+  float ltft_max;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

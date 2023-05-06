@@ -466,6 +466,21 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Number of successive switches of EGO sensor's signal"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("The required number of successive switchings of the EGO sensor's signal level while the operating point is in the cell area. The higher the value, the slower the learning will be."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Обучать таблицу LTFT на ХХ"), &d.ltft_on_idling, _T("Если галочка установлена, то обновление значений в таблице LTFT будет происходить при закрытом дросселе. В противном случае обновление значений LTFT будет происходить только в рабочих режимах."));
+ else
+  dfd.AppendItem(_T("Learn LTFT map on idling"), &d.ltft_on_idling, _T("If the checkbox is checked, then LTFT map will be updated on idling, otherwise LTFT map will be updated only on working modes."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Ограничение LTFT коррекции снизу"), _T("%"), -24.6f, .0f, 0.1f, 1, &d.ltft_min, _T("Значения долговременной коррекции в таблице LTFT не могут быть меньше этого значения."));
+ else
+  dfd.AppendItem(_T("Bottom limit of LTFT correction"), _T("%"), -24.6f, .0f, 0.1f, 1, &d.ltft_min, _T("Values in the LTFT map can not be less than this value."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Ограничение LTFT коррекции сверху"), _T("%"), .0f, 24.6f, 0.1f, 1, &d.ltft_max, _T("Значения долговременной коррекции в таблице LTFT не могут быть больше этого значения."));
+ else
+  dfd.AppendItem(_T("Top limit of LTFT correction"), _T("%"), .0f, 24.6f, 0.1f, 1, &d.ltft_max, _T("Values in the LTFT map can not be greater than this value."));
+
  //Bluetooth
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Параметры Bluetooth:"));

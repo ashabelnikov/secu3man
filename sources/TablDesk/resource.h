@@ -66,6 +66,13 @@
 #define IDC_TD_GME_IGN_CHECK            5067
 #define IDD_GRID_MODE_EDITOR_IGN        5068
 #define IDC_GME_IGN_WRK                 5069
+#define IDC_CESETT_MAP_V_EM_CAPTION     5080
+#define IDC_CESETT_VBAT_V_EM_CAPTION    5081
+#define IDC_CESETT_CTS_V_EM_CAPTION     5082
+#define IDC_CESETT_KS_V_EM_CAPTION      5083
+#define IDC_CESETT_TPS_V_EM_CAPTION     5084
+#define IDC_CESETT_ADD_I1_V_EM_CAPTION  5085
+#define IDC_CESETT_ADD_I2_V_EM_CAPTION  5086
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

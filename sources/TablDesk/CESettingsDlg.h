@@ -63,6 +63,8 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnUpdateSECU3i(CCmdUI* pCmdUI);
   afx_msg void OnUpdateSECU3iEx(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateEmValue(CCmdUI* pCmdUI);
+  afx_msg void OnEMCheck();
   DECLARE_MESSAGE_MAP()
 
  private:

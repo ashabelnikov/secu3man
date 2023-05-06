@@ -373,10 +373,15 @@ typedef struct
 
  _uint iac_min_rpm_on_run;
 
+ _uchar ltft_on_idling;
+
+ _char ltft_min;
+ _char ltft_max;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1972];
+ _uchar reserved[1969];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3229,6 +3234,11 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.iac_addonrun_vss_thrd = ((float)exd.iac_addonrun_vss_thrd) / 32.0f;
 
  o_data.iac_min_rpm_on_run = exd.iac_min_rpm_on_run;
+
+ o_data.ltft_on_idling = exd.ltft_on_idling;
+
+ o_data.ltft_min = ((float)exd.ltft_min) / (512.0f / 100.0f);
+ o_data.ltft_max = ((float)exd.ltft_max) / (512.0f / 100.0f);
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3334,6 +3344,11 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.iac_addonrun_vss_thrd = MathHelpers::Round(i_data.iac_addonrun_vss_thrd * 32.0f);
 
  exd.iac_min_rpm_on_run = i_data.iac_min_rpm_on_run;
+
+ exd.ltft_on_idling = i_data.ltft_on_idling;
+
+ exd.ltft_min = MathHelpers::Round(i_data.ltft_min / (100.0f / 512.0f));
+ exd.ltft_max = MathHelpers::Round(i_data.ltft_max / (100.0f / 512.0f));
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
