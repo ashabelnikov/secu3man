@@ -280,8 +280,13 @@ typedef struct
  //Time factors for deceleration, value in 102.4 us units (3.2us * 32)
  _uint xtau_tfdec[XTAU_FACT_SIZE];
 
- _uchar reserved1[1131];
+ _uchar reserved[1131];
+}fw_ex_tabs_t;
 
+
+//описывает дополнительные данные хранимые в прошивке
+typedef struct
+{
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -388,6 +393,7 @@ typedef struct
 typedef struct fw_data_t
 {
  params_t     def_param;                 // Reserve parameters (loaded when instance in EEPROM is broken)
+ fw_ex_tabs_t extabs;                    // Separate tables
  fw_ex_data_t exdata;                    // Additional data in the firmware
  f_data_t     tables[TABLES_NUMBER];     // Array of tables of advance angle
  //Информация о прошивке
@@ -1809,7 +1815,7 @@ void CFirmwareDataMediator::GetAttenuatorMap(float* op_values, bool i_original /
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
-  op_values[i] = p_fd->exdata.attenuator_table[i];
+  op_values[i] = p_fd->extabs.attenuator_table[i];
 }
 
 void CFirmwareDataMediator::SetAttenuatorMap(const float* ip_values)
@@ -1824,7 +1830,7 @@ void CFirmwareDataMediator::SetAttenuatorMap(const float* ip_values)
  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
  {
   ASSERT(ip_values[i] >= 0.0f);
-  p_fd->exdata.attenuator_table[i] = (_uchar)MathHelpers::Round(ip_values[i]);
+  p_fd->extabs.attenuator_table[i] = (_uchar)MathHelpers::Round(ip_values[i]);
  }
 }
 
@@ -1839,7 +1845,7 @@ void CFirmwareDataMediator::GetDwellCntrlMap(float* op_values, bool i_original /
 
  float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  op_values[i] = (p_fd->exdata.coil_on_time[i] * discrete) / 1000.0f; //convert to ms
+  op_values[i] = (p_fd->extabs.coil_on_time[i] * discrete) / 1000.0f; //convert to ms
 }
 
 void CFirmwareDataMediator::SetDwellCntrlMap(const float* ip_values)
@@ -1853,7 +1859,7 @@ void CFirmwareDataMediator::SetDwellCntrlMap(const float* ip_values)
 
  float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
+  p_fd->extabs.coil_on_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
 }
 
 void CFirmwareDataMediator::GetCTSCurveMap(float* op_values, bool i_original /* = false */)
@@ -1866,7 +1872,7 @@ void CFirmwareDataMediator::GetCTSCurveMap(float* op_values, bool i_original /* 
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  op_values[i] = (p_fd->exdata.cts_curve[i] / 4.0f);
+  op_values[i] = (p_fd->extabs.cts_curve[i] / 4.0f);
 }
 
 void CFirmwareDataMediator::SetCTSCurveMap(const float* ip_values)
@@ -1879,7 +1885,7 @@ void CFirmwareDataMediator::SetCTSCurveMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.cts_curve[i] = (_uint)MathHelpers::Round(ip_values[i] * 4.0);
+  p_fd->extabs.cts_curve[i] = (_uint)MathHelpers::Round(ip_values[i] * 4.0);
 }
 
 float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
@@ -1887,9 +1893,9 @@ float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  if (0 == i_type)
-  return p_fd->exdata.cts_vl_begin * ADC_DISCRETE;
+  return p_fd->extabs.cts_vl_begin * ADC_DISCRETE;
  else if (1 == i_type)
-  return p_fd->exdata.cts_vl_end * ADC_DISCRETE;
+  return p_fd->extabs.cts_vl_end * ADC_DISCRETE;
  else
  {
   ASSERT(0); //wrong i_type value
@@ -1901,9 +1907,9 @@ void  CFirmwareDataMediator::SetCTSMapVoltageLimit(int i_type, float i_value)
 {
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  if (0 == i_type)
-  p_fd->exdata.cts_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
+  p_fd->extabs.cts_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
  else if (1 == i_type)
-  p_fd->exdata.cts_vl_end = MathHelpers::Round(i_value / ADC_DISCRETE);
+  p_fd->extabs.cts_vl_end = MathHelpers::Round(i_value / ADC_DISCRETE);
  else
  {
   ASSERT(0); //wrong i_type value
@@ -1920,7 +1926,7 @@ void CFirmwareDataMediator::GetATSCurveMap(float* op_values, bool i_original /* 
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  op_values[i] = (p_fd->exdata.ats_curve[i] / 4.0f);
+  op_values[i] = (p_fd->extabs.ats_curve[i] / 4.0f);
 }
 
 void CFirmwareDataMediator::SetATSCurveMap(const float* ip_values)
@@ -1933,7 +1939,7 @@ void CFirmwareDataMediator::SetATSCurveMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.ats_curve[i] = (_uint)MathHelpers::Round(ip_values[i] * 4.0);
+  p_fd->extabs.ats_curve[i] = (_uint)MathHelpers::Round(ip_values[i] * 4.0);
 }
 
 float CFirmwareDataMediator::GetATSMapVoltageLimit(int i_type)
@@ -1941,9 +1947,9 @@ float CFirmwareDataMediator::GetATSMapVoltageLimit(int i_type)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  if (0 == i_type)
-  return p_fd->exdata.ats_vl_begin * ADC_DISCRETE;
+  return p_fd->extabs.ats_vl_begin * ADC_DISCRETE;
  else if (1 == i_type)
-  return p_fd->exdata.ats_vl_end * ADC_DISCRETE;
+  return p_fd->extabs.ats_vl_end * ADC_DISCRETE;
  else
  {
   ASSERT(0); //wrong i_type value
@@ -1955,9 +1961,9 @@ void  CFirmwareDataMediator::SetATSMapVoltageLimit(int i_type, float i_value)
 {
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  if (0 == i_type)
-  p_fd->exdata.ats_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
+  p_fd->extabs.ats_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
  else if (1 == i_type)
-  p_fd->exdata.ats_vl_end = MathHelpers::Round(i_value / ADC_DISCRETE);
+  p_fd->extabs.ats_vl_end = MathHelpers::Round(i_value / ADC_DISCRETE);
  else
  {
   ASSERT(0); //wrong i_type value
@@ -1979,7 +1985,7 @@ void CFirmwareDataMediator::GetRPMGridMap(float* op_values)
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < F_RPM_SLOTS; i++)
-  op_values[i] = p_fd->exdata.rpm_grid_points[i];
+  op_values[i] = p_fd->extabs.rpm_grid_points[i];
 }
 
 void CFirmwareDataMediator::SetRPMGridMap(const float* ip_values)
@@ -1993,11 +1999,11 @@ void CFirmwareDataMediator::SetRPMGridMap(const float* ip_values)
 
  //store grid points
  for(size_t i = 0; i < F_RPM_SLOTS; i++)
-  p_fd->exdata.rpm_grid_points[i] = MathHelpers::Round(ip_values[i]);
+  p_fd->extabs.rpm_grid_points[i] = MathHelpers::Round(ip_values[i]);
 
  //calculate sizes
  for(size_t i = 0; i < F_RPM_SLOTS-1; i++)
-  p_fd->exdata.rpm_grid_sizes[i] = p_fd->exdata.rpm_grid_points[i+1] - p_fd->exdata.rpm_grid_points[i];
+  p_fd->extabs.rpm_grid_sizes[i] = p_fd->extabs.rpm_grid_points[i+1] - p_fd->extabs.rpm_grid_points[i];
 }
 
 void CFirmwareDataMediator::GetCLTGridMap(float* op_values)
@@ -2010,7 +2016,7 @@ void CFirmwareDataMediator::GetCLTGridMap(float* op_values)
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < F_TMP_SLOTS; i++)
-  op_values[i] = ((float)p_fd->exdata.clt_grid_points[i]) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  op_values[i] = ((float)p_fd->extabs.clt_grid_points[i]) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetCLTGridMap(const float* ip_values)
@@ -2024,11 +2030,11 @@ void CFirmwareDataMediator::SetCLTGridMap(const float* ip_values)
 
  //store grid points
  for(size_t i = 0; i < F_TMP_SLOTS; i++)
-  p_fd->exdata.clt_grid_points[i] = MathHelpers::Round(ip_values[i] * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  p_fd->extabs.clt_grid_points[i] = MathHelpers::Round(ip_values[i] * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  //calculate sizes
  for(size_t i = 0; i < F_TMP_SLOTS-1; i++)
-  p_fd->exdata.clt_grid_sizes[i] = p_fd->exdata.clt_grid_points[i+1] - p_fd->exdata.clt_grid_points[i];
+  p_fd->extabs.clt_grid_sizes[i] = p_fd->extabs.clt_grid_points[i+1] - p_fd->extabs.clt_grid_points[i];
 }
 
 void CFirmwareDataMediator::GetLoadGridMap(float* op_values)
@@ -2041,7 +2047,7 @@ void CFirmwareDataMediator::GetLoadGridMap(float* op_values)
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < F_LOAD_SLOTS; i++)
-  op_values[i] = ((float)p_fd->exdata.load_grid_points[i]) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  op_values[i] = ((float)p_fd->extabs.load_grid_points[i]) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetLoadGridMap(const float* ip_values)
@@ -2055,11 +2061,11 @@ void CFirmwareDataMediator::SetLoadGridMap(const float* ip_values)
 
  //store grid points
  for(size_t i = 0; i < F_LOAD_SLOTS; i++)
-  p_fd->exdata.load_grid_points[i] = MathHelpers::Round(ip_values[i] * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  p_fd->extabs.load_grid_points[i] = MathHelpers::Round(ip_values[i] * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  //calculate sizes
  for(size_t i = 0; i < F_LOAD_SLOTS-1; i++)
-  p_fd->exdata.load_grid_sizes[i] = p_fd->exdata.load_grid_points[i+1] - p_fd->exdata.load_grid_points[i];
+  p_fd->extabs.load_grid_sizes[i] = p_fd->extabs.load_grid_points[i+1] - p_fd->extabs.load_grid_points[i];
 }
 
 void CFirmwareDataMediator::GetATSAACMap(float* op_values, bool i_original /* = false */)
@@ -2070,7 +2076,7 @@ void CFirmwareDataMediator::GetATSAACMap(float* op_values, bool i_original /* = 
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.ats_corr[i]) / AA_MAPS_M_FACTOR;
+  op_values[i] = ((float)p_fd->extabs.ats_corr[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetATSAACMap(const float* ip_values)
@@ -2081,7 +2087,7 @@ void CFirmwareDataMediator::SetATSAACMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.ats_corr[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->extabs.ats_corr[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
 void CFirmwareDataMediator::GetGasdosePosMap(float* op_values, bool i_original /*= false*/)
@@ -2093,7 +2099,7 @@ void CFirmwareDataMediator::GetGasdosePosMap(float* op_values, bool i_original /
 
  for (int i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); i++ )
  {
-  _uchar *p = &(p_fd->exdata.gasdose_pos[0][0]);
+  _uchar *p = &(p_fd->extabs.gasdose_pos[0][0]);
   op_values[i] = ((float) *(p + i)) / GD_MAPS_M_FACTOR;
  }
 }
@@ -2107,7 +2113,7 @@ void CFirmwareDataMediator::SetGasdosePosMap(const float* ip_values)
 
  for (int i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); i++ )
  {
-  _uchar *p = &(p_fd->exdata.gasdose_pos[0][0]);
+  _uchar *p = &(p_fd->extabs.gasdose_pos[0][0]);
   *(p + i) = MathHelpers::Round((ip_values[i] * GD_MAPS_M_FACTOR));
  }
 }
@@ -2122,13 +2128,13 @@ void CFirmwareDataMediator::GetBarocorrMap(float* op_values, bool i_original /*=
  int i = 0;
  for (; i < BAROCORR_SIZE; i++ )
  {
-  float value = (float)p_fd->exdata.barocorr[i];
+  float value = (float)p_fd->extabs.barocorr[i];
   op_values[i] = (value / BAROCORR_MAPS_M_FACTOR) * 100.0f; // x 100%
  }
 
  for (; i < BAROCORR_SIZE+2; i++ )
  {
-  float value = (float)p_fd->exdata.barocorr[i];
+  float value = (float)p_fd->extabs.barocorr[i];
   op_values[i] = (value) / BAROCORR_MAPSX_M_FACTOR;
  } 
 }
@@ -2142,9 +2148,9 @@ void CFirmwareDataMediator::SetBarocorrMap(const float* ip_values)
 
  int i = 0;
  for (; i < BAROCORR_SIZE; i++ )
-  p_fd->exdata.barocorr[i] = MathHelpers::Round((ip_values[i] / 100.0f) * BAROCORR_MAPS_M_FACTOR); // divide by 100%
+  p_fd->extabs.barocorr[i] = MathHelpers::Round((ip_values[i] / 100.0f) * BAROCORR_MAPS_M_FACTOR); // divide by 100%
  for (; i < BAROCORR_SIZE+2; i++ )
-  p_fd->exdata.barocorr[i] = MathHelpers::Round(ip_values[i] * BAROCORR_MAPSX_M_FACTOR);
+  p_fd->extabs.barocorr[i] = MathHelpers::Round(ip_values[i] * BAROCORR_MAPSX_M_FACTOR);
 }
 
 void CFirmwareDataMediator::GetManIgntimMap(float* op_values, bool i_original /* = false */)
@@ -2155,7 +2161,7 @@ void CFirmwareDataMediator::GetManIgntimMap(float* op_values, bool i_original /*
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < PA4_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.pa4_igntim_corr[i]) / AA_MAPS_M_FACTOR;
+  op_values[i] = ((float)p_fd->extabs.pa4_igntim_corr[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetManIgntimMap(const float* ip_values)
@@ -2166,7 +2172,7 @@ void CFirmwareDataMediator::SetManIgntimMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < PA4_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.pa4_igntim_corr[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->extabs.pa4_igntim_corr[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
 void CFirmwareDataMediator::GetTmp2CurveMap(float* op_values, bool i_original /*= false*/)
@@ -2178,10 +2184,10 @@ void CFirmwareDataMediator::GetTmp2CurveMap(float* op_values, bool i_original /*
 
  int i = 0;
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.tmp2_curve[i]) / 4.0f;
+  op_values[i] = ((float)p_fd->extabs.tmp2_curve[i]) / 4.0f;
 
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
-  op_values[i] = ((float)p_fd->exdata.tmp2_curve[i]) * ADC_DISCRETE;
+  op_values[i] = ((float)p_fd->extabs.tmp2_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetTmp2CurveMap(const float* ip_values)
@@ -2193,9 +2199,9 @@ void CFirmwareDataMediator::SetTmp2CurveMap(const float* ip_values)
 
  int i = 0;
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+  p_fd->extabs.tmp2_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
-  p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+  p_fd->extabs.tmp2_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetGrtsCurveMap(float* op_values, bool i_original /*= false*/)
@@ -2207,10 +2213,10 @@ void CFirmwareDataMediator::GetGrtsCurveMap(float* op_values, bool i_original /*
 
  int i = 0;
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.grts_curve[i]) / 4.0f;
+  op_values[i] = ((float)p_fd->extabs.grts_curve[i]) / 4.0f;
 
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
-  op_values[i] = ((float)p_fd->exdata.grts_curve[i]) * ADC_DISCRETE;
+  op_values[i] = ((float)p_fd->extabs.grts_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetGrtsCurveMap(const float* ip_values)
@@ -2222,9 +2228,9 @@ void CFirmwareDataMediator::SetGrtsCurveMap(const float* ip_values)
 
  int i = 0;
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.grts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+  p_fd->extabs.grts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
-  p_fd->exdata.grts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+  p_fd->extabs.grts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetCrkTempMap(float* op_values, bool i_original /* = false */)
@@ -2235,7 +2241,7 @@ void CFirmwareDataMediator::GetCrkTempMap(float* op_values, bool i_original /* =
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CTS_CRKCORR_SIZE; i++)
-  op_values[i] = (p_fd->exdata.cts_crkcorr[i] / AA_MAPS_M_FACTOR);
+  op_values[i] = (p_fd->extabs.cts_crkcorr[i] / AA_MAPS_M_FACTOR);
 }
 
 void CFirmwareDataMediator::SetCrkTempMap(const float* ip_values)
@@ -2246,7 +2252,7 @@ void CFirmwareDataMediator::SetCrkTempMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CTS_CRKCORR_SIZE; i++)
-  p_fd->exdata.cts_crkcorr[i] = MathHelpers::Round(ip_values[i] * AA_MAPS_M_FACTOR);
+  p_fd->extabs.cts_crkcorr[i] = MathHelpers::Round(ip_values[i] * AA_MAPS_M_FACTOR);
 }
 
 void CFirmwareDataMediator::GetEHPauseMap(float* op_values, bool i_original /* = false */)
@@ -2259,7 +2265,7 @@ void CFirmwareDataMediator::GetEHPauseMap(float* op_values, bool i_original /* =
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  op_values[i] = p_fd->exdata.eh_pause[i] / 100.0f; //convert to seconds
+  op_values[i] = p_fd->extabs.eh_pause[i] / 100.0f; //convert to seconds
 }
 
 void CFirmwareDataMediator::SetEHPauseMap(const float* ip_values)
@@ -2272,7 +2278,7 @@ void CFirmwareDataMediator::SetEHPauseMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.eh_pause[i] = (_uchar)MathHelpers::Round(ip_values[i] * 100.0f);
+  p_fd->extabs.eh_pause[i] = (_uchar)MathHelpers::Round(ip_values[i] * 100.0f);
 }
 
 void CFirmwareDataMediator::GetCrankingThrdMap(float* op_values, bool i_original /* = false */)
@@ -2281,7 +2287,7 @@ void CFirmwareDataMediator::GetCrankingThrdMap(float* op_values, bool i_original
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CRANK_THRD_SIZE; i++)
-  op_values[i] = (p_fd->exdata.cranking_thrd[i] * 10.0f);
+  op_values[i] = (p_fd->extabs.cranking_thrd[i] * 10.0f);
 }
 
 void CFirmwareDataMediator::SetCrankingThrdMap(const float* ip_values)
@@ -2290,7 +2296,7 @@ void CFirmwareDataMediator::SetCrankingThrdMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CRANK_THRD_SIZE; i++)
-  p_fd->exdata.cranking_thrd[i] = MathHelpers::Round(ip_values[i] / 10.0f);
+  p_fd->extabs.cranking_thrd[i] = MathHelpers::Round(ip_values[i] / 10.0f);
 }
 
 void CFirmwareDataMediator::GetCrankingTimeMap(float* op_values, bool i_original /* = false */)
@@ -2299,7 +2305,7 @@ void CFirmwareDataMediator::GetCrankingTimeMap(float* op_values, bool i_original
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CRANK_TIME_SIZE; i++)
-  op_values[i] = (p_fd->exdata.cranking_time[i]);
+  op_values[i] = (p_fd->extabs.cranking_time[i]);
 }
 
 void CFirmwareDataMediator::SetCrankingTimeMap(const float* ip_values)
@@ -2308,7 +2314,7 @@ void CFirmwareDataMediator::SetCrankingTimeMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CRANK_TIME_SIZE; i++)
-  p_fd->exdata.cranking_time[i] = MathHelpers::Round(ip_values[i]);
+  p_fd->extabs.cranking_time[i] = MathHelpers::Round(ip_values[i]);
 }
 
 void CFirmwareDataMediator::GetSmapabanThrdMap(float* op_values, bool i_original /* = false */)
@@ -2317,7 +2323,7 @@ void CFirmwareDataMediator::GetSmapabanThrdMap(float* op_values, bool i_original
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < SMAPABAN_THRD_SIZE; i++)
-  op_values[i] = (p_fd->exdata.smapaban_thrd[i] * 10.0f);
+  op_values[i] = (p_fd->extabs.smapaban_thrd[i] * 10.0f);
 }
 
 void CFirmwareDataMediator::SetSmapabanThrdMap(const float* ip_values)
@@ -2326,7 +2332,7 @@ void CFirmwareDataMediator::SetSmapabanThrdMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < SMAPABAN_THRD_SIZE; i++)
-  p_fd->exdata.smapaban_thrd[i] = MathHelpers::Round(ip_values[i] / 10.0f);
+  p_fd->extabs.smapaban_thrd[i] = MathHelpers::Round(ip_values[i] / 10.0f);
 }
 
 void CFirmwareDataMediator::GetPwm1Map(int i_index, float* op_values, bool i_original /* = false*/)
@@ -2390,7 +2396,7 @@ void CFirmwareDataMediator::GetKnockZoneMap(float* op_values, bool i_original /*
 
  for (int i = 0; i < F_WRK_POINTS_L; i++)
   for (int b = 0; b < F_WRK_POINTS_F; b++)
-   op_values[(i*F_WRK_POINTS_F)+b] = (float)CHECKBIT16(p_fd->exdata.knock_zone[i], b);
+   op_values[(i*F_WRK_POINTS_F)+b] = (float)CHECKBIT16(p_fd->extabs.knock_zone[i], b);
 }
 
 void CFirmwareDataMediator::SetKnockZoneMap(const float* ip_values)
@@ -2402,7 +2408,7 @@ void CFirmwareDataMediator::SetKnockZoneMap(const float* ip_values)
 
  for (int i = 0; i < F_WRK_POINTS_L; i++)
   for (int b = 0; b < F_WRK_POINTS_F; b++)   
-   WRITEBIT16(p_fd->exdata.knock_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
+   WRITEBIT16(p_fd->extabs.knock_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
 }
 
 void CFirmwareDataMediator::GetLambdaZoneMap(float* op_values, bool i_original /*= false*/)
@@ -2414,7 +2420,7 @@ void CFirmwareDataMediator::GetLambdaZoneMap(float* op_values, bool i_original /
 
  for (int i = 0; i < F_WRK_POINTS_L; i++)
   for (int b = 0; b < F_WRK_POINTS_F; b++)
-   op_values[(i*F_WRK_POINTS_F)+b] = (float)CHECKBIT16(p_fd->exdata.lambda_zone[i], b);
+   op_values[(i*F_WRK_POINTS_F)+b] = (float)CHECKBIT16(p_fd->extabs.lambda_zone[i], b);
 }
 
 void CFirmwareDataMediator::SetLambdaZoneMap(const float* ip_values)
@@ -2426,7 +2432,7 @@ void CFirmwareDataMediator::SetLambdaZoneMap(const float* ip_values)
 
  for (int i = 0; i < F_WRK_POINTS_L; i++)
   for (int b = 0; b < F_WRK_POINTS_F; b++)   
-   WRITEBIT16(p_fd->exdata.lambda_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
+   WRITEBIT16(p_fd->extabs.lambda_zone[i], b, (ip_values[(i*F_WRK_POINTS_F)+b] > 0.5));
 }
 
 void CFirmwareDataMediator::GetGrHeatDutyMap(float* op_values, bool i_original /* = false */)
@@ -2439,7 +2445,7 @@ void CFirmwareDataMediator::GetGrHeatDutyMap(float* op_values, bool i_original /
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < F_TMP_POINTS; i++)
-  op_values[i] = (p_fd->exdata.grheat_duty[i] / 2.0f);
+  op_values[i] = (p_fd->extabs.grheat_duty[i] / 2.0f);
 }
 
 void CFirmwareDataMediator::SetGrHeatDutyMap(const float* ip_values)
@@ -2452,7 +2458,7 @@ void CFirmwareDataMediator::SetGrHeatDutyMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < F_TMP_POINTS; i++)
-  p_fd->exdata.grheat_duty[i] = (_uchar)MathHelpers::Round(ip_values[i] * 2.0);
+  p_fd->extabs.grheat_duty[i] = (_uchar)MathHelpers::Round(ip_values[i] * 2.0);
 }
 
 void CFirmwareDataMediator::GetPwmIacUCoefMap(float* op_values, bool i_original /*= false*/)
@@ -2461,7 +2467,7 @@ void CFirmwareDataMediator::GetPwmIacUCoefMap(float* op_values, bool i_original 
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
  for (int i = 0; i < PWMIAC_UCOEF_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.pwmiac_ucoef[i]) / PWMIAC_UCOEF_MAPS_M_FACTOR;
+  op_values[i] = ((float)p_fd->extabs.pwmiac_ucoef[i]) / PWMIAC_UCOEF_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetPwmIacUCoefMap(const float* ip_values)
@@ -2470,7 +2476,7 @@ void CFirmwareDataMediator::SetPwmIacUCoefMap(const float* ip_values)
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
  for (int i = 0; i < PWMIAC_UCOEF_SIZE; i++ )
-  p_fd->exdata.pwmiac_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
+  p_fd->extabs.pwmiac_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
 }
 
 void CFirmwareDataMediator::GetAftstrStrk0Map(float* op_values, bool i_original /*= false*/)
@@ -2479,7 +2485,7 @@ void CFirmwareDataMediator::GetAftstrStrk0Map(float* op_values, bool i_original 
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
-  op_values[i] = p_fd->exdata.inj_aftstr_strk0[i];
+  op_values[i] = p_fd->extabs.inj_aftstr_strk0[i];
 }
 
 void CFirmwareDataMediator::SetAftstrStrk0Map(const float* ip_values)
@@ -2488,7 +2494,7 @@ void CFirmwareDataMediator::SetAftstrStrk0Map(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
-  p_fd->exdata.inj_aftstr_strk0[i] = MathHelpers::Round(ip_values[i]);
+  p_fd->extabs.inj_aftstr_strk0[i] = MathHelpers::Round(ip_values[i]);
 }
 
 void CFirmwareDataMediator::GetAftstrStrk1Map(float* op_values, bool i_original /*= false*/)
@@ -2497,7 +2503,7 @@ void CFirmwareDataMediator::GetAftstrStrk1Map(float* op_values, bool i_original 
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
-  op_values[i] = p_fd->exdata.inj_aftstr_strk1[i];
+  op_values[i] = p_fd->extabs.inj_aftstr_strk1[i];
 }
 
 void CFirmwareDataMediator::SetAftstrStrk1Map(const float* ip_values)
@@ -2506,7 +2512,7 @@ void CFirmwareDataMediator::SetAftstrStrk1Map(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < AFTSTR_STRK_SIZE; i++)
-  p_fd->exdata.inj_aftstr_strk1[i] = MathHelpers::Round(ip_values[i]);
+  p_fd->extabs.inj_aftstr_strk1[i] = MathHelpers::Round(ip_values[i]);
 }
 
 void CFirmwareDataMediator::GetGrValDelMap(float* op_values, bool i_original /*= false*/)
@@ -2515,7 +2521,7 @@ void CFirmwareDataMediator::GetGrValDelMap(float* op_values, bool i_original /*=
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < F_TMP_POINTS; i++)
-  op_values[i] = ((float)p_fd->exdata.grv_delay[i]) / 100.0f;
+  op_values[i] = ((float)p_fd->extabs.grv_delay[i]) / 100.0f;
 }
 
 void CFirmwareDataMediator::SetGrValDelMap(const float* ip_values)
@@ -2524,7 +2530,7 @@ void CFirmwareDataMediator::SetGrValDelMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < F_TMP_POINTS; i++)
-  p_fd->exdata.grv_delay[i] = MathHelpers::Round(ip_values[i]*100.0f);
+  p_fd->extabs.grv_delay[i] = MathHelpers::Round(ip_values[i]*100.0f);
 }
 
 void CFirmwareDataMediator::GetFtlsCurveMap(float* op_values, bool i_original /*= false*/)
@@ -2536,10 +2542,10 @@ void CFirmwareDataMediator::GetFtlsCurveMap(float* op_values, bool i_original /*
 
  int i = 0;
  for (; i < FTLS_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.ftls_curve[i]) / 64.0f;
+  op_values[i] = ((float)p_fd->extabs.ftls_curve[i]) / 64.0f;
 
  for (; i < FTLS_LOOKUP_TABLE_SIZE+2; i++ )
-  op_values[i] = ((float)p_fd->exdata.ftls_curve[i]) * ADC_DISCRETE;
+  op_values[i] = ((float)p_fd->extabs.ftls_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetFtlsCurveMap(const float* ip_values)
@@ -2551,9 +2557,9 @@ void CFirmwareDataMediator::SetFtlsCurveMap(const float* ip_values)
 
  int i = 0;
  for (; i < FTLS_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.ftls_curve[i] = MathHelpers::Round(ip_values[i] * 64.0f);
+  p_fd->extabs.ftls_curve[i] = MathHelpers::Round(ip_values[i] * 64.0f);
  for (; i < FTLS_LOOKUP_TABLE_SIZE+2; i++ )
-  p_fd->exdata.ftls_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+  p_fd->extabs.ftls_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetEgtsCurveMap(float* op_values, bool i_original /*= false*/)
@@ -2565,10 +2571,10 @@ void CFirmwareDataMediator::GetEgtsCurveMap(float* op_values, bool i_original /*
 
  int i = 0;
  for (; i < EGTS_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.egts_curve[i]) / 4.0f;
+  op_values[i] = ((float)p_fd->extabs.egts_curve[i]) / 4.0f;
 
  for (; i < EGTS_LOOKUP_TABLE_SIZE+2; i++ )
-  op_values[i] = ((float)p_fd->exdata.egts_curve[i]) * ADC_DISCRETE;
+  op_values[i] = ((float)p_fd->extabs.egts_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetEgtsCurveMap(const float* ip_values)
@@ -2580,9 +2586,9 @@ void CFirmwareDataMediator::SetEgtsCurveMap(const float* ip_values)
 
  int i = 0;
  for (; i < EGTS_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.egts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+  p_fd->extabs.egts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
  for (; i < EGTS_LOOKUP_TABLE_SIZE+2; i++ )
-  p_fd->exdata.egts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+  p_fd->extabs.egts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetOpsCurveMap(float* op_values, bool i_original /*= false*/)
@@ -2594,10 +2600,10 @@ void CFirmwareDataMediator::GetOpsCurveMap(float* op_values, bool i_original /*=
 
  int i = 0;
  for (; i < OPS_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.ops_curve[i]) / 256.0f;
+  op_values[i] = ((float)p_fd->extabs.ops_curve[i]) / 256.0f;
 
  for (; i < OPS_LOOKUP_TABLE_SIZE+2; i++ )
-  op_values[i] = ((float)p_fd->exdata.ops_curve[i]) * ADC_DISCRETE;
+  op_values[i] = ((float)p_fd->extabs.ops_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetOpsCurveMap(const float* ip_values)
@@ -2609,9 +2615,9 @@ void CFirmwareDataMediator::SetOpsCurveMap(const float* ip_values)
 
  int i = 0;
  for (; i < OPS_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.ops_curve[i] = MathHelpers::Round(ip_values[i] * 256.0f);
+  p_fd->extabs.ops_curve[i] = MathHelpers::Round(ip_values[i] * 256.0f);
  for (; i < OPS_LOOKUP_TABLE_SIZE+2; i++ )
-  p_fd->exdata.ops_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+  p_fd->extabs.ops_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetFtsCurveMap(float* op_values, bool i_original /*= false*/)
@@ -2623,10 +2629,10 @@ void CFirmwareDataMediator::GetFtsCurveMap(float* op_values, bool i_original /*=
 
  int i = 0;
  for (; i < FTS_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.fts_curve[i]) / 4.0f;
+  op_values[i] = ((float)p_fd->extabs.fts_curve[i]) / 4.0f;
 
  for (; i < FTS_LOOKUP_TABLE_SIZE+2; i++ )
-  op_values[i] = ((float)p_fd->exdata.fts_curve[i]) * ADC_DISCRETE;
+  op_values[i] = ((float)p_fd->extabs.fts_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetFtsCurveMap(const float* ip_values)
@@ -2638,9 +2644,9 @@ void CFirmwareDataMediator::SetFtsCurveMap(const float* ip_values)
 
  int i = 0;
  for (; i < FTS_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->exdata.fts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+  p_fd->extabs.fts_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
  for (; i < FTS_LOOKUP_TABLE_SIZE+2; i++ )
-  p_fd->exdata.fts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+  p_fd->extabs.fts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetManInjPwcMap(float* op_values, bool i_original /* = false */)
@@ -2651,7 +2657,7 @@ void CFirmwareDataMediator::GetManInjPwcMap(float* op_values, bool i_original /*
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < INJPWCOEF_LUT_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.injpw_coef[i]) / INJPWCOEF_MULT;
+  op_values[i] = ((float)p_fd->extabs.injpw_coef[i]) / INJPWCOEF_MULT;
 }
 
 void CFirmwareDataMediator::SetManInjPwcMap(const float* ip_values)
@@ -2662,7 +2668,7 @@ void CFirmwareDataMediator::SetManInjPwcMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < INJPWCOEF_LUT_SIZE; i++ )
-  p_fd->exdata.injpw_coef[i] = MathHelpers::Round((ip_values[i]*INJPWCOEF_MULT));
+  p_fd->extabs.injpw_coef[i] = MathHelpers::Round((ip_values[i]*INJPWCOEF_MULT));
 }
 
 void CFirmwareDataMediator::GetMAFCurveMap(float* op_values, bool i_original /* = false*/)
@@ -2673,13 +2679,13 @@ void CFirmwareDataMediator::GetMAFCurveMap(float* op_values, bool i_original /* 
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < MAF_FLOW_CURVE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.maf_curve[i]) / MAF_FLOW_CURVE_MULT;
+  op_values[i] = ((float)p_fd->extabs.maf_curve[i]) / MAF_FLOW_CURVE_MULT;
 
- op_values[i] = (float)p_fd->exdata.maf_curve[i]; //copy value of Y-axis maximum
+ op_values[i] = (float)p_fd->extabs.maf_curve[i]; //copy value of Y-axis maximum
  i++;
 
  for (; i < MAF_FLOW_CURVE_SIZE+3; i++ )
-  op_values[i] = ((float)p_fd->exdata.maf_curve[i]) * ADC_DISCRETE;
+  op_values[i] = ((float)p_fd->extabs.maf_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
@@ -2690,13 +2696,13 @@ void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < MAF_FLOW_CURVE_SIZE; i++ )
-  p_fd->exdata.maf_curve[i] = MathHelpers::Round((ip_values[i]*MAF_FLOW_CURVE_MULT));
+  p_fd->extabs.maf_curve[i] = MathHelpers::Round((ip_values[i]*MAF_FLOW_CURVE_MULT));
 
- p_fd->exdata.maf_curve[i] = MathHelpers::Round(ip_values[i]); //copy value of Y-axis maximum
+ p_fd->extabs.maf_curve[i] = MathHelpers::Round(ip_values[i]); //copy value of Y-axis maximum
  i++;
 
  for (; i < MAF_FLOW_CURVE_SIZE+3; i++ )
-  p_fd->exdata.maf_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+  p_fd->extabs.maf_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetFtlsCorMap(float* op_values, bool i_original /*= false*/)
@@ -2705,7 +2711,7 @@ void CFirmwareDataMediator::GetFtlsCorMap(float* op_values, bool i_original /*= 
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
  for (int i = 0; i < FTLSCOR_UCOEF_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.ftlscor_ucoef[i]) / PWMIAC_UCOEF_MAPS_M_FACTOR;
+  op_values[i] = ((float)p_fd->extabs.ftlscor_ucoef[i]) / PWMIAC_UCOEF_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetFtlsCorMap(const float* ip_values)
@@ -2714,7 +2720,7 @@ void CFirmwareDataMediator::SetFtlsCorMap(const float* ip_values)
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
  for (int i = 0; i < FTLSCOR_UCOEF_SIZE; i++ )
-  p_fd->exdata.ftlscor_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
+  p_fd->extabs.ftlscor_ucoef[i] = MathHelpers::Round(ip_values[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
 }
 
 void CFirmwareDataMediator::GetFuelDensCorrMap(float* op_values, bool i_original /* = false */)
@@ -2723,7 +2729,7 @@ void CFirmwareDataMediator::GetFuelDensCorrMap(float* op_values, bool i_original
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < FUELDENS_CORR_SIZE; i++)
-  op_values[i] = (p_fd->exdata.fueldens_corr[i] / 16384.0f);
+  op_values[i] = (p_fd->extabs.fueldens_corr[i] / 16384.0f);
 }
 
 void CFirmwareDataMediator::SetFuelDensCorrMap(const float* ip_values)
@@ -2732,7 +2738,7 @@ void CFirmwareDataMediator::SetFuelDensCorrMap(const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < FUELDENS_CORR_SIZE; i++)
-  p_fd->exdata.fueldens_corr[i] = MathHelpers::Round(ip_values[i] * 16384.0f);
+  p_fd->extabs.fueldens_corr[i] = MathHelpers::Round(ip_values[i] * 16384.0f);
 }
 
 void CFirmwareDataMediator::GetXtauXfAccMap(float* op_values, bool i_original /*= false*/)
@@ -2741,7 +2747,7 @@ void CFirmwareDataMediator::GetXtauXfAccMap(float* op_values, bool i_original /*
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  op_values[i] = (((float)p_fd->exdata.xtau_xfacc[i]) / 1024.0f) * 100.0f; //%
+  op_values[i] = (((float)p_fd->extabs.xtau_xfacc[i]) / 1024.0f) * 100.0f; //%
 }
 
 void CFirmwareDataMediator::SetXtauXfAccMap(const float* ip_values)
@@ -2750,7 +2756,7 @@ void CFirmwareDataMediator::SetXtauXfAccMap(const float* ip_values)
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  p_fd->exdata.xtau_xfacc[i] = MathHelpers::Round((ip_values[i] / 100.0f) * 1024.0f);
+  p_fd->extabs.xtau_xfacc[i] = MathHelpers::Round((ip_values[i] / 100.0f) * 1024.0f);
 }
 
 void CFirmwareDataMediator::GetXtauXfDecMap(float* op_values, bool i_original /*= false*/)
@@ -2759,7 +2765,7 @@ void CFirmwareDataMediator::GetXtauXfDecMap(float* op_values, bool i_original /*
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  op_values[i] = (((float)p_fd->exdata.xtau_xfdec[i]) / 1024.0f) * 100.0f; //%
+  op_values[i] = (((float)p_fd->extabs.xtau_xfdec[i]) / 1024.0f) * 100.0f; //%
 }
 
 void CFirmwareDataMediator::SetXtauXfDecMap(const float* ip_values)
@@ -2768,7 +2774,7 @@ void CFirmwareDataMediator::SetXtauXfDecMap(const float* ip_values)
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  p_fd->exdata.xtau_xfdec[i] = MathHelpers::Round((ip_values[i] / 100.0f) * 1024.0f);
+  p_fd->extabs.xtau_xfdec[i] = MathHelpers::Round((ip_values[i] / 100.0f) * 1024.0f);
 }
 
 void CFirmwareDataMediator::GetXtauTfAccMap(float* op_values, bool i_original /*= false*/)
@@ -2777,7 +2783,7 @@ void CFirmwareDataMediator::GetXtauTfAccMap(float* op_values, bool i_original /*
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.xtau_tfacc[i]) * 0.1024f; //convert to ms
+  op_values[i] = ((float)p_fd->extabs.xtau_tfacc[i]) * 0.1024f; //convert to ms
 }
 
 void CFirmwareDataMediator::SetXtauTfAccMap(const float* ip_values)
@@ -2786,7 +2792,7 @@ void CFirmwareDataMediator::SetXtauTfAccMap(const float* ip_values)
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  p_fd->exdata.xtau_tfacc[i] = MathHelpers::Round(ip_values[i] / 0.1024f); //convert to 0.1024 ms units
+  p_fd->extabs.xtau_tfacc[i] = MathHelpers::Round(ip_values[i] / 0.1024f); //convert to 0.1024 ms units
 }
 
 void CFirmwareDataMediator::GetXtauTfDecMap(float* op_values, bool i_original /*= false*/)
@@ -2795,7 +2801,7 @@ void CFirmwareDataMediator::GetXtauTfDecMap(float* op_values, bool i_original /*
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]); 
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  op_values[i] = ((float)p_fd->exdata.xtau_tfdec[i]) * 0.1024f; //convert to ms
+  op_values[i] = ((float)p_fd->extabs.xtau_tfdec[i]) * 0.1024f; //convert to ms
 }
 
 void CFirmwareDataMediator::SetXtauTfDecMap(const float* ip_values)
@@ -2804,7 +2810,7 @@ void CFirmwareDataMediator::SetXtauTfDecMap(const float* ip_values)
  //gets address of the sets of maps
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
  for (int i = 0; i < XTAU_FACT_SIZE; i++ )
-  p_fd->exdata.xtau_tfdec[i] = MathHelpers::Round(ip_values[i] / 0.1024f); //convert to 0.1024 ms units
+  p_fd->extabs.xtau_tfdec[i] = MathHelpers::Round(ip_values[i] / 0.1024f); //convert to 0.1024 ms units
 }
 
 //--------------------------------------------------------------------------------
@@ -2983,146 +2989,146 @@ void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
 {
  const fw_data_t* p_fd = (const fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
- o_data.map_v_min = ((float)p_fd->exdata.cesd.map_v_min) * ADC_DISCRETE;
- o_data.map_v_max = ((float)p_fd->exdata.cesd.map_v_max) * ADC_DISCRETE;
- o_data.map_v_em  = ((float)p_fd->exdata.cesd.map_v_em) * ADC_DISCRETE;
- o_data.map_v_useem = CHECKBIT8(p_fd->exdata.cesd.map_v_flg, 0); 
+ o_data.map_v_min = ((float)p_fd->extabs.cesd.map_v_min) * ADC_DISCRETE;
+ o_data.map_v_max = ((float)p_fd->extabs.cesd.map_v_max) * ADC_DISCRETE;
+ o_data.map_v_em  = ((float)p_fd->extabs.cesd.map_v_em) * ADC_DISCRETE;
+ o_data.map_v_useem = CHECKBIT8(p_fd->extabs.cesd.map_v_flg, 0); 
 
- o_data.vbat_v_min = ((float)p_fd->exdata.cesd.vbat_v_min) * ADC_DISCRETE;
- o_data.vbat_v_max = ((float)p_fd->exdata.cesd.vbat_v_max) * ADC_DISCRETE;
- o_data.vbat_v_em  = ((float)p_fd->exdata.cesd.vbat_v_em) * ADC_DISCRETE;
- o_data.vbat_v_useem = CHECKBIT8(p_fd->exdata.cesd.vbat_v_flg, 0); 
+ o_data.vbat_v_min = ((float)p_fd->extabs.cesd.vbat_v_min) * ADC_DISCRETE;
+ o_data.vbat_v_max = ((float)p_fd->extabs.cesd.vbat_v_max) * ADC_DISCRETE;
+ o_data.vbat_v_em  = ((float)p_fd->extabs.cesd.vbat_v_em) * ADC_DISCRETE;
+ o_data.vbat_v_useem = CHECKBIT8(p_fd->extabs.cesd.vbat_v_flg, 0); 
 
- o_data.cts_v_min = ((float)p_fd->exdata.cesd.cts_v_min) * ADC_DISCRETE;
- o_data.cts_v_max = ((float)p_fd->exdata.cesd.cts_v_max) * ADC_DISCRETE;
- o_data.cts_v_em  = ((float)p_fd->exdata.cesd.cts_v_em) * ADC_DISCRETE;
- o_data.cts_v_useem = CHECKBIT8(p_fd->exdata.cesd.cts_v_flg, 0); 
+ o_data.cts_v_min = ((float)p_fd->extabs.cesd.cts_v_min) * ADC_DISCRETE;
+ o_data.cts_v_max = ((float)p_fd->extabs.cesd.cts_v_max) * ADC_DISCRETE;
+ o_data.cts_v_em  = ((float)p_fd->extabs.cesd.cts_v_em) * ADC_DISCRETE;
+ o_data.cts_v_useem = CHECKBIT8(p_fd->extabs.cesd.cts_v_flg, 0); 
 
- o_data.ks_v_min = ((float)p_fd->exdata.cesd.ks_v_min) * ADC_DISCRETE;
- o_data.ks_v_max = ((float)p_fd->exdata.cesd.ks_v_max) * ADC_DISCRETE;
- o_data.ks_v_em  = ((float)p_fd->exdata.cesd.ks_v_em) * ADC_DISCRETE;
- o_data.ks_v_useem = CHECKBIT8(p_fd->exdata.cesd.ks_v_flg, 0); 
+ o_data.ks_v_min = ((float)p_fd->extabs.cesd.ks_v_min) * ADC_DISCRETE;
+ o_data.ks_v_max = ((float)p_fd->extabs.cesd.ks_v_max) * ADC_DISCRETE;
+ o_data.ks_v_em  = ((float)p_fd->extabs.cesd.ks_v_em) * ADC_DISCRETE;
+ o_data.ks_v_useem = CHECKBIT8(p_fd->extabs.cesd.ks_v_flg, 0); 
 
- o_data.tps_v_min = ((float)p_fd->exdata.cesd.tps_v_min) * ADC_DISCRETE;
- o_data.tps_v_max = ((float)p_fd->exdata.cesd.tps_v_max) * ADC_DISCRETE;
- o_data.tps_v_em  = ((float)p_fd->exdata.cesd.tps_v_em) * ADC_DISCRETE;
- o_data.tps_v_useem = CHECKBIT8(p_fd->exdata.cesd.tps_v_flg, 0); 
+ o_data.tps_v_min = ((float)p_fd->extabs.cesd.tps_v_min) * ADC_DISCRETE;
+ o_data.tps_v_max = ((float)p_fd->extabs.cesd.tps_v_max) * ADC_DISCRETE;
+ o_data.tps_v_em  = ((float)p_fd->extabs.cesd.tps_v_em) * ADC_DISCRETE;
+ o_data.tps_v_useem = CHECKBIT8(p_fd->extabs.cesd.tps_v_flg, 0); 
 
- o_data.add_i1_v_min = ((float)p_fd->exdata.cesd.add_i1_v_min) * ADC_DISCRETE;
- o_data.add_i1_v_max = ((float)p_fd->exdata.cesd.add_i1_v_max) * ADC_DISCRETE;
- o_data.add_i1_v_em  = ((float)p_fd->exdata.cesd.add_i1_v_em) * ADC_DISCRETE;
- o_data.add_i1_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i1_v_flg, 0); 
+ o_data.add_i1_v_min = ((float)p_fd->extabs.cesd.add_i1_v_min) * ADC_DISCRETE;
+ o_data.add_i1_v_max = ((float)p_fd->extabs.cesd.add_i1_v_max) * ADC_DISCRETE;
+ o_data.add_i1_v_em  = ((float)p_fd->extabs.cesd.add_i1_v_em) * ADC_DISCRETE;
+ o_data.add_i1_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i1_v_flg, 0); 
 
- o_data.add_i2_v_min = ((float)p_fd->exdata.cesd.add_i2_v_min) * ADC_DISCRETE;
- o_data.add_i2_v_max = ((float)p_fd->exdata.cesd.add_i2_v_max) * ADC_DISCRETE;
- o_data.add_i2_v_em  = ((float)p_fd->exdata.cesd.add_i2_v_em) * ADC_DISCRETE;
- o_data.add_i2_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i2_v_flg, 0); 
+ o_data.add_i2_v_min = ((float)p_fd->extabs.cesd.add_i2_v_min) * ADC_DISCRETE;
+ o_data.add_i2_v_max = ((float)p_fd->extabs.cesd.add_i2_v_max) * ADC_DISCRETE;
+ o_data.add_i2_v_em  = ((float)p_fd->extabs.cesd.add_i2_v_em) * ADC_DISCRETE;
+ o_data.add_i2_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i2_v_flg, 0); 
 
- o_data.add_i3_v_min = ((float)p_fd->exdata.cesd.add_i3_v_min) * ADC_DISCRETE;
- o_data.add_i3_v_max = ((float)p_fd->exdata.cesd.add_i3_v_max) * ADC_DISCRETE;
- o_data.add_i3_v_em  = ((float)p_fd->exdata.cesd.add_i3_v_em) * ADC_DISCRETE;
- o_data.add_i3_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i3_v_flg, 0); 
+ o_data.add_i3_v_min = ((float)p_fd->extabs.cesd.add_i3_v_min) * ADC_DISCRETE;
+ o_data.add_i3_v_max = ((float)p_fd->extabs.cesd.add_i3_v_max) * ADC_DISCRETE;
+ o_data.add_i3_v_em  = ((float)p_fd->extabs.cesd.add_i3_v_em) * ADC_DISCRETE;
+ o_data.add_i3_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i3_v_flg, 0); 
 
- o_data.add_i4_v_min = ((float)p_fd->exdata.cesd.add_i4_v_min) * ADC_DISCRETE;
- o_data.add_i4_v_max = ((float)p_fd->exdata.cesd.add_i4_v_max) * ADC_DISCRETE;
- o_data.add_i4_v_em  = ((float)p_fd->exdata.cesd.add_i4_v_em) * ADC_DISCRETE;
- o_data.add_i4_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i4_v_flg, 0); 
+ o_data.add_i4_v_min = ((float)p_fd->extabs.cesd.add_i4_v_min) * ADC_DISCRETE;
+ o_data.add_i4_v_max = ((float)p_fd->extabs.cesd.add_i4_v_max) * ADC_DISCRETE;
+ o_data.add_i4_v_em  = ((float)p_fd->extabs.cesd.add_i4_v_em) * ADC_DISCRETE;
+ o_data.add_i4_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i4_v_flg, 0); 
 
- o_data.add_i5_v_min = ((float)p_fd->exdata.cesd.add_i5_v_min) * ADC_DISCRETE;
- o_data.add_i5_v_max = ((float)p_fd->exdata.cesd.add_i5_v_max) * ADC_DISCRETE;
- o_data.add_i5_v_em  = ((float)p_fd->exdata.cesd.add_i5_v_em) * ADC_DISCRETE;
- o_data.add_i5_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i5_v_flg, 0); 
+ o_data.add_i5_v_min = ((float)p_fd->extabs.cesd.add_i5_v_min) * ADC_DISCRETE;
+ o_data.add_i5_v_max = ((float)p_fd->extabs.cesd.add_i5_v_max) * ADC_DISCRETE;
+ o_data.add_i5_v_em  = ((float)p_fd->extabs.cesd.add_i5_v_em) * ADC_DISCRETE;
+ o_data.add_i5_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i5_v_flg, 0); 
 
- o_data.add_i6_v_min = ((float)p_fd->exdata.cesd.add_i6_v_min) * ADC_DISCRETE;
- o_data.add_i6_v_max = ((float)p_fd->exdata.cesd.add_i6_v_max) * ADC_DISCRETE;
- o_data.add_i6_v_em  = ((float)p_fd->exdata.cesd.add_i6_v_em) * ADC_DISCRETE;
- o_data.add_i6_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i6_v_flg, 0); 
+ o_data.add_i6_v_min = ((float)p_fd->extabs.cesd.add_i6_v_min) * ADC_DISCRETE;
+ o_data.add_i6_v_max = ((float)p_fd->extabs.cesd.add_i6_v_max) * ADC_DISCRETE;
+ o_data.add_i6_v_em  = ((float)p_fd->extabs.cesd.add_i6_v_em) * ADC_DISCRETE;
+ o_data.add_i6_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i6_v_flg, 0); 
 
- o_data.add_i7_v_min = ((float)p_fd->exdata.cesd.add_i7_v_min) * ADC_DISCRETE;
- o_data.add_i7_v_max = ((float)p_fd->exdata.cesd.add_i7_v_max) * ADC_DISCRETE;
- o_data.add_i7_v_em  = ((float)p_fd->exdata.cesd.add_i7_v_em) * ADC_DISCRETE;
- o_data.add_i7_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i7_v_flg, 0); 
+ o_data.add_i7_v_min = ((float)p_fd->extabs.cesd.add_i7_v_min) * ADC_DISCRETE;
+ o_data.add_i7_v_max = ((float)p_fd->extabs.cesd.add_i7_v_max) * ADC_DISCRETE;
+ o_data.add_i7_v_em  = ((float)p_fd->extabs.cesd.add_i7_v_em) * ADC_DISCRETE;
+ o_data.add_i7_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i7_v_flg, 0); 
 
- o_data.add_i8_v_min = ((float)p_fd->exdata.cesd.add_i8_v_min) * ADC_DISCRETE;
- o_data.add_i8_v_max = ((float)p_fd->exdata.cesd.add_i8_v_max) * ADC_DISCRETE;
- o_data.add_i8_v_em  = ((float)p_fd->exdata.cesd.add_i8_v_em) * ADC_DISCRETE;
- o_data.add_i8_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i8_v_flg, 0); 
+ o_data.add_i8_v_min = ((float)p_fd->extabs.cesd.add_i8_v_min) * ADC_DISCRETE;
+ o_data.add_i8_v_max = ((float)p_fd->extabs.cesd.add_i8_v_max) * ADC_DISCRETE;
+ o_data.add_i8_v_em  = ((float)p_fd->extabs.cesd.add_i8_v_em) * ADC_DISCRETE;
+ o_data.add_i8_v_useem = CHECKBIT8(p_fd->extabs.cesd.add_i8_v_flg, 0); 
 
- o_data.oilpress_thrd = ((float)p_fd->exdata.cesd.oilpress_thrd) / 256.0f;
- o_data.oilpress_timer = p_fd->exdata.cesd.oilpress_timer;
+ o_data.oilpress_thrd = ((float)p_fd->extabs.cesd.oilpress_thrd) / 256.0f;
+ o_data.oilpress_timer = p_fd->extabs.cesd.oilpress_timer;
 }
 
 void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
 {
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
- p_fd->exdata.cesd.map_v_min = MathHelpers::Round((i_data.map_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.map_v_max = MathHelpers::Round((i_data.map_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.map_v_em  = MathHelpers::Round((i_data.map_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.map_v_flg, 0, i_data.map_v_useem);
+ p_fd->extabs.cesd.map_v_min = MathHelpers::Round((i_data.map_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.map_v_max = MathHelpers::Round((i_data.map_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.map_v_em  = MathHelpers::Round((i_data.map_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.map_v_flg, 0, i_data.map_v_useem);
 
- p_fd->exdata.cesd.vbat_v_min = MathHelpers::Round((i_data.vbat_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.vbat_v_max = MathHelpers::Round((i_data.vbat_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.vbat_v_em  = MathHelpers::Round((i_data.vbat_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.vbat_v_flg, 0, i_data.vbat_v_useem);
+ p_fd->extabs.cesd.vbat_v_min = MathHelpers::Round((i_data.vbat_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.vbat_v_max = MathHelpers::Round((i_data.vbat_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.vbat_v_em  = MathHelpers::Round((i_data.vbat_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.vbat_v_flg, 0, i_data.vbat_v_useem);
 
- p_fd->exdata.cesd.cts_v_min = MathHelpers::Round((i_data.cts_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.cts_v_max = MathHelpers::Round((i_data.cts_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.cts_v_em  = MathHelpers::Round((i_data.cts_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.cts_v_flg, 0, i_data.cts_v_useem);
+ p_fd->extabs.cesd.cts_v_min = MathHelpers::Round((i_data.cts_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.cts_v_max = MathHelpers::Round((i_data.cts_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.cts_v_em  = MathHelpers::Round((i_data.cts_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.cts_v_flg, 0, i_data.cts_v_useem);
 
- p_fd->exdata.cesd.ks_v_min = MathHelpers::Round((i_data.ks_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.ks_v_max = MathHelpers::Round((i_data.ks_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.ks_v_em  = MathHelpers::Round((i_data.ks_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.ks_v_flg, 0, i_data.ks_v_useem);
+ p_fd->extabs.cesd.ks_v_min = MathHelpers::Round((i_data.ks_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.ks_v_max = MathHelpers::Round((i_data.ks_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.ks_v_em  = MathHelpers::Round((i_data.ks_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.ks_v_flg, 0, i_data.ks_v_useem);
 
- p_fd->exdata.cesd.tps_v_min = MathHelpers::Round((i_data.tps_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.tps_v_max = MathHelpers::Round((i_data.tps_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.tps_v_em  = MathHelpers::Round((i_data.tps_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.tps_v_flg, 0, i_data.tps_v_useem);
+ p_fd->extabs.cesd.tps_v_min = MathHelpers::Round((i_data.tps_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.tps_v_max = MathHelpers::Round((i_data.tps_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.tps_v_em  = MathHelpers::Round((i_data.tps_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.tps_v_flg, 0, i_data.tps_v_useem);
 
- p_fd->exdata.cesd.add_i1_v_min = MathHelpers::Round((i_data.add_i1_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i1_v_max = MathHelpers::Round((i_data.add_i1_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i1_v_em  = MathHelpers::Round((i_data.add_i1_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i1_v_flg, 0, i_data.add_i1_v_useem);
+ p_fd->extabs.cesd.add_i1_v_min = MathHelpers::Round((i_data.add_i1_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i1_v_max = MathHelpers::Round((i_data.add_i1_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i1_v_em  = MathHelpers::Round((i_data.add_i1_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i1_v_flg, 0, i_data.add_i1_v_useem);
 
- p_fd->exdata.cesd.add_i2_v_min = MathHelpers::Round((i_data.add_i2_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i2_v_max = MathHelpers::Round((i_data.add_i2_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i2_v_em  = MathHelpers::Round((i_data.add_i2_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i2_v_flg, 0, i_data.add_i2_v_useem);
+ p_fd->extabs.cesd.add_i2_v_min = MathHelpers::Round((i_data.add_i2_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i2_v_max = MathHelpers::Round((i_data.add_i2_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i2_v_em  = MathHelpers::Round((i_data.add_i2_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i2_v_flg, 0, i_data.add_i2_v_useem);
 
- p_fd->exdata.cesd.add_i3_v_min = MathHelpers::Round((i_data.add_i3_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i3_v_max = MathHelpers::Round((i_data.add_i3_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i3_v_em  = MathHelpers::Round((i_data.add_i3_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i3_v_flg, 0, i_data.add_i3_v_useem);
+ p_fd->extabs.cesd.add_i3_v_min = MathHelpers::Round((i_data.add_i3_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i3_v_max = MathHelpers::Round((i_data.add_i3_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i3_v_em  = MathHelpers::Round((i_data.add_i3_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i3_v_flg, 0, i_data.add_i3_v_useem);
 
- p_fd->exdata.cesd.add_i4_v_min = MathHelpers::Round((i_data.add_i4_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i4_v_max = MathHelpers::Round((i_data.add_i4_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i4_v_em  = MathHelpers::Round((i_data.add_i4_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i4_v_flg, 0, i_data.add_i4_v_useem);
+ p_fd->extabs.cesd.add_i4_v_min = MathHelpers::Round((i_data.add_i4_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i4_v_max = MathHelpers::Round((i_data.add_i4_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i4_v_em  = MathHelpers::Round((i_data.add_i4_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i4_v_flg, 0, i_data.add_i4_v_useem);
 
- p_fd->exdata.cesd.add_i5_v_min = MathHelpers::Round((i_data.add_i5_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i5_v_max = MathHelpers::Round((i_data.add_i5_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i5_v_em  = MathHelpers::Round((i_data.add_i5_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i5_v_flg, 0, i_data.add_i5_v_useem);
+ p_fd->extabs.cesd.add_i5_v_min = MathHelpers::Round((i_data.add_i5_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i5_v_max = MathHelpers::Round((i_data.add_i5_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i5_v_em  = MathHelpers::Round((i_data.add_i5_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i5_v_flg, 0, i_data.add_i5_v_useem);
 
- p_fd->exdata.cesd.add_i6_v_min = MathHelpers::Round((i_data.add_i6_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i6_v_max = MathHelpers::Round((i_data.add_i6_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i6_v_em  = MathHelpers::Round((i_data.add_i6_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i6_v_flg, 0, i_data.add_i6_v_useem);
+ p_fd->extabs.cesd.add_i6_v_min = MathHelpers::Round((i_data.add_i6_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i6_v_max = MathHelpers::Round((i_data.add_i6_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i6_v_em  = MathHelpers::Round((i_data.add_i6_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i6_v_flg, 0, i_data.add_i6_v_useem);
 
- p_fd->exdata.cesd.add_i7_v_min = MathHelpers::Round((i_data.add_i7_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i7_v_max = MathHelpers::Round((i_data.add_i7_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i7_v_em  = MathHelpers::Round((i_data.add_i7_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i7_v_flg, 0, i_data.add_i7_v_useem);
+ p_fd->extabs.cesd.add_i7_v_min = MathHelpers::Round((i_data.add_i7_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i7_v_max = MathHelpers::Round((i_data.add_i7_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i7_v_em  = MathHelpers::Round((i_data.add_i7_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i7_v_flg, 0, i_data.add_i7_v_useem);
 
- p_fd->exdata.cesd.add_i8_v_min = MathHelpers::Round((i_data.add_i8_v_min / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i8_v_max = MathHelpers::Round((i_data.add_i8_v_max / ADC_DISCRETE));
- p_fd->exdata.cesd.add_i8_v_em  = MathHelpers::Round((i_data.add_i8_v_em / ADC_DISCRETE));
- WRITEBIT8(p_fd->exdata.cesd.add_i8_v_flg, 0, i_data.add_i8_v_useem);
+ p_fd->extabs.cesd.add_i8_v_min = MathHelpers::Round((i_data.add_i8_v_min / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i8_v_max = MathHelpers::Round((i_data.add_i8_v_max / ADC_DISCRETE));
+ p_fd->extabs.cesd.add_i8_v_em  = MathHelpers::Round((i_data.add_i8_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->extabs.cesd.add_i8_v_flg, 0, i_data.add_i8_v_useem);
 
- p_fd->exdata.cesd.oilpress_thrd = MathHelpers::Round((i_data.oilpress_thrd * 256.0f));
- p_fd->exdata.cesd.oilpress_timer = i_data.oilpress_timer;
+ p_fd->extabs.cesd.oilpress_thrd = MathHelpers::Round((i_data.oilpress_thrd * 256.0f));
+ p_fd->extabs.cesd.oilpress_timer = i_data.oilpress_timer;
 }
 
 void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
