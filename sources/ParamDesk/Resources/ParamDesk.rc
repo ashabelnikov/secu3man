@@ -1957,6 +1957,10 @@ BEGIN
     IDS_PD_FUNSET_TPSLEARN_FINISH  "Калибровка ДПДЗ окончена!"
     IDS_PD_FUNSET_TPSLEARN_ERROR   "ОШИБКА!\nРазница напряжений при нажатой и отпущеной педали слишком маленькая!\nПроверьте подключение ДПДЗ."
     IDS_PD_TPS_CALC_BUTTON_TT      "Автоматический расчет параметров смещения и наклона ДПДЗ. Следуйте указаниям из появляющихся сообщений (всего 2 шага). Программа попросит вас нажать педаль акселератора и затем отпустить ее."
+    IDS_WALLWET_MODEL_OFF          "Выключено"
+    IDS_WALLWET_MODEL_PET          "X-tau бензин"
+    IDS_WALLWET_MODEL_GAS          "X-tau газ"
+    IDS_WALLWET_MODEL_BOTH         "X-tau бенз. и газ"
 END
 
 
@@ -4015,6 +4019,10 @@ BEGIN
     IDS_PD_FUNSET_TPSLEARN_FINISH  "TPS calibration is over!"
     IDS_PD_FUNSET_TPSLEARN_ERROR   "ERROR!\nVoltage difference between pressed and released pedal is too small!\nCheck TPS connection."
     IDS_PD_TPS_CALC_BUTTON_TT      "Automatic calculation of the offset and gradient parameters of the TPS. Follow the directions from the messages that appear (only 2 steps). The program will ask you to press the accelerator pedal and then to release it."
+    IDS_WALLWET_MODEL_OFF          "OFF"
+    IDS_WALLWET_MODEL_PET          "X-tau petrol"
+    IDS_WALLWET_MODEL_GAS          "X-tau gas"
+    IDS_WALLWET_MODEL_BOTH         "X-tau pet. and gas"
 END
 
 STRINGTABLE

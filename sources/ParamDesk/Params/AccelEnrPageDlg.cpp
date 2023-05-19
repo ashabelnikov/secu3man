@@ -176,7 +176,7 @@ void CAccelEnrPageDlg::OnUpdateControlsAET(CCmdUI* pCmdUI)
 
 void CAccelEnrPageDlg::OnUpdateControlsXtau(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.wallwet_model==1 && m_fuel_injection);
+ pCmdUI->Enable(m_enabled && m_params.wallwet_model > 0 && m_fuel_injection);
 }
 
 void CAccelEnrPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
@@ -233,8 +233,10 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
  m_enrblend_slider.SetLineSize(1);
  m_enrblend_slider.SetPageSize(10);
 
- m_wwmtype_combo.AddString(_T("OFF"));
- m_wwmtype_combo.AddString(_T("X-tau"));
+ m_wwmtype_combo.AddString(MLL::LoadString(IDS_WALLWET_MODEL_OFF));
+ m_wwmtype_combo.AddString(MLL::LoadString(IDS_WALLWET_MODEL_PET));
+ m_wwmtype_combo.AddString(MLL::LoadString(IDS_WALLWET_MODEL_GAS));
+ m_wwmtype_combo.AddString(MLL::LoadString(IDS_WALLWET_MODEL_BOTH));
 
  m_xtau_s_thrd_spin.SetBuddy(&m_xtau_s_thrd_edit);
  m_xtau_s_thrd_edit.SetLimitText(4);
