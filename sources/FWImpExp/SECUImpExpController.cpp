@@ -214,6 +214,19 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
   m_fwdm->GetInjNonLinGMap(mp_fwd->inj_nonling_corr);
 
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFACC_MAP))
+  m_fwdm->GetXtauXfAccMap(mp_fwd->xtau_xfacc);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFDEC_MAP))
+  m_fwdm->GetXtauXfDecMap(mp_fwd->xtau_xfdec);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFACC_MAP))
+  m_fwdm->GetXtauTfAccMap(mp_fwd->xtau_tfacc);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFDEC_MAP))
+  m_fwdm->GetXtauTfDecMap(mp_fwd->xtau_tfdec);
+
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 
@@ -444,6 +457,10 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFDEC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -637,6 +654,18 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
   m_fwdm->SetInjNonLinGMap(mp_fwd->inj_nonling_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFACC_MAP))
+  m_fwdm->SetXtauXfAccMap(mp_fwd->xtau_xfacc);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFDEC_MAP))
+  m_fwdm->SetXtauXfDecMap(mp_fwd->xtau_xfdec);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFACC_MAP))
+  m_fwdm->SetXtauTfAccMap(mp_fwd->xtau_tfacc);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFDEC_MAP))
+  m_fwdm->SetXtauTfDecMap(mp_fwd->xtau_tfdec);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -874,6 +903,10 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFDEC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

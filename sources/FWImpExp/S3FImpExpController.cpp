@@ -224,6 +224,18 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
   memcpy(mp_fwd->inj_nonling_corr, mp_s3f_io->GetData().inj_nonling_corr, sizeof(float) * INJ_NONLIN_SIZE * 2);
 
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFACC_MAP))
+  memcpy(mp_fwd->xtau_xfacc, mp_s3f_io->GetData().xtau_xfacc, sizeof(float) * XTAU_FACT_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFDEC_MAP))
+  memcpy(mp_fwd->xtau_xfdec, mp_s3f_io->GetData().xtau_xfdec, sizeof(float) * XTAU_FACT_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFACC_MAP))
+  memcpy(mp_fwd->xtau_tfacc, mp_s3f_io->GetData().xtau_tfacc, sizeof(float) * XTAU_FACT_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFDEC_MAP))
+  memcpy(mp_fwd->xtau_tfdec, mp_s3f_io->GetData().xtau_tfdec, sizeof(float) * XTAU_FACT_SIZE);
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -515,6 +527,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFDEC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -548,6 +564,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_FUELDENSC_MAP, sv0126 && sepmap); //since v01.26
  mp_view->EnableFWDFlag(FLAG_INJNONLINP_MAP, sv0127 && sepmap); //since v01.27
  mp_view->EnableFWDFlag(FLAG_INJNONLING_MAP, sv0127 && sepmap); //since v01.27
+ mp_view->EnableFWDFlag(FLAG_XTAU_XFACC_MAP, sv0127 && sepmap); //since v01.27
+ mp_view->EnableFWDFlag(FLAG_XTAU_XFDEC_MAP, sv0127 && sepmap); //since v01.27
+ mp_view->EnableFWDFlag(FLAG_XTAU_TFACC_MAP, sv0127 && sepmap); //since v01.27
+ mp_view->EnableFWDFlag(FLAG_XTAU_TFDEC_MAP, sv0127 && sepmap); //since v01.27
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -743,6 +763,18 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
   memcpy(mp_s3f_io->GetDataLeft().inj_nonling_corr, mp_fwd->inj_nonling_corr, sizeof(float) * INJ_NONLIN_SIZE * 2);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFACC_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().xtau_xfacc, mp_fwd->xtau_xfacc, sizeof(float) * XTAU_FACT_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_XFDEC_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().xtau_xfdec, mp_fwd->xtau_xfdec, sizeof(float) * XTAU_FACT_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFACC_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().xtau_tfacc, mp_fwd->xtau_tfacc, sizeof(float) * XTAU_FACT_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_XTAU_TFDEC_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().xtau_tfdec, mp_fwd->xtau_tfdec, sizeof(float) * XTAU_FACT_SIZE);
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -966,6 +998,10 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
  mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFDEC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)
