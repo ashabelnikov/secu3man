@@ -279,8 +279,14 @@ typedef struct
 
  //Time factors for deceleration, value in 102.4 us units (3.2us * 32)
  _uint xtau_tfdec[XTAU_FACT_SIZE];
+ 
+ _uint inj_nonlinp_corr[INJ_NONLIN_SIZE];
+ _uint inj_nonlinp_bins[INJ_NONLIN_SIZE];
 
- _uchar reserved[1131];
+ _uint inj_nonling_corr[INJ_NONLIN_SIZE];
+ _uint inj_nonling_bins[INJ_NONLIN_SIZE];
+
+ _uchar reserved[1067];
 }fw_ex_tabs_t;
 
 
@@ -383,10 +389,12 @@ typedef struct
  _char ltft_min;
  _char ltft_max;
 
+ _uchar use_injnonlin_corr;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1969];
+ _uchar reserved[1968];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1656,6 +1664,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetXtauXfDecMap(op_fwd->xtau_xfdec);
  GetXtauTfAccMap(op_fwd->xtau_tfacc);
  GetXtauTfDecMap(op_fwd->xtau_tfdec);
+ GetInjNonLinPMap(op_fwd->inj_nonlinp_corr);
+ GetInjNonLinGMap(op_fwd->inj_nonling_corr);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1757,6 +1767,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetXtauXfDecMap(ip_fwd->xtau_xfdec);
  SetXtauTfAccMap(ip_fwd->xtau_tfacc);
  SetXtauTfDecMap(ip_fwd->xtau_tfdec);
+ SetInjNonLinPMap(ip_fwd->inj_nonlinp_corr);
+ SetInjNonLinGMap(ip_fwd->inj_nonling_corr);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2813,6 +2825,60 @@ void CFirmwareDataMediator::SetXtauTfDecMap(const float* ip_values)
   p_fd->extabs.xtau_tfdec[i] = MathHelpers::Round(ip_values[i] / 0.1024f); //convert to 0.1024 ms units
 }
 
+void CFirmwareDataMediator::GetInjNonLinPMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  op_values[i] = ((float)p_fd->extabs.inj_nonlinp_corr[i]) / 312.5f; //convert to ms
+
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  op_values[i+INJ_NONLIN_SIZE] = ((float)p_fd->extabs.inj_nonlinp_bins[i]) / 312.5; //convert to ms
+}
+
+void CFirmwareDataMediator::SetInjNonLinPMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  p_fd->extabs.inj_nonlinp_corr[i] = MathHelpers::Round(ip_values[i] * 312.5f);
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  p_fd->extabs.inj_nonlinp_bins[i] = MathHelpers::Round(ip_values[i+INJ_NONLIN_SIZE] * 312.5);
+}
+
+void CFirmwareDataMediator::GetInjNonLinGMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  op_values[i] = ((float)p_fd->extabs.inj_nonling_corr[i]) / 312.5f; //convert to ms
+
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  op_values[i+INJ_NONLIN_SIZE] = ((float)p_fd->extabs.inj_nonling_bins[i]) / 312.5; //convert to ms
+}
+
+void CFirmwareDataMediator::SetInjNonLinGMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  p_fd->extabs.inj_nonling_corr[i] = MathHelpers::Round(ip_values[i] * 312.5f);
+ for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
+  p_fd->extabs.inj_nonling_bins[i] = MathHelpers::Round(ip_values[i+INJ_NONLIN_SIZE] * 312.5);
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -3245,6 +3311,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.ltft_min = ((float)exd.ltft_min) / (512.0f / 100.0f);
  o_data.ltft_max = ((float)exd.ltft_max) / (512.0f / 100.0f);
+
+ o_data.use_injnonlin_corr = exd.use_injnonlin_corr;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3355,6 +3423,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.ltft_min = MathHelpers::Round(i_data.ltft_min / (100.0f / 512.0f));
  exd.ltft_max = MathHelpers::Round(i_data.ltft_max / (100.0f / 512.0f));
+
+ exd.use_injnonlin_corr = i_data.use_injnonlin_corr;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

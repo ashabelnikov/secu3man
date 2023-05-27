@@ -88,6 +88,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetXtauXfDecMap(bool i_original);
   float* GetXtauTfAccMap(bool i_original);
   float* GetXtauTfDecMap(bool i_original);
+  float* GetInjNonLinPMap(bool i_original);
+  float* GetInjNonLinGMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -168,6 +170,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewXtauXfDecMap();
   afx_msg void OnViewXtauTfAccMap();
   afx_msg void OnViewXtauTfDecMap();
+  afx_msg void OnViewInjNonLinPMap();
+  afx_msg void OnViewInjNonLinGMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -203,6 +207,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewXtauXfDecMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewXtauTfAccMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewXtauTfDecMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewInjNonLinPMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewInjNonLinGMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -247,6 +253,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_xtauxfdec_map_btn;
   CButton   m_view_xtautfacc_map_btn;
   CButton   m_view_xtautfdec_map_btn;
+  CButton   m_view_inj_nonlinp_map_btn;
+  CButton   m_view_inj_nonling_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
@@ -408,6 +416,14 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnChangeXtauTfDecMap(void* i_param);
   static void __cdecl OnCloseXtauTfDecMap(void* i_param);
   static void __cdecl OnWndActivationXtauTfDecMap(void* i_param, long cmd);
+
+  static void __cdecl OnChangeInjNonLinPTable(void* i_param);
+  static void __cdecl OnCloseInjNonLinPTable(void* i_param);
+  static void __cdecl OnWndActivationInjNonLinPTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeInjNonLinGTable(void* i_param);
+  static void __cdecl OnCloseInjNonLinGTable(void* i_param);
+  static void __cdecl OnWndActivationInjNonLinGTable(void* i_param, long cmd);
 
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;

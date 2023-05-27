@@ -245,6 +245,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Use manual inj. PW correction on idling"), _T(""), 0, 1, 1, 1, &d.maninjpw_idl, _T("Set to 0 if you don't want the manual inj.PW correction to work at idling. Set to 1 and correction will work not only in load mode, but also in idling mode."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Использовать таблицы коррекции нелинейности форсунок"), &d.use_injnonlin_corr, _T("При малых длительностях впрыска форсунки имеют заметную нелинейность, для компенсации которой предусмотрена специальная таблица."));
+ else
+  dfd.AppendItem(_T("Use injector's non-linearity correction tables"), &d.use_injnonlin_corr, _T("At small injection PWs injectors have significant non-linearity, for compensation of which a special table is provided."));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));

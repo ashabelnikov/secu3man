@@ -202,6 +202,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optXtauXfDecMapWnd(_T("XtauXfDecMapWnd"))
 , m_optXtauTfAccMapWnd(_T("XtauTfAccMapWnd"))
 , m_optXtauTfDecMapWnd(_T("XtauTfDecMapWnd"))
+, m_optInjNonLinPMapWnd(_T("InjNonLinPMapWnd"))
+, m_optInjNonLinGMapWnd(_T("InjNonLinGMapWnd"))
+
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -316,6 +319,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optXtauXfDecMapWndSize(_T("XtauXfDecMapWnd"))
 , m_optXtauTfAccMapWndSize(_T("XtauTfAccMapWnd"))
 , m_optXtauTfDecMapWndSize(_T("XtauTfDecMapWnd"))
+, m_optInjNonLinPMapWndSize(_T("InjNonLinPMapWnd"))
+, m_optInjNonLinGMapWndSize(_T("InjNonLinGMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -496,6 +501,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepXtauXfDecMap(_T("XtauXfDecMapWnd"))
 , m_optPtMovStepXtauTfAccMap(_T("XtauTfAccMapWnd"))
 , m_optPtMovStepXtauTfDecMap(_T("XtauTfDecMapWnd"))
+, m_optPtMovStepInjNonLinPMap(_T("InjNonLinPMapWnd"))
+, m_optPtMovStepInjNonLinGMap(_T("InjNonLinGMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -945,6 +952,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optXtauXfDecMapWnd);
  ws.ReadWndPos(m_optXtauTfAccMapWnd);
  ws.ReadWndPos(m_optXtauTfDecMapWnd);
+ ws.ReadWndPos(m_optInjNonLinPMapWnd);
+ ws.ReadWndPos(m_optInjNonLinGMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -1061,6 +1070,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optXtauXfDecMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optXtauTfAccMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optXtauTfDecMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optInjNonLinPMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optInjNonLinGMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1329,6 +1340,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepXtauXfDecMap, _T("1.0"), 0.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepXtauTfAccMap, _T("1.0"), 0.0f, 1000.0f);
  ms.ReadFlt(m_optPtMovStepXtauTfDecMap, _T("1.0"), 0.0f, 1000.0f);
+ ms.ReadFlt(m_optPtMovStepInjNonLinPMap, _T("0.001"), 0.0001f, 0.1f);
+ ms.ReadFlt(m_optPtMovStepInjNonLinGMap, _T("0.001"), 0.0001f, 0.1f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -2315,6 +2328,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optXtauTfDecMapWnd, _T("Постоянная времени испарения плeнки для режима замедления"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optInjNonLinPMapWnd, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
+ else
+  ws.WriteWndPos(m_optInjNonLinPMapWnd, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optInjNonLinGMapWnd, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
+ else
+  ws.WriteWndPos(m_optInjNonLinGMapWnd, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
+
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2880,6 +2903,16 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optXtauTfDecMapWndSize, _T("Constant of fuel's film dissipation time (decelaration)"));
  else
   sz.WriteWndPos(m_optXtauTfDecMapWndSize, _T("Постоянная времени испарения плeнки для режима замедления"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optInjNonLinPMapWndSize, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
+ else
+  sz.WriteWndPos(m_optInjNonLinPMapWndSize, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optInjNonLinGMapWndSize, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
+ else
+  sz.WriteWndPos(m_optInjNonLinGMapWndSize, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
 
  //Sizes of windows (online)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -4144,6 +4177,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepXtauTfDecMap, 1, _T("Постоянная времени испарения плeнки для режима замедления"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepInjNonLinPMap, 1, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
+ else
+  ms.WriteFlt(m_optPtMovStepInjNonLinPMap, 1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepInjNonLinGMap, 1, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
+ else
+  ms.WriteFlt(m_optPtMovStepInjNonLinGMap, 1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -4493,6 +4536,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optXtauTfAccMapWnd.value.y = i_wndSettings.m_XtauTfAccMapWnd_Y; 
  m_optXtauTfDecMapWnd.value.x = i_wndSettings.m_XtauTfDecMapWnd_X;
  m_optXtauTfDecMapWnd.value.y = i_wndSettings.m_XtauTfDecMapWnd_Y; 
+ m_optInjNonLinPMapWnd.value.x = i_wndSettings.m_InjNonLinPMapWnd_X;
+ m_optInjNonLinPMapWnd.value.y = i_wndSettings.m_InjNonLinPMapWnd_Y; 
+ m_optInjNonLinGMapWnd.value.x = i_wndSettings.m_InjNonLinGMapWnd_X;
+ m_optInjNonLinGMapWnd.value.y = i_wndSettings.m_InjNonLinGMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -4643,6 +4690,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_XtauTfAccMapWnd_Y = m_optXtauTfAccMapWnd.value.y;
  o_wndSettings.m_XtauTfDecMapWnd_X = m_optXtauTfDecMapWnd.value.x;
  o_wndSettings.m_XtauTfDecMapWnd_Y = m_optXtauTfDecMapWnd.value.y;
+ o_wndSettings.m_InjNonLinPMapWnd_X = m_optInjNonLinPMapWnd.value.x;
+ o_wndSettings.m_InjNonLinPMapWnd_Y = m_optInjNonLinPMapWnd.value.y;
+ o_wndSettings.m_InjNonLinGMapWnd_X = m_optInjNonLinGMapWnd.value.x;
+ o_wndSettings.m_InjNonLinGMapWnd_Y = m_optInjNonLinGMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -4949,6 +5000,10 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optXtauTfAccMapWndSize.value.y = i_wndSize.m_XtauTfAccMapWnd_H; 
  m_optXtauTfDecMapWndSize.value.x = i_wndSize.m_XtauTfDecMapWnd_W;
  m_optXtauTfDecMapWndSize.value.y = i_wndSize.m_XtauTfDecMapWnd_H; 
+ m_optInjNonLinPMapWndSize.value.x = i_wndSize.m_InjNonLinPMapWnd_W;
+ m_optInjNonLinPMapWndSize.value.y = i_wndSize.m_InjNonLinPMapWnd_H; 
+ m_optInjNonLinGMapWndSize.value.x = i_wndSize.m_InjNonLinGMapWnd_W;
+ m_optInjNonLinGMapWndSize.value.y = i_wndSize.m_InjNonLinGMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -5099,6 +5154,10 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_XtauTfAccMapWnd_H = m_optXtauTfAccMapWndSize.value.y;
  o_wndSize.m_XtauTfDecMapWnd_W = m_optXtauTfDecMapWndSize.value.x;
  o_wndSize.m_XtauTfDecMapWnd_H = m_optXtauTfDecMapWndSize.value.y;
+ o_wndSize.m_InjNonLinPMapWnd_W = m_optInjNonLinPMapWndSize.value.x;
+ o_wndSize.m_InjNonLinPMapWnd_H = m_optInjNonLinPMapWndSize.value.y;
+ o_wndSize.m_InjNonLinGMapWnd_W = m_optInjNonLinGMapWndSize.value.x;
+ o_wndSize.m_InjNonLinGMapWnd_H = m_optInjNonLinGMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -6040,6 +6099,8 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepXtauXfDecMap.value = i_ptMovStep.m_xtau_xfdec_map;
  m_optPtMovStepXtauTfAccMap.value = i_ptMovStep.m_xtau_tfacc_map;
  m_optPtMovStepXtauTfDecMap.value = i_ptMovStep.m_xtau_tfdec_map;
+ m_optPtMovStepInjNonLinPMap.value = i_ptMovStep.m_injnonlinp_map;
+ m_optPtMovStepInjNonLinGMap.value = i_ptMovStep.m_injnonling_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -6115,6 +6176,8 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_xtau_xfdec_map = m_optPtMovStepXtauXfDecMap.value;
  o_ptMovStep.m_xtau_tfacc_map = m_optPtMovStepXtauTfAccMap.value;
  o_ptMovStep.m_xtau_tfdec_map = m_optPtMovStepXtauTfDecMap.value;
+ o_ptMovStep.m_injnonlinp_map = m_optPtMovStepInjNonLinPMap.value;
+ o_ptMovStep.m_injnonling_map = m_optPtMovStepInjNonLinGMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

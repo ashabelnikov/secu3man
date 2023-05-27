@@ -218,6 +218,12 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_FUELDENSC_MAP))
   memcpy(mp_fwd->fueldens_corr, mp_s3f_io->GetData().fueldens_corr, sizeof(float) * FUELDENS_CORR_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_INJNONLINP_MAP))
+  memcpy(mp_fwd->inj_nonlinp_corr, mp_s3f_io->GetData().inj_nonlinp_corr, sizeof(float) * INJ_NONLIN_SIZE * 2);
+
+ if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
+  memcpy(mp_fwd->inj_nonling_corr, mp_s3f_io->GetData().inj_nonling_corr, sizeof(float) * INJ_NONLIN_SIZE * 2);
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -406,6 +412,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0124 = (mp_s3f_io->GetVersion() > 0x0123);
  bool sv0125 = (mp_s3f_io->GetVersion() > 0x0124);
  bool sv0126 = (mp_s3f_io->GetVersion() > 0x0125);
+ bool sv0127 = (mp_s3f_io->GetVersion() > 0x0126);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -506,6 +513,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_LAMBDAZONE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -537,6 +546,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_LAMBDAZONE_MAP, sv0123 && sepmap); //since v01.23
  mp_view->EnableFWDFlag(FLAG_FTSCURVE_MAP, sv0126 && sepmap); //since v01.26
  mp_view->EnableFWDFlag(FLAG_FUELDENSC_MAP, sv0126 && sepmap); //since v01.26
+ mp_view->EnableFWDFlag(FLAG_INJNONLINP_MAP, sv0127 && sepmap); //since v01.27
+ mp_view->EnableFWDFlag(FLAG_INJNONLING_MAP, sv0127 && sepmap); //since v01.27
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -726,6 +737,12 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_FUELDENSC_MAP))
   memcpy(mp_s3f_io->GetDataLeft().fueldens_corr, mp_fwd->fueldens_corr, sizeof(float) * FUELDENS_CORR_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_INJNONLINP_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().inj_nonlinp_corr, mp_fwd->inj_nonlinp_corr, sizeof(float) * INJ_NONLIN_SIZE * 2);
+
+ if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().inj_nonling_corr, mp_fwd->inj_nonling_corr, sizeof(float) * INJ_NONLIN_SIZE * 2);
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -947,6 +964,8 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

@@ -176,6 +176,10 @@ struct WndSettings
  int m_XtauTfAccMapWnd_Y;
  int m_XtauTfDecMapWnd_X;
  int m_XtauTfDecMapWnd_Y;
+ int m_InjNonLinPMapWnd_X;
+ int m_InjNonLinPMapWnd_Y;
+ int m_InjNonLinGMapWnd_X;
+ int m_InjNonLinGMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -327,6 +331,10 @@ struct WndSize
  int m_XtauTfAccMapWnd_H;
  int m_XtauTfDecMapWnd_W;
  int m_XtauTfDecMapWnd_H;
+ int m_InjNonLinPMapWnd_W;
+ int m_InjNonLinPMapWnd_H;
+ int m_InjNonLinGMapWnd_W;
+ int m_InjNonLinGMapWnd_H;
 };
 
 //Holds windows's state data
@@ -491,6 +499,8 @@ struct MapPtMovStep
  float m_xtau_xfdec_map;
  float m_xtau_tfacc_map;
  float m_xtau_tfdec_map;
+ float m_injnonlinp_map;
+ float m_injnonling_map;
 };
 
 //Log file's fileds

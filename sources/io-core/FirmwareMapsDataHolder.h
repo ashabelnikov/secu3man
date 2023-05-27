@@ -87,6 +87,7 @@
 #define FTS_LOOKUP_TABLE_SIZE  17
 #define FUELDENS_CORR_SIZE     16
 #define XTAU_FACT_SIZE         16
+#define INJ_NONLIN_SIZE        8
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -266,6 +267,8 @@ struct FWMapsDataHolder
  float xtau_xfdec[XTAU_FACT_SIZE];
  float xtau_tfacc[XTAU_FACT_SIZE];
  float xtau_tfdec[XTAU_FACT_SIZE];
+ float inj_nonlinp_corr[INJ_NONLIN_SIZE * 2];
+ float inj_nonling_corr[INJ_NONLIN_SIZE * 2];
 
  CESettingsData cesd;
 
@@ -313,6 +316,8 @@ struct FWMapsDataHolder
   std::fill(xtau_xfdec, xtau_xfdec + XTAU_FACT_SIZE, .0f);
   std::fill(xtau_tfacc, xtau_tfacc + XTAU_FACT_SIZE, .0f);
   std::fill(xtau_tfdec, xtau_tfdec + XTAU_FACT_SIZE, .0f);
+  std::fill(inj_nonlinp_corr, inj_nonlinp_corr + (INJ_NONLIN_SIZE*2), .0f);
+  std::fill(inj_nonling_corr, inj_nonling_corr + (INJ_NONLIN_SIZE*2), .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

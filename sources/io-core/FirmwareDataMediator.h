@@ -282,6 +282,12 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetXtauTfDecMap(float* op_values, bool i_original = false);
   void SetXtauTfDecMap(const float* i_values);
 
+  void GetInjNonLinPMap(float* op_values, bool i_original = false);
+  void SetInjNonLinPMap(const float* i_values);
+
+  void GetInjNonLinGMap(float* op_values, bool i_original = false);
+  void SetInjNonLinGMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

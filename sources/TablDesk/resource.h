@@ -73,6 +73,10 @@
 #define IDC_CESETT_TPS_V_EM_CAPTION     5084
 #define IDC_CESETT_ADD_I1_V_EM_CAPTION  5085
 #define IDC_CESETT_ADD_I2_V_EM_CAPTION  5086
+#define IDS_INJNONLINP_MAP              5087
+#define IDS_INJNONLING_MAP              5088
+#define IDS_TD_INJNONLINP_MAP_TT        5089
+#define IDS_TD_INJNONLING_MAP_TT        5090
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362
@@ -646,3 +650,5 @@
 #define IDS_TD_XTAU_XFDEC_MAP           5994
 #define IDS_TD_XTAU_TFACC_MAP           5995
 #define IDS_TD_XTAU_TFDEC_MAP           5996
+#define IDC_TD_INJNONLINP_MAP           5997
+#define IDC_TD_INJNONLING_MAP           5998

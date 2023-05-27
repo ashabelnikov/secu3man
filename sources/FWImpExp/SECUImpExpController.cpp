@@ -208,6 +208,12 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_FUELDENSC_MAP))
   m_fwdm->GetFuelDensCorrMap(mp_fwd->fueldens_corr);
 
+ if (mp_view->GetFWDFlag(FLAG_INJNONLINP_MAP))
+  m_fwdm->GetInjNonLinPMap(mp_fwd->inj_nonlinp_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
+  m_fwdm->GetInjNonLinGMap(mp_fwd->inj_nonling_corr);
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 
@@ -436,6 +442,8 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -623,6 +631,12 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_FUELDENSC_MAP))
   m_fwdm->SetFuelDensCorrMap(mp_fwd->fueldens_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_INJNONLINP_MAP))
+  m_fwdm->SetInjNonLinPMap(mp_fwd->inj_nonlinp_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
+  m_fwdm->SetInjNonLinGMap(mp_fwd->inj_nonling_corr);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -858,6 +872,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_FTLSCOR_MAP, false);
  mp_view->SetFWDFlag(FLAG_FTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

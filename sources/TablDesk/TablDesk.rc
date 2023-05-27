@@ -144,6 +144,8 @@ BEGIN
     CONTROL         "Коэфф.топл.пл.замед.",IDC_TD_XTAU_XFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,713,96,18
     CONTROL         "Врем.испар.пл.ускор.",IDC_TD_XTAU_TFACC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,732,96,18
     CONTROL         "Врем.испар.пл.замед.",IDC_TD_XTAU_TFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,732,96,18
+    CONTROL         "Нелин. форс.(бенз.)",IDC_TD_INJNONLINP_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,751,96,18
+    CONTROL         "Нелин. форс. (газ)",IDC_TD_INJNONLING_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,751,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -898,6 +900,10 @@ BEGIN
     IDS_TD_XTAU_XFDEC_MAP      "Коэфф. топлива выпадающего в пленку (замедление)"
     IDS_TD_XTAU_TFACC_MAP      "Время испарения топлива плeнки (ускорение)"
     IDS_TD_XTAU_TFDEC_MAP      "Время испарения топлива плeнки (замедление)"
+    IDS_INJNONLINP_MAP         "Коррекция нелинейности форсунки (бензин)"
+    IDS_INJNONLING_MAP         "Коррекция нелинейности форсунки (газ)"
+    IDS_TD_INJNONLINP_MAP_TT   "Таблица коррекции нелинейности форсунки при малых длительностях впрыска для бензина."
+    IDS_TD_INJNONLING_MAP_TT   "Таблица коррекции нелинейности форсунки при малых длительностях впрыска для газа."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1039,6 +1045,8 @@ BEGIN
     CONTROL         "Fuel film coeff. decel.",IDC_TD_XTAU_XFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,713,96,18
     CONTROL         "Evap.time const. accel",IDC_TD_XTAU_TFACC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,732,96,18
     CONTROL         "Evap.time const. decel",IDC_TD_XTAU_TFDEC_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,732,96,18
+    CONTROL         "Inj. non-linearity (petrol)",IDC_TD_INJNONLINP_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,751,96,18
+    CONTROL         "Inj. non-linearity (gas)",IDC_TD_INJNONLING_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,125,751,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1794,6 +1802,10 @@ BEGIN
     IDS_TD_XTAU_XFDEC_MAP      "Coeff. of fuel condensating in film (deceleration)"
     IDS_TD_XTAU_TFACC_MAP      "Fuel's film dissipation time constant (acceleration)"
     IDS_TD_XTAU_TFDEC_MAP      "Fuel's film dissipation time constant (deceleration)"
+    IDS_INJNONLINP_MAP         "Correction of injector's non-linearity (petrol)"
+    IDS_INJNONLING_MAP         "Correction of injector's non-linearity (gas)"
+    IDS_TD_INJNONLINP_MAP_TT   "Table of correction of injector's non-linearity, used on small inj. PWs (petrol)"
+    IDS_TD_INJNONLING_MAP_TT   "Table of correction of injector's non-linearity, used on small inj. PWs (gas)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

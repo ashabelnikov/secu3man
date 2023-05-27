@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0126 //01.26
+#define CURRENT_VERSION 0x0127 //01.27
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -93,6 +93,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.26 - Added Throttle assist map (02.08.2022)
 //         Added Fuel temperature sensor's curve map (10.08.2022)
 //         Added Fuel density correction map (25.08.2022)
+// 01.27 - Added inj. non-linearity correction maps - petrol and gas (24.05.2023)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -304,7 +305,11 @@ struct S3FSepMaps
  s3f_int32_t fts_curve[FTS_LOOKUP_TABLE_SIZE+2];        //FTS curve
  s3f_int32_t fueldens_corr[FUELDENS_CORR_SIZE];         //fuel density correction map
 
- s3f_int32_t reserved[3632];       //reserved bytes, = 0
+ //since v01.27
+ s3f_int32_t inj_nonlinp_corr[INJ_NONLIN_SIZE * 2];     //Inj. non-linearity correction (petrol). Correction and bins
+ s3f_int32_t inj_nonling_corr[INJ_NONLIN_SIZE * 2];     //Inj. non-linearity correction (gas). Correction and bins
+
+ s3f_int32_t reserved[3600];       //reserved bytes, = 0
 };
 
 
@@ -770,6 +775,10 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->fts_curve[i] = MathHelpers::Round(m_data.fts_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < FUELDENS_CORR_SIZE; ++i)
   p_sepMaps->fueldens_corr[i] = MathHelpers::Round(m_data.fueldens_corr[i] * INT_MULTIPLIER);
+ for(i = 0; i < INJ_NONLIN_SIZE * 2; ++i)
+  p_sepMaps->inj_nonlinp_corr[i] = MathHelpers::Round(m_data.inj_nonlinp_corr[i] * INT_MULTIPLIER);
+ for(i = 0; i < INJ_NONLIN_SIZE * 2; ++i)
+  p_sepMaps->inj_nonling_corr[i] = MathHelpers::Round(m_data.inj_nonling_corr[i] * INT_MULTIPLIER);
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
@@ -1048,6 +1057,10 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.fts_curve[i] = p_sepMaps->fts_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < FUELDENS_CORR_SIZE; ++i)
   m_data.fueldens_corr[i] = p_sepMaps->fueldens_corr[i] / INT_MULTIPLIER;
+ for(i = 0; i < INJ_NONLIN_SIZE * 2; ++i)
+  m_data.inj_nonlinp_corr[i] = p_sepMaps->inj_nonlinp_corr[i] / INT_MULTIPLIER;
+ for(i = 0; i < INJ_NONLIN_SIZE * 2; ++i)
+  m_data.inj_nonling_corr[i] = p_sepMaps->inj_nonling_corr[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

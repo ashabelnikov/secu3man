@@ -489,6 +489,18 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_XtauTfDecMapWnd_W = rc.right - rc.left;
    sz.m_XtauTfDecMapWnd_H = rc.bottom - rc.top;
    break;
+  case TYPE_MAP_INJNONLINP:
+   ws.m_InjNonLinPMapWnd_X = rc.left;
+   ws.m_InjNonLinPMapWnd_Y = rc.top;
+   sz.m_InjNonLinPMapWnd_W = rc.right - rc.left;
+   sz.m_InjNonLinPMapWnd_H = rc.bottom - rc.top;
+   break;
+  case TYPE_MAP_INJNONLING:
+   ws.m_InjNonLinGMapWnd_X = rc.left;
+   ws.m_InjNonLinGMapWnd_Y = rc.top;
+   sz.m_InjNonLinGMapWnd_W = rc.right - rc.left;
+   sz.m_InjNonLinGMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -808,6 +820,14 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_XTAU_TFDEC:
    X = ws.m_XtauTfDecMapWnd_X, Y = ws.m_XtauTfDecMapWnd_Y;
    W = sz.m_XtauTfDecMapWnd_W, H = sz.m_XtauTfDecMapWnd_H;
+   break;
+  case TYPE_MAP_INJNONLINP:
+   X = ws.m_InjNonLinPMapWnd_X, Y = ws.m_InjNonLinPMapWnd_Y;
+   W = sz.m_InjNonLinPMapWnd_W, H = sz.m_InjNonLinPMapWnd_H;
+   break;
+  case TYPE_MAP_INJNONLING:
+   X = ws.m_InjNonLinGMapWnd_X, Y = ws.m_InjNonLinGMapWnd_Y;
+   W = sz.m_InjNonLinGMapWnd_W, H = sz.m_InjNonLinGMapWnd_H;
    break;
 
   default:

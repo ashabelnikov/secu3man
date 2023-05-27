@@ -98,14 +98,16 @@ enum EMapTypes
  TYPE_MAP_XTAU_XFDEC    = 67, //
  TYPE_MAP_XTAU_TFACC    = 68, //
  TYPE_MAP_XTAU_TFDEC    = 69, //
+ TYPE_MAP_INJNONLINP    = 70, //
+ TYPE_MAP_INJNONLING    = 71, //
 
- TYPE_MAP_GME_IGN_WND   = 70, //pseudo map, grid mode editing window for ignition maps
- TYPE_MAP_GME_INJ_WND   = 71, //pseudo map, grid mode editing window for injection maps
+ TYPE_MAP_GME_IGN_WND   = 72, //pseudo map, grid mode editing window for ignition maps
+ TYPE_MAP_GME_INJ_WND   = 73, //pseudo map, grid mode editing window for injection maps
 
  TYPE_MAP_SET_START     = 1,
  TYPE_MAP_SET_END       = 35,
  TYPE_MAP_SEP_START     = 36,
- TYPE_MAP_SEP_END       = 69,
+ TYPE_MAP_SEP_END       = 71,
  TYPE_MAP_ALL_START     = 1,
- TYPE_MAP_ALL_END       = 71
+ TYPE_MAP_ALL_END       = 73
 };

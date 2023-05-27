@@ -309,6 +309,8 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_XFDEC, mptms.m_xtau_xfdec_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_TFACC, mptms.m_xtau_tfacc_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_TFDEC, mptms.m_xtau_tfdec_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJNONLINP, mptms.m_injnonlinp_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJNONLING, mptms.m_injnonling_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -1247,6 +1249,12 @@ void CFirmwareTabController::SetViewChartsValues(void)
  mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(false),false);
  mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(true),true);
 
+ mp_fwdm->GetInjNonLinPMap(mp_view->mp_TablesPanel->GetInjNonLinPMap(false),false);
+ mp_fwdm->GetInjNonLinPMap(mp_view->mp_TablesPanel->GetInjNonLinPMap(true),true);
+
+ mp_fwdm->GetInjNonLinGMap(mp_view->mp_TablesPanel->GetInjNonLinGMap(false),false);
+ mp_fwdm->GetInjNonLinGMap(mp_view->mp_TablesPanel->GetInjNonLinGMap(true),true);
+
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
  mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
@@ -1646,6 +1654,12 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_XTAU_TFDEC:
    mp_fwdm->SetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(false));
+   break;
+  case TYPE_MAP_INJNONLINP:
+   mp_fwdm->SetInjNonLinPMap(mp_view->mp_TablesPanel->GetInjNonLinPMap(false));
+   break;
+  case TYPE_MAP_INJNONLING:
+   mp_fwdm->SetInjNonLinGMap(mp_view->mp_TablesPanel->GetInjNonLinGMap(false));
    break;
  }
 }
@@ -2142,6 +2156,8 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_xtau_xfdec_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_XFDEC);
  mptms.m_xtau_tfacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_TFACC);
  mptms.m_xtau_tfdec_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_TFDEC);
+ mptms.m_injnonlinp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJNONLINP);
+ mptms.m_injnonling_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJNONLING);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

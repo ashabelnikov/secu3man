@@ -448,6 +448,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optXtauXfDecMapWnd;
   OptField_t<POINT> m_optXtauTfAccMapWnd;
   OptField_t<POINT> m_optXtauTfDecMapWnd;
+  OptField_t<POINT> m_optInjNonLinPMapWnd;
+  OptField_t<POINT> m_optInjNonLinGMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -562,6 +564,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optXtauXfDecMapWndSize;
   OptField_t<POINT> m_optXtauTfAccMapWndSize;
   OptField_t<POINT> m_optXtauTfDecMapWndSize;
+  OptField_t<POINT> m_optInjNonLinPMapWndSize;
+  OptField_t<POINT> m_optInjNonLinGMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -810,6 +814,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepXtauXfDecMap;
   OptField_t<float> m_optPtMovStepXtauTfAccMap;
   OptField_t<float> m_optPtMovStepXtauTfDecMap;
+  OptField_t<float> m_optPtMovStepInjNonLinPMap;
+  OptField_t<float> m_optPtMovStepInjNonLinGMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;

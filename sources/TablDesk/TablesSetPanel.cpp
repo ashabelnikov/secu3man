@@ -57,7 +57,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_fts_curve_enabled(false)
 , m_xtau_maps_enabled(false)
 {
- m_scrl_view = 1264;
+ m_scrl_view = 1294;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
@@ -122,6 +122,8 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_XTAU_XFDEC_MAP, m_view_xtauxfdec_map_btn);
  DDX_Control(pDX, IDC_TD_XTAU_TFACC_MAP, m_view_xtautfacc_map_btn);
  DDX_Control(pDX, IDC_TD_XTAU_TFDEC_MAP, m_view_xtautfdec_map_btn);
+ DDX_Control(pDX, IDC_TD_INJNONLINP_MAP, m_view_inj_nonlinp_map_btn);
+ DDX_Control(pDX, IDC_TD_INJNONLING_MAP, m_view_inj_nonling_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -163,6 +165,8 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_XTAU_XFDEC_MAP, OnViewXtauXfDecMap)
  ON_BN_CLICKED(IDC_TD_XTAU_TFACC_MAP, OnViewXtauTfAccMap)
  ON_BN_CLICKED(IDC_TD_XTAU_TFDEC_MAP, OnViewXtauTfDecMap)
+ ON_BN_CLICKED(IDC_TD_INJNONLINP_MAP, OnViewInjNonLinPMap)
+ ON_BN_CLICKED(IDC_TD_INJNONLING_MAP, OnViewInjNonLinGMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -204,6 +208,8 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_XFDEC_MAP, OnUpdateViewXtauXfDecMap) 
  ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_TFACC_MAP, OnUpdateViewXtauTfAccMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_TFDEC_MAP, OnUpdateViewXtauTfDecMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_INJNONLINP_MAP, OnUpdateViewInjNonLinPMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_INJNONLING_MAP, OnUpdateViewInjNonLinGMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -265,6 +271,8 @@ BOOL CTablesSetPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_view_xtauxfdec_map_btn, MLL::GetString(IDS_TD_XTAU_XFDEC_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_xtautfacc_map_btn, MLL::GetString(IDS_TD_XTAU_TFACC_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_view_xtautfdec_map_btn, MLL::GetString(IDS_TD_XTAU_TFDEC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_inj_nonlinp_map_btn, MLL::GetString(IDS_TD_INJNONLINP_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_view_inj_nonling_map_btn, MLL::GetString(IDS_TD_INJNONLING_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -563,6 +571,22 @@ void CTablesSetPanel::OnUpdateViewXtauTfDecMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_XTAU_TFDEC].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewInjNonLinPMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJNONLINP].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewInjNonLinGMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJNONLING].state) ? TRUE : FALSE );
+}
+
 void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
@@ -664,6 +688,12 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_XTAU_TFDEC].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_XTAU_TFDEC].handle, GetXtauTfDecMap(true), GetXtauTfDecMap(false));
+
+ if (m_md[TYPE_MAP_INJNONLINP].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJNONLINP].handle, GetInjNonLinPMap(true), GetInjNonLinPMap(false));
+
+ if (m_md[TYPE_MAP_INJNONLING].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJNONLING].handle, GetInjNonLinGMap(true), GetInjNonLinGMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -698,6 +728,10 @@ void CTablesSetPanel::EnableFuelInjection(bool i_enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[TYPE_MAP_BAROCORR].state && ::IsWindow(m_md[TYPE_MAP_BAROCORR].handle))
   DLL::Chart2DEnable(m_md[TYPE_MAP_BAROCORR].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJNONLINP].state && ::IsWindow(m_md[TYPE_MAP_INJNONLINP].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJNONLINP].handle, i_enable && Super::IsAllowed());
+ if (m_md[TYPE_MAP_INJNONLING].state && ::IsWindow(m_md[TYPE_MAP_INJNONLING].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJNONLING].handle, i_enable && Super::IsAllowed());
 }
 
 void CTablesSetPanel::EnableGasdose(bool enable)
@@ -2162,6 +2196,82 @@ void CTablesSetPanel::OnViewXtauTfDecMap()
  }
 }
 
+void CTablesSetPanel::OnViewInjNonLinPMap()
+{
+ MapData &md = m_md[TYPE_MAP_INJNONLINP];
+ //If button was released, then close editor's window
+ if (m_view_inj_nonlinp_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  const float bins_lims[5] = {0.0f, 2.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 2ms, inc 1%, 3 dec places, min diff 0.05ms
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinPMap(true), GetInjNonLinPMap(false), 0.0, 2.0, bins_lims, 8,
+    MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
+    MLL::GetString(IDS_INJNONLINP_MAP).c_str(), true);  //use bins on horizontal axis
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.03f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.000"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeInjNonLinPTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseInjNonLinPTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationInjNonLinPTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_INJNONLINP);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CTablesSetPanel::OnViewInjNonLinGMap()
+{
+ MapData &md = m_md[TYPE_MAP_INJNONLING];
+ //If button was released, then close editor's window
+ if (m_view_inj_nonling_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  const float bins_lims[5] = {0.0f, 2.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 2ms, inc 1%, 3 dec places, min diff 0.05ms
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinGMap(true), GetInjNonLinGMap(false), 0.0, 2.0, bins_lims, 8,
+    MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
+    MLL::GetString(IDS_INJNONLING_MAP).c_str(), true); //use bins on horizontal axis
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.03f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.000"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeInjNonLinGTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseInjNonLinGTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationInjNonLinGTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, TYPE_MAP_INJNONLING);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -2481,6 +2591,22 @@ float* CTablesSetPanel::GetXtauTfDecMap(bool i_original)
   return m_md[TYPE_MAP_XTAU_TFDEC].original;
  else
   return m_md[TYPE_MAP_XTAU_TFDEC].active;
+}
+
+float* CTablesSetPanel::GetInjNonLinPMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_INJNONLINP].original;
+ else
+  return m_md[TYPE_MAP_INJNONLINP].active;
+}
+
+float* CTablesSetPanel::GetInjNonLinGMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_INJNONLING].original;
+ else
+  return m_md[TYPE_MAP_INJNONLING].active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)
