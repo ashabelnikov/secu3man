@@ -32,6 +32,32 @@
 #include "MapIds.h"
 #include "ui-core/MapEditorCtrl.h"
 
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END - 2; ++i)
+ {
+  if (_this->m_md[i].state)
+  {
+   if (i == TYPE_MAP_DA_WORK || i == TYPE_MAP_INJ_VE || i == TYPE_MAP_INJ_VE2 || i == TYPE_MAP_INJ_AFR || i == TYPE_MAP_INJ_IT || i == TYPE_MAP_PWM1 || i == TYPE_MAP_PWM2 || i == TYPE_MAP_GASDOSE)  
+    _this->m_md[i].ptMovStep = DLL::Chart3DGetPtMovingStep(_this->m_md[i].handle);
+   else
+    _this->m_md[i].ptMovStep = DLL::Chart2DGetPtMovingStep(_this->m_md[i].handle);
+  }
+ }
+
+ if (_this->m_OnChangeSettings)
+  _this->m_OnChangeSettings();
+}
+
 //------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeStartMap(void* i_param)
 {

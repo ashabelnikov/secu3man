@@ -315,17 +315,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void OnChangeSettingsGME(void);
 
-  static void __cdecl OnChangeStartMap(void* i_param);
-  static void __cdecl OnCloseStartMap(void* i_param);
-  static void __cdecl OnChangeIdleMap(void* i_param);
-  static void __cdecl OnCloseIdleMap(void* i_param);
-  static void __cdecl OnChangeWorkMap(void* i_param);
-  static void __cdecl OnCloseWorkMap(void* i_param);
-  static void __cdecl OnChangeTempMap(void* i_param);
-  static void __cdecl OnCloseTempMap(void* i_param);
-  static float __cdecl OnValueTransformITMap(void* i_param, float source, int direction);
-  static void __cdecl OnChangeTempIdlMap(void* i_param);
-  static void __cdecl OnCloseTempIdlMap(void* i_param);
 protected:
   struct MapData
   {
@@ -344,106 +333,151 @@ protected:
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param);
 private:
+  static float __cdecl OnValueTransformITMap(void* i_param, float source, int direction);
+
+  static void __cdecl OnChangeStartMap(void* i_param);
+  static void __cdecl OnCloseStartMap(void* i_param);
   static void __cdecl OnWndActivationStartMap(void* i_param, long cmd);
+
+  static void __cdecl OnChangeIdleMap(void* i_param);
+  static void __cdecl OnCloseIdleMap(void* i_param);
   static void __cdecl OnWndActivationIdleMap(void* i_param, long cmd);
+
+  static void __cdecl OnChangeWorkMap(void* i_param);
+  static void __cdecl OnCloseWorkMap(void* i_param);
   static void __cdecl OnWndActivationWorkMap(void* i_param, long cmd);
+
+  static void __cdecl OnChangeTempMap(void* i_param);
+  static void __cdecl OnCloseTempMap(void* i_param);
   static void __cdecl OnWndActivationTempMap(void* i_param, long cmd);
+
+  static void __cdecl OnChangeTempIdlMap(void* i_param);
+  static void __cdecl OnCloseTempIdlMap(void* i_param);
   static void __cdecl OnWndActivationTempIdlMap(void* i_param, long cmd);
 
   static void __cdecl OnChangeVEMap(void* i_param);
   static void __cdecl OnCloseVEMap(void* i_param);
+  static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeAFRMap(void* i_param);
   static void __cdecl OnCloseAFRMap(void* i_param);
+  static void __cdecl OnWndActivationAFRMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeCrnkMap(void* i_param);
   static void __cdecl OnCloseCrnkMap(void* i_param);
+  static void __cdecl OnWndActivationCrnkMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeWrmpMap(void* i_param);
   static void __cdecl OnCloseWrmpMap(void* i_param);
+  static void __cdecl OnWndActivationWrmpMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeDeadMap(void* i_param);
   static void __cdecl OnCloseDeadMap(void* i_param);
+  static void __cdecl OnWndActivationDeadMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeIdlrMap(void* i_param);
   static void __cdecl OnCloseIdlrMap(void* i_param);
+  static void __cdecl OnWndActivationIdlrMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeIdlcMap(void* i_param);
   static void __cdecl OnCloseIdlcMap(void* i_param);
+  static void __cdecl OnWndActivationIdlcMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeThrassMap(void* i_param);
   static void __cdecl OnCloseThrassMap(void* i_param);
+  static void __cdecl OnWndActivationThrassMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeAETPSMap(void* i_param);
   static void __cdecl OnCloseAETPSMap(void* i_param);
+  static void __cdecl OnWndActivationAETPSMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeAEMAPMap(void* i_param);
   static void __cdecl OnCloseAEMAPMap(void* i_param);
+  static void __cdecl OnWndActivationAEMAPMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeAERPMMap(void* i_param);
   static void __cdecl OnCloseAERPMMap(void* i_param);
+  static void __cdecl OnWndActivationAERPMMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeAftstrMap(void* i_param);
   static void __cdecl OnCloseAftstrMap(void* i_param);
+  static void __cdecl OnWndActivationAftstrMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeITMap(void* i_param);
   static void __cdecl OnCloseITMap(void* i_param);
+  static void __cdecl OnWndActivationITMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeITRPMMap(void* i_param);
   static void __cdecl OnCloseITRPMMap(void* i_param);
+  static void __cdecl OnWndActivationITRPMMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeRigidMap(void* i_param);
   static void __cdecl OnCloseRigidMap(void* i_param);
+  static void __cdecl OnWndActivationRigidMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeEGOCrvMap(void* i_param);
   static void __cdecl OnCloseEGOCrvMap(void* i_param);
+  static void __cdecl OnWndActivationEGOCrvMap(void* i_param, long cmd);
   static void __cdecl OnChangeEGOCrvXAxisEdit(void* i_param, int i_type, float i_value);
+
   static void __cdecl OnChangeIACCMap(void* i_param);
   static void __cdecl OnCloseIACCMap(void* i_param);
+  static void __cdecl OnWndActivationIACCMap(void* i_param, long cmd);
   static void __cdecl OnChangeIACCXAxisEdit(void* i_param, int i_type, float i_value);
+
   static void __cdecl OnChangeIACCWMap(void* i_param);
   static void __cdecl OnCloseIACCWMap(void* i_param);
+  static void __cdecl OnWndActivationIACCWMap(void* i_param, long cmd);
   static void __cdecl OnChangeIACCWXAxisEdit(void* i_param, int i_type, float i_value);
+
   static void __cdecl OnChangeIATCLTMap(void* i_param);
   static void __cdecl OnCloseIATCLTMap(void* i_param);
+  static void __cdecl OnWndActivationIATCLTMap(void* i_param, long cmd);
   static void __cdecl OnChangeIATCLTXAxisEdit(void* i_param, int i_type, float i_value);
+
   static void __cdecl OnChangeTpsswtMap(void* i_param);
   static void __cdecl OnCloseTpsswtMap(void* i_param);
+  static void __cdecl OnWndActivationTpsswtMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeGtscMap(void* i_param);
   static void __cdecl OnCloseGtscMap(void* i_param);
+  static void __cdecl OnWndActivationGtscMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeGpscMap(void* i_param);
   static void __cdecl OnCloseGpscMap(void* i_param);
+  static void __cdecl OnWndActivationGpscMap(void* i_param, long cmd);
   static void __cdecl OnChangeGpscXAxisEdit(void* i_param, int i_type, float i_value);
+
   static void __cdecl OnChangeAtscMap(void* i_param);
   static void __cdecl OnCloseAtscMap(void* i_param);
+  static void __cdecl OnWndActivationAtscMap(void* i_param, long cmd);
+
   static void __cdecl OnChangePwm1Map(void* i_param);
   static void __cdecl OnClosePwm1Map(void* i_param);
+  static void __cdecl OnWndActivationPwm1Map(void* i_param, long cmd);
+
   static void __cdecl OnChangePwm2Map(void* i_param);
   static void __cdecl OnClosePwm2Map(void* i_param);
+  static void __cdecl OnWndActivationPwm2Map(void* i_param, long cmd);
+
   static void __cdecl OnChangeIACMATMap(void* i_param);
   static void __cdecl OnCloseIACMATMap(void* i_param);
+  static void __cdecl OnWndActivationIACMATMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeVE2Map(void* i_param);
   static void __cdecl OnCloseVE2Map(void* i_param);
+  static void __cdecl OnWndActivationVE2Map(void* i_param, long cmd);
+
   static void __cdecl OnChangeTpszonMap(void* i_param);
   static void __cdecl OnCloseTpszonMap(void* i_param);
+  static void __cdecl OnWndActivationTpszonMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeCylMultMap(void* i_param);
   static void __cdecl OnCloseCylMultMap(void* i_param);
+  static void __cdecl OnWndActivationCylMultMap(void* i_param, long cmd);
+
   static void __cdecl OnChangeCylAddMap(void* i_param);
   static void __cdecl OnCloseCylAddMap(void* i_param);
-  static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationVE2Map(void* i_param, long cmd);
-  static void __cdecl OnWndActivationAFRMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationCrnkMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationWrmpMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationDeadMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationIdlrMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationIdlcMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationThrassMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationAETPSMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationAEMAPMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationAERPMMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationAftstrMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationITMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationITRPMMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationRigidMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationEGOCrvMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationIACCMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationIACCWMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationIATCLTMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationTpsswtMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationGtscMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationGpscMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationAtscMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationPwm1Map(void* i_param, long cmd);
-  static void __cdecl OnWndActivationPwm2Map(void* i_param, long cmd);
-  static void __cdecl OnWndActivationIACMATMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationTpszonMap(void* i_param, long cmd);
-  static void __cdecl OnWndActivationCylMultMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationCylAddMap(void* i_param, long cmd);
 
   void OnGridMapChangedIgn(int mapType);
