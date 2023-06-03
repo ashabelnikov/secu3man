@@ -36,6 +36,7 @@ class CToolTipCtrlEx;
 
 class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
 {
+ typedef CDialog Super;
  public:
   CAppSettingsDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;

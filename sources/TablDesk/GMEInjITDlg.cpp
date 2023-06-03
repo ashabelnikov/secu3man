@@ -31,8 +31,6 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/CtrlScaler.h"
 
-const UINT CGMEInjITDlg::IDD = IDD_GME_INJ_IT;
-
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjITDlg dialog
 
@@ -44,9 +42,8 @@ BEGIN_MESSAGE_MAP(CGMEInjITDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjITDlg::CGMEInjITDlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjITDlg::IDD, pParent)
-, m_it_map(16, 16, false, false, NULL, 3)
+CGMEInjITDlg::CGMEInjITDlg()
+: m_it_map(16, 16, false, false, NULL, 3)
 , mp_ITMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
@@ -123,7 +120,7 @@ void CGMEInjITDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjITDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_IT;
 }
 
 void CGMEInjITDlg::BindMaps(float* pIT)

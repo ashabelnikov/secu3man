@@ -44,9 +44,8 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CFunSetPageDlg(CWnd* pParent = NULL, bool m_tps_learning = true); // standard constructor
+  CFunSetPageDlg(bool m_tps_learning = true);
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

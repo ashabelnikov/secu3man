@@ -26,8 +26,7 @@
 #include "stdafx.h"
 #include "TabDialog.h"
 
-CTabDialog::CTabDialog(UINT nIDTemplate, CWnd* pParentWnd)
-: Super(nIDTemplate, pParentWnd)
+CTabDialog::CTabDialog()
 {
  //empty
 }

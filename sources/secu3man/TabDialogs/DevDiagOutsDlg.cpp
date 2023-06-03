@@ -35,8 +35,6 @@
 
 using namespace fastdelegate;
 
-const UINT CDevDiagOutsDlg::IDD = IDD_DEVDIAG_OUTPUTS;
-
 const UINT OutputsCheckStart = IDC_DEV_DIAG_IGN_OUT1_CHECK;
 const UINT OutputsCheckEnd = IDC_DEV_DIAG_DE_CHECK;
 const UINT OutputsCheckStart1 = IDC_DEV_DIAG_IGN_O1_CHECK;     //secu-3i
@@ -51,9 +49,8 @@ BEGIN_MESSAGE_MAP(CDevDiagOutsDlg, Super)
  ON_UPDATE_COMMAND_UI_RANGE(OutputsCheckStart1, OutputsCheckEnd1, OnUpdateDiagControls) //secu-3i
 END_MESSAGE_MAP()
 
-CDevDiagOutsDlg::CDevDiagOutsDlg(CWnd* pParent /*=NULL*/)
-: Super(CDevDiagOutsDlg::IDD, pParent)
-, m_enable_diag_controls(false)
+CDevDiagOutsDlg::CDevDiagOutsDlg()
+: m_enable_diag_controls(false)
 , m_enable_secu3t_features(false)
 , m_enable_blde_testing(false)
 , m_enable_tacho_testing(false)
@@ -63,14 +60,14 @@ CDevDiagOutsDlg::CDevDiagOutsDlg(CWnd* pParent /*=NULL*/)
  //empty
 }
 
+BOOL CDevDiagOutsDlg::Create(CWnd* pParentWnd /* NULL*/)
+{
+ return Super::Create(IDD_DEVDIAG_OUTPUTS, pParentWnd);
+}
+
 void CDevDiagOutsDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
-}
-
-LPCTSTR CDevDiagOutsDlg::GetDialogID(void) const
-{
- return (LPCTSTR)IDD;
 }
 
 BOOL CDevDiagOutsDlg::OnInitDialog()

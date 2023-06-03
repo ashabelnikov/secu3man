@@ -39,9 +39,8 @@ class CGMEInjITDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  CGMEInjITDlg(CWnd* pParent = NULL);   // standard constructor
+  CGMEInjITDlg();
  ~CGMEInjITDlg();
-  static const UINT IDD;
 
   void BindMaps(float* pIT);
   void BindRPMGrid(float* pGrid);

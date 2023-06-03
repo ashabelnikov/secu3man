@@ -36,8 +36,6 @@
 
 using namespace std;
 
-const UINT CKnockPageDlg::IDD = IDD_PD_KNOCK_PAGE;
-
 BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_KNOCK_ENABLE_KC_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_KNOCK_BPF_FREQ_COMBO, OnChangeData)
@@ -123,9 +121,8 @@ BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
  ON_WM_SIZE()
 END_MESSAGE_MAP()
 
-CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CKnockPageDlg::IDD, pParent)
-, m_enabled(false)
+CKnockPageDlg::CKnockPageDlg()
+: m_enabled(false)
 , mp_scr(new CWndScroller)
 , m_wnd_begin_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_wnd_end_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
@@ -162,7 +159,12 @@ CKnockPageDlg::~CKnockPageDlg()
 
 LPCTSTR CKnockPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_KNOCK_PAGE;
+}
+
+BOOL CKnockPageDlg::Create(CWnd* pParentWnd /* = NULL*/)
+{
+ return Super::Create(GetDialogID(), pParentWnd);
 }
 
 void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)

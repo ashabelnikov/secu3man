@@ -42,10 +42,9 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CInjectorPageDlg(CWnd* pParent = NULL);   // standard constructor
+  CInjectorPageDlg();
  ~CInjectorPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

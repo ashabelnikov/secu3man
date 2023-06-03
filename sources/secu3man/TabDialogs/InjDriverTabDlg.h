@@ -46,8 +46,7 @@ class CInjDriverTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  CInjDriverTabDlg(CWnd* pParent = NULL);   // standard constructor
-  static const UINT IDD;
+  CInjDriverTabDlg();
   virtual LPCTSTR GetDialogID(void) const;
 
   void SetVoltLineColor(DWORD color);

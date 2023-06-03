@@ -31,8 +31,6 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
 
-const UINT CGMEInjOther1Dlg::IDD = IDD_GME_INJ_OTHER1;
-
 static const UINT StaticCtrlBegin = IDC_GME_INJ_TPSSWT_TEXT;
 static const UINT StaticCtrlEnd = IDC_GME_INJ_THRASS_TEXT;
 
@@ -51,9 +49,8 @@ BEGIN_MESSAGE_MAP(CGMEInjOther1Dlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjOther1Dlg::CGMEInjOther1Dlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjOther1Dlg::IDD, pParent)
-, m_tpsswt_map(1, 16)
+CGMEInjOther1Dlg::CGMEInjOther1Dlg()
+: m_tpsswt_map(1, 16)
 , m_tpszon_map(1, 16)
 , m_cylmult_map(1, 8)
 , m_cyladd_map(1, 8)
@@ -176,7 +173,7 @@ void CGMEInjOther1Dlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjOther1Dlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_OTHER1;
 }
 
 void CGMEInjOther1Dlg::BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd, float* pThrass)

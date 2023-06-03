@@ -37,9 +37,8 @@ class CGMEInjOther1Dlg : public CTabDialog
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CGMEInjOther1Dlg(CWnd* pParent = NULL);   // standard constructor
+  CGMEInjOther1Dlg();
  ~CGMEInjOther1Dlg();
-  static const UINT IDD;
 
   void BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd, float* pThrass);
   void BindRPMGrid(float* pGrid);

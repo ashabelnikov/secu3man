@@ -33,8 +33,6 @@
 
 const float AFBEGINEND_MINDIFF = 16500.0f; //this limit prevets overflow, can't be less
 
-const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
-
 BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -110,9 +108,8 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_VSS_PP1KM_CAPTION, OnUpdateControls)
 END_MESSAGE_MAP()
 
-CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CMiscPageDlg::IDD, pParent)
-, m_enabled(false)
+CMiscPageDlg::CMiscPageDlg()
+: m_enabled(false)
 , m_hall_output_enabled(false)
 , m_inj_turnoff_enabled(false)
 , m_enable_secu3t_features(false)
@@ -147,7 +144,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_MISC_PAGE;
 }
 
 float CMiscPageDlg::_calcAfEnd(void)

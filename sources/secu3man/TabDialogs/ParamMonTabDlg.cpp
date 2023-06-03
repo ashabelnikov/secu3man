@@ -52,11 +52,8 @@ BEGIN_MESSAGE_MAP(CParamMonTabDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-const UINT CParamMonTabDlg::IDD = IDD_PARAMETERS_AND_MONITOR;
-
-CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CParamMonTabDlg::IDD, pParent)
-, mp_CEDeskDlg(new CCEDeskDlg())
+CParamMonTabDlg::CParamMonTabDlg()
+: mp_CEDeskDlg(new CCEDeskDlg())
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
@@ -83,7 +80,7 @@ void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CParamMonTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PARAMETERS_AND_MONITOR;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -108,7 +105,7 @@ BOOL CParamMonTabDlg::OnInitDialog()
  bool check_state = GetEditTablesCheckState();
 
  rect = GDIHelpers::GetChildWndRect(this, IDC_PM_PARAMDESK_FRAME);
- mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
+ mp_ParamDeskDlg->Create(this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  mp_ParamDeskDlg->Show(!check_state);

@@ -42,8 +42,6 @@
 using namespace std;
 using namespace fastdelegate;
 
-const UINT CLogPlayerTabDlg::IDD = IDD_LOG_PLAYER;
-
 BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, Super)
  ON_WM_DROPFILES()
  ON_WM_SIZE()
@@ -53,9 +51,8 @@ BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, Super)
  ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
-CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CLogPlayerTabDlg::IDD, pParent)
-, mp_CEDeskDlg(new CCEDeskDlg())
+CLogPlayerTabDlg::CLogPlayerTabDlg()
+: mp_CEDeskDlg(new CCEDeskDlg())
 , mp_LMDeskDlg(new CLMDeskDlg())
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_LPPanelDlg(new CLPControlPanelDlg)
@@ -89,7 +86,7 @@ void CLogPlayerTabDlg::OnDropFiles(HDROP hDropInfo)
 
 LPCTSTR CLogPlayerTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_LOG_PLAYER;
 }
 
 BOOL CLogPlayerTabDlg::OnInitDialog()
@@ -108,7 +105,7 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  mp_CEDeskDlg->Show(true);
 
  rect = GDIHelpers::GetChildWndRect(this, IDC_LP_LOGCONTROL_PANEL_FRAME);
- mp_LPPanelDlg->Create(CLPControlPanelDlg::IDD, this);
+ mp_LPPanelDlg->Create(this);
  mp_LPPanelDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  
  rect = GDIHelpers::GetChildWndRect(this, IDC_LP_LOG_MARKS_DESK_HOLDER);

@@ -32,7 +32,7 @@ class AFX_EXT_CLASS CParamTabBaseDlg : public CTabDialog
   typedef CTabDialog Super;
 
  public:
-  CParamTabBaseDlg(UINT nIDTemplate, CWnd* pParentWnd = NULL);   // standard constructor
+  CParamTabBaseDlg();
 
  protected:
   virtual BOOL PreTranslateMessage(MSG* pMsg);

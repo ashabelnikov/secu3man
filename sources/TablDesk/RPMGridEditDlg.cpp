@@ -170,7 +170,7 @@ LRESULT CRPMGridEditDlg::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
 
 HBRUSH CRPMGridEditDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 {
- HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+ HBRUSH hbr = Super::OnCtlColor(pDC, pWnd, nCtlColor);
  if ((nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[0].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[1].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[2].m_hWnd))
  {
   pDC->SetTextColor(errorMsgColor);

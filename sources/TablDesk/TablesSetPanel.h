@@ -45,8 +45,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  CTablesSetPanel(CWnd* pParent = NULL);   // standard constructor
-  static const UINT IDD;
+  CTablesSetPanel();
+  virtual ~CTablesSetPanel();
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   void SetFunSetListBox(const std::vector<_TSTRING>& i_list_of_names);
   void SetFunSetListBoxSelection(int i_selected_index);
@@ -218,43 +219,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
  private:
   CListCtrlEx m_funset_listbox;
-  CButton   m_view_attenuator_map_btn;
-  CButton   m_view_dwellcntrl_map_btn;
-  CButton   m_view_cts_curve_map_btn;
-  CButton   m_view_ats_curve_map_btn;
-  CButton   m_view_ats_aac_map_btn;
-  CButton   m_view_gasdose_map_btn;
   CButton   m_edit_cesettings_btn;
-  CButton   m_view_barocorr_map_btn;
-  CButton   m_view_manigntim_map_btn;
-  CButton   m_view_tmp2_curve_map_btn;
-  CButton   m_view_crktemp_map_btn;
-  CButton   m_view_eh_pause_map_btn;
-  CButton   m_view_cranking_thrd_map_btn;
-  CButton   m_view_cranking_time_map_btn;
-  CButton   m_view_smapaban_thrd_map_btn;
-  CButton   m_view_knock_zone_map_btn;
-  CButton   m_view_lambda_zone_map_btn;
-  CButton   m_view_grts_curve_map_btn;
-  CButton   m_view_grheat_duty_map_btn;
-  CButton   m_view_pwmiac_ucoef_map_btn;
-  CButton   m_view_aftstr_strk0_map_btn;
-  CButton   m_view_aftstr_strk1_map_btn;
-  CButton   m_view_grvaldel_map_btn;
-  CButton   m_view_ftls_curve_map_btn;
-  CButton   m_view_egts_curve_map_btn;
-  CButton   m_view_ops_curve_map_btn;
-  CButton   m_view_maninjpwc_map_btn;
-  CButton   m_view_mafcurve_map_btn;
-  CButton   m_view_ftlscor_map_btn;
-  CButton   m_view_fts_curve_map_btn;
-  CButton   m_view_fueldens_corr_map_btn;
-  CButton   m_view_xtauxfacc_map_btn;
-  CButton   m_view_xtauxfdec_map_btn;
-  CButton   m_view_xtautfacc_map_btn;
-  CButton   m_view_xtautfdec_map_btn;
-  CButton   m_view_inj_nonlinp_map_btn;
-  CButton   m_view_inj_nonling_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;

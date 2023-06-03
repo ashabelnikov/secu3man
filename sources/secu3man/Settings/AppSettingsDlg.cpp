@@ -91,7 +91,7 @@ void CAppSettingsDlg::DDX_CBStringPort(CDataExchange* pDX, CComboBox* p_port_sel
 }
 
 CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
-: CDialog(CAppSettingsDlg::IDD, pParent)
+: Super(CAppSettingsDlg::IDD, pParent)
 , m_OnOk(NULL)
 , m_OnCancel(NULL)
 , m_OnActivate(NULL)
@@ -122,7 +122,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_APP_SETTINGS_PORT_SELECTION1_COMBO, m_port_selection1_combo); //all
  DDX_Control(pDX, IDC_APP_SETTINGS_PORT_SELECTION2_COMBO, m_port_selection2_combo); //existing
 
@@ -188,7 +188,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CAppSettingsDlg, CDialog)
+BEGIN_MESSAGE_MAP(CAppSettingsDlg, Super)
  ON_WM_CTLCOLOR()
  ON_WM_DEVICECHANGE()
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_BUTTON, OnAppSettingsLogfolderButton)
@@ -210,7 +210,7 @@ HBRUSH CAppSettingsDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
   return (HBRUSH)GetStockObject(NULL_BRUSH);
  }
 
- return CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+ return Super::OnCtlColor(pDC, pWnd, nCtlColor);
 }
 
 void CAppSettingsDlg::OnSelendokRestartPerameters()
@@ -247,7 +247,7 @@ bool CAppSettingsDlg::IsRestartRequired(void)
 
 BOOL CAppSettingsDlg::OnInitDialog()
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 
  m_port_selection1_combo.LimitText(200);
 
@@ -315,14 +315,14 @@ void CAppSettingsDlg::OnCancel()
 {
  UpdateData();
  if (m_OnCancel) m_OnCancel();
-  CDialog::OnCancel();
+  Super::OnCancel();
 }
 
 void CAppSettingsDlg::OnOK()
 {
  UpdateData();
  if (m_OnOk) m_OnOk();
-  CDialog::OnOK();
+  Super::OnOK();
 
  AfxGetMainWnd()->RedrawWindow();
 }

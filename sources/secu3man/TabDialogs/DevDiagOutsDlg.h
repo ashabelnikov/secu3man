@@ -38,9 +38,8 @@ class CDevDiagOutsDlg : public CDialog
   typedef fastdelegate::FastDelegate2<int, bool> EventOutputToggle;
 
  public:
-  CDevDiagOutsDlg(CWnd* pParent = NULL);
-  static const UINT IDD;
-  virtual LPCTSTR GetDialogID(void) const;
+  CDevDiagOutsDlg();
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   //установка обработчиков событий от элементов управления
   void setOnOutputToggle(EventOutputToggle OnFunction);

@@ -29,8 +29,6 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
 
-const UINT CGMEInjAFRDlg::IDD = IDD_GME_INJ_AFR;
-
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjAFRDlg dialog
 
@@ -40,9 +38,8 @@ BEGIN_MESSAGE_MAP(CGMEInjAFRDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjAFRDlg::CGMEInjAFRDlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjAFRDlg::IDD, pParent)
-, m_afr_map(16, 16, false, false, NULL, 3)
+CGMEInjAFRDlg::CGMEInjAFRDlg()
+: m_afr_map(16, 16, false, false, NULL, 3)
 , mp_AFRMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
@@ -101,7 +98,7 @@ void CGMEInjAFRDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjAFRDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_AFR;
 }
 
 void CGMEInjAFRDlg::BindMaps(float* pAFR)

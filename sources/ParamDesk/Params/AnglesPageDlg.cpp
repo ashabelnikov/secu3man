@@ -31,8 +31,6 @@
 #include "ui-core/DDX_helpers.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CAnglesPageDlg::IDD = IDD_PD_ANGLES_PAGE;
-
 BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_WM_SIZE()
  ON_WM_DESTROY()
@@ -85,9 +83,8 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_MANIGNTIM_IDL_CHECK, OnUpdateControls)
 END_MESSAGE_MAP()
 
-CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CAnglesPageDlg::IDD, pParent)
-, m_enabled(false)
+CAnglesPageDlg::CAnglesPageDlg()
+: m_enabled(false)
 , m_max_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_min_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
@@ -110,7 +107,7 @@ CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CAnglesPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_ANGLES_PAGE;
 }
 
 void CAnglesPageDlg::DoDataExchange(CDataExchange* pDX)

@@ -26,8 +26,7 @@
 #include "stdafx.h"
 #include "ParamTabBaseDlg.h"
 
-CParamTabBaseDlg::CParamTabBaseDlg(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
-: Super(nIDTemplate, pParentWnd)
+CParamTabBaseDlg::CParamTabBaseDlg()
 {
  //empty
 }

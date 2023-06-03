@@ -46,8 +46,6 @@
 
 const int TIMER_ID = 1;
 
-const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;
-
 //Tab IDs of parameters selection tab. Note that order of beneath IDs must
 //correspond to AddPage() calling order.
 enum PSTabId
@@ -59,16 +57,15 @@ enum PSTabId
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
 
-CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CFirmwareTabDlg::IDD, pParent)
-, m_is_bl_started_emergency_available(false)
+CFirmwareTabDlg::CFirmwareTabDlg()
+: m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
 , m_is_app_items_available(false)
-, mp_ParamDeskDlg(new CParamDeskDlg(NULL, true, false)) //<-- use knock parameters tab, don't use TPS learning
+, mp_ParamDeskDlg(new CParamDeskDlg(true, false)) //<-- use knock parameters tab, don't use TPS learning
 , mp_IORemappingDlg(new CIORemappingDlg())
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 , mp_ContextMenuManager(new CFirmwareModeContextMenuManager())
-, mp_TablesPanel(new CTablesSetPanel(NULL))
+, mp_TablesPanel(new CTablesSetPanel())
 , m_tab_selection(0) //<-- "default parameters" is selected by default
 , m_initialized(false)
 , mp_eeresetLink(new CLabel)
@@ -120,7 +117,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_FIRMWARE_SUPPORT;
 }
 
 BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
@@ -217,7 +214,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  //create parameters desk
  CRect rect;
  rect = GDIHelpers::GetChildWndRect(this, IDC_FW_PD_FRAME);
- mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
+ mp_ParamDeskDlg->Create(this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
@@ -227,7 +224,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  //create IO remapping desk
  rect = GDIHelpers::GetChildWndRect(this, IDC_FW_PD_FRAME);
- mp_IORemappingDlg->Create(CIORemappingDlg::IDD,this);
+ mp_IORemappingDlg->Create(this);
  mp_IORemappingDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_IORemappingDlg->ShowWindow(SW_HIDE);
 
@@ -237,7 +234,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  //create tables desk
  rect = GDIHelpers::GetChildWndRect(this, IDC_FW_TD_FRAME);
- mp_TablesPanel->Create(CTablesSetPanel::IDD, this);
+ mp_TablesPanel->Create(this);
  mp_TablesPanel->SetPosition(rect.TopLeft().x,rect.TopLeft().y, GetDlgItem(IDC_FW_VIEW_FWOPT));
  mp_TablesPanel->ShowWindow(SW_SHOWNORMAL);
 

@@ -43,7 +43,7 @@ void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
   return;
  }
 
- for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END - 2; ++i)
+ for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END - 2; ++i) //all maps except two last pseudo maps
  {
   if (_this->m_md[i].state)
   {
@@ -1634,7 +1634,7 @@ void CButtonsPanel::OnGridMapChangedIgn(int mapType)
 //------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapClosedIgn(HWND hwnd, int mapType)
 {
- m_grid_map_state_ign = 0;
+ m_md[TYPE_MAP_GME_IGN_WND].state = 0;
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, TYPE_MAP_GME_IGN_WND);
 }
@@ -1709,7 +1709,7 @@ void CButtonsPanel::OnGridMapClosedInj(HWND hwnd, int mapType)
  if (mp_autoTuneCntr.get())
   mp_autoTuneCntr->Deactivate();
 
- m_grid_map_state_inj = 0;
+ m_md[TYPE_MAP_GME_INJ_WND].state = 0;
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, TYPE_MAP_GME_INJ_WND);
 }

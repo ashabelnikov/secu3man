@@ -37,9 +37,8 @@ class CDevDiagInpsDlg : public CDialog
   typedef CDialog Super;
 
  public:
-  CDevDiagInpsDlg(CWnd* pParent = NULL);
-  static const UINT IDD;
-  virtual LPCTSTR GetDialogID(void) const;
+  CDevDiagInpsDlg();
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   //Set values of inputs (digital and analog)
   void SetInputValues(const SECU3IO::DiagInpDat* i_values);

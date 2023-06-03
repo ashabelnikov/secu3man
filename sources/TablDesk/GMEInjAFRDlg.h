@@ -37,9 +37,8 @@ class CGMEInjAFRDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  CGMEInjAFRDlg(CWnd* pParent = NULL);   // standard constructor
+  CGMEInjAFRDlg();
  ~CGMEInjAFRDlg();
-  static const UINT IDD;
 
   void BindMaps(float* pAFR);
   void BindRPMGrid(float* pGrid);

@@ -37,8 +37,6 @@
 
 using namespace fastdelegate;
 
-const UINT CDevDiagInpsDlg::IDD = IDD_DEVDIAG_INPUTS;
-
 const UINT InputsTextStart = IDC_DEV_DIAG_VOLTAGE;
 const UINT InputsTextEnd = IDC_DEV_DIAG_DE;
 const UINT InputsTextStart1 = IDC_DEV_DIAG_VOLTAGE;            //secu-3i
@@ -58,9 +56,8 @@ BEGIN_MESSAGE_MAP(CDevDiagInpsDlg, Super)
  ON_UPDATE_COMMAND_UI_RANGE(InputsCaptionStart1, InputsCaptionEnd1, OnUpdateDiagControls)  //secu-3i
 END_MESSAGE_MAP()
 
-CDevDiagInpsDlg::CDevDiagInpsDlg(CWnd* pParent /*=NULL*/)
-: Super(CDevDiagInpsDlg::IDD, pParent)
-, m_enable_diag_controls(false)
+CDevDiagInpsDlg::CDevDiagInpsDlg()
+: m_enable_diag_controls(false)
 , m_enable_secu3t_features(false)
 , m_enable_extraio(false)
 , mp_scr(new CWndScroller)
@@ -98,9 +95,9 @@ void CDevDiagInpsDlg::DoDataExchange(CDataExchange* pDX)
  }
 }
 
-LPCTSTR CDevDiagInpsDlg::GetDialogID(void) const
+BOOL CDevDiagInpsDlg::Create(CWnd* pParentWnd /*= NULL*/)
 {
- return (LPCTSTR)IDD;
+ return Super::Create(IDD_DEVDIAG_INPUTS, pParentWnd);
 }
 
 BOOL CDevDiagInpsDlg::OnInitDialog()

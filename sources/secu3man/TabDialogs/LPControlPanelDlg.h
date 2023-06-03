@@ -41,8 +41,8 @@ class CLPControlPanelDlg : public CModelessDialog
   typedef fastdelegate::FastDelegate2<UINT, unsigned long> EventHScroll;
 
  public:
-  CLPControlPanelDlg(CWnd* pParent = NULL);
-  static const UINT IDD;
+  CLPControlPanelDlg();
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   //Time factor combo box
   void FillTimeFactorCombo(std::vector<_TSTRING>& i_factor_strings);

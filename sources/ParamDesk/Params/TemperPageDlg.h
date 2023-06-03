@@ -40,9 +40,8 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CTemperPageDlg(CWnd* pParent = NULL); // standard constructor
+  CTemperPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

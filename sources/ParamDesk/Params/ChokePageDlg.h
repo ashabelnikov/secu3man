@@ -42,9 +42,8 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CChokePageDlg(CWnd* pParent = NULL);   // standard constructor
+  CChokePageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

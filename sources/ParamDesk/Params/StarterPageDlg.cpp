@@ -31,8 +31,6 @@
 #include "ui-core/WndScroller.h"
 #include "ui-core/DDX_helpers.h"
 
-const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
-
 BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -101,9 +99,8 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRSTART_CHECK, OnUpdateInjGasChokeControls)
 END_MESSAGE_MAP()
 
-CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CStarterPageDlg::IDD, pParent)
-, m_enabled(false)
+CStarterPageDlg::CStarterPageDlg()
+: m_enabled(false)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_choke(false)
@@ -137,7 +134,7 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CStarterPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_STARTER_PAGE;
 }
 
 void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)

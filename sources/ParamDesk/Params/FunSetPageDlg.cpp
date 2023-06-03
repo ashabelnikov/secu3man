@@ -36,8 +36,6 @@
 #include "common/Calculations.h"
 #include <math.h>
 
-const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
-
 BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -137,9 +135,8 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_USE_LDAX_GRID, OnUpdateControls)
 END_MESSAGE_MAP()
 
-CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/, bool tps_learning /*=true*/)
-: Super(CFunSetPageDlg::IDD, pParent)
-, m_enabled(false)
+CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/)
+: m_enabled(false)
 , m_enable_secu3t_features(false)
 , m_map_grad_edit(CEditEx::MODE_FLOAT, true)
 , m_press_swing_edit(CEditEx::MODE_FLOAT, true)
@@ -177,7 +174,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/, bool tps_learning /*=tru
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_FUNSET_PAGE;
 }
 
 void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)

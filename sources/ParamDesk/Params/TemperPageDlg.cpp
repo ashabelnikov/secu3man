@@ -31,7 +31,6 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CTemperPageDlg::IDD = IDD_PD_TEMPER_PAGE;
 const float TEMP_HYSTERESIS = 0.25f;
 
 BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
@@ -88,9 +87,8 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENTTIMER_UNIT, OnUpdateControls)
 END_MESSAGE_MAP()
 
-CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CTemperPageDlg::IDD, pParent)
-, m_enabled(false)
+CTemperPageDlg::CTemperPageDlg()
+: m_enabled(false)
 , m_enable_secu3t_features(false)
 , m_use_vent_pwm_enabled(false)
 , m_use_curve_map_enabled(false)
@@ -118,7 +116,7 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CTemperPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_TEMPER_PAGE;
 }
 
 void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)

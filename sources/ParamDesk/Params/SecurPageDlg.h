@@ -41,9 +41,8 @@ class CSecurPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CSecurPageDlg(CWnd* pParent = NULL);   // standard constructor
+  CSecurPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

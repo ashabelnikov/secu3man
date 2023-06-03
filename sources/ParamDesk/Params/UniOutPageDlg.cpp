@@ -31,8 +31,6 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CUniOutPageDlg::IDD = IDD_PD_UNIOUT_PAGE;
-
 BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -138,9 +136,8 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_UNIOUT_6_COND2_OFF_EDIT, OnChangeData)
 END_MESSAGE_MAP()
 
-CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CUniOutPageDlg::IDD, pParent)
-, m_enabled(false)
+CUniOutPageDlg::CUniOutPageDlg()
+: m_enabled(false)
 , mp_scr(new CWndScroller)
 {
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
@@ -213,7 +210,7 @@ CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CUniOutPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_UNIOUT_PAGE;
 }
 
 void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)

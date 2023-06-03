@@ -29,8 +29,6 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-const UINT CSecurPageDlg::IDD = IDD_PD_SECUR_PAGE;
-
 BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_SECUR_BT_TYPE_COMBO, OnChangeData)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_APPLY_BUTTON, OnChangeDataApply)
@@ -61,9 +59,8 @@ BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_TYPE_COMBO_CAPTION, OnUpdateControls)
 END_MESSAGE_MAP()
 
-CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CSecurPageDlg::IDD, pParent)
-, m_enabled(false)
+CSecurPageDlg::CSecurPageDlg()
+: m_enabled(false)
 , m_namepass_enabled(false)
 , m_respar_enabled(false)
 , m_bt_name_edit(CEditEx::MODE_STRING)
@@ -84,7 +81,7 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CSecurPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_SECUR_PAGE;
 }
 
 void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)

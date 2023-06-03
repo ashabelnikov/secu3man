@@ -45,9 +45,9 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
  typedef CModelessUpdatableDialog Super;
 
  public:
-  CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false, bool tps_learning = true);
+  CParamDeskDlg(bool i_show_knock_page = false, bool tps_learning = true);
   virtual ~CParamDeskDlg();
-  static const UINT IDD;
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   //note: wnd_insert_after parameter may be used to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);

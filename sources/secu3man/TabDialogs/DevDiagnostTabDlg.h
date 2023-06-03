@@ -47,8 +47,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CDevDiagnostTabDlg(CWnd* pParent = NULL);
-  static const UINT IDD;
+  CDevDiagnostTabDlg();
   virtual LPCTSTR GetDialogID(void) const;
 
   //установка обработчиков событий от элементов управления

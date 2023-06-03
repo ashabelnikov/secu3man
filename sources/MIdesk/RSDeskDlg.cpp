@@ -135,7 +135,7 @@ void CRSDeskDlg::Input::ShowWindow(int show)
   ctrl[i]->ShowWindow(show);
 }
 
-BEGIN_MESSAGE_MAP(CRSDeskDlg, CDialog)
+BEGIN_MESSAGE_MAP(CRSDeskDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
  ON_WM_PAINT()

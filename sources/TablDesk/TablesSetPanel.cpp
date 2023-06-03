@@ -33,16 +33,11 @@
 #include "TablesSetPanel.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-//------------------------------------------------------------------------
-
-const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
-
 /////////////////////////////////////////////////////////////////////////////
 // CTablesSetPanel dialog
 
-CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
-: Super(CTablesSetPanel::IDD, pParent)
-, m_dwellcntrl_enabled(false)
+CTablesSetPanel::CTablesSetPanel()
+: m_dwellcntrl_enabled(false)
 , m_cts_curve_enabled(false)
 , m_tmp2_curve_enabled(false)
 , m_grts_curve_enabled(false)
@@ -62,6 +57,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
   MapData md;
+  md.mp_button = new CButton;
   m_md.insert(std::make_pair(i, md));
  }
 
@@ -80,50 +76,62 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  memset(m_ats_curve_x_axis_limits, 0, sizeof(float) * 2);
 }
 
+CTablesSetPanel::~CTablesSetPanel()
+{
+ for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+  delete m_md[i].mp_button;
+}
+
+BOOL CTablesSetPanel::Create(CWnd* pParentWnd /*= NULL*/)
+{
+ return CButtonsPanel::Super::Create(IDD_TD_ALLTABLES_PANEL, pParentWnd);
+}
+
 void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_TD_FUNSET_LIST, m_funset_listbox);
- DDX_Control(pDX, IDC_TD_VIEW_ATTENUATOR_MAP, m_view_attenuator_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_DWELL_CONTROL, m_view_dwellcntrl_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_CTS_CURVE, m_view_cts_curve_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_ATS_CURVE, m_view_ats_curve_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_ATS_MAP, m_view_ats_aac_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_ATTENUATOR_MAP, *m_md[TYPE_MAP_ATTENUATOR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_DWELL_CONTROL, *m_md[TYPE_MAP_DWELLCNTRL].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_CTS_CURVE, *m_md[TYPE_MAP_CTS_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_ATS_CURVE, *m_md[TYPE_MAP_ATS_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_ATS_MAP, *m_md[TYPE_MAP_ATS_CORR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_GDP_MAP, *m_md[TYPE_MAP_GASDOSE].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_BAROCORR_MAP, *m_md[TYPE_MAP_BAROCORR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_MANIGNTIM_MAP, *m_md[TYPE_MAP_MANIGNTIM].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_TMP2_CURVE, *m_md[TYPE_MAP_TMP2_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_CRKTEMP_MAP, *m_md[TYPE_MAP_CRKCLT_CORR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_EH_PAUSE_MAP, *m_md[TYPE_MAP_EH_PAUSE].mp_button);
+ DDX_Control(pDX, IDC_TD_CRANKING_THRD_MAP, *m_md[TYPE_MAP_CRANKING_THRD].mp_button);
+ DDX_Control(pDX, IDC_TD_CRANKING_TIME_MAP, *m_md[TYPE_MAP_CRANKING_TIME].mp_button);
+ DDX_Control(pDX, IDC_TD_SMAPABAN_THRD_MAP, *m_md[TYPE_MAP_SMAPABAN_THRD].mp_button);
+ DDX_Control(pDX, IDC_TD_KNOCK_ZONES_MAP, *m_md[TYPE_MAP_KNOCK_ZONE].mp_button);
+ DDX_Control(pDX, IDC_TD_LAMBDA_ZONES_MAP, *m_md[TYPE_MAP_LAMBDA_ZONE].mp_button);
+ DDX_Control(pDX, IDC_TD_GRTS_CURVE, *m_md[TYPE_MAP_GRTS_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_GRHEAT_DUTY_MAP, *m_md[TYPE_MAP_GRHEAT_DUTY].mp_button);
+ DDX_Control(pDX, IDC_TD_PWMIAC_UCOEF_MAP, *m_md[TYPE_MAP_PWMIAC_UCOEF].mp_button);
+ DDX_Control(pDX, IDC_TD_AFTSTR_STRK0_MAP, *m_md[TYPE_MAP_AFTSTR_STRK0].mp_button);
+ DDX_Control(pDX, IDC_TD_AFTSTR_STRK1_MAP, *m_md[TYPE_MAP_AFTSTR_STRK1].mp_button);
+ DDX_Control(pDX, IDC_TD_GRVDELAY_MAP, *m_md[TYPE_MAP_GRVDELAY].mp_button);
+ DDX_Control(pDX, IDC_TD_FTLS_CURVE, *m_md[TYPE_MAP_FTLS_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_EGTS_CURVE, *m_md[TYPE_MAP_EGTS_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_OPS_CURVE, *m_md[TYPE_MAP_OPS_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_MANINJPWC_MAP, *m_md[TYPE_MAP_MANINJPWC].mp_button);
+ DDX_Control(pDX, IDC_TD_MAF_CURVE, *m_md[TYPE_MAP_MAF_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_FTLSCOR_MAP, *m_md[TYPE_MAP_FTLSCOR].mp_button);
+ DDX_Control(pDX, IDC_TD_FTS_CURVE, *m_md[TYPE_MAP_FTS_CURVE].mp_button);
+ DDX_Control(pDX, IDC_TD_FUELDENS_CORR_MAP, *m_md[TYPE_MAP_FUELDENS_CORR].mp_button);
+ DDX_Control(pDX, IDC_TD_XTAU_XFACC_MAP, *m_md[TYPE_MAP_XTAU_XFACC].mp_button);
+ DDX_Control(pDX, IDC_TD_XTAU_XFDEC_MAP, *m_md[TYPE_MAP_XTAU_XFDEC].mp_button);
+ DDX_Control(pDX, IDC_TD_XTAU_TFACC_MAP, *m_md[TYPE_MAP_XTAU_TFACC].mp_button);
+ DDX_Control(pDX, IDC_TD_XTAU_TFDEC_MAP, *m_md[TYPE_MAP_XTAU_TFDEC].mp_button);
+ DDX_Control(pDX, IDC_TD_INJNONLINP_MAP, *m_md[TYPE_MAP_INJNONLINP].mp_button);
+ DDX_Control(pDX, IDC_TD_INJNONLING_MAP, *m_md[TYPE_MAP_INJNONLING].mp_button);
+
+ DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
  DDX_Control(pDX, IDC_TD_RPM_GRID_BUTTON, m_rpm_grid_btn);
  DDX_Control(pDX, IDC_TD_FW_CONSTS_BUTTON, m_fw_consts_btn);
- DDX_Control(pDX, IDC_TD_VIEW_GDP_MAP, m_view_gasdose_map_btn);
- DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
- DDX_Control(pDX, IDC_TD_VIEW_BAROCORR_MAP, m_view_barocorr_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_MANIGNTIM_MAP, m_view_manigntim_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_TMP2_CURVE, m_view_tmp2_curve_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_CRKTEMP_MAP, m_view_crktemp_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_EH_PAUSE_MAP, m_view_eh_pause_map_btn);
- DDX_Control(pDX, IDC_TD_CRANKING_THRD_MAP, m_view_cranking_thrd_map_btn);
- DDX_Control(pDX, IDC_TD_CRANKING_TIME_MAP, m_view_cranking_time_map_btn);
- DDX_Control(pDX, IDC_TD_SMAPABAN_THRD_MAP, m_view_smapaban_thrd_map_btn);
- DDX_Control(pDX, IDC_TD_KNOCK_ZONES_MAP, m_view_knock_zone_map_btn);
- DDX_Control(pDX, IDC_TD_LAMBDA_ZONES_MAP, m_view_lambda_zone_map_btn);
- DDX_Control(pDX, IDC_TD_GRTS_CURVE, m_view_grts_curve_map_btn);
- DDX_Control(pDX, IDC_TD_GRHEAT_DUTY_MAP, m_view_grheat_duty_map_btn);
- DDX_Control(pDX, IDC_TD_PWMIAC_UCOEF_MAP, m_view_pwmiac_ucoef_map_btn);
- DDX_Control(pDX, IDC_TD_AFTSTR_STRK0_MAP, m_view_aftstr_strk0_map_btn);
- DDX_Control(pDX, IDC_TD_AFTSTR_STRK1_MAP, m_view_aftstr_strk1_map_btn);
- DDX_Control(pDX, IDC_TD_GRVDELAY_MAP, m_view_grvaldel_map_btn);
- DDX_Control(pDX, IDC_TD_FTLS_CURVE, m_view_ftls_curve_map_btn);
- DDX_Control(pDX, IDC_TD_EGTS_CURVE, m_view_egts_curve_map_btn);
- DDX_Control(pDX, IDC_TD_OPS_CURVE, m_view_ops_curve_map_btn);
- DDX_Control(pDX, IDC_TD_MANINJPWC_MAP, m_view_maninjpwc_map_btn);
- DDX_Control(pDX, IDC_TD_MAF_CURVE, m_view_mafcurve_map_btn);
- DDX_Control(pDX, IDC_TD_FTLSCOR_MAP, m_view_ftlscor_map_btn);
- DDX_Control(pDX, IDC_TD_FTS_CURVE, m_view_fts_curve_map_btn);
- DDX_Control(pDX, IDC_TD_FUELDENS_CORR_MAP, m_view_fueldens_corr_map_btn);
- DDX_Control(pDX, IDC_TD_XTAU_XFACC_MAP, m_view_xtauxfacc_map_btn);
- DDX_Control(pDX, IDC_TD_XTAU_XFDEC_MAP, m_view_xtauxfdec_map_btn);
- DDX_Control(pDX, IDC_TD_XTAU_TFACC_MAP, m_view_xtautfacc_map_btn);
- DDX_Control(pDX, IDC_TD_XTAU_TFDEC_MAP, m_view_xtautfdec_map_btn);
- DDX_Control(pDX, IDC_TD_INJNONLINP_MAP, m_view_inj_nonlinp_map_btn);
- DDX_Control(pDX, IDC_TD_INJNONLING_MAP, m_view_inj_nonling_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -232,47 +240,48 @@ BOOL CTablesSetPanel::OnInitDialog()
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_funset_listbox, MLL::GetString(IDS_TD_FUNSET_LIST_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_calc_dwell_btn, MLL::GetString(IDS_TD_DWELL_CALC_BUTTON_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_rpm_grid_btn, MLL::GetString(IDS_TD_RPM_GRID_BUTTON_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_dwellcntrl_map_btn, MLL::GetString(IDS_TD_VIEW_DWELL_CONTROL_TT))); 
  VERIFY(mp_ttc->AddWindow(&m_fw_consts_btn, MLL::GetString(IDS_TD_FW_CONSTS_BUTTON_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_funset_listbox, MLL::GetString(IDS_TD_FUNSET_LIST_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_crktemp_map_btn, MLL::GetString(IDS_TD_VIEW_CRKTEMP_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_attenuator_map_btn, MLL::GetString(IDS_TD_VIEW_ATTENUATOR_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_gasdose_map_btn, MLL::GetString(IDS_TD_VIEW_GDP_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_barocorr_map_btn, MLL::GetString(IDS_TD_VIEW_BAROCORR_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_cts_curve_map_btn, MLL::GetString(IDS_TD_VIEW_CTS_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_ats_curve_map_btn, MLL::GetString(IDS_TD_VIEW_ATS_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_ats_aac_map_btn, MLL::GetString(IDS_TD_VIEW_ATS_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(&m_edit_cesettings_btn, MLL::GetString(IDS_TD_EDIT_CEPAR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_manigntim_map_btn, MLL::GetString(IDS_TD_VIEW_MANIGNTIM_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_tmp2_curve_map_btn, MLL::GetString(IDS_TD_VIEW_TMP2_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_eh_pause_map_btn, MLL::GetString(IDS_TD_VIEW_EH_PAUSE_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_cranking_thrd_map_btn, MLL::GetString(IDS_TD_CRANKING_THRD_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_cranking_time_map_btn, MLL::GetString(IDS_TD_CRANKING_TIME_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_smapaban_thrd_map_btn, MLL::GetString(IDS_TD_SMAPABAN_THRD_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_knock_zone_map_btn, MLL::GetString(IDS_TD_VIEW_KNOCK_ZONE_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_lambda_zone_map_btn, MLL::GetString(IDS_TD_LAMBDA_ZONES_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_grts_curve_map_btn, MLL::GetString(IDS_TD_GRTS_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_grheat_duty_map_btn, MLL::GetString(IDS_TD_GRHEAT_DUTY_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_pwmiac_ucoef_map_btn, MLL::GetString(IDS_TD_PWMIAC_UCOEF_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_aftstr_strk0_map_btn, MLL::GetString(IDS_TD_AFTSTR_STRK0_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_aftstr_strk1_map_btn, MLL::GetString(IDS_TD_AFTSTR_STRK1_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_grvaldel_map_btn, MLL::GetString(IDS_TD_GRVDELAY_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_ftls_curve_map_btn, MLL::GetString(IDS_TD_FTLS_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_egts_curve_map_btn, MLL::GetString(IDS_TD_EGTS_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_ops_curve_map_btn, MLL::GetString(IDS_TD_OPS_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_maninjpwc_map_btn, MLL::GetString(IDS_TD_MANINJPWC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_mafcurve_map_btn, MLL::GetString(IDS_TD_MAF_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_ftlscor_map_btn, MLL::GetString(IDS_TD_FTLSCOR_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_fts_curve_map_btn, MLL::GetString(IDS_TD_FTS_CURVE_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_fueldens_corr_map_btn, MLL::GetString(IDS_TD_FUELDENS_CORR_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_xtauxfacc_map_btn, MLL::GetString(IDS_TD_XTAU_XFACC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_xtauxfdec_map_btn, MLL::GetString(IDS_TD_XTAU_XFDEC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_xtautfacc_map_btn, MLL::GetString(IDS_TD_XTAU_TFACC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_xtautfdec_map_btn, MLL::GetString(IDS_TD_XTAU_TFDEC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_inj_nonlinp_map_btn, MLL::GetString(IDS_TD_INJNONLINP_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_inj_nonling_map_btn, MLL::GetString(IDS_TD_INJNONLING_MAP_TT)));
+
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_ATTENUATOR].mp_button, MLL::GetString(IDS_TD_VIEW_ATTENUATOR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_DWELLCNTRL].mp_button, MLL::GetString(IDS_TD_VIEW_DWELL_CONTROL_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_CRKCLT_CORR].mp_button, MLL::GetString(IDS_TD_VIEW_CRKTEMP_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_GASDOSE].mp_button, MLL::GetString(IDS_TD_VIEW_GDP_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_BAROCORR].mp_button, MLL::GetString(IDS_TD_VIEW_BAROCORR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_CTS_CURVE].mp_button, MLL::GetString(IDS_TD_VIEW_CTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_ATS_CURVE].mp_button, MLL::GetString(IDS_TD_VIEW_ATS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_ATS_CORR].mp_button, MLL::GetString(IDS_TD_VIEW_ATS_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_MANIGNTIM].mp_button, MLL::GetString(IDS_TD_VIEW_MANIGNTIM_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_TMP2_CURVE].mp_button, MLL::GetString(IDS_TD_VIEW_TMP2_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_EH_PAUSE].mp_button, MLL::GetString(IDS_TD_VIEW_EH_PAUSE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_CRANKING_THRD].mp_button, MLL::GetString(IDS_TD_CRANKING_THRD_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_CRANKING_TIME].mp_button, MLL::GetString(IDS_TD_CRANKING_TIME_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_SMAPABAN_THRD].mp_button, MLL::GetString(IDS_TD_SMAPABAN_THRD_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_KNOCK_ZONE].mp_button, MLL::GetString(IDS_TD_VIEW_KNOCK_ZONE_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_LAMBDA_ZONE].mp_button, MLL::GetString(IDS_TD_LAMBDA_ZONES_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_GRTS_CURVE].mp_button, MLL::GetString(IDS_TD_GRTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_GRHEAT_DUTY].mp_button, MLL::GetString(IDS_TD_GRHEAT_DUTY_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_PWMIAC_UCOEF].mp_button, MLL::GetString(IDS_TD_PWMIAC_UCOEF_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_AFTSTR_STRK0].mp_button, MLL::GetString(IDS_TD_AFTSTR_STRK0_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_AFTSTR_STRK1].mp_button, MLL::GetString(IDS_TD_AFTSTR_STRK1_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_GRVDELAY].mp_button, MLL::GetString(IDS_TD_GRVDELAY_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_FTLS_CURVE].mp_button, MLL::GetString(IDS_TD_FTLS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_EGTS_CURVE].mp_button, MLL::GetString(IDS_TD_EGTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_OPS_CURVE].mp_button, MLL::GetString(IDS_TD_OPS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_MANINJPWC].mp_button, MLL::GetString(IDS_TD_MANINJPWC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_MAF_CURVE].mp_button, MLL::GetString(IDS_TD_MAF_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_FTLSCOR].mp_button, MLL::GetString(IDS_TD_FTLSCOR_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_FTS_CURVE].mp_button, MLL::GetString(IDS_TD_FTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_FUELDENS_CORR].mp_button, MLL::GetString(IDS_TD_FUELDENS_CORR_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_XTAU_XFACC].mp_button, MLL::GetString(IDS_TD_XTAU_XFACC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_XTAU_XFDEC].mp_button, MLL::GetString(IDS_TD_XTAU_XFDEC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_XTAU_TFACC].mp_button, MLL::GetString(IDS_TD_XTAU_TFACC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_XTAU_TFDEC].mp_button, MLL::GetString(IDS_TD_XTAU_TFDEC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJNONLINP].mp_button, MLL::GetString(IDS_TD_INJNONLINP_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJNONLING].mp_button, MLL::GetString(IDS_TD_INJNONLING_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -920,7 +929,7 @@ void CTablesSetPanel::OnViewAttenuatorMap()
 {
  MapData &md = m_md[TYPE_MAP_ATTENUATOR];
  //If button was released, then close editor's window
- if (m_view_attenuator_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -959,7 +968,7 @@ void CTablesSetPanel::OnViewDwellCntrlMap()
 {
  MapData &md = m_md[TYPE_MAP_DWELLCNTRL];
  //If button was released, then close editor's window
- if (m_view_dwellcntrl_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -995,7 +1004,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_CTS_CURVE];
  //If button was released, then close editor's window
- if (m_view_cts_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1034,7 +1043,7 @@ void CTablesSetPanel::OnViewATSCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_ATS_CURVE];
  //If button was released, then close editor's window
- if (m_view_ats_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1073,7 +1082,7 @@ void CTablesSetPanel::OnViewATSAACMap()
 {
  MapData &md = m_md[TYPE_MAP_ATS_CORR];
  //If button was released, then close editor's window
- if (m_view_ats_aac_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1108,7 +1117,7 @@ void CTablesSetPanel::OnViewGasdosePosMap()
 {
  MapData &md = m_md[TYPE_MAP_GASDOSE];
  //if button has been turned off, then close editor's window
- if (m_view_gasdose_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1143,7 +1152,7 @@ void CTablesSetPanel::OnViewBarocorrMap()
 {
  MapData &md = m_md[TYPE_MAP_BAROCORR];
  //If button was released, then close editor's window
- if (m_view_barocorr_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1183,7 +1192,7 @@ void CTablesSetPanel::OnViewTmp2CurveMap()
 {
  MapData &md = m_md[TYPE_MAP_TMP2_CURVE];
  //If button was released, then close editor's window
- if (m_view_tmp2_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1223,7 +1232,7 @@ void CTablesSetPanel::OnViewGrtsCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_GRTS_CURVE];
  //If button was released, then close editor's window
- if (m_view_grts_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1263,7 +1272,7 @@ void CTablesSetPanel::OnViewManIgntimMap()
 {
  MapData &md = m_md[TYPE_MAP_MANIGNTIM];
  //If button was released, then close editor's window
- if (m_view_manigntim_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1300,7 +1309,7 @@ void CTablesSetPanel::OnViewCrkTempMap()
 {
  MapData &md = m_md[TYPE_MAP_CRKCLT_CORR];
  //If button was released, then close editor's window
- if (m_view_crktemp_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1336,7 +1345,7 @@ void CTablesSetPanel::OnViewEHPauseMap()
 {
  MapData &md = m_md[TYPE_MAP_EH_PAUSE];
  //If button was released, then close editor's window
- if (m_view_eh_pause_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1373,7 +1382,7 @@ void CTablesSetPanel::OnViewCrankingThrdMap()
 {
  MapData &md = m_md[TYPE_MAP_CRANKING_THRD];
  //if button was released, then close editor's window
- if (m_view_cranking_thrd_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1410,7 +1419,7 @@ void CTablesSetPanel::OnViewCrankingTimeMap()
 {
  MapData &md = m_md[TYPE_MAP_CRANKING_TIME];
  //if button was released, then close editor's window
- if (m_view_cranking_time_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1447,7 +1456,7 @@ void CTablesSetPanel::OnViewSmapabanThrdMap()
 {
  MapData &md = m_md[TYPE_MAP_SMAPABAN_THRD];
  //if button was released, then close editor's window
- if (m_view_smapaban_thrd_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1484,7 +1493,7 @@ void CTablesSetPanel::OnViewKnockZoneMap()
 {
  MapData &md = m_md[TYPE_MAP_KNOCK_ZONE];
  //if button has been turned off, then close editor's window
- if (m_view_knock_zone_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1520,7 +1529,7 @@ void CTablesSetPanel::OnViewLambdaZoneMap()
 {
  MapData &md = m_md[TYPE_MAP_LAMBDA_ZONE];
  //if button has been turned off, then close editor's window
- if (m_view_lambda_zone_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1556,7 +1565,7 @@ void CTablesSetPanel::OnViewGrHeatDutyMap()
 {
  MapData &md = m_md[TYPE_MAP_GRHEAT_DUTY];
  //If button was released, then close editor's window
- if (m_view_grheat_duty_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1592,7 +1601,7 @@ void CTablesSetPanel::OnViewPwmIacUCoefMap()
 {
  MapData &md = m_md[TYPE_MAP_PWMIAC_UCOEF];
  //If button was released, then close editor's window
- if (m_view_pwmiac_ucoef_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1629,7 +1638,7 @@ void CTablesSetPanel::OnViewAftstrStrk0Map()
 {
  MapData &md = m_md[TYPE_MAP_AFTSTR_STRK0];
  //If button was released, then close editor's window
- if (m_view_aftstr_strk0_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1667,7 +1676,7 @@ void CTablesSetPanel::OnViewAftstrStrk1Map()
 {
  MapData &md = m_md[TYPE_MAP_AFTSTR_STRK1];
  //If button was released, then close editor's window
- if (m_view_aftstr_strk1_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1705,7 +1714,7 @@ void CTablesSetPanel::OnViewGrValDelMap()
 {
  MapData &md = m_md[TYPE_MAP_GRVDELAY];
  //If button was released, then close editor's window
- if (m_view_grvaldel_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1741,7 +1750,7 @@ void CTablesSetPanel::OnViewFtlsCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_FTLS_CURVE];
  //If button was released, then close editor's window
- if (m_view_ftls_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1781,7 +1790,7 @@ void CTablesSetPanel::OnViewFtlsCorMap()
 {
  MapData &md = m_md[TYPE_MAP_FTLSCOR];
  //If button was released, then close editor's window
- if (m_view_ftlscor_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1818,7 +1827,7 @@ void CTablesSetPanel::OnViewEgtsCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_EGTS_CURVE];
  //If button was released, then close editor's window
- if (m_view_egts_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1858,7 +1867,7 @@ void CTablesSetPanel::OnViewFtsCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_FTS_CURVE];
  //If button was released, then close editor's window
- if (m_view_fts_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1899,7 +1908,7 @@ void CTablesSetPanel::OnViewOpsCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_OPS_CURVE];
  //If button was released, then close editor's window
- if (m_view_ops_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1939,7 +1948,7 @@ void CTablesSetPanel::OnViewManInjPwcMap()
 {
  MapData &md = m_md[TYPE_MAP_MANINJPWC];
  //If button was released, then close editor's window
- if (m_view_maninjpwc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1976,7 +1985,7 @@ void CTablesSetPanel::OnViewMAFCurveMap()
 {
  MapData &md = m_md[TYPE_MAP_MAF_CURVE];
  //If button was released, then close editor's window
- if (m_view_mafcurve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -2016,7 +2025,7 @@ void CTablesSetPanel::OnViewFuelDensCorrMap()
 {
  MapData &md = m_md[TYPE_MAP_FUELDENS_CORR];
  //If button was released, then close editor's window
- if (m_view_fueldens_corr_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -2053,7 +2062,7 @@ void CTablesSetPanel::OnViewXtauXfAccMap()
 {
  MapData &md = m_md[TYPE_MAP_XTAU_XFACC];
  //If button was released, then close editor's window
- if (m_view_xtauxfacc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -2090,7 +2099,7 @@ void CTablesSetPanel::OnViewXtauXfDecMap()
 {
  MapData &md = m_md[TYPE_MAP_XTAU_XFDEC];
  //If button was released, then close editor's window
- if (m_view_xtauxfdec_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -2127,7 +2136,7 @@ void CTablesSetPanel::OnViewXtauTfAccMap()
 {
  MapData &md = m_md[TYPE_MAP_XTAU_TFACC];
  //If button was released, then close editor's window
- if (m_view_xtautfacc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -2164,7 +2173,7 @@ void CTablesSetPanel::OnViewXtauTfDecMap()
 {
  MapData &md = m_md[TYPE_MAP_XTAU_TFDEC];
  //If button was released, then close editor's window
- if (m_view_xtautfdec_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -2200,7 +2209,7 @@ void CTablesSetPanel::OnViewInjNonLinPMap()
 {
  MapData &md = m_md[TYPE_MAP_INJNONLINP];
  //If button was released, then close editor's window
- if (m_view_inj_nonlinp_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -2238,7 +2247,7 @@ void CTablesSetPanel::OnViewInjNonLinGMap()
 {
  MapData &md = m_md[TYPE_MAP_INJNONLING];
  //If button was released, then close editor's window
- if (m_view_inj_nonling_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;

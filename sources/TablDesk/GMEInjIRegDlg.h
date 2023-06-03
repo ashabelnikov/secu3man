@@ -37,9 +37,8 @@ class CGMEInjIRegDlg : public CTabDialog
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CGMEInjIRegDlg(CWnd* pParent = NULL);   // standard constructor
+  CGMEInjIRegDlg();
  ~CGMEInjIRegDlg();
-  static const UINT IDD;
 
   void BindMaps(float* pIdlc, float* pIdlr, float* pITPRM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT);
   void BindTemperGrid(float* pGrid); //rest temperature

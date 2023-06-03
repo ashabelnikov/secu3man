@@ -43,9 +43,8 @@ class CUniOutPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CUniOutPageDlg(CWnd* pParent = NULL);   // standard constructor
+  CUniOutPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

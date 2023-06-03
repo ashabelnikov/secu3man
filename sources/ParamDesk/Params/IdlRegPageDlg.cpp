@@ -31,8 +31,6 @@
 #include "ui-core/WndScroller.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-const UINT CIdlRegPageDlg::IDD = IDD_PD_IDLREG_PAGE;
-
 BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -174,9 +172,8 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USETHRASSMAP_CHECK,OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
-CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CIdlRegPageDlg::IDD, pParent)
-, m_enabled(false)
+CIdlRegPageDlg::CIdlRegPageDlg()
+: m_enabled(false)
 , m_fuel_injection(false)
 , m_factor_pos_edit(CEditEx::MODE_FLOAT, true)
 , m_factor_neg_edit(CEditEx::MODE_FLOAT, true)
@@ -231,7 +228,7 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_IDLREG_PAGE;
 }
 
 void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)

@@ -43,17 +43,11 @@
 static const float splitAngMin = -20.0f;
 static const float splitAngMax =  20.0f;
 
-//const UINT CButtonsPanel::IDD = IDD_TD_BUTTONS_PANEL; //WTF?
-
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
 
-CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enableAutoTune /*=false*/, bool onlineMode /*=false*/)
-: Super(dialog_id, pParent)
-, m_grid_map_state_ign(0)
-, m_grid_map_state_inj(0)
-, m_charts_enabled(-1)
-, IDD(IDD_TD_BUTTONS_PANEL)
+CButtonsPanel::CButtonsPanel(bool enableAutoTune /*=false*/, bool onlineMode /*=false*/)
+: m_charts_enabled(-1)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
 , m_scrl_view(1200)
@@ -78,6 +72,14 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
  for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
  {
   MapData md;
+  md.mp_button = new CButton;
+  m_md.insert(std::make_pair(i, md));
+ }
+ //add two pseudo maps
+ for(int i = TYPE_MAP_GME_IGN_WND; i <= TYPE_MAP_GME_INJ_WND; ++i)
+ {
+  MapData md;
+  md.mp_button = new CButton;
   m_md.insert(std::make_pair(i, md));
  }
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
@@ -85,64 +87,74 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
  memset(m_load_grid_values, 0, 16 * sizeof(float));
 
  m_ve2_map_load_slots.reserve(32);
- m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16);
+ m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16); 
 }
 
 CButtonsPanel::~CButtonsPanel()
 {
- //empty
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+  delete m_md[i].mp_button;
+ for(int i = TYPE_MAP_GME_IGN_WND; i <= TYPE_MAP_GME_INJ_WND; ++i)
+  delete m_md[i].mp_button;
+}
+
+BOOL CButtonsPanel::Create(CWnd* pParentWnd /*= NULL*/)
+{
+ return Super::Create(IDD_TD_BUTTONS_PANEL, pParentWnd);
 }
 
 void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_TD_VIEW_WORK_MAP,  m_view_work_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_TEMP_MAP,  m_view_temp_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_TEMPI_MAP,  m_view_tempi_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_START_MAP, m_view_start_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IDLE_MAP,  m_view_idle_map_btn);
- DDX_Control(pDX, IDC_TD_GME_IGN_CHECK, m_grid_mode_editing_ign_check);
- DDX_Control(pDX, IDC_TD_GME_INJ_CHECK, m_grid_mode_editing_inj_check);
- DDX_Control(pDX, IDC_TD_VIEW_VE_MAP,  m_view_ve_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_VE2_MAP,  m_view_ve2_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_AFR_MAP,  m_view_afr_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_CRNK_MAP,  m_view_crnk_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_WRMP_MAP,  m_view_wrmp_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_DEAD_MAP,  m_view_dead_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IDLR_MAP,  m_view_idlr_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IDLC_MAP,  m_view_idlc_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_THRASS_MAP,  m_view_thrass_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_AETPS_MAP,  m_view_aetps_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_AEMAP_MAP,  m_view_aemap_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_AERPM_MAP,  m_view_aerpm_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_AFTSTR_MAP,  m_view_aftstr_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IT_MAP,  m_view_it_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_ITRPM_MAP,  m_view_itrpm_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_RIGID_MAP,  m_view_rigid_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_EGOCRV_MAP,  m_view_egocrv_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IACC_MAP,  m_view_iacc_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IACCW_MAP,  m_view_iaccw_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IATCLT_MAP,  m_view_iatclt_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_TPSSWT_MAP,  m_view_tpsswt_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_GTSC_MAP,  m_view_gtsc_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_GPSC_MAP,  m_view_gpsc_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_ATSC_MAP,  m_view_atsc_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_PWM1_MAP,  m_view_pwm1_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_PWM2_MAP,  m_view_pwm2_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_IACMAT_MAP,  m_view_iacmat_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_TPSZON_MAP,  m_view_tpszon_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_CYLMULT_MAP,  m_view_cylmult_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_CYLADD_MAP,  m_view_cyladd_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_WORK_MAP, *m_md[TYPE_MAP_DA_WORK].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_TEMP_MAP, *m_md[TYPE_MAP_DA_TEMP_CORR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_TEMPI_MAP, *m_md[TYPE_MAP_DA_TEMPI_CORR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_START_MAP, *m_md[TYPE_MAP_DA_START].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IDLE_MAP, *m_md[TYPE_MAP_DA_IDLE].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_VE_MAP, *m_md[TYPE_MAP_INJ_VE].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_VE2_MAP, *m_md[TYPE_MAP_INJ_VE2].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_AFR_MAP, *m_md[TYPE_MAP_INJ_AFR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_CRNK_MAP, *m_md[TYPE_MAP_INJ_CRNK].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_WRMP_MAP, *m_md[TYPE_MAP_INJ_WRMP].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_DEAD_MAP, *m_md[TYPE_MAP_INJ_DEAD].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IDLR_MAP, *m_md[TYPE_MAP_INJ_IDLR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IDLC_MAP, *m_md[TYPE_MAP_INJ_IDLC].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_THRASS_MAP, *m_md[TYPE_MAP_INJ_THRASS].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_AETPS_MAP, *m_md[TYPE_MAP_INJ_AETPS].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_AEMAP_MAP, *m_md[TYPE_MAP_INJ_AEMAP].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_AERPM_MAP, *m_md[TYPE_MAP_INJ_AERPM].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_AFTSTR_MAP, *m_md[TYPE_MAP_INJ_AFTSTR].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IT_MAP, *m_md[TYPE_MAP_INJ_IT].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_ITRPM_MAP, *m_md[TYPE_MAP_INJ_ITRPM].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_RIGID_MAP, *m_md[TYPE_MAP_INJ_RIGID].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_EGOCRV_MAP, *m_md[TYPE_MAP_INJ_EGOCRV].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IACC_MAP, *m_md[TYPE_MAP_INJ_IACC].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IACCW_MAP, *m_md[TYPE_MAP_INJ_IACCW].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IATCLT_MAP, *m_md[TYPE_MAP_INJ_IATCLT].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_TPSSWT_MAP, *m_md[TYPE_MAP_INJ_TPSSWT].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_GTSC_MAP, *m_md[TYPE_MAP_INJ_GTSC].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_GPSC_MAP, *m_md[TYPE_MAP_INJ_GPSC].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_ATSC_MAP, *m_md[TYPE_MAP_INJ_ATSC].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_PWM1_MAP, *m_md[TYPE_MAP_PWM1].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_PWM2_MAP, *m_md[TYPE_MAP_PWM2].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IACMAT_MAP, *m_md[TYPE_MAP_INJ_IACMAT].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_TPSZON_MAP, *m_md[TYPE_MAP_INJ_TPSZON].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_CYLMULT_MAP, *m_md[TYPE_MAP_INJ_CYLMULT].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_CYLADD_MAP, *m_md[TYPE_MAP_INJ_CYLADD].mp_button);
+ DDX_Control(pDX, IDC_TD_GME_IGN_CHECK, *m_md[TYPE_MAP_GME_IGN_WND].mp_button); //pseudo map
+ DDX_Control(pDX, IDC_TD_GME_INJ_CHECK, *m_md[TYPE_MAP_GME_INJ_WND].mp_button); //pseudo map
 }
 
 BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
+ ON_WM_TIMER()
+ ON_WM_DESTROY()
+ ON_WM_SIZE()
+
  ON_BN_CLICKED(IDC_TD_VIEW_START_MAP,OnViewStartMap)
  ON_BN_CLICKED(IDC_TD_VIEW_IDLE_MAP, OnViewIdleMap)
  ON_BN_CLICKED(IDC_TD_VIEW_WORK_MAP, OnViewWorkMap)
  ON_BN_CLICKED(IDC_TD_VIEW_TEMP_MAP, OnViewTempMap)
  ON_BN_CLICKED(IDC_TD_VIEW_TEMPI_MAP, OnViewTempIdlMap)
- ON_BN_CLICKED(IDC_TD_GME_IGN_CHECK, OnGridModeEditingIgn)
- ON_BN_CLICKED(IDC_TD_GME_INJ_CHECK, OnGridModeEditingInj)
  ON_BN_CLICKED(IDC_TD_VIEW_VE_MAP, OnViewVEMap)
  ON_BN_CLICKED(IDC_TD_VIEW_VE2_MAP, OnViewVE2Map)
  ON_BN_CLICKED(IDC_TD_VIEW_AFR_MAP, OnViewAFRMap)
@@ -173,6 +185,8 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_TPSZON_MAP, OnViewTpszonMap)
  ON_BN_CLICKED(IDC_TD_VIEW_CYLMULT_MAP, OnViewCylMultMap)
  ON_BN_CLICKED(IDC_TD_VIEW_CYLADD_MAP, OnViewCylAddMap)
+ ON_BN_CLICKED(IDC_TD_GME_IGN_CHECK, OnGridModeEditingIgn) //pseudo map
+ ON_BN_CLICKED(IDC_TD_GME_INJ_CHECK, OnGridModeEditingInj) //pseudo map
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_START_MAP,OnUpdateViewStartMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLE_MAP, OnUpdateViewIdleMap)
@@ -202,8 +216,6 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TPSSWT_MAP, OnUpdateViewTpsswtMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GTSC_MAP, OnUpdateViewGtscMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GPSC_MAP, OnUpdateViewGpscMap)
- ON_UPDATE_COMMAND_UI(IDC_TD_GME_IGN_CHECK, OnUpdateGridModeEditingIgn)
- ON_UPDATE_COMMAND_UI(IDC_TD_GME_INJ_CHECK, OnUpdateGridModeEditingInj)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATSC_MAP, OnUpdateViewAtscMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_PWM1_MAP, OnUpdateViewPwm1Map)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_PWM2_MAP, OnUpdateViewPwm2Map)
@@ -211,10 +223,8 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TPSZON_MAP, OnUpdateViewTpszonMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CYLMULT_MAP, OnUpdateViewCylMultMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CYLADD_MAP, OnUpdateViewCylAddMap)
-
- ON_WM_TIMER()
- ON_WM_DESTROY()
- ON_WM_SIZE()
+ ON_UPDATE_COMMAND_UI(IDC_TD_GME_IGN_CHECK, OnUpdateGridModeEditingIgn) //pseudo map
+ ON_UPDATE_COMMAND_UI(IDC_TD_GME_INJ_CHECK, OnUpdateGridModeEditingInj) //pseudo map
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -230,43 +240,43 @@ BOOL CButtonsPanel::OnInitDialog()
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_grid_mode_editing_ign_check, MLL::GetString(IDS_TD_GME_IGN_CHECK_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_grid_mode_editing_inj_check, MLL::GetString(IDS_TD_GME_INJ_CHECK_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_start_map_btn, MLL::GetString(IDS_TD_VIEW_START_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_idle_map_btn, MLL::GetString(IDS_TD_VIEW_IDLE_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_work_map_btn, MLL::GetString(IDS_TD_VIEW_WORK_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_temp_map_btn, MLL::GetString(IDS_TD_VIEW_TEMP_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_tempi_map_btn, MLL::GetString(IDS_TD_VIEW_TEMPI_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_crnk_map_btn, MLL::GetString(IDS_TD_VIEW_CRNK_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_ve_map_btn, MLL::GetString(IDS_TD_VIEW_VE_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_ve2_map_btn, MLL::GetString(IDS_TD_VIEW_VE2_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_afr_map_btn, MLL::GetString(IDS_TD_VIEW_AFR_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_wrmp_map_btn, MLL::GetString(IDS_TD_VIEW_WRMP_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_atsc_map_btn, MLL::GetString(IDS_TD_VIEW_ATSC_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_aetps_map_btn, MLL::GetString(IDS_TD_VIEW_AETPS_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_aemap_map_btn, MLL::GetString(IDS_TD_VIEW_AEMAP_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_aerpm_map_btn, MLL::GetString(IDS_TD_VIEW_AERPM_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_aftstr_map_btn, MLL::GetString(IDS_TD_VIEW_AFTSTR_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_gtsc_map_btn, MLL::GetString(IDS_TD_VIEW_GTSC_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_gpsc_map_btn, MLL::GetString(IDS_TD_VIEW_GPSC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_dead_map_btn, MLL::GetString(IDS_TD_VIEW_DEAD_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_idlr_map_btn, MLL::GetString(IDS_TD_VIEW_IDLR_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_idlc_map_btn, MLL::GetString(IDS_TD_VIEW_IDLC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_thrass_map_btn, MLL::GetString(IDS_TD_VIEW_THRASS_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_it_map_btn, MLL::GetString(IDS_TD_VIEW_IT_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_itrpm_map_btn, MLL::GetString(IDS_TD_VIEW_ITRPM_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_rigid_map_btn, MLL::GetString(IDS_TD_VIEW_RIGID_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_egocrv_map_btn, MLL::GetString(IDS_TD_VIEW_EGOCRV_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_iacc_map_btn, MLL::GetString(IDS_TD_VIEW_IACC_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_iaccw_map_btn, MLL::GetString(IDS_TD_VIEW_IACCW_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_iatclt_map_btn, MLL::GetString(IDS_TD_VIEW_IATCLT_MAP_TT)));
- VERIFY(mp_ttc->AddWindow(&m_view_tpsswt_map_btn, MLL::GetString(IDS_TD_VIEW_TPSSWT_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_pwm1_map_btn, MLL::GetString(IDS_TD_VIEW_PWM1_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_pwm2_map_btn, MLL::GetString(IDS_TD_VIEW_PWM2_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_iacmat_map_btn, MLL::GetString(IDS_TD_VIEW_IACMAT_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_tpszon_map_btn, MLL::GetString(IDS_TD_VIEW_TPSZON_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_cylmult_map_btn, MLL::GetString(IDS_TD_VIEW_CYLMULT_MAP_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_view_cyladd_map_btn, MLL::GetString(IDS_TD_VIEW_CYLADD_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_GME_IGN_WND].mp_button, MLL::GetString(IDS_TD_GME_IGN_CHECK_TT))); //pseudo map
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_GME_INJ_WND].mp_button, MLL::GetString(IDS_TD_GME_INJ_CHECK_TT))); //pseudo map
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_DA_START].mp_button, MLL::GetString(IDS_TD_VIEW_START_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_DA_IDLE].mp_button, MLL::GetString(IDS_TD_VIEW_IDLE_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_DA_WORK].mp_button, MLL::GetString(IDS_TD_VIEW_WORK_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_DA_TEMP_CORR].mp_button, MLL::GetString(IDS_TD_VIEW_TEMP_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_DA_TEMPI_CORR].mp_button, MLL::GetString(IDS_TD_VIEW_TEMPI_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_CRNK].mp_button, MLL::GetString(IDS_TD_VIEW_CRNK_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_VE].mp_button, MLL::GetString(IDS_TD_VIEW_VE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_VE2].mp_button, MLL::GetString(IDS_TD_VIEW_VE2_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_AFR].mp_button, MLL::GetString(IDS_TD_VIEW_AFR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_WRMP].mp_button, MLL::GetString(IDS_TD_VIEW_WRMP_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_ATSC].mp_button, MLL::GetString(IDS_TD_VIEW_ATSC_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_AETPS].mp_button, MLL::GetString(IDS_TD_VIEW_AETPS_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_AEMAP].mp_button, MLL::GetString(IDS_TD_VIEW_AEMAP_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_AERPM].mp_button, MLL::GetString(IDS_TD_VIEW_AERPM_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_AFTSTR].mp_button, MLL::GetString(IDS_TD_VIEW_AFTSTR_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_GTSC].mp_button, MLL::GetString(IDS_TD_VIEW_GTSC_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_GPSC].mp_button, MLL::GetString(IDS_TD_VIEW_GPSC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_DEAD].mp_button, MLL::GetString(IDS_TD_VIEW_DEAD_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_IDLR].mp_button, MLL::GetString(IDS_TD_VIEW_IDLR_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_IDLC].mp_button, MLL::GetString(IDS_TD_VIEW_IDLC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_THRASS].mp_button, MLL::GetString(IDS_TD_VIEW_THRASS_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_IT].mp_button, MLL::GetString(IDS_TD_VIEW_IT_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_ITRPM].mp_button, MLL::GetString(IDS_TD_VIEW_ITRPM_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_RIGID].mp_button, MLL::GetString(IDS_TD_VIEW_RIGID_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_EGOCRV].mp_button, MLL::GetString(IDS_TD_VIEW_EGOCRV_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_IACC].mp_button, MLL::GetString(IDS_TD_VIEW_IACC_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_IACCW].mp_button, MLL::GetString(IDS_TD_VIEW_IACCW_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_IATCLT].mp_button, MLL::GetString(IDS_TD_VIEW_IATCLT_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_TPSSWT].mp_button, MLL::GetString(IDS_TD_VIEW_TPSSWT_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_PWM1].mp_button, MLL::GetString(IDS_TD_VIEW_PWM1_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_PWM2].mp_button, MLL::GetString(IDS_TD_VIEW_PWM2_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_IACMAT].mp_button, MLL::GetString(IDS_TD_VIEW_IACMAT_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_TPSZON].mp_button, MLL::GetString(IDS_TD_VIEW_TPSZON_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_CYLMULT].mp_button, MLL::GetString(IDS_TD_VIEW_CYLMULT_MAP_TT))); 
+ VERIFY(mp_ttc->AddWindow(m_md[TYPE_MAP_INJ_CYLADD].mp_button, MLL::GetString(IDS_TD_VIEW_CYLADD_MAP_TT))); 
  
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -280,7 +290,7 @@ void CButtonsPanel::OnViewStartMap()
 {
  MapData &md = m_md[TYPE_MAP_DA_START];
  //If button was released, then close editor's window
- if (m_view_start_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -316,7 +326,7 @@ void CButtonsPanel::OnViewIdleMap()
 {
  MapData &md = m_md[TYPE_MAP_DA_IDLE];
  //If button was released, then close editor's window
- if (m_view_idle_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -352,7 +362,7 @@ void CButtonsPanel::OnViewWorkMap()
 {
  MapData &md = m_md[TYPE_MAP_DA_WORK];
  //If button was released, then close editor's window
- if (m_view_work_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -387,7 +397,7 @@ void CButtonsPanel::OnViewTempMap()
 {
  MapData &md = m_md[TYPE_MAP_DA_TEMP_CORR];
  //If button was released, then close editor's window
- if (m_view_temp_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -423,7 +433,7 @@ void CButtonsPanel::OnViewTempIdlMap()
 {
  MapData &md = m_md[TYPE_MAP_DA_TEMPI_CORR];
  //If button was released, then close editor's window
- if (m_view_tempi_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -459,7 +469,7 @@ void CButtonsPanel::OnViewVEMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_VE];
  //If button was released, then close editor's window
- if (m_view_ve_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -495,7 +505,7 @@ void CButtonsPanel::OnViewVE2Map()
 {
  MapData &md = m_md[TYPE_MAP_INJ_VE2];
  //If button was released, then close editor's window
- if (m_view_ve2_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -531,7 +541,7 @@ void CButtonsPanel::OnViewAFRMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_AFR];
  //If button was released, then close editor's window
- if (m_view_afr_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -567,7 +577,7 @@ void CButtonsPanel::OnViewCrnkMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_CRNK];
  //If button was released, then close editor's window
- if (m_view_crnk_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -604,7 +614,7 @@ void CButtonsPanel::OnViewWrmpMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_WRMP];
  //if button was released, then close editor's window
- if (m_view_wrmp_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -640,7 +650,7 @@ void CButtonsPanel::OnViewDeadMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_DEAD];
  //if button was released, then close editor's window
- if (m_view_dead_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -677,7 +687,7 @@ void CButtonsPanel::OnViewIdlrMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_IDLR];
  //if button was released, then close editor's window
- if (m_view_idlr_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -713,7 +723,7 @@ void CButtonsPanel::OnViewIdlcMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_IDLC];
  //if button was released, then close editor's window
- if (m_view_idlc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -749,7 +759,7 @@ void CButtonsPanel::OnViewThrassMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_THRASS];
  //if button was released, then close editor's window
- if (m_view_thrass_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -785,7 +795,7 @@ void CButtonsPanel::OnViewAETPSMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_AETPS];
  //if button was released, then close editor's window
- if (m_view_aetps_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -821,7 +831,7 @@ void CButtonsPanel::OnViewAEMAPMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_AEMAP];
  //if button was released, then close editor's window
- if (m_view_aemap_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -858,7 +868,7 @@ void CButtonsPanel::OnViewAERPMMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_AERPM];
  //if button was released, then close editor's window
- if (m_view_aerpm_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -894,7 +904,7 @@ void CButtonsPanel::OnViewAftstrMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_AFTSTR];
  //if button was released, then close editor's window
- if (m_view_aftstr_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -930,7 +940,7 @@ void CButtonsPanel::OnViewITMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_IT];
  //if button was released, then close editor's window
- if (m_view_it_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -968,7 +978,7 @@ void CButtonsPanel::OnViewITRPMMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_ITRPM];
  //if button was released, then close editor's window
- if (m_view_itrpm_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1005,7 +1015,7 @@ void CButtonsPanel::OnViewRigidMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_RIGID];
  //if button was released, then close editor's window
- if (m_view_rigid_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1041,7 +1051,7 @@ void CButtonsPanel::OnViewEGOCrvMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_EGOCRV];
  //If button was released, then close editor's window
- if (m_view_egocrv_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1081,7 +1091,7 @@ void CButtonsPanel::OnViewIACCMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_IACC];
  //If button was released, then close editor's window
- if (m_view_iacc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1121,7 +1131,7 @@ void CButtonsPanel::OnViewIACCWMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_IACCW];
  //If button was released, then close editor's window
- if (m_view_iaccw_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1161,7 +1171,7 @@ void CButtonsPanel::OnViewIATCLTMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_IATCLT];
  //If button was released, then close editor's window
- if (m_view_iatclt_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1201,7 +1211,7 @@ void CButtonsPanel::OnViewTpsswtMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_TPSSWT];
  //If button was released, then close editor's window
- if (m_view_tpsswt_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1238,7 +1248,7 @@ void CButtonsPanel::OnViewGtscMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_GTSC];
  //if button was released, then close editor's window
- if (m_view_gtsc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1274,7 +1284,7 @@ void CButtonsPanel::OnViewGpscMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_GPSC];
  //If button was released, then close editor's window
- if (m_view_gpsc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle, WM_CLOSE, 0, 0);
   return;
@@ -1314,7 +1324,7 @@ void CButtonsPanel::OnViewAtscMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_ATSC];
  //if button was released, then close editor's window
- if (m_view_atsc_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1350,7 +1360,7 @@ void CButtonsPanel::OnViewPwm1Map()
 {
  MapData &md = m_md[TYPE_MAP_PWM1];
  //If button was released, then close editor's window
- if (m_view_pwm1_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1385,7 +1395,7 @@ void CButtonsPanel::OnViewPwm2Map()
 {
  MapData &md = m_md[TYPE_MAP_PWM2];
  //If button was released, then close editor's window
- if (m_view_pwm2_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1421,7 +1431,7 @@ void CButtonsPanel::OnViewIACMATMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_IACMAT];
  //if button was released, then close editor's window
- if (m_view_iacmat_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1458,7 +1468,7 @@ void CButtonsPanel::OnViewTpszonMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_TPSZON];
  //If button was released, then close editor's window
- if (m_view_tpszon_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1494,7 +1504,7 @@ void CButtonsPanel::OnViewCylMultMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_CYLMULT];
  //if button was released, then close editor's window
- if (m_view_cylmult_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1530,7 +1540,7 @@ void CButtonsPanel::OnViewCylAddMap()
 {
  MapData &md = m_md[TYPE_MAP_INJ_CYLADD];
  //if button was released, then close editor's window
- if (m_view_cyladd_map_btn.GetCheck()==BST_UNCHECKED)
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(md.handle,WM_CLOSE,0,0);
   return;
@@ -1564,8 +1574,8 @@ void CButtonsPanel::OnViewCylAddMap()
 
 //-----------------------------------------------------------------------------------------------
 void CButtonsPanel::OnGridModeEditingIgn()
-{
- if (m_grid_mode_editing_ign_check.GetCheck()==BST_CHECKED)
+{ 
+ if (m_md[TYPE_MAP_GME_IGN_WND].mp_button->GetCheck()==BST_CHECKED)
  {
   mp_gridModeEditorIgnDlg.reset(new CGridModeEditorIgnDlg());
   mp_gridModeEditorIgnDlg->BindMaps(m_md[TYPE_MAP_DA_START].active, m_md[TYPE_MAP_DA_IDLE].active, m_md[TYPE_MAP_DA_WORK].active, m_md[TYPE_MAP_DA_TEMP_CORR].active, m_md[TYPE_MAP_DA_TEMPI_CORR].active);
@@ -1580,7 +1590,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
   VERIFY(mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL));
   mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable, false==m_onlineMode); //force update in offline mode
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
-  m_grid_map_state_ign = 1;
+  m_md[TYPE_MAP_GME_IGN_WND].state = 1;
  }
  else
  {
@@ -1593,7 +1603,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
 //-----------------------------------------------------------------------------------------------
 void CButtonsPanel::OnGridModeEditingInj()
 {
- if (m_grid_mode_editing_inj_check.GetCheck()==BST_CHECKED)
+ if (m_md[TYPE_MAP_GME_INJ_WND].mp_button->GetCheck()==BST_CHECKED)
  {
   mp_gridModeEditorInjDlg.reset(new CGridModeEditorInjDlg());
   if (mp_autoTuneCntr.get())
@@ -1629,7 +1639,7 @@ void CButtonsPanel::OnGridModeEditingInj()
 
   if (mp_autoTuneCntr.get())
    mp_autoTuneCntr->Activate();
-  m_grid_map_state_inj = 1;
+  m_md[TYPE_MAP_GME_INJ_WND].state = 1;
  }
  else
  {
@@ -1683,14 +1693,14 @@ void CButtonsPanel::OnUpdateGridModeEditingIgn(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  pCmdUI->Enable(allowed);
- pCmdUI->SetCheck((mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign) ? TRUE : FALSE);
+ pCmdUI->SetCheck((mp_gridModeEditorIgnDlg.get() && m_md[TYPE_MAP_GME_IGN_WND].state) ? TRUE : FALSE);
 }
 
 void CButtonsPanel::OnUpdateGridModeEditingInj(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  pCmdUI->Enable(allowed);
- pCmdUI->SetCheck((mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj) ? TRUE : FALSE);
+ pCmdUI->SetCheck((mp_gridModeEditorInjDlg.get() && m_md[TYPE_MAP_GME_INJ_WND].state) ? TRUE : FALSE);
 }
 
 void CButtonsPanel::OnUpdateViewVEMap(CCmdUI* pCmdUI)
@@ -2027,9 +2037,9 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart3DUpdate(m_md[TYPE_MAP_PWM1].handle, GetPwm1Map(true), GetPwm1Map(false));
  if (m_md[TYPE_MAP_PWM2].state)
   DLL::Chart3DUpdate(m_md[TYPE_MAP_PWM2].handle, GetPwm2Map(true), GetPwm2Map(false));
- if (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign)
+ if (mp_gridModeEditorIgnDlg.get() && m_md[TYPE_MAP_GME_IGN_WND].state)
   mp_gridModeEditorIgnDlg->UpdateView(true);
- if (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj)
+ if (mp_gridModeEditorInjDlg.get() && m_md[TYPE_MAP_GME_INJ_WND].state)
   mp_gridModeEditorInjDlg->UpdateView(true);
 
  if (m_md[TYPE_MAP_INJ_IACMAT].state)
@@ -2496,9 +2506,9 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
  if (wndType >= TYPE_MAP_SET_START && wndType <= TYPE_MAP_SET_END)
   return m_md[wndType].state ? m_md[wndType].handle : NULL;
  else if (wndType == TYPE_MAP_GME_IGN_WND) //pseudo map
-  return (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign) ? mp_gridModeEditorIgnDlg->m_hWnd : NULL; 
+  return (mp_gridModeEditorIgnDlg.get() && m_md[TYPE_MAP_GME_IGN_WND].state) ? mp_gridModeEditorIgnDlg->m_hWnd : NULL; 
  else if (wndType == TYPE_MAP_GME_INJ_WND) //pseudo map
-  return (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj) ? mp_gridModeEditorInjDlg->m_hWnd : NULL; 
+  return (mp_gridModeEditorInjDlg.get() && m_md[TYPE_MAP_GME_INJ_WND].state) ? mp_gridModeEditorInjDlg->m_hWnd : NULL; 
  else
   return NULL;
 }
@@ -2571,9 +2581,9 @@ void CButtonsPanel::_EnableCharts(bool enable)
    DLL::Chart3DEnable(m_md[TYPE_MAP_PWM1].handle, enable && IsAllowed());
   if (m_md[TYPE_MAP_PWM2].state && ::IsWindow(m_md[TYPE_MAP_PWM2].handle))
    DLL::Chart3DEnable(m_md[TYPE_MAP_PWM2].handle, enable && IsAllowed());
-  if (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign && ::IsWindow(mp_gridModeEditorIgnDlg->m_hWnd))
+  if (mp_gridModeEditorIgnDlg.get() && m_md[TYPE_MAP_GME_IGN_WND].state && ::IsWindow(mp_gridModeEditorIgnDlg->m_hWnd))
    mp_gridModeEditorIgnDlg->UpdateDialogControls(mp_gridModeEditorIgnDlg.get(), TRUE);
-  if (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj && ::IsWindow(mp_gridModeEditorInjDlg->m_hWnd))
+  if (mp_gridModeEditorInjDlg.get() && m_md[TYPE_MAP_GME_INJ_WND].state && ::IsWindow(mp_gridModeEditorInjDlg->m_hWnd))
    mp_gridModeEditorInjDlg->UpdateDialogControls();
   if (m_md[TYPE_MAP_INJ_IACMAT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACMAT].handle))
    DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACMAT].handle, enable && IsAllowed());
@@ -2917,14 +2927,14 @@ void CButtonsPanel::SetSplitAngMode(bool mode)
   DLL::Chart3DSetFncRange(m_md[TYPE_MAP_PWM1].handle, splitAngMin, splitAngMax); //split angle
   DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_PWM1].handle, 1, MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str());
   DLL::Chart3DSetTitle(m_md[TYPE_MAP_PWM1].handle, MLL::GetString(IDS_SPLIT_ANGLE_MAP).c_str());
-  m_view_pwm1_map_btn.SetWindowText(MLL::GetString(IDS_TD_VIEW_SPLIT_MAP).c_str());
+  m_md[TYPE_MAP_PWM1].mp_button->SetWindowText(MLL::GetString(IDS_TD_VIEW_SPLIT_MAP).c_str());
  }
  else
  {
   DLL::Chart3DSetFncRange(m_md[TYPE_MAP_PWM1].handle, 0.0f, 100.0f);  //PWM duty
   DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_PWM1].handle, 1, MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str());
   DLL::Chart3DSetTitle(m_md[TYPE_MAP_PWM1].handle, MLL::GetString(IDS_PWM1_MAP).c_str());
-  m_view_pwm1_map_btn.SetWindowText(MLL::GetString(IDS_TD_VIEW_PWM1_MAP).c_str());
+  m_md[TYPE_MAP_PWM1].mp_button->SetWindowText(MLL::GetString(IDS_TD_VIEW_PWM1_MAP).c_str());
  }
 }
 

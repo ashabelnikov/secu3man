@@ -35,7 +35,7 @@ class AFX_EXT_CLASS CTabDialog : public CUpdatableDialog
   typedef CUpdatableDialog Super;
 
  public:
-  CTabDialog(UINT nIDTemplate, CWnd* pParentWnd);
+  CTabDialog();
   virtual ~CTabDialog();
 
   //возвращает идентификатор диалога

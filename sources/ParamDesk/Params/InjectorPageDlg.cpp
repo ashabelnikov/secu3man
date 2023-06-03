@@ -35,8 +35,6 @@
 #include "ui-core/MsgBox.h"
 #include "common/Calculations.h"
 
-const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
-
 BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -145,9 +143,8 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_GENERAL_GROUP,OnUpdateControls)
 END_MESSAGE_MAP()
 
-CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CInjectorPageDlg::IDD, pParent)
-, m_enabled(false)
+CInjectorPageDlg::CInjectorPageDlg()
+: m_enabled(false)
 , m_enable_secu3t_features(false)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
 , m_fff_const_edit(CEditEx::MODE_FLOAT, true)
@@ -205,7 +202,7 @@ CInjectorPageDlg::~CInjectorPageDlg()
 
 LPCTSTR CInjectorPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_INJECTOR_PAGE;
 }
 
 void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)

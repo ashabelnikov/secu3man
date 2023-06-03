@@ -66,11 +66,8 @@ using namespace fastdelegate;
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
 
-const UINT CParamDeskDlg::IDD = IDD_PARAMETERS_DESK;
-
-CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/, bool tps_learning /*= true*/)
-: Super(CParamDeskDlg::IDD, pParent)
-, m_pImgList(NULL)
+CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learning /*= true*/)
+: m_pImgList(NULL)
 , m_enabled(false)
 , m_fuel_injection(false)
 , m_lambda(false)
@@ -99,7 +96,7 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
  m_pIdlRegPageDlg = new CIdlRegPageDlg();
  m_pIdlRegPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
- m_pFunSetPageDlg = new CFunSetPageDlg(NULL, m_tps_learning);
+ m_pFunSetPageDlg = new CFunSetPageDlg(m_tps_learning);
  m_pFunSetPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
  m_pFunSetPageDlg->setOnTPSLearning(MakeDelegate(this, &CParamDeskDlg::OnTPSLearning));
 
@@ -168,6 +165,11 @@ CParamDeskDlg::~CParamDeskDlg()
  delete m_pLambdaPageDlg;
  delete m_pAccelEnrPageDlg;
  delete m_pGasdosePageDlg;
+}
+
+BOOL CParamDeskDlg::Create(CWnd* pParentWnd /*= NULL*/)
+{
+ return Super::Create(IDD_PARAMETERS_DESK, pParentWnd);
 }
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)

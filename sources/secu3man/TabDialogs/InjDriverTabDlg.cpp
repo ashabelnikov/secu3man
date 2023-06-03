@@ -41,8 +41,6 @@
 #include "ui-core/WndScroller.h"
 #include "ui-core/MsgBox.h"
 
-const UINT CInjDriverTabDlg::IDD = IDD_INJ_DRIVER;
-
 //Chart series
 #define SERIE_PO 0
 #define SERIE_PD 1
@@ -59,9 +57,8 @@ const float x_axis_min = 5.4f;
 const float x_axis_step = 0.8f;
 const float x_axis_max = x_axis_min + (x_axis_step * (x_axis_points-1));
 
-CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CInjDriverTabDlg::IDD, pParent)
-, mp_chart(new CChart2D())
+CInjDriverTabDlg::CInjDriverTabDlg()
+: mp_chart(new CChart2D())
 , mp_secu3orgLink(new CLabel)
 , mp_TipLink(new CLabel)
 , mp_secu3logo(new CClickableBmp())
@@ -238,7 +235,7 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CInjDriverTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_INJ_DRIVER;
 }
 
 BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)

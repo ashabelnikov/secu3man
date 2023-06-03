@@ -42,9 +42,8 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CIdlRegPageDlg(CWnd* pParent = NULL); // standard constructor
+  CIdlRegPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

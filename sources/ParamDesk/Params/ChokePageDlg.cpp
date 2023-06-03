@@ -31,8 +31,6 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CChokePageDlg::IDD = IDD_PD_CHOKE_PAGE;
-
 BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -87,9 +85,8 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_EDIT,OnUpdateControlsCarb)
 END_MESSAGE_MAP()
 
-CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
-: Super(CChokePageDlg::IDD, pParent)
-, m_enabled(false)
+CChokePageDlg::CChokePageDlg()
+: m_enabled(false)
 , m_fuel_injection(false)
 , m_sm_steps_num_edit(CEditEx::MODE_INT, true)
 , m_strt_add_tm1_edit(CEditEx::MODE_FLOAT, true)
@@ -117,7 +114,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CChokePageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_CHOKE_PAGE;
 }
 
 void CChokePageDlg::DoDataExchange(CDataExchange* pDX)

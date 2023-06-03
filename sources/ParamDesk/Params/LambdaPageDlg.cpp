@@ -32,8 +32,6 @@
 #include "ui-core/fnt_helpers.h"
 #include "common/dpiaware.h"
 
-const UINT CLambdaPageDlg::IDD = IDD_PD_LAMBDA_PAGE;
-
 BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -160,9 +158,8 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_MIXSEN_CHECK, OnUpdateControls)
 END_MESSAGE_MAP()
 
-CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CLambdaPageDlg::IDD, pParent)
-, m_enabled(false)
+CLambdaPageDlg::CLambdaPageDlg()
+: m_enabled(false)
 , m_fuel_injection(false)
 , m_strperstp_edit(CEditEx::MODE_INT, true)
 , m_msperstp_edit(CEditEx::MODE_INT, true)
@@ -218,7 +215,7 @@ CLambdaPageDlg::~CLambdaPageDlg()
 
 LPCTSTR CLambdaPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_LAMBDA_PAGE;
 }
 
 void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)

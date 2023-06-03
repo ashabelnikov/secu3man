@@ -31,8 +31,6 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CADCCompenPageDlg::IDD = IDD_PD_ADCCOMPEN_PAGE;
-
 BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -135,9 +133,8 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I8_CORRECTION_SPIN, OnUpdateControlsSECU3i)
 END_MESSAGE_MAP()
 
-CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CADCCompenPageDlg::IDD, pParent)
-, m_enabled(false)
+CADCCompenPageDlg::CADCCompenPageDlg()
+: m_enabled(false)
 , m_enable_secu3t_features(false)
 , m_map_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_map_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
@@ -199,7 +196,7 @@ CADCCompenPageDlg::~CADCCompenPageDlg()
 
 LPCTSTR CADCCompenPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_ADCCOMPEN_PAGE;
 }
 
 void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)

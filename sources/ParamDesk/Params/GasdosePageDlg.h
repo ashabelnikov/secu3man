@@ -42,9 +42,8 @@ class CGasdosePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CGasdosePageDlg(CWnd* pParent = NULL);   // standard constructor
+  CGasdosePageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

@@ -52,10 +52,8 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   typedef fastdelegate::FastDelegate1<_TSTRING> EventString;
 
  public:
-  CFirmwareTabDlg(CWnd* pParent = NULL);   // standard constructor
+  CFirmwareTabDlg();
  ~CFirmwareTabDlg();
-
-  static const UINT IDD;
 
   virtual LPCTSTR GetDialogID(void) const;
 

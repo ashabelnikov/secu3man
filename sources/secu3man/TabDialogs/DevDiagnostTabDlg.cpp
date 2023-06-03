@@ -42,8 +42,6 @@
 
 using namespace fastdelegate;
 
-const UINT CDevDiagnostTabDlg::IDD = IDD_DEV_DIAGNOSTICS;
-
 BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
@@ -84,17 +82,16 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_DEVDIAG_TESTCH_COMBO, OnUpdateDiagControls)
 END_MESSAGE_MAP()
 
-CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CDevDiagnostTabDlg::IDD, pParent)
-, mp_OScopeCtrl1(new COscillCtrl())
+CDevDiagnostTabDlg::CDevDiagnostTabDlg()
+: mp_OScopeCtrl1(new COscillCtrl())
 , mp_OScopeCtrl2(new COscillCtrl())
 , mp_ContextMenuManager(new CDiagnostContextMenuManager())
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
 , m_enable_blde_testing(false)
 , m_enable_tacho_testing(false)
-, mp_inpsDlg(new CDevDiagInpsDlg(NULL))
-, mp_outsDlg(new CDevDiagOutsDlg(NULL))
+, mp_inpsDlg(new CDevDiagInpsDlg())
+, mp_outsDlg(new CDevDiagOutsDlg())
 , m_start_autotst_enabled(false)
 , m_stop_autotst_enabled(false)
 , m_initialized(false)
@@ -136,7 +133,7 @@ void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_DEV_DIAGNOSTICS;
 }
 
 BOOL CDevDiagnostTabDlg::OnInitDialog()
@@ -159,13 +156,13 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  CRect rect;
  GetDlgItem(IDC_DEV_DIAG_OUTPUTS_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
- mp_outsDlg->Create(CDevDiagOutsDlg::IDD,this);
+ mp_outsDlg->Create(this);
  mp_outsDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_outsDlg->ShowWindow(SW_SHOW);
  //create inputs child dialog
  GetDlgItem(IDC_DEV_DIAG_INPUTS_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
- mp_inpsDlg->Create(CDevDiagInpsDlg::IDD,this);
+ mp_inpsDlg->Create(this);
  mp_inpsDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_inpsDlg->ShowWindow(SW_SHOW);
 

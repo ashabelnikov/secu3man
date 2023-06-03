@@ -41,10 +41,9 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CLambdaPageDlg(CWnd* pParent = NULL);   // standard constructor
+  CLambdaPageDlg();
  ~CLambdaPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

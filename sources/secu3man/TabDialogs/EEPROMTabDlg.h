@@ -45,8 +45,7 @@ class CEEPROMTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate1<_TSTRING> EventString;
 
  public:
-  CEEPROMTabDlg(CWnd* pParent = NULL);   // standard constructor
-  static const UINT IDD;
+  CEEPROMTabDlg();   // standard constructor
   virtual LPCTSTR GetDialogID(void) const;
 
   void SetEEFileName(_TSTRING i_name);

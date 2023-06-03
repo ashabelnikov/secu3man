@@ -42,8 +42,6 @@ CComboBox* CIORemappingDlg::_GetCBbyIOSID(const std::map<UINT, int>& map, int io
  return NULL;
 }
 
-const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
-
 //See also FirmwareDataMediator.h
 const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT1_CAPTION;
 const UINT IOCaptionEnd = IDC_IO_REMAPPING_ADD_I4_CAPTION;
@@ -88,9 +86,8 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CIORemappingDlg dialog
 
-CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
-: Super(CIORemappingDlg::IDD, pParent)
-, m_enabled(false)
+CIORemappingDlg::CIORemappingDlg()
+: m_enabled(false)
 , m_enable_secu3t_features(false)
 , mp_scr(new CWndScroller)
 , mp_ioremhelpLink(new CLabel())
@@ -101,6 +98,11 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 CIORemappingDlg::~CIORemappingDlg()
 {
  //empty
+}
+
+BOOL CIORemappingDlg::Create(CWnd* pParentWnd /*= NULL*/)
+{
+ return Super::Create(IDD_IO_REMAPPING, pParentWnd);
 }
 
 void CIORemappingDlg::DoDataExchange(CDataExchange* pDX)

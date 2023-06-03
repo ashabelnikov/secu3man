@@ -31,8 +31,6 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
 
-const UINT CGMEInjIRegDlg::IDD = IDD_GME_INJ_IREG;
-
 const float RigidGrid[8] = {1,2,3,4,5,6,7,8};
 
 static const UINT StaticCtrlBegin = IDC_GME_INJ_IDLC_TEXT;
@@ -53,9 +51,8 @@ BEGIN_MESSAGE_MAP(CGMEInjIRegDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjIRegDlg::IDD, pParent)
-, m_idlc_map(1, 16)
+CGMEInjIRegDlg::CGMEInjIRegDlg()
+: m_idlc_map(1, 16)
 , m_idlr_map(1, 16)
 , m_itrpm_map(1, 16)
 , m_rigid_map(1, 8)
@@ -212,7 +209,7 @@ void CGMEInjIRegDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjIRegDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_IREG;
 }
 
 void CGMEInjIRegDlg::BindMaps(float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT)

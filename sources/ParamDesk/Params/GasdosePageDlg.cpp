@@ -31,8 +31,6 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CGasdosePageDlg::IDD = IDD_PD_GASDOSE_PAGE;
-
 BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -79,9 +77,8 @@ BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_MAXFREQINIT_CHECK,OnUpdateControls)
 END_MESSAGE_MAP()
 
-CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
-: Super(CGasdosePageDlg::IDD, pParent)
-, m_enabled(false)
+CGasdosePageDlg::CGasdosePageDlg()
+: m_enabled(false)
 , m_sm_steps_num_edit(CEditEx::MODE_INT, true)
 , m_fc_closing_edit(CEditEx::MODE_FLOAT, true)
 , m_corrlimit_p_edit(CEditEx::MODE_FLOAT, true)
@@ -105,7 +102,7 @@ CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CGasdosePageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_GASDOSE_PAGE;
 }
 
 void CGasdosePageDlg::DoDataExchange(CDataExchange* pDX)

@@ -34,7 +34,7 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-BEGIN_MESSAGE_MAP(CCEDeskDlg, CDialog)
+BEGIN_MESSAGE_MAP(CCEDeskDlg, Super)
 END_MESSAGE_MAP()
 
 const UINT CCEDeskDlg::IDD = IDD_CE_ERRORS_DESK;

@@ -31,7 +31,7 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-BEGIN_MESSAGE_MAP(CLMDeskDlg, CDialog)
+BEGIN_MESSAGE_MAP(CLMDeskDlg, Super)
  ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
@@ -93,7 +93,7 @@ HBRUSH CLMDeskDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
    }
   }
  }
- return CDialog::OnCtlColor(pDC, pWnd, nCtlColor); 
+ return Super::OnCtlColor(pDC, pWnd, nCtlColor); 
 }
 
 //enable/disable fixtures

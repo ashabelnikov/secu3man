@@ -29,8 +29,6 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
 
-const UINT CGMEInjPwm2Dlg::IDD = IDD_GME_INJ_PWM2;
-
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjPwm2Dlg dialog
 
@@ -40,9 +38,8 @@ BEGIN_MESSAGE_MAP(CGMEInjPwm2Dlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjPwm2Dlg::CGMEInjPwm2Dlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjPwm2Dlg::IDD, pParent)
-, m_pwm2_map(16, 16, false, false, NULL, 3)
+CGMEInjPwm2Dlg::CGMEInjPwm2Dlg()
+: m_pwm2_map(16, 16, false, false, NULL, 3)
 , mp_pwm2Map(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
@@ -101,7 +98,7 @@ void CGMEInjPwm2Dlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjPwm2Dlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_PWM2;
 }
 
 void CGMEInjPwm2Dlg::BindMaps(float* pPWM2)

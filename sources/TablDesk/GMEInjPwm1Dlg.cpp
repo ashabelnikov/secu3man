@@ -32,8 +32,6 @@
 static const float splitAngMin = -20.0f;
 static const float splitAngMax =  20.0f;
 
-const UINT CGMEInjPwm1Dlg::IDD = IDD_GME_INJ_PWM1;
-
 /////////////////////////////////////////////////////////////////////////////
 // CGMEInjPwm1Dlg dialog
 
@@ -43,9 +41,8 @@ BEGIN_MESSAGE_MAP(CGMEInjPwm1Dlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjPwm1Dlg::CGMEInjPwm1Dlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjPwm1Dlg::IDD, pParent)
-, m_pwm1_map(16, 16, false, false, NULL, 3)
+CGMEInjPwm1Dlg::CGMEInjPwm1Dlg()
+: m_pwm1_map(16, 16, false, false, NULL, 3)
 , mp_pwm1Map(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
@@ -109,7 +106,7 @@ void CGMEInjPwm1Dlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjPwm1Dlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_PWM1;
 }
 
 void CGMEInjPwm1Dlg::BindMaps(float* pPWM1)

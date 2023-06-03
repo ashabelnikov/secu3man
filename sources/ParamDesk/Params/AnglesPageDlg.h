@@ -41,9 +41,8 @@ class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CAnglesPageDlg(CWnd* pParent = NULL); // standard constructor
+  CAnglesPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

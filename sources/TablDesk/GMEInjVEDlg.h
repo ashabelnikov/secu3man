@@ -40,9 +40,8 @@ class CGMEInjVEDlg : public CTabDialog
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CGMEInjVEDlg(CWnd* pParent = NULL);   // standard constructor
+  CGMEInjVEDlg();
  ~CGMEInjVEDlg();
-  static const UINT IDD;
 
   void BindMaps(float* pVE, float* pVE2);
   void BindRPMGrid(float* pGrid);

@@ -32,8 +32,6 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CAccelEnrPageDlg::IDD = IDD_PD_ACCELENR_PAGE;
-
 BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
  ON_WM_SIZE()
  ON_WM_HSCROLL()
@@ -95,9 +93,8 @@ BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
 
 END_MESSAGE_MAP()
 
-CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CAccelEnrPageDlg::IDD, pParent)
-, mp_scr(new CWndScroller)
+CAccelEnrPageDlg::CAccelEnrPageDlg()
+: mp_scr(new CWndScroller)
 , m_enabled(false)
 , m_fuel_injection(false)
 , m_tpsdot_thrd_edit(CEditEx::MODE_FLOAT, true)
@@ -122,7 +119,7 @@ CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CAccelEnrPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_ACCELENR_PAGE;
 }
 
 void CAccelEnrPageDlg::DoDataExchange(CDataExchange* pDX)

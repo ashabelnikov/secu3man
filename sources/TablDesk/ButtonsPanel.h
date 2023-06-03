@@ -49,11 +49,11 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
   typedef fastdelegate::FastDelegate2<HWND, long> EventWithHWNDLong;
 
-  CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL, bool enableAutoTune = false, bool onlineMode = false);   // standard constructor
-  /*static*/ const UINT IDD;
-  ~CButtonsPanel();
+  CButtonsPanel(bool enableAutoTune = false, bool onlineMode = false);   // standard constructor
+  virtual ~CButtonsPanel();
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
-  //note: use wnd_insert_after parameter to fix tab order!
+  //note: use wnd_insert_after parameter to change tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
 
   //returns NULL if corresponding window wasn't opened
@@ -267,64 +267,25 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   int m_scrl_view;
  private:
   void _GetITModeRange(float& y1, float& y2);
+  void OnChangeSettingsGME(void);
 
   std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
-
-  CButton m_view_work_map_btn;
-  CButton m_view_temp_map_btn;
-  CButton m_view_tempi_map_btn;
-  CButton m_view_start_map_btn;
-  CButton m_view_idle_map_btn;
-  CButton m_view_ve_map_btn;
-  CButton m_view_ve2_map_btn;
-  CButton m_view_afr_map_btn;
-  CButton m_view_crnk_map_btn;
-  CButton m_view_wrmp_map_btn;
-  CButton m_view_dead_map_btn;
-  CButton m_view_idlr_map_btn;
-  CButton m_view_idlc_map_btn;
-  CButton m_view_thrass_map_btn;
-  CButton m_view_aetps_map_btn;
-  CButton m_view_aemap_map_btn;
-  CButton m_view_aerpm_map_btn;
-  CButton m_view_aftstr_map_btn;
-  CButton m_view_it_map_btn;
-  CButton m_view_itrpm_map_btn;
-  CButton m_view_rigid_map_btn;
-  CButton m_view_egocrv_map_btn;
-  CButton m_view_iacc_map_btn;
-  CButton m_view_iaccw_map_btn;
-  CButton m_view_iatclt_map_btn;
-  CButton m_view_tpsswt_map_btn;
-  CButton m_view_gtsc_map_btn;
-  CButton m_view_gpsc_map_btn;
-  CButton m_view_atsc_map_btn;
-  CButton m_view_pwm1_map_btn;
-  CButton m_view_pwm2_map_btn;
-  CButton m_view_iacmat_map_btn;
-  CButton m_view_tpszon_map_btn;
-  CButton m_view_cylmult_map_btn;
-  CButton m_view_cyladd_map_btn;
-
-  CButton m_grid_mode_editing_ign_check;
-  CButton m_grid_mode_editing_inj_check;
   std::auto_ptr<CGridModeEditorIgnDlg> mp_gridModeEditorIgnDlg;
   std::auto_ptr<CGridModeEditorInjDlg> mp_gridModeEditorInjDlg;
   std::auto_ptr<CAutoTuneController> mp_autoTuneCntr;
 
-  void OnChangeSettingsGME(void);
-
 protected:
   struct MapData
   {
-   MapData() : state(0), handle(NULL), ptMovStep(0.5f)
+   MapData() : state(0), handle(NULL), ptMovStep(0.5f), mp_button(NULL)
    { std::fill(original, original + 256, .0f); std::fill(active, active + 256, .0f); }
    float original[256];
    float active[256];
    int state;
    HWND handle;
    float ptMovStep;
+   CButton *mp_button;
   };
 
   std::map<int, MapData> m_md;
@@ -488,8 +449,6 @@ private:
 
   int m_charts_enabled;
   ///////////////////////////////////////////////////////
-  int m_grid_map_state_ign;
-  int m_grid_map_state_inj;
   float m_rpm_grid_values[16];
   float m_clt_grid_values[16];
   float m_load_grid_values[16];

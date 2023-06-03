@@ -43,9 +43,8 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  public:
   typedef std::vector<int> BRCType;
 
-  CMiscPageDlg(CWnd* pParent = NULL);
+  CMiscPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

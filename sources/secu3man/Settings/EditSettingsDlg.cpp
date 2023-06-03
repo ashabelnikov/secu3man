@@ -35,7 +35,7 @@
 const UINT CEditSettingsDlg::IDD = IDD_APP_SETTINGS_EDITOR;
 
 CEditSettingsDlg::CEditSettingsDlg(const _TSTRING& filename, bool syntaxHighlight /*=true*/, CWnd* pParent /*=NULL*/)
-: CDialog(CEditSettingsDlg::IDD, pParent)
+: Super(CEditSettingsDlg::IDD, pParent)
 , m_filename(filename)
 , m_syntaxHighlight(syntaxHighlight)
 , m_initialized(false)
@@ -45,13 +45,13 @@ CEditSettingsDlg::CEditSettingsDlg(const _TSTRING& filename, bool syntaxHighligh
 
 void CEditSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_INI_RICHEDIT, m_edit);
  DDX_Control(pDX, IDOK, m_ok_button);
 }
 
 
-BEGIN_MESSAGE_MAP(CEditSettingsDlg, CDialog)
+BEGIN_MESSAGE_MAP(CEditSettingsDlg, Super)
  ON_WM_SIZE()
  ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()

@@ -39,11 +39,8 @@ using namespace std;
 
 using namespace fastdelegate;
 
-const UINT CLPControlPanelDlg::IDD = IDD_LOG_PLAYER_CONTROL_PANEL;
-
-CLPControlPanelDlg::CLPControlPanelDlg(CWnd* pParent /*=NULL*/)
-: Super(CLPControlPanelDlg::IDD, pParent)
-, m_next_button_state(false)
+CLPControlPanelDlg::CLPControlPanelDlg()
+: m_next_button_state(false)
 , m_prev_button_state(false)
 , m_play_button_state(false)
 , m_slider_state(false)
@@ -51,6 +48,11 @@ CLPControlPanelDlg::CLPControlPanelDlg(CWnd* pParent /*=NULL*/)
 , m_marksFrame(new CHatchDispCtrl())
 {
  //empty
+}
+
+BOOL CLPControlPanelDlg::Create(CWnd* pParentWnd /*= NULL*/)
+{
+ return Super::Create(IDD_LOG_PLAYER_CONTROL_PANEL, pParentWnd);
 }
 
 void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)

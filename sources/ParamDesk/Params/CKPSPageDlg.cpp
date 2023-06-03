@@ -36,8 +36,6 @@
 #include "ui-core/WndScroller.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
-
 BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -94,9 +92,8 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_USE_CAM_REF, OnUpdateUseCamRef)
 END_MESSAGE_MAP()
 
-CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CCKPSPageDlg::IDD, pParent)
-, m_ignition_cogs_edit(CEditEx::MODE_INT, true)
+CCKPSPageDlg::CCKPSPageDlg()
+: m_ignition_cogs_edit(CEditEx::MODE_INT, true)
 , m_hall_wnd_width_edit(CEditEx::MODE_FLOAT, true)
 , m_hall_degrees_btdc_edit(CEditEx::MODE_FLOAT, true)
 , m_wheel_cogs_num_edit(CEditEx::MODE_INT, true)
@@ -128,7 +125,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CCKPSPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_CKPS_PAGE;
 }
 
 void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)

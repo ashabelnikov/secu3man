@@ -31,8 +31,6 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/CtrlScaler.h"
 
-const UINT CGMEInjVEDlg::IDD = IDD_GME_INJ_VE;
-
 const COLORREF colorBlocked = RGB(100,100,100);
 
 /////////////////////////////////////////////////////////////////////////////
@@ -64,9 +62,8 @@ BEGIN_MESSAGE_MAP(CGMEInjVEDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjVEDlg::IDD, pParent)
-, m_ve_map(16, 16, false, false, NULL, 3) 
+CGMEInjVEDlg::CGMEInjVEDlg()
+: m_ve_map(16, 16, false, false, NULL, 3) 
 , m_ve2_map(16, 16, false, false, NULL, 3) 
 , m_lamdel_map(3, 3, false, false, NULL, 3)
 , m_celwgt_map(16, 16, false, false, NULL, 3, true) //read-only
@@ -275,7 +272,7 @@ void CGMEInjVEDlg::OnUpdateControlsAutoTune3(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjVEDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_VE;
 }
 
 void CGMEInjVEDlg::BindMaps(float* pVE, float* pVE2)

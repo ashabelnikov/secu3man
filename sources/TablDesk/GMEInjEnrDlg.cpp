@@ -31,8 +31,6 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
 
-const UINT CGMEInjEnrDlg::IDD = IDD_GME_INJ_ENR;
-
 static const UINT StaticCtrlBegin = IDC_GME_INJ_AFTSTR_TEXT;
 static const UINT StaticCtrlEnd = IDC_GME_INJ_AEMAP_TEXT;
 
@@ -49,9 +47,8 @@ BEGIN_MESSAGE_MAP(CGMEInjEnrDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-CGMEInjEnrDlg::CGMEInjEnrDlg(CWnd* pParent /*=NULL*/)
-: Super(CGMEInjEnrDlg::IDD, pParent)
-, m_aftstr_map(1, 16)
+CGMEInjEnrDlg::CGMEInjEnrDlg()
+: m_aftstr_map(1, 16)
 , m_wrmp_map(1, 16)
 , m_aetps_map(1, 8)
 , m_aerpm_map(1, 4)
@@ -173,7 +170,7 @@ void CGMEInjEnrDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 LPCTSTR CGMEInjEnrDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_GME_INJ_ENR;
 }
 
 void CGMEInjEnrDlg::BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pAEMAP)

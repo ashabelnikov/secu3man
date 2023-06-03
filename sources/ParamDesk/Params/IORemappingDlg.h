@@ -42,9 +42,9 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   typedef CModelessDialog Super;
 
  public:
-  CIORemappingDlg(CWnd* pParent = NULL);   // standard constructor
- ~CIORemappingDlg();                       // destructor
-  static const UINT IDD;
+  CIORemappingDlg();
+ ~CIORemappingDlg();
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
 

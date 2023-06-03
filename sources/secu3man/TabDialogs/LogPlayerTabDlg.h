@@ -43,8 +43,7 @@ class CLogPlayerTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate1<_TSTRING> EventString;
 
  public:
-  CLogPlayerTabDlg(CWnd* pParent = NULL);
-  static const UINT IDD;
+  CLogPlayerTabDlg();
   virtual LPCTSTR GetDialogID(void) const;
 
   //Drag and Drop event handler

@@ -32,8 +32,6 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
-const UINT CCarburPageDlg::IDD = IDD_PD_CARBUR_PAGE;
-
 BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -118,9 +116,8 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_IGNCUT_UNI_CAPTION,OnUpdateControls)
 END_MESSAGE_MAP()
 
-CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CCarburPageDlg::IDD, pParent)
-, m_enabled(false)
+CCarburPageDlg::CCarburPageDlg()
+: m_enabled(false)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_shutoff_lo_threshold_edit(CEditEx::MODE_INT, true)
@@ -154,7 +151,7 @@ CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CCarburPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_PD_CARBUR_PAGE;
 }
 
 void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)

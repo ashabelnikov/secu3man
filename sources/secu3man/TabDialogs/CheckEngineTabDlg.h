@@ -45,8 +45,7 @@ class CCheckEngineTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  CCheckEngineTabDlg(CWnd* pParent = NULL);   // standard constructor
-  static const UINT IDD;
+  CCheckEngineTabDlg();
   virtual LPCTSTR GetDialogID(void) const;
 
   void setOnRealTimeErrors(EventHandler OnFunction) {m_OnRealTimeErrors = OnFunction;}

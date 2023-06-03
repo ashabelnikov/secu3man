@@ -83,8 +83,6 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I2_V_EM_SPIN, OnUpdateEmValue)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I2_V_EM_CAPTION, OnUpdateEmValue)
 
-
-
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MIN_EDIT, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MIN_SPIN, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MAX_EDIT, OnUpdateSECU3i)
@@ -887,7 +885,6 @@ void CCESettingsDlg::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*
 {
  SetWindowPos(wnd_insert_after,x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
 }
-
 
 /////////////////////////////////////////////////////////////////////////////
 // CCESettingsCntr dialog

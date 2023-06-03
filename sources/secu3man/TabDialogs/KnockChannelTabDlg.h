@@ -45,8 +45,7 @@ class CKnockChannelTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate1<const std::vector<int>&> EventIndexes;
 
  public:
-  CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor
-  static const UINT IDD;
+  CKnockChannelTabDlg();
   virtual LPCTSTR GetDialogID(void) const;
 
   void setOnSaveParameters(EventHandler OnFunction);

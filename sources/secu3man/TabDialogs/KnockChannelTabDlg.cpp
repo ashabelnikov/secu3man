@@ -51,11 +51,8 @@ using namespace fastdelegate;
 #define LEVEL_SLIDER_POS_NUM 100
 #define RPM_AXIS_MAX  (RPM_AXIS_MIN + ((RPM_KNOCK_SIGNAL_POINTS-1) * RPM_AXIS_STEP))
 
-const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
-
-CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CKnockChannelTabDlg::IDD, pParent)
-, mp_RTChart(new CChart2D())
+CKnockChannelTabDlg::CKnockChannelTabDlg()
+: mp_RTChart(new CChart2D())
 , mp_knock_parameters_dlg(new CKnockPageDlg())
 , mp_knock_frq_calc_dlg(new CKnockFrqCalcDlg())
 , mp_OScopeCtrl(new COscillCtrl())
@@ -103,7 +100,7 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_KNOCK_CHANNEL;
 }
 
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
@@ -144,7 +141,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  ScreenToClient(rect);
 
  //создаем диалог с параметрами ДД
- mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD, this);
+ mp_knock_parameters_dlg->Create(this);
  mp_knock_parameters_dlg->SetWindowPos(GetDlgItem(IDC_KC_CLEAR_FUNCTION),rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
  mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
 

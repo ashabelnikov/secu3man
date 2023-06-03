@@ -42,9 +42,8 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CCKPSPageDlg(CWnd* pParent = NULL);
+  CCKPSPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

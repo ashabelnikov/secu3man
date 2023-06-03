@@ -41,9 +41,8 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef CParamTabBaseDlg Super;
 
  public:
-  CCarburPageDlg(CWnd* pParent = NULL); // standard constructor
+  CCarburPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);

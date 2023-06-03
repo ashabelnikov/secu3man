@@ -41,10 +41,10 @@ class AFX_EXT_CLASS CKnockPageDlg : public CParamTabBaseDlg, public ParamPageEve
   typedef CParamTabBaseDlg Super;
 
  public:
-  CKnockPageDlg(CWnd* pParent = NULL); // standard constructor
+  CKnockPageDlg();
  ~CKnockPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
-  static const UINT IDD;
+  virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   void Enable(bool enable);
   bool IsEnabled(void);

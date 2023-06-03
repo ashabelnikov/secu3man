@@ -39,13 +39,10 @@
 
 #define TIMER_ID 0
 
-const UINT CEEPROMTabDlg::IDD = IDD_EEPROM_DATA;
-
-CEEPROMTabDlg::CEEPROMTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CEEPROMTabDlg::IDD, pParent)
-, mp_ParamDeskDlg(new CParamDeskDlg(NULL, true, false)) //<-- use knock parameters tab, don't use TPS learning
+CEEPROMTabDlg::CEEPROMTabDlg()
+: mp_ParamDeskDlg(new CParamDeskDlg(true, false)) //<-- use knock parameters tab, don't use TPS learning
 , mp_ContextMenuManager(new CEEPROMContextMenuManager())
-, mp_TablesPanel(new CButtonsPanel(0, NULL))
+, mp_TablesPanel(new CButtonsPanel())
 , m_is_bl_items_available(false)
 , m_initialized(false)
 , mp_eeresetLink(new CLabel)
@@ -76,7 +73,7 @@ void CEEPROMTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CEEPROMTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD;
+ return (LPCTSTR)IDD_EEPROM_DATA;
 }
 
 BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
@@ -119,7 +116,7 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  CRect rect;
  GetDlgItem(IDC_EE_PD_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
- mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
+ mp_ParamDeskDlg->Create(this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_EE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
@@ -129,7 +126,7 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  //create tables desk
  GetDlgItem(IDC_EE_TD_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect); 
- mp_TablesPanel->Create(mp_TablesPanel->IDD, this);
+ mp_TablesPanel->Create(this);
  mp_TablesPanel->SetPosition(rect.TopLeft().x,rect.TopLeft().y, GetDlgItem(IDC_EE_MAPSET_NAME));
  mp_TablesPanel->ShowWindow(SW_SHOWNORMAL);
 
