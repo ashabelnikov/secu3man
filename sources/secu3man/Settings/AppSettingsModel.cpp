@@ -4331,9 +4331,11 @@ bool CAppSettingsModel::_CheckAndCorrectLFCRs(void)
 
  if (fwrite(&dstbuf[0], 1, dstsize, f) != dstsize)
  {
+  fflush(f); //write file stream to disk
   fclose(f);
   return false;
  }
+ fflush(f); //write file stream to disk
  fclose(f);
  return true;
 }
