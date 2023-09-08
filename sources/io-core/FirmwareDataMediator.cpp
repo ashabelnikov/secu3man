@@ -2836,7 +2836,7 @@ void CFirmwareDataMediator::GetInjNonLinPMap(float* op_values, bool i_original /
   op_values[i] = ((float)p_fd->extabs.inj_nonlinp_corr[i]) / 312.5f; //convert to ms
 
  for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
-  op_values[i+INJ_NONLIN_SIZE] = ((float)p_fd->extabs.inj_nonlinp_bins[i]) / 312.5; //convert to ms
+  op_values[i+INJ_NONLIN_SIZE] = ((float)p_fd->extabs.inj_nonlinp_bins[i]) / 312.5f; //convert to ms
 }
 
 void CFirmwareDataMediator::SetInjNonLinPMap(const float* ip_values)
@@ -2863,7 +2863,7 @@ void CFirmwareDataMediator::GetInjNonLinGMap(float* op_values, bool i_original /
   op_values[i] = ((float)p_fd->extabs.inj_nonling_corr[i]) / 312.5f; //convert to ms
 
  for (int i = 0; i < INJ_NONLIN_SIZE; i++ )
-  op_values[i+INJ_NONLIN_SIZE] = ((float)p_fd->extabs.inj_nonling_bins[i]) / 312.5; //convert to ms
+  op_values[i+INJ_NONLIN_SIZE] = ((float)p_fd->extabs.inj_nonling_bins[i]) / 312.5f; //convert to ms
 }
 
 void CFirmwareDataMediator::SetInjNonLinGMap(const float* ip_values)

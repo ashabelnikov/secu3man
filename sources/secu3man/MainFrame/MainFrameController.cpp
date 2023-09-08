@@ -348,7 +348,10 @@ void MainFrameController::OnCreate(void)
 
  VERIFY(mp_view->CreateDVDesk(settings->GetUseDVFeatures()));
  if (mp_view->GetDVDesk())
+ {
   mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
+  mp_view->GetDVDesk()->SetWriteToFile(settings->GetDbgVarsToFile());
+ }
 
  //Restore saved size of the window
  WndSize sz;

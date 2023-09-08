@@ -31,6 +31,7 @@
 #include "common/GDIHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
+#include <shlwapi.h>
 
 static int ApplySign(int value, bool sign)
 { 
@@ -53,6 +54,8 @@ CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
 , m_update_period(100)
 , m_was_initialized(false)
 , m_enabled(-1)
+, m_fh(NULL)
+, m_wrtofile(false)
 {
  for(size_t i = 0; i < VU_SIZE; ++i)
  {
@@ -61,6 +64,12 @@ CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
   m_vu[i].base_fmt = _T("0x%04X");
   m_vu[i].sign = false; //unsigned is default
  }
+}
+
+CDVDeskDlg::~CDVDeskDlg()
+{
+ if (m_fh)
+  fclose(m_fh);
 }
 
 void CDVDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -168,6 +177,32 @@ using namespace SECU3IO;
 
 void CDVDeskDlg::SetValues(const DbgvarDat* i_values)
 {
+ if (m_wrtofile)
+ {
+  if (!m_fh)
+  {
+   TCHAR currentDir[MAX_PATH+1];
+   HMODULE hModule = GetModuleHandle(NULL);
+   ASSERT(hModule);
+   _tcscpy(currentDir, _T(""));
+   GetModuleFileName(hModule, currentDir, MAX_PATH);
+   VERIFY(PathRemoveFileSpec(currentDir));
+
+   CString dir(currentDir);
+
+   CString last_char = dir.Right(1);
+   if (last_char != _T("\\")) //append with \ if not root directory
+    dir+=_T("\\");
+   dir+=_T("dbgvar.csv");
+
+   m_fh = _tfopen(dir,"wb+");
+  }
+  if (m_fh)
+  {
+   fprintf(m_fh, "%05d, %05d, %05d, %05d\n", i_values->var1, i_values->var2, i_values->var3, i_values->var4);
+  }
+ }
+
  m_vu[0].var_value = i_values->var1;
  m_vu[1].var_value = i_values->var2;
  m_vu[2].var_value = i_values->var3;
@@ -197,5 +232,18 @@ void CDVDeskDlg::SetUpdatePeriod(unsigned int i_period)
  {
   m_update_timer.KillTimer();
   m_update_timer.SetTimer(this, &CDVDeskDlg::OnUpdateTimer, m_update_period);
+ }
+}
+
+void CDVDeskDlg::SetWriteToFile(bool write)
+{
+ m_wrtofile = write;
+ if (!write)
+ {
+  if (m_fh)
+  {
+   fclose(m_fh);
+   m_fh = NULL;
+  }
  }
 }

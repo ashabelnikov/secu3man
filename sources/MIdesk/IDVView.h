@@ -39,4 +39,5 @@ class IDVView
   virtual void SetValues(const SECU3IO::DbgvarDat* i_values) = 0;  //put values into the view
   virtual void GetValues(SECU3IO::DbgvarDat* o_values) = 0;        //get values from the view
   virtual void SetUpdatePeriod(unsigned int i_period) = 0;         //update period for internal controls
+  virtual void SetWriteToFile(bool write) = 0;                     //write values to file
 };

@@ -73,6 +73,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFuelDensity2(_T("FuelDensity2"))
 , m_optLogBinaryFmt(_T("LogBinaryFmt"))
 , m_optCreateWindows(_T("CreateWindows"))
+, m_optDbgVarsToFile(_T("DbgVarsToFile"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -818,6 +819,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadFlt(m_optFuelDensity2,_T("0.536"), 0.2f, 2.0f); //2-nd fuel (e.g. LPG)
  os.ReadInt(m_optLogBinaryFmt, _T("0"), 0, 1);
  os.ReadInt(m_optCreateWindows, _T("1"), 0, 1);
+ os.ReadInt(m_optDbgVarsToFile, _T("0"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -1513,7 +1515,6 @@ bool CAppSettingsModel::WriteSettings(void)
   os.WriteComment(_T("Specifies how frequently virtual gauges and indicators will be updated (redraw). Value in the milliseconds"));
  else
   os.WriteComment(_T("Задает период обновления панели приборов и индикаторов (перерисовка). Значение в миллисекундах"));
-
  os.WriteInt(m_optMIDeskUpdatePeriod);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -1533,6 +1534,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Использовать средства отладки (для разработчиков). Если установлено в 1, внутри главного окна будет отображаться небольшое плавающее окно. См. также DVDeskUpdatePeriod."));
  os.WriteInt(m_optUseDVFeatures);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Write values of debug variables into a file. File 'dbgvar.csv' will be placed in the directory of programm."));
+ else
+  os.WriteComment(_T("Писать значения отладочных переменных в файл. Файл 'dbgvar.csv' будет находиться в папке с файлами программы."));
+ os.WriteInt(m_optDbgVarsToFile); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Specifies how frequently debug floating window will be updated (redraw). Value in the milliseconds"));
@@ -6441,4 +6448,9 @@ bool CAppSettingsModel::GetLogBinaryFmt(void) const
 bool CAppSettingsModel::GetCreateWindows(void) const
 {
  return m_optCreateWindows.value;
+}
+
+bool CAppSettingsModel::GetDbgVarsToFile(void) const
+{
+ return m_optDbgVarsToFile.value;
 }

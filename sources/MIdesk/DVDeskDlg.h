@@ -38,6 +38,7 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
 
  public:
   CDVDeskDlg(CWnd* pParent = NULL);   // standard constructor
+  virtual ~CDVDeskDlg();
   static const UINT IDD;
 
   //--------interface implementation---------------
@@ -47,6 +48,7 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   virtual void SetValues(const SECU3IO::DbgvarDat* i_values);
   virtual void GetValues(SECU3IO::DbgvarDat* o_values);
   virtual void SetUpdatePeriod(unsigned int i_period);
+  virtual void SetWriteToFile(bool write);
   //-----------------------------------------------
 
   // Implementation
@@ -78,6 +80,9 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
    bool hex;
    bool sign;
   }m_vu[VU_SIZE];
+
+  FILE* m_fh;
+  bool m_wrtofile;
 };
 
 /////////////////////////////////////////////////////////////////////////////
