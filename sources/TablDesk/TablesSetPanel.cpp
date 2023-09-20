@@ -2218,8 +2218,8 @@ void CTablesSetPanel::OnViewInjNonLinPMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  const float bins_lims[5] = {0.0f, 2.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 2ms, inc 1%, 3 dec places, min diff 0.05ms
-  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinPMap(true), GetInjNonLinPMap(false), 0.0, 2.0, bins_lims, 8,
+  const float bins_lims[5] = {0.0f, 3.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 3ms, inc 1%, 3 dec places, min diff 0.05ms
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinPMap(true), GetInjNonLinPMap(false), 0.0, 3.0, bins_lims, 8,
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_INJNONLINP_MAP).c_str(), true);  //use bins on horizontal axis
@@ -2256,8 +2256,8 @@ void CTablesSetPanel::OnViewInjNonLinGMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  const float bins_lims[5] = {0.0f, 2.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 2ms, inc 1%, 3 dec places, min diff 0.05ms
-  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinGMap(true), GetInjNonLinGMap(false), 0.0, 2.0, bins_lims, 8,
+  const float bins_lims[5] = {0.0f, 3.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 3ms, inc 1%, 3 dec places, min diff 0.05ms
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinGMap(true), GetInjNonLinGMap(false), 0.0, 3.0, bins_lims, 8,
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_INJNONLING_MAP).c_str(), true); //use bins on horizontal axis
