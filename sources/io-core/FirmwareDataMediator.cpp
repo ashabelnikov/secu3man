@@ -391,10 +391,12 @@ typedef struct
 
  _uchar use_injnonlin_corr;
 
+ _uchar ego_fc_delay;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1968];
+ _uchar reserved[1967];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3313,6 +3315,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.ltft_max = ((float)exd.ltft_max) / (512.0f / 100.0f);
 
  o_data.use_injnonlin_corr = exd.use_injnonlin_corr;
+
+ o_data.ego_fc_delay = exd.ego_fc_delay;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3425,6 +3429,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.ltft_max = MathHelpers::Round(i_data.ltft_max / (100.0f / 512.0f));
 
  exd.use_injnonlin_corr = i_data.use_injnonlin_corr;
+
+ exd.ego_fc_delay = i_data.ego_fc_delay;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
