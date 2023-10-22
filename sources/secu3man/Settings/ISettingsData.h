@@ -577,6 +577,8 @@ struct LogFileFields
  _TSTRING m_fldConsFuel;
  _TSTRING m_fldEGOCorr2;
  _TSTRING m_fldAFR2;
+ _TSTRING m_fldAFRMap;
+ _TSTRING m_fldTchrg;
 };
 
 //Functionality

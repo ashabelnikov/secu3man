@@ -578,6 +578,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldConsFuel(_T("FuelConsumed"))
 , m_optLogFieldEGOCorr2(_T("EGOcorr2"))
 , m_optLogFieldAFR2(_T("AFR2"))
+, m_optLogFieldAFRMap(_T("AFRMap"))
+, m_optLogFieldTchrg(_T("Tchrg"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -1419,6 +1421,8 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldConsFuel, _T("FuelConsumed"));
  lf.ReadString(m_optLogFieldEGOCorr2, _T("EGOcorr2"));
  lf.ReadString(m_optLogFieldAFR2, _T("AFR2"));
+ lf.ReadString(m_optLogFieldAFRMap, _T("AFRMap"));
+ lf.ReadString(m_optLogFieldTchrg, _T("Tchrg"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -4274,6 +4278,8 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldConsFuel);
  lf.WriteString(m_optLogFieldEGOCorr2);
  lf.WriteString(m_optLogFieldAFR2);
+ lf.WriteString(m_optLogFieldAFRMap);
+ lf.WriteString(m_optLogFieldTchrg);
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldServFlag);
  lf.WriteString(m_optLogFieldCECodes);
@@ -6262,6 +6268,8 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldMAPdot.value = i_flds.m_fldMAPdot;
  m_optLogFieldFts.value = i_flds.m_fldFts;
  m_optLogFieldConsFuel.value = i_flds.m_fldConsFuel;
+ m_optLogFieldAFRMap.value = i_flds.m_fldAFRMap;
+ m_optLogFieldTchrg.value = i_flds.m_fldTchrg;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -6337,6 +6345,8 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldMAPdot = m_optLogFieldMAPdot.value;
  o_flds.m_fldFts = m_optLogFieldFts.value;
  o_flds.m_fldConsFuel = m_optLogFieldConsFuel.value;
+ o_flds.m_fldAFRMap = m_optLogFieldAFRMap.value;
+ o_flds.m_fldTchrg = m_optLogFieldTchrg.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const

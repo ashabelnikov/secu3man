@@ -34,7 +34,7 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";                                                                                                                                                                          //6.3     //6.3
-const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%5.1f%c %%5.1f%c %%6.1f%c %%4.2f%c %%5.1f%c %%4.2f%c %%07d%c %%6.2f%c %%5.1f%c %%02d%c %%05d%c %%5.1f%c %%9.3f%c %%6.2f%c %%5.2f%c %%01d%c %%05d%c %%s\r\n";
+const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%5.1f%c %%5.1f%c %%6.1f%c %%4.2f%c %%5.1f%c %%4.2f%c %%07d%c %%6.2f%c %%5.1f%c %%02d%c %%05d%c %%5.1f%c %%9.3f%c %%6.2f%c %%5.2f%c %%5.2f%c %%5.1f%c %%01d%c %%05d%c %%s\r\n";
 
 namespace {
 void DwordToString(DWORD value, char* str)
@@ -153,20 +153,22 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
    p_sensors->inj_tim_begin,     // phase of beginning of inj. pulse
    p_sensors->inj_tim_end,       // phase of the end of inj. pulse
    p_sensors->grts,              // gas reducer's temperature
-   p_sensors->ftls,
-   p_sensors->egts,
-   p_sensors->ops,
-   p_sensors->inj_duty,          //inj. duty                        
-   p_sensors->rigid_arg,         //IAC rigidity argument
-   p_sensors->rxlaf,             //RxL air flow                       
-   p_sensors->maf,
-   p_sensors->vent_duty,         //cooling fan's duty
-   uniout_flags,
+   p_sensors->ftls,              // level of fuel in the tank
+   p_sensors->egts,              // exhaust gas temperature
+   p_sensors->ops,               // oil pressure
+   p_sensors->inj_duty,          // inj. duty                        
+   p_sensors->rigid_arg,         // IAC rigidity argument
+   p_sensors->rxlaf,             // RxL air flow                       
+   p_sensors->maf,               // mass air flow
+   p_sensors->vent_duty,         // cooling fan's duty
+   uniout_flags,                 // states of all universal outputs
    p_sensors->mapdot,            // MAP dot (dP/dt), kPa/s
-   p_sensors->fts,               //FTS                        
-   p_sensors->cons_fuel,         //fuel odometer
+   p_sensors->fts,               // FTS                        
+   p_sensors->cons_fuel,         // fuel odometer
    p_sensors->lambda_corr2,      // lambda correction #2
    p_sensors->afr2,              // AFR from lambda sensor
+   p_sensors->afrmap,            // value from AFR map
+   p_sensors->tchrg,             // value of corrected MAT
    m_pending_marks,
    service_flags,
    p_sensors->ce_errors };
@@ -264,6 +266,9 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         p_sensors->lambda_corr2,      // lambda correction #2
                         p_sensors->afr2,              // AFR from lambda sensor #2
 
+                        p_sensors->afrmap,
+                        p_sensors->tchrg,
+                         
                         m_pending_marks,
                         service_flags,
                         ce_errors);
@@ -338,7 +343,7 @@ bool LogWriter::IsLoggingInProcess(void)
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogWriter::InjectMarks(int marks)

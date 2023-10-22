@@ -84,6 +84,8 @@ struct s3lRecord
  float cons_fuel;                       
  float lambda_corr2;
  float afr2;
+ float afrmap;
+ float tchrg;
  BYTE  log_marks;
  WORD  service_flags;
  DWORD ce_errors;

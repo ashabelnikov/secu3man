@@ -104,6 +104,7 @@ namespace SECU3IO
 
   float afr;                            // AFR calculated from lambda sensor
   float afr2;                           // AFR calculated from lambda sensor
+  float afrmap;                         // AFR value from map
 
   float load;                           // Load value (MAP or TPS or synthetic MAP+TPS)
   float baro_press;                     // Baro pressure
@@ -133,6 +134,8 @@ namespace SECU3IO
   float cons_fuel;                      //Consumed fuel (L)
 
   float lambda_mx;                      //mixed voltages from two EGO sensors
+
+  float tchrg;                          //Corrected MAT value
  };
 
  struct DbgvarDat
