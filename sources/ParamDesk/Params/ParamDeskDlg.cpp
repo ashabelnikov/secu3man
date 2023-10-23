@@ -295,7 +295,6 @@ BOOL CParamDeskDlg::OnInitDialog()
  }
 
  m_hot_keys_supplier->Init(this);
- _RegisterHotKeys();
 
  UpdateDialogControls(this, TRUE);
 
@@ -426,7 +425,6 @@ bool CParamDeskDlg::IsEnabled(void)
 void CParamDeskDlg::Show(bool show)
 {
  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
- m_tab_control.ShowWindow(nCmdShow);
  this->ShowWindow(nCmdShow);
 }
 
@@ -849,22 +847,28 @@ int CParamDeskDlg::GetCurSel(void)
  return m_tab_control.GetCurSel();
 }
 
-void CParamDeskDlg::_RegisterHotKeys(void)
+void CParamDeskDlg::RegisterHotKeys(bool reg)
 {
 #define RegisterHK(d,k) m_hot_keys_supplier->RegisterCommand(ID_PD_ACTIVATE_##d, k, 0);
-
- RegisterHK(STARTR_PAR, VK_F1);
- RegisterHK(ANGLES_PAR, VK_F2);
- RegisterHK(IDLREG_PAR, VK_F3);
- RegisterHK(FUNSET_PAR, VK_F4);
- RegisterHK(TEMPER_PAR, VK_F5);
- RegisterHK(CARBUR_PAR, VK_F6);
- RegisterHK(ADCCOR_PAR, VK_F7);
- RegisterHK(CKPS_PAR,   VK_F8);
- if (m_show_knock_page)
-  RegisterHK(KNOCK_PAR,  VK_F9);
- RegisterHK(MISCEL_PAR, VK_F10);
- RegisterHK(CHOKE_PAR,  VK_F11);
+ if (reg)
+ {
+  RegisterHK(STARTR_PAR, VK_F1);
+  RegisterHK(ANGLES_PAR, VK_F2);
+  RegisterHK(IDLREG_PAR, VK_F3);
+  RegisterHK(FUNSET_PAR, VK_F4);
+  RegisterHK(TEMPER_PAR, VK_F5);
+  RegisterHK(CARBUR_PAR, VK_F6);
+  RegisterHK(ADCCOR_PAR, VK_F7);
+  RegisterHK(CKPS_PAR,   VK_F8);
+  if (m_show_knock_page)
+   RegisterHK(KNOCK_PAR,  VK_F9);
+  RegisterHK(MISCEL_PAR, VK_F10);
+  RegisterHK(CHOKE_PAR,  VK_F11);
+ }
+ else
+ {
+  m_hot_keys_supplier->UnregisterAllCommands();
+ }
 }
 
 #define OnHK_XXX(x)\

@@ -485,5 +485,7 @@ void CEEPROMTabDlg::OnShow(bool show)
  else
   KillTimer(TIMER_ID);
 
+ mp_ParamDeskDlg->RegisterHotKeys(show);
+
  mp_TablesPanel->OnShow(show);
 }

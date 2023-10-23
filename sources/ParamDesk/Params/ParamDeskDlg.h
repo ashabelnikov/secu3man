@@ -110,6 +110,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   void SetFuelDensity(float fd1, float fd2);
   //-------------------------------------------------------------
 
+  void RegisterHotKeys(bool reg);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);// DDX/DDV support
@@ -143,7 +145,6 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
 
   void OnChangeInTab(void);
   int  _GetTabIndex(unsigned i_descriptor);
-  void _RegisterHotKeys(void);
 
   void OnReservparsLinkClick();
 

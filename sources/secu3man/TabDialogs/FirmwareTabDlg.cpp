@@ -257,7 +257,6 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  m_fw_information_edit.SetLimitText(48);
 
  m_hot_keys_supplier->Init(this);
- _RegisterHotKeys();
 
  //Enable drap & drop functionality
  DragAcceptFiles(true);
@@ -890,6 +889,13 @@ void CFirmwareTabDlg::OnShow(bool show)
   SetTimer(TIMER_ID, 250, NULL);
  else
   KillTimer(TIMER_ID);
+
+ if (show)
+  _RegisterHotKeys();
+ else
+  m_hot_keys_supplier->UnregisterAllCommands();
+
+ mp_ParamDeskDlg->RegisterHotKeys(show);
 
  mp_TablesPanel->OnShow(show);
 }
