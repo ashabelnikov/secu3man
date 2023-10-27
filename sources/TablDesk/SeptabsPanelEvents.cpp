@@ -29,6 +29,8 @@
 #include "io-core/secu3io.h"
 #include "MapIds.h"
 #include "SeptabsPanel.h"
+#include "ui-core/WndScroller.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 //------------------------------------------------------------------------
 void __cdecl CSeptabsPanel::OnChangeSettingsCME(void* i_param)

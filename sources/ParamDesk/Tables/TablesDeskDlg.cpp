@@ -34,6 +34,7 @@
 #include "TablDesk/MapIds.h"
 #include "TDContextMenuManager.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 using namespace std;
 using namespace fastdelegate;

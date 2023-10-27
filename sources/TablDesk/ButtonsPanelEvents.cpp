@@ -31,6 +31,8 @@
 #include "GridModeEditorIgnDlg.h"
 #include "MapIds.h"
 #include "ui-core/MapEditorCtrl.h"
+#include "ui-core/WndScroller.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 //------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
