@@ -45,6 +45,8 @@ set(HEADERS
   RPMGridEditDlg.h
   StdAfx.h
   TablesSetPanel.h
+  TablesPanelBase.h
+  SeptabsPanel.h
   )
 
 set(SOURCES
@@ -70,7 +72,9 @@ set(SOURCES
   TablDesk.cpp
   TablDesk.rc
   TablesSetPanel.cpp
-  TablesSetPanelEvents.cpp
+  TablesPanelBase.cpp
+  SeptabsPanelEvents.cpp
+  SeptabsPanel.cpp
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

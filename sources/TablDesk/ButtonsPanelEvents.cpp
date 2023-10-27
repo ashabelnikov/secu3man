@@ -32,7 +32,6 @@
 #include "MapIds.h"
 #include "ui-core/MapEditorCtrl.h"
 
-
 //------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
 {
@@ -47,7 +46,7 @@ void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
  {
   if (_this->m_md[i].state)
   {
-   if (i == TYPE_MAP_DA_WORK || i == TYPE_MAP_INJ_VE || i == TYPE_MAP_INJ_VE2 || i == TYPE_MAP_INJ_AFR || i == TYPE_MAP_INJ_IT || i == TYPE_MAP_PWM1 || i == TYPE_MAP_PWM2 || i == TYPE_MAP_GASDOSE)  
+   if (_this->Is3DMap(i))  
     _this->m_md[i].ptMovStep = DLL::Chart3DGetPtMovingStep(_this->m_md[i].handle);
    else
     _this->m_md[i].ptMovStep = DLL::Chart2DGetPtMovingStep(_this->m_md[i].handle);
@@ -184,18 +183,6 @@ void __cdecl CButtonsPanel::OnCloseTempMap(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_DA_TEMP_CORR].handle, TYPE_MAP_DA_TEMP_CORR);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CButtonsPanel::OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param)
-{
- CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //WTF?
-  return;
- }
- _stprintf(io_label_string, _T("%d"), MathHelpers::Round(_this->GetRPMGrid()[index]));
 }
 
 //------------------------------------------------------------------------
@@ -1725,18 +1712,6 @@ float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, 
  }
 
  return MathHelpers::InjTimValueTransform(_this->m_it_mode, source, direction);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CButtonsPanel::OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param)
-{
- CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //WTF?
-  return;
- }
- _stprintf(io_label_string, _T("%d"), MathHelpers::Round(_this->GetCLTGrid()[index]));
 }
 
 //------------------------------------------------------------------------

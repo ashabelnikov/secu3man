@@ -46,21 +46,14 @@ static const float splitAngMax =  20.0f;
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
 
-CButtonsPanel::CButtonsPanel(bool enableAutoTune /*=false*/, bool onlineMode /*=false*/)
-: m_charts_enabled(-1)
-, m_en_aa_indication(false)
-, mp_scr(new CWndScroller)
-, m_scrl_view(1200)
-, m_fuel_injection(false)
-, m_gasdose(false)
+CButtonsPanel::CButtonsPanel(bool enableAutoTune /*=false*/, bool onlineMode /*=false*/, bool disable_vscroll /*= false*/)
+: m_en_aa_indication(false)
 , m_carb_afr(false)
 , m_en_gas_corr(false)
 , m_choke_op_enabled(false)
 , mp_autoTuneCntr(enableAutoTune ? new CAutoTuneController() : NULL)
 , m_onlineMode(onlineMode)
-, m_children_charts(false)
-, m_openedChart(NULL)
-, m_toggleMapWnd(false)
+, m_disable_vscroll(disable_vscroll)
 , m_it_mode(0)
 , m_active_ve(0)
 , m_splitAng(false)
@@ -68,6 +61,7 @@ CButtonsPanel::CButtonsPanel(bool enableAutoTune /*=false*/, bool onlineMode /*=
 , m_ldaxMinVal(0)
 , m_ldaxMaxVal(0)
 , m_ve2_map_func(0)
+, m_initialized(false)
 {
  for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
  {
@@ -82,9 +76,6 @@ CButtonsPanel::CButtonsPanel(bool enableAutoTune /*=false*/, bool onlineMode /*=
   md.mp_button = new CButton;
   m_md.insert(std::make_pair(i, md));
  }
- memset(m_rpm_grid_values, 0, 16 * sizeof(float));
- memset(m_clt_grid_values, 0, 16 * sizeof(float));
- memset(m_load_grid_values, 0, 16 * sizeof(float));
 
  m_ve2_map_load_slots.reserve(32);
  m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16); 
@@ -234,6 +225,8 @@ BOOL CButtonsPanel::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ m_initialized = true;
+
  //initialize window scroller
  mp_scr->Init(this);
 
@@ -340,7 +333,7 @@ void CButtonsPanel::OnViewIdleMap()
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_IDLE_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIdleMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeIdleMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle,OnCloseIdleMap,this);
@@ -376,7 +369,7 @@ void CButtonsPanel::OnViewWorkMap()
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_WORK_MAP).c_str());
   DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationWorkMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart3DSetOnChange(md.handle,OnChangeWorkMap,this);
   DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart3DSetOnClose(md.handle,OnCloseWorkMap,this);
@@ -411,7 +404,7 @@ void CButtonsPanel::OnViewTempMap()
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_TEMPCORR_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTempMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTempMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle,OnCloseTempMap,this);
@@ -447,7 +440,7 @@ void CButtonsPanel::OnViewTempIdlMap()
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_TEMPCORRI_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTempIdlMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTempIdlMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle,OnCloseTempIdlMap,this);
@@ -485,7 +478,7 @@ void CButtonsPanel::OnViewVEMap()
   DLL::Chart3DSetPtValuesFormat(md.handle, _T("#0.000"));
   DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationVEMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart3DSetOnChange(md.handle,OnChangeVEMap,this);
   DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart3DSetOnClose(md.handle,OnCloseVEMap,this);
@@ -521,7 +514,7 @@ void CButtonsPanel::OnViewVE2Map()
   DLL::Chart3DSetPtValuesFormat(md.handle, _T("#0.000"));
   DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationVE2Map, this);
-  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart3DSetOnChange(md.handle,OnChangeVE2Map,this);
   DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart3DSetOnClose(md.handle,OnCloseVE2Map,this);
@@ -557,7 +550,7 @@ void CButtonsPanel::OnViewAFRMap()
   DLL::Chart3DSetPtValuesFormat(md.handle, _T("#00.0"));
   DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationAFRMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart3DSetOnChange(md.handle,OnChangeAFRMap,this);
   DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart3DSetOnClose(md.handle,OnCloseAFRMap,this);
@@ -591,7 +584,7 @@ void CButtonsPanel::OnViewCrnkMap()
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_CRNK_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationCrnkMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.01f"));
   DLL::Chart2DSetOnChange(md.handle, OnChangeCrnkMap, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
@@ -628,7 +621,7 @@ void CButtonsPanel::OnViewWrmpMap()
     MLL::GetString(IDS_MAPS_WRMP_UNIT).c_str(),
     MLL::GetString(IDS_WRMP_MAP).c_str(), false);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationWrmpMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeWrmpMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
@@ -701,7 +694,7 @@ void CButtonsPanel::OnViewIdlrMap()
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
     MLL::GetString(IDS_IDLR_MAP).c_str(), false);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIdlrMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeIdlrMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
@@ -737,7 +730,7 @@ void CButtonsPanel::OnViewIdlcMap()
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
     MLL::GetString(IDS_IDLC_MAP).c_str(), false);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIdlcMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeIdlcMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
@@ -773,7 +766,7 @@ void CButtonsPanel::OnViewThrassMap()
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
     MLL::GetString(IDS_THRASS_MAP).c_str(), false);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationThrassMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeThrassMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
@@ -918,7 +911,7 @@ void CButtonsPanel::OnViewAftstrMap()
     MLL::GetString(IDS_MAPS_AFTSTR_UNIT).c_str(),
     MLL::GetString(IDS_AFTSTR_MAP).c_str(), false);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationAftstrMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeAftstrMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
@@ -957,7 +950,7 @@ void CButtonsPanel::OnViewITMap()
     MLL::GetString(IDS_IT_MAP).c_str());
   DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationITMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart3DSetOnChange(md.handle,OnChangeITMap,this);
   DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart3DSetOnClose(md.handle,OnCloseITMap,this);
@@ -992,7 +985,7 @@ void CButtonsPanel::OnViewITRPMMap()
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_ITRPM_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationITRPMMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeITRPMMap,this);
@@ -1225,7 +1218,7 @@ void CButtonsPanel::OnViewTpsswtMap()
     MLL::GetString(IDS_MAPS_TPSSWT_UNIT).c_str(),
     MLL::GetString(IDS_TPSSWT_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTpsswtMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTpsswtMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle,OnCloseTpsswtMap,this);
@@ -1374,7 +1367,7 @@ void CButtonsPanel::OnViewPwm1Map()
     m_splitAng ? MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str() : MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str(), //unit
     m_splitAng ? MLL::GetString(IDS_SPLIT_ANGLE_MAP).c_str() : MLL::GetString(IDS_PWM1_MAP).c_str()); //title
   DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationPwm1Map, this);
-  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart3DSetOnChange(md.handle,OnChangePwm1Map,this);
   DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart3DSetOnClose(md.handle,OnClosePwm1Map,this);
@@ -1409,7 +1402,7 @@ void CButtonsPanel::OnViewPwm2Map()
     MLL::GetString(IDS_MAPS_DUTY_UNIT).c_str(),
     MLL::GetString(IDS_PWM2_MAP).c_str());
   DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationPwm2Map, this);
-  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart3DSetOnChange(md.handle,OnChangePwm2Map,this);
   DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart3DSetOnClose(md.handle,OnClosePwm2Map,this);
@@ -1482,7 +1475,7 @@ void CButtonsPanel::OnViewTpszonMap()
     MLL::GetString(IDS_MAPS_TPSZON_UNIT).c_str(),
     MLL::GetString(IDS_TPSZON_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTpszonMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTpszonMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle,OnCloseTpszonMap,this);
@@ -2208,297 +2201,177 @@ void CButtonsPanel::EnableChokeOp(bool enable)
 
 float* CButtonsPanel::GetStartMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_DA_START].original;
- else
-  return m_md[TYPE_MAP_DA_START].active;
+ return i_original ? m_md[TYPE_MAP_DA_START].original : m_md[TYPE_MAP_DA_START].active;
 }
 
 float* CButtonsPanel::GetIdleMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_DA_IDLE].original;
- else
-  return m_md[TYPE_MAP_DA_IDLE].active;
+ return i_original ? m_md[TYPE_MAP_DA_IDLE].original : m_md[TYPE_MAP_DA_IDLE].active;
 }
 
 float* CButtonsPanel::GetWorkMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_DA_WORK].original;
- else
-  return m_md[TYPE_MAP_DA_WORK].active;
+ return i_original ? m_md[TYPE_MAP_DA_WORK].original : m_md[TYPE_MAP_DA_WORK].active;
 }
 
 float* CButtonsPanel::GetTempMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_DA_TEMP_CORR].original;
- else
-  return m_md[TYPE_MAP_DA_TEMP_CORR].active;
+ return i_original ? m_md[TYPE_MAP_DA_TEMP_CORR].original : m_md[TYPE_MAP_DA_TEMP_CORR].active;
 }
 
 float* CButtonsPanel::GetTempIdlMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_DA_TEMPI_CORR].original;
- else
-  return m_md[TYPE_MAP_DA_TEMPI_CORR].active;
+ return i_original ? m_md[TYPE_MAP_DA_TEMPI_CORR].original : m_md[TYPE_MAP_DA_TEMPI_CORR].active;
 }
 
 float* CButtonsPanel::GetVEMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_VE].original;
- else
-  return m_md[TYPE_MAP_INJ_VE].active;
+ return i_original ? m_md[TYPE_MAP_INJ_VE].original : m_md[TYPE_MAP_INJ_VE].active;
 }
 
 float* CButtonsPanel::GetVE2Map(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_VE2].original;
- else
-  return m_md[TYPE_MAP_INJ_VE2].active;
+ return i_original ? m_md[TYPE_MAP_INJ_VE2].original : m_md[TYPE_MAP_INJ_VE2].active;
 }
 
 float* CButtonsPanel::GetAFRMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_AFR].original;
- else
-  return m_md[TYPE_MAP_INJ_AFR].active;
+ return i_original ? m_md[TYPE_MAP_INJ_AFR].original : m_md[TYPE_MAP_INJ_AFR].active;
 }
 
 float* CButtonsPanel::GetCrnkMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_CRNK].original;
- else
-  return m_md[TYPE_MAP_INJ_CRNK].active;
+ return i_original ? m_md[TYPE_MAP_INJ_CRNK].original : m_md[TYPE_MAP_INJ_CRNK].active;
 }
 
 float* CButtonsPanel::GetWrmpMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_WRMP].original;
- else
-  return m_md[TYPE_MAP_INJ_WRMP].active;
+ return i_original ? m_md[TYPE_MAP_INJ_WRMP].original : m_md[TYPE_MAP_INJ_WRMP].active;
 }
 
 float* CButtonsPanel::GetDeadMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_DEAD].original;
- else
-  return m_md[TYPE_MAP_INJ_DEAD].active;
+ return i_original ? m_md[TYPE_MAP_INJ_DEAD].original : m_md[TYPE_MAP_INJ_DEAD].active;
 }
 
 float* CButtonsPanel::GetIdlrMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_IDLR].original;
- else
-  return m_md[TYPE_MAP_INJ_IDLR].active;
+ return i_original ? m_md[TYPE_MAP_INJ_IDLR].original : m_md[TYPE_MAP_INJ_IDLR].active;
 }
 
 float* CButtonsPanel::GetIdlcMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_IDLC].original;
- else
-  return m_md[TYPE_MAP_INJ_IDLC].active;
+ return i_original ? m_md[TYPE_MAP_INJ_IDLC].original : m_md[TYPE_MAP_INJ_IDLC].active;
 }
 
 float* CButtonsPanel::GetThrassMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_THRASS].original;
- else
-  return m_md[TYPE_MAP_INJ_THRASS].active;
+ return i_original ? m_md[TYPE_MAP_INJ_THRASS].original : m_md[TYPE_MAP_INJ_THRASS].active;
 }
 
 float* CButtonsPanel::GetAETPSMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_AETPS].original;
- else
-  return m_md[TYPE_MAP_INJ_AETPS].active;
+ return i_original ? m_md[TYPE_MAP_INJ_AETPS].original : m_md[TYPE_MAP_INJ_AETPS].active;
 }
 
 float* CButtonsPanel::GetAEMAPMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_AEMAP].original;
- else
-  return m_md[TYPE_MAP_INJ_AEMAP].active;
+ return i_original ? m_md[TYPE_MAP_INJ_AEMAP].original : m_md[TYPE_MAP_INJ_AEMAP].active;
 }
 
 float* CButtonsPanel::GetAERPMMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_AERPM].original;
- else
-  return m_md[TYPE_MAP_INJ_AERPM].active;
+ return i_original ? m_md[TYPE_MAP_INJ_AERPM].original : m_md[TYPE_MAP_INJ_AERPM].active;
 }
 
 float* CButtonsPanel::GetAftstrMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_AFTSTR].original;
- else
-  return m_md[TYPE_MAP_INJ_AFTSTR].active;
+ return i_original ? m_md[TYPE_MAP_INJ_AFTSTR].original : m_md[TYPE_MAP_INJ_AFTSTR].active;
 }
 
 float* CButtonsPanel::GetITMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_IT].original;
- else
-  return m_md[TYPE_MAP_INJ_IT].active;
+ return i_original ? m_md[TYPE_MAP_INJ_IT].original : m_md[TYPE_MAP_INJ_IT].active;
 }
 
 float* CButtonsPanel::GetITRPMMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_ITRPM].original;
- else
-  return m_md[TYPE_MAP_INJ_ITRPM].active;
+ return i_original ? m_md[TYPE_MAP_INJ_ITRPM].original : m_md[TYPE_MAP_INJ_ITRPM].active;
 }
 
 float* CButtonsPanel::GetRigidMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_RIGID].original;
- else
-  return m_md[TYPE_MAP_INJ_RIGID].active;
+ return i_original ? m_md[TYPE_MAP_INJ_RIGID].original : m_md[TYPE_MAP_INJ_RIGID].active;
 }
 
 float* CButtonsPanel::GetEGOCurveMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_EGOCRV].original;
- else
-  return m_md[TYPE_MAP_INJ_EGOCRV].active;
+ return i_original ? m_md[TYPE_MAP_INJ_EGOCRV].original : m_md[TYPE_MAP_INJ_EGOCRV].active;
 }
 
 float* CButtonsPanel::GetIACCMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_IACC].original;
- else
-  return m_md[TYPE_MAP_INJ_IACC].active;
+ return i_original ? m_md[TYPE_MAP_INJ_IACC].original : m_md[TYPE_MAP_INJ_IACC].active;
 }
 
 float* CButtonsPanel::GetIACCWMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_IACCW].original;
- else
-  return m_md[TYPE_MAP_INJ_IACCW].active;
+ return i_original ? m_md[TYPE_MAP_INJ_IACCW].original : m_md[TYPE_MAP_INJ_IACCW].active;
 }
 
 float* CButtonsPanel::GetIATCLTMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_IATCLT].original;
- else
-  return m_md[TYPE_MAP_INJ_IATCLT].active;
+ return i_original ? m_md[TYPE_MAP_INJ_IATCLT].original : m_md[TYPE_MAP_INJ_IATCLT].active;
 }
 
 float* CButtonsPanel::GetTpsswtMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_TPSSWT].original;
- else
-  return m_md[TYPE_MAP_INJ_TPSSWT].active;
+ return i_original ? m_md[TYPE_MAP_INJ_TPSSWT].original : m_md[TYPE_MAP_INJ_TPSSWT].active;
 }
 
 float* CButtonsPanel::GetGtscMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_GTSC].original;
- else
-  return m_md[TYPE_MAP_INJ_GTSC].active;
+ return i_original ? m_md[TYPE_MAP_INJ_GTSC].original : m_md[TYPE_MAP_INJ_GTSC].active;
 }
 
 float* CButtonsPanel::GetAtscMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_ATSC].original;
- else
-  return m_md[TYPE_MAP_INJ_ATSC].active;
+ return i_original ? m_md[TYPE_MAP_INJ_ATSC].original : m_md[TYPE_MAP_INJ_ATSC].active;
 }
 
 float* CButtonsPanel::GetGpscMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_GPSC].original;
- else
-  return m_md[TYPE_MAP_INJ_GPSC].active;
+ return i_original ? m_md[TYPE_MAP_INJ_GPSC].original : m_md[TYPE_MAP_INJ_GPSC].active;
 }
 
 float* CButtonsPanel::GetPwm1Map(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_PWM1].original;
- else
-  return m_md[TYPE_MAP_PWM1].active;
+ return i_original ? m_md[TYPE_MAP_PWM1].original : m_md[TYPE_MAP_PWM1].active;
 }
 
 float* CButtonsPanel::GetPwm2Map(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_PWM2].original;
- else
-  return m_md[TYPE_MAP_PWM2].active;
+ return i_original ? m_md[TYPE_MAP_PWM2].original : m_md[TYPE_MAP_PWM2].active;
 }
 
 float* CButtonsPanel::GetIACMATMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_IACMAT].original;
- else
-  return m_md[TYPE_MAP_INJ_IACMAT].active;
+ return i_original ? m_md[TYPE_MAP_INJ_IACMAT].original : m_md[TYPE_MAP_INJ_IACMAT].active;
 }
 
 float* CButtonsPanel::GetTpszonMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_TPSZON].original;
- else
-  return m_md[TYPE_MAP_INJ_TPSZON].active;
+ return i_original ? m_md[TYPE_MAP_INJ_TPSZON].original : m_md[TYPE_MAP_INJ_TPSZON].active;
 }
 
 float* CButtonsPanel::GetCylMultMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_CYLMULT].original;
- else
-  return m_md[TYPE_MAP_INJ_CYLMULT].active;
+ return i_original ? m_md[TYPE_MAP_INJ_CYLMULT].original : m_md[TYPE_MAP_INJ_CYLMULT].active;
 }
 
 float* CButtonsPanel::GetCylAddMap(bool i_original)
 {
- if (i_original)
-  return m_md[TYPE_MAP_INJ_CYLADD].original;
- else
-  return m_md[TYPE_MAP_INJ_CYLADD].active;
-}
-
-float* CButtonsPanel::GetRPMGrid(void)
-{
- return m_rpm_grid_values;
-}
-
-float* CButtonsPanel::GetCLTGrid(void)
-{
- return m_clt_grid_values;
-}
-
-float* CButtonsPanel::GetLoadGrid(void)
-{
- return m_load_grid_values;
+ return i_original ? m_md[TYPE_MAP_INJ_CYLADD].original : m_md[TYPE_MAP_INJ_CYLADD].active;
 }
 
 HWND CButtonsPanel::GetMapWindow(int wndType)
@@ -2517,121 +2390,93 @@ void CButtonsPanel::_EnableCharts(bool enable)
 {
  if (m_charts_enabled != (int)enable)
  {//ignition
-  if (m_md[TYPE_MAP_DA_START].state && ::IsWindow(m_md[TYPE_MAP_DA_START].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_DA_START].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_DA_IDLE].state && ::IsWindow(m_md[TYPE_MAP_DA_IDLE].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_DA_IDLE].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_DA_WORK].state && ::IsWindow(m_md[TYPE_MAP_DA_WORK].handle))
-   DLL::Chart3DEnable(m_md[TYPE_MAP_DA_WORK].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_DA_TEMP_CORR].state && ::IsWindow(m_md[TYPE_MAP_DA_TEMP_CORR].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_DA_TEMP_CORR].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_DA_TEMPI_CORR].state && ::IsWindow(m_md[TYPE_MAP_DA_TEMPI_CORR].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_DA_TEMPI_CORR].handle, enable && IsAllowed());
-
-  //fuel injection
-  if (m_md[TYPE_MAP_INJ_VE].state && ::IsWindow(m_md[TYPE_MAP_INJ_VE].handle))
-   DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_VE].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_VE2].state && ::IsWindow(m_md[TYPE_MAP_INJ_VE2].handle))
-   DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_VE2].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_AFR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFR].handle))
-   DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_AFR].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_CRNK].state && ::IsWindow(m_md[TYPE_MAP_INJ_CRNK].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_CRNK].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_WRMP].state && ::IsWindow(m_md[TYPE_MAP_INJ_WRMP].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_WRMP].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_DEAD].state && ::IsWindow(m_md[TYPE_MAP_INJ_DEAD].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_DEAD].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_IDLR].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLR].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLR].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_IDLC].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLC].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLC].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_THRASS].state && ::IsWindow(m_md[TYPE_MAP_INJ_THRASS].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_THRASS].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_AETPS].state && ::IsWindow(m_md[TYPE_MAP_INJ_AETPS].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AETPS].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_AEMAP].state && ::IsWindow(m_md[TYPE_MAP_INJ_AEMAP].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AEMAP].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_AERPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_AERPM].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AERPM].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_AFTSTR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFTSTR].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AFTSTR].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_IT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IT].handle))
-   DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_IT].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_ITRPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_ITRPM].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ITRPM].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_RIGID].state && ::IsWindow(m_md[TYPE_MAP_INJ_RIGID].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_RIGID].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_EGOCRV].state && ::IsWindow(m_md[TYPE_MAP_INJ_EGOCRV].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_EGOCRV].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_IACC].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACC].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACC].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_IACCW].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACCW].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACCW].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_IATCLT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IATCLT].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IATCLT].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_TPSSWT].state && ::IsWindow(m_md[TYPE_MAP_INJ_TPSSWT].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_TPSSWT].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_GTSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GTSC].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GTSC].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_GPSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GPSC].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GPSC].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_ATSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_ATSC].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ATSC].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_PWM1].state && ::IsWindow(m_md[TYPE_MAP_PWM1].handle))
-   DLL::Chart3DEnable(m_md[TYPE_MAP_PWM1].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_PWM2].state && ::IsWindow(m_md[TYPE_MAP_PWM2].handle))
-   DLL::Chart3DEnable(m_md[TYPE_MAP_PWM2].handle, enable && IsAllowed());
+  for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+  {
+   if (m_md[i].state && ::IsWindow(m_md[i].handle))
+   {
+    if (Is3DMap(i))
+     DLL::Chart3DEnable(m_md[i].handle, enable && IsAllowed());
+    else
+     DLL::Chart2DEnable(m_md[i].handle, enable && IsAllowed());
+   }
+  }
+  //and don't forget two pseudo maps:
   if (mp_gridModeEditorIgnDlg.get() && m_md[TYPE_MAP_GME_IGN_WND].state && ::IsWindow(mp_gridModeEditorIgnDlg->m_hWnd))
    mp_gridModeEditorIgnDlg->UpdateDialogControls(mp_gridModeEditorIgnDlg.get(), TRUE);
   if (mp_gridModeEditorInjDlg.get() && m_md[TYPE_MAP_GME_INJ_WND].state && ::IsWindow(mp_gridModeEditorInjDlg->m_hWnd))
    mp_gridModeEditorInjDlg->UpdateDialogControls();
-  if (m_md[TYPE_MAP_INJ_IACMAT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACMAT].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACMAT].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_TPSZON].state && ::IsWindow(m_md[TYPE_MAP_INJ_TPSZON].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_TPSZON].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_CYLMULT].state && ::IsWindow(m_md[TYPE_MAP_INJ_CYLMULT].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_CYLMULT].handle, enable && IsAllowed());
-  if (m_md[TYPE_MAP_INJ_CYLADD].state && ::IsWindow(m_md[TYPE_MAP_INJ_CYLADD].handle))
-   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_CYLADD].handle, enable && IsAllowed());
  }
 
  m_charts_enabled = enable;
 }
-
-bool CButtonsPanel::IsAllowed(void)
-{
- if (m_IsAllowed)
-  return m_IsAllowed();
- return false;
-}
-
-void CButtonsPanel::setIsAllowed(EventResult IsFunction)
-{m_IsAllowed = IsFunction;}
-
-void CButtonsPanel::setOnMapChanged(EventWithCode OnFunction)
-{m_OnMapChanged = OnFunction;}
-
-void CButtonsPanel::setOnCloseMapWnd(EventWithHWND OnFunction)
-{ m_OnCloseMapWnd = OnFunction; }
-
-void CButtonsPanel::setOnOpenMapWnd(EventWithHWND OnFunction)
-{ m_OnOpenMapWnd = OnFunction; }
 
 void CButtonsPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
 {
  SetWindowPos(wnd_insert_after, x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
 }
 
-void CButtonsPanel::setOnWndActivation(EventWithHWNDLong OnFunction)
-{ m_OnWndActivation = OnFunction; }
+void CButtonsPanel::SetPosition(const CRect& rc, CWnd* wnd_insert_after /*=NULL*/)
+{
+ SetWindowPos(wnd_insert_after, rc.left, rc.top, rc.Width(), rc.Height(), (wnd_insert_after ? 0 : SWP_NOZORDER));
+}
 
 void CButtonsPanel::OnSize( UINT nType, int cx, int cy )
 {
  Super::OnSize(nType, cx, cy);
 
  DPIAware da;
+
+ if (m_initialized)
+ {
+  CRect rc1 = GDIHelpers::GetChildWndRect(m_md[TYPE_MAP_DA_START].mp_button);
+  int c = da.ScaleX(8), half_id = TYPE_MAP_INJ_IDLR;
+  
+  if ((cx - rc1.left) - rc1.Width() > rc1.Width())
+  {
+   if (m_btnMovIds.empty())
+   {//move
+    CRect rc2 = GDIHelpers::GetChildWndRect(m_md[TYPE_MAP_DA_IDLE].mp_button);
+    CRect rc3 = GDIHelpers::GetChildWndRect(m_md[half_id].mp_button);
+    int decr = (rc3.top - rc1.top) + (rc2.top - rc1.top);
+
+    for (int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+    {
+     CRect rc4 = GDIHelpers::GetChildWndRect(m_md[i].mp_button);
+     if (rc4.top > rc3.top)
+      m_btnMovIds.push_back(i);
+    }  
+    for(size_t t = 0; t < m_btnMovIds.size(); ++t)
+    {
+     CRect rc = GDIHelpers::GetChildWndRect(m_md[m_btnMovIds[t]].mp_button);
+     m_md[m_btnMovIds[t]].mp_button->SetWindowPos(NULL, rc1.right + c, rc.top - decr, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+    }
+   }
+  }
+  else
+  {
+   if (!m_btnMovIds.empty())
+   {//restore
+    CRect rc2 = GDIHelpers::GetChildWndRect(m_md[TYPE_MAP_DA_IDLE].mp_button);
+    CRect rc3 = GDIHelpers::GetChildWndRect(m_md[half_id].mp_button);
+    int decr = (rc3.top - rc1.top) + (rc2.top - rc1.top);
+
+    for(size_t t = 0; t < m_btnMovIds.size(); ++t)
+    {
+     CRect rc = GDIHelpers::GetChildWndRect(m_md[m_btnMovIds[t]].mp_button);
+     m_md[m_btnMovIds[t]].mp_button->SetWindowPos(NULL, rc1.left, rc.top + decr, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+    }
+    m_btnMovIds.clear();   
+   }
+  }
+ }
+
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(m_scrl_view));
+ {
+  if (m_disable_vscroll)
+   mp_scr->SetViewSize(cx, da.ScaleY(1));
+  else
+   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1200 : 650));
+ }
 }
 
 void CButtonsPanel::SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable, bool forceUpdate /*= false*/)
@@ -2743,7 +2588,7 @@ void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bo
 
 void CButtonsPanel::MakeChartsChildren(bool children)
 {
- m_children_charts = children;
+ CTablesPanelBase::MakeChartsChildren(children);
  HWND hwnd;
 
  for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
@@ -2757,41 +2602,6 @@ void CButtonsPanel::MakeChartsChildren(bool children)
 
  hwnd = GetMapWindow(TYPE_MAP_GME_INJ_WND); //pseudo map
  GDIHelpers::MakeWindowChild(hwnd, children);
-}
-
-void CButtonsPanel::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
-{
- if (m_toggleMapWnd)
- {
-  if (m_openedChart)
-   ::SendMessage(m_openedChart,WM_CLOSE,0,0);
-  m_openedChart = i_hwnd;
- }
-
- GDIHelpers::MakeWindowChild(i_hwnd, m_children_charts);
- ::SendMessage(i_hwnd, WM_NCACTIVATE, TRUE, -1);
-
- if (m_OnOpenMapWnd)
-  m_OnOpenMapWnd(i_hwnd, i_mapType);
-}
-
-void CButtonsPanel::OnWndActivation(HWND i_hwnd, long cmd)
-{
- if (m_OnWndActivation)
-  m_OnWndActivation(i_hwnd, cmd);
-
- if (m_children_charts && cmd == SC_MINIMIZE && NULL != i_hwnd)
-  CWnd::FromHandle(i_hwnd)->SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-}
-
-void CButtonsPanel::EnableToggleMapWnd(bool toggle)
-{
- m_toggleMapWnd = toggle;
-}
-
-HWND CButtonsPanel::_ChartParentHwnd(void)
-{
- return m_children_charts ? AfxGetMainWnd()->GetSafeHwnd() : NULL;
 }
 
 void CButtonsPanel::CloseCharts(void)
@@ -2861,11 +2671,6 @@ int CButtonsPanel::GetActiveVEMap(void) const
  return m_active_ve;
 }
 
-void CButtonsPanel::setOnChangeSettings(EventHandler OnCB)
-{
- m_OnChangeSettings = OnCB;
-}
-
 void CButtonsPanel::OnChangeSettingsGME(void)
 {
  m_it_mode = mp_gridModeEditorInjDlg->GetITMode();
@@ -2889,23 +2694,6 @@ void CButtonsPanel::_GetITModeRange(float& y1, float& y2)
 {
  y1 = (m_it_mode < 2) ? .0f : -360.0f;
  y2 = (m_it_mode < 2) ? 720.0f : 360.0f;
-}
-
-float CButtonsPanel::GetPtMovStep(int wndType)
-{
- return m_md[wndType].ptMovStep;
-}
-
-void CButtonsPanel::SetPtMovStep(int wndType, float value)
-{
- m_md[wndType].ptMovStep = value;
- if (m_md[wndType].state)
- {
-  if (wndType == TYPE_MAP_DA_WORK || wndType == TYPE_MAP_INJ_VE || wndType == TYPE_MAP_INJ_VE2 || wndType == TYPE_MAP_INJ_AFR || wndType == TYPE_MAP_INJ_IT || wndType == TYPE_MAP_PWM1 || wndType == TYPE_MAP_PWM2 || wndType == TYPE_MAP_GASDOSE)
-   DLL::Chart3DSetPtMovingStep(m_md[wndType].handle, value);
-  else
-   DLL::Chart2DSetPtMovingStep(m_md[wndType].handle, value); 
- }
 }
 
 void CButtonsPanel::TransformValues(void)
@@ -2936,12 +2724,6 @@ void CButtonsPanel::SetSplitAngMode(bool mode)
   DLL::Chart3DSetTitle(m_md[TYPE_MAP_PWM1].handle, MLL::GetString(IDS_PWM1_MAP).c_str());
   m_md[TYPE_MAP_PWM1].mp_button->SetWindowText(MLL::GetString(IDS_TD_VIEW_PWM1_MAP).c_str());
  }
-}
-
-void CButtonsPanel::SetCSVSepSymbol(char sepsymb)
-{
- DLL::Chart2DSetCSVSepSymbol(sepsymb);
- DLL::Chart3DSetCSVSepSymbol(sepsymb);
 }
 
 void CButtonsPanel::OnShow(bool show)

@@ -22,7 +22,7 @@ SOURCES = ButtonsPanel.cpp DLLLinkedFunctions.cpp DwellCalcDlg.cpp RPMGridEditDl
   StdAfx.cpp TablDesk.cpp TablesSetPanel.cpp GridModeEditorIgnDlg.cpp CESettingsDlg.cpp \
   GridModeEditorInjDlg.cpp GMEInjVEDlg.cpp GMEInjAFRDlg.cpp GMEInjITDlg.cpp GMEInjIRegDlg.cpp \
   GMEInjEnrDlg.cpp GMEInjOtherDlg.cpp AutoTuneController.cpp GMEInjPwm1Dlg.cpp GMEInjPwm2Dlg.cpp \
-  GMEInjOther1Dlg.cpp ButtonsPanelEvents.cpp TablesSetPanelEvents.cpp
+  GMEInjOther1Dlg.cpp ButtonsPanelEvents.cpp SeptabsPanelEvents.cpp SeptabsPanel.cpp TablesPanelBase.cpp
 
 
 # DLL building

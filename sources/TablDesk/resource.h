@@ -77,6 +77,9 @@
 #define IDS_INJNONLING_MAP              5088
 #define IDS_TD_INJNONLINP_MAP_TT        5089
 #define IDS_TD_INJNONLING_MAP_TT        5090
+#define IDC_TD_SETTABS_FRAME            5091
+#define IDC_TD_SEPTABS_FRAME            5092
+#define IDD_TD_SEPTABLES_PANEL          5093
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

@@ -57,6 +57,8 @@
 #include "TablDesk/CESettingsDlg.h"
 #include "ErrorMsg.h"
 #include "ui-core/MsgBox.h"
+#include "TablDesk/ButtonsPanel.h"
+#include "TablDesk/SeptabsPanel.h"
 
 using namespace fastdelegate;
 
@@ -137,19 +139,23 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  mp_view->setOnDropFile(MakeDelegate(this, &CFirmwareTabController::OnDropFile));
  mp_view->setOnFirmwareMaster(MakeDelegate(this, &CFirmwareTabController::OnFirmwareMaster));
 
- mp_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
  mp_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
  mp_view->mp_TablesPanel->setOnFunSetNamechanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetNamechanged));
- mp_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &MapWndScrPos::OnCloseMapWnd));
- mp_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->setOnCloseMapWnd(MakeDelegate(this, &MapWndScrPos::OnCloseMapWnd));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnCloseMapWnd(MakeDelegate(this, &MapWndScrPos::OnCloseMapWnd));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
  mp_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
- mp_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
- mp_view->mp_TablesPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
- mp_view->mp_TablesPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
- mp_view->mp_TablesPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
- mp_view->mp_TablesPanel->EnableAdvanceAngleIndication(false);
- mp_view->mp_TablesPanel->setOnChangeSettings(MakeDelegate(this, &CFirmwareTabController::OnChangeSettingsMapEd));
- mp_view->mp_TablesPanel->setOnFwConstsButton(MakeDelegate(this, &CFirmwareTabController::OnEditFwConsts));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableAdvanceAngleIndication(false);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnChangeSettings(MakeDelegate(this, &CFirmwareTabController::OnChangeSettingsMapEd));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->setOnChangeSettings(MakeDelegate(this, &CFirmwareTabController::OnChangeSettingsMapEd));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnFwConstsButton(MakeDelegate(this, &CFirmwareTabController::OnEditFwConsts));
 
  mp_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
  mp_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CFirmwareTabController::OnParamDeskChangeInTab));
@@ -189,10 +195,10 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 
  mp_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
- mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
- mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
- mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
 }
 
 void CFirmwareTabController::OnActivate(void)
@@ -208,7 +214,7 @@ void CFirmwareTabController::OnActivate(void)
  if (IsFirmwareOpened())
  {
   DWORD opt = mp_fwdm->GetFWOptions();
-  mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE));
+  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE));
  }
 
  //////////////////////////////////////////////////////////////////
@@ -233,84 +239,84 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
 
- mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
- mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
- mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_START, mptms.m_start_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_IDLE, mptms.m_idle_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_WORK, mptms.m_work_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_TEMPI_CORR, mptms.m_tempi_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_VE2, mptms.m_ve2_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_WRMP, mptms.m_wrmp_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_DEAD, mptms.m_dead_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLR, mptms.m_idlr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLC, mptms.m_idlc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_THRASS, mptms.m_thrass_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AETPS, mptms.m_aetps_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AEMAP, mptms.m_aemap_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AERPM, mptms.m_aerpm_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AFTSTR, mptms.m_aftstr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IT, mptms.m_it_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ITRPM, mptms.m_itrpm_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_RIGID, mptms.m_rigid_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_EGOCRV, mptms.m_egocrv_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACC, mptms.m_iacc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACCW, mptms.m_iaccw_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IATCLT, mptms.m_iatclt_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_TPSSWT, mptms.m_tpsswt_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GTSC, mptms.m_gtsc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GPSC, mptms.m_gpsc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_TPSZON, mptms.m_tpszon_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CYLMULT, mptms.m_cylmult_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CYLADD, mptms.m_cyladd_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_START, mptms.m_start_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_IDLE, mptms.m_idle_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_WORK, mptms.m_work_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMPI_CORR, mptms.m_tempi_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_VE2, mptms.m_ve2_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_WRMP, mptms.m_wrmp_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_DEAD, mptms.m_dead_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IDLR, mptms.m_idlr_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IDLC, mptms.m_idlc_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_THRASS, mptms.m_thrass_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AETPS, mptms.m_aetps_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AEMAP, mptms.m_aemap_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AERPM, mptms.m_aerpm_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AFTSTR, mptms.m_aftstr_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IT, mptms.m_it_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_ITRPM, mptms.m_itrpm_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_RIGID, mptms.m_rigid_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_EGOCRV, mptms.m_egocrv_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACC, mptms.m_iacc_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACCW, mptms.m_iaccw_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IATCLT, mptms.m_iatclt_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_TPSSWT, mptms.m_tpsswt_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_GTSC, mptms.m_gtsc_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_GPSC, mptms.m_gpsc_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_TPSZON, mptms.m_tpszon_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CYLMULT, mptms.m_cylmult_map);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CYLADD, mptms.m_cyladd_map);
  //separate
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_ATTENUATOR, mptms.m_attenuator_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DWELLCNTRL, mptms.m_dwellcntrl_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CTS_CURVE, mptms.m_cts_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_ATS_CURVE, mptms.m_ats_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_ATS_CORR, mptms.m_ats_aac_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GASDOSE, mptms.m_gasdose_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_BAROCORR, mptms.m_barocorr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MANIGNTIM, mptms.m_manigntim_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_TMP2_CURVE, mptms.m_tmp2_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRKCLT_CORR, mptms.m_crktemp_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_EH_PAUSE, mptms.m_eh_pause_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRANKING_THRD, mptms.m_cranking_thrd_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRANKING_TIME, mptms.m_cranking_time_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_SMAPABAN_THRD, mptms.m_smapaban_thrd_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_KNOCK_ZONE, mptms.m_knock_zone_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRTS_CURVE, mptms.m_grts_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRHEAT_DUTY, mptms.m_grheat_duty_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWMIAC_UCOEF, mptms.m_pwmiac_ucoef_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK0, mptms.m_aftstr_strk0_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK1, mptms.m_aftstr_strk1_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_GRVDELAY, mptms.m_grvaldel_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTLS_CURVE, mptms.m_ftls_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_EGTS_CURVE, mptms.m_egts_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_OPS_CURVE, mptms.m_ops_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MANINJPWC, mptms.m_maninjpwc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_MAF_CURVE, mptms.m_mafcurve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTLSCOR, mptms.m_ftlscor_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_LAMBDA_ZONE, mptms.m_lambda_zone_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FTS_CURVE, mptms.m_fts_curve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_FUELDENS_CORR, mptms.m_fueldens_corr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_XFACC, mptms.m_xtau_xfacc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_XFDEC, mptms.m_xtau_xfdec_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_TFACC, mptms.m_xtau_tfacc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_XTAU_TFDEC, mptms.m_xtau_tfdec_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJNONLINP, mptms.m_injnonlinp_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJNONLING, mptms.m_injnonling_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_ATTENUATOR, mptms.m_attenuator_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_DWELLCNTRL, mptms.m_dwellcntrl_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CTS_CURVE, mptms.m_cts_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_ATS_CURVE, mptms.m_ats_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_ATS_CORR, mptms.m_ats_aac_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GASDOSE, mptms.m_gasdose_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_BAROCORR, mptms.m_barocorr_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_MANIGNTIM, mptms.m_manigntim_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_TMP2_CURVE, mptms.m_tmp2_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CRKCLT_CORR, mptms.m_crktemp_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_EH_PAUSE, mptms.m_eh_pause_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CRANKING_THRD, mptms.m_cranking_thrd_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CRANKING_TIME, mptms.m_cranking_time_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_SMAPABAN_THRD, mptms.m_smapaban_thrd_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_KNOCK_ZONE, mptms.m_knock_zone_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GRTS_CURVE, mptms.m_grts_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GRHEAT_DUTY, mptms.m_grheat_duty_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_PWMIAC_UCOEF, mptms.m_pwmiac_ucoef_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK0, mptms.m_aftstr_strk0_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK1, mptms.m_aftstr_strk1_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GRVDELAY, mptms.m_grvaldel_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FTLS_CURVE, mptms.m_ftls_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_EGTS_CURVE, mptms.m_egts_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_OPS_CURVE, mptms.m_ops_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_MANINJPWC, mptms.m_maninjpwc_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_MAF_CURVE, mptms.m_mafcurve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FTLSCOR, mptms.m_ftlscor_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_LAMBDA_ZONE, mptms.m_lambda_zone_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FTS_CURVE, mptms.m_fts_curve_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FUELDENS_CORR, mptms.m_fueldens_corr_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_XFACC, mptms.m_xtau_xfacc_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_XFDEC, mptms.m_xtau_xfdec_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_TFACC, mptms.m_xtau_tfacc_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_TFDEC, mptms.m_xtau_tfdec_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_INJNONLINP, mptms.m_injnonlinp_map);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_INJNONLING, mptms.m_injnonling_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -990,26 +996,28 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_settings->GetFunctionality(fnc);
 
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
- mp_view->mp_TablesPanel->EnableDwellControl(CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL));
- mp_view->mp_TablesPanel->EnableCTSCurve(CHECKBIT32(opt, SECU3IO::COPT_THERMISTOR_CS));
- mp_view->mp_TablesPanel->EnableChokeOp(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
- mp_view->mp_TablesPanel->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL));
- mp_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR));
- mp_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
- mp_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->EnableGrtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->EnableFtlsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->EnableEgtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->EnableFtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->EnableXtauMaps(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
- mp_view->mp_TablesPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
- mp_view->mp_TablesPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
- mp_view->mp_TablesPanel->EnableAftstrStrkMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
- mp_view->mp_TablesPanel->EnableLambdaZones(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
- mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
- mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableDwellControl(CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableCTSCurve(CHECKBIT32(opt, SECU3IO::COPT_THERMISTOR_CS));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableChokeOp(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableCarbAfr(CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableTmp2Curve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableGrtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableFtlsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableEgtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableFtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableXtauMaps(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableAftstrStrkMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableLambdaZones(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
 
  mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
  mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(opt, SECU3IO::COPT_COOLINGFAN_PWM));
@@ -1120,7 +1128,7 @@ void CFirmwareTabController::OnSaveFlashToFile(void)
 
   //устанавливаем значения только в графики
   SetViewChartsValues();
-  mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
+  mp_view->mp_TablesPanel->mp_ButtonsPanel->TransformValues(); //transform values in some maps before they will be rendered for user
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
 
   mp_view->SetFirmwareCRCs(mp_fwdm->GetCRC16StoredInActiveFirmware(),mp_fwdm->CalculateCRC16OfActiveFirmware());
@@ -1141,232 +1149,235 @@ bool CFirmwareTabController::IsFirmwareOpened()
 //эта функция не обновляет графики, нужно еще вызывать UpdateOpenedCharts()!
 void CFirmwareTabController::SetViewChartsValues(void)
 {
- mp_fwdm->GetAttenuatorMap(mp_view->mp_TablesPanel->GetAttenuatorMap(false),false);
- mp_fwdm->GetAttenuatorMap(mp_view->mp_TablesPanel->GetAttenuatorMap(true),true);
+ mp_fwdm->GetAttenuatorMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAttenuatorMap(false),false);
+ mp_fwdm->GetAttenuatorMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAttenuatorMap(true),true);
 
- mp_fwdm->GetDwellCntrlMap(mp_view->mp_TablesPanel->GetDwellCntrlMap(false),false);
- mp_fwdm->GetDwellCntrlMap(mp_view->mp_TablesPanel->GetDwellCntrlMap(true),true);
+ mp_fwdm->GetDwellCntrlMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetDwellCntrlMap(false),false);
+ mp_fwdm->GetDwellCntrlMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetDwellCntrlMap(true),true);
 
- mp_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->GetCTSCurveMap(false),false);
- mp_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->GetCTSCurveMap(true),true);
- mp_view->mp_TablesPanel->SetCTSXAxisEdits(mp_fwdm->GetCTSMapVoltageLimit(0), mp_fwdm->GetCTSMapVoltageLimit(1));
+ mp_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCTSCurveMap(false),false);
+ mp_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCTSCurveMap(true),true);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetCTSXAxisEdits(mp_fwdm->GetCTSMapVoltageLimit(0), mp_fwdm->GetCTSMapVoltageLimit(1));
 
- mp_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->GetATSCurveMap(false),false);
- mp_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->GetATSCurveMap(true),true);
- mp_view->mp_TablesPanel->SetATSXAxisEdits(mp_fwdm->GetATSMapVoltageLimit(0), mp_fwdm->GetATSMapVoltageLimit(1));
+ mp_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSCurveMap(false),false);
+ mp_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSCurveMap(true),true);
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->SetATSXAxisEdits(mp_fwdm->GetATSMapVoltageLimit(0), mp_fwdm->GetATSMapVoltageLimit(1));
 
- mp_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->GetATSAACMap(false),false);
- mp_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->GetATSAACMap(true),true);
+ mp_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSAACMap(false),false);
+ mp_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSAACMap(true),true);
 
- mp_fwdm->GetGasdosePosMap(mp_view->mp_TablesPanel->GetGasdosePosMap(false),false);
- mp_fwdm->GetGasdosePosMap(mp_view->mp_TablesPanel->GetGasdosePosMap(true),true);
+ mp_fwdm->GetGasdosePosMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGasdosePosMap(false),false);
+ mp_fwdm->GetGasdosePosMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGasdosePosMap(true),true);
 
- mp_fwdm->GetBarocorrMap(mp_view->mp_TablesPanel->GetBarocorrMap(false),false);
- mp_fwdm->GetBarocorrMap(mp_view->mp_TablesPanel->GetBarocorrMap(true),true);
+ mp_fwdm->GetBarocorrMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetBarocorrMap(false),false);
+ mp_fwdm->GetBarocorrMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetBarocorrMap(true),true);
 
- mp_fwdm->GetManIgntimMap(mp_view->mp_TablesPanel->GetManIgntimMap(false),false);
- mp_fwdm->GetManIgntimMap(mp_view->mp_TablesPanel->GetManIgntimMap(true),true);
+ mp_fwdm->GetManIgntimMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetManIgntimMap(false),false);
+ mp_fwdm->GetManIgntimMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetManIgntimMap(true),true);
 
- mp_fwdm->GetTmp2CurveMap(mp_view->mp_TablesPanel->GetTmp2CurveMap(false),false);
- mp_fwdm->GetTmp2CurveMap(mp_view->mp_TablesPanel->GetTmp2CurveMap(true),true);
+ mp_fwdm->GetTmp2CurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetTmp2CurveMap(false),false);
+ mp_fwdm->GetTmp2CurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetTmp2CurveMap(true),true);
 
- mp_fwdm->GetCrkTempMap(mp_view->mp_TablesPanel->GetCrkTempMap(false),false);
- mp_fwdm->GetCrkTempMap(mp_view->mp_TablesPanel->GetCrkTempMap(true),true);
+ mp_fwdm->GetCrkTempMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrkTempMap(false),false);
+ mp_fwdm->GetCrkTempMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrkTempMap(true),true);
 
- mp_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(false),false);
- mp_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(true),true);
+ mp_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetEHPauseMap(false),false);
+ mp_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetEHPauseMap(true),true);
 
- mp_fwdm->GetCrankingThrdMap(mp_view->mp_TablesPanel->GetCrankingThrdMap(false),false);
- mp_fwdm->GetCrankingThrdMap(mp_view->mp_TablesPanel->GetCrankingThrdMap(true),true);
+ mp_fwdm->GetCrankingThrdMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrankingThrdMap(false),false);
+ mp_fwdm->GetCrankingThrdMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrankingThrdMap(true),true);
 
- mp_fwdm->GetCrankingTimeMap(mp_view->mp_TablesPanel->GetCrankingTimeMap(false),false);
- mp_fwdm->GetCrankingTimeMap(mp_view->mp_TablesPanel->GetCrankingTimeMap(true),true);
+ mp_fwdm->GetCrankingTimeMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrankingTimeMap(false),false);
+ mp_fwdm->GetCrankingTimeMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrankingTimeMap(true),true);
 
- mp_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(false),false);
- mp_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(true),true);
+ mp_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetSmapabanThrdMap(false),false);
+ mp_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetSmapabanThrdMap(true),true);
 
- mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(false),false);
- mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(true),true);
+ mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetKnockZoneMap(false),false);
+ mp_fwdm->GetKnockZoneMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetKnockZoneMap(true),true);
 
- mp_fwdm->GetLambdaZoneMap(mp_view->mp_TablesPanel->GetLambdaZoneMap(false),false);
- mp_fwdm->GetLambdaZoneMap(mp_view->mp_TablesPanel->GetLambdaZoneMap(true),true);
+ mp_fwdm->GetLambdaZoneMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLambdaZoneMap(false),false);
+ mp_fwdm->GetLambdaZoneMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLambdaZoneMap(true),true);
 
- mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(false),false);
- mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(true),true);
+ mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrtsCurveMap(false),false);
+ mp_fwdm->GetGrtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrtsCurveMap(true),true);
 
- mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(false),false);
- mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(true),true);
+ mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrHeatDutyMap(false),false);
+ mp_fwdm->GetGrHeatDutyMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrHeatDutyMap(true),true);
 
- mp_fwdm->GetPwmIacUCoefMap(mp_view->mp_TablesPanel->GetPwmIacUCoefMap(false),false);
- mp_fwdm->GetPwmIacUCoefMap(mp_view->mp_TablesPanel->GetPwmIacUCoefMap(true),true);
+ mp_fwdm->GetPwmIacUCoefMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPwmIacUCoefMap(false),false);
+ mp_fwdm->GetPwmIacUCoefMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPwmIacUCoefMap(true),true);
  
- mp_fwdm->GetAftstrStrk0Map(mp_view->mp_TablesPanel->GetAftstrStrk0Map(false),false);
- mp_fwdm->GetAftstrStrk0Map(mp_view->mp_TablesPanel->GetAftstrStrk0Map(true),true);
+ mp_fwdm->GetAftstrStrk0Map(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAftstrStrk0Map(false),false);
+ mp_fwdm->GetAftstrStrk0Map(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAftstrStrk0Map(true),true);
 
- mp_fwdm->GetAftstrStrk1Map(mp_view->mp_TablesPanel->GetAftstrStrk1Map(false),false);
- mp_fwdm->GetAftstrStrk1Map(mp_view->mp_TablesPanel->GetAftstrStrk1Map(true),true);
+ mp_fwdm->GetAftstrStrk1Map(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAftstrStrk1Map(false),false);
+ mp_fwdm->GetAftstrStrk1Map(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAftstrStrk1Map(true),true);
 
- mp_fwdm->GetGrValDelMap(mp_view->mp_TablesPanel->GetGrValDelMap(false),false);
- mp_fwdm->GetGrValDelMap(mp_view->mp_TablesPanel->GetGrValDelMap(true),true);
+ mp_fwdm->GetGrValDelMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrValDelMap(false),false);
+ mp_fwdm->GetGrValDelMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrValDelMap(true),true);
 
- mp_fwdm->GetFtlsCurveMap(mp_view->mp_TablesPanel->GetFtlsCurveMap(false),false);
- mp_fwdm->GetFtlsCurveMap(mp_view->mp_TablesPanel->GetFtlsCurveMap(true),true);
+ mp_fwdm->GetFtlsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtlsCurveMap(false),false);
+ mp_fwdm->GetFtlsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtlsCurveMap(true),true);
 
- mp_fwdm->GetFtlsCorMap(mp_view->mp_TablesPanel->GetFtlsCorMap(false),false);
- mp_fwdm->GetFtlsCorMap(mp_view->mp_TablesPanel->GetFtlsCorMap(true),true);
+ mp_fwdm->GetFtlsCorMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtlsCorMap(false),false);
+ mp_fwdm->GetFtlsCorMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtlsCorMap(true),true);
 
- mp_fwdm->GetEgtsCurveMap(mp_view->mp_TablesPanel->GetEgtsCurveMap(false),false);
- mp_fwdm->GetEgtsCurveMap(mp_view->mp_TablesPanel->GetEgtsCurveMap(true),true);
+ mp_fwdm->GetEgtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetEgtsCurveMap(false),false);
+ mp_fwdm->GetEgtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetEgtsCurveMap(true),true);
 
- mp_fwdm->GetOpsCurveMap(mp_view->mp_TablesPanel->GetOpsCurveMap(false),false);
- mp_fwdm->GetOpsCurveMap(mp_view->mp_TablesPanel->GetOpsCurveMap(true),true);
+ mp_fwdm->GetOpsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetOpsCurveMap(false),false);
+ mp_fwdm->GetOpsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetOpsCurveMap(true),true);
 
- mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(false),false);
- mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(true),true);
+ mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetManInjPwcMap(false),false);
+ mp_fwdm->GetManInjPwcMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetManInjPwcMap(true),true);
 
- mp_fwdm->GetMAFCurveMap(mp_view->mp_TablesPanel->GetMAFCurveMap(false),false);
- mp_fwdm->GetMAFCurveMap(mp_view->mp_TablesPanel->GetMAFCurveMap(true),true);
+ mp_fwdm->GetMAFCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetMAFCurveMap(false),false);
+ mp_fwdm->GetMAFCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetMAFCurveMap(true),true);
 
- mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
- mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
- mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
+ mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetRPMGrid());
+ mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCLTGrid());
+ mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLoadGrid());
+ mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetRPMGrid());
+ mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCLTGrid());
+ mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetLoadGrid());
 
- mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(false),false);
- mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(true),true);
+ mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtsCurveMap(false),false);
+ mp_fwdm->GetFtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtsCurveMap(true),true);
 
- mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(false),false);
- mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(true),true);
+ mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFuelDensCorrMap(false),false);
+ mp_fwdm->GetFuelDensCorrMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFuelDensCorrMap(true),true);
 
- mp_fwdm->GetXtauXfAccMap(mp_view->mp_TablesPanel->GetXtauXfAccMap(false),false);
- mp_fwdm->GetXtauXfAccMap(mp_view->mp_TablesPanel->GetXtauXfAccMap(true),true);
+ mp_fwdm->GetXtauXfAccMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauXfAccMap(false),false);
+ mp_fwdm->GetXtauXfAccMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauXfAccMap(true),true);
 
- mp_fwdm->GetXtauXfDecMap(mp_view->mp_TablesPanel->GetXtauXfDecMap(false),false);
- mp_fwdm->GetXtauXfDecMap(mp_view->mp_TablesPanel->GetXtauXfDecMap(true),true);
+ mp_fwdm->GetXtauXfDecMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauXfDecMap(false),false);
+ mp_fwdm->GetXtauXfDecMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauXfDecMap(true),true);
 
- mp_fwdm->GetXtauTfAccMap(mp_view->mp_TablesPanel->GetXtauTfAccMap(false),false);
- mp_fwdm->GetXtauTfAccMap(mp_view->mp_TablesPanel->GetXtauTfAccMap(true),true);
+ mp_fwdm->GetXtauTfAccMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauTfAccMap(false),false);
+ mp_fwdm->GetXtauTfAccMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauTfAccMap(true),true);
 
- mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(false),false);
- mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(true),true);
+ mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauTfDecMap(false),false);
+ mp_fwdm->GetXtauTfDecMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauTfDecMap(true),true);
 
- mp_fwdm->GetInjNonLinPMap(mp_view->mp_TablesPanel->GetInjNonLinPMap(false),false);
- mp_fwdm->GetInjNonLinPMap(mp_view->mp_TablesPanel->GetInjNonLinPMap(true),true);
+ mp_fwdm->GetInjNonLinPMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetInjNonLinPMap(false),false);
+ mp_fwdm->GetInjNonLinPMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetInjNonLinPMap(true),true);
 
- mp_fwdm->GetInjNonLinGMap(mp_view->mp_TablesPanel->GetInjNonLinGMap(false),false);
- mp_fwdm->GetInjNonLinGMap(mp_view->mp_TablesPanel->GetInjNonLinGMap(true),true);
+ mp_fwdm->GetInjNonLinGMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetInjNonLinGMap(false),false);
+ mp_fwdm->GetInjNonLinGMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetInjNonLinGMap(true),true);
 
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
  mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
- mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
 
  if (m_current_funset_index==-1)
   return;
- mp_fwdm->GetStartMap(m_current_funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
- mp_fwdm->GetStartMap(m_current_funset_index,mp_view->mp_TablesPanel->GetStartMap(true),true);
+ mp_fwdm->GetStartMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetStartMap(false),false);
+ mp_fwdm->GetStartMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetStartMap(true),true);
 
- mp_fwdm->GetIdleMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdleMap(false),false);
- mp_fwdm->GetIdleMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdleMap(true),true);
+ mp_fwdm->GetIdleMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdleMap(false),false);
+ mp_fwdm->GetIdleMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdleMap(true),true);
 
- mp_fwdm->GetWorkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWorkMap(false),false);
- mp_fwdm->GetWorkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWorkMap(true),true);
+ mp_fwdm->GetWorkMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetWorkMap(false),false);
+ mp_fwdm->GetWorkMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetWorkMap(true),true);
 
- mp_fwdm->GetTempMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTempMap(false),false);
- mp_fwdm->GetTempMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTempMap(true),true);
+ mp_fwdm->GetTempMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTempMap(false),false);
+ mp_fwdm->GetTempMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTempMap(true),true);
 
- mp_fwdm->GetTempIdlMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(false),false);
- mp_fwdm->GetTempIdlMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(true),true);
+ mp_fwdm->GetTempIdlMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTempIdlMap(false),false);
+ mp_fwdm->GetTempIdlMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTempIdlMap(true),true);
 
  //fuel injection
- mp_fwdm->GetVEMap(m_current_funset_index,mp_view->mp_TablesPanel->GetVEMap(false),false);
- mp_fwdm->GetVEMap(m_current_funset_index,mp_view->mp_TablesPanel->GetVEMap(true),true);
+ mp_fwdm->GetVEMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetVEMap(false),false);
+ mp_fwdm->GetVEMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetVEMap(true),true);
 
- mp_fwdm->GetVE2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetVE2Map(false),false);
- mp_fwdm->GetVE2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetVE2Map(true),true);
+ mp_fwdm->GetVE2Map(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetVE2Map(false),false);
+ mp_fwdm->GetVE2Map(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetVE2Map(true),true);
 
- mp_fwdm->GetAFRMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAFRMap(false),false);
- mp_fwdm->GetAFRMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAFRMap(true),true);
+ mp_fwdm->GetAFRMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAFRMap(false),false);
+ mp_fwdm->GetAFRMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAFRMap(true),true);
 
- mp_fwdm->GetCrnkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCrnkMap(false),false);
- mp_fwdm->GetCrnkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCrnkMap(true),true);
+ mp_fwdm->GetCrnkMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCrnkMap(false),false);
+ mp_fwdm->GetCrnkMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCrnkMap(true),true);
 
- mp_fwdm->GetWrmpMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWrmpMap(false),false);
- mp_fwdm->GetWrmpMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWrmpMap(true),true);
+ mp_fwdm->GetWrmpMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetWrmpMap(false),false);
+ mp_fwdm->GetWrmpMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetWrmpMap(true),true);
 
- mp_fwdm->GetDeadMap(m_current_funset_index,mp_view->mp_TablesPanel->GetDeadMap(false),false);
- mp_fwdm->GetDeadMap(m_current_funset_index,mp_view->mp_TablesPanel->GetDeadMap(true),true);
+ mp_fwdm->GetDeadMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetDeadMap(false),false);
+ mp_fwdm->GetDeadMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetDeadMap(true),true);
 
- mp_fwdm->GetIdlrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlrMap(false),false);
- mp_fwdm->GetIdlrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlrMap(true),true);
+ mp_fwdm->GetIdlrMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdlrMap(false),false);
+ mp_fwdm->GetIdlrMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdlrMap(true),true);
 
- mp_fwdm->GetIdlcMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlcMap(false),false);
- mp_fwdm->GetIdlcMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlcMap(true),true);
+ mp_fwdm->GetIdlcMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdlcMap(false),false);
+ mp_fwdm->GetIdlcMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdlcMap(true),true);
 
- mp_fwdm->GetThrassMap(m_current_funset_index,mp_view->mp_TablesPanel->GetThrassMap(false),false);
- mp_fwdm->GetThrassMap(m_current_funset_index,mp_view->mp_TablesPanel->GetThrassMap(true),true);
+ mp_fwdm->GetThrassMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetThrassMap(false),false);
+ mp_fwdm->GetThrassMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetThrassMap(true),true);
 
- mp_fwdm->GetAETPSMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAETPSMap(false),false);
- mp_fwdm->GetAETPSMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAETPSMap(true),true);
+ mp_fwdm->GetAETPSMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAETPSMap(false),false);
+ mp_fwdm->GetAETPSMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAETPSMap(true),true);
 
- mp_fwdm->GetAEMAPMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(false),false);
- mp_fwdm->GetAEMAPMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(true),true);
+ mp_fwdm->GetAEMAPMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAEMAPMap(false),false);
+ mp_fwdm->GetAEMAPMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAEMAPMap(true),true);
 
- mp_fwdm->GetAERPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAERPMMap(false),false);
- mp_fwdm->GetAERPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAERPMMap(true),true);
+ mp_fwdm->GetAERPMMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAERPMMap(false),false);
+ mp_fwdm->GetAERPMMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAERPMMap(true),true);
 
- mp_fwdm->GetAftstrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAftstrMap(false),false);
- mp_fwdm->GetAftstrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAftstrMap(true),true);
+ mp_fwdm->GetAftstrMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAftstrMap(false),false);
+ mp_fwdm->GetAftstrMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAftstrMap(true),true);
 
- mp_fwdm->GetITMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITMap(false),false);
- mp_fwdm->GetITMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITMap(true),true);
+ mp_fwdm->GetITMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITMap(false),false);
+ mp_fwdm->GetITMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITMap(true),true);
 
- mp_fwdm->GetITRPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITRPMMap(false),false);
- mp_fwdm->GetITRPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITRPMMap(true),true);
+ mp_fwdm->GetITRPMMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITRPMMap(false),false);
+ mp_fwdm->GetITRPMMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITRPMMap(true),true);
 
- mp_fwdm->GetRigidMap(m_current_funset_index,mp_view->mp_TablesPanel->GetRigidMap(false),false);
- mp_fwdm->GetRigidMap(m_current_funset_index,mp_view->mp_TablesPanel->GetRigidMap(true),true);
+ mp_fwdm->GetRigidMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetRigidMap(false),false);
+ mp_fwdm->GetRigidMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetRigidMap(true),true);
 
- mp_fwdm->GetEGOCurveMap(m_current_funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(false),false);
- mp_fwdm->GetEGOCurveMap(m_current_funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(true),true);
+ mp_fwdm->GetEGOCurveMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetEGOCurveMap(false),false);
+ mp_fwdm->GetEGOCurveMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetEGOCurveMap(true),true);
 
- mp_fwdm->GetIACCorrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCMap(false),false);
- mp_fwdm->GetIACCorrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCMap(true),true);
+ mp_fwdm->GetIACCorrMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACCMap(false),false);
+ mp_fwdm->GetIACCorrMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACCMap(true),true);
 
- mp_fwdm->GetIACCorrWMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCWMap(false),false);
- mp_fwdm->GetIACCorrWMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCWMap(true),true);
+ mp_fwdm->GetIACCorrWMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACCWMap(false),false);
+ mp_fwdm->GetIACCorrWMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACCWMap(true),true);
 
- mp_fwdm->GetIATCLTMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(false),false);
- mp_fwdm->GetIATCLTMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(true),true);
+ mp_fwdm->GetIATCLTMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIATCLTMap(false),false);
+ mp_fwdm->GetIATCLTMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIATCLTMap(true),true);
 
- mp_fwdm->GetTpsswtMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(false),false);
- mp_fwdm->GetTpsswtMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(true),true);
+ mp_fwdm->GetTpsswtMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTpsswtMap(false),false);
+ mp_fwdm->GetTpsswtMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTpsswtMap(true),true);
 
- mp_fwdm->GetGtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGtscMap(false),false);
- mp_fwdm->GetGtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGtscMap(true),true);
+ mp_fwdm->GetGtscMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetGtscMap(false),false);
+ mp_fwdm->GetGtscMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetGtscMap(true),true);
 
- mp_fwdm->GetGpscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGpscMap(false),false);
- mp_fwdm->GetGpscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGpscMap(true),true);
+ mp_fwdm->GetGpscMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetGpscMap(false),false);
+ mp_fwdm->GetGpscMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetGpscMap(true),true);
 
- mp_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
- mp_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
+ mp_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAtscMap(false),false);
+ mp_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAtscMap(true),true);
 
- mp_fwdm->GetPwm1Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm1Map(false),false);
- mp_fwdm->GetPwm1Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm1Map(true),true);
+ mp_fwdm->GetPwm1Map(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPwm1Map(false),false);
+ mp_fwdm->GetPwm1Map(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPwm1Map(true),true);
 
- mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
- mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
+ mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPwm2Map(false),false);
+ mp_fwdm->GetPwm2Map(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPwm2Map(true),true);
 
- mp_fwdm->GetIACMATMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACMATMap(false),false);
- mp_fwdm->GetIACMATMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACMATMap(true),true);
+ mp_fwdm->GetIACMATMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACMATMap(false),false);
+ mp_fwdm->GetIACMATMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACMATMap(true),true);
 
- mp_fwdm->GetTpszonMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTpszonMap(false),false);
- mp_fwdm->GetTpszonMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTpszonMap(true),true);
+ mp_fwdm->GetTpszonMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTpszonMap(false),false);
+ mp_fwdm->GetTpszonMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTpszonMap(true),true);
 
- mp_fwdm->GetInjCylMultMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCylMultMap(false),false);
- mp_fwdm->GetInjCylMultMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCylMultMap(true),true);
+ mp_fwdm->GetInjCylMultMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCylMultMap(false),false);
+ mp_fwdm->GetInjCylMultMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCylMultMap(true),true);
 
- mp_fwdm->GetInjCylAddMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCylAddMap(false),false);
- mp_fwdm->GetInjCylAddMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCylAddMap(true),true);
+ mp_fwdm->GetInjCylAddMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCylAddMap(false),false);
+ mp_fwdm->GetInjCylAddMap(m_current_funset_index,mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCylAddMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(bool updateIOR /*=true*/)
@@ -1382,7 +1393,7 @@ void CFirmwareTabController::SetViewFirmwareValues(bool updateIOR /*=true*/)
  std::vector<_TSTRING> funset_names = mp_fwdm->GetFunctionsSetNames();
  mp_view->mp_TablesPanel->SetFunSetListBox(funset_names);
 
- mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
 
  //если было выделение в списке, то восстанавлваем его
@@ -1413,253 +1424,253 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    //ignition maps
   case TYPE_MAP_DA_START:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetStartMap(m_current_funset_index, mp_view->mp_TablesPanel->GetStartMap(false));
+   mp_fwdm->SetStartMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetStartMap(false));
    break;
   case TYPE_MAP_DA_IDLE:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetIdleMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIdleMap(false));
+   mp_fwdm->SetIdleMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdleMap(false));
    break;
   case TYPE_MAP_DA_WORK:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetWorkMap(m_current_funset_index, mp_view->mp_TablesPanel->GetWorkMap(false));
+   mp_fwdm->SetWorkMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetWorkMap(false));
    break;
   case TYPE_MAP_DA_TEMP_CORR:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetTempMap(m_current_funset_index, mp_view->mp_TablesPanel->GetTempMap(false));
+   mp_fwdm->SetTempMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTempMap(false));
    break;
   case TYPE_MAP_DA_TEMPI_CORR:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetTempIdlMap(m_current_funset_index, mp_view->mp_TablesPanel->GetTempIdlMap(false));
+   mp_fwdm->SetTempIdlMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTempIdlMap(false));
    break;
    //fuel injection maps
   case TYPE_MAP_INJ_VE:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetVEMap(m_current_funset_index, mp_view->mp_TablesPanel->GetVEMap(false));
+   mp_fwdm->SetVEMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetVEMap(false));
    break;
   case TYPE_MAP_INJ_VE2:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetVE2Map(m_current_funset_index, mp_view->mp_TablesPanel->GetVE2Map(false));
+   mp_fwdm->SetVE2Map(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetVE2Map(false));
    break;
   case TYPE_MAP_INJ_AFR:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetAFRMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAFRMap(false));
+   mp_fwdm->SetAFRMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAFRMap(false));
    break;
   case TYPE_MAP_INJ_CRNK:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetCrnkMap(m_current_funset_index, mp_view->mp_TablesPanel->GetCrnkMap(false));
+   mp_fwdm->SetCrnkMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCrnkMap(false));
    break;
   case TYPE_MAP_INJ_WRMP:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetWrmpMap(m_current_funset_index, mp_view->mp_TablesPanel->GetWrmpMap(false));
+   mp_fwdm->SetWrmpMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetWrmpMap(false));
    break;
   case TYPE_MAP_INJ_DEAD:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetDeadMap(m_current_funset_index, mp_view->mp_TablesPanel->GetDeadMap(false));
+   mp_fwdm->SetDeadMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetDeadMap(false));
    break;
   case TYPE_MAP_INJ_IDLR:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetIdlrMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIdlrMap(false));
+   mp_fwdm->SetIdlrMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdlrMap(false));
    break;
   case TYPE_MAP_INJ_IDLC:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetIdlcMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIdlcMap(false));
+   mp_fwdm->SetIdlcMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIdlcMap(false));
    break;
   case TYPE_MAP_INJ_THRASS:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetThrassMap(m_current_funset_index, mp_view->mp_TablesPanel->GetThrassMap(false));
+   mp_fwdm->SetThrassMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetThrassMap(false));
    break;
   case TYPE_MAP_INJ_AETPS:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetAETPSMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAETPSMap(false));
+   mp_fwdm->SetAETPSMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAETPSMap(false));
    break;
   case TYPE_MAP_INJ_AEMAP:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetAEMAPMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAEMAPMap(false));
+   mp_fwdm->SetAEMAPMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAEMAPMap(false));
    break;
   case TYPE_MAP_INJ_AERPM:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetAERPMMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAERPMMap(false));
+   mp_fwdm->SetAERPMMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAERPMMap(false));
    break;
   case TYPE_MAP_INJ_AFTSTR:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetAftstrMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAftstrMap(false));
+   mp_fwdm->SetAftstrMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAftstrMap(false));
    break;
   case TYPE_MAP_INJ_IT:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetITMap(m_current_funset_index, mp_view->mp_TablesPanel->GetITMap(false));
+   mp_fwdm->SetITMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITMap(false));
    break;
   case TYPE_MAP_INJ_ITRPM:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetITRPMMap(m_current_funset_index, mp_view->mp_TablesPanel->GetITRPMMap(false));
+   mp_fwdm->SetITRPMMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITRPMMap(false));
    break;
   case TYPE_MAP_INJ_RIGID:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetRigidMap(m_current_funset_index, mp_view->mp_TablesPanel->GetRigidMap(false));
+   mp_fwdm->SetRigidMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetRigidMap(false));
    break;
   case TYPE_MAP_INJ_EGOCRV:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetEGOCurveMap(m_current_funset_index, mp_view->mp_TablesPanel->GetEGOCurveMap(false));
+   mp_fwdm->SetEGOCurveMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetEGOCurveMap(false));
    break;
   case TYPE_MAP_INJ_IACC:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetIACCorrMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIACCMap(false));
+   mp_fwdm->SetIACCorrMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACCMap(false));
    break;
   case TYPE_MAP_INJ_IACCW:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetIACCorrWMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIACCWMap(false));
+   mp_fwdm->SetIACCorrWMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACCWMap(false));
    break;
   case TYPE_MAP_INJ_IATCLT:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetIATCLTMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIATCLTMap(false));
+   mp_fwdm->SetIATCLTMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIATCLTMap(false));
    break;
   case TYPE_MAP_INJ_TPSSWT:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetTpsswtMap(m_current_funset_index, mp_view->mp_TablesPanel->GetTpsswtMap(false));
+   mp_fwdm->SetTpsswtMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTpsswtMap(false));
    break;
   case TYPE_MAP_INJ_GTSC:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetGtscMap(m_current_funset_index, mp_view->mp_TablesPanel->GetGtscMap(false));
+   mp_fwdm->SetGtscMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetGtscMap(false));
    break;
   case TYPE_MAP_INJ_GPSC:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetGpscMap(m_current_funset_index, mp_view->mp_TablesPanel->GetGpscMap(false));
+   mp_fwdm->SetGpscMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetGpscMap(false));
    break;
   case TYPE_MAP_INJ_ATSC:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetAtscMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
+   mp_fwdm->SetAtscMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetAtscMap(false));
    break;
   case TYPE_MAP_PWM1:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetPwm1Map(m_current_funset_index, mp_view->mp_TablesPanel->GetPwm1Map(false));
+   mp_fwdm->SetPwm1Map(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPwm1Map(false));
    break;
   case TYPE_MAP_PWM2:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetPwm2Map(m_current_funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
+   mp_fwdm->SetPwm2Map(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPwm2Map(false));
    break;
   case TYPE_MAP_INJ_IACMAT:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetIACMATMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIACMATMap(false));
+   mp_fwdm->SetIACMATMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIACMATMap(false));
    break;
   case TYPE_MAP_INJ_TPSZON:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetTpszonMap(m_current_funset_index, mp_view->mp_TablesPanel->GetTpszonMap(false));
+   mp_fwdm->SetTpszonMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTpszonMap(false));
    break;
   case TYPE_MAP_INJ_CYLMULT:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetInjCylMultMap(m_current_funset_index, mp_view->mp_TablesPanel->GetCylMultMap(false));
+   mp_fwdm->SetInjCylMultMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCylMultMap(false));
    break;
   case TYPE_MAP_INJ_CYLADD:
    ASSERT(m_current_funset_index!=-1);
-   mp_fwdm->SetInjCylAddMap(m_current_funset_index, mp_view->mp_TablesPanel->GetCylAddMap(false));
+   mp_fwdm->SetInjCylAddMap(m_current_funset_index, mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCylAddMap(false));
    break;
    //separate maps
   case TYPE_MAP_ATTENUATOR:
-   mp_fwdm->SetAttenuatorMap(mp_view->mp_TablesPanel->GetAttenuatorMap(false));
+   mp_fwdm->SetAttenuatorMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAttenuatorMap(false));
    break;
   case TYPE_MAP_DWELLCNTRL:
-   mp_fwdm->SetDwellCntrlMap(mp_view->mp_TablesPanel->GetDwellCntrlMap(false));
+   mp_fwdm->SetDwellCntrlMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetDwellCntrlMap(false));
    break;
   case TYPE_MAP_CTS_CURVE:
-   mp_fwdm->SetCTSCurveMap(mp_view->mp_TablesPanel->GetCTSCurveMap(false));
+   mp_fwdm->SetCTSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCTSCurveMap(false));
    break;
   case TYPE_MAP_ATS_CURVE:
-   mp_fwdm->SetATSCurveMap(mp_view->mp_TablesPanel->GetATSCurveMap(false));
+   mp_fwdm->SetATSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSCurveMap(false));
    break;
   case TYPE_MAP_ATS_CORR:
-   mp_fwdm->SetATSAACMap(mp_view->mp_TablesPanel->GetATSAACMap(false));
+   mp_fwdm->SetATSAACMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSAACMap(false));
    break;
   case TYPE_MAP_GASDOSE:
-   mp_fwdm->SetGasdosePosMap(mp_view->mp_TablesPanel->GetGasdosePosMap(false));
+   mp_fwdm->SetGasdosePosMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGasdosePosMap(false));
    break;
   case TYPE_MAP_BAROCORR:
-   mp_fwdm->SetBarocorrMap(mp_view->mp_TablesPanel->GetBarocorrMap(false));
+   mp_fwdm->SetBarocorrMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetBarocorrMap(false));
    break;
   case TYPE_MAP_MANIGNTIM:
-   mp_fwdm->SetManIgntimMap(mp_view->mp_TablesPanel->GetManIgntimMap(false));
+   mp_fwdm->SetManIgntimMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetManIgntimMap(false));
    break;
   case TYPE_MAP_TMP2_CURVE:
-   mp_fwdm->SetTmp2CurveMap(mp_view->mp_TablesPanel->GetTmp2CurveMap(false));
+   mp_fwdm->SetTmp2CurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetTmp2CurveMap(false));
    break;
   case TYPE_MAP_CRKCLT_CORR:
-   mp_fwdm->SetCrkTempMap(mp_view->mp_TablesPanel->GetCrkTempMap(false));
+   mp_fwdm->SetCrkTempMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrkTempMap(false));
    break;
   case TYPE_MAP_EH_PAUSE:
-   mp_fwdm->SetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(false));
+   mp_fwdm->SetEHPauseMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetEHPauseMap(false));
    break;
   case TYPE_MAP_CRANKING_THRD:
-   mp_fwdm->SetCrankingThrdMap(mp_view->mp_TablesPanel->GetCrankingThrdMap(false));
+   mp_fwdm->SetCrankingThrdMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrankingThrdMap(false));
    break;
   case TYPE_MAP_CRANKING_TIME:
-   mp_fwdm->SetCrankingTimeMap(mp_view->mp_TablesPanel->GetCrankingTimeMap(false));
+   mp_fwdm->SetCrankingTimeMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCrankingTimeMap(false));
    break;
   case TYPE_MAP_SMAPABAN_THRD:
-   mp_fwdm->SetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(false));
+   mp_fwdm->SetSmapabanThrdMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetSmapabanThrdMap(false));
    break;
   case TYPE_MAP_KNOCK_ZONE:
-   mp_fwdm->SetKnockZoneMap(mp_view->mp_TablesPanel->GetKnockZoneMap(false));
+   mp_fwdm->SetKnockZoneMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetKnockZoneMap(false));
    break;
   case TYPE_MAP_LAMBDA_ZONE:
-   mp_fwdm->SetLambdaZoneMap(mp_view->mp_TablesPanel->GetLambdaZoneMap(false));
+   mp_fwdm->SetLambdaZoneMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLambdaZoneMap(false));
    break;
   case TYPE_MAP_GRTS_CURVE:
-   mp_fwdm->SetGrtsCurveMap(mp_view->mp_TablesPanel->GetGrtsCurveMap(false));
+   mp_fwdm->SetGrtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrtsCurveMap(false));
    break;
   case TYPE_MAP_FTLS_CURVE:
-   mp_fwdm->SetFtlsCurveMap(mp_view->mp_TablesPanel->GetFtlsCurveMap(false));
+   mp_fwdm->SetFtlsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtlsCurveMap(false));
    break;
   case TYPE_MAP_FTLSCOR:
-   mp_fwdm->SetFtlsCorMap(mp_view->mp_TablesPanel->GetFtlsCorMap(false));
+   mp_fwdm->SetFtlsCorMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtlsCorMap(false));
    break;
   case TYPE_MAP_EGTS_CURVE:
-   mp_fwdm->SetEgtsCurveMap(mp_view->mp_TablesPanel->GetEgtsCurveMap(false));
+   mp_fwdm->SetEgtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetEgtsCurveMap(false));
    break;
   case TYPE_MAP_OPS_CURVE:
-   mp_fwdm->SetOpsCurveMap(mp_view->mp_TablesPanel->GetOpsCurveMap(false));
+   mp_fwdm->SetOpsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetOpsCurveMap(false));
    break;
   case TYPE_MAP_GRHEAT_DUTY:
-   mp_fwdm->SetGrHeatDutyMap(mp_view->mp_TablesPanel->GetGrHeatDutyMap(false));
+   mp_fwdm->SetGrHeatDutyMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrHeatDutyMap(false));
    break;
   case TYPE_MAP_PWMIAC_UCOEF:
-   mp_fwdm->SetPwmIacUCoefMap(mp_view->mp_TablesPanel->GetPwmIacUCoefMap(false));
+   mp_fwdm->SetPwmIacUCoefMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPwmIacUCoefMap(false));
    break;
   case TYPE_MAP_AFTSTR_STRK0:
-   mp_fwdm->SetAftstrStrk0Map(mp_view->mp_TablesPanel->GetAftstrStrk0Map(false));
+   mp_fwdm->SetAftstrStrk0Map(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAftstrStrk0Map(false));
    break;
   case TYPE_MAP_AFTSTR_STRK1:
-   mp_fwdm->SetAftstrStrk1Map(mp_view->mp_TablesPanel->GetAftstrStrk1Map(false));
+   mp_fwdm->SetAftstrStrk1Map(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetAftstrStrk1Map(false));
    break;
   case TYPE_MAP_GRVDELAY:
-   mp_fwdm->SetGrValDelMap(mp_view->mp_TablesPanel->GetGrValDelMap(false));
+   mp_fwdm->SetGrValDelMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetGrValDelMap(false));
    break;
   case TYPE_MAP_MANINJPWC:
-   mp_fwdm->SetManInjPwcMap(mp_view->mp_TablesPanel->GetManInjPwcMap(false));
+   mp_fwdm->SetManInjPwcMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetManInjPwcMap(false));
    break;
   case TYPE_MAP_MAF_CURVE:
-   mp_fwdm->SetMAFCurveMap(mp_view->mp_TablesPanel->GetMAFCurveMap(false));
+   mp_fwdm->SetMAFCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetMAFCurveMap(false));
    break;
   case TYPE_MAP_FTS_CURVE:
-   mp_fwdm->SetFtsCurveMap(mp_view->mp_TablesPanel->GetFtsCurveMap(false));
+   mp_fwdm->SetFtsCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFtsCurveMap(false));
    break;
   case TYPE_MAP_FUELDENS_CORR:
-   mp_fwdm->SetFuelDensCorrMap(mp_view->mp_TablesPanel->GetFuelDensCorrMap(false));
+   mp_fwdm->SetFuelDensCorrMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetFuelDensCorrMap(false));
    break;
   case TYPE_MAP_XTAU_XFACC:
-   mp_fwdm->SetXtauXfAccMap(mp_view->mp_TablesPanel->GetXtauXfAccMap(false));
+   mp_fwdm->SetXtauXfAccMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauXfAccMap(false));
    break;
   case TYPE_MAP_XTAU_XFDEC:
-   mp_fwdm->SetXtauXfDecMap(mp_view->mp_TablesPanel->GetXtauXfDecMap(false));
+   mp_fwdm->SetXtauXfDecMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauXfDecMap(false));
    break;
   case TYPE_MAP_XTAU_TFACC:
-   mp_fwdm->SetXtauTfAccMap(mp_view->mp_TablesPanel->GetXtauTfAccMap(false));
+   mp_fwdm->SetXtauTfAccMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauTfAccMap(false));
    break;
   case TYPE_MAP_XTAU_TFDEC:
-   mp_fwdm->SetXtauTfDecMap(mp_view->mp_TablesPanel->GetXtauTfDecMap(false));
+   mp_fwdm->SetXtauTfDecMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetXtauTfDecMap(false));
    break;
   case TYPE_MAP_INJNONLINP:
-   mp_fwdm->SetInjNonLinPMap(mp_view->mp_TablesPanel->GetInjNonLinPMap(false));
+   mp_fwdm->SetInjNonLinPMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetInjNonLinPMap(false));
    break;
   case TYPE_MAP_INJNONLING:
-   mp_fwdm->SetInjNonLinGMap(mp_view->mp_TablesPanel->GetInjNonLinGMap(false));
+   mp_fwdm->SetInjNonLinGMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetInjNonLinGMap(false));
    break;
  }
 }
@@ -1673,7 +1684,7 @@ void CFirmwareTabController::OnFunSetSelectionChanged(int i_selected_index)
  if (m_current_funset_index != -1)
  { //только если в списке выбрано
   SetViewChartsValues();
-  mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
+  mp_view->mp_TablesPanel->mp_ButtonsPanel->TransformValues(); //transform values in some maps before they will be rendered for user
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
@@ -1774,7 +1785,7 @@ void CFirmwareTabController::OnParamDeskChangeInTab(void)
  if (descriptor==FUNSET_PAR)
  {
   SECU3IO::FunSetPar &params = (SECU3IO::FunSetPar&)paramdata;
-  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true); //force update
+  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true); //force update
  }
 }
 
@@ -1886,14 +1897,18 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  cntr.AttachFWDM(mp_fwdm);
  if (IDOK == cntr.Edit())
  {
-  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
-  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
-  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
+  //write grids back
+  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetRPMGrid());
+  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCLTGrid());
+  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetLoadGrid());
+  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetRPMGrid());
+  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCLTGrid());
+  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLoadGrid());
 
   //apply load axis's grid settings for all related maps
   SECU3IO::FunSetPar params;
   mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
-  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
 
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
@@ -2080,84 +2095,84 @@ void CFirmwareTabController::OnCESettingsButton(void)
 
 void CFirmwareTabController::OnChangeSettingsMapEd(void)
 {
- mp_settings->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
- mp_view->mp_ParamDeskDlg->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
- mp_settings->SetActiveVEMap(mp_view->mp_TablesPanel->GetActiveVEMap());
+ mp_settings->SetITEdMode(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITEdMode());
+ mp_view->mp_ParamDeskDlg->SetITEdMode(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetITEdMode());
+ mp_settings->SetActiveVEMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetActiveVEMap());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mptms.m_start_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_START);
- mptms.m_idle_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_IDLE);
- mptms.m_work_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_WORK);
- mptms.m_temp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
- mptms.m_tempi_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_TEMPI_CORR);
- mptms.m_ve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
- mptms.m_ve2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_VE2);
- mptms.m_afr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
- mptms.m_crnk_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);
- mptms.m_wrmp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_WRMP);
- mptms.m_dead_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_DEAD);
- mptms.m_idlr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLR);
- mptms.m_idlc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLC);
- mptms.m_thrass_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_THRASS);
- mptms.m_aetps_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AETPS);
- mptms.m_aemap_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AEMAP);
- mptms.m_aerpm_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AERPM);
- mptms.m_aftstr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AFTSTR);
- mptms.m_it_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IT);
- mptms.m_itrpm_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ITRPM);
- mptms.m_rigid_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_RIGID);
- mptms.m_egocrv_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_EGOCRV);
- mptms.m_iacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACC);
- mptms.m_iaccw_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACCW);
- mptms.m_iatclt_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IATCLT);
- mptms.m_tpsswt_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_TPSSWT);
- mptms.m_gtsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GTSC);
- mptms.m_gpsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
- mptms.m_atsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
- mptms.m_pwm1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM1);
- mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
- mptms.m_iacmat_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
- mptms.m_tpszon_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_TPSZON);
- mptms.m_cylmult_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CYLMULT);
- mptms.m_cyladd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CYLADD);
+ mptms.m_start_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_START);
+ mptms.m_idle_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_IDLE);
+ mptms.m_work_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_WORK);
+ mptms.m_temp_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
+ mptms.m_tempi_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMPI_CORR);
+ mptms.m_ve_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
+ mptms.m_ve2_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_VE2);
+ mptms.m_afr_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
+ mptms.m_crnk_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);
+ mptms.m_wrmp_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_WRMP);
+ mptms.m_dead_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_DEAD);
+ mptms.m_idlr_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IDLR);
+ mptms.m_idlc_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IDLC);
+ mptms.m_thrass_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_THRASS);
+ mptms.m_aetps_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AETPS);
+ mptms.m_aemap_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AEMAP);
+ mptms.m_aerpm_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AERPM);
+ mptms.m_aftstr_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AFTSTR);
+ mptms.m_it_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IT);
+ mptms.m_itrpm_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_ITRPM);
+ mptms.m_rigid_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_RIGID);
+ mptms.m_egocrv_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_EGOCRV);
+ mptms.m_iacc_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACC);
+ mptms.m_iaccw_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACCW);
+ mptms.m_iatclt_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IATCLT);
+ mptms.m_tpsswt_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_TPSSWT);
+ mptms.m_gtsc_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_GTSC);
+ mptms.m_gpsc_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
+ mptms.m_atsc_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
+ mptms.m_pwm1_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_PWM1);
+ mptms.m_pwm2_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_PWM2);
+ mptms.m_iacmat_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
+ mptms.m_tpszon_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_TPSZON);
+ mptms.m_cylmult_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CYLMULT);
+ mptms.m_cyladd_map = mp_view->mp_TablesPanel->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CYLADD);
  //separate
- mptms.m_attenuator_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_ATTENUATOR);
- mptms.m_dwellcntrl_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DWELLCNTRL);
- mptms.m_cts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CTS_CURVE);
- mptms.m_ats_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_ATS_CURVE);
- mptms.m_ats_aac_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_ATS_CORR);
- mptms.m_gasdose_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GASDOSE);
- mptms.m_barocorr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_BAROCORR);
- mptms.m_manigntim_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MANIGNTIM);
- mptms.m_tmp2_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_TMP2_CURVE);
- mptms.m_crktemp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRKCLT_CORR);
- mptms.m_eh_pause_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_EH_PAUSE);
- mptms.m_cranking_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRANKING_THRD);
- mptms.m_cranking_time_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRANKING_TIME);
- mptms.m_smapaban_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_SMAPABAN_THRD);
- mptms.m_knock_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_KNOCK_ZONE);
- mptms.m_grts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRTS_CURVE);
- mptms.m_grheat_duty_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRHEAT_DUTY);
- mptms.m_pwmiac_ucoef_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWMIAC_UCOEF);
- mptms.m_aftstr_strk0_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK0);
- mptms.m_aftstr_strk1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK1);
- mptms.m_grvaldel_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_GRVDELAY);
- mptms.m_ftls_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTLS_CURVE);
- mptms.m_egts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_EGTS_CURVE);
- mptms.m_ops_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_OPS_CURVE);
- mptms.m_maninjpwc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MANINJPWC);
- mptms.m_mafcurve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_MAF_CURVE);
- mptms.m_ftlscor_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTLSCOR);
- mptms.m_lambda_zone_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_LAMBDA_ZONE);
- mptms.m_fts_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FTS_CURVE);
- mptms.m_fueldens_corr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_FUELDENS_CORR);
- mptms.m_xtau_xfacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_XFACC);
- mptms.m_xtau_xfdec_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_XFDEC);
- mptms.m_xtau_tfacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_TFACC);
- mptms.m_xtau_tfdec_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_XTAU_TFDEC);
- mptms.m_injnonlinp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJNONLINP);
- mptms.m_injnonling_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJNONLING);
+ mptms.m_attenuator_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_ATTENUATOR);
+ mptms.m_dwellcntrl_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_DWELLCNTRL);
+ mptms.m_cts_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CTS_CURVE);
+ mptms.m_ats_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_ATS_CURVE);
+ mptms.m_ats_aac_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_ATS_CORR);
+ mptms.m_gasdose_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GASDOSE);
+ mptms.m_barocorr_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_BAROCORR);
+ mptms.m_manigntim_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_MANIGNTIM);
+ mptms.m_tmp2_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_TMP2_CURVE);
+ mptms.m_crktemp_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CRKCLT_CORR);
+ mptms.m_eh_pause_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_EH_PAUSE);
+ mptms.m_cranking_thrd_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CRANKING_THRD);
+ mptms.m_cranking_time_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CRANKING_TIME);
+ mptms.m_smapaban_thrd_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_SMAPABAN_THRD);
+ mptms.m_knock_zone_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_KNOCK_ZONE);
+ mptms.m_grts_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GRTS_CURVE);
+ mptms.m_grheat_duty_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GRHEAT_DUTY);
+ mptms.m_pwmiac_ucoef_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_PWMIAC_UCOEF);
+ mptms.m_aftstr_strk0_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK0);
+ mptms.m_aftstr_strk1_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK1);
+ mptms.m_grvaldel_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GRVDELAY);
+ mptms.m_ftls_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FTLS_CURVE);
+ mptms.m_egts_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_EGTS_CURVE);
+ mptms.m_ops_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_OPS_CURVE);
+ mptms.m_maninjpwc_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_MANINJPWC);
+ mptms.m_mafcurve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_MAF_CURVE);
+ mptms.m_ftlscor_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FTLSCOR);
+ mptms.m_lambda_zone_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_LAMBDA_ZONE);
+ mptms.m_fts_curve_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FTS_CURVE);
+ mptms.m_fueldens_corr_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FUELDENS_CORR);
+ mptms.m_xtau_xfacc_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_XFACC);
+ mptms.m_xtau_xfdec_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_XFDEC);
+ mptms.m_xtau_tfacc_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_TFACC);
+ mptms.m_xtau_tfdec_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_TFDEC);
+ mptms.m_injnonlinp_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_INJNONLINP);
+ mptms.m_injnonling_map = mp_view->mp_TablesPanel->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_INJNONLING);
 
  mp_settings->SetMapPtMovStep(mptms);
 }

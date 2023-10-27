@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file TablesSetPanelEvents.cpp
+/** \file SeptabsPanelEvents.cpp
  * \author Alexey A. Shabelnikov
  */
 
@@ -28,13 +28,37 @@
 #include "DLLLinkedFunctions.h"
 #include "io-core/secu3io.h"
 #include "MapIds.h"
-#include "TablesSetPanel.h"
-#include "ui-core/ToolTipCtrlEx.h"
+#include "SeptabsPanel.h"
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeAttenuatorTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeSettingsCME(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+ {
+  if (_this->m_md[i].state)
+  {
+   if (_this->Is3DMap(i))  
+    _this->m_md[i].ptMovStep = DLL::Chart3DGetPtMovingStep(_this->m_md[i].handle);
+   else
+    _this->m_md[i].ptMovStep = DLL::Chart2DGetPtMovingStep(_this->m_md[i].handle);
+  }
+ }
+
+ if (_this->m_OnChangeSettings)
+  _this->m_OnChangeSettings();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeAttenuatorTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -46,9 +70,9 @@ void __cdecl CTablesSetPanel::OnChangeAttenuatorTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseAttenuatorTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseAttenuatorTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -62,9 +86,9 @@ void __cdecl CTablesSetPanel::OnCloseAttenuatorTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeDwellCntrlTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeDwellCntrlTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -76,9 +100,9 @@ void __cdecl CTablesSetPanel::OnChangeDwellCntrlTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseDwellCntrlTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseDwellCntrlTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -92,9 +116,9 @@ void __cdecl CTablesSetPanel::OnCloseDwellCntrlTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeCTSCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeCTSCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -106,9 +130,9 @@ void __cdecl CTablesSetPanel::OnChangeCTSCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseCTSCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseCTSCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -122,9 +146,9 @@ void __cdecl CTablesSetPanel::OnCloseCTSCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeATSCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeATSCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -136,9 +160,9 @@ void __cdecl CTablesSetPanel::OnChangeATSCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseATSCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseATSCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -152,9 +176,9 @@ void __cdecl CTablesSetPanel::OnCloseATSCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeATSAACTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeATSAACTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -166,9 +190,9 @@ void __cdecl CTablesSetPanel::OnChangeATSAACTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseATSAACTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseATSAACTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -182,9 +206,9 @@ void __cdecl CTablesSetPanel::OnCloseATSAACTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param)
+void __cdecl CSeptabsPanel::OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //WTF?
@@ -198,9 +222,9 @@ void __cdecl CTablesSetPanel::OnGetYAxisLabel(LPTSTR io_label_string, int index,
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param)
+void __cdecl CSeptabsPanel::OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //WTF?
@@ -210,9 +234,9 @@ void __cdecl CTablesSetPanel::OnGetXAxisLabel(LPTSTR io_label_string, int index,
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -227,9 +251,9 @@ void __cdecl CTablesSetPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, fl
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeATSXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeATSXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -244,9 +268,9 @@ void __cdecl CTablesSetPanel::OnChangeATSXAxisEdit(void* i_param, int i_type, fl
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeGasdoseTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeGasdoseTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -258,9 +282,9 @@ void __cdecl CTablesSetPanel::OnChangeGasdoseTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseGasdoseTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseGasdoseTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -274,9 +298,9 @@ void __cdecl CTablesSetPanel::OnCloseGasdoseTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeBarocorrTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeBarocorrTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -288,9 +312,9 @@ void __cdecl CTablesSetPanel::OnChangeBarocorrTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseBarocorrTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseBarocorrTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -304,9 +328,9 @@ void __cdecl CTablesSetPanel::OnCloseBarocorrTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeBarocorrXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeBarocorrXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -325,9 +349,9 @@ void __cdecl CTablesSetPanel::OnChangeBarocorrXAxisEdit(void* i_param, int i_typ
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeManIgntimTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeManIgntimTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -339,9 +363,9 @@ void __cdecl CTablesSetPanel::OnChangeManIgntimTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseManIgntimTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseManIgntimTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -355,9 +379,9 @@ void __cdecl CTablesSetPanel::OnCloseManIgntimTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeTmp2CurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeTmp2CurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -369,9 +393,9 @@ void __cdecl CTablesSetPanel::OnChangeTmp2CurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseTmp2CurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseTmp2CurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -385,9 +409,9 @@ void __cdecl CTablesSetPanel::OnCloseTmp2CurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeTmp2CurveXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeTmp2CurveXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -407,9 +431,9 @@ void __cdecl CTablesSetPanel::OnChangeTmp2CurveXAxisEdit(void* i_param, int i_ty
 
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeCrkTempTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeCrkTempTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -421,9 +445,9 @@ void __cdecl CTablesSetPanel::OnChangeCrkTempTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseCrkTempTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseCrkTempTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -437,9 +461,9 @@ void __cdecl CTablesSetPanel::OnCloseCrkTempTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeEHPauseTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeEHPauseTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -451,9 +475,9 @@ void __cdecl CTablesSetPanel::OnChangeEHPauseTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseEHPauseTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseEHPauseTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -467,9 +491,9 @@ void __cdecl CTablesSetPanel::OnCloseEHPauseTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationAttenuatorTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationAttenuatorTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -481,9 +505,9 @@ void __cdecl CTablesSetPanel::OnWndActivationAttenuatorTable(void* i_param, long
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationDwellCntrlTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationDwellCntrlTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -495,9 +519,9 @@ void __cdecl CTablesSetPanel::OnWndActivationDwellCntrlTable(void* i_param, long
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationCTSCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationCTSCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -509,9 +533,9 @@ void __cdecl CTablesSetPanel::OnWndActivationCTSCurveTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationATSCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationATSCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -523,9 +547,9 @@ void __cdecl CTablesSetPanel::OnWndActivationATSCurveTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationATSAACTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationATSAACTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -537,9 +561,9 @@ void __cdecl CTablesSetPanel::OnWndActivationATSAACTable(void* i_param, long cmd
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationGasdoseTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationGasdoseTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -551,9 +575,9 @@ void __cdecl CTablesSetPanel::OnWndActivationGasdoseTable(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationBarocorrTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationBarocorrTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -565,9 +589,9 @@ void __cdecl CTablesSetPanel::OnWndActivationBarocorrTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationManIgntimTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationManIgntimTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -579,9 +603,9 @@ void __cdecl CTablesSetPanel::OnWndActivationManIgntimTable(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationTmp2CurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationTmp2CurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -593,9 +617,9 @@ void __cdecl CTablesSetPanel::OnWndActivationTmp2CurveTable(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationCrkTempTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationCrkTempTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -607,9 +631,9 @@ void __cdecl CTablesSetPanel::OnWndActivationCrkTempTable(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationEHPauseTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationEHPauseTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -621,9 +645,9 @@ void __cdecl CTablesSetPanel::OnWndActivationEHPauseTable(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeCrankingThrdMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeCrankingThrdMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -635,9 +659,9 @@ void __cdecl CTablesSetPanel::OnChangeCrankingThrdMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseCrankingThrdMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseCrankingThrdMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -651,9 +675,9 @@ void __cdecl CTablesSetPanel::OnCloseCrankingThrdMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationCrankingThrdMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationCrankingThrdMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -665,9 +689,9 @@ void __cdecl CTablesSetPanel::OnWndActivationCrankingThrdMap(void* i_param, long
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeCrankingTimeMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeCrankingTimeMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -679,9 +703,9 @@ void __cdecl CTablesSetPanel::OnChangeCrankingTimeMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseCrankingTimeMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseCrankingTimeMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -695,9 +719,9 @@ void __cdecl CTablesSetPanel::OnCloseCrankingTimeMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationCrankingTimeMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationCrankingTimeMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -709,9 +733,9 @@ void __cdecl CTablesSetPanel::OnWndActivationCrankingTimeMap(void* i_param, long
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeSmapabanThrdMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeSmapabanThrdMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -723,9 +747,9 @@ void __cdecl CTablesSetPanel::OnChangeSmapabanThrdMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseSmapabanThrdMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseSmapabanThrdMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -739,9 +763,9 @@ void __cdecl CTablesSetPanel::OnCloseSmapabanThrdMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationSmapabanThrdMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationSmapabanThrdMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -753,9 +777,9 @@ void __cdecl CTablesSetPanel::OnWndActivationSmapabanThrdMap(void* i_param, long
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeKnockZoneMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeKnockZoneMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -767,9 +791,9 @@ void __cdecl CTablesSetPanel::OnChangeKnockZoneMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseKnockZoneMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseKnockZoneMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -783,9 +807,9 @@ void __cdecl CTablesSetPanel::OnCloseKnockZoneMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationKnockZoneMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationKnockZoneMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -797,9 +821,9 @@ void __cdecl CTablesSetPanel::OnWndActivationKnockZoneMap(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeGrtsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeGrtsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -811,9 +835,9 @@ void __cdecl CTablesSetPanel::OnChangeGrtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseGrtsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseGrtsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -827,9 +851,9 @@ void __cdecl CTablesSetPanel::OnCloseGrtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeGrtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeGrtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -848,9 +872,9 @@ void __cdecl CTablesSetPanel::OnChangeGrtsCurveXAxisEdit(void* i_param, int i_ty
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationGrtsCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationGrtsCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -862,9 +886,9 @@ void __cdecl CTablesSetPanel::OnWndActivationGrtsCurveTable(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeGrHeatDutyTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeGrHeatDutyTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -876,9 +900,9 @@ void __cdecl CTablesSetPanel::OnChangeGrHeatDutyTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseGrHeatDutyTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseGrHeatDutyTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -892,9 +916,9 @@ void __cdecl CTablesSetPanel::OnCloseGrHeatDutyTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationGrHeatDutyTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationGrHeatDutyTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -906,9 +930,9 @@ void __cdecl CTablesSetPanel::OnWndActivationGrHeatDutyTable(void* i_param, long
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangePwmIacUCoefMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangePwmIacUCoefMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -920,9 +944,9 @@ void __cdecl CTablesSetPanel::OnChangePwmIacUCoefMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnClosePwmIacUCoefMap(void* i_param)
+void __cdecl CSeptabsPanel::OnClosePwmIacUCoefMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -936,9 +960,9 @@ void __cdecl CTablesSetPanel::OnClosePwmIacUCoefMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationPwmIacUCoefMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationPwmIacUCoefMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -950,9 +974,9 @@ void __cdecl CTablesSetPanel::OnWndActivationPwmIacUCoefMap(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeAftstrStrk0Map(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeAftstrStrk0Map(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -964,9 +988,9 @@ void __cdecl CTablesSetPanel::OnChangeAftstrStrk0Map(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseAftstrStrk0Map(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseAftstrStrk0Map(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -980,9 +1004,9 @@ void __cdecl CTablesSetPanel::OnCloseAftstrStrk0Map(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationAftstrStrk0Map(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationAftstrStrk0Map(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -994,9 +1018,9 @@ void __cdecl CTablesSetPanel::OnWndActivationAftstrStrk0Map(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeAftstrStrk1Map(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeAftstrStrk1Map(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1008,9 +1032,9 @@ void __cdecl CTablesSetPanel::OnChangeAftstrStrk1Map(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseAftstrStrk1Map(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseAftstrStrk1Map(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1024,9 +1048,9 @@ void __cdecl CTablesSetPanel::OnCloseAftstrStrk1Map(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationAftstrStrk1Map(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationAftstrStrk1Map(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1038,9 +1062,9 @@ void __cdecl CTablesSetPanel::OnWndActivationAftstrStrk1Map(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeGrValDelMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeGrValDelMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1052,9 +1076,9 @@ void __cdecl CTablesSetPanel::OnChangeGrValDelMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseGrValDelMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseGrValDelMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1068,9 +1092,9 @@ void __cdecl CTablesSetPanel::OnCloseGrValDelMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationGrValDelMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationGrValDelMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1082,9 +1106,9 @@ void __cdecl CTablesSetPanel::OnWndActivationGrValDelMap(void* i_param, long cmd
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeFtlsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeFtlsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1096,9 +1120,9 @@ void __cdecl CTablesSetPanel::OnChangeFtlsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseFtlsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseFtlsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1112,9 +1136,9 @@ void __cdecl CTablesSetPanel::OnCloseFtlsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeFtlsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeFtlsCurveXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1133,9 +1157,9 @@ void __cdecl CTablesSetPanel::OnChangeFtlsCurveXAxisEdit(void* i_param, int i_ty
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationFtlsCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationFtlsCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1147,9 +1171,9 @@ void __cdecl CTablesSetPanel::OnWndActivationFtlsCurveTable(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeEgtsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeEgtsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1161,9 +1185,9 @@ void __cdecl CTablesSetPanel::OnChangeEgtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseEgtsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseEgtsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1177,9 +1201,9 @@ void __cdecl CTablesSetPanel::OnCloseEgtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeEgtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeEgtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1198,9 +1222,9 @@ void __cdecl CTablesSetPanel::OnChangeEgtsCurveXAxisEdit(void* i_param, int i_ty
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationEgtsCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationEgtsCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1212,9 +1236,9 @@ void __cdecl CTablesSetPanel::OnWndActivationEgtsCurveTable(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeOpsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeOpsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1226,9 +1250,9 @@ void __cdecl CTablesSetPanel::OnChangeOpsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseOpsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseOpsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1242,9 +1266,9 @@ void __cdecl CTablesSetPanel::OnCloseOpsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeOpsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeOpsCurveXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1263,9 +1287,9 @@ void __cdecl CTablesSetPanel::OnChangeOpsCurveXAxisEdit(void* i_param, int i_typ
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationOpsCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationOpsCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1277,9 +1301,9 @@ void __cdecl CTablesSetPanel::OnWndActivationOpsCurveTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeManInjPwcTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeManInjPwcTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1291,9 +1315,9 @@ void __cdecl CTablesSetPanel::OnChangeManInjPwcTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseManInjPwcTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseManInjPwcTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1307,9 +1331,9 @@ void __cdecl CTablesSetPanel::OnCloseManInjPwcTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationManInjPwcTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationManInjPwcTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1321,9 +1345,9 @@ void __cdecl CTablesSetPanel::OnWndActivationManInjPwcTable(void* i_param, long 
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeMAFCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeMAFCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1335,9 +1359,9 @@ void __cdecl CTablesSetPanel::OnChangeMAFCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseMAFCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseMAFCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1351,9 +1375,9 @@ void __cdecl CTablesSetPanel::OnCloseMAFCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeMAFCurveXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeMAFCurveXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1372,9 +1396,9 @@ void __cdecl CTablesSetPanel::OnChangeMAFCurveXAxisEdit(void* i_param, int i_typ
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationMAFCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationMAFCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1386,9 +1410,9 @@ void __cdecl CTablesSetPanel::OnWndActivationMAFCurveTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeFtlsCorTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeFtlsCorTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1400,9 +1424,9 @@ void __cdecl CTablesSetPanel::OnChangeFtlsCorTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseFtlsCorTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseFtlsCorTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1416,9 +1440,9 @@ void __cdecl CTablesSetPanel::OnCloseFtlsCorTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationFtlsCorTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationFtlsCorTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1430,9 +1454,9 @@ void __cdecl CTablesSetPanel::OnWndActivationFtlsCorTable(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeLambdaZoneMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeLambdaZoneMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1444,9 +1468,9 @@ void __cdecl CTablesSetPanel::OnChangeLambdaZoneMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseLambdaZoneMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseLambdaZoneMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1460,9 +1484,9 @@ void __cdecl CTablesSetPanel::OnCloseLambdaZoneMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationLambdaZoneMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationLambdaZoneMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1474,9 +1498,9 @@ void __cdecl CTablesSetPanel::OnWndActivationLambdaZoneMap(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeFtsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeFtsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1488,9 +1512,9 @@ void __cdecl CTablesSetPanel::OnChangeFtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseFtsCurveTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseFtsCurveTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1504,9 +1528,9 @@ void __cdecl CTablesSetPanel::OnCloseFtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeFtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
+void __cdecl CSeptabsPanel::OnChangeFtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1525,9 +1549,9 @@ void __cdecl CTablesSetPanel::OnChangeFtsCurveXAxisEdit(void* i_param, int i_typ
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationFtsCurveTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationFtsCurveTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1539,9 +1563,9 @@ void __cdecl CTablesSetPanel::OnWndActivationFtsCurveTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeFuelDensCorrTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeFuelDensCorrTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1553,9 +1577,9 @@ void __cdecl CTablesSetPanel::OnChangeFuelDensCorrTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseFuelDensCorrTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseFuelDensCorrTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1569,9 +1593,9 @@ void __cdecl CTablesSetPanel::OnCloseFuelDensCorrTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationFuelDensCorrTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationFuelDensCorrTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1583,9 +1607,9 @@ void __cdecl CTablesSetPanel::OnWndActivationFuelDensCorrTable(void* i_param, lo
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeXtauXfAccMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeXtauXfAccMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1597,9 +1621,9 @@ void __cdecl CTablesSetPanel::OnChangeXtauXfAccMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseXtauXfAccMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseXtauXfAccMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1613,9 +1637,9 @@ void __cdecl CTablesSetPanel::OnCloseXtauXfAccMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationXtauXfAccMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationXtauXfAccMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1627,9 +1651,9 @@ void __cdecl CTablesSetPanel::OnWndActivationXtauXfAccMap(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeXtauXfDecMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeXtauXfDecMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1641,9 +1665,9 @@ void __cdecl CTablesSetPanel::OnChangeXtauXfDecMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseXtauXfDecMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseXtauXfDecMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1657,9 +1681,9 @@ void __cdecl CTablesSetPanel::OnCloseXtauXfDecMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationXtauXfDecMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationXtauXfDecMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1671,9 +1695,9 @@ void __cdecl CTablesSetPanel::OnWndActivationXtauXfDecMap(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeXtauTfAccMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeXtauTfAccMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1685,9 +1709,9 @@ void __cdecl CTablesSetPanel::OnChangeXtauTfAccMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseXtauTfAccMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseXtauTfAccMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1701,9 +1725,9 @@ void __cdecl CTablesSetPanel::OnCloseXtauTfAccMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationXtauTfAccMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationXtauTfAccMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1715,9 +1739,9 @@ void __cdecl CTablesSetPanel::OnWndActivationXtauTfAccMap(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeXtauTfDecMap(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeXtauTfDecMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1729,9 +1753,9 @@ void __cdecl CTablesSetPanel::OnChangeXtauTfDecMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseXtauTfDecMap(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseXtauTfDecMap(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1745,9 +1769,9 @@ void __cdecl CTablesSetPanel::OnCloseXtauTfDecMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationXtauTfDecMap(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationXtauTfDecMap(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1759,9 +1783,9 @@ void __cdecl CTablesSetPanel::OnWndActivationXtauTfDecMap(void* i_param, long cm
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeInjNonLinPTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeInjNonLinPTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1773,9 +1797,9 @@ void __cdecl CTablesSetPanel::OnChangeInjNonLinPTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseInjNonLinPTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseInjNonLinPTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1789,9 +1813,9 @@ void __cdecl CTablesSetPanel::OnCloseInjNonLinPTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationInjNonLinPTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationInjNonLinPTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1803,9 +1827,9 @@ void __cdecl CTablesSetPanel::OnWndActivationInjNonLinPTable(void* i_param, long
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeInjNonLinGTable(void* i_param)
+void __cdecl CSeptabsPanel::OnChangeInjNonLinGTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1817,9 +1841,9 @@ void __cdecl CTablesSetPanel::OnChangeInjNonLinGTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseInjNonLinGTable(void* i_param)
+void __cdecl CSeptabsPanel::OnCloseInjNonLinGTable(void* i_param)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -1833,9 +1857,9 @@ void __cdecl CTablesSetPanel::OnCloseInjNonLinGTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnWndActivationInjNonLinGTable(void* i_param, long cmd)
+void __cdecl CSeptabsPanel::OnWndActivationInjNonLinGTable(void* i_param, long cmd)
 {
- CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?

@@ -30,31 +30,25 @@
 #include "common/FastDelegate.h"
 #include "GridModeEditorIgnDlg.h"
 #include "GridModeEditorInjDlg.h"
+#include "TablesPanelBase.h"
 
-class CWndScroller;
 class CAutoTuneController;
-class CToolTipCtrlEx;
 
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
 
-class AFX_EXT_CLASS CButtonsPanel : public CDialog
+class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
 {
   typedef CDialog Super;
 
  public:
-  typedef fastdelegate::FastDelegate0<> EventHandler;
-  typedef fastdelegate::FastDelegate1<int> EventWithCode;
-  typedef fastdelegate::FastDelegate0<bool> EventResult;
-  typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
-  typedef fastdelegate::FastDelegate2<HWND, long> EventWithHWNDLong;
-
-  CButtonsPanel(bool enableAutoTune = false, bool onlineMode = false);   // standard constructor
+  CButtonsPanel(bool enableAutoTune = false, bool onlineMode = false, bool disable_vscroll = false);   // standard constructor
   virtual ~CButtonsPanel();
   virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   //note: use wnd_insert_after parameter to change tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
+  void SetPosition(const CRect& rc, CWnd* wnd_insert_after = NULL);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -92,9 +86,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetPwm1Map(bool i_original);
   float* GetPwm2Map(bool i_original);
   float* GetIACMATMap(bool i_original);
-  float* GetRPMGrid(void);
-  float* GetCLTGrid(void);
-  float* GetLoadGrid(void);
   float* GetVE2Map(bool i_original);
   float* GetTpszonMap(bool i_original);
   float* GetCylMultMap(bool i_original);
@@ -147,27 +138,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   int GetActiveVEMap(void) const;
 
   virtual void MakeChartsChildren(bool children);
-
-  void EnableToggleMapWnd(bool toggle);
-
-  virtual void CloseCharts(void);
-
-  virtual void ShowOpenedCharts(bool i_show);
-
-  float GetPtMovStep(int wndType);
-  void  SetPtMovStep(int wndType, float value);
+  void CloseCharts(void);
+  void ShowOpenedCharts(bool i_show);
 
   void SetSplitAngMode(bool mode);
-
-  void SetCSVSepSymbol(char sepsymb);
-
- public: //установка обработчиков событий
-  void setOnChangeSettings(EventHandler OnCB);
-  void setOnMapChanged(EventWithCode OnFunction);
-  void setOnCloseMapWnd(EventWithHWND OnFunction);
-  void setOnOpenMapWnd(EventWithHWND OnFunction); 
-  void setIsAllowed(EventResult IsFunction);
-  void setOnWndActivation(EventWithHWNDLong OnFunction); 
 
 // Implementation
  protected:
@@ -254,46 +228,16 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void _EnableCharts(bool enable);
 
-  //may be overloaded to change behaviour
-  virtual bool IsAllowed(void);
-
-  EventHandler  m_OnChangeSettings;
-  EventWithCode m_OnMapChanged;
-  EventWithHWND m_OnCloseMapWnd;
-  EventWithHWND m_OnOpenMapWnd;
-  EventResult   m_IsAllowed;
-  EventWithHWNDLong m_OnWndActivation;
-
-  int m_scrl_view;
  private:
   void _GetITModeRange(float& y1, float& y2);
   void OnChangeSettingsGME(void);
 
-  std::auto_ptr<CWndScroller> mp_scr;
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CGridModeEditorIgnDlg> mp_gridModeEditorIgnDlg;
   std::auto_ptr<CGridModeEditorInjDlg> mp_gridModeEditorInjDlg;
   std::auto_ptr<CAutoTuneController> mp_autoTuneCntr;
 
-protected:
-  struct MapData
-  {
-   MapData() : state(0), handle(NULL), ptMovStep(0.5f), mp_button(NULL)
-   { std::fill(original, original + 256, .0f); std::fill(active, active + 256, .0f); }
-   float original[256];
-   float active[256];
-   int state;
-   HWND handle;
-   float ptMovStep;
-   CButton *mp_button;
-  };
-
-  std::map<int, MapData> m_md;
-
+ private:
   static void __cdecl OnChangeSettingsCME(void* i_param);
-  static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
-  static void __cdecl OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param);
-private:
   static float __cdecl OnValueTransformITMap(void* i_param, float source, int direction);
 
   static void __cdecl OnChangeStartMap(void* i_param);
@@ -447,33 +391,16 @@ private:
   void OnGridMapChangedInj(int mapType);
   void OnGridMapClosedInj(HWND, int);
 
-  int m_charts_enabled;
-  ///////////////////////////////////////////////////////
-  float m_rpm_grid_values[16];
-  float m_clt_grid_values[16];
-  float m_load_grid_values[16];
-  ///////////////////////////////////////////////////////
   bool m_en_aa_indication;
   bool m_carb_afr;
   bool m_en_gas_corr;
-protected:
-  HWND _ChartParentHwnd(void);
-  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
-  void OnWndActivation(HWND i_hwnd, long cmd);
-
-  bool m_fuel_injection;
-  bool m_gasdose;
+ protected:
   bool m_choke_op_enabled;
 
   float m_ldaxMinVal;
   float m_ldaxMaxVal;
   int m_ldaxCfg;
   bool m_ldaxUseTable;
-
-  bool m_children_charts;
-
-  HWND m_openedChart;
-  bool m_toggleMapWnd;
   
   int m_it_mode;
   int m_active_ve;
@@ -481,4 +408,8 @@ protected:
   bool m_onlineMode;
   int m_ve2_map_func;
   std::vector<float> m_ve2_map_load_slots;
+
+  std::vector<int> m_btnMovIds;
+  bool m_initialized;
+  bool m_disable_vscroll;
 };
