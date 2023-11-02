@@ -2435,7 +2435,7 @@ void CButtonsPanel::OnSize( UINT nType, int cx, int cy )
   CRect rc1 = GDIHelpers::GetChildWndRect(m_md[TYPE_MAP_DA_START].mp_button);
   int c = da.ScaleX(8), half_id = TYPE_MAP_INJ_IDLR;
   
-  if ((cx - rc1.left) - rc1.Width() > rc1.Width())
+  if ((cx - rc1.left) - rc1.Width() > rc1.Width()*0.6f)
   {
    if (m_btnMovIds.empty())
    {//move
