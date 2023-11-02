@@ -143,6 +143,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
 
   void SetSplitAngMode(bool mode);
 
+  void EnableEmbedMapWnd(bool embed, const CRect& rc);
+
 // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

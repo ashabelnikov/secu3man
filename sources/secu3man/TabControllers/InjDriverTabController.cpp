@@ -94,7 +94,7 @@ CInjDriverTabController::~CInjDriverTabController()
 //изменились настройки программы!
 void CInjDriverTabController::OnSettingsChanged(int action)
 {
- if (action == 2) //child charts check in main menu
+ if (action == 2 || action == 3 || action == 4) //child charts check in main menu etc
   return;
 
  mp_view->SetVoltLineColor(mp_sett->GetVoltLineColor());

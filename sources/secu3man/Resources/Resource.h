@@ -764,3 +764,4 @@
 #define IDS_CE_TRIMTAB1_RADIOBOX_TT     4891
 #define IDS_CE_TRIMTAB2_RADIOBOX_TT     4892
 #define IDC_CE_TRIMTAB2_MAP             4893
+#define ID_APP_EMBED_MAPWND             4894

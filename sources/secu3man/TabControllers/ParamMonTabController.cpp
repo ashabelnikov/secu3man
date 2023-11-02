@@ -123,6 +123,9 @@ void CParamMonTabController::OnSettingsChanged(int action)
   return; 
  }
 
+ if (action==4)
+  return; 
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  if (action != 1)
  { //will be skipped if only ExFixtures check has been changed (see MainFrameController::OnAppSwitchDashboards() for more info)

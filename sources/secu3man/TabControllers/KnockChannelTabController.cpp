@@ -121,7 +121,7 @@ CKnockChannelTabController::~CKnockChannelTabController()
 //изменились настройки программы!
 void CKnockChannelTabController::OnSettingsChanged(int action)
 {
- if (action == 2) //child charts check in main menu
+ if (action == 2 || action == 3 || action == 4) //child charts check in main menu etc
   return;
 
  //включаем необходимый для данного контекста коммуникационный контроллер

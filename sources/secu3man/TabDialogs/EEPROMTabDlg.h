@@ -72,6 +72,7 @@ class CEEPROMTabDlg : public CTabDialog
 
   void EnableMakingChartsChildren(bool enable);
   void EnableToggleMapWnd(bool toggle);
+  void EnableEmbedMapWnd(bool embed);
 
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
   std::auto_ptr<CEEPROMContextMenuManager> mp_ContextMenuManager;
@@ -126,6 +127,7 @@ class CEEPROMTabDlg : public CTabDialog
 
   bool m_is_bl_items_available;
   bool m_initialized;
+  bool m_embed_charts;
 
   EventResult  m_IsEEPROMOpened;
   EventHandler m_OnOpenEEPROMFromFile;

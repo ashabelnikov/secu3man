@@ -37,6 +37,7 @@
 CTablesPanelBase::CTablesPanelBase()
 : mp_scr(new CWndScroller)
 , m_children_charts(false)
+, m_embed_charts(false)
 , m_toggleMapWnd(false)
 , m_openedChart(NULL)
 , m_fuel_injection(false)
@@ -118,6 +119,9 @@ void CTablesPanelBase::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(i_hwnd, i_mapType);
+
+ if (m_embed_charts)
+  ::SetWindowPos(i_hwnd, NULL, m_embed_rect.left, m_embed_rect.top, m_embed_rect.Width(), m_embed_rect.Height(), SWP_NOZORDER);  
 }
 
 void CTablesPanelBase::OnWndActivation(HWND i_hwnd, long cmd)
@@ -132,6 +136,23 @@ void CTablesPanelBase::OnWndActivation(HWND i_hwnd, long cmd)
 void CTablesPanelBase::EnableToggleMapWnd(bool toggle)
 {
  m_toggleMapWnd = toggle;
+}
+
+void CTablesPanelBase::EnableEmbedMapWnd(bool embed, const CRect& rc, int begin, int end)
+{
+ m_embed_charts = embed;
+ m_embed_rect = rc;
+
+ if (embed)
+ {
+  for(int i = begin; i <= end; ++i)
+  {
+   if (m_md[i].state && IsWindow(m_md[i].handle))
+   {
+    ::SetWindowPos(m_md[i].handle, NULL, rc.left, rc.top, rc.Width(), rc.Height(), SWP_NOZORDER);  
+   }
+  }
+ }
 }
 
 bool CTablesPanelBase::Is3DMap(int i)

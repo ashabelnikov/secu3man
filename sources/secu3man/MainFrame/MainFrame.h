@@ -57,6 +57,7 @@ class CMainFrame : public CFrameWnd
   void CheckOnAppSwitchDashboards(bool checked);
   void CheckOnChildCharts(bool checked);
   void CheckOnToggleMapWnd(bool checked);
+  void CheckOnEmbedMapWnd(bool checked);
   void EnableTab(int idx, bool i_enable);
 
   //устанавливают обработчики событий
@@ -86,6 +87,7 @@ class CMainFrame : public CFrameWnd
   void addOnAppSaveSettings(EventHandler i_OnFunction);
   void setOnChildCharts(EventHandler i_OnFunction);
   void setOnToggleMapWnd(EventHandler i_OnFunction);
+  void setOnEmbedMapWnd(EventHandler i_OnFunction);
   void setOnEditSettings(EventHandler i_OnFunction);
   void setOnHelp(EventHandler i_OnFunction);
 
@@ -120,6 +122,7 @@ protected:
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateEmbedMapWnd(CCmdUI* pCmdUI);
   afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
   afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
   afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
@@ -127,6 +130,7 @@ protected:
   LRESULT OnSysColorChange(WPARAM wParam, LPARAM lParam);
   afx_msg void OnChildCharts();
   afx_msg void OnToggleMapWnd();
+  afx_msg void OnEmbedMapWnd();
   afx_msg void OnHelp();
   DECLARE_MESSAGE_MAP()
 
@@ -159,6 +163,7 @@ private:
   std::vector<EventHandler> m_OnSaveSettings;
   EventHandler m_OnChildCharts;
   EventHandler m_OnToggleMapWnd;
+  EventHandler m_OnEmbedMapWnd;
   EventHandler m_OnEditSettings;
   EventHandler m_OnHelp;
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;

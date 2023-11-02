@@ -116,6 +116,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->addOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
  mp_view->setOnChildCharts(MakeDelegate(this, &MainFrameController::OnChildCharts));
  mp_view->setOnToggleMapWnd(MakeDelegate(this, &MainFrameController::OnToggleMapWnd));
+ mp_view->setOnEmbedMapWnd(MakeDelegate(this, &MainFrameController::OnEmbedMapWnd));
  mp_view->setOnEditSettings(MakeDelegate(this, &MainFrameController::OnEditSettings));
  mp_view->setOnHelp(MakeDelegate(this, &MainFrameController::OnHelp));
 }
@@ -514,6 +515,7 @@ void MainFrameController::OnAfterCreate(void)
 
  //set check's state
  mp_view->CheckOnToggleMapWnd(settings->GetToggleMapWnd());
+ mp_view->CheckOnEmbedMapWnd(settings->GetEmbedMapWnd());
 }
 
 void MainFrameController::OnGetInitialPos(CPoint& o_point)
@@ -578,6 +580,12 @@ void MainFrameController::OnChildCharts()
  mp_view->CheckOnChildCharts(cch);
  m_pAppSettingsManager->GetSettings()->SetChildCharts(cch);
  m_pCommunicationManager->NotifySettingsChanged(2); //only ChildCharts check changed
+ if (false==cch)
+ { //remove 'Embed maps' check
+  mp_view->CheckOnEmbedMapWnd(false);
+  m_pAppSettingsManager->GetSettings()->SetEmbedMapWnd(false);
+  m_pCommunicationManager->NotifySettingsChanged(4); //only Embed map check changed
+ }
 }
 
 void MainFrameController::OnToggleMapWnd()
@@ -586,6 +594,14 @@ void MainFrameController::OnToggleMapWnd()
  mp_view->CheckOnToggleMapWnd(tmw);
  m_pAppSettingsManager->GetSettings()->SetToggleMapWnd(tmw);
  m_pCommunicationManager->NotifySettingsChanged(3); //only Toggle map windows check changed
+}
+
+void MainFrameController::OnEmbedMapWnd()
+{
+ bool tmw = !m_pAppSettingsManager->GetSettings()->GetEmbedMapWnd();
+ mp_view->CheckOnEmbedMapWnd(tmw);
+ m_pAppSettingsManager->GetSettings()->SetEmbedMapWnd(tmw);
+ m_pCommunicationManager->NotifySettingsChanged(4); //only Embed map check changed
 }
 
 void MainFrameController::OnEditSettings()

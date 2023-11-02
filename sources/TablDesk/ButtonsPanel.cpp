@@ -1584,12 +1584,14 @@ void CButtonsPanel::OnGridModeEditingIgn()
   mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable, false==m_onlineMode); //force update in offline mode
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
   m_md[TYPE_MAP_GME_IGN_WND].state = 1;
+  m_md[TYPE_MAP_GME_IGN_WND].handle = mp_gridModeEditorIgnDlg->m_hWnd;
  }
  else
  {
   OnGridMapClosedIgn(mp_gridModeEditorIgnDlg->m_hWnd, TYPE_MAP_GME_IGN_WND);
   mp_gridModeEditorIgnDlg->DestroyWindow();
   mp_gridModeEditorIgnDlg.reset(NULL);
+  m_md[TYPE_MAP_GME_IGN_WND].handle = NULL;
  }
 }
 
@@ -1633,12 +1635,14 @@ void CButtonsPanel::OnGridModeEditingInj()
   if (mp_autoTuneCntr.get())
    mp_autoTuneCntr->Activate();
   m_md[TYPE_MAP_GME_INJ_WND].state = 1;
+  m_md[TYPE_MAP_GME_INJ_WND].handle = mp_gridModeEditorInjDlg->m_hWnd;
  }
  else
  {
   OnGridMapClosedInj(mp_gridModeEditorInjDlg->m_hWnd, TYPE_MAP_GME_INJ_WND);
   mp_gridModeEditorInjDlg->DestroyWindow();
   mp_gridModeEditorInjDlg.reset(NULL);
+  m_md[TYPE_MAP_GME_INJ_WND].handle = NULL;
  }
 }
 
@@ -2732,4 +2736,10 @@ void CButtonsPanel::OnShow(bool show)
   SetTimer(TIMER_ID, 250, NULL);
  else
   KillTimer(TIMER_ID);
+}
+
+void CButtonsPanel::EnableEmbedMapWnd(bool embed, const CRect& rc)
+{
+ CTablesPanelBase::EnableEmbedMapWnd(embed, rc, TYPE_MAP_SET_START, TYPE_MAP_SET_END);
+ CTablesPanelBase::EnableEmbedMapWnd(embed, rc, TYPE_MAP_GME_IGN_WND, TYPE_MAP_GME_INJ_WND);
 }

@@ -236,7 +236,10 @@ CDevDiagnostTabController::~CDevDiagnostTabController()
 //изменились настройки программы!
 void CDevDiagnostTabController::OnSettingsChanged(int action)
 {
- //включаем необходимый для данного контекста коммуникационный контроллер
+ if (action==2 || action==3 || action==4)
+  return; 
+
+ //turn on required communication controller
  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 }
 

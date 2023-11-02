@@ -48,6 +48,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_WM_CLOSE()
  ON_WM_GETMINMAXINFO()
  ON_WM_SYSCOMMAND()
+ ON_WM_ACTIVATEAPP()
+ ON_WM_DEVICECHANGE()
+ ON_MESSAGE(WM_SYSCOLORCHANGE, OnSysColorChange)
+
  ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
  ON_COMMAND(ID_APP_DEV_SITE, OnAppDevSite)
  ON_COMMAND(ID_APP_DEV_FORUM, OnAppDevForum)
@@ -66,18 +70,18 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_SAVESCR5SEC, OnAppSaveScreenshot5sec)
  ON_COMMAND(ID_APP_SAVEINI, OnAppSaveSettings)
  ON_COMMAND(ID_APP_EDITINI, OnAppEditSettings)
+ ON_COMMAND(ID_APP_CHILD_CHATRS, OnChildCharts)
+ ON_COMMAND(ID_APP_TOGGLE_MAPWND, OnToggleMapWnd)
+ ON_COMMAND(ID_APP_EMBED_MAPWND, OnEmbedMapWnd)
+ ON_COMMAND(ID_HELP, OnHelp)
+
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK1,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK2,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK3,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_SWITCH_DASHBOARD,OnUpdateOnAppSwitchDashboards)
- ON_WM_ACTIVATEAPP()
- ON_WM_DEVICECHANGE()
- ON_MESSAGE(WM_SYSCOLORCHANGE, OnSysColorChange)
- ON_COMMAND(ID_APP_CHILD_CHATRS, OnChildCharts)
- ON_COMMAND(ID_APP_TOGGLE_MAPWND, OnToggleMapWnd)
- ON_COMMAND(ID_HELP, OnHelp)
+ ON_UPDATE_COMMAND_UI(ID_APP_EMBED_MAPWND,OnUpdateEmbedMapWnd)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -349,6 +353,11 @@ void CMainFrame::setOnToggleMapWnd(EventHandler i_OnFunction)
  m_OnToggleMapWnd = i_OnFunction;
 }
 
+void CMainFrame::setOnEmbedMapWnd(EventHandler i_OnFunction)
+{
+ m_OnEmbedMapWnd = i_OnFunction;
+}
+
 void CMainFrame::setOnEditSettings(EventHandler i_OnFunction)
 {
  m_OnEditSettings = i_OnFunction;
@@ -494,6 +503,12 @@ void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
 void CMainFrame::OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(true);
+}
+
+void CMainFrame::OnUpdateEmbedMapWnd(CCmdUI* pCmdUI)
+{
+ bool enable = GetMenu()->GetMenuState(ID_APP_CHILD_CHATRS, MF_BYCOMMAND) & MF_CHECKED;
+ pCmdUI->Enable(enable);
 }
 
 void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
@@ -681,6 +696,12 @@ void CMainFrame::OnToggleMapWnd()
   m_OnToggleMapWnd();
 }
 
+void CMainFrame::OnEmbedMapWnd()
+{
+ if (m_OnEmbedMapWnd)
+  m_OnEmbedMapWnd();
+}
+
 void CMainFrame::CheckOnChildCharts(bool checked)
 {
  GetMenu()->CheckMenuItem(ID_APP_CHILD_CHATRS, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
@@ -689,6 +710,11 @@ void CMainFrame::CheckOnChildCharts(bool checked)
 void CMainFrame::CheckOnToggleMapWnd(bool checked)
 {
  GetMenu()->CheckMenuItem(ID_APP_TOGGLE_MAPWND, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
+}
+
+void CMainFrame::CheckOnEmbedMapWnd(bool checked)
+{
+ GetMenu()->CheckMenuItem(ID_APP_EMBED_MAPWND, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
 }
 
 void CMainFrame::EnableTab(int idx, bool i_enable)

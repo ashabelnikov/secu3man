@@ -139,6 +139,9 @@ CCheckEngineTabController::~CCheckEngineTabController()
 //изменились настройки программы!
 void CCheckEngineTabController::OnSettingsChanged(int action)
 {
+ if (action==2 || action==3 || action==4)
+  return; 
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  VERIFY(m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 }

@@ -113,6 +113,8 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   void ShowOpenedCharts(bool i_show);
   virtual void MakeChartsChildren(bool children);
 
+  void EnableEmbedMapWnd(bool embed, const CRect& rc);
+
  public: //set event handlers
   void setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
   void setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction);

@@ -107,6 +107,8 @@ class CAppSettingsModel : public ISettingsData
   virtual float GetFuelDensity1(void) const;
   virtual float GetFuelDensity2(void) const;
   virtual bool GetLogBinaryFmt(void) const;
+  virtual bool GetEmbedMapWnd(void) const;
+  virtual void SetEmbedMapWnd(bool toggle);
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -312,6 +314,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optChildCharts;
   OptField_t<bool> m_optPortAutoReopen;  
   OptField_t<int> m_optToggleMapWnd;
+  OptField_t<int> m_optEmbedMapWnd;
   OptField_t<bool> m_optExistingPorts;
   OptField_t<int> m_optToolTipTime;
   OptField_t<bool> m_optIniEdSyntax;

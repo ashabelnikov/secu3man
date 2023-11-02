@@ -133,7 +133,7 @@ CLogPlayerTabController::~CLogPlayerTabController()
 void CLogPlayerTabController::OnSettingsChanged(int action)
 {
  mp_tabCntr->OnSettingsChanged(action);
- if (action == 2 || action == 3)
+ if (action == 2 || action == 3 || action == 4)
   return;
 
  //включаем необходимый для данного контекста коммуникационный контроллер

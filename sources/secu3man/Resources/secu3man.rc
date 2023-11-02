@@ -42,6 +42,7 @@ BEGIN
         MENUITEM "Ночной режим", ID_APP_NIGHT_MODE
         MENUITEM "Дочерние окна таблиц", ID_APP_CHILD_CHATRS
         MENUITEM "Переключать окна таблиц", ID_APP_TOGGLE_MAPWND
+        MENUITEM "Встраивать окна таблиц", ID_APP_EMBED_MAPWND
     END
     POPUP "&Помощь"
     BEGIN
@@ -1013,6 +1014,7 @@ BEGIN
         MENUITEM "Night mode", ID_APP_NIGHT_MODE
         MENUITEM "Child windows", ID_APP_CHILD_CHATRS
         MENUITEM "Toggle map windows", ID_APP_TOGGLE_MAPWND
+        MENUITEM "Embed map windows", ID_APP_EMBED_MAPWND
     END
     POPUP "&Help"
     BEGIN

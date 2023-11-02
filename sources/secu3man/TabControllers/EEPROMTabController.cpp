@@ -131,6 +131,12 @@ void CEEPROMTabController::OnSettingsChanged(int action)
   return;
  }
 
+ if (action == 4)
+ {
+  mp_view->EnableEmbedMapWnd(mp_settings->GetEmbedMapWnd());
+  return;
+ }
+
  mp_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
@@ -170,6 +176,7 @@ void CEEPROMTabController::OnActivate(void)
 
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
+ mp_view->EnableEmbedMapWnd(mp_settings->GetEmbedMapWnd());
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_ParamDeskDlg->SetFuelDensity(mp_settings->GetFuelDensity1(), mp_settings->GetFuelDensity2());

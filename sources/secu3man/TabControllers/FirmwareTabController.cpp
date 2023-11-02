@@ -187,6 +187,12 @@ void CFirmwareTabController::OnSettingsChanged(int action)
   return;
  }
 
+ if (action == 4)
+ {
+  mp_view->EnableEmbedMapWnd(mp_settings->GetEmbedMapWnd());
+  return;
+ }
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
 
@@ -238,6 +244,7 @@ void CFirmwareTabController::OnActivate(void)
 
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
+ mp_view->EnableEmbedMapWnd(mp_settings->GetEmbedMapWnd());
 
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());

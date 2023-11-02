@@ -87,6 +87,7 @@ class AFX_EXT_CLASS CTablesPanelBase
   bool IsAllowed(void);
   bool Is3DMap(int i);
   virtual void MakeChartsChildren(bool children);
+  void EnableEmbedMapWnd(bool embed, const CRect& rc, int begin, int end);
 
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param);
@@ -111,6 +112,8 @@ class AFX_EXT_CLASS CTablesPanelBase
   bool m_fuel_injection;
 
   bool m_children_charts;
+  bool m_embed_charts;
+  CRect m_embed_rect;
   int m_charts_enabled;
 
  private:

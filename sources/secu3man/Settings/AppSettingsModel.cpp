@@ -65,6 +65,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optChildCharts(_T("ChildCharts"))
 , m_optPortAutoReopen(_T("PortAutoReopen"))
 , m_optToggleMapWnd(_T("ToggleMapWnd"))
+, m_optEmbedMapWnd(_T("EmbedMapWnd"))
 , m_optExistingPorts(_T("ExistingPorts"))
 , m_optToolTipTime(_T("ToolTipTime"))
 , m_optIniEdSyntax(_T("IniEditorSyntax"))
@@ -813,6 +814,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optChildCharts, _T("1"), 0, 1);
  os.ReadInt(m_optPortAutoReopen, _T("1"), 0, 1);
  os.ReadInt(m_optToggleMapWnd, _T("0"), 0, 1);
+ os.ReadInt(m_optEmbedMapWnd, _T("0"), 0, 1);
  os.ReadInt(m_optExistingPorts, _T("1"), 0, 1);
  os.ReadInt(m_optToolTipTime, _T("5000"), 1000, 60000);
  os.ReadInt(m_optIniEdSyntax, _T("1"), 0, 1);
@@ -1617,6 +1619,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Когда установлено в 1, только одно окно 2D или 3D графиков таблиц будет отображаться одновременно (кнопки будут переключаться). По умолчанию установленов в 0 (отключено)."));
  os.WriteInt(m_optToggleMapWnd); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("When set to 1, windows of maps will be embedded into free space of main window (only for 'Firmware data' and 'EEPROM' tabs). By default is set to 0 (disabled)."));
+ else
+  os.WriteComment(_T("Когда установлено в 1, окна таблиц будут встраиваться в свободное пространство главного окна (только для вкладок 'Данные прошивки' и 'EEPROM'). По умолчанию установленов в 0 (отключено)."));
+ os.WriteInt(m_optEmbedMapWnd); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("The time that the tooltips are displayed. Increase if you do not have time to read the tips"));
@@ -5885,6 +5893,16 @@ bool CAppSettingsModel::GetToggleMapWnd(void) const
 void CAppSettingsModel::SetToggleMapWnd(bool toggle)
 {
  m_optToggleMapWnd.value = toggle;
+}
+
+bool CAppSettingsModel::GetEmbedMapWnd(void) const
+{
+ return m_optEmbedMapWnd.value;
+}
+
+void CAppSettingsModel::SetEmbedMapWnd(bool embed)
+{
+ m_optEmbedMapWnd.value = embed;
 }
 
 int CAppSettingsModel::GetParamMonVert(void) const

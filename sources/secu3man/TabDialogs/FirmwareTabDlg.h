@@ -119,6 +119,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
 
   void EnableMakingChartsChildren(bool enable);
   void EnableToggleMapWnd(bool toggle);
+  void EnableEmbedMapWnd(bool embed);
 
 // Implementation
  protected:
@@ -222,6 +223,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   bool m_is_bl_items_available;
   bool m_is_app_items_available;
   bool m_initialized;
+  bool m_embed_charts;
 
   void _RegisterHotKeys(void);
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;

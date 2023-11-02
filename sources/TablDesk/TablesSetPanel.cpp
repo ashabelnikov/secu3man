@@ -240,6 +240,12 @@ void CTablesSetPanel::EnableToggleMapWnd(bool toggle)
  mp_SeptabsPanel->EnableToggleMapWnd(toggle);
 }
 
+void CTablesSetPanel::EnableEmbedMapWnd(bool embed, const CRect& rc)
+{
+ mp_ButtonsPanel->EnableEmbedMapWnd(embed, rc);
+ mp_SeptabsPanel->EnableEmbedMapWnd(embed, rc);
+}
+
 void CTablesSetPanel::OnShow(bool show)
 {
  mp_ButtonsPanel->OnShow(show);

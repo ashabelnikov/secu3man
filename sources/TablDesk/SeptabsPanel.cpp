@@ -2523,3 +2523,8 @@ void CSeptabsPanel::_EnableCharts(bool enable)
 
  m_charts_enabled = enable;
 }
+
+void CSeptabsPanel::EnableEmbedMapWnd(bool embed, const CRect& rc)
+{
+ CTablesPanelBase::EnableEmbedMapWnd(embed, rc, TYPE_MAP_SEP_START, TYPE_MAP_SEP_END);
+}

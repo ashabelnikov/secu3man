@@ -48,6 +48,7 @@ CEEPROMTabDlg::CEEPROMTabDlg()
 , mp_eeresetLink(new CLabel)
 , mp_eecontLink(new CLabel)
 , mp_eeusingLink(new CLabel)
+, m_embed_charts(false)
 {
  mp_ContextMenuManager->CreateContent();
 
@@ -433,6 +434,9 @@ void CEEPROMTabDlg::OnSize(UINT nType, int cx, int cy)
 
   rc1 = GDIHelpers::GetChildWndRect(mp_TablesPanel.get());
   mp_TablesPanel->SetWindowPos(NULL, 0, 0, rc1.Width(), pmb_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  if (m_embed_charts)
+   EnableEmbedMapWnd(m_embed_charts); //update children charts' windows
  }
 
  Super::OnSize(nType, cx, cy);
@@ -448,6 +452,19 @@ void CEEPROMTabDlg::EnableToggleMapWnd(bool toggle)
 {
  if (mp_TablesPanel.get() && ::IsWindow(mp_TablesPanel->m_hWnd))
   mp_TablesPanel->EnableToggleMapWnd(toggle);
+}
+
+void CEEPROMTabDlg::EnableEmbedMapWnd(bool embed)
+{
+ m_embed_charts = embed;
+ if (mp_TablesPanel.get() && ::IsWindow(mp_TablesPanel->m_hWnd))
+ {
+  CRect rc1 = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+  CRect cr;
+  GetClientRect(&cr);
+  CRect rc(rc1.right+6, cr.top, cr.right+6, cr.bottom);
+  mp_TablesPanel->EnableEmbedMapWnd(m_embed_charts, rc);
+ }
 }
 
 void CEEPROMTabDlg::OnEeresetLinkClick(void)

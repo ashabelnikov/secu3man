@@ -71,6 +71,7 @@ class MainFrameController : public IAPPEventHandler
   void OnFullScreen(bool i_what);
   void OnChildCharts();
   void OnToggleMapWnd();
+  void OnEmbedMapWnd();
   bool IsBeginLoggingAllowed(void);
   bool IsEndLoggingAllowed(void);
   bool OnClose(void);

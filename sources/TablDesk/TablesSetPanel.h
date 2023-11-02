@@ -71,6 +71,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CDialog
 
   void EnableToggleMapWnd(bool toggle);
 
+  void EnableEmbedMapWnd(bool embed, const CRect& rc);
+
   std::auto_ptr<CButtonsPanel> mp_ButtonsPanel;  //set of maps
   std::auto_ptr<CSeptabsPanel> mp_SeptabsPanel;  //group of separate maps
 
