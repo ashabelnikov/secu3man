@@ -172,10 +172,13 @@ void CTabController::CreateTabPage(bool create /* = false*/)
    return;
   }
 
-  mp_CurDlg = pPageData->pDialogClass;
+  CTabDialog *p_CurDlg = pPageData->pDialogClass;
   FitDialogSize(selection, !m_liveWnd);
   if (!create)
-   mp_CurDlg->OnShow(true);
+   p_CurDlg->OnShow(true);
+
+  if (!m_liveWnd)
+   mp_CurDlg = p_CurDlg;
  }
 }
 
