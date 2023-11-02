@@ -1953,6 +1953,8 @@ void CButtonsPanel::OnDestroy()
  Super::OnDestroy();
  KillTimer(TIMER_ID);
  mp_scr->Close();
+ m_initialized = false;
+ m_btnMovIds.clear();
 }
 
 void CButtonsPanel::UpdateOpenedCharts(void)
