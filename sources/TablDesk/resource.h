@@ -80,6 +80,7 @@
 #define IDC_TD_SETTABS_FRAME            5091
 #define IDC_TD_SEPTABS_FRAME            5092
 #define IDD_TD_SEPTABLES_PANEL          5093
+#define IDC_TD_SETIDX                   5094
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

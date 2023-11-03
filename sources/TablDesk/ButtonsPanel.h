@@ -145,6 +145,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
 
   void EnableEmbedMapWnd(bool embed, const CRect& rc);
 
+  void SetMapSetIndex(int idx);
+
 // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -397,6 +399,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   bool m_carb_afr;
   bool m_en_gas_corr;
  protected:
+  CStatic m_setidx;
   bool m_choke_op_enabled;
 
   float m_ldaxMinVal;

@@ -88,6 +88,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  mp_ButtonsPanel->Create(this);
  mp_ButtonsPanel->SetPosition(rect, &m_funset_listbox);
  mp_ButtonsPanel->ShowWindow(SW_SHOWNORMAL);
+ mp_ButtonsPanel->SetMapSetIndex(-1);
 
  //create dialog with separate maps
  rect = GDIHelpers::GetChildWndRect(this, IDC_TD_SEPTABS_FRAME);
@@ -155,6 +156,12 @@ void CTablesSetPanel::OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult)
 
   if (m_OnFunSetSelectionChanged)
    m_OnFunSetSelectionChanged(selected_index);
+
+  mp_ButtonsPanel->SetMapSetIndex(selected_index+1);
+ }
+ else
+ {
+  mp_ButtonsPanel->SetMapSetIndex(-1);
  }
 
  *pResult = 0;

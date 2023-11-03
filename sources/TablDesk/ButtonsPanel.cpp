@@ -134,6 +134,7 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_CYLADD_MAP, *m_md[TYPE_MAP_INJ_CYLADD].mp_button);
  DDX_Control(pDX, IDC_TD_GME_IGN_CHECK, *m_md[TYPE_MAP_GME_IGN_WND].mp_button); //pseudo map
  DDX_Control(pDX, IDC_TD_GME_INJ_CHECK, *m_md[TYPE_MAP_GME_INJ_WND].mp_button); //pseudo map
+ DDX_Control(pDX, IDC_TD_SETIDX, m_setidx);
 }
 
 BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
@@ -2744,4 +2745,14 @@ void CButtonsPanel::EnableEmbedMapWnd(bool embed, const CRect& rc)
 {
  CTablesPanelBase::EnableEmbedMapWnd(embed, rc, TYPE_MAP_SET_START, TYPE_MAP_SET_END);
  CTablesPanelBase::EnableEmbedMapWnd(embed, rc, TYPE_MAP_GME_IGN_WND, TYPE_MAP_GME_INJ_WND);
+}
+
+void CButtonsPanel::SetMapSetIndex(int idx)
+{
+ CString cs;
+ if (idx > 0)
+  cs.Format(_T("%d"), idx);
+ else
+  cs = _T("");
+ m_setidx.SetWindowText(cs);
 }
