@@ -90,6 +90,8 @@ class TForm3D : public TForm
   TBitBtn *ButtonAngleDown;
   TButton *Smoothing3x;
   TButton *Smoothing5x;
+  TButton *TrackLeft;
+  TButton *TrackRight;
   TPopupMenu *PopupMenu;
   TMenuItem *PM_ZeroAllPoints;
   TMenuItem *PM_Dup1stPoint;
@@ -156,6 +158,8 @@ class TForm3D : public TForm
   void __fastcall ButtonAngleDownClick(TObject *Sender);
   void __fastcall Smoothing3xClick(TObject *Sender);
   void __fastcall Smoothing5xClick(TObject *Sender);
+  void __fastcall TrackLeftClick(TObject *Sender);
+  void __fastcall TrackRightClick(TObject *Sender);
   void __fastcall OnZeroAllCurves(TObject *Sender);
   void __fastcall OnDuplicateThisCurve(TObject *Sender);
   void __fastcall OnZeroAllPoints(TObject *Sender);

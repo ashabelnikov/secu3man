@@ -59,7 +59,7 @@ object Form3D: TForm3D
   TextHeight = 13
   Scaled=True
   object LabelAfc: TLabel
-    Left = 25
+    Left = 10
     Top = 362
     Width = 137
     Height = 15
@@ -73,7 +73,7 @@ object Form3D: TForm3D
     Anchors = [akBottom]
   end
   object LabelAfv: TLabel
-    Left = 402
+    Left = 410
     Top = 362
     Width = 23
     Height = 15
@@ -87,6 +87,23 @@ object Form3D: TForm3D
     ParentFont = False
     Anchors = [akBottom]
   end
+  object TrackLeft: TButton
+    Left = 100
+    Top = 357
+    Width = 20
+    Height = 20
+    Caption = '<'
+    TabOrder = 5
+    ShowHint = True    
+    Anchors = [akBottom]
+    OnClick = TrackLeftClick
+    OnKeyDown = CtrlKeyDown
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+  end
   object TrackBarAf: TTrackBar
     Left = 120
     Top = 353
@@ -98,7 +115,7 @@ object Form3D: TForm3D
     Position = 1
     SelEnd = 0
     SelStart = 0
-    TabOrder = 5
+    TabOrder = 6
     ThumbLength = 15
     TickMarks = tmTopLeft
     TickStyle = tsAuto
@@ -107,13 +124,30 @@ object Form3D: TForm3D
     OnKeyDown = CtrlKeyDown
     Anchors = [akBottom]
   end
+  object TrackRight: TButton
+    Left = 400
+    Top = 357
+    Width = 20
+    Height = 20
+    Caption = '>'
+    TabOrder = 7
+    ShowHint = True    
+    Anchors = [akBottom]
+    OnClick = TrackRightClick
+    OnKeyDown = CtrlKeyDown
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+  end
   object CheckBox3d: TCheckBox
     Left = 455
     Top = 358
     Width = 50
     Height = 25
     Caption = '3D'
-    TabOrder = 6
+    TabOrder = 8
     ShowHint = True    
     OnClick = CheckBox3dClick
     OnKeyDown = CtrlKeyDown
@@ -130,7 +164,7 @@ object Form3D: TForm3D
     Width = 100
     Height = 25
     Caption = 'גטה סחאהט'
-    TabOrder = 7
+    TabOrder = 9
     ShowHint = True    
     OnClick = CheckBoxBvClick
     OnKeyDown = CtrlKeyDown

@@ -383,6 +383,8 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   Chart1->View3D  = true;
   MakeAllVisible();
   TrackBarAf->Enabled = false;
+  TrackLeft->Enabled = false;
+  TrackRight->Enabled = false;
   LabelAfv->Enabled = false;
   CheckBoxBv->Enabled = true;
   CheckBoxBvClick(NULL);
@@ -399,6 +401,8 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   Chart1->View3D = false;
   MakeOneVisible(m_air_flow_position);
   TrackBarAf->Enabled = true;
+  TrackLeft->Enabled = true;
+  TrackRight->Enabled = true;
   LabelAfv->Enabled = true;
   CheckBoxBv->Enabled = false;
   FillChart(0, 0);
@@ -1291,6 +1295,20 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
   if (m_pOnChange)
    m_pOnChange(m_param_on_change);
  }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::TrackLeftClick(TObject *Sender)
+{
+ TrackBarAf->Position--;
+ TrackBarAfChange(NULL);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::TrackRightClick(TObject *Sender)
+{
+ TrackBarAf->Position++;
+ TrackBarAfChange(NULL);
 }
 
 //---------------------------------------------------------------------------
