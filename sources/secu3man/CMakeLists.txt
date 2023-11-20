@@ -75,6 +75,7 @@ set(HEADERS
   TabControllers/PMMonitorController.h
   TabControllers/PMParamsController.h
   TabControllers/PMTablesController.h
+  TabControllers/PMSeptabsController.h
   TabControllers/TabControllersCommunicator.h
   TabControllers/EEPROMTabController.h
   TabControllers/MapWndScrPos.h
@@ -136,6 +137,7 @@ set(SOURCES
   TabControllers/PMMonitorController.cpp
   TabControllers/PMParamsController.cpp
   TabControllers/PMTablesController.cpp
+  TabControllers/PMSeptabsController.cpp
   TabControllers/TabcontrollersCommunicator.cpp
   TabControllers/EEPROMTabController.cpp
   TabControllers/MapWndScrPos.cpp

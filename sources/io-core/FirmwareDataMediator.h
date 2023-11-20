@@ -170,14 +170,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetCTSCurveMap(float* op_values, bool i_original = false);
   void SetCTSCurveMap(const float* i_values);
 
-  float GetCTSMapVoltageLimit(int i_type);
-  void  SetCTSMapVoltageLimit(int i_type, float i_value);
-
   void GetATSCurveMap(float* op_values, bool i_original = false);
   void SetATSCurveMap(const float* i_values);
-
-  float GetATSMapVoltageLimit(int i_type);
-  void  SetATSMapVoltageLimit(int i_type, float i_value);
 
   void GetRPMGridMap(float* op_values);
   void SetRPMGridMap(const float* i_values);
@@ -287,6 +281,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 
   void GetInjNonLinGMap(float* op_values, bool i_original = false);
   void SetInjNonLinGMap(const float* i_values);
+
+
+  void SetSepMap(int id, const float* ip_values);
+
 
   //Types of slots/plugs
   enum IOXtype

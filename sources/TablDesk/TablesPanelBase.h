@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <map>
+#include <vector>
 #include "common/FastDelegate.h"
 
 struct MapData
@@ -88,6 +89,7 @@ class AFX_EXT_CLASS CTablesPanelBase
   bool Is3DMap(int i);
   virtual void MakeChartsChildren(bool children);
   void EnableEmbedMapWnd(bool embed, const CRect& rc, int begin, int end);
+  void AlignButtons(CWnd *p_parent, int cx, int id1st, int id2nd, int idHalf, int begin, int end);
 
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param);
@@ -115,6 +117,9 @@ class AFX_EXT_CLASS CTablesPanelBase
   bool m_embed_charts;
   CRect m_embed_rect;
   int m_charts_enabled;
+
+  std::vector<int> m_btnMovIds;
+  bool m_disable_vscroll;
 
  private:
   float m_rpm_grid_values[16];

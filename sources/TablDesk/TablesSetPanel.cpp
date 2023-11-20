@@ -42,7 +42,7 @@ using namespace fastdelegate;
 
 CTablesSetPanel::CTablesSetPanel()
 : mp_ButtonsPanel(new CButtonsPanel(false, false, true))
-, mp_SeptabsPanel(new CSeptabsPanel)
+, mp_SeptabsPanel(new CSeptabsPanel(true, true, true, true))
 , mp_scr(new CWndScroller)
 {
  mp_ButtonsPanel->setIsAllowed(MakeDelegate(this, &CTablesSetPanel::IsAllowed));
@@ -93,7 +93,7 @@ BOOL CTablesSetPanel::OnInitDialog()
  //create dialog with separate maps
  rect = GDIHelpers::GetChildWndRect(this, IDC_TD_SEPTABS_FRAME);
  mp_SeptabsPanel->Create(this);
- mp_SeptabsPanel->SetPosition(rect.TopLeft().x, rect.TopLeft().y, mp_ButtonsPanel.get());
+ mp_SeptabsPanel->SetPosition(rect, mp_ButtonsPanel.get());
  mp_SeptabsPanel->ShowWindow(SW_SHOWNORMAL);
 
  //create a tooltip control and assign tooltips

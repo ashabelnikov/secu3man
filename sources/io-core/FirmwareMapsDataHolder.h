@@ -228,15 +228,13 @@ struct SECU3FWMapsItem
 struct FWMapsDataHolder
 {
  std::vector<SECU3FWMapsItem> maps;
- float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
- float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
- float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];
- float ctscurve_vlimits[2]; //voltage limits are stored together with table
- float atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];
- float atscurve_vlimits[2]; //voltage limits are stored together with table
  float rpm_slots[F_RPM_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
  float clt_slots[F_TMP_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
  float load_slots[F_LOAD_SLOTS]; //сетка нагрузки исполузуемая вместе с этими кривыми
+ float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
+ float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+ float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2]; //voltage limits are stored together with table
+ float atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2]; //voltage limits are stored together with table
  float ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];  //коррекция УОЗ по ДТВ
  float gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dosator position
  float barocorr_table[BAROCORR_SIZE+2]; //barometric correction
@@ -279,13 +277,11 @@ struct FWMapsDataHolder
   maps.assign(setNum, defval);
   std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(ctscurve_table, ctscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(ctscurve_vlimits, ctscurve_vlimits + 2, .0f);
+  std::fill(ctscurve_table, ctscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE+2, .0f);
   std::fill(rpm_slots, rpm_slots + F_RPM_SLOTS, .0f);
   std::fill(clt_slots, clt_slots + F_TMP_SLOTS, .0f);
   std::fill(load_slots, load_slots + F_LOAD_SLOTS, .0f);
-  std::fill(atscurve_table, atscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(atscurve_vlimits, atscurve_vlimits + 2, .0f);
+  std::fill(atscurve_table, atscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE+2, .0f);
   std::fill(ats_corr_table, ats_corr_table + ATS_CORR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(gasdose_pos_table, gasdose_pos_table + (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE), .0f);
   std::fill(barocorr_table, barocorr_table + BAROCORR_SIZE + 2, .0f);  

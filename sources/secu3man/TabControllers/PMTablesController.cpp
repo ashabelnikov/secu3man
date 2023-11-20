@@ -315,7 +315,7 @@ CPMTablesController::~CPMTablesController()
  delete m_omaps;
  delete m_maps_flags;
 
- m_td_changes_timer.KillTimer();
+ /*m_td_changes_timer.KillTimer();*/
 }
 
 //----------------------------------------------------------------
@@ -327,7 +327,7 @@ void CPMTablesController::OnActivate(void)
  mp_view->Enable(IsValidCache());
 
  //запускаем таймер по которому будет ограничиватьс€ частота посылки данных в SECU-3
- m_td_changes_timer.SetTimer(this, &CPMTablesController::OnTableDeskChangesTimer, 250);
+/* m_td_changes_timer.SetTimer(this, &CPMTablesController::OnTableDeskChangesTimer, 250);*/
 
  mp_view->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
@@ -374,7 +374,7 @@ void CPMTablesController::OnActivate(void)
 
 void CPMTablesController::OnDeactivate(void)
 {
- m_td_changes_timer.KillTimer();
+ /*m_td_changes_timer.KillTimer();*/
 }
 
 void CPMTablesController::Enable(bool state)
@@ -439,15 +439,18 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
    break;
 
   case 4:
+   {
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
-   if (i_descriptor != EDITAB_PAR)
-    mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR);
+   const EditTabPar* data = (const EditTabPar*)i_packet_data;
+   if (i_descriptor != EDITAB_PAR || (data->tab_id < TYPE_MAP_SET_START || data->tab_id > TYPE_MAP_SET_END))
+    mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR, 255); //<-- want all tables
    else
    {//ќчищаем флаги, сохран€ем прин€тые данные и идем на продолжение приема
     _ClearAcquisitionFlags();
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
     m_operation_state = 5;
+   }
    }
    break;
 
@@ -723,7 +726,6 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
    CString statusStr;
    statusStr.Format(MLL::LoadString(IDS_PM_WRITING_TABLES), i_mapType); 
    mp_sbar->SetInformationText(statusStr);
-   state = 0;   
    //store values of padding cells from cache
    packet.beginPadding = (packet.address > 0) ? _GetMap(i_mapType, false)[packet.address-1] : 0;
    packet.endPadding = (packet.address + packet.data_size) < _GetMapSize(i_mapType) ? _GetMap(i_mapType, false)[(packet.address + packet.data_size)] : 0;
@@ -733,6 +735,8 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
    //transfer copied values from view into cache (save modification)
    for(size_t i = 0; i < packet.data_size; ++i)
     _GetMap(i_mapType, false)[packet.address + i] = pMap[packet.address + i];
+   state = 0;   
+   packet.data_size = 0;
   }
  }
 }
@@ -899,6 +903,7 @@ void CPMTablesController::OnExportToS3F(void)
 //----------------------------------------------------------------
 void CPMTablesController::OnDataCollected(void)
 {
+ mp_view->SetModificationFlag(false);
  _ResetModification(); //original=current
  _MoveMapsToCharts(false);
  _MoveMapsToCharts(true);
@@ -913,10 +918,11 @@ void CPMTablesController::OnDataCollected(void)
  _SetTablesSetName(m_maps->name);
 }
 
+/*
 void CPMTablesController::OnTableDeskChangesTimer(void)
 {
  //todo
-}
+}*/
 
 void CPMTablesController::OnClose()
 {

@@ -208,7 +208,7 @@ void __cdecl CSeptabsPanel::OnCloseATSAACTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param)
+void __cdecl CSeptabsPanel::OnGetAttenuatorYAxisLabel(LPTSTR io_label_string, int index, void* i_param)
 {
  CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
  if (!_this)
@@ -224,18 +224,6 @@ void __cdecl CSeptabsPanel::OnGetYAxisLabel(LPTSTR io_label_string, int index, v
 }
 
 //------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //WTF?
-  return;
- }
- _stprintf(io_label_string, _T("")); //empty string
-}
-
-//------------------------------------------------------------------------
 void __cdecl CSeptabsPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, float i_value)
 {
  CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
@@ -245,11 +233,16 @@ void __cdecl CSeptabsPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, floa
   return;
  }
 
- _this->m_cts_curve_x_axis_limits[i_type] = i_value;
+if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetCTSCurveMap(false)[16 + i_type] = i_value;
 
  //allow controller to detect changes
- if (_this->m_OnCTSXAxisEditChanged)
-  _this->m_OnCTSXAxisEditChanged(i_type, i_value);
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_CTS_CURVE);
 }
 
 //------------------------------------------------------------------------
@@ -262,11 +255,16 @@ void __cdecl CSeptabsPanel::OnChangeATSXAxisEdit(void* i_param, int i_type, floa
   return;
  }
  
- _this->m_ats_curve_x_axis_limits[i_type] = i_value;
+ if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetATSCurveMap(false)[16 + i_type] = i_value;
 
  //allow controller to detect changes
- if (_this->m_OnATSXAxisEditChanged)
-  _this->m_OnATSXAxisEditChanged(i_type, i_value);
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_ATS_CURVE);
 }
 
 //------------------------------------------------------------------------

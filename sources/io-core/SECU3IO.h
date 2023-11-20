@@ -23,8 +23,7 @@
  * \author Alexey A. Shabelnikov
  */
 
-//Представление данных передаваемых между SECU и менеджером. Структуры данных представлены без привязки
-//к конкретной платформе - они абстрагированы
+//Representation of data being sent between SECU-3 unit and SECU-3 Manager
 #pragma once
 
 #include <utility>
@@ -403,7 +402,7 @@ namespace SECU3IO
  {
   unsigned char tab_id;                 //идентификатор таблицы(данных) в наборе
   unsigned int address;                 //адрес начала фрагмента данных в таблице
-  float table_data[32];                 //фрагмент данных (не более 16-ти значений)
+  float table_data[64];                 //фрагмент данных (не более 16-ти значений)
   TCHAR name_data[32];                  //содержит текстовую информацию
   unsigned int data_size;               //размер фрагмента данных
   float beginPadding;
@@ -447,6 +446,43 @@ namespace SECU3IO
  const int ETMT_CYLADD_MAP = 33;        //Inj. Addition
  const int ETMT_AEMAP_MAP = 34;         //AE MAP map
  const int ETMT_THRASS_MAP = 35;        //Throttle assistant map
+ //separate maps
+ const int ETMT_ATTENUATOR =   36;  //!<
+ const int ETMT_DWELLCNTRL =   37;  //!<
+ const int ETMT_CTS_CURVE  =   38;  //!<
+ const int ETMT_ATS_CURVE  =   39;  //!<
+ const int ETMT_ATS_CORR   =   40;  //!<
+ const int ETMT_GASDOSE    =   41;  //!<
+ const int ETMT_BAROCORR   =   42;  //!<
+ const int ETMT_MANIGNTIM  =   43;  //!<
+ const int ETMT_TMP2_CURVE =   44;  //!<
+ const int ETMT_CRKCLT_CORR=   45;  //!<
+ const int ETMT_EH_PAUSE    =  46;  //!<
+ const int ETMT_CRANKING_THRD = 47;  //!<
+ const int ETMT_CRANKING_TIME = 48;  //!<
+ const int ETMT_SMAPABAN_THRD = 49;  //!<
+ const int ETMT_KNOCK_ZONE   = 50;  //!<
+ const int ETMT_GRTS_CURVE   = 51;  //!<
+ const int ETMT_GRHEAT_DUTY  = 52;  //!<
+ const int ETMT_PWMIAC_UCOEF = 53;  //!<
+ const int ETMT_AFTSTR_STRK0 = 54;  //!<
+ const int ETMT_AFTSTR_STRK1 = 55;  //!<
+ const int ETMT_GRVDELAY     = 56;  //!<
+ const int ETMT_FTLS_CURVE   = 57;  //!<
+ const int ETMT_EGTS_CURVE   = 58;  //!<
+ const int ETMT_OPS_CURVE    = 59;  //!<
+ const int ETMT_MANINJPWC    = 60;  //!<
+ const int ETMT_MAF_CURVE    = 61;  //!<
+ const int ETMT_FTLSCOR      = 62;  //!<
+ const int ETMT_LAMBDA_ZONE  = 63;  //!<
+ const int ETMT_FTS_CURVE    = 64;  //!<
+ const int ETMT_FUELDENS_CORR = 65;  //!<
+ const int ETMT_XTAU_XFACC   = 66;  //!<
+ const int ETMT_XTAU_XFDEC   = 67;  //!<
+ const int ETMT_XTAU_TFACC   = 68;  //!<
+ const int ETMT_XTAU_TFDEC   = 69;  //!<
+ const int ETMT_INJNONLINP   = 70;  //!<
+ const int ETMT_INJNONLING   = 71;  //!<
 
  struct SepTabPar
  {

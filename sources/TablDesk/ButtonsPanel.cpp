@@ -217,6 +217,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CYLADD_MAP, OnUpdateViewCylAddMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GME_IGN_CHECK, OnUpdateGridModeEditingIgn) //pseudo map
  ON_UPDATE_COMMAND_UI(IDC_TD_GME_INJ_CHECK, OnUpdateGridModeEditingInj) //pseudo map
+ ON_UPDATE_COMMAND_UI(IDC_TD_SETIDX, OnUpdateControls)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1647,6 +1648,11 @@ void CButtonsPanel::OnGridModeEditingInj()
  }
 }
 
+void CButtonsPanel::OnUpdateControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(IsAllowed());
+}
+
 void CButtonsPanel::OnUpdateViewStartMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
@@ -2427,58 +2433,18 @@ void CButtonsPanel::SetPosition(const CRect& rc, CWnd* wnd_insert_after /*=NULL*
  SetWindowPos(wnd_insert_after, rc.left, rc.top, rc.Width(), rc.Height(), (wnd_insert_after ? 0 : SWP_NOZORDER));
 }
 
-void CButtonsPanel::OnSize( UINT nType, int cx, int cy )
+void CButtonsPanel::OnSize(UINT nType, int cx, int cy)
 {
  Super::OnSize(nType, cx, cy);
 
- DPIAware da;
-
  if (m_initialized)
  {
-  CRect rc1 = GDIHelpers::GetChildWndRect(m_md[TYPE_MAP_DA_START].mp_button);
-  int c = da.ScaleX(8), half_id = TYPE_MAP_INJ_IDLR;
-  
-  if ((cx - rc1.left) - rc1.Width() > rc1.Width()*0.6f)
-  {
-   if (m_btnMovIds.empty())
-   {//move
-    CRect rc2 = GDIHelpers::GetChildWndRect(m_md[TYPE_MAP_DA_IDLE].mp_button);
-    CRect rc3 = GDIHelpers::GetChildWndRect(m_md[half_id].mp_button);
-    int decr = (rc3.top - rc1.top) + (rc2.top - rc1.top);
-
-    for (int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
-    {
-     CRect rc4 = GDIHelpers::GetChildWndRect(m_md[i].mp_button);
-     if (rc4.top > rc3.top)
-      m_btnMovIds.push_back(i);
-    }  
-    for(size_t t = 0; t < m_btnMovIds.size(); ++t)
-    {
-     CRect rc = GDIHelpers::GetChildWndRect(m_md[m_btnMovIds[t]].mp_button);
-     m_md[m_btnMovIds[t]].mp_button->SetWindowPos(NULL, rc1.right + c, rc.top - decr, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-    }
-   }
-  }
-  else
-  {
-   if (!m_btnMovIds.empty())
-   {//restore
-    CRect rc2 = GDIHelpers::GetChildWndRect(m_md[TYPE_MAP_DA_IDLE].mp_button);
-    CRect rc3 = GDIHelpers::GetChildWndRect(m_md[half_id].mp_button);
-    int decr = (rc3.top - rc1.top) + (rc2.top - rc1.top);
-
-    for(size_t t = 0; t < m_btnMovIds.size(); ++t)
-    {
-     CRect rc = GDIHelpers::GetChildWndRect(m_md[m_btnMovIds[t]].mp_button);
-     m_md[m_btnMovIds[t]].mp_button->SetWindowPos(NULL, rc1.left, rc.top + decr, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-    }
-    m_btnMovIds.clear();   
-   }
-  }
+  AlignButtons(this, cx, TYPE_MAP_DA_START, TYPE_MAP_DA_IDLE, TYPE_MAP_INJ_IDLR,TYPE_MAP_SET_START, TYPE_MAP_SET_END);
  }
 
  if (mp_scr.get())
  {
+  DPIAware da;
   if (m_disable_vscroll)
    mp_scr->SetViewSize(cx, da.ScaleY(1));
   else

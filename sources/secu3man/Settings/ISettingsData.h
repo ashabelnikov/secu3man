@@ -32,6 +32,7 @@ struct WndSettings
 {
  int m_MainFrmWnd_X;  //main window x
  int m_MainFrmWnd_Y;  //main window y
+ //set of tables
  int m_StrtMapWnd_X;
  int m_StrtMapWnd_Y;
  int m_IdleMapWnd_X;
@@ -42,16 +43,6 @@ struct WndSettings
  int m_TempMapWnd_Y;
  int m_TempIdlMapWnd_X;
  int m_TempIdlMapWnd_Y;
- int m_AttenuatorMapWnd_X;
- int m_AttenuatorMapWnd_Y;
- int m_DwellCntrlMapWnd_X;
- int m_DwellCntrlMapWnd_Y;
- int m_CTSCurveMapWnd_X;
- int m_CTSCurveMapWnd_Y;
- int m_GridMapIgnWnd_X;
- int m_GridMapIgnWnd_Y;
- int m_GridMapInjWnd_X;
- int m_GridMapInjWnd_Y;
  int m_VEMapWnd_X;
  int m_VEMapWnd_Y;
  int m_VE2MapWnd_X;
@@ -70,10 +61,6 @@ struct WndSettings
  int m_IdlcMapWnd_Y;
  int m_ThrassMapWnd_X;
  int m_ThrassMapWnd_Y;
- int m_ATSCurvMapWnd_X;
- int m_ATSCurvMapWnd_Y;
- int m_ATSCorrMapWnd_X;
- int m_ATSCorrMapWnd_Y;
  int m_AETPSMapWnd_X;
  int m_AETPSMapWnd_Y;
  int m_AEMAPMapWnd_X;
@@ -82,8 +69,6 @@ struct WndSettings
  int m_AERPMMapWnd_Y;
  int m_AftstrMapWnd_X;
  int m_AftstrMapWnd_Y;
- int m_GasdoseMapWnd_X;
- int m_GasdoseMapWnd_Y;
  int m_ITMapWnd_X;
  int m_ITMapWnd_Y;
  int m_ITRPMMapWnd_X;
@@ -92,30 +77,57 @@ struct WndSettings
  int m_RigidMapWnd_Y;
  int m_EGOCrvMapWnd_X;
  int m_EGOCrvMapWnd_Y;
+ int m_GtscMapWnd_X;
+ int m_GtscMapWnd_Y;
+ int m_GpscMapWnd_X;
+ int m_GpscMapWnd_Y;
+ int m_TpsswtMapWnd_X;
+ int m_TpsswtMapWnd_Y;
+ int m_TpszonMapWnd_X;
+ int m_TpszonMapWnd_Y;
+ int m_AtscMapWnd_X;
+ int m_AtscMapWnd_Y;
+ int m_IATCLTMapWnd_X;
+ int m_IATCLTMapWnd_Y;
+ int m_IACMATMapWnd_X;
+ int m_IACMATMapWnd_Y;
  int m_IACCMapWnd_X;
  int m_IACCMapWnd_Y;
  int m_IACCWMapWnd_X;
  int m_IACCWMapWnd_Y;
- int m_IATCLTMapWnd_X;
- int m_IATCLTMapWnd_Y;
+ int m_Pwm1MapWnd_X;
+ int m_Pwm1MapWnd_Y;
+ int m_Pwm2MapWnd_X;
+ int m_Pwm2MapWnd_Y;
+ int m_CylMultMapWnd_X;
+ int m_CylMultMapWnd_Y;
+ int m_CylAddMapWnd_X;
+ int m_CylAddMapWnd_Y;
+ int m_GridMapIgnWnd_X; //group of ign. maps x
+ int m_GridMapIgnWnd_Y; //group of ign. maps y
+ int m_GridMapInjWnd_X; //group of inj. maps x
+ int m_GridMapInjWnd_Y; //group of inj. maps y
+ //group of separate maps
+ int m_AttenuatorMapWnd_X;
+ int m_AttenuatorMapWnd_Y;
+ int m_DwellCntrlMapWnd_X;
+ int m_DwellCntrlMapWnd_Y;
+ int m_CTSCurveMapWnd_X;
+ int m_CTSCurveMapWnd_Y;
+ int m_ATSCurvMapWnd_X;
+ int m_ATSCurvMapWnd_Y;
+ int m_ATSCorrMapWnd_X;
+ int m_ATSCorrMapWnd_Y;
+ int m_GasdoseMapWnd_X;
+ int m_GasdoseMapWnd_Y;
  int m_BarocorrMapWnd_X;
  int m_BarocorrMapWnd_Y;
  int m_ManIgntimMapWnd_X;
  int m_ManIgntimMapWnd_Y;
  int m_CESettingsWnd_X;
  int m_CESettingsWnd_Y;
- int m_TpsswtMapWnd_X;
- int m_TpsswtMapWnd_Y;
- int m_TpszonMapWnd_X;
- int m_TpszonMapWnd_Y;
  int m_Tmp2CurveMapWnd_X;
  int m_Tmp2CurveMapWnd_Y;
- int m_GtscMapWnd_X;
- int m_GtscMapWnd_Y;
- int m_GpscMapWnd_X;
- int m_GpscMapWnd_Y;
- int m_AtscMapWnd_X;
- int m_AtscMapWnd_Y;
  int m_CrkTempMapWnd_X;
  int m_CrkTempMapWnd_Y;
  int m_EHPauseMapWnd_X;
@@ -126,10 +138,6 @@ struct WndSettings
  int m_CrankingTimeMapWnd_Y;
  int m_SmapabanThrdMapWnd_X;
  int m_SmapabanThrdMapWnd_Y;
- int m_Pwm1MapWnd_X;
- int m_Pwm1MapWnd_Y;
- int m_Pwm2MapWnd_X;
- int m_Pwm2MapWnd_Y;
  int m_KnockZoneMapWnd_X;
  int m_KnockZoneMapWnd_Y;
  int m_GrtsCurveMapWnd_X;
@@ -144,8 +152,6 @@ struct WndSettings
  int m_AftstrStrk1MapWnd_Y;
  int m_GrValDelMapWnd_X;
  int m_GrValDelMapWnd_Y;
- int m_IACMATMapWnd_X;
- int m_IACMATMapWnd_Y;
  int m_FtlsCurveMapWnd_X;
  int m_FtlsCurveMapWnd_Y;
  int m_EgtsCurveMapWnd_X;
@@ -160,10 +166,6 @@ struct WndSettings
  int m_FtlsCorMapWnd_Y;
  int m_LambdaZoneMapWnd_X;
  int m_LambdaZoneMapWnd_Y;
- int m_CylMultMapWnd_X;
- int m_CylMultMapWnd_Y;
- int m_CylAddMapWnd_X;
- int m_CylAddMapWnd_Y;
  int m_FtsCurveMapWnd_X;
  int m_FtsCurveMapWnd_Y;
  int m_FuelDensCorrMapWnd_X;
@@ -187,6 +189,7 @@ struct WndSize
 {
  int m_MainFrmWnd_W; //main window width
  int m_MainFrmWnd_H; //main window height
+ //set of maps
  int m_StrtMapWnd_W;
  int m_StrtMapWnd_H;
  int m_IdleMapWnd_W;
@@ -197,16 +200,6 @@ struct WndSize
  int m_TempMapWnd_H;
  int m_TempIdlMapWnd_W;
  int m_TempIdlMapWnd_H;
- int m_AttenuatorMapWnd_W;
- int m_AttenuatorMapWnd_H;
- int m_DwellCntrlMapWnd_W;
- int m_DwellCntrlMapWnd_H;
- int m_CTSCurveMapWnd_W;
- int m_CTSCurveMapWnd_H;
- int m_GridMapIgnWnd_W;
- int m_GridMapIgnWnd_H;
- int m_GridMapInjWnd_W;
- int m_GridMapInjWnd_H;
  int m_VEMapWnd_W;
  int m_VEMapWnd_H;
  int m_VE2MapWnd_W;
@@ -225,10 +218,6 @@ struct WndSize
  int m_IdlcMapWnd_H;
  int m_ThrassMapWnd_W;
  int m_ThrassMapWnd_H;
- int m_ATSCurvMapWnd_W;
- int m_ATSCurvMapWnd_H;
- int m_ATSCorrMapWnd_W;
- int m_ATSCorrMapWnd_H;
  int m_AETPSMapWnd_W;
  int m_AETPSMapWnd_H;
  int m_AEMAPMapWnd_W;
@@ -237,8 +226,6 @@ struct WndSize
  int m_AERPMMapWnd_H;
  int m_AftstrMapWnd_W;
  int m_AftstrMapWnd_H;
- int m_GasdoseMapWnd_W;
- int m_GasdoseMapWnd_H;
  int m_ITMapWnd_W;
  int m_ITMapWnd_H;
  int m_ITRPMMapWnd_W;
@@ -247,30 +234,57 @@ struct WndSize
  int m_RigidMapWnd_H;
  int m_EGOCrvMapWnd_W;
  int m_EGOCrvMapWnd_H;
+ int m_IACMATMapWnd_W;
+ int m_IACMATMapWnd_H;
  int m_IACCMapWnd_W;
  int m_IACCMapWnd_H;
  int m_IACCWMapWnd_W;
  int m_IACCWMapWnd_H;
  int m_IATCLTMapWnd_W;
  int m_IATCLTMapWnd_H;
- int m_BarocorrMapWnd_W;
- int m_BarocorrMapWnd_H;
- int m_ManIgntimMapWnd_W;
- int m_ManIgntimMapWnd_H;
- int m_CESettingsWnd_W;
- int m_CESettingsWnd_H;
  int m_TpsswtMapWnd_W;
  int m_TpsswtMapWnd_H;
  int m_TpszonMapWnd_W;
  int m_TpszonMapWnd_H;
- int m_Tmp2CurveMapWnd_W;
- int m_Tmp2CurveMapWnd_H;
  int m_GtscMapWnd_W;
  int m_GtscMapWnd_H;
  int m_GpscMapWnd_W;
  int m_GpscMapWnd_H;
  int m_AtscMapWnd_W;
  int m_AtscMapWnd_H;
+ int m_Pwm1MapWnd_W;
+ int m_Pwm1MapWnd_H;
+ int m_Pwm2MapWnd_W;
+ int m_Pwm2MapWnd_H;
+ int m_CylMultMapWnd_W;
+ int m_CylMultMapWnd_H;
+ int m_CylAddMapWnd_W;
+ int m_CylAddMapWnd_H;
+ int m_GridMapIgnWnd_W; //group of ign. maps W
+ int m_GridMapIgnWnd_H; //group of ign. maps H
+ int m_GridMapInjWnd_W; //group of inj. maps W
+ int m_GridMapInjWnd_H; //group of inj. maps H
+ //group of separate maps
+ int m_AttenuatorMapWnd_W;
+ int m_AttenuatorMapWnd_H;
+ int m_DwellCntrlMapWnd_W;
+ int m_DwellCntrlMapWnd_H;
+ int m_CTSCurveMapWnd_W;
+ int m_CTSCurveMapWnd_H;
+ int m_ATSCurvMapWnd_W;
+ int m_ATSCurvMapWnd_H;
+ int m_ATSCorrMapWnd_W;
+ int m_ATSCorrMapWnd_H;
+ int m_GasdoseMapWnd_W;
+ int m_GasdoseMapWnd_H;
+ int m_BarocorrMapWnd_W;
+ int m_BarocorrMapWnd_H;
+ int m_ManIgntimMapWnd_W;
+ int m_ManIgntimMapWnd_H;
+ int m_CESettingsWnd_W;
+ int m_CESettingsWnd_H;
+ int m_Tmp2CurveMapWnd_W;
+ int m_Tmp2CurveMapWnd_H;
  int m_CrkTempMapWnd_W;
  int m_CrkTempMapWnd_H;
  int m_EHPauseMapWnd_W;
@@ -281,10 +295,6 @@ struct WndSize
  int m_CrankingTimeMapWnd_H;
  int m_SmapabanThrdMapWnd_W;
  int m_SmapabanThrdMapWnd_H;
- int m_Pwm1MapWnd_W;
- int m_Pwm1MapWnd_H;
- int m_Pwm2MapWnd_W;
- int m_Pwm2MapWnd_H;
  int m_KnockZoneMapWnd_W;
  int m_KnockZoneMapWnd_H;
  int m_GrtsCurveMapWnd_W;
@@ -299,8 +309,6 @@ struct WndSize
  int m_AftstrStrk1MapWnd_H;
  int m_GrValDelMapWnd_W;
  int m_GrValDelMapWnd_H;
- int m_IACMATMapWnd_W;
- int m_IACMATMapWnd_H;
  int m_FtlsCurveMapWnd_W;
  int m_FtlsCurveMapWnd_H;
  int m_EgtsCurveMapWnd_W;
@@ -315,10 +323,6 @@ struct WndSize
  int m_FtlsCorMapWnd_H;
  int m_LambdaZoneMapWnd_W;
  int m_LambdaZoneMapWnd_H;
- int m_CylMultMapWnd_W;
- int m_CylMultMapWnd_H;
- int m_CylAddMapWnd_W;
- int m_CylAddMapWnd_H;
  int m_FtsCurveMapWnd_W;
  int m_FtsCurveMapWnd_H;
  int m_FuelDensCorrMapWnd_W;

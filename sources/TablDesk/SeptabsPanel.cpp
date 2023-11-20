@@ -41,7 +41,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CSeptabsPanel dialog
 
-CSeptabsPanel::CSeptabsPanel()
+CSeptabsPanel::CSeptabsPanel(bool disable_vscroll /*= false*/, bool enable_fwconsts /*= false*/, bool enable_ceerr /*= false*/, bool enable_grids /*= false*/)
 : m_dwellcntrl_enabled(false)
 , m_cts_curve_enabled(false)
 , m_tmp2_curve_enabled(false)
@@ -56,6 +56,11 @@ CSeptabsPanel::CSeptabsPanel()
 , m_lambdazone_enabled(false)
 , m_fts_curve_enabled(false)
 , m_xtau_maps_enabled(false)
+, m_initialized(false)
+, m_disable_vscroll(disable_vscroll)
+, m_enable_fwconsts(enable_fwconsts)
+, m_enable_ceerr(enable_ceerr)
+, m_enable_grids(enable_grids)
 {
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
@@ -75,8 +80,6 @@ CSeptabsPanel::CSeptabsPanel()
  for(size_t i = 0; i < 64; ++i)
   m_mafcurve_slots[i] = (float)((5.0*i) / 63.0);
 */
- memset(m_cts_curve_x_axis_limits, 0, sizeof(float) * 2);
- memset(m_ats_curve_x_axis_limits, 0, sizeof(float) * 2);
 }
 
 CSeptabsPanel::~CSeptabsPanel()
@@ -184,8 +187,8 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATS_CURVE, OnUpdateViewATSCurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATS_MAP, OnUpdateViewATSAACMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_DWELL_CALC_BUTTON, OnUpdateViewDwellCntrlMap)
- ON_UPDATE_COMMAND_UI(IDC_TD_RPM_GRID_BUTTON, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_TD_FW_CONSTS_BUTTON, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_TD_RPM_GRID_BUTTON, OnUpdateControlsGRD)
+ ON_UPDATE_COMMAND_UI(IDC_TD_FW_CONSTS_BUTTON, OnUpdateControlsFWC)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUNSET_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_MAP_GROUPBOX, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GDP_MAP, OnUpdateViewGasdosePosMap)
@@ -232,6 +235,8 @@ BOOL CSeptabsPanel::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ m_initialized = true;
+
  //initialize window scroller
  mp_scr->Init(this);
 
@@ -241,6 +246,8 @@ BOOL CSeptabsPanel::OnInitDialog()
                               MAKEINTRESOURCE(IDB_GRID_FOCUSED), MAKEINTRESOURCE(IDB_GRID_DISABLED));
  m_fw_consts_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CONST_UP), MAKEINTRESOURCE(IDB_CONST_DOWN), 
                               MAKEINTRESOURCE(IDB_CONST_FOCUSED), MAKEINTRESOURCE(IDB_CONST_DISABLED));
+ m_edit_cesettings_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CES_UP), MAKEINTRESOURCE(IDB_CES_DOWN), 
+                              MAKEINTRESOURCE(IDB_CES_FOCUSED), MAKEINTRESOURCE(IDB_CES_DISABLED));
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -298,6 +305,8 @@ void CSeptabsPanel::OnDestroy()
 {
  Super::OnDestroy();
  mp_scr->Close();
+ m_initialized = false;
+ m_btnMovIds.clear();
 }
 
 void CSeptabsPanel::OnTimer(UINT nIDEvent)
@@ -308,18 +317,34 @@ void CSeptabsPanel::OnTimer(UINT nIDEvent)
  Super::OnTimer(nIDEvent);
 }
 
-void CSeptabsPanel::OnSize( UINT nType, int cx, int cy )
+void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
 {
  Super::OnSize(nType, cx, cy);
 
- DPIAware da;
+ if (m_initialized)
+ {
+  AlignButtons(this, cx, TYPE_MAP_DWELLCNTRL, TYPE_MAP_ATTENUATOR, TYPE_MAP_GASDOSE, TYPE_MAP_SEP_START, TYPE_MAP_SEP_END);
+ }
+
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(700));
+ {
+  DPIAware da;
+  if (m_disable_vscroll)
+   mp_scr->SetViewSize(cx, da.ScaleY(1));
+  else
+   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1200 : 650));
+ }
+
 }
 
 void CSeptabsPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
 {
  SetWindowPos(wnd_insert_after, x_pos, y_pos, 0, 0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
+}
+
+void CSeptabsPanel::SetPosition(const CRect& rc, CWnd* wnd_insert_after /*=NULL*/)
+{
+ SetWindowPos(wnd_insert_after, rc.left, rc.top, rc.Width(), rc.Height(), (wnd_insert_after ? 0 : SWP_NOZORDER));
 }
 
 void CSeptabsPanel::MakeChartsChildren(bool children)
@@ -378,7 +403,7 @@ void CSeptabsPanel::OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI)
 
 void CSeptabsPanel::OnUpdateCESettingsButton(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(IsAllowed());
+ pCmdUI->Enable(IsAllowed() && m_enable_ceerr);
 }
 
 void CSeptabsPanel::OnUpdateViewBarocorrMap(CCmdUI* pCmdUI)
@@ -462,6 +487,16 @@ void CSeptabsPanel::OnUpdateViewLambdaZoneMap(CCmdUI* pCmdUI)
 void CSeptabsPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(IsAllowed());
+}
+
+void CSeptabsPanel::OnUpdateControlsFWC(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(IsAllowed() && m_enable_fwconsts);
+}
+
+void CSeptabsPanel::OnUpdateControlsGRD(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(IsAllowed() && m_enable_grids);
 }
 
 void CSeptabsPanel::OnUpdateViewGrHeatDutyMap(CCmdUI* pCmdUI)
@@ -607,12 +642,12 @@ void CSeptabsPanel::UpdateOpenedCharts(void)
  {
   DLL::Chart2DUpdateYRange(m_md[TYPE_MAP_CTS_CURVE].handle, GetCLTGrid()[0], GetCLTGrid()[15]);
   DLL::Chart2DUpdate(m_md[TYPE_MAP_CTS_CURVE].handle, GetCTSCurveMap(true), GetCTSCurveMap(false));
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_CTS_CURVE].handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_CTS_CURVE].handle, 1, GetCTSCurveMap(false)[16], GetCTSCurveMap(false)[16+1]);
  }
  if (m_md[TYPE_MAP_ATS_CURVE].state)
  {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_ATS_CURVE].handle, GetATSCurveMap(true), GetATSCurveMap(false));
-  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_ATS_CURVE].handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_ATS_CURVE].handle, 1, GetATSCurveMap(false)[16], GetATSCurveMap(false)[16+1]);
  }
  if (m_md[TYPE_MAP_ATS_CORR].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_ATS_CORR].handle, GetATSAACMap(true), GetATSAACMap(false));
@@ -621,10 +656,16 @@ void CSeptabsPanel::UpdateOpenedCharts(void)
   DLL::Chart3DUpdate(m_md[TYPE_MAP_GASDOSE].handle, GetGasdosePosMap(true), GetGasdosePosMap(false));
 
  if (m_md[TYPE_MAP_BAROCORR].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_BAROCORR].handle, GetBarocorrMap(true), GetBarocorrMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_BAROCORR].handle, 1, GetBarocorrMap(false)[9], GetBarocorrMap(false)[9+1]);
+ }
 
  if (m_md[TYPE_MAP_TMP2_CURVE].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_TMP2_CURVE].handle, GetTmp2CurveMap(true), GetTmp2CurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_TMP2_CURVE].handle, 1, GetTmp2CurveMap(false)[16], GetTmp2CurveMap(false)[16+1]);
+ }
 
  if (m_md[TYPE_MAP_CRKCLT_CORR].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_CRKCLT_CORR].handle, GetCrkTempMap(true), GetCrkTempMap(false));
@@ -651,6 +692,7 @@ void CSeptabsPanel::UpdateOpenedCharts(void)
  {
   DLL::Chart2DUpdateYRange(m_md[TYPE_MAP_GRTS_CURVE].handle, GetCLTGrid()[0], GetCLTGrid()[15]);
   DLL::Chart2DUpdate(m_md[TYPE_MAP_GRTS_CURVE].handle, GetGrtsCurveMap(true), GetGrtsCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_GRTS_CURVE].handle, 1, GetGrtsCurveMap(false)[16], GetGrtsCurveMap(false)[16+1]);
  }
 
  if (m_md[TYPE_MAP_GRHEAT_DUTY].state)
@@ -669,19 +711,31 @@ void CSeptabsPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_GRVDELAY].handle, GetGrValDelMap(true), GetGrValDelMap(false));
 
  if (m_md[TYPE_MAP_FTLS_CURVE].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_FTLS_CURVE].handle, GetFtlsCurveMap(true), GetFtlsCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_FTLS_CURVE].handle, 1, GetFtlsCurveMap(false)[17], GetFtlsCurveMap(false)[17+1]);
+ }
 
  if (m_md[TYPE_MAP_EGTS_CURVE].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_EGTS_CURVE].handle, GetEgtsCurveMap(true), GetEgtsCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_EGTS_CURVE].handle, 1, GetEgtsCurveMap(false)[17], GetEgtsCurveMap(false)[17+1]);
+ }
 
  if (m_md[TYPE_MAP_OPS_CURVE].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_OPS_CURVE].handle, GetOpsCurveMap(true), GetOpsCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_OPS_CURVE].handle, 1, GetOpsCurveMap(false)[17], GetOpsCurveMap(false)[17+1]);
+ }
 
  if (m_md[TYPE_MAP_FTLSCOR].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_FTLSCOR].handle, GetFtlsCorMap(true), GetFtlsCorMap(false));
 
  if (m_md[TYPE_MAP_FTS_CURVE].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_FTS_CURVE].handle, GetFtsCurveMap(true), GetFtsCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_FTS_CURVE].handle, 1, GetFtsCurveMap(false)[17], GetFtsCurveMap(false)[17+1]);
+ }
 
  if (m_md[TYPE_MAP_FUELDENS_CORR].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_FUELDENS_CORR].handle, GetFuelDensCorrMap(true), GetFuelDensCorrMap(false));
@@ -703,6 +757,18 @@ void CSeptabsPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_INJNONLING].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJNONLING].handle, GetInjNonLinGMap(true), GetInjNonLinGMap(false));
+
+ if (m_md[TYPE_MAP_MAF_CURVE].state)
+ {
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_MAF_CURVE].handle, GetMAFCurveMap(true), GetMAFCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_MAF_CURVE].handle, 1, GetMAFCurveMap(false)[64+1], GetMAFCurveMap(false)[64+2]);
+ }
+
+ if (m_md[TYPE_MAP_MANIGNTIM].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_MANIGNTIM].handle, GetManIgntimMap(true), GetManIgntimMap(false));
+
+ if (m_md[TYPE_MAP_MANINJPWC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_MANINJPWC].handle, GetManInjPwcMap(true), GetManInjPwcMap(false));
 }
 
 void CSeptabsPanel::EnableDwellControl(bool enable)
@@ -891,7 +957,7 @@ void CSeptabsPanel::OnViewAttenuatorMap()
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle,OnCloseAttenuatorTable, this);
   DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationAttenuatorTable, this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 0, OnGetYAxisLabel, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 0, OnGetAttenuatorYAxisLabel, this);
   DLL::Chart2DSetAxisValuesFormat(md.handle, 0, _T("#0.00"));
   DLL::Chart2DInverseAxis(md.handle, 0, true);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
@@ -962,15 +1028,15 @@ void CSeptabsPanel::OnViewCTSCurveMap()
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CTS_CURVE_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeCTSXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabel, this);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeCTSXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(md.handle, OnChangeCTSCurveTable, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle, OnCloseCTSCurveTable, this);
   DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationCTSCurveTable, this);
   DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DUpdateAxisEdits(md.handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetCTSCurveMap(false)[16], GetCTSCurveMap(false)[16+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, TYPE_MAP_CTS_CURVE);
@@ -1001,15 +1067,15 @@ void CSeptabsPanel::OnViewATSCurveMap()
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_ATS_CURVE_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeATSXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabel, this);
+  DLL::Chart2DSetAxisEdits(md.handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeATSXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(md.handle, OnChangeATSCurveTable, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle, OnCloseATSCurveTable, this);
   DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationATSCurveTable, this);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(md.handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
+  DLL::Chart2DUpdateAxisEdits(md.handle, 1, GetATSCurveMap(false)[16], GetATSCurveMap(false)[16+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, TYPE_MAP_ATS_CURVE);
@@ -2162,7 +2228,7 @@ void CSeptabsPanel::OnViewInjNonLinPMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  const float bins_lims[5] = {0.0f, 3.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 3ms, inc 1%, 3 dec places, min diff 0.05ms
+  const float bins_lims[5] = {0.0f, 3.0f, 0.1f, 3.0f, 0.05f}; //min 0ms, max 3ms, inc 0.1, 3 dec places, min diff 0.05ms
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinPMap(true), GetInjNonLinPMap(false), 0.0, 3.0, bins_lims, 8,
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
@@ -2200,7 +2266,7 @@ void CSeptabsPanel::OnViewInjNonLinGMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  const float bins_lims[5] = {0.0f, 3.0f, 1.0f, 3.0f, 0.05f}; //min 0ms, max 3ms, inc 1%, 3 dec places, min diff 0.05ms
+  const float bins_lims[5] = {0.0f, 3.0f, 0.1f, 3.0f, 0.05f}; //min 0ms, max 3ms, inc 0.1, 3 dec places, min diff 0.05ms
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetInjNonLinGMap(true), GetInjNonLinGMap(false), 0.0, 3.0, bins_lims, 8,
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
@@ -2285,18 +2351,6 @@ float* CSeptabsPanel::GetATSCurveMap(bool i_original)
 float* CSeptabsPanel::GetATSAACMap(bool i_original)
 {
  return i_original ? m_md[TYPE_MAP_ATS_CORR].original : m_md[TYPE_MAP_ATS_CORR].active;
-}
-
-void CSeptabsPanel::SetCTSXAxisEdits(float i_begin, float i_end)
-{
- m_cts_curve_x_axis_limits[0] = i_begin;
- m_cts_curve_x_axis_limits[1] = i_end;	
-}
-
-void CSeptabsPanel::SetATSXAxisEdits(float i_begin, float i_end)
-{
- m_ats_curve_x_axis_limits[0] = i_begin;
- m_ats_curve_x_axis_limits[1] = i_end;	
 }
 
 float* CSeptabsPanel::GetGasdosePosMap(bool i_original)
@@ -2461,12 +2515,6 @@ HWND CSeptabsPanel::GetMapWindow(int wndType)
  else
   return NULL;
 }
-
-void CSeptabsPanel::setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction)
-{m_OnCTSXAxisEditChanged = OnFunction;}
-
-void CSeptabsPanel::setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction)
-{m_OnATSXAxisEditChanged = OnFunction;}
 
 void CSeptabsPanel::setOnRPMGridEditButton(EventHandler OnFunction)
 {m_OnRPMGridEditButton = OnFunction;}

@@ -202,7 +202,7 @@ BEGIN
     IDS_FWM_SYNC_CKPS       "Зубчатый диск с или без отсут.зубьев, коленвал"
     IDS_FWM_SYNC_CAMS       "Зубчатый диск с или без отсут.зубьев, распредвал"
     IDS_FWM_SYNC_HALL       "Трамблер с ДХ / Инд.датчиком, Nзуб=Nцил"
-    IDS_FWM_SYNC_CKPNP1     "Зубчатый диск N+1, коленвал, Nзуб=Nцил"
+    IDS_FWM_SYNC_CKPNP1     "Зубчатый диск N+1, коленвал, Nзуб=Nцил/2"
     IDS_FWM_SECU3_UNIT_COMBO_TT "Выбор блока SECU3, для которого нужна прошивка. Для блоков SECU-3T, SECU-3 Lite и SECU-3 Micro загружается одинаковая прошивка."
     IDS_FWM_SYNCHRO_COMBO_TT "Выбор метода синхронизации."
     IDS_FWM_DWELL_CHECK_TT  "COPT_DWELL_CONTROL"
@@ -435,7 +435,7 @@ BEGIN
     IDS_FWM_SYNC_CKPS       "Missing or non-missing tooth trigger wheel, crankshaft"
     IDS_FWM_SYNC_CAMS       "Missing or non-missing tooth trigger wheel, camshaft"
     IDS_FWM_SYNC_HALL       "Distributor with hall/VR sensor, Nrods = Ncyl"
-    IDS_FWM_SYNC_CKPNP1     "N+1 trigger wheel, crankshaft, Nrods = Ncyl"
+    IDS_FWM_SYNC_CKPNP1     "N+1 trigger wheel, crankshaft, Nrods = Ncyl/2"
     IDS_FWM_SECU3_UNIT_COMBO_TT "Select SECU3 unit for which you need firmware. For SECU-3T, SECU-3 Lite and SECU-3 Micro units same firmware is loaded."
     IDS_FWM_SYNCHRO_COMBO_TT "Select synchronization method."
     IDS_FWM_DWELL_CHECK_TT  "COPT_DWELL_CONTROL"
@@ -495,7 +495,7 @@ BEGIN
     BLOCK "040904e4"
     BEGIN
       VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007-2022 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2007-2023 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
       VALUE "ProductName", "SECU-3 Manager"
     END
   END

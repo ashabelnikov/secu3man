@@ -386,7 +386,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optWorkMapWnd;
   OptField_t<POINT> m_optTempMapWnd;
   OptField_t<POINT> m_optTempIdlMapWnd;
-  OptField_t<POINT> m_optAttenMapWnd;
+  OptField_t<POINT> m_optAttenuatorMapWnd;
   OptField_t<POINT> m_optDwellCntrlMapWnd;
   OptField_t<POINT> m_optCTSCurveMapWnd;
   OptField_t<POINT> m_optGridMapIgnWnd;
@@ -494,6 +494,44 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optTpszonMapWnd1;
   OptField_t<POINT> m_optCylMultMapWnd1;
   OptField_t<POINT> m_optCylAddMapWnd1;
+  //group of separate maps
+  OptField_t<POINT> m_optAttenuatorMapWnd1;
+  OptField_t<POINT> m_optDwellCntrlMapWnd1;
+  OptField_t<POINT> m_optCTSCurveMapWnd1;
+  OptField_t<POINT> m_optATSCurvMapWnd1;
+  OptField_t<POINT> m_optATSCorrMapWnd1;
+  OptField_t<POINT> m_optGasdoseMapWnd1;
+  OptField_t<POINT> m_optBarocorrMapWnd1;
+  OptField_t<POINT> m_optManIgntimMapWnd1;
+  OptField_t<POINT> m_optCESettingsWnd1;
+  OptField_t<POINT> m_optTmp2CurveMapWnd1;
+  OptField_t<POINT> m_optCrkTempMapWnd1;
+  OptField_t<POINT> m_optEHPauseMapWnd1;
+  OptField_t<POINT> m_optCrankingThrdMapWnd1;
+  OptField_t<POINT> m_optCrankingTimeMapWnd1;
+  OptField_t<POINT> m_optSmapabanThrdMapWnd1;
+  OptField_t<POINT> m_optKnockZoneMapWnd1;
+  OptField_t<POINT> m_optGrtsCurveMapWnd1;
+  OptField_t<POINT> m_optGrHeatDutyMapWnd1;
+  OptField_t<POINT> m_optPwmIacUCoefMapWnd1;
+  OptField_t<POINT> m_optAftstrStrk0MapWnd1;
+  OptField_t<POINT> m_optAftstrStrk1MapWnd1;
+  OptField_t<POINT> m_optGrValDelMapWnd1;
+  OptField_t<POINT> m_optFtlsCurveMapWnd1;
+  OptField_t<POINT> m_optEgtsCurveMapWnd1;
+  OptField_t<POINT> m_optOpsCurveMapWnd1;
+  OptField_t<POINT> m_optManInjPwcMapWnd1;
+  OptField_t<POINT> m_optMAFCurveMapWnd1;
+  OptField_t<POINT> m_optFtlsCorMapWnd1;
+  OptField_t<POINT> m_optLambdaZoneMapWnd1;
+  OptField_t<POINT> m_optFtsCurveMapWnd1;
+  OptField_t<POINT> m_optFuelDensCorrMapWnd1;
+  OptField_t<POINT> m_optXtauXfAccMapWnd1;
+  OptField_t<POINT> m_optXtauXfDecMapWnd1;
+  OptField_t<POINT> m_optXtauTfAccMapWnd1;
+  OptField_t<POINT> m_optXtauTfDecMapWnd1;
+  OptField_t<POINT> m_optInjNonLinPMapWnd1;
+  OptField_t<POINT> m_optInjNonLinGMapWnd1;
 
   //window's sizes
   OptField_t<POINT> m_optMainFrmWndSize;
@@ -502,7 +540,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optWorkMapWndSize;
   OptField_t<POINT> m_optTempMapWndSize;
   OptField_t<POINT> m_optTempIdlMapWndSize;
-  OptField_t<POINT> m_optAttenMapWndSize;
+  OptField_t<POINT> m_optAttenuatorMapWndSize;
   OptField_t<POINT> m_optDwellCntrlMapWndSize;
   OptField_t<POINT> m_optCTSCurveMapWndSize;
   OptField_t<POINT> m_optGridMapIgnWndSize;
@@ -610,6 +648,44 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optTpszonMapWndSize1;
   OptField_t<POINT> m_optCylMultMapWndSize1;
   OptField_t<POINT> m_optCylAddMapWndSize1;
+  //group of separate maps
+  OptField_t<POINT> m_optAttenuatorMapWndSize1;
+  OptField_t<POINT> m_optDwellCntrlMapWndSize1;
+  OptField_t<POINT> m_optCTSCurveMapWndSize1;
+  OptField_t<POINT> m_optATSCurvMapWndSize1;
+  OptField_t<POINT> m_optATSCorrMapWndSize1;
+  OptField_t<POINT> m_optGasdoseMapWndSize1;
+  OptField_t<POINT> m_optBarocorrMapWndSize1;
+  OptField_t<POINT> m_optManIgntimMapWndSize1;
+  OptField_t<POINT> m_optCESettingsWndSize1;
+  OptField_t<POINT> m_optTmp2CurveMapWndSize1;
+  OptField_t<POINT> m_optCrkTempMapWndSize1;
+  OptField_t<POINT> m_optEHPauseMapWndSize1;
+  OptField_t<POINT> m_optCrankingThrdMapWndSize1;
+  OptField_t<POINT> m_optCrankingTimeMapWndSize1;
+  OptField_t<POINT> m_optSmapabanThrdMapWndSize1;
+  OptField_t<POINT> m_optKnockZoneMapWndSize1;
+  OptField_t<POINT> m_optGrtsCurveMapWndSize1;
+  OptField_t<POINT> m_optGrHeatDutyMapWndSize1;
+  OptField_t<POINT> m_optPwmIacUCoefMapWndSize1;
+  OptField_t<POINT> m_optAftstrStrk0MapWndSize1;
+  OptField_t<POINT> m_optAftstrStrk1MapWndSize1;
+  OptField_t<POINT> m_optGrValDelMapWndSize1;
+  OptField_t<POINT> m_optFtlsCurveMapWndSize1;
+  OptField_t<POINT> m_optEgtsCurveMapWndSize1;
+  OptField_t<POINT> m_optOpsCurveMapWndSize1;
+  OptField_t<POINT> m_optManInjPwcMapWndSize1;
+  OptField_t<POINT> m_optMAFCurveMapWndSize1;
+  OptField_t<POINT> m_optFtlsCorMapWndSize1;
+  OptField_t<POINT> m_optLambdaZoneMapWndSize1;
+  OptField_t<POINT> m_optFtsCurveMapWndSize1;
+  OptField_t<POINT> m_optFuelDensCorrMapWndSize1;
+  OptField_t<POINT> m_optXtauXfAccMapWndSize1;
+  OptField_t<POINT> m_optXtauXfDecMapWndSize1;
+  OptField_t<POINT> m_optXtauTfAccMapWndSize1;
+  OptField_t<POINT> m_optXtauTfDecMapWndSize1;
+  OptField_t<POINT> m_optInjNonLinPMapWndSize1;
+  OptField_t<POINT> m_optInjNonLinGMapWndSize1;
 
   //window state
   OptField_t<int> m_optMainFrmWndState;
@@ -787,7 +863,7 @@ class CAppSettingsModel : public ISettingsData
   //separate
   OptField_t<float> m_optPtMovStepCrkTempMap;
   OptField_t<float> m_optPtMovStepEHPauseMap;
-  OptField_t<float> m_optPtMovStepAttenMap;
+  OptField_t<float> m_optPtMovStepAttenuatorMap;
   OptField_t<float> m_optPtMovStepDwellCntrlMap;
   OptField_t<float> m_optPtMovStepCTSCurveMap;
   OptField_t<float> m_optPtMovStepBarocorrMap;

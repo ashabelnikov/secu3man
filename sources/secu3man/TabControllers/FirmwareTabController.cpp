@@ -148,8 +148,6 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  mp_view->mp_TablesPanel->mp_ButtonsPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
  mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
  mp_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
- mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
- mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
  mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
  mp_view->mp_TablesPanel->mp_SeptabsPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
  mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableAdvanceAngleIndication(false);
@@ -1164,11 +1162,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  mp_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCTSCurveMap(false),false);
  mp_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCTSCurveMap(true),true);
- mp_view->mp_TablesPanel->mp_SeptabsPanel->SetCTSXAxisEdits(mp_fwdm->GetCTSMapVoltageLimit(0), mp_fwdm->GetCTSMapVoltageLimit(1));
 
  mp_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSCurveMap(false),false);
  mp_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSCurveMap(true),true);
- mp_view->mp_TablesPanel->mp_SeptabsPanel->SetATSXAxisEdits(mp_fwdm->GetATSMapVoltageLimit(0), mp_fwdm->GetATSMapVoltageLimit(1));
 
  mp_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSAACMap(false),false);
  mp_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetATSAACMap(true),true);
@@ -1699,16 +1695,6 @@ void CFirmwareTabController::OnFunSetSelectionChanged(int i_selected_index)
 void CFirmwareTabController::OnFunSetNamechanged(int i_index_of_item, CString i_new_name)
 {
  mp_fwdm->SetFunctionsSetName(i_index_of_item,_TSTRING(i_new_name));
-}
-
-void CFirmwareTabController::OnCTSXAxisEditChanged(int i_type, float i_value)
-{
- mp_fwdm->SetCTSMapVoltageLimit(i_type, i_value);
-}
-
-void CFirmwareTabController::OnATSXAxisEditChanged(int i_type, float i_value)
-{
- mp_fwdm->SetATSMapVoltageLimit(i_type, i_value);
 }
 
 void CFirmwareTabController::OnModificationCheckTimer(void)

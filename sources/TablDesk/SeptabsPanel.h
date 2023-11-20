@@ -35,15 +35,15 @@
 class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 {
   typedef CDialog Super;
-  typedef fastdelegate::FastDelegate2<int,float> EventWithCodeAndFloat;
 
  public:
-  CSeptabsPanel();
+  CSeptabsPanel(bool disable_vscroll = false, bool enable_fwconsts = false, bool enable_ceerr = false, bool enable_grids = false);
   virtual ~CSeptabsPanel();
   virtual BOOL Create(CWnd* pParentWnd = NULL);
 
   //note: use wnd_insert_after parameter to change tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
+  void SetPosition(const CRect& rc, CWnd* wnd_insert_after = NULL);
 
   void OnShow(bool show);
 
@@ -53,8 +53,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   float* GetCTSCurveMap(bool i_original);
   float* GetATSCurveMap(bool i_original);
   float* GetATSAACMap(bool i_original);
-  void SetCTSXAxisEdits(float i_begin, float i_end);
-  void SetATSXAxisEdits(float i_begin, float i_end);
   float* GetGasdosePosMap(bool i_original);
   float* GetBarocorrMap(bool i_original);
   float* GetManIgntimMap(bool i_original);
@@ -116,8 +114,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   void EnableEmbedMapWnd(bool embed, const CRect& rc);
 
  public: //set event handlers
-  void setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
-  void setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
   void setOnRPMGridEditButton(EventHandler OnFunction);
   void setOnCESettingsButton(EventHandler OnFunction);
   void setOnFwConstsButton(EventHandler OnFunction);
@@ -207,6 +203,8 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnUpdateViewInjNonLinPMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewInjNonLinGMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsFWC(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsGRD(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   DECLARE_MESSAGE_MAP()
@@ -220,6 +218,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
   static void __cdecl OnWndActivationAttenuatorTable(void* i_param, long cmd);
+  static void __cdecl OnGetAttenuatorYAxisLabel(LPTSTR io_label_string, int index, void* i_param);
 
   static void __cdecl OnChangeDwellCntrlTable(void* i_param);
   static void __cdecl OnCloseDwellCntrlTable(void* i_param);
@@ -227,15 +226,12 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeCTSCurveTable(void* i_param);
   static void __cdecl OnCloseCTSCurveTable(void* i_param);
-  static void __cdecl OnWndActivationCTSCurveTable(void* i_param, long cmd);
-
-  static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param);
-  static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
-  static void __cdecl OnChangeATSXAxisEdit(void* i_param, int type, float value);
+  static void __cdecl OnWndActivationCTSCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeATSCurveTable(void* i_param);
   static void __cdecl OnCloseATSCurveTable(void* i_param);
+  static void __cdecl OnChangeATSXAxisEdit(void* i_param, int type, float value);
   static void __cdecl OnWndActivationATSCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeATSAACTable(void* i_param);
@@ -375,8 +371,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnWndActivationInjNonLinGTable(void* i_param, long cmd);
 
  private:
-  EventWithCodeAndFloat m_OnCTSXAxisEditChanged;
-  EventWithCodeAndFloat m_OnATSXAxisEditChanged;
   EventHandler m_OnRPMGridEditButton;
   EventHandler m_OnCESettingsButton;
   EventHandler m_OnFwConstsButton;
@@ -385,7 +379,13 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
   CBitmapButton m_fw_consts_btn;
-  CButton m_edit_cesettings_btn;
+  CBitmapButton m_edit_cesettings_btn;
+
+  bool m_initialized;
+  bool m_disable_vscroll;
+  bool m_enable_fwconsts;
+  bool m_enable_ceerr;
+  bool m_enable_grids;
 
  private:
   bool m_dwellcntrl_enabled;
@@ -404,8 +404,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   bool m_xtau_maps_enabled;
 
   float m_attenuator_table_slots[128];
-  float m_cts_curve_x_axis_limits[2];
-  float m_ats_curve_x_axis_limits[2];
 
 /*  float m_mafcurve_slots[64];*/
 };

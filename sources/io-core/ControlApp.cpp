@@ -1870,7 +1870,21 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.tab_id != ETMT_GPSC_MAP && editTabPar.tab_id != ETMT_ATSC_MAP && editTabPar.tab_id != ETMT_PWM1_MAP &&
      editTabPar.tab_id != ETMT_PWM2_MAP && editTabPar.tab_id != ETMT_TEMPI_MAP && editTabPar.tab_id != ETMT_IACMAT_MAP && 
      editTabPar.tab_id != ETMT_VE2_MAP && editTabPar.tab_id != ETMT_TPSZON_MAP && editTabPar.tab_id != ETMT_CYLMULT_MAP && 
-     editTabPar.tab_id != ETMT_CYLADD_MAP && editTabPar.tab_id != ETMT_AEMAP_MAP && editTabPar.tab_id != ETMT_THRASS_MAP)
+     editTabPar.tab_id != ETMT_CYLADD_MAP && editTabPar.tab_id != ETMT_AEMAP_MAP && editTabPar.tab_id != ETMT_THRASS_MAP &&
+     //group of separate maps
+     editTabPar.tab_id != ETMT_ATTENUATOR && editTabPar.tab_id != ETMT_DWELLCNTRL && editTabPar.tab_id != ETMT_KNOCK_ZONE &&
+     editTabPar.tab_id != ETMT_LAMBDA_ZONE && editTabPar.tab_id != ETMT_GASDOSE && editTabPar.tab_id != ETMT_CTS_CURVE &&
+     editTabPar.tab_id != ETMT_ATS_CURVE && editTabPar.tab_id != ETMT_TMP2_CURVE && editTabPar.tab_id != ETMT_GRTS_CURVE &&
+     editTabPar.tab_id != ETMT_FTS_CURVE && editTabPar.tab_id != ETMT_FTLS_CURVE && editTabPar.tab_id != ETMT_EGTS_CURVE &&
+     editTabPar.tab_id != ETMT_OPS_CURVE && editTabPar.tab_id != ETMT_MAF_CURVE && editTabPar.tab_id != ETMT_BAROCORR &&
+     editTabPar.tab_id != ETMT_ATS_CORR && editTabPar.tab_id != ETMT_MANIGNTIM && editTabPar.tab_id != ETMT_CRKCLT_CORR &&
+     editTabPar.tab_id != ETMT_EH_PAUSE && editTabPar.tab_id != ETMT_CRANKING_THRD && editTabPar.tab_id != ETMT_CRANKING_TIME &&
+     editTabPar.tab_id != ETMT_SMAPABAN_THRD && editTabPar.tab_id != ETMT_GRHEAT_DUTY && editTabPar.tab_id != ETMT_AFTSTR_STRK0 &&
+     editTabPar.tab_id != ETMT_AFTSTR_STRK1 && editTabPar.tab_id != ETMT_PWMIAC_UCOEF && editTabPar.tab_id != ETMT_GRVDELAY &&
+     editTabPar.tab_id != ETMT_MANINJPWC && editTabPar.tab_id != ETMT_FTLSCOR && editTabPar.tab_id != ETMT_FUELDENS_CORR &&
+     editTabPar.tab_id != ETMT_XTAU_XFACC && editTabPar.tab_id != ETMT_XTAU_XFDEC && editTabPar.tab_id != ETMT_XTAU_TFACC &&
+     editTabPar.tab_id != ETMT_XTAU_TFDEC && editTabPar.tab_id != ETMT_INJNONLINP && editTabPar.tab_id != ETMT_INJNONLING
+     )
   return false;
 
  //check for 16-byte packets
@@ -1889,7 +1903,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
  {
   size_t data_size = 0;
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
-  if (editTabPar.tab_id == ETMT_CRNK_MAP || editTabPar.tab_id == ETMT_DEAD_MAP || editTabPar.tab_id == ETMT_RIGID_MAP || editTabPar.tab_id == ETMT_EGOCRV_MAP || editTabPar.tab_id == ETMT_IACC_MAP || editTabPar.tab_id == ETMT_IATCLT_MAP)
+  if (editTabPar.tab_id == ETMT_CRNK_MAP || editTabPar.tab_id == ETMT_DEAD_MAP || editTabPar.tab_id == ETMT_RIGID_MAP || editTabPar.tab_id == ETMT_EGOCRV_MAP || editTabPar.tab_id == ETMT_IACC_MAP || editTabPar.tab_id == ETMT_IATCLT_MAP || editTabPar.tab_id == ETMT_DWELLCNTRL || editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE || editTabPar.tab_id == ETMT_FTLS_CURVE || editTabPar.tab_id == ETMT_EGTS_CURVE || editTabPar.tab_id == ETMT_OPS_CURVE || editTabPar.tab_id == ETMT_MAF_CURVE || editTabPar.tab_id == ETMT_BAROCORR || editTabPar.tab_id == ETMT_AFTSTR_STRK0 || editTabPar.tab_id == ETMT_AFTSTR_STRK1 || editTabPar.tab_id == ETMT_PWMIAC_UCOEF || editTabPar.tab_id == ETMT_GRVDELAY || editTabPar.tab_id == ETMT_MANINJPWC || editTabPar.tab_id == ETMT_FTLSCOR || editTabPar.tab_id == ETMT_FUELDENS_CORR || editTabPar.tab_id == ETMT_XTAU_XFACC || editTabPar.tab_id == ETMT_XTAU_XFDEC || editTabPar.tab_id == ETMT_XTAU_TFACC || editTabPar.tab_id == ETMT_XTAU_TFDEC || editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING)
   {
    size_t div = 2;
    if (size % div)
@@ -1899,7 +1913,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    for(size_t i = 0; i < size / div; ++i)
    {
     int value;
-    if (false == mp_pdp->Hex16ToBin(raw_packet, &value, editTabPar.tab_id == ETMT_DEAD_MAP)) //<--signed for dead map
+    bool withsign = (editTabPar.tab_id == ETMT_DEAD_MAP || editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE); 
+    if (false == mp_pdp->Hex16ToBin(raw_packet, &value, withsign)) //<--signed for dead map
      return false;
 
     if (editTabPar.tab_id == ETMT_IATCLT_MAP)
@@ -1910,6 +1925,43 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
     else if (editTabPar.tab_id == ETMT_EGOCRV_MAP)
      editTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (((float)value) / EGO_CURVE_M_FACTOR);
+    else if (editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE)
+     editTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (((float)value) / 4.0f);
+    else if (editTabPar.tab_id == ETMT_FTS_CURVE)
+     editTabPar.table_data[i] = ((address+i) > 16) ? (value * ADC_DISCRETE) : (((float)value) / FTS_MULT);     
+    else if (editTabPar.tab_id == ETMT_FTLS_CURVE)
+     editTabPar.table_data[i] = ((address+i) > 16) ? (value * ADC_DISCRETE) : (((float)value) / FTLS_MULT);
+    else if (editTabPar.tab_id == ETMT_EGTS_CURVE)
+     editTabPar.table_data[i] = ((address+i) > 16) ? (value * ADC_DISCRETE) : (((float)value) / EGTS_MULT);
+    else if (editTabPar.tab_id == ETMT_OPS_CURVE)
+     editTabPar.table_data[i] = ((address+i) > 16) ? (value * ADC_DISCRETE) : (((float)value) / OPS_MULT);
+    else if (editTabPar.tab_id == ETMT_MAF_CURVE)
+    {
+     if (address < 64)
+      editTabPar.table_data[i] = (((float)value) / MAFS_MULT);
+     else
+      editTabPar.table_data[i] = ((address+i) > 64) ? (value * ADC_DISCRETE) : value;
+    }
+    else if (editTabPar.tab_id == ETMT_BAROCORR)
+     editTabPar.table_data[i] = ((address+i) >= BAROCORR_SIZE) ? (value / BAROCORR_MAPSX_M_FACTOR) : (((float)value) / BAROCORR_MAPS_M_FACTOR) * 100.0f; //%
+    else if (editTabPar.tab_id == ETMT_AFTSTR_STRK0 || editTabPar.tab_id == ETMT_AFTSTR_STRK1)
+     editTabPar.table_data[i] = ((float)value);
+    else if (editTabPar.tab_id == ETMT_PWMIAC_UCOEF)
+     editTabPar.table_data[i] = ((float)value / PWMIAC_UCOEF_MAPS_M_FACTOR);
+    else if (editTabPar.tab_id == ETMT_GRVDELAY)
+     editTabPar.table_data[i] = ((float)value / 100.0f);
+    else if (editTabPar.tab_id == ETMT_MANINJPWC)
+     editTabPar.table_data[i] = ((float)value) / INJPWCOEF_MULT;
+    else if (editTabPar.tab_id == ETMT_FTLSCOR)
+     editTabPar.table_data[i] = ((float)value) / PWMIAC_UCOEF_MAPS_M_FACTOR;
+    else if (editTabPar.tab_id == ETMT_FUELDENS_CORR)
+     editTabPar.table_data[i] = ((float)value) / 16384.0f;
+    else if (editTabPar.tab_id == ETMT_XTAU_XFACC || editTabPar.tab_id == ETMT_XTAU_XFDEC)
+     editTabPar.table_data[i] = (((float)value) / 1024.0f) * 100.0f;
+    else if (editTabPar.tab_id == ETMT_XTAU_TFACC || editTabPar.tab_id == ETMT_XTAU_TFDEC)
+     editTabPar.table_data[i] = (((float)value) * 0.1024f);
+    else if (editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING)
+     editTabPar.table_data[i] = ((float)value) / 312.5f;
     else
      editTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
@@ -1952,6 +2004,30 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
     for(size_t i = 0; i < numOfCells; ++i)
      editTabPar.table_data[i] = ((float)w12GetCell(buff, i)) / IT_MAPS_M_FACTOR;
     data_size = numOfCells;
+   }
+   else if (editTabPar.tab_id == ETMT_KNOCK_ZONE || editTabPar.tab_id == ETMT_LAMBDA_ZONE) //knock and lambda zones
+   {
+    size_t div = 2;
+    if (size % div) //must contain whole number of 16-bit words
+     return false;
+
+    WORD buff[16];
+    for(size_t i = 0; i < size / div; ++i)
+    {
+     int value;
+     if (false == mp_pdp->Hex16ToBin(raw_packet, &value, false))
+      return false;
+     buff[i] = value;
+    }
+
+    //convert from bits
+    for(size_t w = 0; w < size / div; ++w)
+    {
+     for(size_t i = 0; i < F_WRK_POINTS_F; ++i)
+      editTabPar.table_data[(w*F_WRK_POINTS_F)+i] = CHECKBIT16(buff[w], i);
+    }
+    data_size = (size / div) * F_WRK_POINTS_F;
+    editTabPar.address*=F_WRK_POINTS_F;
    }
    else
    {
@@ -1999,6 +2075,18 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.table_data[i] = ((float)((signed char)value)) * 0.0256f;
      else if (editTabPar.tab_id == ETMT_AEMAP_MAP)
       editTabPar.table_data[i] = (i >= INJ_AE_MAP_LOOKUP_TABLE_SIZE)?(float((signed char)value)/AEMAPB_MAPS_M_FACTOR):(float(value)-AEMAPV_MAPS_ADDER);
+     else if (editTabPar.tab_id == ETMT_ATTENUATOR)
+      editTabPar.table_data[i] = (float)value;
+     else if (editTabPar.tab_id == ETMT_GASDOSE)
+      editTabPar.table_data[i] = ((float)value) / GD_MAPS_M_FACTOR;
+     else if (editTabPar.tab_id == ETMT_EH_PAUSE)
+      editTabPar.table_data[i] = ((float)value) / 100.0f;
+     else if (editTabPar.tab_id == ETMT_CRANKING_THRD || editTabPar.tab_id == ETMT_SMAPABAN_THRD)
+      editTabPar.table_data[i] = ((float)value) * 10.0f;
+     else if (editTabPar.tab_id == ETMT_CRANKING_TIME)
+      editTabPar.table_data[i] = ((float)value);
+     else if (editTabPar.tab_id == ETMT_GRHEAT_DUTY)
+      editTabPar.table_data[i] = ((float)value) / 2.0f;
      else
       editTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -3488,7 +3576,11 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    m_outgoing_packet.push_back(*((BYTE*)i_packet_data));
    break;
   case CHANGEMODE:
-   m_outgoing_packet.push_back(*((BYTE*)i_packet_data));
+   {
+    const BYTE* p_data = (BYTE*)i_packet_data;
+    m_outgoing_packet.push_back(p_data[0]); //code of new context
+    m_outgoing_packet.push_back(p_data[1]); //data for new context (used by some packets)
+   }
    break;
   case TEMPER_PAR:
    Build_TEMPER_PAR((TemperPar*)i_packet_data);
@@ -3589,13 +3681,13 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 
 //-----------------------------------------------------------------------
 //посылает команду изменени€ контекста на новый контекст специфицированный i_new_descriptor-ом
-bool CControlApp::ChangeContext(const BYTE i_new_descriptor)
+bool CControlApp::ChangeContext(const BYTE i_new_descriptor, int data /*= 0*/)
 {
  if (false==IsValidDescriptor(i_new_descriptor))  //передали правильный дескриптор ?
   return false;
 
- BYTE data = i_new_descriptor; 
- return SendPacket(CHANGEMODE, &data);
+ BYTE packet_data[2] = {i_new_descriptor, data};
+ return SendPacket(CHANGEMODE, &packet_data);
 }
 //-----------------------------------------------------------------------
 //ѕосылает команду запуска бутлоадера
@@ -4061,12 +4153,32 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
   for(int idx = byte_idx_start; idx < endIdx; ++idx)
    mp_pdp->Bin8ToHex(buff[idx], m_outgoing_packet);
  }
+ else if (packet_data->tab_id == ETMT_KNOCK_ZONE || packet_data->tab_id == ETMT_LAMBDA_ZONE)
+ {  
+/*TRACE("\n");
+  for (size_t i = 0; i < packet_data->data_size/F_WRK_POINTS_F; i++)
+  {
+   for (size_t b = 0; b < 16; b++)
+   {
+    int v = (int)packet_data->table_data[(i*16)+b];
+    TRACE("%d ", v);
+   }
+   TRACE("\n");
+  }*/ 
+  for (size_t i = 0; i < packet_data->data_size/F_WRK_POINTS_F; i++)
+  {
+   WORD value;
+   for (size_t b = 0; b < F_WRK_POINTS_F; b++)
+    WRITEBIT16(value, b, packet_data->table_data[(i*F_WRK_POINTS_F)+b] > 0.5);
+   mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+  }
+ } 
  else if (packet_data->tab_id != ETMT_NAME_STR)
  {
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
   for(unsigned int i = 0; i < packet_data->data_size; ++i)
   {
-   if (packet_data->tab_id == ETMT_CRNK_MAP || packet_data->tab_id == ETMT_DEAD_MAP)
+   if (packet_data->tab_id == ETMT_CRNK_MAP || packet_data->tab_id == ETMT_DEAD_MAP || packet_data->tab_id == ETMT_DWELLCNTRL)
    {
     int value = MathHelpers::Round((packet_data->table_data[i] * 1000.0f) / discrete);
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
@@ -4192,6 +4304,149 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    {
     unsigned char value = MathHelpers::Round((packet_data->address>=INJ_AE_MAP_LOOKUP_TABLE_SIZE)?(packet_data->table_data[i]*AEMAPB_MAPS_M_FACTOR):(packet_data->table_data[i]+AEMAPV_MAPS_ADDER));
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_ATTENUATOR)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i]);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_GASDOSE)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * GD_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_CTS_CURVE || packet_data->tab_id == ETMT_ATS_CURVE || packet_data->tab_id == ETMT_TMP2_CURVE || packet_data->tab_id == ETMT_GRTS_CURVE)
+   {
+    int value;
+    if (packet_data->address >= THERMISTOR_LOOKUP_TABLE_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] / ADC_DISCRETE);
+    else
+     value = MathHelpers::Round(packet_data->table_data[i] * 4.0f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_FTS_CURVE)
+   {
+    int value;
+    if (packet_data->address >= FTS_LOOKUP_TABLE_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] / ADC_DISCRETE);
+    else
+     value = MathHelpers::Round(packet_data->table_data[i] * FTS_MULT);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_FTLS_CURVE)
+   {
+    int value;
+    if (packet_data->address >= FTLS_LOOKUP_TABLE_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] / ADC_DISCRETE);
+    else
+     value = MathHelpers::Round(packet_data->table_data[i] * FTLS_MULT);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_EGTS_CURVE)
+   {
+    int value;
+    if (packet_data->address >= EGTS_LOOKUP_TABLE_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] / ADC_DISCRETE);
+    else
+     value = MathHelpers::Round(packet_data->table_data[i] * EGTS_MULT);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_OPS_CURVE)
+   {
+    int value;
+    if (packet_data->address >= OPS_LOOKUP_TABLE_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] / ADC_DISCRETE);
+    else
+     value = MathHelpers::Round(packet_data->table_data[i] * OPS_MULT);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_MAF_CURVE)
+   {
+    int value;
+    if (packet_data->address < MAF_FLOW_CURVE_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] * MAFS_MULT);
+    else
+     value = MathHelpers::Round((packet_data->address == 64) ? packet_data->table_data[i] : packet_data->table_data[i] / ADC_DISCRETE);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_BAROCORR)
+   {
+    int value;
+    if (packet_data->address >= BAROCORR_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] * BAROCORR_MAPSX_M_FACTOR);
+    else
+     value = MathHelpers::Round((packet_data->table_data[i] / 100.0f) * BAROCORR_MAPS_M_FACTOR);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_EH_PAUSE)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * 100.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_CRANKING_THRD || packet_data->tab_id == ETMT_SMAPABAN_THRD)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] / 10.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_CRANKING_TIME)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i]);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_GRHEAT_DUTY)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * 2.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_AFTSTR_STRK0)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i]);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_AFTSTR_STRK1)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i]);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_PWMIAC_UCOEF)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_GRVDELAY)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * 100.0f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_MANINJPWC)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * INJPWCOEF_MULT);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_FTLSCOR)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * PWMIAC_UCOEF_MAPS_M_FACTOR);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_FUELDENS_CORR)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * 16384.0f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_XTAU_XFACC || packet_data->tab_id == ETMT_XTAU_XFDEC)
+   {
+    int value = MathHelpers::Round((packet_data->table_data[i] / 100.0f) * 1024.0f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_XTAU_TFACC || packet_data->tab_id == ETMT_XTAU_TFDEC)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] / 0.1024f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_INJNONLINP || packet_data->tab_id == ETMT_INJNONLING)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * 312.5f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
    }
    else
    {  //default case

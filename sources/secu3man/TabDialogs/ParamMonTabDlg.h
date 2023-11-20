@@ -35,6 +35,7 @@ class CMIDeskDlg;
 class CParamDeskDlg;
 class CRSDeskDlg;
 class CTablesDeskDlg;
+class CSepTablesDeskDlg;
 class CToolTipCtrlEx;
 
 // CParamMonTabDlg dialog
@@ -48,19 +49,23 @@ class CParamMonTabDlg : public CTabDialog
 
   bool GetRawSensorsCheckState(void);
   bool GetEditTablesCheckState(void);
+  bool GetEditTablesOffCheckState(void);
 
   void EnableEditTablesCheck(bool enable);
+  void EnableEditTablesOffCheck(bool enable);
   void EnableMakingChartsChildren(bool enable);
   void EnableToggleMapWnd(bool toggle);
 
   void setOnRawSensorsCheck(EventHandler i_Function);
   void setOnEditTablesCheck(EventHandler i_Function);
+  void setOnEditTablesOffCheck(EventHandler i_Function);
 
   std::auto_ptr<CCEDeskDlg> mp_CEDeskDlg;
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CRSDeskDlg> mp_RSDeskDlg;
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
   std::auto_ptr<CTablesDeskDlg> mp_TablesDeskDlg;
+  std::auto_ptr<CSepTablesDeskDlg> mp_SeptabsDeskDlg;
 
   void SetSplitterPos(int pos);
   int GetSplitterPos(void) const;
@@ -74,6 +79,7 @@ class CParamMonTabDlg : public CTabDialog
   afx_msg void OnDestroy();
   afx_msg void OnPmShowRawSensors();
   afx_msg void OnPmEditTables();
+  afx_msg void OnPmEditTablesOff();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnMouseMove(UINT nFlags, CPoint point);
   afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
@@ -85,10 +91,12 @@ class CParamMonTabDlg : public CTabDialog
  private:
   CButton m_raw_sensors_check;
   CButton m_edit_tables_check;
+  CButton m_edit_tables_off_check;
   std::auto_ptr<CLabel> mp_secu3orgLink;
 
   EventHandler m_OnRawSensorsCheck;
   EventHandler m_OnEditTablesCheck;
+  EventHandler m_OnEditTablesOffCheck;
 
   bool m_enMakeChartsChildren;
   bool m_initialized;

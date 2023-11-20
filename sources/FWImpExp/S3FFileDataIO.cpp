@@ -251,12 +251,10 @@ struct S3FSepMaps
 {
  s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
- s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
- s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
+ s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //coolant sensor look up table
  s3f_int32_t choke_op_table[16]; //choke opening map (appeared in version 1.01, abandoned 02 Feb 2018 and left for compatibility reasons)
  s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
- s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
- s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
+ s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //intake air temperature sensor look up table, since v01.03
  s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
  s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map, lines are stored in reverse direction!
  s3f_int32_t tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //TEMP2 temperature sensor look up table, since v01.07
@@ -443,12 +441,10 @@ struct S3FSepMaps_v0115
 {
  s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
- s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
- s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
+ s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //coolant sensor look up table
  s3f_int32_t choke_op_table[16]; //choke opening map (appeared in version 1.01, abandoned 02 Feb 2018 and left for compatibility reasons)
  s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
- s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
- s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
+ s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //intake air temperature sensor look up table, since v01.03
  s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
  s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map, lines are stored in reverse direction!
  s3f_int32_t tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //TEMP2 temperature sensor look up table, since v01.07
@@ -500,8 +496,7 @@ struct S3FSepMaps_v0102
 {
  s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
- s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
- s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
+ s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2];    //coolant sensor look up table
  s3f_int32_t choke_op_table[16]; //choke opening map (appeared in version 1.01, abandoned 02 Feb 2018 and left for compatibility reasons)
  s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
  s3f_int32_t reserved[96];       //reserved bytes, = 0
@@ -719,16 +714,12 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->attenuator_table[i] = MathHelpers::Round(m_data.attenuator_table[i] * INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->dwellcntrl_table[i] = MathHelpers::Round(m_data.dwellcntrl_table[i] * INT_MULTIPLIER);
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   p_sepMaps->ctscurve_table[i] = MathHelpers::Round(m_data.ctscurve_table[i] * INT_MULTIPLIER);
- for(i = 0; i < 2; ++i)
-  p_sepMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
  for(i = 0; i < 16; ++i)
   p_sepMaps->choke_op_table[i] = MathHelpers::Round(0 * INT_MULTIPLIER); //abandoned, fill with 0.0
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   p_sepMaps->atscurve_table[i] = MathHelpers::Round(m_data.atscurve_table[i] * INT_MULTIPLIER);
- for(i = 0; i < 2; ++i)
-  p_sepMaps->atscurve_vlimits[i] = MathHelpers::Round(m_data.atscurve_vlimits[i] * INT_MULTIPLIER);
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->ats_corr_table[i] = MathHelpers::Round(m_data.ats_corr_table[i] * INT_MULTIPLIER);
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
@@ -1012,14 +1003,10 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
   m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
- for(i = 0; i < 2; ++i)
-  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.atscurve_table[i] = p_sepMaps->atscurve_table[i] / INT_MULTIPLIER;
- for(i = 0; i < 2; ++i)
-  m_data.atscurve_vlimits[i] = p_sepMaps->atscurve_vlimits[i] / INT_MULTIPLIER;
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
@@ -1315,14 +1302,10 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
   m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
- for(i = 0; i < 2; ++i)
-  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.atscurve_table[i] = p_sepMaps->atscurve_table[i] / INT_MULTIPLIER;
- for(i = 0; i < 2; ++i)
-  m_data.atscurve_vlimits[i] = p_sepMaps->atscurve_vlimits[i] / INT_MULTIPLIER;
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
@@ -1496,10 +1479,8 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
   m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
   m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
- for(i = 0; i < 2; ++i)
-  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  bool empty = true;

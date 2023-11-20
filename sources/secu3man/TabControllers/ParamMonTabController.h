@@ -40,6 +40,7 @@ class CPMMonitorController; //sub-controller
 class CPMParamsController;  //sub-controller
 class CPMStateMachineState; //sub-controller
 class CPMTablesController;  //sub-controller
+class CPMSeptabsController; //sub-controller
 class CStatusBarManager;
 class ISettingsData;
 
@@ -70,10 +71,14 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   
   //from view
   void OnRawSensorsCheckBox(void);  //from "show raw sensors" check box  
-  void OnEditTablesCheckBox(void);  //from "edit tables" check box
+  void OnEditTablesCheckBox(void);    //from "edit tables" check box
+  void OnEditTablesOffCheckBox(void); //from "edit separate tables" check box
   
   //from CPMParamsController sub-controller
   void OnPDRequestsDataCollection();
+
+  //from CPMSeptabsController sub-controller
+  void OnSepRequestsDataCollection();
 
   void OnParametersChanged(const BYTE i_descriptor, const void* ip_packet);
 
@@ -94,12 +99,15 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   std::auto_ptr<CPMMonitorController> mp_moncntr;
   std::auto_ptr<CPMParamsController> mp_parcntr;
   std::auto_ptr<CPMTablesController> mp_tabcntr;
+  std::auto_ptr<CPMSeptabsController> mp_sepcntr;
 
   void _StartScenario(const std::vector<CPMStateMachineState*>& scenario);
   //различные машины состояний (для разных сценариев)
   std::vector<CPMStateMachineState*> m_scenario1;
   std::vector<CPMStateMachineState*> m_scenario2;
+  std::vector<CPMStateMachineState*> m_scenario21;
   std::vector<CPMStateMachineState*> m_scenario3;
+  std::vector<CPMStateMachineState*> m_scenario31;
   std::vector<CPMStateMachineState*> m_scenario4;
   std::vector<CPMStateMachineState*> m_scenario5;
   //машина состояний

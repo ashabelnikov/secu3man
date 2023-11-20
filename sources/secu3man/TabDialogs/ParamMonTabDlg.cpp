@@ -36,6 +36,7 @@
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
+#include "ParamDesk/Tables/SepTablesDeskDlg.h"
 #include "ui-core/Label.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "About/secu-3about.h"
@@ -45,6 +46,7 @@ using namespace fastdelegate;
 BEGIN_MESSAGE_MAP(CParamMonTabDlg, Super)
  ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
  ON_BN_CLICKED(IDC_PM_EDIT_TABLES, OnPmEditTables)
+ ON_BN_CLICKED(IDC_PM_EDIT_TABLES_OFF, OnPmEditTablesOff)
  ON_WM_SIZE()
  ON_WM_MOUSEMOVE()
  ON_WM_LBUTTONDOWN()
@@ -58,6 +60,7 @@ CParamMonTabDlg::CParamMonTabDlg()
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
 , mp_TablesDeskDlg(new CTablesDeskDlg())
+, mp_SeptabsDeskDlg(new CSepTablesDeskDlg())
 , mp_secu3orgLink(new CLabel)
 , m_moveSplitter(false)
 , m_initialized(false)
@@ -75,6 +78,7 @@ void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
  DDX_Control(pDX,IDC_PM_EDIT_TABLES,m_edit_tables_check);
+ DDX_Control(pDX,IDC_PM_EDIT_TABLES_OFF,m_edit_tables_off_check);
  DDX_Control(pDX,IDC_PM_SECU3ORG_LINK, *mp_secu3orgLink);
 }
 
@@ -110,17 +114,26 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  mp_ParamDeskDlg->Show(!check_state);
 
- //create tables desk
+ //create set of tables desk
  rect = GDIHelpers::GetChildWndRect(this, IDC_PM_PARAMDESK_FRAME);
  mp_TablesDeskDlg->Create(CTablesDeskDlg::IDD,this);
  mp_TablesDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
  mp_TablesDeskDlg->Show(check_state);
+
+ check_state = GetEditTablesOffCheckState();
+
+ //create separate tables desk
+ rect = GDIHelpers::GetChildWndRect(this, IDC_PM_PARAMDESK_FRAME);
+ mp_SeptabsDeskDlg->Create(CSepTablesDeskDlg::IDD,this);
+ mp_SeptabsDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
+ mp_SeptabsDeskDlg->Show(check_state);
  
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_edit_tables_check, MLL::GetString(IDS_PM_EDIT_TABLES_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_edit_tables_off_check, MLL::GetString(IDS_PM_EDIT_TABLES_OFF_TT)));
  VERIFY(mp_ttc->AddWindow(&m_raw_sensors_check, MLL::GetString(IDS_PM_SHOW_RAW_SENSORS_TT))); 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -180,13 +193,57 @@ void CParamMonTabDlg::OnPmEditTables()
  //=================================================================
 
  bool check_state = GetEditTablesCheckState();
- mp_ParamDeskDlg->Show(!check_state);
+ if (check_state)
+ {
+  m_edit_tables_off_check.SetCheck(BST_UNCHECKED);
+  mp_ParamDeskDlg->Show(false);
+  mp_SeptabsDeskDlg->Show(false);
+  mp_SeptabsDeskDlg->ShowOpenedCharts(false);
+ }
+ else
+ {
+  mp_ParamDeskDlg->Show(true);
+ }
+
  mp_TablesDeskDlg->Show(check_state);
  mp_TablesDeskDlg->ShowOpenedCharts(check_state);
+
  mp_TablesDeskDlg->MakeChartsChildren(m_enMakeChartsChildren);
 
  if (m_OnEditTablesCheck)
   m_OnEditTablesCheck();
+}
+
+void CParamMonTabDlg::OnPmEditTablesOff()
+{
+ //=================================================================
+ CString str;
+ mp_secu3orgLink->GetWindowText(str);
+ if (!CheckAppUrl((LPCTSTR)str))
+  return;
+ //=================================================================
+
+ bool check_state = GetEditTablesOffCheckState();
+ if (check_state)
+ {
+  m_edit_tables_check.SetCheck(BST_UNCHECKED);
+  mp_ParamDeskDlg->Show(false);
+  mp_TablesDeskDlg->Show(false);
+  mp_TablesDeskDlg->ShowOpenedCharts(false);
+ }
+ else
+ {
+  mp_ParamDeskDlg->Show(true);
+ }
+ 
+ mp_SeptabsDeskDlg->Show(check_state);
+ mp_SeptabsDeskDlg->ShowOpenedCharts(check_state);
+
+
+ mp_SeptabsDeskDlg->MakeChartsChildren(m_enMakeChartsChildren);
+
+ if (m_OnEditTablesOffCheck)
+  m_OnEditTablesOffCheck();
 }
 
 bool CParamMonTabDlg::GetRawSensorsCheckState(void)
@@ -206,11 +263,24 @@ void CParamMonTabDlg::EnableEditTablesCheck(bool enable)
  m_edit_tables_check.EnableWindow(enable);
 }
 
+bool CParamMonTabDlg::GetEditTablesOffCheckState(void)
+{
+ int check = m_edit_tables_off_check.GetCheck();
+ return (check==BST_CHECKED) ? true : false;
+}
+
+void CParamMonTabDlg::EnableEditTablesOffCheck(bool enable)
+{
+ m_edit_tables_off_check.EnableWindow(enable);
+}
+
 void CParamMonTabDlg::EnableMakingChartsChildren(bool enable)
 {
  m_enMakeChartsChildren = enable;
  if (mp_TablesDeskDlg.get() && ::IsWindow(mp_TablesDeskDlg->m_hWnd))
   mp_TablesDeskDlg->MakeChartsChildren(m_enMakeChartsChildren);
+ if (mp_SeptabsDeskDlg.get() && ::IsWindow(mp_SeptabsDeskDlg->m_hWnd))
+  mp_SeptabsDeskDlg->MakeChartsChildren(m_enMakeChartsChildren);
 }
 
 void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
@@ -221,6 +291,11 @@ void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
 void CParamMonTabDlg::setOnEditTablesCheck(EventHandler i_Function)
 {
  m_OnEditTablesCheck = i_Function;
+}
+
+void CParamMonTabDlg::setOnEditTablesOffCheck(EventHandler i_Function)
+{
+ m_OnEditTablesOffCheck = i_Function;
 }
 
 void CParamMonTabDlg::OnSize( UINT nType, int cx, int cy )
@@ -255,6 +330,12 @@ void CParamMonTabDlg::OnSize( UINT nType, int cx, int cy )
 
   rc1 = GDIHelpers::GetChildWndRect(mp_RSDeskDlg.get());
   mp_RSDeskDlg->SetWindowPos(NULL, 0, 0, cx - rc1.left - m_miMargin, etc_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_edit_tables_off_check);
+  m_edit_tables_off_check.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_SeptabsDeskDlg.get());
+  mp_SeptabsDeskDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), etc_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
  }
 
  Super::OnSize(nType, cx, cy);
@@ -315,6 +396,7 @@ void CParamMonTabDlg::OnLButtonUp(UINT nFlags, CPoint point)
 void CParamMonTabDlg::EnableToggleMapWnd(bool toggle)
 {
  mp_TablesDeskDlg->EnableToggleMapWnd(toggle);
+ mp_SeptabsDeskDlg->EnableToggleMapWnd(toggle);
 }
 
 void CParamMonTabDlg::SetSplitterPos(int pos)
@@ -356,6 +438,9 @@ void CParamMonTabDlg::_MoveSplitter(int x, int start_x)
  rc = GDIHelpers::GetChildWndRect(mp_TablesDeskDlg.get());
  mp_TablesDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
 
+ rc = GDIHelpers::GetChildWndRect(mp_SeptabsDeskDlg.get());
+ mp_SeptabsDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
  mp_ParamDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, pd_rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
 
  rc = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
@@ -372,4 +457,5 @@ void CParamMonTabDlg::_MoveSplitter(int x, int start_x)
 void CParamMonTabDlg::OnShow(bool show)
 {
  mp_TablesDeskDlg->OnShow(show);
+ mp_SeptabsDeskDlg->OnShow(show);
 }

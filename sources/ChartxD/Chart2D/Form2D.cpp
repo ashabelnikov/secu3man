@@ -241,6 +241,13 @@ void TForm2D::Enable(bool i_enable)
   }
   ButtonShowBins->Enabled = i_enable;
  }
+ else if (m_horizontal_axis_grid_mode == 1)
+ {
+  EditXBegin->Enabled = i_enable;
+  EditXEnd->Enabled = i_enable;
+  SpinXBegin->Enabled = i_enable;
+  SpinXEnd->Enabled = i_enable;
+ }
 }
 
 //---------------------------------------------------------------------------

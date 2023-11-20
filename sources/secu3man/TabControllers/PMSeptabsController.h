@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file PMTablesController.h
+/** \file PMSeptabsController.h
  * \author Alexey A. Shabelnikov
  */
 
@@ -33,18 +33,18 @@
 
 class CCommunicationManager;
 class CStatusBarManager;
-class CTablesDeskDlg;
-struct SECU3FWMapsItem;
+class CSepTablesDeskDlg;
+struct FWMapsDataHolder;
 class ISettingsData;
 namespace SECU3IO {struct EditTabPar; struct FunSetPar;}
 
-class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public MapWndScrPos
+class CPMSeptabsController : public CPMControllerBase<CSepTablesDeskDlg>, public MapWndScrPos
 {
   typedef CPMControllerBase<VIEW> Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
  public:
-  CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
-  virtual ~CPMTablesController();
+  CPMSeptabsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings, EventHandler OnSepReqDataColl);
+  virtual ~CPMSeptabsController();
 
   //beginning of controller's work
   void OnActivate(void);
@@ -69,64 +69,58 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
   void InvalidateCache(void);
   bool IsValidCache(void);
 
-  void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames); //names of read-only and read/write tables
-
   void ApplyFWOptions(DWORD opt);
-
-  void OnFunSetChanged(const SECU3IO::FunSetPar* data);
 
   void setOnChangeSettings(EventHandler OnCB);
 
   void OnSettingsChanged(void);
-
+  
  private:
   //Events from view
+
   void OnMapChanged(int i_mapType);
   virtual void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
   virtual void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
   void OnSaveButton(void);
-  void OnChangeTablesSetName(void);
-  void OnLoadTablesFrom(int index);
-  void OnSaveTablesTo(int index);
-  void OnImportFromS3F(void);
-  void OnExportToS3F(void);
   void OnChangeSettings(void);
 
  private:
   //helpful methods
   bool _CompareViewMap(int i_mapType, size_t size) const;
-  float* _GetMap(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps = NULL);
-  void _MoveMapToChart(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps = NULL);
-  void _MoveMapsToCharts(bool i_original, SECU3FWMapsItem* p_maps = NULL);
+
+  float* _GetMap(int i_mapType, bool i_original, FWMapsDataHolder* p_maps = NULL);
+
+  void _MoveMapToChart(int i_mapType, bool i_original, FWMapsDataHolder* p_maps = NULL);
+  void _MoveMapsToCharts(bool i_original, FWMapsDataHolder* p_maps = NULL);
+
   void _ClearAcquisitionFlags(void);
-  void _ResetModification(void);
-  void _SetTablesSetName(const _TSTRING name);
+
+  void _ResetModification(int mapId = -1);
 
   void _UpdateCache(const SECU3IO::EditTabPar* data); 
-  bool _IsCacheUpToDate(void);
-  bool _IsModificationMade(void) const;
+
+  bool _IsModificationMade(int i_mapId) const;
   void _SynchronizeMap(int i_mapType);
 
-  //tables's data collected
-  void OnDataCollected(void);
-  //from timer
-  void OnTableDeskChangesTimer(void);
+  //tables' data collected
+  void OnDataCollected(int tabId = -1);
+
+
+  bool _isCacheUpToDate(int id);
 
  private:
   EventHandler m_OnChangeSettings;
+  EventHandler m_OnSepReqDataColl;
+  int m_collectId;
+  bool m_valid_cache;
 
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
   ISettingsData* mp_settings;
 
-  //кеш таблиц
-  SECU3FWMapsItem* m_maps;  //current
-  SECU3FWMapsItem* m_omaps; //original
-  //флаги описывающие состояние сбора информации по таблицам
-  SECU3FWMapsItem* m_maps_flags;
-
-  bool m_valid_cache; //признак валидного кеша (данные в менеджере соответствуют данным в SECU-3)
-  /*CObjectTimer<CPMTablesController> m_td_changes_timer;*/
+  FWMapsDataHolder* m_maps;  //current
+  FWMapsDataHolder* m_omaps; //original
+  FWMapsDataHolder* m_maps_flags;
 
   float m_rpmGrid[32];
   float m_cltGrid[32];

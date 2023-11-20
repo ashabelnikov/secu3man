@@ -196,6 +196,8 @@ void TForm3D::Enable(bool enable)
  Smoothing5x->Enabled = enable;
  if (CheckBox3d->Checked)
   Chart1->Visible = enable;
+ TrackLeft->Enabled = enable;
+ TrackRight->Enabled = enable;
 }
 
 //---------------------------------------------------------------------------

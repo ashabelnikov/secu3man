@@ -165,17 +165,11 @@ typedef struct
  _uint coil_on_time[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
  //Coolant temperature sensor lookup table
- _int cts_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
+ _int cts_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2]; //data of map plus two voltage limits
  //Related voltage limits
- _uint cts_vl_begin;
- _uint cts_vl_end;
 
  //Air temperature sensor lookup table
- _int ats_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
- //Voltage corresponding to the beginning of axis
- _uint ats_vl_begin;
- //Voltage corresponding to the end of axis
- _uint ats_vl_end;
+ _int ats_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2]; //data of map plus two voltage limits
 
  //Air temperature correction of advance angle
  _char ats_corr[ATS_CORR_LOOKUP_TABLE_SIZE];
@@ -1630,11 +1624,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetAttenuatorMap(op_fwd->attenuator_table);
  GetDwellCntrlMap(op_fwd->dwellcntrl_table);
  GetCTSCurveMap(op_fwd->ctscurve_table);
- op_fwd->ctscurve_vlimits[0] = GetCTSMapVoltageLimit(0);
- op_fwd->ctscurve_vlimits[1] = GetCTSMapVoltageLimit(1);
  GetATSCurveMap(op_fwd->atscurve_table);
- op_fwd->atscurve_vlimits[0] = GetATSMapVoltageLimit(0);
- op_fwd->atscurve_vlimits[1] = GetATSMapVoltageLimit(1);
  GetATSAACMap(op_fwd->ats_corr_table);
  GetGasdosePosMap(op_fwd->gasdose_pos_table);   //GD
  GetBarocorrMap(op_fwd->barocorr_table);
@@ -1733,11 +1723,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetAttenuatorMap(ip_fwd->attenuator_table);
  SetDwellCntrlMap(ip_fwd->dwellcntrl_table);
  SetCTSCurveMap(ip_fwd->ctscurve_table);
- SetCTSMapVoltageLimit(0, ip_fwd->ctscurve_vlimits[0]);
- SetCTSMapVoltageLimit(1, ip_fwd->ctscurve_vlimits[1]);
  SetATSCurveMap(ip_fwd->atscurve_table);
- SetATSMapVoltageLimit(0, ip_fwd->atscurve_vlimits[0]);
- SetATSMapVoltageLimit(1, ip_fwd->atscurve_vlimits[1]);
  SetATSAACMap(ip_fwd->ats_corr_table);
  SetGasdosePosMap(ip_fwd->gasdose_pos_table); //GD
  SetBarocorrMap(ip_fwd->barocorr_table);
@@ -1887,6 +1873,8 @@ void CFirmwareDataMediator::GetCTSCurveMap(float* op_values, bool i_original /* 
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
   op_values[i] = (p_fd->extabs.cts_curve[i] / 4.0f);
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->extabs.cts_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetCTSCurveMap(const float* ip_values)
@@ -1900,34 +1888,8 @@ void CFirmwareDataMediator::SetCTSCurveMap(const float* ip_values)
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
   p_fd->extabs.cts_curve[i] = (_uint)MathHelpers::Round(ip_values[i] * 4.0);
-}
-
-float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
-{
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
- if (0 == i_type)
-  return p_fd->extabs.cts_vl_begin * ADC_DISCRETE;
- else if (1 == i_type)
-  return p_fd->extabs.cts_vl_end * ADC_DISCRETE;
- else
- {
-  ASSERT(0); //wrong i_type value
-  return 0;
- }
-}
-
-void  CFirmwareDataMediator::SetCTSMapVoltageLimit(int i_type, float i_value)
-{
- fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
- if (0 == i_type)
-  p_fd->extabs.cts_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
- else if (1 == i_type)
-  p_fd->extabs.cts_vl_end = MathHelpers::Round(i_value / ADC_DISCRETE);
- else
- {
-  ASSERT(0); //wrong i_type value
- }
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->extabs.cts_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 void CFirmwareDataMediator::GetATSCurveMap(float* op_values, bool i_original /* = false */)
@@ -1941,6 +1903,8 @@ void CFirmwareDataMediator::GetATSCurveMap(float* op_values, bool i_original /* 
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
   op_values[i] = (p_fd->extabs.ats_curve[i] / 4.0f);
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->extabs.ats_curve[i]) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetATSCurveMap(const float* ip_values)
@@ -1954,34 +1918,8 @@ void CFirmwareDataMediator::SetATSCurveMap(const float* ip_values)
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
   p_fd->extabs.ats_curve[i] = (_uint)MathHelpers::Round(ip_values[i] * 4.0);
-}
-
-float CFirmwareDataMediator::GetATSMapVoltageLimit(int i_type)
-{
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
- if (0 == i_type)
-  return p_fd->extabs.ats_vl_begin * ADC_DISCRETE;
- else if (1 == i_type)
-  return p_fd->extabs.ats_vl_end * ADC_DISCRETE;
- else
- {
-  ASSERT(0); //wrong i_type value
-  return 0;
- }
-}
-
-void  CFirmwareDataMediator::SetATSMapVoltageLimit(int i_type, float i_value)
-{
- fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
- if (0 == i_type)
-  p_fd->extabs.ats_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
- else if (1 == i_type)
-  p_fd->extabs.ats_vl_end = MathHelpers::Round(i_value / ADC_DISCRETE);
- else
- {
-  ASSERT(0); //wrong i_type value
- }
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->extabs.ats_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
@@ -3475,4 +3413,48 @@ void CFirmwareDataMediator::SetInjCylAddMap(int i_index, const float* ip_values)
 
  for (int i = 0; i < INJ_CYLADD_SIZE; i++ )
   p_fd->tables[i_index].inj_cyladd[i] = MathHelpers::Round(ip_values[i] / 0.0256f);
+}
+
+void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
+{
+ switch(id)
+ {
+  case ETMT_ATTENUATOR: SetAttenuatorMap(ip_values); break;
+  case ETMT_DWELLCNTRL: SetDwellCntrlMap(ip_values); break;
+  case ETMT_CTS_CURVE: SetCTSCurveMap(ip_values); break;
+  case ETMT_ATS_CURVE: SetATSCurveMap(ip_values); break;
+  case ETMT_ATS_CORR: SetATSAACMap(ip_values); break;
+  case ETMT_GASDOSE: SetGasdosePosMap(ip_values); break;
+  case ETMT_BAROCORR: SetBarocorrMap(ip_values); break;
+  case ETMT_MANIGNTIM: SetManIgntimMap(ip_values); break;
+  case ETMT_TMP2_CURVE: SetTmp2CurveMap(ip_values); break;
+  case ETMT_CRKCLT_CORR: SetCrkTempMap(ip_values); break;
+  case ETMT_EH_PAUSE: SetEHPauseMap(ip_values); break;
+  case ETMT_CRANKING_THRD: SetCrankingThrdMap(ip_values); break;
+  case ETMT_CRANKING_TIME: SetCrankingTimeMap(ip_values); break;
+  case ETMT_SMAPABAN_THRD: SetSmapabanThrdMap(ip_values); break;
+  case ETMT_KNOCK_ZONE: SetKnockZoneMap(ip_values); break;
+  case ETMT_GRTS_CURVE: SetGrtsCurveMap(ip_values); break;
+  case ETMT_GRHEAT_DUTY: SetGrHeatDutyMap(ip_values); break;
+  case ETMT_PWMIAC_UCOEF: SetPwmIacUCoefMap(ip_values); break;
+  case ETMT_AFTSTR_STRK0: SetAftstrStrk0Map(ip_values); break;
+  case ETMT_AFTSTR_STRK1: SetAftstrStrk1Map(ip_values); break;
+  case ETMT_GRVDELAY: SetGrValDelMap(ip_values); break;
+  case ETMT_FTLS_CURVE: SetFtlsCurveMap(ip_values); break;
+  case ETMT_EGTS_CURVE: SetEgtsCurveMap(ip_values); break;
+  case ETMT_OPS_CURVE: SetOpsCurveMap(ip_values); break;
+  case ETMT_MANINJPWC: SetManInjPwcMap(ip_values); break;
+  case ETMT_MAF_CURVE: SetMAFCurveMap(ip_values); break;
+  case ETMT_FTLSCOR: SetFtlsCorMap(ip_values); break;
+  case ETMT_LAMBDA_ZONE: SetLambdaZoneMap(ip_values); break;
+  case ETMT_FTS_CURVE: SetFtsCurveMap(ip_values); break;
+  case ETMT_FUELDENS_CORR: SetFuelDensCorrMap(ip_values); break;
+  case ETMT_XTAU_XFACC: SetXtauXfAccMap(ip_values); break;
+  case ETMT_XTAU_XFDEC: SetXtauXfDecMap(ip_values); break;
+  case ETMT_XTAU_TFACC: SetXtauTfAccMap(ip_values); break;
+  case ETMT_XTAU_TFDEC: SetXtauTfDecMap(ip_values); break;
+  case ETMT_INJNONLINP: SetInjNonLinPMap(ip_values); break;
+  case ETMT_INJNONLING: SetInjNonLinGMap(ip_values); break;
+  default: ASSERT(0);
+ }
 }

@@ -43,7 +43,6 @@ class ITablesDeskView
   virtual bool IsEnabled(void) = 0;                               //¬озвращает true если представление разрешено
   virtual void Enable(bool enable) = 0;                           //enable/disable view
   virtual void Show(bool show) = 0;                               //показать/спр€тать контент представлени€
-  virtual void ShowSaveButton(bool i_show) = 0;                   //показать/cпр€тать кнопку "сохранить"
   virtual void ShowOpenedCharts(bool i_show) = 0;                 //show/hide opened charts
   virtual void UpdateOpenedCharts(void) = 0;                      //update opened charts
   virtual void TransformValues(void) = 0;                         //transform values in maps

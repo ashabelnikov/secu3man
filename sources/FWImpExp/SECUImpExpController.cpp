@@ -114,18 +114,10 @@ void SECU3ImportController::OnOkPressed(void)
   m_fwdm->GetDwellCntrlMap(mp_fwd->dwellcntrl_table);
 
  if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
- {
   m_fwdm->GetCTSCurveMap(mp_fwd->ctscurve_table);
-  mp_fwd->ctscurve_vlimits[0] = m_fwdm->GetCTSMapVoltageLimit(0);
-  mp_fwd->ctscurve_vlimits[1] = m_fwdm->GetCTSMapVoltageLimit(1);
- }
 
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
- {
   m_fwdm->GetATSCurveMap(mp_fwd->atscurve_table);
-  mp_fwd->atscurve_vlimits[0] = m_fwdm->GetATSMapVoltageLimit(0);
-  mp_fwd->atscurve_vlimits[1] = m_fwdm->GetATSMapVoltageLimit(1);
- }
 
  if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
   m_fwdm->GetATSAACMap(mp_fwd->ats_corr_table);
@@ -555,18 +547,10 @@ void SECU3ExportController::OnOkPressed(void)
   m_fwdm->SetDwellCntrlMap(mp_fwd->dwellcntrl_table);
 
  if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
- {
   m_fwdm->SetCTSCurveMap(mp_fwd->ctscurve_table);
-  m_fwdm->SetCTSMapVoltageLimit(0, mp_fwd->ctscurve_vlimits[0]);
-  m_fwdm->SetCTSMapVoltageLimit(1, mp_fwd->ctscurve_vlimits[1]);
- }
  
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
- {
   m_fwdm->SetATSCurveMap(mp_fwd->atscurve_table);
-  m_fwdm->SetATSMapVoltageLimit(0, mp_fwd->atscurve_vlimits[0]);
-  m_fwdm->SetATSMapVoltageLimit(1, mp_fwd->atscurve_vlimits[1]);
- }
 
  if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
   m_fwdm->SetATSAACMap(mp_fwd->ats_corr_table);

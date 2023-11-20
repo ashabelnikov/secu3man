@@ -39,11 +39,13 @@
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
+#include "ParamDesk/Tables/SepTablesDeskDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "PMInitDataCollector.h"
 #include "PMMonitorController.h"
 #include "PMParamsController.h"
 #include "PMTablesController.h"
+#include "PMSeptabsController.h"
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/ParamMonTabDlg.h"
 
@@ -65,6 +67,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
 , mp_moncntr(new CPMMonitorController(ip_view->mp_MIDeskDlg.get(),ip_view->mp_RSDeskDlg.get(), ip_view->mp_CEDeskDlg.get(), ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar, ip_settings))
 , mp_parcntr(new CPMParamsController(ip_view->mp_ParamDeskDlg.get(), ip_comm, ip_sbar, MakeDelegate(this, &CParamMonTabController::OnPDRequestsDataCollection), MakeDelegate(this, &CParamMonTabController::OnParametersChanged), ip_settings))
 , mp_tabcntr(new CPMTablesController(ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar, ip_settings))
+, mp_sepcntr(new CPMSeptabsController(ip_view->mp_SeptabsDeskDlg.get(), ip_comm, ip_sbar, ip_settings, MakeDelegate(this, &CParamMonTabController::OnSepRequestsDataCollection)))
 , m_current_state(m_state_machine.end())
 {
  //=================================================================
@@ -83,9 +86,19 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
  m_scenario2.push_back(mp_parcntr.get());
  m_scenario2.push_back(mp_moncntr.get());
 
+ //сценарий: [сбор данных]-->[чтение отдельных таблиц]-->[чтение параметров]-->[мониторинг]
+ m_scenario21.push_back(mp_idccntr.get());
+ m_scenario21.push_back(mp_sepcntr.get());
+ m_scenario21.push_back(mp_parcntr.get());
+ m_scenario21.push_back(mp_moncntr.get());
+
  //сценарий: [чтение таблиц]-->[мониторинг]
  m_scenario3.push_back(mp_tabcntr.get());
  m_scenario3.push_back(mp_moncntr.get());
+
+ //сценарий: [чтение отдельных таблиц]-->[мониторинг]
+ m_scenario31.push_back(mp_sepcntr.get());
+ m_scenario31.push_back(mp_moncntr.get());
 
  //сценарий: [чтение параметров]-->[мониторинг]
  m_scenario4.push_back(mp_parcntr.get());
@@ -98,9 +111,11 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
  //”станавливаем обработчики событий от view
  mp_view->setOnRawSensorsCheck(MakeDelegate(this, &CParamMonTabController::OnRawSensorsCheckBox));
  mp_view->setOnEditTablesCheck(MakeDelegate(this, &CParamMonTabController::OnEditTablesCheckBox));
+ mp_view->setOnEditTablesOffCheck(MakeDelegate(this, &CParamMonTabController::OnEditTablesOffCheckBox));
 
  mp_view->mp_MIDeskDlg->setOnMISettingsChanged(MakeDelegate(this, &CParamMonTabController::OnMIDeskSettingsChanged));
  mp_tabcntr->setOnChangeSettings(MakeDelegate(this, &CParamMonTabController::_OnChangeSettings));
+ mp_sepcntr->setOnChangeSettings(MakeDelegate(this, &CParamMonTabController::_OnChangeSettings));
 }
 
 CParamMonTabController::~CParamMonTabController()
@@ -134,6 +149,7 @@ void CParamMonTabController::OnSettingsChanged(int action)
  }
 
  mp_tabcntr->OnSettingsChanged();
+ mp_sepcntr->OnSettingsChanged();
 
  ConfigureIndicators();
  mp_view->Invalidate();
@@ -147,7 +163,9 @@ void CParamMonTabController::OnActivate(void)
  mp_moncntr->ShowRawSensors(mp_view->GetRawSensorsCheckState());
  mp_parcntr->OnActivate();
  mp_tabcntr->InvalidateCache(); //<--делаем закешированные таблицы невалидными
+ mp_sepcntr->InvalidateCache(); //<--делаем закешированные таблицы невалидными
  mp_tabcntr->OnActivate();
+ mp_sepcntr->OnActivate();
 
  //////////////////////////////////////////////////////////////////
  //ѕодключаем контроллер к потоку данных от SECU-3
@@ -186,6 +204,7 @@ void CParamMonTabController::OnDeactivate(void)
  mp_moncntr->OnDeactivate();
  mp_parcntr->OnDeactivate();
  mp_tabcntr->OnDeactivate();
+ mp_sepcntr->OnDeactivate();
  
  mp_sbar->SetInformationText(_T(""));
 
@@ -237,10 +256,12 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   if ((*m_current_state) == mp_idccntr.get())
   {
    mp_view->EnableEditTablesCheck(CHECKBIT32(mp_idccntr->GetFWOptions(), COPT_REALTIME_TABLES));
+   mp_view->EnableEditTablesOffCheck(CHECKBIT32(mp_idccntr->GetFWOptions(), COPT_REALTIME_TABLES));
    mp_parcntr->SetFunctionsNames(mp_idccntr->GetFNNames()); 
    mp_parcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
    mp_moncntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
    mp_tabcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
+   mp_sepcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
 
    if (CHECKBIT32(mp_idccntr->GetFWOptions(), COPT_REALTIME_TABLES))
    {
@@ -259,6 +280,11 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   else if ((*m_current_state) == mp_tabcntr.get())
   {
    mp_tabcntr->Enable(mp_comm->m_pControlApp->GetOnlineStatus());  
+  }
+  //«авершилось чтение отдельных таблиц
+  else if ((*m_current_state) == mp_sepcntr.get())
+  {
+   mp_sepcntr->Enable(mp_comm->m_pControlApp->GetOnlineStatus());  
   }
   
   //переходим к следующему состо€нию
@@ -280,11 +306,19 @@ void CParamMonTabController::OnConnection(const bool i_online)
  {
   state = CStatusBarManager::STATE_ONLINE;
   mp_tabcntr->InvalidateCache(); //<--делаем закешированные таблицы невалидными
-  _StartScenario(mp_view->GetEditTablesCheckState() ? m_scenario2 : m_scenario1);
+  mp_sepcntr->InvalidateCache(); //<--делаем закешированные таблицы невалидными
+
+  if (mp_view->GetEditTablesCheckState())
+   _StartScenario(m_scenario2);
+  else if (mp_view->GetEditTablesOffCheckState() && false==mp_sepcntr->IsValidCache())
+   _StartScenario(m_scenario21);
+  else
+   _StartScenario(m_scenario1);
  }
  else
  {
   state = CStatusBarManager::STATE_OFFLINE;
+  mp_sepcntr->InvalidateCache();
  }
 
  mp_moncntr->OnConnection(i_online);
@@ -296,6 +330,7 @@ void CParamMonTabController::OnConnection(const bool i_online)
   mp_tabcntr->Enable(i_online);
   mp_parcntr->Enable(i_online);
  }
+ mp_sepcntr->Enable(i_online);
 
  mp_sbar->SetConnectionState(state);
 }
@@ -303,6 +338,7 @@ void CParamMonTabController::OnConnection(const bool i_online)
 bool CParamMonTabController::OnClose(void)
 {
  mp_tabcntr->OnClose();
+ mp_sepcntr->OnClose();
  mp_settings->SetParamMonVert(mp_view->GetSplitterPos());
  return true; //отвечаем что данна€ вкладка готова к закрытию приложени€
 }
@@ -310,6 +346,7 @@ bool CParamMonTabController::OnClose(void)
 void CParamMonTabController::OnCloseNotify(void)
 {
  mp_tabcntr->OnCloseNotify();
+ mp_sepcntr->OnCloseNotify();
 }
 
 void CParamMonTabController::OnFullScreen(bool i_what)
@@ -325,6 +362,7 @@ bool CParamMonTabController::OnAskChangeTab(void)
 void CParamMonTabController::OnSaveSettings(void)
 {
  mp_tabcntr->OnSaveSettings();
+ mp_sepcntr->OnSaveSettings();
 }
 
 //—обытие от чекбокса переключающего режим мониторинга (приборы/сырые данные)
@@ -339,6 +377,14 @@ void CParamMonTabController::OnEditTablesCheckBox(void)
  //то запускаем процесс чтени€ таблиц
  if (true==mp_view->GetEditTablesCheckState() && false==mp_tabcntr->IsValidCache())
   _StartScenario(m_scenario3);
+}
+
+void CParamMonTabController::OnEditTablesOffCheckBox(void)
+{
+ //≈сли пользователь нажал кнопку и данные в кеше контроллера невалидные (устарели)
+ //то запускаем процесс чтени€ таблиц
+ if (true==mp_view->GetEditTablesOffCheckState() && false==mp_sepcntr->IsValidCache())
+  _StartScenario(m_scenario31);
 }
 
 void CParamMonTabController::OnPDRequestsDataCollection()
@@ -432,4 +478,9 @@ void CParamMonTabController::_OnChangeSettings(void)
 {
  mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
  mp_view->mp_ParamDeskDlg->SetITEdMode(mp_settings->GetITEdMode());
+}
+
+void CParamMonTabController::OnSepRequestsDataCollection()
+{
+ _StartScenario(m_scenario31);
 }

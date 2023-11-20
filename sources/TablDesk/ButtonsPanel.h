@@ -189,6 +189,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnViewCylAddMap();
   afx_msg void OnGridModeEditingIgn();
   afx_msg void OnGridModeEditingInj();
+  afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIdleMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewWorkMap(CCmdUI* pCmdUI);
@@ -414,7 +415,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   int m_ve2_map_func;
   std::vector<float> m_ve2_map_load_slots;
 
-  std::vector<int> m_btnMovIds;
   bool m_initialized;
   bool m_disable_vscroll;
 };

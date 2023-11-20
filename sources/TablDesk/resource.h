@@ -81,6 +81,10 @@
 #define IDC_TD_SEPTABS_FRAME            5092
 #define IDD_TD_SEPTABLES_PANEL          5093
 #define IDC_TD_SETIDX                   5094
+#define IDB_CES_UP                      5095
+#define IDB_CES_DOWN                    5096
+#define IDB_CES_FOCUSED                 5097
+#define IDB_CES_DISABLED                5098
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

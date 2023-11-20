@@ -122,8 +122,6 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnMapChanged(int i_type);
   void OnFunSetSelectionChanged(int i_selected_index);
   void OnFunSetNamechanged(int i_index_of_item, CString i_new_name);
-  void OnCTSXAxisEditChanged(int i_type, float i_value);
-  void OnATSXAxisEditChanged(int i_type, float i_value);
   void OnCESettingsButton(void);
   ///////////////////////////////////////////////////////////
   void OnBLStartedEmergency(void);

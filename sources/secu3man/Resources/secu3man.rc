@@ -105,8 +105,9 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "Редактирование таблиц",IDC_PM_EDIT_TABLES,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 187,214,89,17
-    CONTROL         "Показывать ""сырые"" значения датчиков",IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS, 311,215,163,15
+    CONTROL         "Редакт. набора таблиц",IDC_PM_EDIT_TABLES,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 120,214,89,17
+    CONTROL         "Редакт. отдел. таблиц",IDC_PM_EDIT_TABLES_OFF,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 215,214,89,17
+    CONTROL         "Показывать ""сырые"" значения датчиков",IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS, 320,215,163,15
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,282,192
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,185,212
     CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,193,238,20
@@ -741,12 +742,13 @@ BEGIN
     IDS_PM_WRITING_PARAMS         "Сохранение параметров..."
     IDS_PM_WRITING_TABLSET        "Сохранение таблиц..."
     IDS_PM_EEPROM_PARAMETERS      "Параметры в EEPROM:"
-    IDS_PM_TABLES_IN_RAM          "Таблицы в ОЗУ:"
+    IDS_PM_TABLES_IN_RAM          "Набор таблиц в ОЗУ:"
     IDS_APP_TITLE                 "SECU-3 Manager"
     IDS_STATUS_BAR_LOGO           "SECU-3"
     IDS_KC_OSCILLOSCOPE_V_UNIT    "В"
     IDS_KC_OSCILLOSCOPE_H_UNIT    "Выборки"
-    IDS_PM_EDIT_TABLES_TT         "Открывает панель редактирования таблиц в реальном времени"
+    IDS_PM_EDIT_TABLES_TT         "Открывает панель редактирования набора таблиц в реальном времени"
+    IDS_PM_EDIT_TABLES_OFF_TT     "Открывает панель редактирования группы отдельных таблиц в реальном времени"
     IDS_PM_SHOW_RAW_SENSORS_TT    "Показать значения напряжений на датчиках. В этом режиме запись данных в лог приостанавливается, индикация рабочих точек в редакторах таблиц не работает, работа автонастройки VE также невозможна."
     IDS_FW_VIEW_FWOPT_TT          "Просмотр опций с которыми скомпилирована прошивка"
     IDS_ASK_USER_ABOUT_VREF_COMP  "Программа определила что загружаемые данные возможно использовались в прошивке с другим опорным напряжением АЦП.\n Пересчитать поправочные коэффициенты АЦП?"
@@ -1077,8 +1079,9 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "Edit tables",IDC_PM_EDIT_TABLES,"Button", BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS ,187,214,89,17
-    CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS,311,215,163,15
+    CONTROL         "Edit set of tables",IDC_PM_EDIT_TABLES,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 120,214,89,17
+    CONTROL         "Edit separate tables",IDC_PM_EDIT_TABLES_OFF,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 215,214,89,17
+    CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS,320,215,163,15
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,282,192
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,185,212
     CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,193,238,20
@@ -1673,12 +1676,13 @@ BEGIN
     IDS_PM_WRITING_PARAMS         "Saving parameters..."
     IDS_PM_WRITING_TABLSET        "Saving tables..."
     IDS_PM_EEPROM_PARAMETERS      "Parameters in EEPROM:"
-    IDS_PM_TABLES_IN_RAM          "Tables in RAM:"
+    IDS_PM_TABLES_IN_RAM          "Set of tables in RAM:"
     IDS_APP_TITLE                 "SECU-3 Manager"
     IDS_STATUS_BAR_LOGO           "SECU-3"
     IDS_KC_OSCILLOSCOPE_V_UNIT    "V"
     IDS_KC_OSCILLOSCOPE_H_UNIT    "Samples"
-    IDS_PM_EDIT_TABLES_TT         "Opens panel for editing of maps in the realtime"
+    IDS_PM_EDIT_TABLES_TT         "Opens panel for editing of set of maps in the realtime"
+    IDS_PM_EDIT_TABLES_OFF_TT     "Opens panel for editing of group of separate maps in the realtime"
     IDS_PM_SHOW_RAW_SENSORS_TT    "Show voltage values on sensors. In this mode, data recording to the log is suspended, the indication of operating points in the map editors does not work, and the VE autotuning is also impossible."
 END
 
@@ -2019,7 +2023,7 @@ BEGIN
     BLOCK "040904e4"
     BEGIN
       VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007-2022 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2007-2023 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
       VALUE "ProductName", "SECU-3 Manager"
     END
   END

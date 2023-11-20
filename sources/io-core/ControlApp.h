@@ -82,7 +82,7 @@ class IOCORE_API CControlApp
   void SetQuartzFrq(long frq);
   void SetPortAutoReopen(bool reopen);
   bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
-  bool ChangeContext(const BYTE i_new_descriptor);
+  bool ChangeContext(const BYTE i_new_descriptor, int data = 0);
   bool StartBootLoader();
   void SetEventHandler(EventHandler* i_pEventHandler);
   inline CSECTION* GetSyncObject(void);

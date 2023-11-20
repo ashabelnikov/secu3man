@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "TablesPanelBase.h"
+#include "common/dpiaware.h"
 #include "common/GDIHelpers.h"
 #include "DLLLinkedFunctions.h"
 #include "MapIds.h"
@@ -158,7 +159,7 @@ void CTablesPanelBase::EnableEmbedMapWnd(bool embed, const CRect& rc, int begin,
 bool CTablesPanelBase::Is3DMap(int i)
 {
  return (i == TYPE_MAP_DA_WORK || i == TYPE_MAP_INJ_VE || i == TYPE_MAP_INJ_VE2 || i == TYPE_MAP_INJ_AFR || 
-         i == TYPE_MAP_INJ_IT || i == TYPE_MAP_PWM1 || i == TYPE_MAP_PWM2 || i == TYPE_MAP_GASDOSE);
+         i == TYPE_MAP_INJ_IT || i == TYPE_MAP_PWM1 || i == TYPE_MAP_PWM2 || i == TYPE_MAP_GASDOSE || i == TYPE_MAP_KNOCK_ZONE || i == TYPE_MAP_LAMBDA_ZONE);
 }
 
 float CTablesPanelBase::GetPtMovStep(int wndType)
@@ -209,4 +210,48 @@ void __cdecl CTablesPanelBase::OnGetXAxisLabelCLT(LPTSTR io_label_string, int in
 }
 
 //------------------------------------------------------------------------
+void CTablesPanelBase::AlignButtons(CWnd *p_parent, int cx, int id1st, int id2nd, int idHalf, int begin, int end)
+{
+ DPIAware da;
+ CRect rc1 = GDIHelpers::GetChildWndRect(m_md[id1st].mp_button);
+ int c = da.ScaleX(8), half_id = idHalf;
+  
+ if ((cx - rc1.left) - rc1.Width() > rc1.Width()*0.6f)
+ {
+  if (m_btnMovIds.empty())
+  {//move
+   CRect rc2 = GDIHelpers::GetChildWndRect(m_md[id2nd].mp_button);
+   CRect rc3 = GDIHelpers::GetChildWndRect(m_md[half_id].mp_button);
+   int decr = (rc3.top - rc1.top) + (rc2.top - rc1.top);
+
+   for (int i = begin; i <= end; ++i)
+   {
+    CRect rc4 = GDIHelpers::GetChildWndRect(m_md[i].mp_button);
+    if (rc4.top > rc3.top)
+     m_btnMovIds.push_back(i);
+   }  
+   for(size_t t = 0; t < m_btnMovIds.size(); ++t)
+   {
+    CRect rc = GDIHelpers::GetChildWndRect(m_md[m_btnMovIds[t]].mp_button);
+    m_md[m_btnMovIds[t]].mp_button->SetWindowPos(NULL, rc1.right + c, rc.top - decr, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+   }
+  }
+ }
+ else
+ {
+  if (!m_btnMovIds.empty())
+  {//restore
+   CRect rc2 = GDIHelpers::GetChildWndRect(m_md[id2nd].mp_button);
+   CRect rc3 = GDIHelpers::GetChildWndRect(m_md[half_id].mp_button);
+   int decr = (rc3.top - rc1.top) + (rc2.top - rc1.top);
+
+   for(size_t t = 0; t < m_btnMovIds.size(); ++t)
+   {
+    CRect rc = GDIHelpers::GetChildWndRect(m_md[m_btnMovIds[t]].mp_button);
+    m_md[m_btnMovIds[t]].mp_button->SetWindowPos(NULL, rc1.left, rc.top + decr, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+   }
+   m_btnMovIds.clear();   
+  }
+ }
+}
 

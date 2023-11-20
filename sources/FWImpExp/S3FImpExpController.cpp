@@ -124,18 +124,10 @@ void S3FImportController::OnOkPressed(void)
   memcpy(mp_fwd->dwellcntrl_table, mp_s3f_io->GetData().dwellcntrl_table, sizeof(float) * COIL_ON_TIME_LOOKUP_TABLE_SIZE);
 
  if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
- {
-  memcpy(mp_fwd->ctscurve_table, mp_s3f_io->GetData().ctscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
-  mp_fwd->ctscurve_vlimits[0] = mp_s3f_io->GetData().ctscurve_vlimits[0];
-  mp_fwd->ctscurve_vlimits[1] = mp_s3f_io->GetData().ctscurve_vlimits[1];
- }
+  memcpy(mp_fwd->ctscurve_table, mp_s3f_io->GetData().ctscurve_table, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
 
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
- {
-  memcpy(mp_fwd->atscurve_table, mp_s3f_io->GetData().atscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
-  mp_fwd->atscurve_vlimits[0] = mp_s3f_io->GetData().atscurve_vlimits[0];
-  mp_fwd->atscurve_vlimits[1] = mp_s3f_io->GetData().atscurve_vlimits[1];
- }
+  memcpy(mp_fwd->atscurve_table, mp_s3f_io->GetData().atscurve_table, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
 
  if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
   memcpy(mp_fwd->ats_corr_table, mp_s3f_io->GetData().ats_corr_table, sizeof(float) * ATS_CORR_LOOKUP_TABLE_SIZE);
@@ -664,18 +656,10 @@ void S3FExportController::OnOkPressed(void)
   memcpy(mp_s3f_io->GetDataLeft().dwellcntrl_table, mp_fwd->dwellcntrl_table, sizeof(float) * COIL_ON_TIME_LOOKUP_TABLE_SIZE);
 
  if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
- {
-  memcpy(mp_s3f_io->GetDataLeft().ctscurve_table, mp_fwd->ctscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
-  mp_s3f_io->GetDataLeft().ctscurve_vlimits[0] = mp_fwd->ctscurve_vlimits[0];
-  mp_s3f_io->GetDataLeft().ctscurve_vlimits[1] = mp_fwd->ctscurve_vlimits[1];
- }
+  memcpy(mp_s3f_io->GetDataLeft().ctscurve_table, mp_fwd->ctscurve_table, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
 
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
- {
-  memcpy(mp_s3f_io->GetDataLeft().atscurve_table, mp_fwd->atscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
-  mp_s3f_io->GetDataLeft().atscurve_vlimits[0] = mp_fwd->atscurve_vlimits[0];
-  mp_s3f_io->GetDataLeft().atscurve_vlimits[1] = mp_fwd->atscurve_vlimits[1];
- }
+  memcpy(mp_s3f_io->GetDataLeft().atscurve_table, mp_fwd->atscurve_table, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
 
  if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
   memcpy(mp_s3f_io->GetDataLeft().ats_corr_table, mp_fwd->ats_corr_table, sizeof(float) * ATS_CORR_LOOKUP_TABLE_SIZE);

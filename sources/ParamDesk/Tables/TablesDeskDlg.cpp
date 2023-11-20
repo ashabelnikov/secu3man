@@ -80,7 +80,7 @@ void CTablesDeskDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CTablesDeskDlg, Super)
  ON_WM_DESTROY()
- ON_WM_SYSCOMMAND()
+/* ON_WM_SYSCOMMAND()*/
  ON_WM_CONTEXTMENU()
  ON_WM_SIZE()
  ON_UPDATE_COMMAND_UI(IDC_TABLES_DESK_TITLE, OnUpdateControls)
@@ -224,11 +224,6 @@ void CTablesDeskDlg::Show(bool show)
 {
  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
  this->ShowWindow(nCmdShow);
-}
-
-void CTablesDeskDlg::ShowSaveButton(bool i_show)
-{
- m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
 }
 
 void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
@@ -533,7 +528,6 @@ void CTablesDeskDlg::EnableAdvanceAngleIndication(bool i_enable)
 void CTablesDeskDlg::OnDestroy()
 {
  Super::OnDestroy();
- ShowOpenedCharts(false);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -554,13 +548,13 @@ void CTablesDeskDlg::OnSaveButton()
 // m_save_button.GetWindowRect(rc);
 // mp_ContextMenuManager->TrackPopupMenuSave(rc.left, rc.bottom);
 }
-
+/*
 void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)
 {
  Super::OnSysCommand(nID, lParam);
  if (nID == SC_MINIMIZE)
   SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-}
+}*/
 
 void CTablesDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
@@ -653,7 +647,9 @@ void CTablesDeskDlg::EnableToggleMapWnd(bool toggle)
  mp_ButtonsPanel->EnableToggleMapWnd(toggle);
 }
 
+//note: this event is about shoving tab and not obligatory about showing this dialog
 void CTablesDeskDlg::OnShow(bool show)
 {
  mp_ButtonsPanel->OnShow(show);
+ ShowOpenedCharts(IsWindowVisible() && show);
 }
