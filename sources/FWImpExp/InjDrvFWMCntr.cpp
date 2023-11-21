@@ -54,6 +54,7 @@ InjDrvFWMCntr::InjDrvFWMCntr()
 
  //set event handlers to catch events from view
  mp_view->setOnOkButton(MakeDelegate(this,&InjDrvFWMCntr::OnOkPressed));
+ mp_view->setOnLoadButton(MakeDelegate(this,&InjDrvFWMCntr::OnLoadPressed));
  mp_view->setOnSaveButton(MakeDelegate(this,&InjDrvFWMCntr::OnSavePressed));
  mp_view->setOnCancelButton(MakeDelegate(this,&InjDrvFWMCntr::OnCancelPressed));
  mp_view->setOnActivate(MakeDelegate(this,&InjDrvFWMCntr::OnViewActivate));
@@ -96,6 +97,17 @@ void InjDrvFWMCntr::OnSavePressed(void)
  _BuildOptList(opts, procId);
  mp_view->EndDialog(IDCANCEL); //close window
  m_status = _LoadFirmware(opts, procId, true); //load and save result on disk
+}
+
+void InjDrvFWMCntr::OnLoadPressed(void)
+{
+ std::set<_TSTRING> opts;
+ int procId = mp_view->GetProcCombo();
+ _BuildOptList(opts, procId);
+ AfxGetMainWnd()->BeginWaitCursor();
+ m_status = _LoadFirmware(opts, procId, false); //load and store result in memory
+ AfxGetMainWnd()->EndWaitCursor();
+ mp_view->EndDialog(IDRETRY); //close window
 }
 
 void InjDrvFWMCntr::OnCancelPressed(void)

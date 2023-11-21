@@ -98,6 +98,8 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
   ISettingsData* mp_sett;
 
  private:
+  void _LoadFromFirmware(bool buffer = false);
+
   CObjectTimer<CInjDriverTabController> m_lzidblhs_tmr;
   CObjectTimer<CInjDriverTabController> m_address_tmr;
   bool m_initFlags[2];

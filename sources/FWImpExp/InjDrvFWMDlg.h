@@ -66,6 +66,7 @@ class CInjDrvFWMDlg : public CDialog
   void setOnActivate(EventHandler OnActivate) {m_OnActivate = OnActivate;};
   void setOnChangeFwmCheck(EventWithCode OnChange) {m_OnChangeFwmCheck = OnChange;};
   void setOnSaveButton(EventHandler OnFunction) {m_OnSaveButton = OnFunction;};
+  void setOnLoadButton(EventHandler OnFunction) {m_OnLoadButton = OnFunction;};
   void setOnFuseLink(EventHandler OnFunction) {m_OnFuseLink = OnFunction;};
   void setOnChecksLink(EventHandler OnFunction) {m_OnChecksLink = OnFunction;};
 
@@ -89,6 +90,7 @@ class CInjDrvFWMDlg : public CDialog
   afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
   afx_msg void OnFwmCheck(UINT);
   afx_msg void OnSave();
+  afx_msg void OnLoad();
   DECLARE_MESSAGE_MAP()
 
   void OnFuseLinkClick(void);
@@ -97,6 +99,7 @@ class CInjDrvFWMDlg : public CDialog
  private:
   EventHandler m_OnOkButton;
   EventHandler m_OnSaveButton;
+  EventHandler m_OnLoadButton;
   EventHandler m_OnCancelButton;
   EventHandler m_OnActivate;
   EventWithCode m_OnChangeFwmCheck;

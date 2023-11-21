@@ -399,11 +399,20 @@ void CInjDriverTabController::OnSaveToFirmware(void)
  CInjDrvFileDataIO::SaveSetsToFirmware(params);
 }
 
-void CInjDriverTabController::OnLoadFromFirmware(void)
+void CInjDriverTabController::_LoadFromFirmware(bool buffer /*= false*/)
 {
  SECU3IO::InjDrvPar params[2];
- if (!CInjDrvFileDataIO::LoadSetsFromFirmware(params))
-  return;
+ if (buffer)
+ {
+  if (!CInjDrvFileDataIO::LoadSetsFromBuffer(params, m_bl_data))
+   return;
+ }
+ else
+ {
+  if (!CInjDrvFileDataIO::LoadSetsFromFirmware(params))
+   return;
+ }
+
  params[0].set_idx = 0;
  params[0].dev_address = mp_view->GetInjDrvSel();
  params[0].broadcast = mp_view->GetEditSimultanCheck();
@@ -436,6 +445,12 @@ void CInjDriverTabController::OnLoadFromFirmware(void)
  mp_view->SetOfflineCheck();
  
  mp_sbar->SetInformationText(MLL::LoadString(IDS_INJDRV_LOADED_FROM_FW));    
+}
+
+
+void CInjDriverTabController::OnLoadFromFirmware()
+{
+ _LoadFromFirmware();
 }
 
 void CInjDriverTabController::OnShowFirmwareInfo(void)
@@ -857,8 +872,15 @@ void CInjDriverTabController::OnFirmwareMaster()
  InjDrvFWMCntr cntr;
 
  int result = cntr.DoLoad(&m_bl_data[0], MCU_FLASH_SIZE);
- if (result != IDOK || !cntr.GetStatus())
+ if (result == IDCANCEL || !cntr.GetStatus())
+ {
   return; //canceled by user or error
+ }
+ else if (result == IDRETRY)
+ {
+  _LoadFromFirmware(true); //load from buffer
+  return; 
+ }
  
  mp_comm->m_pBootLoader->SetPlatformParameters(PlatformParamHolder(EP_ATMEGA328PB));
 

@@ -39,7 +39,7 @@ BEGIN
     PUSHBUTTON      "Отмена",IDCANCEL,157,179,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 156
+IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 176
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Мастер прошивок"
 FONT 8, "MS Sans Serif"
@@ -53,8 +53,9 @@ BEGIN
     LTEXT           "Fuse биты?",IDC_FWM_FUSE_LINK,23,110,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS    
     LTEXT           "Какие галочки ставить?",IDC_FWM_CHECKS_LINK,90,110,88,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS    
     PUSHBUTTON      "Сохранить",IDC_FWM_SAVE_BTN,20,130,50,16
-    DEFPUSHBUTTON   "Загрузить",IDOK,80,130,50,16
+    DEFPUSHBUTTON   "Прошить",IDOK,80,130,50,16
     PUSHBUTTON      "Отмена",IDCANCEL,140,130,50,16
+    PUSHBUTTON      "Загрузить",IDC_FWM_OPEN_BTN,20,150,50,16
 END
 
 IDD_INJDRV_STOCK DIALOGEX 0, 0, 288, 182
@@ -237,6 +238,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_INJDRV_PRESETS_LIST_TT "Список с пресетами для разных форсунок"
     IDS_FWM_CHECKMARKS_LZID  "Если у вас блок SECU-3i TBZ или SECU-LZIDx, то вам не нужно устанавливать галочки инверсии.\nГалочка 'Коррекции длительн. впрыска' разрешает работу таблиц 'Множитель' и 'Добавка'."
+    IDS_FWM_OPEN_BTN_TT "Загрузить данные из прошивки"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -274,7 +276,7 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,157,179,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 156
+IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 176
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Firmware master"
 FONT 8, "MS Sans Serif"
@@ -288,8 +290,9 @@ BEGIN
     LTEXT           "Fuse bits?",IDC_FWM_FUSE_LINK,23,110,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     LTEXT           "Which checks to set?",IDC_FWM_CHECKS_LINK,90,110,88,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS    
     PUSHBUTTON      "Save",IDC_FWM_SAVE_BTN,20,130,50,16
-    DEFPUSHBUTTON   "Load",IDOK,80,130,50,16
+    DEFPUSHBUTTON   "Flash",IDOK,80,130,50,16
     PUSHBUTTON      "Cancel",IDCANCEL,140,130,50,16
+    PUSHBUTTON      "Load",IDC_FWM_OPEN_BTN,20,150,50,16
 END
 
 IDD_INJDRV_STOCK DIALOGEX 0, 0, 288, 182
@@ -470,6 +473,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_INJDRV_PRESETS_LIST_TT "List with presets for various injectors"
     IDS_FWM_CHECKMARKS_LZID  "If you have a SECU-3i TBZ or SECU-LZIDx unit, then you do not need to check the inversion checkmarks.\nCheckmark 'Corrections of inj. PW' enables the operation of 'PW mul' and 'PW add' tables."
+    IDS_FWM_OPEN_BTN_TT "Open data from firmware"
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -39,6 +39,7 @@ class AFX_EXT_CLASS InjDrvFWMCntr
 
   void OnOkPressed(void);
   void OnSavePressed(void);
+  void OnLoadPressed(void);
   void OnCancelPressed(void);
   void OnViewActivate(void);
   void OnChangeFwmCheck(int id);

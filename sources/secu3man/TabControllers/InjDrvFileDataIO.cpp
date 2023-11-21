@@ -720,3 +720,24 @@ bool CInjDrvFileDataIO::LoadEEPROM(std::vector<BYTE>& buffer, size_t size)
  }
  return false; //canceled by user
 }
+
+bool CInjDrvFileDataIO::LoadSetsFromBuffer(SECU3IO::InjDrvPar* op_set, std::vector<BYTE>& i_buff)
+{
+ //find signature and calculate addresses
+ lzid_sett_t* p_set[2];
+ if (!getSettAddresses<lzid_sett_t>(i_buff, p_set))
+  return false;
+
+ bool result[2] = {false, false};
+ for(int i = 0; i < 2; ++i)
+  result[i] = ConvertFromFirmwareData<lzid_sett_t>(op_set[i], *p_set[i], true);
+
+ //For now we ignore check sum, because it is not calculated in the firmware
+ if (!result[0] || !result[1])
+ { //data corrupted
+  SECUMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
+  return false;
+ }
+
+ return true; //OK
+}
