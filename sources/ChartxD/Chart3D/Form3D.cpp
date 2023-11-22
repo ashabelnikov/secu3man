@@ -1283,10 +1283,20 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
    }
   }
 
-  //set read values
-  for(int j = 0; j < m_count_z; j++)
-   for(int i = 0; i < m_count_x; i++)
-    SetItem(j, i, atof(csv[(m_count_z-1)-j][i].c_str()));
+  if (CheckBoxBv->Checked)
+  {
+   //set read values
+   for(int j = 0; j < m_count_z; j++)
+    for(int i = 0; i < m_count_x; i++)
+     SetItem(j, i, atof(csv[j][i].c_str()));
+  }
+  else
+  {
+   //set read values
+   for(int j = 0; j < m_count_z; j++)
+    for(int i = 0; i < m_count_x; i++)
+     SetItem(j, i, atof(csv[(m_count_z-1)-j][i].c_str()));
+  }
 
   //delete old values and then fill series again
   for(int i = 0; i < Chart1->SeriesList->Count; i++)
