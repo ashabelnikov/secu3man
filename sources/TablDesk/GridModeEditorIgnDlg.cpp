@@ -31,7 +31,7 @@
 #include "common/GDIHelpers.h"
 #include "GridModeEditorIgnDlg.h"
 #include "io-core/SECU3IO.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/Label.h"
 #include "ui-core/MsgBox.h"
@@ -278,7 +278,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
   mp_cscl->Add(&m_ctrls[i]);
 
  if (m_OnOpenMapWnd)
-  m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
+  m_OnOpenMapWnd(this->m_hWnd, ETMT_GME_IGN_WND);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -325,7 +325,7 @@ void CGridModeEditorIgnDlg::_ResetUseFlags(void)
 void CGridModeEditorIgnDlg::OnClose()
 {
  if (m_OnCloseMapWnd)
-  m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
+  m_OnCloseMapWnd(this->m_hWnd, ETMT_GME_IGN_WND);
  Super::OnClose(); //close window
  DestroyWindow();
 }
@@ -470,27 +470,27 @@ void CGridModeEditorIgnDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
 
 void CGridModeEditorIgnDlg::OnChangeStart(void)
 {
- m_OnMapChanged(TYPE_MAP_DA_START);
+ m_OnMapChanged(ETMT_IGN_START);
 }
 
 void CGridModeEditorIgnDlg::OnChangeIdle(void)
 {
- m_OnMapChanged(TYPE_MAP_DA_IDLE);
+ m_OnMapChanged(ETMT_IGN_IDLE);
 }
 
 void CGridModeEditorIgnDlg::OnChangeWork(void)
 {
- m_OnMapChanged(TYPE_MAP_DA_WORK);
+ m_OnMapChanged(ETMT_IGN_WORK);
 }
 
 void CGridModeEditorIgnDlg::OnChangeTemp(void)
 {
- m_OnMapChanged(TYPE_MAP_DA_TEMP_CORR);
+ m_OnMapChanged(ETMT_IGN_TEMP);
 }
 
 void CGridModeEditorIgnDlg::OnChangeTempIdl(void)
 {
- m_OnMapChanged(TYPE_MAP_DA_TEMPI_CORR);
+ m_OnMapChanged(ETMT_IGN_TEMPI);
 }
 
 void CGridModeEditorIgnDlg::OnAbroadMoveStart(CMapEditorCtrl::AbroadDir direction, int column)

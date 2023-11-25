@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "GMEInjOther1Dlg.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
@@ -238,32 +238,32 @@ void CGMEInjOther1Dlg::SetArguments(bool strt_use, int rpm)
 void CGMEInjOther1Dlg::OnChangeTpsswt(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_TPSSWT);
+  m_OnChange(ETMT_INJ_TPSSWT);
 }
 
 void CGMEInjOther1Dlg::OnChangeTpszon(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_TPSZON);
+  m_OnChange(ETMT_INJ_TPSZON);
 }
 
 
 void CGMEInjOther1Dlg::OnChangeCylMult(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_CYLMULT);
+  m_OnChange(ETMT_INJ_CYLMULT);
 }
 
 void CGMEInjOther1Dlg::OnChangeCylAdd(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_CYLADD);
+  m_OnChange(ETMT_INJ_CYLADD);
 }
 
 void CGMEInjOther1Dlg::OnChangeThrass(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_THRASS);
+  m_OnChange(ETMT_INJ_THRASS);
 }
 
 void CGMEInjOther1Dlg::OnAbroadMoveTpsswt(CMapEditorCtrl::AbroadDir direction, int column)

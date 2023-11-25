@@ -70,7 +70,6 @@ class ITablesDeskView
   //Data access
   virtual void SetTablesSetName(const _TSTRING& name) = 0;        //set name to edit box 
   virtual _TSTRING GetTablesSetName(void) const = 0;              //get name from edit box
-  virtual float* GetMap(int i_mapType, bool i_original) = 0;      //r/w access to specified table  
 
   //Dynamically indicated values
   virtual void SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,//set values dynamycally indicated in the GMW window

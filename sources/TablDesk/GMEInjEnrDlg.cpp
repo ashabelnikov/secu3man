@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "GMEInjEnrDlg.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
@@ -258,31 +258,31 @@ void CGMEInjEnrDlg::SetArguments(bool strt_use, float clt, int tpsdot, int rpm, 
 void CGMEInjEnrDlg::OnChangeAftstr(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_AFTSTR);
+  m_OnChange(ETMT_INJ_AFTSTR);
 }
 
 void CGMEInjEnrDlg::OnChangeWrmp(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_WRMP);
+  m_OnChange(ETMT_INJ_WRMP);
 }
 
 void CGMEInjEnrDlg::OnChangeAETPS(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_AETPS);
+  m_OnChange(ETMT_INJ_AETPS);
 }
 
 void CGMEInjEnrDlg::OnChangeAERPM(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_AERPM);
+  m_OnChange(ETMT_INJ_AERPM);
 }
 
 void CGMEInjEnrDlg::OnChangeAEMAP(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_AEMAP);
+  m_OnChange(ETMT_INJ_AEMAP);
 }
 
 void CGMEInjEnrDlg::OnAbroadMoveAftstr(CMapEditorCtrl::AbroadDir direction, int column)

@@ -41,7 +41,7 @@
 #include "EEPROMTabController.h"
 #include "TablDesk/GridModeEditorIgnDlg.h"
 #include "TablDesk/GridModeEditorInjDlg.h"
-#include "TablDesk/MapIds.h"
+#include "io-core/MapIds.h"
 #include "TablDesk/DynamicValues.h"
 
 #undef max
@@ -149,14 +149,14 @@ void CLPTablesController::OnDeactivate(void)
 {
  if (mp_gridModeEditorIgnDlg.get())
  {
-  _OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, TYPE_MAP_GME_IGN_WND);
+  _OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, ETMT_GME_IGN_WND);
   mp_gridModeEditorIgnDlg->DestroyWindow();
   mp_gridModeEditorIgnDlg.reset(NULL);
  }
 
  if (mp_gridModeEditorInjDlg.get())
  {
-  _OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, TYPE_MAP_GME_INJ_WND);
+  _OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, ETMT_GME_INJ_WND);
   mp_gridModeEditorInjDlg->DestroyWindow();
   mp_gridModeEditorInjDlg.reset(NULL);
  }
@@ -247,83 +247,19 @@ void CLPTablesController::_OnSelectMapSet(void)
   { //from flash
    int index = m_current_funset_index;
    CFirmwareDataMediator *p_fwdm = mp_fwdcntr->GetFWDM();  
-   p_fwdm->GetStartMap(index, startMap, false);  
-   p_fwdm->GetIdleMap(index, idleMap, false);
-   p_fwdm->GetWorkMap(index, workMap, false);
-   p_fwdm->GetTempMap(index, tempMap, false);
-   p_fwdm->GetTempIdlMap(index, tempIMap, false);
-
-   p_fwdm->GetVEMap(index, veMap, false);
-   p_fwdm->GetVE2Map(index, ve2Map, false);
-   p_fwdm->GetAFRMap(index, afrMap, false);
-   p_fwdm->GetITMap(index, itMap, false);
-   p_fwdm->GetIdlrMap(index, idlrMap, false);
-   p_fwdm->GetIdlcMap(index, idlcMap, false);
-   p_fwdm->GetThrassMap(index, thrassMap, false);
-   p_fwdm->GetITRPMMap(index, itrpmMap, false);
-   p_fwdm->GetRigidMap(index, rigidMap, false);
-   p_fwdm->GetIACCorrMap(index, iaccMap, false);
-   p_fwdm->GetIACCorrWMap(index, iaccwMap, false);
-   p_fwdm->GetAftstrMap(index, aftstrMap, false);
-   p_fwdm->GetWrmpMap(index, wrmpMap, false);
-   p_fwdm->GetAETPSMap(index, aetpsMap, false);
-   p_fwdm->GetAEMAPMap(index, aemapMap, false);
-   p_fwdm->GetAERPMMap(index, aerpmMap, false);
-   p_fwdm->GetCrnkMap(index, crnkMap, false);
-   p_fwdm->GetDeadMap(index, deadMap, false);
-   p_fwdm->GetEGOCurveMap(index, egocrvMap, false);
-   p_fwdm->GetIATCLTMap(index, iatcltMap, false);
-   p_fwdm->GetTpsswtMap(index, tpsswtMap, false);
-   p_fwdm->GetAtscMap(index, atscMap, false);
-   p_fwdm->GetGtscMap(index, gtscMap, false);
-   p_fwdm->GetGpscMap(index, gpscMap, false);
-   p_fwdm->GetPwm1Map(index, pwm1Map, false);
-   p_fwdm->GetPwm2Map(index, pwm2Map, false);
-   p_fwdm->GetIACMATMap(index, iacmatMap, false);
-   p_fwdm->GetTpszonMap(index, tpszonMap, false);
-   p_fwdm->GetInjCylMultMap(index, cylmultMap, false);
-   p_fwdm->GetInjCylAddMap(index, cyladdMap, false);
+   for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
+   {
+    p_fwdm->GetSetMap(index, i, m_md.GetMap(i), false);  
+   }
   }
   else
   { //from eeprom
    int index = m_current_funset_index - TABLES_NUMBER;
    EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
-   p_eedm->GetStartMap(index, startMap, false);  
-   p_eedm->GetIdleMap(index, idleMap, false);
-   p_eedm->GetWorkMap(index, workMap, false);
-   p_eedm->GetTempMap(index, tempMap, false);
-   p_eedm->GetTempIdlMap(index, tempIMap, false);  
-
-   p_eedm->GetVEMap(index, veMap, false);
-   p_eedm->GetVE2Map(index, ve2Map, false);
-   p_eedm->GetAFRMap(index, afrMap, false);
-   p_eedm->GetITMap(index, itMap, false);
-   p_eedm->GetIdlrMap(index, idlrMap, false);
-   p_eedm->GetIdlcMap(index, idlcMap, false);
-   p_eedm->GetThrassMap(index, thrassMap, false);
-   p_eedm->GetITRPMMap(index, itrpmMap, false);
-   p_eedm->GetRigidMap(index, rigidMap, false);
-   p_eedm->GetIACCorrMap(index, iaccMap, false);
-   p_eedm->GetIACCorrWMap(index, iaccwMap, false);
-   p_eedm->GetAftstrMap(index, aftstrMap, false);
-   p_eedm->GetWrmpMap(index, wrmpMap, false);
-   p_eedm->GetAETPSMap(index, aetpsMap, false);
-   p_eedm->GetAEMAPMap(index, aemapMap, false);
-   p_eedm->GetAERPMMap(index, aerpmMap, false);
-   p_eedm->GetCrnkMap(index, crnkMap, false);
-   p_eedm->GetDeadMap(index, deadMap, false);
-   p_eedm->GetEGOCurveMap(index, egocrvMap, false);
-   p_eedm->GetIATCLTMap(index, iatcltMap, false);
-   p_eedm->GetTpsswtMap(index, tpsswtMap, false);
-   p_eedm->GetAtscMap(index, atscMap, false);
-   p_eedm->GetGtscMap(index, gtscMap, false);
-   p_eedm->GetGpscMap(index, gpscMap, false);
-   p_eedm->GetPwm1Map(index, pwm1Map, false);
-   p_eedm->GetPwm2Map(index, pwm2Map, false);
-   p_eedm->GetIACMATMap(index, iacmatMap, false);
-   p_eedm->GetTpszonMap(index, tpszonMap, false);
-   p_eedm->GetInjCylMultMap(index, cylmultMap, false);
-   p_eedm->GetInjCylAddMap(index, cyladdMap, false);
+   for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
+   {
+    p_eedm->GetSetMap(index, i, m_md.GetMap(i), false);  
+   }
   }
  }
 
@@ -342,221 +278,10 @@ void CLPTablesController::_OnMapChanged(int i_mapType)
  bool source = m_current_funset_index < TABLES_NUMBER; //true - flash, false - eeprom
  int index = source ? m_current_funset_index : m_current_funset_index - TABLES_NUMBER;
 
- switch(i_mapType)
- {
-  //ignition maps
-  case TYPE_MAP_DA_START:
-   if (source)
-    p_fwdm->SetStartMap(index, startMap);
-   else
-    p_eedm->SetStartMap(index, startMap);
-   break;
-  case TYPE_MAP_DA_IDLE:
-   if (source)
-    p_fwdm->SetIdleMap(index, idleMap);
-   else
-    p_eedm->SetIdleMap(index, idleMap);
-   break;
-  case TYPE_MAP_DA_WORK:
-   if (source)
-    p_fwdm->SetWorkMap(index, workMap);
-   else
-    p_eedm->SetWorkMap(index, workMap);
-   break;
-  case TYPE_MAP_DA_TEMP_CORR:
-   if (source)
-    p_fwdm->SetTempMap(index, tempMap);
-   else
-    p_eedm->SetTempMap(index, tempMap);
-   break;
-  case TYPE_MAP_DA_TEMPI_CORR:
-   if (source)
-    p_fwdm->SetTempIdlMap(index, tempIMap);
-   else
-    p_eedm->SetTempIdlMap(index, tempIMap);
-   break;
-
-  case TYPE_MAP_INJ_VE:
-   if (source)
-    p_fwdm->SetVEMap(index,  veMap);
-   else
-    p_eedm->SetVEMap(index, veMap);
-   break;
-  case TYPE_MAP_INJ_VE2:
-   if (source)
-    p_fwdm->SetVE2Map(index,  ve2Map);
-   else
-    p_eedm->SetVE2Map(index, ve2Map);
-   break;
-  case TYPE_MAP_INJ_AFR:
-   if (source)
-    p_fwdm->SetAFRMap(index,  afrMap);
-   else
-    p_eedm->SetAFRMap(index, afrMap);
-   break;
-  case TYPE_MAP_INJ_IT:
-   if (source)
-    p_fwdm->SetITMap(index,  itMap);
-   else
-    p_eedm->SetITMap(index, itMap);
-   break;
-  case TYPE_MAP_INJ_IDLR:
-   if (source)
-    p_fwdm->SetIdlrMap(index, idlrMap);
-   else
-    p_eedm->SetIdlrMap(index, idlrMap);
-   break;
-  case TYPE_MAP_INJ_IDLC:
-   if (source)
-    p_fwdm->SetIdlcMap(index, idlcMap);
-   else
-    p_eedm->SetIdlcMap(index, idlcMap);
-   break;
-  case TYPE_MAP_INJ_THRASS:
-   if (source)
-    p_fwdm->SetThrassMap(index, thrassMap);
-   else
-    p_eedm->SetThrassMap(index, thrassMap);
-   break;
-  case TYPE_MAP_INJ_ITRPM:
-   if (source)
-    p_fwdm->SetITRPMMap(index, itrpmMap);
-   else
-    p_eedm->SetITRPMMap(index, itrpmMap);
-   break;
-  case TYPE_MAP_INJ_RIGID:
-   if (source)
-    p_fwdm->SetRigidMap(index, rigidMap);
-   else
-    p_eedm->SetRigidMap(index, rigidMap);
-   break;
-  case TYPE_MAP_INJ_IACC:
-   if (source)
-    p_fwdm->SetIACCorrMap(index, iaccMap);
-   else
-    p_eedm->SetIACCorrMap(index, iaccMap);
-   break;
-  case TYPE_MAP_INJ_IACCW:
-   if (source)
-    p_fwdm->SetIACCorrWMap(index, iaccwMap);
-   else
-    p_eedm->SetIACCorrWMap(index, iaccwMap);
-   break;
-  case TYPE_MAP_INJ_AFTSTR:
-   if (source)
-    p_fwdm->SetAftstrMap(index, aftstrMap);
-   else
-    p_eedm->SetAftstrMap(index, aftstrMap);
-   break;
-  case TYPE_MAP_INJ_WRMP:
-   if (source)
-    p_fwdm->SetWrmpMap(index, wrmpMap);
-   else
-    p_eedm->SetWrmpMap(index, wrmpMap);
-   break;
-  case TYPE_MAP_INJ_AETPS:
-   if (source)
-    p_fwdm->SetAETPSMap(index, aetpsMap);
-   else
-    p_eedm->SetAETPSMap(index, aetpsMap);
-   break;
-  case TYPE_MAP_INJ_AEMAP:
-   if (source)
-    p_fwdm->SetAEMAPMap(index, aemapMap);
-   else
-    p_eedm->SetAEMAPMap(index, aemapMap);
-   break;
-  case TYPE_MAP_INJ_AERPM:
-   if (source)
-    p_fwdm->SetAERPMMap(index, aerpmMap);
-   else
-    p_eedm->SetAERPMMap(index, aerpmMap);
-   break;
-  case TYPE_MAP_INJ_CRNK:
-   if (source)
-    p_fwdm->SetCrnkMap(index, crnkMap);
-   else
-    p_eedm->SetCrnkMap(index, crnkMap);
-   break;
-  case TYPE_MAP_INJ_DEAD:
-   if (source)
-    p_fwdm->SetDeadMap(index, deadMap);
-   else
-    p_eedm->SetDeadMap(index, deadMap);
-   break;
-  case TYPE_MAP_INJ_EGOCRV:
-   if (source)
-    p_fwdm->SetEGOCurveMap(index, egocrvMap);
-   else
-    p_eedm->SetEGOCurveMap(index, egocrvMap);
-   break;
-  case TYPE_MAP_INJ_IATCLT:
-   if (source)
-    p_fwdm->SetIATCLTMap(index, iatcltMap);
-   else
-    p_eedm->SetIATCLTMap(index, iatcltMap);
-   break;
-  case TYPE_MAP_INJ_TPSSWT:
-   if (source)
-    p_fwdm->SetTpsswtMap(index, tpsswtMap);
-   else
-    p_eedm->SetTpsswtMap(index, tpsswtMap);
-   break;
-  case TYPE_MAP_INJ_ATSC:
-   if (source)
-    p_fwdm->SetAtscMap(index, atscMap);
-   else
-    p_eedm->SetAtscMap(index, atscMap);
-   break;
-  case TYPE_MAP_INJ_GTSC:
-   if (source)
-    p_fwdm->SetGtscMap(index, gtscMap);
-   else
-    p_eedm->SetGtscMap(index, gtscMap);
-   break;
-  case TYPE_MAP_INJ_GPSC:
-   if (source)
-    p_fwdm->SetGpscMap(index, gpscMap);
-   else
-    p_eedm->SetGpscMap(index, gpscMap);
-   break;
-  case TYPE_MAP_PWM1:
-   if (source)
-    p_fwdm->SetPwm1Map(index, pwm1Map);
-   else
-    p_eedm->SetPwm1Map(index, pwm1Map);
-   break;
-  case TYPE_MAP_PWM2:
-   if (source)
-    p_fwdm->SetPwm2Map(index, pwm2Map);
-   else
-    p_eedm->SetPwm2Map(index, pwm2Map);
-   break;
-  case TYPE_MAP_INJ_IACMAT:
-   if (source)
-    p_fwdm->SetIACMATMap(index, iacmatMap);
-   else
-    p_eedm->SetIACMATMap(index, iacmatMap);
-   break;
-  case TYPE_MAP_INJ_TPSZON:
-   if (source)
-    p_fwdm->SetTpszonMap(index, tpszonMap);
-   else
-    p_eedm->SetTpszonMap(index, tpszonMap);
-   break;
-  case TYPE_MAP_INJ_CYLMULT:
-   if (source)
-    p_fwdm->SetInjCylMultMap(index, cylmultMap);
-   else
-    p_eedm->SetInjCylMultMap(index, cylmultMap);
-   break;
-  case TYPE_MAP_INJ_CYLADD:
-   if (source)
-    p_fwdm->SetInjCylAddMap(index, cyladdMap);
-   else
-    p_eedm->SetInjCylAddMap(index, cyladdMap);
-   break;
- }
+ if (source)
+  p_fwdm->SetSetMap(index, i_mapType, m_md.GetMap(i_mapType));
+ else
+  p_eedm->SetSetMap(index, i_mapType, m_md.GetMap(i_mapType));
 }
 
 void CLPTablesController::_OnOpenMapWnd(HWND i_hwnd, int i_mapType)
@@ -578,10 +303,10 @@ void CLPTablesController::_OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 {
  MapWndScrPos::OnCloseMapWnd(i_hwnd, i_mapType);
 
- if (i_mapType == TYPE_MAP_GME_IGN_WND)
+ if (i_mapType == ETMT_GME_IGN_WND)
   mp_view->SetGmeIgnCheck(false);
 
- if (i_mapType == TYPE_MAP_GME_INJ_WND)
+ if (i_mapType == ETMT_GME_INJ_WND)
   mp_view->SetGmeInjCheck(false);
 }
 
@@ -590,7 +315,7 @@ void CLPTablesController::_OnGmeIgnButton(void)
  if (mp_view->GetGmeIgnCheck())
  {
   mp_gridModeEditorIgnDlg.reset(new CGridModeEditorIgnDlg());
-  mp_gridModeEditorIgnDlg->BindMaps(startMap, idleMap, workMap, tempMap, tempIMap);
+  mp_gridModeEditorIgnDlg->BindMaps(m_md.f_str, m_md.f_idl, m_md.f_wrk, m_md.f_tmp, m_md.f_tmp_idl);
   mp_gridModeEditorIgnDlg->BindRPMGrid(m_rpm_grid_values);
   mp_gridModeEditorIgnDlg->BindCLTGrid(m_clt_grid_values);
   mp_gridModeEditorIgnDlg->BindLoadGrid(m_load_grid_values);
@@ -626,7 +351,7 @@ void CLPTablesController::_OnGmeIgnButton(void)
  }
  else
  {
-  _OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, TYPE_MAP_GME_IGN_WND);
+  _OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, ETMT_GME_IGN_WND);
   mp_gridModeEditorIgnDlg->DestroyWindow();
   mp_gridModeEditorIgnDlg.reset(NULL);
  }
@@ -637,9 +362,12 @@ void CLPTablesController::_OnGmeInjButton(void)
  if (mp_view->GetGmeInjCheck())
  {
   mp_gridModeEditorInjDlg.reset(new CGridModeEditorInjDlg());
-  mp_gridModeEditorInjDlg->BindMaps(veMap, afrMap, itMap, idlcMap, idlrMap, itrpmMap, rigidMap, iaccMap, iaccwMap,
-                                    aftstrMap, wrmpMap, aetpsMap, aerpmMap, crnkMap, deadMap, egocrvMap, iatcltMap,
-                                    tpsswtMap, atscMap, gtscMap, gpscMap, pwm1Map, pwm2Map, iacmatMap, ve2Map, tpszonMap, cylmultMap, cyladdMap, aemapMap, thrassMap);
+
+  mp_gridModeEditorInjDlg->BindMaps(m_md.inj_ve, m_md.inj_afr, m_md.inj_timing, m_md.inj_iac_crank_pos, m_md.inj_iac_run_pos, m_md.inj_target_rpm, m_md.inj_idl_rigidity, m_md.inj_iac_corr,
+                                    m_md.inj_iac_corr_w, m_md.inj_aftstr, m_md.inj_warmup, m_md.inj_ae_tps, m_md.inj_ae_rpm, m_md.inj_cranking, m_md.inj_dead_time, m_md.inj_ego_curve, 
+                                    m_md.inj_iatclt_corr, m_md.inj_tpsswt, m_md.inj_ats_corr, m_md.inj_gts_corr, m_md.inj_gps_corr, m_md.pwm_duty1, m_md.pwm_duty2, m_md.iac_mat_corr,
+                                    m_md.inj_ve2, m_md.inj_tpszon, m_md.inj_cylmult, m_md.inj_cyladd, m_md.inj_ae_map, m_md.inj_thrass);
+
   mp_gridModeEditorInjDlg->BindRPMGrid(m_rpm_grid_values);
   mp_gridModeEditorInjDlg->BindCLTGrid(m_clt_grid_values);
   mp_gridModeEditorInjDlg->BindLoadGrid(m_load_grid_values, &m_ve2_map_load_slots[0]);
@@ -678,7 +406,7 @@ void CLPTablesController::_OnGmeInjButton(void)
  }
  else
  {
-  OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, TYPE_MAP_GME_INJ_WND);
+  OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, ETMT_GME_INJ_WND);
   mp_gridModeEditorInjDlg->DestroyWindow();
   mp_gridModeEditorInjDlg.reset(NULL);
  }

@@ -32,6 +32,7 @@
 #include "io-core/FirmwareDataMediator.h"
 #include "io-core/FirmwareMapsDataHolder.h"
 #include "io-core/PlatformParamHolder.h"
+#include "io-core/MapIds.h"
 #include "MapImpExpDlg.h"
 #include "ui-core/MsgBox.h"
 
@@ -106,118 +107,117 @@ SECU3ImportController::~SECU3ImportController()
 
 void SECU3ImportController::OnOkPressed(void)
 {
- //import separate tables
- if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
-  m_fwdm->GetAttenuatorMap(mp_fwd->attenuator_table);
-
- if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
-  m_fwdm->GetDwellCntrlMap(mp_fwd->dwellcntrl_table);
-
- if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
-  m_fwdm->GetCTSCurveMap(mp_fwd->ctscurve_table);
-
- if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
-  m_fwdm->GetATSCurveMap(mp_fwd->atscurve_table);
-
- if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
-  m_fwdm->GetATSAACMap(mp_fwd->ats_corr_table);
-
- if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
-  m_fwdm->GetGasdosePosMap(mp_fwd->gasdose_pos_table);
-
- if (mp_view->GetFWDFlag(FLAG_BAROCORR_MAP))
-  m_fwdm->GetBarocorrMap(mp_fwd->barocorr_table);
-
- if (mp_view->GetFWDFlag(FLAG_MANIT_MAP))
-  m_fwdm->GetManIgntimMap(mp_fwd->pa4_igntim_corr);
-
- if (mp_view->GetFWDFlag(FLAG_TMP2CURVE_MAP))
-  m_fwdm->GetTmp2CurveMap(mp_fwd->tmp2_curve);
-
- if (mp_view->GetFWDFlag(FLAG_CRKTEMP_MAP))
-  m_fwdm->GetCrkTempMap(mp_fwd->ctscrk_corr);
-
- if (mp_view->GetFWDFlag(FLAG_EHPAUSE_MAP))
-  m_fwdm->GetEHPauseMap(mp_fwd->eh_pause_table);
-
- if (mp_view->GetFWDFlag(FLAG_CRNKTHRD_MAP))
-  m_fwdm->GetCrankingThrdMap(mp_fwd->cranking_thrd);
-
- if (mp_view->GetFWDFlag(FLAG_CRNKTIME_MAP))
-  m_fwdm->GetCrankingTimeMap(mp_fwd->cranking_time);
-
- if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
-  m_fwdm->GetSmapabanThrdMap(mp_fwd->smapaban_thrd);
-
  if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
   m_fwdm->GetCESettingsData(mp_fwd->cesd);
 
+ //import separate tables
+ if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
+  m_fwdm->GetSepMap(ETMT_ATTENUATOR, mp_fwd->attenuator_table);
+
+ if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
+  m_fwdm->GetSepMap(ETMT_DWELLCNTRL, mp_fwd->dwellcntrl_table);
+
+ if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
+  m_fwdm->GetSepMap(ETMT_CTS_CURVE, mp_fwd->ctscurve_table);
+
+ if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
+  m_fwdm->GetSepMap(ETMT_ATS_CURVE, mp_fwd->atscurve_table);
+
+ if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
+  m_fwdm->GetSepMap(ETMT_ATS_CORR, mp_fwd->ats_corr_table);
+
+ if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
+  m_fwdm->GetSepMap(ETMT_GASDOSE, mp_fwd->gasdose_pos_table);
+
+ if (mp_view->GetFWDFlag(FLAG_BAROCORR_MAP))
+  m_fwdm->GetSepMap(ETMT_BAROCORR, mp_fwd->barocorr_table);
+
+ if (mp_view->GetFWDFlag(FLAG_MANIT_MAP))
+  m_fwdm->GetSepMap(ETMT_MANIGNTIM, mp_fwd->pa4_igntim_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_TMP2CURVE_MAP))
+  m_fwdm->GetSepMap(ETMT_TMP2_CURVE, mp_fwd->tmp2_curve);
+
+ if (mp_view->GetFWDFlag(FLAG_CRKTEMP_MAP))
+  m_fwdm->GetSepMap(ETMT_CRKCLT_CORR, mp_fwd->ctscrk_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_EHPAUSE_MAP))
+  m_fwdm->GetSepMap(ETMT_EH_PAUSE, mp_fwd->eh_pause_table);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNKTHRD_MAP))
+  m_fwdm->GetSepMap(ETMT_CRANKING_THRD, mp_fwd->cranking_thrd);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNKTIME_MAP))
+  m_fwdm->GetSepMap(ETMT_CRANKING_TIME, mp_fwd->cranking_time);
+
+ if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
+  m_fwdm->GetSepMap(ETMT_SMAPABAN_THRD, mp_fwd->smapaban_thrd);
+
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
-  m_fwdm->GetKnockZoneMap(mp_fwd->knock_zone);
+  m_fwdm->GetSepMap(ETMT_KNOCK_ZONE, mp_fwd->knock_zone);
 
  if (mp_view->GetFWDFlag(FLAG_LAMBDAZONE_MAP))
-  m_fwdm->GetLambdaZoneMap(mp_fwd->lambda_zone);
+  m_fwdm->GetSepMap(ETMT_LAMBDA_ZONE, mp_fwd->lambda_zone);
 
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
-  m_fwdm->GetGrtsCurveMap(mp_fwd->grts_curve);
+  m_fwdm->GetSepMap(ETMT_GRTS_CURVE, mp_fwd->grts_curve);
 
  if (mp_view->GetFWDFlag(FLAG_GRHEAT_MAP))
-  m_fwdm->GetGrHeatDutyMap(mp_fwd->grheat_duty);
+  m_fwdm->GetSepMap(ETMT_GRHEAT_DUTY, mp_fwd->grheat_duty);
 
  if (mp_view->GetFWDFlag(FLAG_IACUCOEF_MAP))
-  m_fwdm->GetPwmIacUCoefMap(mp_fwd->pwmiac_ucoef);
+  m_fwdm->GetSepMap(ETMT_PWMIAC_UCOEF, mp_fwd->pwmiac_ucoef);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK0_MAP))
-  m_fwdm->GetAftstrStrk0Map(mp_fwd->aftstr_strk0);
+  m_fwdm->GetSepMap(ETMT_AFTSTR_STRK0, mp_fwd->aftstr_strk0);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
-  m_fwdm->GetAftstrStrk1Map(mp_fwd->aftstr_strk1);
+  m_fwdm->GetSepMap(ETMT_AFTSTR_STRK1, mp_fwd->aftstr_strk1);
 
  if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
-  m_fwdm->GetGrValDelMap(mp_fwd->grv_delay);
+  m_fwdm->GetSepMap(ETMT_GRVDELAY, mp_fwd->grv_delay);
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCURVE_MAP))
-  m_fwdm->GetFtlsCurveMap(mp_fwd->ftls_curve);
+  m_fwdm->GetSepMap(ETMT_FTLS_CURVE, mp_fwd->ftls_curve);
 
  if (mp_view->GetFWDFlag(FLAG_EGTSCURVE_MAP))
-  m_fwdm->GetEgtsCurveMap(mp_fwd->egts_curve);
+  m_fwdm->GetSepMap(ETMT_EGTS_CURVE, mp_fwd->egts_curve);
 
  if (mp_view->GetFWDFlag(FLAG_OPSCURVE_MAP))
-  m_fwdm->GetOpsCurveMap(mp_fwd->ops_curve);
+  m_fwdm->GetSepMap(ETMT_OPS_CURVE, mp_fwd->ops_curve);
 
  if (mp_view->GetFWDFlag(FLAG_MANINJPWC_MAP))
-  m_fwdm->GetManInjPwcMap(mp_fwd->injpw_coef);
+  m_fwdm->GetSepMap(ETMT_MANINJPWC, mp_fwd->injpw_coef);
 
  if (mp_view->GetFWDFlag(FLAG_MAFCURVE_MAP))
-  m_fwdm->GetMAFCurveMap(mp_fwd->maf_curve);
+  m_fwdm->GetSepMap(ETMT_MAF_CURVE, mp_fwd->maf_curve);
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
-  m_fwdm->GetFtlsCorMap(mp_fwd->ftls_corr);
+  m_fwdm->GetSepMap(ETMT_FTLSCOR, mp_fwd->ftls_corr);
 
  if (mp_view->GetFWDFlag(FLAG_FTSCURVE_MAP))
-  m_fwdm->GetFtsCurveMap(mp_fwd->fts_curve);
+  m_fwdm->GetSepMap(ETMT_FTS_CURVE, mp_fwd->fts_curve);
 
  if (mp_view->GetFWDFlag(FLAG_FUELDENSC_MAP))
-  m_fwdm->GetFuelDensCorrMap(mp_fwd->fueldens_corr);
+  m_fwdm->GetSepMap(ETMT_FUELDENS_CORR, mp_fwd->fueldens_corr);
 
  if (mp_view->GetFWDFlag(FLAG_INJNONLINP_MAP))
-  m_fwdm->GetInjNonLinPMap(mp_fwd->inj_nonlinp_corr);
+  m_fwdm->GetSepMap(ETMT_INJNONLINP, mp_fwd->inj_nonlinp_corr);
 
  if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
-  m_fwdm->GetInjNonLinGMap(mp_fwd->inj_nonling_corr);
+  m_fwdm->GetSepMap(ETMT_INJNONLING, mp_fwd->inj_nonling_corr);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_XFACC_MAP))
-  m_fwdm->GetXtauXfAccMap(mp_fwd->xtau_xfacc);
+  m_fwdm->GetSepMap(ETMT_XTAU_XFACC, mp_fwd->xtau_xfacc);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_XFDEC_MAP))
-  m_fwdm->GetXtauXfDecMap(mp_fwd->xtau_xfdec);
+  m_fwdm->GetSepMap(ETMT_XTAU_XFDEC, mp_fwd->xtau_xfdec);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_TFACC_MAP))
-  m_fwdm->GetXtauTfAccMap(mp_fwd->xtau_tfacc);
+  m_fwdm->GetSepMap(ETMT_XTAU_TFACC, mp_fwd->xtau_tfacc);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_TFDEC_MAP))
-  m_fwdm->GetXtauTfDecMap(mp_fwd->xtau_tfdec);
-
+  m_fwdm->GetSepMap(ETMT_XTAU_TFDEC, mp_fwd->xtau_tfdec);
 
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
@@ -255,112 +255,112 @@ void SECU3ImportController::OnExchangePressed(void)
  mp_view->SetFWDCurrentListSelection(current_sel);
 
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
-  m_fwdm->GetStartMap(other_sel, mp_fwd->maps[current_sel].f_str);
+  m_fwdm->GetSetMap(other_sel, ETMT_IGN_START, mp_fwd->maps[current_sel].f_str);
 
  if (mp_view->GetFWDFlag(FLAG_IDLE_MAP))
-  m_fwdm->GetIdleMap(other_sel, mp_fwd->maps[current_sel].f_idl);
+  m_fwdm->GetSetMap(other_sel, ETMT_IGN_IDLE, mp_fwd->maps[current_sel].f_idl);
 
  if (mp_view->GetFWDFlag(FLAG_WORK_MAP))
-  m_fwdm->GetWorkMap(other_sel, mp_fwd->maps[current_sel].f_wrk);
+  m_fwdm->GetSetMap(other_sel, ETMT_IGN_WORK, mp_fwd->maps[current_sel].f_wrk);
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
-  m_fwdm->GetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
+  m_fwdm->GetSetMap(other_sel, ETMT_IGN_TEMP, mp_fwd->maps[current_sel].f_tmp);
 
  if (mp_view->GetFWDFlag(FLAG_TEMPI_MAP))
-  m_fwdm->GetTempIdlMap(other_sel, mp_fwd->maps[current_sel].f_tmp_idl);
+  m_fwdm->GetSetMap(other_sel, ETMT_IGN_TEMPI, mp_fwd->maps[current_sel].f_tmp_idl);
 
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
-  m_fwdm->GetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_VE, mp_fwd->maps[current_sel].inj_ve);
 
  if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
-  m_fwdm->GetVE2Map(other_sel, mp_fwd->maps[current_sel].inj_ve2);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_VE2, mp_fwd->maps[current_sel].inj_ve2);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
-  m_fwdm->GetAFRMap(other_sel, mp_fwd->maps[current_sel].inj_afr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_AFR, mp_fwd->maps[current_sel].inj_afr);
 
  if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
-  m_fwdm->GetCrnkMap(other_sel, mp_fwd->maps[current_sel].inj_cranking);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_CRNK, mp_fwd->maps[current_sel].inj_cranking);
 
  if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
-  m_fwdm->GetWrmpMap(other_sel, mp_fwd->maps[current_sel].inj_warmup);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_WRMP, mp_fwd->maps[current_sel].inj_warmup);
 
  if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
-  m_fwdm->GetDeadMap(other_sel, mp_fwd->maps[current_sel].inj_dead_time);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_DEAD, mp_fwd->maps[current_sel].inj_dead_time);
 
  if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
-  m_fwdm->GetIdlrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_run_pos);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IDLR, mp_fwd->maps[current_sel].inj_iac_run_pos);
 
  if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
-  m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IDLC, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 
  if (mp_view->GetFWDFlag(FLAG_THRASS_MAP))
-  m_fwdm->GetThrassMap(other_sel, mp_fwd->maps[current_sel].inj_thrass);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_THRASS, mp_fwd->maps[current_sel].inj_thrass);
 
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
-  m_fwdm->GetAETPSMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_AETPS, mp_fwd->maps[current_sel].inj_ae_tps);
 
  if (mp_view->GetFWDFlag(FLAG_AEMAP_MAP))
-  m_fwdm->GetAEMAPMap(other_sel, mp_fwd->maps[current_sel].inj_ae_map);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_AEMAP, mp_fwd->maps[current_sel].inj_ae_map);
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
-  m_fwdm->GetAERPMMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_AERPM, mp_fwd->maps[current_sel].inj_ae_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
-  m_fwdm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_AFTSTR, mp_fwd->maps[current_sel].inj_aftstr);
 
  if (mp_view->GetFWDFlag(FLAG_IT_MAP))
-  m_fwdm->GetITMap(other_sel, mp_fwd->maps[current_sel].inj_timing);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IT, mp_fwd->maps[current_sel].inj_timing);
 
  if (mp_view->GetFWDFlag(FLAG_ITRPM_MAP))
-  m_fwdm->GetITRPMMap(other_sel, mp_fwd->maps[current_sel].inj_target_rpm);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_ITRPM, mp_fwd->maps[current_sel].inj_target_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_RIGID_MAP))
-  m_fwdm->GetRigidMap(other_sel, mp_fwd->maps[current_sel].inj_idl_rigidity);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_RIGID, mp_fwd->maps[current_sel].inj_idl_rigidity);
 
  if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
-  m_fwdm->GetEGOCurveMap(other_sel, mp_fwd->maps[current_sel].inj_ego_curve);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_EGOCRV, mp_fwd->maps[current_sel].inj_ego_curve);
 
  if (mp_view->GetFWDFlag(FLAG_IACCORRW_MAP))
-  m_fwdm->GetIACCorrWMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr_w);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IACCW, mp_fwd->maps[current_sel].inj_iac_corr_w);
 
  if (mp_view->GetFWDFlag(FLAG_IACCORR_MAP))
-  m_fwdm->GetIACCorrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IACC, mp_fwd->maps[current_sel].inj_iac_corr);
 
  if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
-  m_fwdm->GetIATCLTMap(other_sel, mp_fwd->maps[current_sel].inj_iatclt_corr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IATCLT, mp_fwd->maps[current_sel].inj_iatclt_corr);
 
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
-  m_fwdm->GetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_TPSSWT, mp_fwd->maps[current_sel].inj_tpsswt);
 
  if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
-  m_fwdm->GetTpszonMap(other_sel, mp_fwd->maps[current_sel].inj_tpszon);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_TPSZON, mp_fwd->maps[current_sel].inj_tpszon);
 
  if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
-  m_fwdm->GetGtscMap(other_sel, mp_fwd->maps[current_sel].inj_gts_corr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_GTSC, mp_fwd->maps[current_sel].inj_gts_corr);
 
  if (mp_view->GetFWDFlag(FLAG_GPSC_MAP))
-  m_fwdm->GetGpscMap(other_sel, mp_fwd->maps[current_sel].inj_gps_corr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_GPSC, mp_fwd->maps[current_sel].inj_gps_corr);
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
-  m_fwdm->GetAtscMap(other_sel, mp_fwd->maps[current_sel].inj_ats_corr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_ATSC, mp_fwd->maps[current_sel].inj_ats_corr);
 
  if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
-  m_fwdm->GetPwm1Map(other_sel, mp_fwd->maps[current_sel].pwm_duty1);
+  m_fwdm->GetSetMap(other_sel, ETMT_PWM1, mp_fwd->maps[current_sel].pwm_duty1);
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
-  m_fwdm->GetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
+  m_fwdm->GetSetMap(other_sel, ETMT_PWM2, mp_fwd->maps[current_sel].pwm_duty2);
 
  if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
-  m_fwdm->GetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IACMAT, mp_fwd->maps[current_sel].iac_mat_corr);
 
  if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
-  m_fwdm->GetTpszonMap(other_sel, mp_fwd->maps[current_sel].inj_tpszon);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_TPSZON, mp_fwd->maps[current_sel].inj_tpszon);
 
  if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
-  m_fwdm->GetInjCylMultMap(other_sel, mp_fwd->maps[current_sel].inj_cylmult);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_CYLMULT, mp_fwd->maps[current_sel].inj_cylmult);
 
  if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
-  m_fwdm->GetInjCylAddMap(other_sel, mp_fwd->maps[current_sel].inj_cyladd);
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_CYLADD, mp_fwd->maps[current_sel].inj_cyladd);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -541,115 +541,115 @@ void SECU3ExportController::OnOkPressed(void)
 {
  //export separate tables
  if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
-  m_fwdm->SetAttenuatorMap(mp_fwd->attenuator_table);
+  m_fwdm->SetSepMap(ETMT_ATTENUATOR, mp_fwd->attenuator_table);
 
  if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
-  m_fwdm->SetDwellCntrlMap(mp_fwd->dwellcntrl_table);
+  m_fwdm->SetSepMap(ETMT_DWELLCNTRL, mp_fwd->dwellcntrl_table);
 
  if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
-  m_fwdm->SetCTSCurveMap(mp_fwd->ctscurve_table);
+  m_fwdm->SetSepMap(ETMT_CTS_CURVE, mp_fwd->ctscurve_table);
  
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
-  m_fwdm->SetATSCurveMap(mp_fwd->atscurve_table);
+  m_fwdm->SetSepMap(ETMT_ATS_CURVE, mp_fwd->atscurve_table);
 
  if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
-  m_fwdm->SetATSAACMap(mp_fwd->ats_corr_table);
+  m_fwdm->SetSepMap(ETMT_ATS_CORR, mp_fwd->ats_corr_table);
 
  if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
-  m_fwdm->SetGasdosePosMap(mp_fwd->gasdose_pos_table);
+  m_fwdm->SetSepMap(ETMT_GASDOSE, mp_fwd->gasdose_pos_table);
 
  if (mp_view->GetFWDFlag(FLAG_BAROCORR_MAP))
-  m_fwdm->SetBarocorrMap(mp_fwd->barocorr_table);
+  m_fwdm->SetSepMap(ETMT_BAROCORR, mp_fwd->barocorr_table);
 
  if (mp_view->GetFWDFlag(FLAG_MANIT_MAP))
-  m_fwdm->SetManIgntimMap(mp_fwd->pa4_igntim_corr);
+  m_fwdm->SetSepMap(ETMT_MANIGNTIM, mp_fwd->pa4_igntim_corr);
 
  if (mp_view->GetFWDFlag(FLAG_TMP2CURVE_MAP))
-  m_fwdm->SetTmp2CurveMap(mp_fwd->tmp2_curve);
+  m_fwdm->SetSepMap(ETMT_TMP2_CURVE, mp_fwd->tmp2_curve);
 
  if (mp_view->GetFWDFlag(FLAG_CRKTEMP_MAP))
-  m_fwdm->SetCrkTempMap(mp_fwd->ctscrk_corr);
+  m_fwdm->SetSepMap(ETMT_CRKCLT_CORR, mp_fwd->ctscrk_corr);
 
  if (mp_view->GetFWDFlag(FLAG_EHPAUSE_MAP))
-  m_fwdm->SetEHPauseMap(mp_fwd->eh_pause_table);
+  m_fwdm->SetSepMap(ETMT_EH_PAUSE, mp_fwd->eh_pause_table);
 
  if (mp_view->GetFWDFlag(FLAG_CRNKTHRD_MAP))
-  m_fwdm->SetCrankingThrdMap(mp_fwd->cranking_thrd);
+  m_fwdm->SetSepMap(ETMT_CRANKING_THRD, mp_fwd->cranking_thrd);
 
  if (mp_view->GetFWDFlag(FLAG_CRNKTIME_MAP))
-  m_fwdm->SetCrankingTimeMap(mp_fwd->cranking_time);
+  m_fwdm->SetSepMap(ETMT_CRANKING_TIME, mp_fwd->cranking_time);
 
  if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
-  m_fwdm->SetSmapabanThrdMap(mp_fwd->smapaban_thrd);
+  m_fwdm->SetSepMap(ETMT_SMAPABAN_THRD, mp_fwd->smapaban_thrd);
 
  if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
   m_fwdm->SetCESettingsData(mp_fwd->cesd);
 
  if (mp_view->GetFWDFlag(FLAG_KNOCKZONE_MAP))
-  m_fwdm->SetKnockZoneMap(mp_fwd->knock_zone);
+  m_fwdm->SetSepMap(ETMT_KNOCK_ZONE, mp_fwd->knock_zone);
 
  if (mp_view->GetFWDFlag(FLAG_LAMBDAZONE_MAP))
-  m_fwdm->SetLambdaZoneMap(mp_fwd->lambda_zone);
+  m_fwdm->SetSepMap(ETMT_LAMBDA_ZONE, mp_fwd->lambda_zone);
 
  if (mp_view->GetFWDFlag(FLAG_GRTSCURVE_MAP))
-  m_fwdm->SetGrtsCurveMap(mp_fwd->grts_curve);
+  m_fwdm->SetSepMap(ETMT_GRTS_CURVE, mp_fwd->grts_curve);
 
  if (mp_view->GetFWDFlag(FLAG_GRHEAT_MAP))
-  m_fwdm->SetGrHeatDutyMap(mp_fwd->grheat_duty);
+  m_fwdm->SetSepMap(ETMT_GRHEAT_DUTY, mp_fwd->grheat_duty);
 
  if (mp_view->GetFWDFlag(FLAG_IACUCOEF_MAP))
-  m_fwdm->SetPwmIacUCoefMap(mp_fwd->pwmiac_ucoef);
+  m_fwdm->SetSepMap(ETMT_PWMIAC_UCOEF, mp_fwd->pwmiac_ucoef);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK0_MAP))
-  m_fwdm->SetAftstrStrk0Map(mp_fwd->aftstr_strk0);
+  m_fwdm->SetSepMap(ETMT_AFTSTR_STRK0, mp_fwd->aftstr_strk0);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTRK1_MAP))
-  m_fwdm->SetAftstrStrk1Map(mp_fwd->aftstr_strk1);
+  m_fwdm->SetSepMap(ETMT_AFTSTR_STRK1, mp_fwd->aftstr_strk1);
 
  if (mp_view->GetFWDFlag(FLAG_GRVDELAY_MAP))
-  m_fwdm->SetGrValDelMap(mp_fwd->grv_delay);
+  m_fwdm->SetSepMap(ETMT_GRVDELAY, mp_fwd->grv_delay);
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCURVE_MAP))
-  m_fwdm->SetFtlsCurveMap(mp_fwd->ftls_curve);
+  m_fwdm->SetSepMap(ETMT_FTLS_CURVE, mp_fwd->ftls_curve);
 
  if (mp_view->GetFWDFlag(FLAG_EGTSCURVE_MAP))
-  m_fwdm->SetEgtsCurveMap(mp_fwd->egts_curve);
+  m_fwdm->SetSepMap(ETMT_EGTS_CURVE, mp_fwd->egts_curve);
 
  if (mp_view->GetFWDFlag(FLAG_OPSCURVE_MAP))
-  m_fwdm->SetOpsCurveMap(mp_fwd->ops_curve);
+  m_fwdm->SetSepMap(ETMT_OPS_CURVE, mp_fwd->ops_curve);
 
  if (mp_view->GetFWDFlag(FLAG_MANINJPWC_MAP))
-  m_fwdm->SetManInjPwcMap(mp_fwd->injpw_coef);
+  m_fwdm->SetSepMap(ETMT_MANINJPWC, mp_fwd->injpw_coef);
 
  if (mp_view->GetFWDFlag(FLAG_MAFCURVE_MAP))
-  m_fwdm->SetMAFCurveMap(mp_fwd->maf_curve);
+  m_fwdm->SetSepMap(ETMT_MAF_CURVE, mp_fwd->maf_curve);
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
-  m_fwdm->SetFtlsCorMap(mp_fwd->ftls_corr);
+  m_fwdm->SetSepMap(ETMT_FTLSCOR, mp_fwd->ftls_corr);
 
  if (mp_view->GetFWDFlag(FLAG_FTSCURVE_MAP))
-  m_fwdm->SetFtsCurveMap(mp_fwd->fts_curve);
+  m_fwdm->SetSepMap(ETMT_FTS_CURVE, mp_fwd->fts_curve);
 
  if (mp_view->GetFWDFlag(FLAG_FUELDENSC_MAP))
-  m_fwdm->SetFuelDensCorrMap(mp_fwd->fueldens_corr);
+  m_fwdm->SetSepMap(ETMT_FUELDENS_CORR, mp_fwd->fueldens_corr);
 
  if (mp_view->GetFWDFlag(FLAG_INJNONLINP_MAP))
-  m_fwdm->SetInjNonLinPMap(mp_fwd->inj_nonlinp_corr);
+  m_fwdm->SetSepMap(ETMT_INJNONLINP, mp_fwd->inj_nonlinp_corr);
 
  if (mp_view->GetFWDFlag(FLAG_INJNONLING_MAP))
-  m_fwdm->SetInjNonLinGMap(mp_fwd->inj_nonling_corr);
+  m_fwdm->SetSepMap(ETMT_INJNONLING, mp_fwd->inj_nonling_corr);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_XFACC_MAP))
-  m_fwdm->SetXtauXfAccMap(mp_fwd->xtau_xfacc);
+  m_fwdm->SetSepMap(ETMT_XTAU_XFACC, mp_fwd->xtau_xfacc);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_XFDEC_MAP))
-  m_fwdm->SetXtauXfDecMap(mp_fwd->xtau_xfdec);
+  m_fwdm->SetSepMap(ETMT_XTAU_XFDEC, mp_fwd->xtau_xfdec);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_TFACC_MAP))
-  m_fwdm->SetXtauTfAccMap(mp_fwd->xtau_tfacc);
+  m_fwdm->SetSepMap(ETMT_XTAU_TFACC, mp_fwd->xtau_tfacc);
 
  if (mp_view->GetFWDFlag(FLAG_XTAU_TFDEC_MAP))
-  m_fwdm->SetXtauTfDecMap(mp_fwd->xtau_tfdec);
+  m_fwdm->SetSepMap(ETMT_XTAU_TFDEC, mp_fwd->xtau_tfdec);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -699,106 +699,106 @@ void SECU3ExportController::OnExchangePressed(void)
  mp_view->SetFWDOtherListSelection(other_sel);
 
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
-  m_fwdm->SetStartMap(other_sel, mp_fwd->maps[current_sel].f_str);
+  m_fwdm->SetSetMap(other_sel, ETMT_IGN_START, mp_fwd->maps[current_sel].f_str);
 
  if (mp_view->GetFWDFlag(FLAG_IDLE_MAP))
-  m_fwdm->SetIdleMap(other_sel, mp_fwd->maps[current_sel].f_idl);
+  m_fwdm->SetSetMap(other_sel, ETMT_IGN_IDLE, mp_fwd->maps[current_sel].f_idl);
 
  if (mp_view->GetFWDFlag(FLAG_WORK_MAP))
-  m_fwdm->SetWorkMap(other_sel, mp_fwd->maps[current_sel].f_wrk);
+  m_fwdm->SetSetMap(other_sel, ETMT_IGN_WORK, mp_fwd->maps[current_sel].f_wrk);
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
-  m_fwdm->SetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
+  m_fwdm->SetSetMap(other_sel, ETMT_IGN_TEMP, mp_fwd->maps[current_sel].f_tmp);
 
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
-  m_fwdm->SetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_VE, mp_fwd->maps[current_sel].inj_ve);
 
  if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
-  m_fwdm->SetVE2Map(other_sel, mp_fwd->maps[current_sel].inj_ve2);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_VE2, mp_fwd->maps[current_sel].inj_ve2);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
-  m_fwdm->SetAFRMap(other_sel, mp_fwd->maps[current_sel].inj_afr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_AFR, mp_fwd->maps[current_sel].inj_afr);
 
  if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
-  m_fwdm->SetCrnkMap(other_sel, mp_fwd->maps[current_sel].inj_cranking);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_CRNK, mp_fwd->maps[current_sel].inj_cranking);
 
  if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
-  m_fwdm->SetWrmpMap(other_sel, mp_fwd->maps[current_sel].inj_warmup);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_WRMP, mp_fwd->maps[current_sel].inj_warmup);
 
  if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
-  m_fwdm->SetDeadMap(other_sel, mp_fwd->maps[current_sel].inj_dead_time);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_DEAD, mp_fwd->maps[current_sel].inj_dead_time);
 
  if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
-  m_fwdm->SetIdlrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_run_pos);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IDLR, mp_fwd->maps[current_sel].inj_iac_run_pos);
 
  if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
-  m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IDLC, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 
  if (mp_view->GetFWDFlag(FLAG_THRASS_MAP))
-  m_fwdm->SetThrassMap(other_sel, mp_fwd->maps[current_sel].inj_thrass);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_THRASS, mp_fwd->maps[current_sel].inj_thrass);
 
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
-  m_fwdm->SetAETPSMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_AETPS, mp_fwd->maps[current_sel].inj_ae_tps);
 
  if (mp_view->GetFWDFlag(FLAG_AEMAP_MAP))
-  m_fwdm->SetAEMAPMap(other_sel, mp_fwd->maps[current_sel].inj_ae_map);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_AEMAP, mp_fwd->maps[current_sel].inj_ae_map);
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
-  m_fwdm->SetAERPMMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_AERPM, mp_fwd->maps[current_sel].inj_ae_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
-  m_fwdm->SetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_AFTSTR, mp_fwd->maps[current_sel].inj_aftstr);
 
  if (mp_view->GetFWDFlag(FLAG_IT_MAP))
-  m_fwdm->SetITMap(other_sel, mp_fwd->maps[current_sel].inj_timing);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IT, mp_fwd->maps[current_sel].inj_timing);
 
  if (mp_view->GetFWDFlag(FLAG_ITRPM_MAP))
-  m_fwdm->SetITRPMMap(other_sel, mp_fwd->maps[current_sel].inj_target_rpm);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_ITRPM, mp_fwd->maps[current_sel].inj_target_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_RIGID_MAP))
-  m_fwdm->SetRigidMap(other_sel, mp_fwd->maps[current_sel].inj_idl_rigidity);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_RIGID, mp_fwd->maps[current_sel].inj_idl_rigidity);
 
  if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
-  m_fwdm->SetEGOCurveMap(other_sel, mp_fwd->maps[current_sel].inj_ego_curve);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_EGOCRV, mp_fwd->maps[current_sel].inj_ego_curve);
 
  if (mp_view->GetFWDFlag(FLAG_IACCORRW_MAP))
-  m_fwdm->SetIACCorrWMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr_w);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IACCW, mp_fwd->maps[current_sel].inj_iac_corr_w);
 
  if (mp_view->GetFWDFlag(FLAG_IACCORR_MAP))
-  m_fwdm->SetIACCorrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IACC, mp_fwd->maps[current_sel].inj_iac_corr);
 
  if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
-  m_fwdm->SetIATCLTMap(other_sel, mp_fwd->maps[current_sel].inj_iatclt_corr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IATCLT, mp_fwd->maps[current_sel].inj_iatclt_corr);
 
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
-  m_fwdm->SetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_TPSSWT, mp_fwd->maps[current_sel].inj_tpsswt);
 
  if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
-  m_fwdm->SetTpszonMap(other_sel, mp_fwd->maps[current_sel].inj_tpszon);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_TPSZON, mp_fwd->maps[current_sel].inj_tpszon);
 
  if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
-  m_fwdm->SetGtscMap(other_sel, mp_fwd->maps[current_sel].inj_gts_corr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_GTSC, mp_fwd->maps[current_sel].inj_gts_corr);
 
  if (mp_view->GetFWDFlag(FLAG_GPSC_MAP))
-  m_fwdm->SetGpscMap(other_sel, mp_fwd->maps[current_sel].inj_gps_corr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_GPSC, mp_fwd->maps[current_sel].inj_gps_corr);
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
-  m_fwdm->SetAtscMap(other_sel, mp_fwd->maps[current_sel].inj_ats_corr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_ATSC, mp_fwd->maps[current_sel].inj_ats_corr);
 
  if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
-  m_fwdm->SetPwm1Map(other_sel, mp_fwd->maps[current_sel].pwm_duty1);
+  m_fwdm->SetSetMap(other_sel, ETMT_PWM1, mp_fwd->maps[current_sel].pwm_duty1);
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
-  m_fwdm->SetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
+  m_fwdm->SetSetMap(other_sel, ETMT_PWM2, mp_fwd->maps[current_sel].pwm_duty2);
 
  if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
-  m_fwdm->SetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IACMAT, mp_fwd->maps[current_sel].iac_mat_corr);
 
  if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
-  m_fwdm->SetInjCylMultMap(other_sel, mp_fwd->maps[current_sel].inj_cylmult);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_CYLMULT, mp_fwd->maps[current_sel].inj_cylmult);
 
  if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
-  m_fwdm->SetInjCylAddMap(other_sel, mp_fwd->maps[current_sel].inj_cyladd);
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_CYLADD, mp_fwd->maps[current_sel].inj_cyladd);
 }
 
 //модальное окно активировалось - проводим его инициализацию

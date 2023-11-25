@@ -36,6 +36,7 @@
 #include "ufcodes.h"
 #include "BitMask.h"
 #include "Magnitude.h"
+#include "MapIds.h"
 
 //этот файл содержит платформенно-ориентированные фрагменты кода
 #pragma pack(1)
@@ -3415,6 +3416,50 @@ void CFirmwareDataMediator::SetInjCylAddMap(int i_index, const float* ip_values)
   p_fd->tables[i_index].inj_cyladd[i] = MathHelpers::Round(ip_values[i] / 0.0256f);
 }
 
+void CFirmwareDataMediator::GetSepMap(int id, float* op_values, bool i_original /*= false*/)
+{
+ switch(id)
+ {
+  case ETMT_ATTENUATOR: GetAttenuatorMap(op_values, i_original); break;
+  case ETMT_DWELLCNTRL: GetDwellCntrlMap(op_values, i_original); break;
+  case ETMT_CTS_CURVE: GetCTSCurveMap(op_values, i_original); break;
+  case ETMT_ATS_CURVE: GetATSCurveMap(op_values, i_original); break;
+  case ETMT_ATS_CORR: GetATSAACMap(op_values, i_original); break;
+  case ETMT_GASDOSE: GetGasdosePosMap(op_values, i_original); break;
+  case ETMT_BAROCORR: GetBarocorrMap(op_values, i_original); break;
+  case ETMT_MANIGNTIM: GetManIgntimMap(op_values, i_original); break;
+  case ETMT_TMP2_CURVE: GetTmp2CurveMap(op_values, i_original); break;
+  case ETMT_CRKCLT_CORR: GetCrkTempMap(op_values, i_original); break;
+  case ETMT_EH_PAUSE: GetEHPauseMap(op_values, i_original); break;
+  case ETMT_CRANKING_THRD: GetCrankingThrdMap(op_values, i_original); break;
+  case ETMT_CRANKING_TIME: GetCrankingTimeMap(op_values, i_original); break;
+  case ETMT_SMAPABAN_THRD: GetSmapabanThrdMap(op_values, i_original); break;
+  case ETMT_KNOCK_ZONE: GetKnockZoneMap(op_values, i_original); break;
+  case ETMT_GRTS_CURVE: GetGrtsCurveMap(op_values, i_original); break;
+  case ETMT_GRHEAT_DUTY: GetGrHeatDutyMap(op_values, i_original); break;
+  case ETMT_PWMIAC_UCOEF: GetPwmIacUCoefMap(op_values, i_original); break;
+  case ETMT_AFTSTR_STRK0: GetAftstrStrk0Map(op_values, i_original); break;
+  case ETMT_AFTSTR_STRK1: GetAftstrStrk1Map(op_values, i_original); break;
+  case ETMT_GRVDELAY: GetGrValDelMap(op_values, i_original); break;
+  case ETMT_FTLS_CURVE: GetFtlsCurveMap(op_values, i_original); break;
+  case ETMT_EGTS_CURVE: GetEgtsCurveMap(op_values, i_original); break;
+  case ETMT_OPS_CURVE: GetOpsCurveMap(op_values, i_original); break;
+  case ETMT_MANINJPWC: GetManInjPwcMap(op_values, i_original); break;
+  case ETMT_MAF_CURVE: GetMAFCurveMap(op_values, i_original); break;
+  case ETMT_FTLSCOR: GetFtlsCorMap(op_values, i_original); break;
+  case ETMT_LAMBDA_ZONE: GetLambdaZoneMap(op_values, i_original); break;
+  case ETMT_FTS_CURVE: GetFtsCurveMap(op_values, i_original); break;
+  case ETMT_FUELDENS_CORR: GetFuelDensCorrMap(op_values, i_original); break;
+  case ETMT_XTAU_XFACC: GetXtauXfAccMap(op_values, i_original); break;
+  case ETMT_XTAU_XFDEC: GetXtauXfDecMap(op_values, i_original); break;
+  case ETMT_XTAU_TFACC: GetXtauTfAccMap(op_values, i_original); break;
+  case ETMT_XTAU_TFDEC: GetXtauTfDecMap(op_values, i_original); break;
+  case ETMT_INJNONLINP: GetInjNonLinPMap(op_values, i_original); break;
+  case ETMT_INJNONLING: GetInjNonLinGMap(op_values, i_original); break;
+  default: ASSERT(0);
+ }
+}
+
 void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
 {
  switch(id)
@@ -3455,6 +3500,92 @@ void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
   case ETMT_XTAU_TFDEC: SetXtauTfDecMap(ip_values); break;
   case ETMT_INJNONLINP: SetInjNonLinPMap(ip_values); break;
   case ETMT_INJNONLING: SetInjNonLinGMap(ip_values); break;
+  default: ASSERT(0);
+ }
+}
+
+void CFirmwareDataMediator::GetSetMap(int i_index, int id, float* op_values, bool i_original/* = false*/)
+{
+ switch(id)
+ {
+  case ETMT_IGN_START: GetStartMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_IDLE: GetIdleMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_WORK: GetWorkMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_TEMP: GetTempMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_TEMPI: GetTempIdlMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_VE: GetVEMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_VE2: GetVE2Map(i_index, op_values, i_original); break;
+  case ETMT_INJ_AFR: GetAFRMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_CRNK: GetCrnkMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_WRMP: GetWrmpMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_DEAD: GetDeadMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IDLR: GetIdlrMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IDLC: GetIdlcMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_THRASS: GetThrassMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AETPS: GetAETPSMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AEMAP: GetAEMAPMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AERPM: GetAERPMMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AFTSTR: GetAftstrMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IT: GetITMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_ITRPM: GetITRPMMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_RIGID: GetRigidMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_EGOCRV: GetEGOCurveMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IACC: GetIACCorrMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IACCW: GetIACCorrWMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IATCLT: GetIATCLTMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_TPSSWT: GetTpsswtMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_GTSC: GetGtscMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_GPSC: GetGpscMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_ATSC: GetAtscMap(i_index, op_values, i_original); break;
+  case ETMT_PWM1: GetPwm1Map(i_index, op_values, i_original); break;
+  case ETMT_PWM2: GetPwm2Map(i_index, op_values, i_original); break;
+  case ETMT_INJ_IACMAT: GetIACMATMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_TPSZON: GetTpszonMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_CYLMULT: GetInjCylMultMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_CYLADD: GetInjCylAddMap(i_index, op_values, i_original); break;
+  default: ASSERT(0);
+ }
+}
+
+void CFirmwareDataMediator::SetSetMap(int i_index, int id, const float* ip_values)
+{
+ switch(id)
+ {
+  case ETMT_IGN_START: SetStartMap(i_index, ip_values); break;
+  case ETMT_IGN_IDLE: SetIdleMap(i_index, ip_values); break;
+  case ETMT_IGN_WORK: SetWorkMap(i_index, ip_values); break;
+  case ETMT_IGN_TEMP: SetTempMap(i_index, ip_values); break;
+  case ETMT_IGN_TEMPI: SetTempIdlMap(i_index, ip_values); break;
+  case ETMT_INJ_VE: SetVEMap(i_index, ip_values); break;
+  case ETMT_INJ_VE2: SetVE2Map(i_index, ip_values); break;
+  case ETMT_INJ_AFR: SetAFRMap(i_index, ip_values); break;
+  case ETMT_INJ_CRNK: SetCrnkMap(i_index, ip_values); break;
+  case ETMT_INJ_WRMP: SetWrmpMap(i_index, ip_values); break;
+  case ETMT_INJ_DEAD: SetDeadMap(i_index, ip_values); break;
+  case ETMT_INJ_IDLR: SetIdlrMap(i_index, ip_values); break;
+  case ETMT_INJ_IDLC: SetIdlcMap(i_index, ip_values); break;
+  case ETMT_INJ_THRASS: SetThrassMap(i_index, ip_values); break;
+  case ETMT_INJ_AETPS: SetAETPSMap(i_index, ip_values); break;
+  case ETMT_INJ_AEMAP: SetAEMAPMap(i_index, ip_values); break;
+  case ETMT_INJ_AERPM: SetAERPMMap(i_index, ip_values); break;
+  case ETMT_INJ_AFTSTR: SetAftstrMap(i_index, ip_values); break;
+  case ETMT_INJ_IT: SetITMap(i_index, ip_values); break;
+  case ETMT_INJ_ITRPM: SetITRPMMap(i_index, ip_values); break;
+  case ETMT_INJ_RIGID: SetRigidMap(i_index, ip_values); break;
+  case ETMT_INJ_EGOCRV: SetEGOCurveMap(i_index, ip_values); break;
+  case ETMT_INJ_IACC: SetIACCorrMap(i_index, ip_values); break;
+  case ETMT_INJ_IACCW: SetIACCorrWMap(i_index, ip_values); break;
+  case ETMT_INJ_IATCLT: SetIATCLTMap(i_index, ip_values); break;
+  case ETMT_INJ_TPSSWT: SetTpsswtMap(i_index, ip_values); break;
+  case ETMT_INJ_GTSC: SetGtscMap(i_index, ip_values); break;
+  case ETMT_INJ_GPSC: SetGpscMap(i_index, ip_values); break;
+  case ETMT_INJ_ATSC: SetAtscMap(i_index, ip_values); break;
+  case ETMT_PWM1: SetPwm1Map(i_index, ip_values); break;
+  case ETMT_PWM2: SetPwm2Map(i_index, ip_values); break;
+  case ETMT_INJ_IACMAT: SetIACMATMap(i_index, ip_values); break;
+  case ETMT_INJ_TPSZON: SetTpszonMap(i_index, ip_values); break;
+  case ETMT_INJ_CYLMULT: SetInjCylMultMap(i_index, ip_values); break;
+  case ETMT_INJ_CYLADD: SetInjCylAddMap(i_index, ip_values); break;
   default: ASSERT(0);
  }
 }

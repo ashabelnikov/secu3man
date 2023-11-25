@@ -40,7 +40,6 @@ set(HEADERS
   GMEInjOther1Dlg.h
   GMEInjPwm1Dlg.h
   GMEInjPwm2Dlg.h
-  MapIds.h
   resource.h
   RPMGridEditDlg.h
   StdAfx.h

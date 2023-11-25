@@ -27,6 +27,7 @@
 
 #include <vector>
 #include "common/unicodesupport.h"
+#include "io-core/MapIds.h"
 
 //определяем количество узлов интерполяции для каждой функции
 #define F_WRK_POINTS_F         16
@@ -184,6 +185,13 @@ struct CESettingsData
 
 struct SECU3FWMapsItem
 {
+ SECU3FWMapsItem()
+ : name(_T(""))
+ {
+  for (int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
+   std::fill(GetMap(i), GetMap(i) + GetMapSize(i), .0f); 
+ };
+
  _TSTRING name;                // имя набора характеристик
  //ignition maps
  float f_str[F_STR_POINTS];    // функция УОЗ на старте
@@ -222,6 +230,93 @@ struct SECU3FWMapsItem
  float inj_cyladd[INJ_CYLADD_SIZE];             // Inj. PW addition
  float inj_ae_map[INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2]; // bins and values of the AE's MAP lookup table
  float inj_thrass[INJ_THRASS_SIZE];             //IAC's throttle assistant map
+
+ float* GetMap(int i_mapType)
+ {
+  switch(i_mapType)
+  {
+   case ETMT_IGN_START: return f_str; //ignition maps
+   case ETMT_IGN_IDLE: return f_idl;
+   case ETMT_IGN_WORK: return f_wrk;
+   case ETMT_IGN_TEMP: return f_tmp;
+   case ETMT_IGN_TEMPI: return f_tmp_idl;  
+   case ETMT_INJ_VE: return inj_ve;      //fuel injection
+   case ETMT_INJ_VE2: return inj_ve2;
+   case ETMT_INJ_AFR: return inj_afr;
+   case ETMT_INJ_CRNK: return inj_cranking;
+   case ETMT_INJ_WRMP: return inj_warmup;
+   case ETMT_INJ_DEAD: return inj_dead_time;
+   case ETMT_INJ_IDLR: return inj_iac_run_pos;
+   case ETMT_INJ_IDLC: return inj_iac_crank_pos;
+   case ETMT_INJ_THRASS: return inj_thrass;
+   case ETMT_INJ_AETPS: return inj_ae_tps;
+   case ETMT_INJ_AEMAP: return inj_ae_map;
+   case ETMT_INJ_AERPM: return inj_ae_rpm;
+   case ETMT_INJ_AFTSTR: return inj_aftstr;
+   case ETMT_INJ_IT: return inj_timing;
+   case ETMT_INJ_ITRPM: return inj_target_rpm;
+   case ETMT_INJ_RIGID: return inj_idl_rigidity;
+   case ETMT_INJ_EGOCRV: return inj_ego_curve;
+   case ETMT_INJ_IACC: return inj_iac_corr;
+   case ETMT_INJ_IACCW: return inj_iac_corr_w;
+   case ETMT_INJ_IATCLT: return inj_iatclt_corr;
+   case ETMT_INJ_TPSSWT: return inj_tpsswt;
+   case ETMT_INJ_GTSC: return inj_gts_corr;
+   case ETMT_INJ_GPSC: return inj_gps_corr;
+   case ETMT_INJ_ATSC: return inj_ats_corr;
+   case ETMT_PWM1: return pwm_duty1;
+   case ETMT_PWM2: return pwm_duty2;
+   case ETMT_INJ_IACMAT: return iac_mat_corr;
+   case ETMT_INJ_TPSZON: return inj_tpszon;
+   case ETMT_INJ_CYLMULT: return inj_cylmult;
+   case ETMT_INJ_CYLADD: return inj_cyladd;
+  }
+  return NULL; //undefined type of map
+ }
+
+ static size_t GetMapSize(int i_mapType)
+ {
+  switch(i_mapType)
+  {
+   case ETMT_IGN_START: return F_STR_POINTS; //ignition maps
+   case ETMT_IGN_IDLE: return F_IDL_POINTS;
+   case ETMT_IGN_WORK: return F_WRK_POINTS_L * F_WRK_POINTS_F;
+   case ETMT_IGN_TEMP: return F_TMP_POINTS;
+   case ETMT_IGN_TEMPI: return F_TMP_POINTS;
+   case ETMT_INJ_VE: return INJ_VE_POINTS_L * INJ_VE_POINTS_F; //fuel injection maps
+   case ETMT_INJ_VE2: return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
+   case ETMT_INJ_AFR: return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
+   case ETMT_INJ_CRNK: return INJ_CRANKING_LOOKUP_TABLE_SIZE;
+   case ETMT_INJ_WRMP: return INJ_WARMUP_LOOKUP_TABLE_SIZE;
+   case ETMT_INJ_DEAD: return INJ_DT_LOOKUP_TABLE_SIZE;
+   case ETMT_INJ_IDLR:
+   case ETMT_INJ_IDLC: return INJ_IAC_POS_TABLE_SIZE;
+   case ETMT_INJ_THRASS: return INJ_THRASS_SIZE;
+   case ETMT_INJ_AETPS: return INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; //bins and values
+   case ETMT_INJ_AEMAP: return INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2; //bins and values
+   case ETMT_INJ_AERPM: return INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; //bins and values
+   case ETMT_INJ_AFTSTR: return INJ_AFTSTR_LOOKUP_TABLE_SIZE;
+   case ETMT_INJ_IT: return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
+   case ETMT_INJ_ITRPM: return INJ_TARGET_RPM_TABLE_SIZE;
+   case ETMT_INJ_RIGID: return INJ_IDL_RIGIDITY_TABLE_SIZE;
+   case ETMT_INJ_EGOCRV: return INJ_EGO_CURVE_SIZE+2;
+   case ETMT_INJ_IACC: return INJ_IAC_CORR_SIZE+2;
+   case ETMT_INJ_IACCW: return INJ_IAC_CORR_W_SIZE+2;
+   case ETMT_INJ_IATCLT: return INJ_IATCLT_CORR_SIZE+2;
+   case ETMT_INJ_TPSSWT: return INJ_TPSSWT_SIZE;
+   case ETMT_INJ_GTSC: return INJ_GTS_CORR_SIZE;
+   case ETMT_INJ_GPSC: return INJ_GPS_CORR_SIZE+2;
+   case ETMT_INJ_ATSC: return INJ_ATS_CORR_SIZE;
+   case ETMT_PWM1: return F_WRK_POINTS_L * F_WRK_POINTS_F;
+   case ETMT_PWM2: return F_WRK_POINTS_L * F_WRK_POINTS_F;
+   case ETMT_INJ_IACMAT: return INJ_ATS_CORR_SIZE;
+   case ETMT_INJ_TPSZON: return INJ_TPSZON_SIZE;
+   case ETMT_INJ_CYLMULT:
+   case ETMT_INJ_CYLADD: return INJ_CYLADD_SIZE;
+  }
+  ASSERT(0);
+  return 0; //undefined type of map
+ }
 };
 
 //Аппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
@@ -273,47 +368,8 @@ struct FWMapsDataHolder
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
  {
-  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
-  maps.assign(setNum, defval);
-  std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(ctscurve_table, ctscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE+2, .0f);
-  std::fill(rpm_slots, rpm_slots + F_RPM_SLOTS, .0f);
-  std::fill(clt_slots, clt_slots + F_TMP_SLOTS, .0f);
-  std::fill(load_slots, load_slots + F_LOAD_SLOTS, .0f);
-  std::fill(atscurve_table, atscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE+2, .0f);
-  std::fill(ats_corr_table, ats_corr_table + ATS_CORR_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(gasdose_pos_table, gasdose_pos_table + (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE), .0f);
-  std::fill(barocorr_table, barocorr_table + BAROCORR_SIZE + 2, .0f);  
-  std::fill(pa4_igntim_corr, pa4_igntim_corr + PA4_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(tmp2_curve, tmp2_curve + THERMISTOR_LOOKUP_TABLE_SIZE + 2, .0f);
-  std::fill(ctscrk_corr, ctscrk_corr + CTS_CRKCORR_SIZE, .0f);
-  std::fill(eh_pause_table, eh_pause_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
-  std::fill(cranking_thrd, cranking_thrd + CRANK_THRD_SIZE, .0f);
-  std::fill(cranking_time, cranking_time + CRANK_TIME_SIZE, .0f);
-  std::fill(smapaban_thrd, smapaban_thrd + SMAPABAN_THRD_SIZE, .0f);
-  std::fill(knock_zone, knock_zone + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
-  std::fill(grts_curve, grts_curve + THERMISTOR_LOOKUP_TABLE_SIZE + 2, .0f);
-  std::fill(grheat_duty, grheat_duty + F_TMP_SLOTS, .0f);
-  std::fill(pwmiac_ucoef, pwmiac_ucoef + PWMIAC_UCOEF_SIZE, .0f);
-  std::fill(aftstr_strk0, aftstr_strk0 + AFTSTR_STRK_SIZE, .0f);
-  std::fill(aftstr_strk1, aftstr_strk1 + AFTSTR_STRK_SIZE, .0f);
-  std::fill(grv_delay, grv_delay + F_TMP_POINTS, .0f);
-  std::fill(ftls_curve, ftls_curve + FTLS_LOOKUP_TABLE_SIZE + 2, .0f);
-  std::fill(egts_curve, egts_curve + EGTS_LOOKUP_TABLE_SIZE + 2, .0f);
-  std::fill(ops_curve, ops_curve + OPS_LOOKUP_TABLE_SIZE + 2, .0f);
-  std::fill(injpw_coef, injpw_coef + INJPWCOEF_LUT_SIZE, .0f);
-  std::fill(maf_curve, maf_curve + MAF_FLOW_CURVE_SIZE + 1 + 2, .0f);
-  std::fill(ftls_corr, ftls_corr + FTLSCOR_UCOEF_SIZE, .0f);
-  std::fill(lambda_zone, lambda_zone + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
-  std::fill(fts_curve, fts_curve + FTS_LOOKUP_TABLE_SIZE + 2, .0f);
-  std::fill(fueldens_corr, fueldens_corr + FUELDENS_CORR_SIZE, .0f);
-  std::fill(xtau_xfacc, xtau_xfacc + XTAU_FACT_SIZE, .0f);
-  std::fill(xtau_xfdec, xtau_xfdec + XTAU_FACT_SIZE, .0f);
-  std::fill(xtau_tfacc, xtau_tfacc + XTAU_FACT_SIZE, .0f);
-  std::fill(xtau_tfdec, xtau_tfdec + XTAU_FACT_SIZE, .0f);
-  std::fill(inj_nonlinp_corr, inj_nonlinp_corr + (INJ_NONLIN_SIZE*2), .0f);
-  std::fill(inj_nonling_corr, inj_nonling_corr + (INJ_NONLIN_SIZE*2), .0f);
+  for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
+   std::fill(GetMap(i), GetMap(i) + GetMapSize(i), .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const
@@ -324,4 +380,93 @@ struct FWMapsDataHolder
    list.push_back(maps[i].name);
   return list;
  };
+
+ float* GetMap(int i_mapType)
+ { 
+  switch(i_mapType)
+  {
+   case ETMT_ATTENUATOR: return attenuator_table;
+   case ETMT_DWELLCNTRL: return dwellcntrl_table;
+   case ETMT_CTS_CURVE: return ctscurve_table;
+   case ETMT_ATS_CURVE: return atscurve_table;
+   case ETMT_ATS_CORR: return ats_corr_table;
+   case ETMT_GASDOSE: return gasdose_pos_table;
+   case ETMT_BAROCORR: return barocorr_table;
+   case ETMT_MANIGNTIM: return pa4_igntim_corr;
+   case ETMT_TMP2_CURVE: return tmp2_curve;
+   case ETMT_CRKCLT_CORR: return ctscrk_corr;
+   case ETMT_EH_PAUSE: return eh_pause_table;
+   case ETMT_CRANKING_THRD: return cranking_thrd;
+   case ETMT_CRANKING_TIME: return cranking_time;
+   case ETMT_SMAPABAN_THRD: return smapaban_thrd;
+   case ETMT_KNOCK_ZONE: return knock_zone;
+   case ETMT_GRTS_CURVE: return grts_curve;
+   case ETMT_GRHEAT_DUTY: return grheat_duty;
+   case ETMT_PWMIAC_UCOEF: return pwmiac_ucoef;
+   case ETMT_AFTSTR_STRK0: return aftstr_strk0;
+   case ETMT_AFTSTR_STRK1: return aftstr_strk1;
+   case ETMT_GRVDELAY: return grv_delay;
+   case ETMT_FTLS_CURVE: return ftls_curve;
+   case ETMT_EGTS_CURVE: return egts_curve;
+   case ETMT_OPS_CURVE: return ops_curve;
+   case ETMT_MANINJPWC: return injpw_coef;
+   case ETMT_MAF_CURVE: return maf_curve;
+   case ETMT_FTLSCOR: return ftls_corr;
+   case ETMT_LAMBDA_ZONE: return lambda_zone;
+   case ETMT_FTS_CURVE: return fts_curve;
+   case ETMT_FUELDENS_CORR: return fueldens_corr;
+   case ETMT_XTAU_XFACC: return xtau_xfacc;
+   case ETMT_XTAU_XFDEC: return xtau_xfdec;
+   case ETMT_XTAU_TFACC: return xtau_tfacc;
+   case ETMT_XTAU_TFDEC: return xtau_tfdec;
+   case ETMT_INJNONLINP: return inj_nonlinp_corr;
+   case ETMT_INJNONLING: return inj_nonling_corr;
+  }
+  return NULL; //undefined type of map
+ }
+
+ static size_t GetMapSize(int i_mapType)
+ {
+  switch(i_mapType)
+  {
+   case ETMT_ATTENUATOR: return KC_ATTENUATOR_LOOKUP_TABLE_SIZE;
+   case ETMT_DWELLCNTRL: return COIL_ON_TIME_LOOKUP_TABLE_SIZE;
+   case ETMT_CTS_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
+   case ETMT_ATS_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
+   case ETMT_ATS_CORR: return ATS_CORR_LOOKUP_TABLE_SIZE;
+   case ETMT_GASDOSE: return GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE;
+   case ETMT_BAROCORR: return BAROCORR_SIZE+2;
+   case ETMT_MANIGNTIM: return PA4_LOOKUP_TABLE_SIZE;
+   case ETMT_TMP2_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
+   case ETMT_CRKCLT_CORR: return CTS_CRKCORR_SIZE;
+   case ETMT_EH_PAUSE: return COIL_ON_TIME_LOOKUP_TABLE_SIZE;
+   case ETMT_CRANKING_THRD: return CRANK_THRD_SIZE;
+   case ETMT_CRANKING_TIME: return CRANK_TIME_SIZE;
+   case ETMT_SMAPABAN_THRD: return SMAPABAN_THRD_SIZE;
+   case ETMT_KNOCK_ZONE: return F_WRK_POINTS_L * F_WRK_POINTS_F;
+   case ETMT_GRTS_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
+   case ETMT_GRHEAT_DUTY: return F_TMP_POINTS;
+   case ETMT_PWMIAC_UCOEF: return PWMIAC_UCOEF_SIZE;
+   case ETMT_AFTSTR_STRK0: return AFTSTR_STRK_SIZE;
+   case ETMT_AFTSTR_STRK1: return AFTSTR_STRK_SIZE;
+   case ETMT_GRVDELAY: return F_TMP_POINTS;
+   case ETMT_FTLS_CURVE: return FTLS_LOOKUP_TABLE_SIZE+2;
+   case ETMT_EGTS_CURVE: return EGTS_LOOKUP_TABLE_SIZE+2;
+   case ETMT_OPS_CURVE: return OPS_LOOKUP_TABLE_SIZE+2;
+   case ETMT_MANINJPWC: return INJPWCOEF_LUT_SIZE;
+   case ETMT_MAF_CURVE: return MAF_FLOW_CURVE_SIZE+1+2;
+   case ETMT_FTLSCOR: return FTLSCOR_UCOEF_SIZE;
+   case ETMT_LAMBDA_ZONE: return F_WRK_POINTS_L * F_WRK_POINTS_F;
+   case ETMT_FTS_CURVE: return FTS_LOOKUP_TABLE_SIZE+2;
+   case ETMT_FUELDENS_CORR: return FUELDENS_CORR_SIZE;
+   case ETMT_XTAU_XFACC: return XTAU_FACT_SIZE;
+   case ETMT_XTAU_XFDEC: return XTAU_FACT_SIZE;
+   case ETMT_XTAU_TFACC: return XTAU_FACT_SIZE;
+   case ETMT_XTAU_TFDEC: return XTAU_FACT_SIZE;
+   case ETMT_INJNONLINP: return INJ_NONLIN_SIZE * 2;
+   case ETMT_INJNONLING: return INJ_NONLIN_SIZE * 2;
+  }
+  ASSERT(0);
+  return 0; //undefined type of map
+ }
 };

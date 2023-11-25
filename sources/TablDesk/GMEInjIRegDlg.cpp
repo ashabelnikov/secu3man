@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "GMEInjIRegDlg.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
@@ -326,43 +326,43 @@ void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac
 void CGMEInjIRegDlg::OnChangeIdlc(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_IDLC);
+  m_OnChange(ETMT_INJ_IDLC);
 }
 
 void CGMEInjIRegDlg::OnChangeIdlr(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_IDLR);
+  m_OnChange(ETMT_INJ_IDLR);
 }
 
 void CGMEInjIRegDlg::OnChangeITRPM(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_ITRPM);
+  m_OnChange(ETMT_INJ_ITRPM);
 }
 
 void CGMEInjIRegDlg::OnChangeRigid(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_RIGID);
+  m_OnChange(ETMT_INJ_RIGID);
 }
 
 void CGMEInjIRegDlg::OnChangeIACC(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_IACC);
+  m_OnChange(ETMT_INJ_IACC);
 }
 
 void CGMEInjIRegDlg::OnChangeIACCW(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_IACCW);
+  m_OnChange(ETMT_INJ_IACCW);
 }
 
 void CGMEInjIRegDlg::OnChangeIACMAT(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_IACMAT);
+  m_OnChange(ETMT_INJ_IACMAT);
 }
 
 void CGMEInjIRegDlg::_UpdateDynamicGrids(void)

@@ -31,7 +31,7 @@
 #include "common/Dll.h"
 #include "common/FastDelegate.h"
 #include "TablDesk/SeptabsPanel.h"
-#include "TablDesk/MapIds.h"
+#include "io-core/MapIds.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
@@ -187,7 +187,7 @@ void CSepTablesDeskDlg::SetLoadGrid(const float* values)
 void CSepTablesDeskDlg::CloseAllCharts(void)
 {
  HWND hwnd;
- for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+ for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
  {
   hwnd = mp_SeptabsPanel->GetMapWindow(i);
   if (hwnd) ::DestroyWindow(hwnd);
@@ -206,52 +206,6 @@ void CSepTablesDeskDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
 
 void CSepTablesDeskDlg::setOnSaveButton(EventHandler OnFunction)
 { m_OnSaveButton  = OnFunction; }
-
-
-//------------------------------------------------------------------------
-float* CSepTablesDeskDlg::GetMap(int i_mapType, bool i_original)
-{
- switch(i_mapType)
- {
-  case TYPE_MAP_ATTENUATOR: return mp_SeptabsPanel->GetAttenuatorMap(i_original);
-  case TYPE_MAP_DWELLCNTRL: return mp_SeptabsPanel->GetDwellCntrlMap(i_original);
-  case TYPE_MAP_CTS_CURVE: return mp_SeptabsPanel->GetCTSCurveMap(i_original);
-  case TYPE_MAP_ATS_CURVE: return mp_SeptabsPanel->GetATSCurveMap(i_original);
-  case TYPE_MAP_ATS_CORR: return mp_SeptabsPanel->GetATSAACMap(i_original);
-  case TYPE_MAP_GASDOSE: return mp_SeptabsPanel->GetGasdosePosMap(i_original);
-  case TYPE_MAP_BAROCORR: return mp_SeptabsPanel->GetBarocorrMap(i_original);
-  case TYPE_MAP_MANIGNTIM: return mp_SeptabsPanel->GetManIgntimMap(i_original);
-  case TYPE_MAP_TMP2_CURVE: return mp_SeptabsPanel->GetTmp2CurveMap(i_original);
-  case TYPE_MAP_CRKCLT_CORR: return mp_SeptabsPanel->GetCrkTempMap(i_original);
-  case TYPE_MAP_EH_PAUSE: return mp_SeptabsPanel->GetEHPauseMap(i_original);
-  case TYPE_MAP_CRANKING_THRD: return mp_SeptabsPanel->GetCrankingThrdMap(i_original);
-  case TYPE_MAP_CRANKING_TIME: return mp_SeptabsPanel->GetCrankingTimeMap(i_original);
-  case TYPE_MAP_SMAPABAN_THRD: return mp_SeptabsPanel->GetSmapabanThrdMap(i_original);
-  case TYPE_MAP_KNOCK_ZONE: return mp_SeptabsPanel->GetKnockZoneMap(i_original);
-  case TYPE_MAP_GRTS_CURVE: return mp_SeptabsPanel->GetGrtsCurveMap(i_original);
-  case TYPE_MAP_GRHEAT_DUTY: return mp_SeptabsPanel->GetGrHeatDutyMap(i_original);
-  case TYPE_MAP_PWMIAC_UCOEF: return mp_SeptabsPanel->GetPwmIacUCoefMap(i_original);
-  case TYPE_MAP_AFTSTR_STRK0: return mp_SeptabsPanel->GetAftstrStrk0Map(i_original);
-  case TYPE_MAP_AFTSTR_STRK1: return mp_SeptabsPanel->GetAftstrStrk1Map(i_original);
-  case TYPE_MAP_GRVDELAY: return mp_SeptabsPanel->GetGrValDelMap(i_original);
-  case TYPE_MAP_FTLS_CURVE: return mp_SeptabsPanel->GetFtlsCurveMap(i_original);
-  case TYPE_MAP_EGTS_CURVE: return mp_SeptabsPanel->GetEgtsCurveMap(i_original);
-  case TYPE_MAP_OPS_CURVE: return mp_SeptabsPanel->GetOpsCurveMap(i_original);
-  case TYPE_MAP_MANINJPWC: return mp_SeptabsPanel->GetManInjPwcMap(i_original);
-  case TYPE_MAP_MAF_CURVE: return mp_SeptabsPanel->GetMAFCurveMap(i_original);
-  case TYPE_MAP_FTLSCOR: return mp_SeptabsPanel->GetFtlsCorMap(i_original);
-  case TYPE_MAP_LAMBDA_ZONE: return mp_SeptabsPanel->GetLambdaZoneMap(i_original);
-  case TYPE_MAP_FTS_CURVE: return mp_SeptabsPanel->GetFtsCurveMap(i_original);
-  case TYPE_MAP_FUELDENS_CORR: return mp_SeptabsPanel->GetFuelDensCorrMap(i_original);
-  case TYPE_MAP_XTAU_XFACC: return mp_SeptabsPanel->GetXtauXfAccMap(i_original);
-  case TYPE_MAP_XTAU_XFDEC: return mp_SeptabsPanel->GetXtauXfDecMap(i_original);
-  case TYPE_MAP_XTAU_TFACC: return mp_SeptabsPanel->GetXtauTfAccMap(i_original);
-  case TYPE_MAP_XTAU_TFDEC: return mp_SeptabsPanel->GetXtauTfDecMap(i_original);
-  case TYPE_MAP_INJNONLINP: return mp_SeptabsPanel->GetInjNonLinPMap(i_original);
-  case TYPE_MAP_INJNONLING: return mp_SeptabsPanel->GetInjNonLinGMap(i_original);
-  default: return NULL;
- }
-}
 
 //------------------------------------------------------------------------
 void CSepTablesDeskDlg::OnDestroy()

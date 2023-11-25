@@ -31,6 +31,7 @@
 #include "common/fastdelegate.h"
 #include "TablDesk/DynamicValues.h"
 #include "MapWndScrPos.h"
+#include "io-core/FirmwareMapsDataHolder.h"
 
 class CLPControlPanelDlg;
 class ISettingsData;
@@ -66,47 +67,11 @@ class CLPTablesController : public MapWndScrPos
   void _OnChangeSettingsGME(void);
   bool _GetSplitAngMode(void);
 
-  //Ignition maps:
-  float startMap[16];
-  float idleMap[16];
-  float workMap[256];
-  float tempMap[16];
-  float tempIMap[16];
-  //axis grids:
+  SECU3FWMapsItem m_md;
+
   float m_rpm_grid_values[16];
   float m_clt_grid_values[16];
   float m_load_grid_values[16];
-  //Fuel injection maps:
-  float veMap[256];
-  float ve2Map[256];
-  float afrMap[256];
-  float itMap[256];
-  float idlcMap[16];
-  float idlrMap[16];
-  float itrpmMap[16];
-  float rigidMap[8];
-  float iaccMap[8+2];
-  float iaccwMap[16+2];
-  float aftstrMap[16];
-  float wrmpMap[16];
-  float aetpsMap[8*2]; //map+bins
-  float aerpmMap[4*2]; //map+bins
-  float crnkMap[16];
-  float deadMap[32];
-  float egocrvMap[16+2];
-  float iatcltMap[8+2];
-  float tpsswtMap[16];
-  float tpszonMap[16];
-  float atscMap[16];
-  float gtscMap[16];
-  float gpscMap[17+2];
-  float pwm1Map[256];
-  float pwm2Map[256];
-  float iacmatMap[16];
-  float cylmultMap[8];
-  float cyladdMap[8];
-  float aemapMap[8*2]; //map+bins
-  float thrassMap[16];
 
  private:
   CFirmwareTabController* mp_fwdcntr;

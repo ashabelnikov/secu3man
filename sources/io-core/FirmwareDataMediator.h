@@ -76,78 +76,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   DWORD GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp);
   BYTE* GetFWVersion(BYTE* fw_version) const;
 
-  //ignition
-  void GetStartMap(int i_index, float* op_values, bool i_original = false);
-  void SetStartMap(int i_index,const float* i_values);
-  void GetIdleMap(int i_index,  float* op_values, bool i_original = false);
-  void SetIdleMap(int i_index, const float* i_values);
-  void GetWorkMap(int i_index, float* op_values, bool i_original = false);
-  void SetWorkMap(int i_index, const float* i_values);
-  void GetTempMap(int i_index, float* op_values, bool i_original = false);
-  void SetTempMap(int i_index, const float* i_values);
-  void GetTempIdlMap(int i_index, float* op_values, bool i_original = false);
-  void SetTempIdlMap(int i_index, const float* i_values);
-  //fuel injection
-  void GetVEMap(int i_index, float* op_values, bool i_original = false);
-  void SetVEMap(int i_index, const float* i_values);
-  void GetVE2Map(int i_index, float* op_values, bool i_original = false);
-  void SetVE2Map(int i_index, const float* i_values);
-  void GetAFRMap(int i_index, float* op_values, bool i_original = false);
-  void SetAFRMap(int i_index, const float* i_values);
-  void GetCrnkMap(int i_index, float* op_values, bool i_original = false);
-  void SetCrnkMap(int i_index, const float* i_values);
-  void GetWrmpMap(int i_index, float* op_values, bool i_original = false);
-  void SetWrmpMap(int i_index, const float* i_values);
-  void GetDeadMap(int i_index, float* op_values, bool i_original = false);
-  void SetDeadMap(int i_index, const float* i_values);
-  void GetIdlrMap(int i_index, float* op_values, bool i_original = false);
-  void SetIdlrMap(int i_index, const float* i_values);
-  void GetIdlcMap(int i_index, float* op_values, bool i_original = false);
-  void SetIdlcMap(int i_index, const float* i_values);
-  void GetThrassMap(int i_index, float* op_values, bool i_original = false);
-  void SetThrassMap(int i_index, const float* i_values);
-  void GetAETPSMap(int i_index, float* op_values, bool i_original = false);
-  void SetAETPSMap(int i_index, const float* i_values);
-  void GetAERPMMap(int i_index, float* op_values, bool i_original = false);
-  void SetAERPMMap(int i_index, const float* i_values);
-  void GetAftstrMap(int i_index, float* op_values, bool i_original = false);
-  void SetAftstrMap(int i_index, const float* i_values);
-  void GetITMap(int i_index, float* op_values, bool i_original = false);
-  void SetITMap(int i_index, const float* i_values);
-  void GetITRPMMap(int i_index, float* op_values, bool i_original = false);
-  void SetITRPMMap(int i_index, const float* i_values);
-  void GetRigidMap(int i_index, float* op_values, bool i_original = false);
-  void SetRigidMap(int i_index, const float* i_values);
-  void GetEGOCurveMap(int i_index, float* op_values, bool i_original = false);
-  void SetEGOCurveMap(int i_index, const float* i_values);
-  void GetIACCorrWMap(int i_index, float* op_values, bool i_original = false);
-  void SetIACCorrWMap(int i_index, const float* i_values);
-  void GetIACCorrMap(int i_index, float* op_values, bool i_original = false);
-  void SetIACCorrMap(int i_index, const float* i_values);
-  void GetIATCLTMap(int i_index, float* op_values, bool i_original = false);
-  void SetIATCLTMap(int i_index, const float* i_values);
-  void GetTpsswtMap(int i_index, float* op_values, bool i_original = false);
-  void SetTpsswtMap(int i_index, const float* i_values);
-  void GetGtscMap(int i_index, float* op_values, bool i_original = false);
-  void SetGtscMap(int i_index, const float* i_values);
-  void GetGpscMap(int i_index, float* op_values, bool i_original = false);
-  void SetGpscMap(int i_index, const float* i_values);
-  void GetAtscMap(int i_index, float* op_values, bool i_original = false);
-  void SetAtscMap(int i_index, const float* i_values);
-  void GetPwm1Map(int i_index, float* op_values, bool i_original = false);
-  void SetPwm1Map(int i_index, const float* i_values);
-  void GetPwm2Map(int i_index, float* op_values, bool i_original = false);
-  void SetPwm2Map(int i_index, const float* i_values);
-  void SetIACMATMap(int i_index, const float* i_values);
-  void GetIACMATMap(int i_index, float* op_values, bool i_original = false);
-  void GetTpszonMap(int i_index, float* op_values, bool i_original = false);
-  void SetTpszonMap(int i_index, const float* i_values);
-  void GetInjCylMultMap(int i_index, float* op_values, bool i_original = false);
-  void SetInjCylMultMap(int i_index, const float* i_values);
-  void GetInjCylAddMap(int i_index, float* op_values, bool i_original = false);
-  void SetInjCylAddMap(int i_index, const float* i_values);
-  void GetAEMAPMap(int i_index, float* op_values, bool i_original = false);
-  void SetAEMAPMap(int i_index, const float* i_values);
+  void GetSetMap(int i_index, int id, float* op_values, bool i_original = false);
+  void SetSetMap(int i_index, int id, const float* ip_values);
+  void GetSepMap(int id, float* op_values, bool i_original = false);
+  void SetSepMap(int id, const float* ip_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);
@@ -161,130 +93,16 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetFWFileName(const _TSTRING i_fw_file_name);
   _TSTRING GetFWFileName(void);
 
-  void GetAttenuatorMap(float* op_values, bool i_original = false);
-  void SetAttenuatorMap(const float* i_values);
-
-  void GetDwellCntrlMap(float* op_values, bool i_original = false);
-  void SetDwellCntrlMap(const float* i_values);
-
-  void GetCTSCurveMap(float* op_values, bool i_original = false);
-  void SetCTSCurveMap(const float* i_values);
-
-  void GetATSCurveMap(float* op_values, bool i_original = false);
-  void SetATSCurveMap(const float* i_values);
-
   void GetRPMGridMap(float* op_values);
   void SetRPMGridMap(const float* i_values);
-
   void GetCLTGridMap(float* op_values);
   void SetCLTGridMap(const float* i_values);
-
   void GetLoadGridMap(float* op_values);
   void SetLoadGridMap(const float* i_values);
-
-  void GetATSAACMap(float* op_values, bool i_original = false);
-  void SetATSAACMap(const float* i_values);
-
-  void GetGasdosePosMap(float* op_values, bool i_original = false);
-  void SetGasdosePosMap(const float* i_values);
-
   void GetCESettingsData(CESettingsData& o_data) const;
   void SetCESettingsData(const CESettingsData& i_data);
-
-  void GetBarocorrMap(float* op_values, bool i_original = false);
-  void SetBarocorrMap(const float* i_values);
-
-  void GetManIgntimMap(float* op_values, bool i_original = false);
-  void SetManIgntimMap(const float* i_values);
-
-  void GetTmp2CurveMap(float* op_values, bool i_original = false);
-  void SetTmp2CurveMap(const float* i_values);
-
-  void GetGrtsCurveMap(float* op_values, bool i_original = false);
-  void SetGrtsCurveMap(const float* i_values);
-
-  void GetCrkTempMap(float* op_values, bool i_original = false);
-  void SetCrkTempMap(const float* i_values);
-
-  void GetEHPauseMap(float* op_values, bool i_original = false);
-  void SetEHPauseMap(const float* i_values);
-
   void GetFwConstsData(SECU3IO::FwConstsData& o_data) const;
   void SetFwConstsData(const SECU3IO::FwConstsData& i_data);
-
-  void GetCrankingThrdMap(float* op_values, bool i_original = false);
-  void SetCrankingThrdMap(const float* ip_values);
-  void GetCrankingTimeMap(float* op_values, bool i_original = false);
-  void SetCrankingTimeMap(const float* ip_values);
-  void GetSmapabanThrdMap(float* op_values, bool i_original = false);
-  void SetSmapabanThrdMap(const float* ip_values);
-
-  void GetKnockZoneMap(float* op_values, bool i_original = false);
-  void SetKnockZoneMap(const float* i_values);
-
-  void GetLambdaZoneMap(float* op_values, bool i_original = false);
-  void SetLambdaZoneMap(const float* i_values);
-
-  void GetGrHeatDutyMap(float* op_values, bool i_original = false);
-  void SetGrHeatDutyMap(const float* i_values);
-
-  void GetPwmIacUCoefMap(float* op_values, bool i_original = false);
-  void SetPwmIacUCoefMap(const float* i_values);
-
-  void GetAftstrStrk0Map(float* op_values, bool i_original = false);
-  void SetAftstrStrk0Map(const float* i_values);
-
-  void GetAftstrStrk1Map(float* op_values, bool i_original = false);
-  void SetAftstrStrk1Map(const float* i_values);
-
-  void GetGrValDelMap(float* op_values, bool i_original = false);
-  void SetGrValDelMap(const float* i_values);
-
-  void GetFtlsCurveMap(float* op_values, bool i_original = false);
-  void SetFtlsCurveMap(const float* i_values);
-
-  void GetFtlsCorMap(float* op_values, bool i_original = false);
-  void SetFtlsCorMap(const float* i_values);
-
-  void GetEgtsCurveMap(float* op_values, bool i_original = false);
-  void SetEgtsCurveMap(const float* i_values);
-
-  void GetOpsCurveMap(float* op_values, bool i_original = false);
-  void SetOpsCurveMap(const float* i_values);
-
-  void GetManInjPwcMap(float* op_values, bool i_original = false);
-  void SetManInjPwcMap(const float* i_values);
-
-  void GetMAFCurveMap(float* op_values, bool i_original = false);
-  void SetMAFCurveMap(const float* i_values);
-
-  void GetFtsCurveMap(float* op_values, bool i_original = false);
-  void SetFtsCurveMap(const float* i_values);
-
-  void GetFuelDensCorrMap(float* op_values, bool i_original = false);
-  void SetFuelDensCorrMap(const float* i_values);
-
-  void GetXtauXfAccMap(float* op_values, bool i_original = false);
-  void SetXtauXfAccMap(const float* i_values);
-
-  void GetXtauXfDecMap(float* op_values, bool i_original = false);
-  void SetXtauXfDecMap(const float* i_values);
-
-  void GetXtauTfAccMap(float* op_values, bool i_original = false);
-  void SetXtauTfAccMap(const float* i_values);
-
-  void GetXtauTfDecMap(float* op_values, bool i_original = false);
-  void SetXtauTfDecMap(const float* i_values);
-
-  void GetInjNonLinPMap(float* op_values, bool i_original = false);
-  void SetInjNonLinPMap(const float* i_values);
-
-  void GetInjNonLinGMap(float* op_values, bool i_original = false);
-  void SetInjNonLinGMap(const float* i_values);
-
-
-  void SetSepMap(int id, const float* ip_values);
-
 
   //Types of slots/plugs
   enum IOXtype
@@ -658,6 +476,152 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   const PPFlashParam& GetPlatformParams(void) const;
 
 protected:
+  //ignition
+  void GetStartMap(int i_index, float* op_values, bool i_original = false);
+  void SetStartMap(int i_index,const float* i_values);
+  void GetIdleMap(int i_index,  float* op_values, bool i_original = false);
+  void SetIdleMap(int i_index, const float* i_values);
+  void GetWorkMap(int i_index, float* op_values, bool i_original = false);
+  void SetWorkMap(int i_index, const float* i_values);
+  void GetTempMap(int i_index, float* op_values, bool i_original = false);
+  void SetTempMap(int i_index, const float* i_values);
+  void GetTempIdlMap(int i_index, float* op_values, bool i_original = false);
+  void SetTempIdlMap(int i_index, const float* i_values);
+  //fuel injection
+  void GetVEMap(int i_index, float* op_values, bool i_original = false);
+  void SetVEMap(int i_index, const float* i_values);
+  void GetVE2Map(int i_index, float* op_values, bool i_original = false);
+  void SetVE2Map(int i_index, const float* i_values);
+  void GetAFRMap(int i_index, float* op_values, bool i_original = false);
+  void SetAFRMap(int i_index, const float* i_values);
+  void GetCrnkMap(int i_index, float* op_values, bool i_original = false);
+  void SetCrnkMap(int i_index, const float* i_values);
+  void GetWrmpMap(int i_index, float* op_values, bool i_original = false);
+  void SetWrmpMap(int i_index, const float* i_values);
+  void GetDeadMap(int i_index, float* op_values, bool i_original = false);
+  void SetDeadMap(int i_index, const float* i_values);
+  void GetIdlrMap(int i_index, float* op_values, bool i_original = false);
+  void SetIdlrMap(int i_index, const float* i_values);
+  void GetIdlcMap(int i_index, float* op_values, bool i_original = false);
+  void SetIdlcMap(int i_index, const float* i_values);
+  void GetThrassMap(int i_index, float* op_values, bool i_original = false);
+  void SetThrassMap(int i_index, const float* i_values);
+  void GetAETPSMap(int i_index, float* op_values, bool i_original = false);
+  void SetAETPSMap(int i_index, const float* i_values);
+  void GetAERPMMap(int i_index, float* op_values, bool i_original = false);
+  void SetAERPMMap(int i_index, const float* i_values);
+  void GetAftstrMap(int i_index, float* op_values, bool i_original = false);
+  void SetAftstrMap(int i_index, const float* i_values);
+  void GetITMap(int i_index, float* op_values, bool i_original = false);
+  void SetITMap(int i_index, const float* i_values);
+  void GetITRPMMap(int i_index, float* op_values, bool i_original = false);
+  void SetITRPMMap(int i_index, const float* i_values);
+  void GetRigidMap(int i_index, float* op_values, bool i_original = false);
+  void SetRigidMap(int i_index, const float* i_values);
+  void GetEGOCurveMap(int i_index, float* op_values, bool i_original = false);
+  void SetEGOCurveMap(int i_index, const float* i_values);
+  void GetIACCorrWMap(int i_index, float* op_values, bool i_original = false);
+  void SetIACCorrWMap(int i_index, const float* i_values);
+  void GetIACCorrMap(int i_index, float* op_values, bool i_original = false);
+  void SetIACCorrMap(int i_index, const float* i_values);
+  void GetIATCLTMap(int i_index, float* op_values, bool i_original = false);
+  void SetIATCLTMap(int i_index, const float* i_values);
+  void GetTpsswtMap(int i_index, float* op_values, bool i_original = false);
+  void SetTpsswtMap(int i_index, const float* i_values);
+  void GetGtscMap(int i_index, float* op_values, bool i_original = false);
+  void SetGtscMap(int i_index, const float* i_values);
+  void GetGpscMap(int i_index, float* op_values, bool i_original = false);
+  void SetGpscMap(int i_index, const float* i_values);
+  void GetAtscMap(int i_index, float* op_values, bool i_original = false);
+  void SetAtscMap(int i_index, const float* i_values);
+  void GetPwm1Map(int i_index, float* op_values, bool i_original = false);
+  void SetPwm1Map(int i_index, const float* i_values);
+  void GetPwm2Map(int i_index, float* op_values, bool i_original = false);
+  void SetPwm2Map(int i_index, const float* i_values);
+  void SetIACMATMap(int i_index, const float* i_values);
+  void GetIACMATMap(int i_index, float* op_values, bool i_original = false);
+  void GetTpszonMap(int i_index, float* op_values, bool i_original = false);
+  void SetTpszonMap(int i_index, const float* i_values);
+  void GetInjCylMultMap(int i_index, float* op_values, bool i_original = false);
+  void SetInjCylMultMap(int i_index, const float* i_values);
+  void GetInjCylAddMap(int i_index, float* op_values, bool i_original = false);
+  void SetInjCylAddMap(int i_index, const float* i_values);
+  void GetAEMAPMap(int i_index, float* op_values, bool i_original = false);
+  void SetAEMAPMap(int i_index, const float* i_values);
+
+  void GetAttenuatorMap(float* op_values, bool i_original = false);
+  void SetAttenuatorMap(const float* i_values);
+  void GetDwellCntrlMap(float* op_values, bool i_original = false);
+  void SetDwellCntrlMap(const float* i_values);
+  void GetCTSCurveMap(float* op_values, bool i_original = false);
+  void SetCTSCurveMap(const float* i_values);
+  void GetATSCurveMap(float* op_values, bool i_original = false);
+  void SetATSCurveMap(const float* i_values);
+  void GetATSAACMap(float* op_values, bool i_original = false);
+  void SetATSAACMap(const float* i_values);
+  void GetGasdosePosMap(float* op_values, bool i_original = false);
+  void SetGasdosePosMap(const float* i_values);
+  void GetBarocorrMap(float* op_values, bool i_original = false);
+  void SetBarocorrMap(const float* i_values);
+  void GetManIgntimMap(float* op_values, bool i_original = false);
+  void SetManIgntimMap(const float* i_values);
+  void GetTmp2CurveMap(float* op_values, bool i_original = false);
+  void SetTmp2CurveMap(const float* i_values);
+  void GetGrtsCurveMap(float* op_values, bool i_original = false);
+  void SetGrtsCurveMap(const float* i_values);
+  void GetCrkTempMap(float* op_values, bool i_original = false);
+  void SetCrkTempMap(const float* i_values);
+  void GetEHPauseMap(float* op_values, bool i_original = false);
+  void SetEHPauseMap(const float* i_values);
+  void GetCrankingThrdMap(float* op_values, bool i_original = false);
+  void SetCrankingThrdMap(const float* ip_values);
+  void GetCrankingTimeMap(float* op_values, bool i_original = false);
+  void SetCrankingTimeMap(const float* ip_values);
+  void GetSmapabanThrdMap(float* op_values, bool i_original = false);
+  void SetSmapabanThrdMap(const float* ip_values);
+  void GetKnockZoneMap(float* op_values, bool i_original = false);
+  void SetKnockZoneMap(const float* i_values);
+  void GetLambdaZoneMap(float* op_values, bool i_original = false);
+  void SetLambdaZoneMap(const float* i_values);
+  void GetGrHeatDutyMap(float* op_values, bool i_original = false);
+  void SetGrHeatDutyMap(const float* i_values);
+  void GetPwmIacUCoefMap(float* op_values, bool i_original = false);
+  void SetPwmIacUCoefMap(const float* i_values);
+  void GetAftstrStrk0Map(float* op_values, bool i_original = false);
+  void SetAftstrStrk0Map(const float* i_values);
+  void GetAftstrStrk1Map(float* op_values, bool i_original = false);
+  void SetAftstrStrk1Map(const float* i_values);
+  void GetGrValDelMap(float* op_values, bool i_original = false);
+  void SetGrValDelMap(const float* i_values);
+  void GetFtlsCurveMap(float* op_values, bool i_original = false);
+  void SetFtlsCurveMap(const float* i_values);
+  void GetFtlsCorMap(float* op_values, bool i_original = false);
+  void SetFtlsCorMap(const float* i_values);
+  void GetEgtsCurveMap(float* op_values, bool i_original = false);
+  void SetEgtsCurveMap(const float* i_values);
+  void GetOpsCurveMap(float* op_values, bool i_original = false);
+  void SetOpsCurveMap(const float* i_values);
+  void GetManInjPwcMap(float* op_values, bool i_original = false);
+  void SetManInjPwcMap(const float* i_values);
+  void GetMAFCurveMap(float* op_values, bool i_original = false);
+  void SetMAFCurveMap(const float* i_values);
+  void GetFtsCurveMap(float* op_values, bool i_original = false);
+  void SetFtsCurveMap(const float* i_values);
+  void GetFuelDensCorrMap(float* op_values, bool i_original = false);
+  void SetFuelDensCorrMap(const float* i_values);
+  void GetXtauXfAccMap(float* op_values, bool i_original = false);
+  void SetXtauXfAccMap(const float* i_values);
+  void GetXtauXfDecMap(float* op_values, bool i_original = false);
+  void SetXtauXfDecMap(const float* i_values);
+  void GetXtauTfAccMap(float* op_values, bool i_original = false);
+  void SetXtauTfAccMap(const float* i_values);
+  void GetXtauTfDecMap(float* op_values, bool i_original = false);
+  void SetXtauTfDecMap(const float* i_values);
+  void GetInjNonLinPMap(float* op_values, bool i_original = false);
+  void SetInjNonLinPMap(const float* i_values);
+  void GetInjNonLinGMap(float* op_values, bool i_original = false);
+  void SetInjNonLinGMap(const float* i_values);
+
   virtual SECU3IO::params_t* GetParamsPtr(void);
   virtual EECUPlatform GetPlatformId(void);
 

@@ -31,7 +31,7 @@
 #include "common/Dll.h"
 #include "common/FastDelegate.h"
 #include "TablDesk/ButtonsPanel.h"
-#include "TablDesk/MapIds.h"
+#include "io-core/MapIds.h"
 #include "TDContextMenuManager.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
@@ -297,16 +297,16 @@ void CTablesDeskDlg::SetLoadGrid(const float* values)
 void CTablesDeskDlg::CloseAllCharts(void)
 {
  HWND hwnd;
- for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
  {
   hwnd = mp_ButtonsPanel->GetMapWindow(i);
   if (hwnd) ::DestroyWindow(hwnd);
  }
 
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND);
+ hwnd = mp_ButtonsPanel->GetMapWindow(ETMT_GME_IGN_WND);
  if (hwnd) ::DestroyWindow(hwnd);
 
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND);
+ hwnd = mp_ButtonsPanel->GetMapWindow(ETMT_GME_INJ_WND);
  if (hwnd) ::DestroyWindow(hwnd);
 }
 
@@ -352,120 +352,6 @@ _TSTRING CTablesDeskDlg::GetTablesSetName(void) const
  CString str;
  m_names_edit.GetWindowText(str);
  return (LPCTSTR)str;
-}
-
-float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
-{
- switch(i_mapType)
- {
-  case TYPE_MAP_DA_START:
-   return mp_ButtonsPanel->GetStartMap(i_original);
-
-  case TYPE_MAP_DA_IDLE:
-   return mp_ButtonsPanel->GetIdleMap(i_original);
-
-  case TYPE_MAP_DA_WORK:
-   return mp_ButtonsPanel->GetWorkMap(i_original);
-
-  case TYPE_MAP_DA_TEMP_CORR:
-   return mp_ButtonsPanel->GetTempMap(i_original);
-
-  case TYPE_MAP_DA_TEMPI_CORR:
-   return mp_ButtonsPanel->GetTempIdlMap(i_original);
-
-  case TYPE_MAP_INJ_VE:
-   return mp_ButtonsPanel->GetVEMap(i_original);
-
-  case TYPE_MAP_INJ_VE2:
-   return mp_ButtonsPanel->GetVE2Map(i_original);
-
-  case TYPE_MAP_INJ_AFR:
-   return mp_ButtonsPanel->GetAFRMap(i_original);
-
-  case TYPE_MAP_INJ_CRNK:
-   return mp_ButtonsPanel->GetCrnkMap(i_original);
-
-  case TYPE_MAP_INJ_WRMP:
-   return mp_ButtonsPanel->GetWrmpMap(i_original);
-
-  case TYPE_MAP_INJ_DEAD:
-   return mp_ButtonsPanel->GetDeadMap(i_original);
-
-  case TYPE_MAP_INJ_IDLR:
-   return mp_ButtonsPanel->GetIdlrMap(i_original);
-
-  case TYPE_MAP_INJ_IDLC:
-   return mp_ButtonsPanel->GetIdlcMap(i_original);
-
-  case TYPE_MAP_INJ_THRASS:
-   return mp_ButtonsPanel->GetThrassMap(i_original);
-
-  case TYPE_MAP_INJ_AETPS:
-   return mp_ButtonsPanel->GetAETPSMap(i_original);
-
-  case TYPE_MAP_INJ_AEMAP:
-   return mp_ButtonsPanel->GetAEMAPMap(i_original);
-
-  case TYPE_MAP_INJ_AERPM:
-   return mp_ButtonsPanel->GetAERPMMap(i_original);
-
-  case TYPE_MAP_INJ_AFTSTR:
-   return mp_ButtonsPanel->GetAftstrMap(i_original);
-
-  case TYPE_MAP_INJ_IT:
-   return mp_ButtonsPanel->GetITMap(i_original);
-
-  case TYPE_MAP_INJ_ITRPM:
-   return mp_ButtonsPanel->GetITRPMMap(i_original);
-
-  case TYPE_MAP_INJ_RIGID:
-   return mp_ButtonsPanel->GetRigidMap(i_original);
-
-  case TYPE_MAP_INJ_EGOCRV:
-   return mp_ButtonsPanel->GetEGOCurveMap(i_original);
-
-  case TYPE_MAP_INJ_IACC:
-   return mp_ButtonsPanel->GetIACCMap(i_original);
-
-  case TYPE_MAP_INJ_IACCW:
-   return mp_ButtonsPanel->GetIACCWMap(i_original);
-
-  case TYPE_MAP_INJ_IATCLT:
-   return mp_ButtonsPanel->GetIATCLTMap(i_original);
-
-  case TYPE_MAP_INJ_TPSSWT:
-   return mp_ButtonsPanel->GetTpsswtMap(i_original);
-
-  case TYPE_MAP_INJ_GTSC:
-   return mp_ButtonsPanel->GetGtscMap(i_original);
-
-  case TYPE_MAP_INJ_GPSC:
-   return mp_ButtonsPanel->GetGpscMap(i_original);
-
-  case TYPE_MAP_INJ_ATSC:
-   return mp_ButtonsPanel->GetAtscMap(i_original);
-
-  case TYPE_MAP_PWM1:
-   return mp_ButtonsPanel->GetPwm1Map(i_original);
-
-  case TYPE_MAP_PWM2:
-   return mp_ButtonsPanel->GetPwm2Map(i_original);
-
-  case TYPE_MAP_INJ_IACMAT:
-   return mp_ButtonsPanel->GetIACMATMap(i_original);
-
-  case TYPE_MAP_INJ_TPSZON:
-   return mp_ButtonsPanel->GetTpszonMap(i_original);
-
-  case TYPE_MAP_INJ_CYLMULT:
-   return mp_ButtonsPanel->GetCylMultMap(i_original);
-
-  case TYPE_MAP_INJ_CYLADD:
-   return mp_ButtonsPanel->GetCylAddMap(i_original);
-
-  default:
-  return NULL;
- }
 }
 
 void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,

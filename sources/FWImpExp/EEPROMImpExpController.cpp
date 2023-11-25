@@ -135,110 +135,110 @@ void EEPROMImportController::OnExchangePressed(void)
 
  //ignition
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
-  m_eedm->GetStartMap(other_sel, mp_fwd->maps[current_sel].f_str);
+  m_eedm->GetSetMap(other_sel, ETMT_IGN_START, mp_fwd->maps[current_sel].f_str);
 
  if (mp_view->GetFWDFlag(FLAG_IDLE_MAP))
-  m_eedm->GetIdleMap(other_sel, mp_fwd->maps[current_sel].f_idl);
+  m_eedm->GetSetMap(other_sel, ETMT_IGN_IDLE, mp_fwd->maps[current_sel].f_idl);
 
  if (mp_view->GetFWDFlag(FLAG_WORK_MAP))
-  m_eedm->GetWorkMap(other_sel, mp_fwd->maps[current_sel].f_wrk);
+  m_eedm->GetSetMap(other_sel, ETMT_IGN_WORK, mp_fwd->maps[current_sel].f_wrk);
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
-  m_eedm->GetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
+  m_eedm->GetSetMap(other_sel, ETMT_IGN_TEMP, mp_fwd->maps[current_sel].f_tmp);
 
  if (mp_view->GetFWDFlag(FLAG_TEMPI_MAP))
-  m_eedm->GetTempIdlMap(other_sel, mp_fwd->maps[current_sel].f_tmp_idl);
+  m_eedm->GetSetMap(other_sel, ETMT_IGN_TEMPI, mp_fwd->maps[current_sel].f_tmp_idl);
 
  //fuel injection
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
-  m_eedm->GetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_VE, mp_fwd->maps[current_sel].inj_ve);
 
  if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
-  m_eedm->GetVE2Map(other_sel, mp_fwd->maps[current_sel].inj_ve2);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_VE2, mp_fwd->maps[current_sel].inj_ve2);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
-  m_eedm->GetAFRMap(other_sel, mp_fwd->maps[current_sel].inj_afr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_AFR, mp_fwd->maps[current_sel].inj_afr);
 
  if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
-  m_eedm->GetCrnkMap(other_sel, mp_fwd->maps[current_sel].inj_cranking);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_CRNK, mp_fwd->maps[current_sel].inj_cranking);
 
  if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
-  m_eedm->GetWrmpMap(other_sel, mp_fwd->maps[current_sel].inj_warmup);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_WRMP, mp_fwd->maps[current_sel].inj_warmup);
 
  if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
-  m_eedm->GetDeadMap(other_sel, mp_fwd->maps[current_sel].inj_dead_time);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_DEAD, mp_fwd->maps[current_sel].inj_dead_time);
 
  if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
-  m_eedm->GetIdlrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_run_pos);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_IDLR, mp_fwd->maps[current_sel].inj_iac_run_pos);
 
  if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
-  m_eedm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_IDLC, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 
  if (mp_view->GetFWDFlag(FLAG_THRASS_MAP))
-  m_eedm->GetThrassMap(other_sel, mp_fwd->maps[current_sel].inj_thrass);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_THRASS, mp_fwd->maps[current_sel].inj_thrass);
 
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
-  m_eedm->GetAETPSMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_AETPS, mp_fwd->maps[current_sel].inj_ae_tps);
 
  if (mp_view->GetFWDFlag(FLAG_AEMAP_MAP))
-  m_eedm->GetAEMAPMap(other_sel, mp_fwd->maps[current_sel].inj_ae_map);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_AEMAP, mp_fwd->maps[current_sel].inj_ae_map);
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
-  m_eedm->GetAERPMMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_AERPM, mp_fwd->maps[current_sel].inj_ae_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
-  m_eedm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_AFTSTR, mp_fwd->maps[current_sel].inj_aftstr);
 
  if (mp_view->GetFWDFlag(FLAG_IT_MAP))
-  m_eedm->GetITMap(other_sel, mp_fwd->maps[current_sel].inj_timing);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_IT, mp_fwd->maps[current_sel].inj_timing);
 
  if (mp_view->GetFWDFlag(FLAG_ITRPM_MAP))
-  m_eedm->GetITRPMMap(other_sel, mp_fwd->maps[current_sel].inj_target_rpm);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_ITRPM, mp_fwd->maps[current_sel].inj_target_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_RIGID_MAP))
-  m_eedm->GetRigidMap(other_sel, mp_fwd->maps[current_sel].inj_idl_rigidity);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_RIGID, mp_fwd->maps[current_sel].inj_idl_rigidity);
 
  if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
-  m_eedm->GetEGOCurveMap(other_sel, mp_fwd->maps[current_sel].inj_ego_curve);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_EGOCRV, mp_fwd->maps[current_sel].inj_ego_curve);
 
  if (mp_view->GetFWDFlag(FLAG_IACCORRW_MAP))
-  m_eedm->GetIACCorrWMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr_w);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_IACCW, mp_fwd->maps[current_sel].inj_iac_corr_w);
 
  if (mp_view->GetFWDFlag(FLAG_IACCORR_MAP))
-  m_eedm->GetIACCorrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_IACC, mp_fwd->maps[current_sel].inj_iac_corr);
 
  if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
-  m_eedm->GetIATCLTMap(other_sel, mp_fwd->maps[current_sel].inj_iatclt_corr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_IATCLT, mp_fwd->maps[current_sel].inj_iatclt_corr);
 
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
-  m_eedm->GetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_TPSSWT, mp_fwd->maps[current_sel].inj_tpsswt);
 
  if (mp_view->GetFWDFlag(FLAG_TPSZON_MAP))
-  m_eedm->GetTpszonMap(other_sel, mp_fwd->maps[current_sel].inj_tpszon);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_TPSZON, mp_fwd->maps[current_sel].inj_tpszon);
 
  if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
-  m_eedm->GetGtscMap(other_sel, mp_fwd->maps[current_sel].inj_gts_corr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_GTSC, mp_fwd->maps[current_sel].inj_gts_corr);
 
  if (mp_view->GetFWDFlag(FLAG_GPSC_MAP))
-  m_eedm->GetGpscMap(other_sel, mp_fwd->maps[current_sel].inj_gps_corr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_GPSC, mp_fwd->maps[current_sel].inj_gps_corr);
 
  if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
-  m_eedm->GetAtscMap(other_sel, mp_fwd->maps[current_sel].inj_ats_corr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_ATSC, mp_fwd->maps[current_sel].inj_ats_corr);
 
  if (mp_view->GetFWDFlag(FLAG_PWM1_MAP))
-  m_eedm->GetPwm1Map(other_sel, mp_fwd->maps[current_sel].pwm_duty1);
+  m_eedm->GetSetMap(other_sel, ETMT_PWM1, mp_fwd->maps[current_sel].pwm_duty1);
 
  if (mp_view->GetFWDFlag(FLAG_PWM2_MAP))
-  m_eedm->GetPwm2Map(other_sel, mp_fwd->maps[current_sel].pwm_duty2);
+  m_eedm->GetSetMap(other_sel, ETMT_PWM2, mp_fwd->maps[current_sel].pwm_duty2);
 
  if (mp_view->GetFWDFlag(FLAG_IACMAT_MAP))
-  m_eedm->GetIACMATMap(other_sel, mp_fwd->maps[current_sel].iac_mat_corr);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_IACMAT, mp_fwd->maps[current_sel].iac_mat_corr);
 
  if (mp_view->GetFWDFlag(FLAG_CYLMULT_MAP))
-  m_eedm->GetInjCylMultMap(other_sel, mp_fwd->maps[current_sel].inj_cylmult);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_CYLMULT, mp_fwd->maps[current_sel].inj_cylmult);
 
  if (mp_view->GetFWDFlag(FLAG_CYLADD_MAP))
-  m_eedm->GetInjCylAddMap(other_sel, mp_fwd->maps[current_sel].inj_cyladd);
+  m_eedm->GetSetMap(other_sel, ETMT_INJ_CYLADD, mp_fwd->maps[current_sel].inj_cyladd);
 }
 
 //Modal window has been activated - perform its initialization

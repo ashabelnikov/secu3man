@@ -48,42 +48,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   void OnShow(bool show);
 
   //Access content of maps
-  float* GetAttenuatorMap(bool i_original);
-  float* GetDwellCntrlMap(bool i_original);
-  float* GetCTSCurveMap(bool i_original);
-  float* GetATSCurveMap(bool i_original);
-  float* GetATSAACMap(bool i_original);
-  float* GetGasdosePosMap(bool i_original);
-  float* GetBarocorrMap(bool i_original);
-  float* GetManIgntimMap(bool i_original);
-  float* GetTmp2CurveMap(bool i_original);
-  float* GetCrkTempMap(bool i_original);
-  float* GetEHPauseMap(bool i_original);
-  float* GetCrankingThrdMap(bool i_original);
-  float* GetCrankingTimeMap(bool i_original);
-  float* GetSmapabanThrdMap(bool i_original);
-  float* GetKnockZoneMap(bool i_original);
-  float* GetGrtsCurveMap(bool i_original);
-  float* GetGrHeatDutyMap(bool i_original);
-  float* GetPwmIacUCoefMap(bool i_original);
-  float* GetAftstrStrk0Map(bool i_original);
-  float* GetAftstrStrk1Map(bool i_original);
-  float* GetGrValDelMap(bool i_original);
-  float* GetFtlsCurveMap(bool i_original);
-  float* GetEgtsCurveMap(bool i_original);
-  float* GetOpsCurveMap(bool i_original);
-  float* GetManInjPwcMap(bool i_original);
-  float* GetMAFCurveMap(bool i_original);
-  float* GetFtlsCorMap(bool i_original);
-  float* GetLambdaZoneMap(bool i_original);
-  float* GetFtsCurveMap(bool i_original);
-  float* GetFuelDensCorrMap(bool i_original);
-  float* GetXtauXfAccMap(bool i_original);
-  float* GetXtauXfDecMap(bool i_original);
-  float* GetXtauTfAccMap(bool i_original);
-  float* GetXtauTfDecMap(bool i_original);
-  float* GetInjNonLinPMap(bool i_original);
-  float* GetInjNonLinGMap(bool i_original);
+  float* GetMap(int mapId, bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);

@@ -28,7 +28,7 @@
 #include "GridModeEditorInjDlg.h"
 #include "common/Dll.h"
 #include "common/DPIAware.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "GMEInjVEDlg.h"
 #include "GMEInjAFRDlg.h"
 #include "GMEInjITDlg.h"
@@ -149,7 +149,7 @@ BOOL CGridModeEditorInjDlg::OnInitDialog()
  m_initialized = true;
 
  if (m_OnOpenMapWnd)
-  m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_INJ_WND);
+  m_OnOpenMapWnd(this->m_hWnd, ETMT_GME_INJ_WND);
 
  Super::UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -227,7 +227,7 @@ void CGridModeEditorInjDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CGridModeEditorInjDlg::OnClose()
 {
  if (m_OnCloseMapWnd)
-  m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_INJ_WND);
+  m_OnCloseMapWnd(this->m_hWnd, ETMT_GME_INJ_WND);
 
  Super::OnClose(); //close window
  DestroyWindow();
@@ -305,25 +305,25 @@ void CGridModeEditorInjDlg::UpdateView(bool axisLabels /*= fasle*/)
 void CGridModeEditorInjDlg::OnChangeVE(void)
 {
  if (m_OnMapChanged)
-  m_OnMapChanged(TYPE_MAP_INJ_VE);
+  m_OnMapChanged(ETMT_INJ_VE);
 }
 
 void CGridModeEditorInjDlg::OnChangeVE2(void)
 {
  if (m_OnMapChanged)
-  m_OnMapChanged(TYPE_MAP_INJ_VE2);
+  m_OnMapChanged(ETMT_INJ_VE2);
 }
 
 void CGridModeEditorInjDlg::OnChangeAFR(void)
 {
  if (m_OnMapChanged)
-  m_OnMapChanged(TYPE_MAP_INJ_AFR);
+  m_OnMapChanged(ETMT_INJ_AFR);
 }
 
 void CGridModeEditorInjDlg::OnChangeIT(void)
 {
  if (m_OnMapChanged)
-  m_OnMapChanged(TYPE_MAP_INJ_IT);
+  m_OnMapChanged(ETMT_INJ_IT);
 }
 
 void CGridModeEditorInjDlg::OnChangeIReg(int mapId)
@@ -353,13 +353,13 @@ void CGridModeEditorInjDlg::OnChangeOther1(int mapId)
 void CGridModeEditorInjDlg::OnChangePwm1(void)
 {
  if (m_OnMapChanged)
-  m_OnMapChanged(TYPE_MAP_PWM1);
+  m_OnMapChanged(ETMT_PWM1);
 }
 
 void CGridModeEditorInjDlg::OnChangePwm2(void)
 {
  if (m_OnMapChanged)
-  m_OnMapChanged(TYPE_MAP_PWM2);
+  m_OnMapChanged(ETMT_PWM2);
 }
 
 void CGridModeEditorInjDlg::setIsAllowed(EventResult IsFunction)

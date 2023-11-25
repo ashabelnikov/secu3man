@@ -39,7 +39,7 @@
 #include "ParamDesk/Tables/SepTablesDeskDlg.h"
 #include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/SeptabsPanel.h"
-#include "TablDesk/MapIds.h"
+#include "io-core/MapIds.h"
 #include "fwimpexp/S3FFileDataIO.h"
 #include "fwimpexp/S3FImpExpController.h"
 #include "Settings/IsettingsData.h"
@@ -54,9 +54,9 @@ using namespace SECU3IO;
 //------------------------------ Helpful functions ----------------------------------
 bool CPMSeptabsController::_CompareViewMap(int i_mapType, size_t size) const
 {
- return std::equal(mp_view->GetMap(i_mapType, false),
-                   mp_view->GetMap(i_mapType, false) + size,
-                   mp_view->GetMap(i_mapType, true));
+ return std::equal(mp_view->mp_SeptabsPanel->GetMap(i_mapType, false),
+                   mp_view->mp_SeptabsPanel->GetMap(i_mapType, false) + size,
+                   mp_view->mp_SeptabsPanel->GetMap(i_mapType, true));
 }
 
 float* CPMSeptabsController::_GetMap(int i_mapType, bool i_original, FWMapsDataHolder* p_maps /*= NULL*/)
@@ -64,105 +64,19 @@ float* CPMSeptabsController::_GetMap(int i_mapType, bool i_original, FWMapsDataH
  if (!p_maps)
   p_maps = i_original ? m_omaps : m_maps;
  
- switch(i_mapType)
- {
-  case TYPE_MAP_ATTENUATOR: return p_maps->attenuator_table;
-  case TYPE_MAP_DWELLCNTRL: return p_maps->dwellcntrl_table;
-  case TYPE_MAP_CTS_CURVE: return p_maps->ctscurve_table;
-  case TYPE_MAP_ATS_CURVE: return p_maps->atscurve_table;
-  case TYPE_MAP_ATS_CORR: return p_maps->ats_corr_table;
-  case TYPE_MAP_GASDOSE: return p_maps->gasdose_pos_table;
-  case TYPE_MAP_BAROCORR: return p_maps->barocorr_table;
-  case TYPE_MAP_MANIGNTIM: return p_maps->pa4_igntim_corr;
-  case TYPE_MAP_TMP2_CURVE: return p_maps->tmp2_curve;
-  case TYPE_MAP_CRKCLT_CORR: return p_maps->ctscrk_corr;
-  case TYPE_MAP_EH_PAUSE: return p_maps->eh_pause_table;
-  case TYPE_MAP_CRANKING_THRD: return p_maps->cranking_thrd;
-  case TYPE_MAP_CRANKING_TIME: return p_maps->cranking_time;
-  case TYPE_MAP_SMAPABAN_THRD: return p_maps->smapaban_thrd;
-  case TYPE_MAP_KNOCK_ZONE: return p_maps->knock_zone;
-  case TYPE_MAP_GRTS_CURVE: return p_maps->grts_curve;
-  case TYPE_MAP_GRHEAT_DUTY: return p_maps->grheat_duty;
-  case TYPE_MAP_PWMIAC_UCOEF: return p_maps->pwmiac_ucoef;
-  case TYPE_MAP_AFTSTR_STRK0: return p_maps->aftstr_strk0;
-  case TYPE_MAP_AFTSTR_STRK1: return p_maps->aftstr_strk1;
-  case TYPE_MAP_GRVDELAY: return p_maps->grv_delay;
-  case TYPE_MAP_FTLS_CURVE: return p_maps->ftls_curve;
-  case TYPE_MAP_EGTS_CURVE: return p_maps->egts_curve;
-  case TYPE_MAP_OPS_CURVE: return p_maps->ops_curve;
-  case TYPE_MAP_MANINJPWC: return p_maps->injpw_coef;
-  case TYPE_MAP_MAF_CURVE: return p_maps->maf_curve;
-  case TYPE_MAP_FTLSCOR: return p_maps->ftls_corr;
-  case TYPE_MAP_LAMBDA_ZONE: return p_maps->lambda_zone;
-  case TYPE_MAP_FTS_CURVE: return p_maps->fts_curve;
-  case TYPE_MAP_FUELDENS_CORR: return p_maps->fueldens_corr;
-  case TYPE_MAP_XTAU_XFACC: return p_maps->xtau_xfacc;
-  case TYPE_MAP_XTAU_XFDEC: return p_maps->xtau_xfdec;
-  case TYPE_MAP_XTAU_TFACC: return p_maps->xtau_tfacc;
-  case TYPE_MAP_XTAU_TFDEC: return p_maps->xtau_tfdec;
-  case TYPE_MAP_INJNONLINP: return p_maps->inj_nonlinp_corr;
-  case TYPE_MAP_INJNONLING: return p_maps->inj_nonling_corr;
- }
- return NULL; //undefined type of map
-}
-
-namespace {
-size_t _GetMapSize(int i_mapType)
-{
- switch(i_mapType)
- {
-  case TYPE_MAP_ATTENUATOR: return KC_ATTENUATOR_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_DWELLCNTRL: return COIL_ON_TIME_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_CTS_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_ATS_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_ATS_CORR: return ATS_CORR_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_GASDOSE: return GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE;
-  case TYPE_MAP_BAROCORR: return BAROCORR_SIZE+2;
-  case TYPE_MAP_MANIGNTIM: return PA4_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_TMP2_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_CRKCLT_CORR: return CTS_CRKCORR_SIZE;
-  case TYPE_MAP_EH_PAUSE: return COIL_ON_TIME_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_CRANKING_THRD: return CRANK_THRD_SIZE;
-  case TYPE_MAP_CRANKING_TIME: return CRANK_TIME_SIZE;
-  case TYPE_MAP_SMAPABAN_THRD: return SMAPABAN_THRD_SIZE;
-  case TYPE_MAP_KNOCK_ZONE: return F_WRK_POINTS_L * F_WRK_POINTS_F;
-  case TYPE_MAP_GRTS_CURVE: return THERMISTOR_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_GRHEAT_DUTY: return F_TMP_POINTS;
-  case TYPE_MAP_PWMIAC_UCOEF: return PWMIAC_UCOEF_SIZE;
-  case TYPE_MAP_AFTSTR_STRK0: return AFTSTR_STRK_SIZE;
-  case TYPE_MAP_AFTSTR_STRK1: return AFTSTR_STRK_SIZE;
-  case TYPE_MAP_GRVDELAY: return F_TMP_POINTS;
-  case TYPE_MAP_FTLS_CURVE: return FTLS_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_EGTS_CURVE: return EGTS_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_OPS_CURVE: return OPS_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_MANINJPWC: return INJPWCOEF_LUT_SIZE;
-  case TYPE_MAP_MAF_CURVE: return MAF_FLOW_CURVE_SIZE+1+2;
-  case TYPE_MAP_FTLSCOR: return FTLSCOR_UCOEF_SIZE;
-  case TYPE_MAP_LAMBDA_ZONE: return F_WRK_POINTS_L * F_WRK_POINTS_F;
-  case TYPE_MAP_FTS_CURVE: return FTS_LOOKUP_TABLE_SIZE+2;
-  case TYPE_MAP_FUELDENS_CORR: return FUELDENS_CORR_SIZE;
-  case TYPE_MAP_XTAU_XFACC: return XTAU_FACT_SIZE;
-  case TYPE_MAP_XTAU_XFDEC: return XTAU_FACT_SIZE;
-  case TYPE_MAP_XTAU_TFACC: return XTAU_FACT_SIZE;
-  case TYPE_MAP_XTAU_TFDEC: return XTAU_FACT_SIZE;
-  case TYPE_MAP_INJNONLINP: return INJ_NONLIN_SIZE * 2;
-  case TYPE_MAP_INJNONLING: return INJ_NONLIN_SIZE * 2;
- }
- ASSERT(0);
- return 0; //undefined type of map
-}
+ return p_maps->GetMap(i_mapType);
 }
 
 void CPMSeptabsController::_MoveMapToChart(int i_mapType, bool i_original, FWMapsDataHolder* p_maps /*= NULL*/)
 {
  std::copy(_GetMap(i_mapType, i_original, p_maps),
-  _GetMap(i_mapType, i_original, p_maps) + _GetMapSize(i_mapType),
-  mp_view->GetMap(i_mapType, i_original));
+  _GetMap(i_mapType, i_original, p_maps) + FWMapsDataHolder::GetMapSize(i_mapType),
+  mp_view->mp_SeptabsPanel->GetMap(i_mapType, i_original));
 }
 
 void CPMSeptabsController::_MoveMapsToCharts(bool i_original, FWMapsDataHolder* p_maps /*= NULL*/)
 {
- for(int id = TYPE_MAP_SEP_START; id <= TYPE_MAP_SEP_END; ++id)
+ for(int id = ETMT_SEP_START; id <= ETMT_SEP_END; ++id)
  {
   if (_isCacheUpToDate(id))
    _MoveMapToChart(id, i_original, p_maps);
@@ -172,8 +86,8 @@ void CPMSeptabsController::_MoveMapsToCharts(bool i_original, FWMapsDataHolder* 
 void CPMSeptabsController::_ClearAcquisitionFlags(void)
 {
  //See TablDesk/MapIds.h for more information
- for(int id = TYPE_MAP_SEP_START; id <= TYPE_MAP_SEP_END; ++id)
-  std::fill(_GetMap(id, false, m_maps_flags), _GetMap(id, false, m_maps_flags) + _GetMapSize(id), .0f);
+ for(int id = ETMT_SEP_START; id <= ETMT_SEP_END; ++id)
+  std::fill(_GetMap(id, false, m_maps_flags), _GetMap(id, false, m_maps_flags) + FWMapsDataHolder::GetMapSize(id), .0f);
 }
 
 void CPMSeptabsController::_ResetModification(int mapId /*= -1*/)
@@ -184,7 +98,7 @@ void CPMSeptabsController::_ResetModification(int mapId /*= -1*/)
  }
  else
  { //certain map
-  std::copy(_GetMap(mapId, false), _GetMap(mapId, false) + _GetMapSize(mapId), _GetMap(mapId, true));
+  std::copy(_GetMap(mapId, false), _GetMap(mapId, false) + FWMapsDataHolder::GetMapSize(mapId), _GetMap(mapId, true));
  }
 }
 
@@ -237,42 +151,8 @@ void CPMSeptabsController::OnActivate(void)
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_ATTENUATOR, mptms.m_attenuator_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_DWELLCNTRL, mptms.m_dwellcntrl_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CTS_CURVE, mptms.m_cts_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_ATS_CURVE, mptms.m_ats_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_ATS_CORR, mptms.m_ats_aac_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GASDOSE, mptms.m_gasdose_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_BAROCORR, mptms.m_barocorr_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_MANIGNTIM, mptms.m_manigntim_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_TMP2_CURVE, mptms.m_tmp2_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CRKCLT_CORR, mptms.m_crktemp_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_EH_PAUSE, mptms.m_eh_pause_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CRANKING_THRD, mptms.m_cranking_thrd_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_CRANKING_TIME, mptms.m_cranking_time_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_SMAPABAN_THRD, mptms.m_smapaban_thrd_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_KNOCK_ZONE, mptms.m_knock_zone_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GRTS_CURVE, mptms.m_grts_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GRHEAT_DUTY, mptms.m_grheat_duty_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_PWMIAC_UCOEF, mptms.m_pwmiac_ucoef_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK0, mptms.m_aftstr_strk0_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_AFTSTR_STRK1, mptms.m_aftstr_strk1_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_GRVDELAY, mptms.m_grvaldel_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FTLS_CURVE, mptms.m_ftls_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_EGTS_CURVE, mptms.m_egts_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_OPS_CURVE, mptms.m_ops_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_MANINJPWC, mptms.m_maninjpwc_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_MAF_CURVE, mptms.m_mafcurve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FTLSCOR, mptms.m_ftlscor_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_LAMBDA_ZONE, mptms.m_lambda_zone_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FTS_CURVE, mptms.m_fts_curve_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_FUELDENS_CORR, mptms.m_fueldens_corr_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_XFACC, mptms.m_xtau_xfacc_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_XFDEC, mptms.m_xtau_xfdec_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_TFACC, mptms.m_xtau_tfacc_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_XTAU_TFDEC, mptms.m_xtau_tfdec_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_INJNONLINP, mptms.m_injnonlinp_map);
- mp_view->mp_SeptabsPanel->SetPtMovStep(TYPE_MAP_INJNONLING, mptms.m_injnonling_map);
+ for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
+  mp_view->mp_SeptabsPanel->SetPtMovStep(i, mptms.m_value[i]);
 }
 
 void CPMSeptabsController::OnDeactivate(void)
@@ -334,7 +214,7 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
 
      //check for opened tables
      bool opened = false;
-     for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+     for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
      {
       HWND hwnd = mp_view->mp_SeptabsPanel->GetMapWindow(i);
       if (hwnd)
@@ -360,7 +240,7 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
     {
      if (i_descriptor != EDITAB_PAR)
      {
-      for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+      for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
       {
        HWND hwnd = mp_view->mp_SeptabsPanel->GetMapWindow(i);
        if (hwnd)
@@ -377,7 +257,7 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
      _UpdateCache(data);
 
      bool all_uptodate = true;
-     for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+     for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
      {
       HWND hwnd = mp_view->mp_SeptabsPanel->GetMapWindow(i);
       if (hwnd && !_isCacheUpToDate(i))
@@ -445,7 +325,7 @@ bool CPMSeptabsController::IsValidCache(void)
  if (!m_valid_cache)
   return false; //RPM, CLT and load grids are not up to date
 
- for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+ for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
  {
   HWND hwnd = mp_view->mp_SeptabsPanel->GetMapWindow(i);
   if (hwnd)
@@ -497,48 +377,12 @@ void UpdateMap(float* map, float* flag, const EditTabPar* data)
 
 void CPMSeptabsController::_UpdateCache(const EditTabPar* data)
 {
- switch(data->tab_id)
+ if (data->tab_id < ETMT_SEP_START || data->tab_id > ETMT_SEP_END)
  {
-  case TYPE_MAP_ATTENUATOR: UpdateMap(m_maps->attenuator_table, m_maps_flags->attenuator_table, data); break;
-  case TYPE_MAP_DWELLCNTRL: UpdateMap(m_maps->dwellcntrl_table, m_maps_flags->dwellcntrl_table, data); break;
-  case TYPE_MAP_CTS_CURVE: UpdateMap(m_maps->ctscurve_table, m_maps_flags->ctscurve_table, data); break;
-  case TYPE_MAP_ATS_CURVE: UpdateMap(m_maps->atscurve_table, m_maps_flags->atscurve_table, data); break;
-  case TYPE_MAP_ATS_CORR: UpdateMap(m_maps->ats_corr_table, m_maps_flags->ats_corr_table, data); break;
-  case TYPE_MAP_GASDOSE: UpdateMap(m_maps->gasdose_pos_table, m_maps_flags->gasdose_pos_table, data); break;
-  case TYPE_MAP_BAROCORR: UpdateMap(m_maps->barocorr_table, m_maps_flags->barocorr_table, data); break;
-  case TYPE_MAP_MANIGNTIM: UpdateMap(m_maps->pa4_igntim_corr, m_maps_flags->pa4_igntim_corr, data); break;
-  case TYPE_MAP_TMP2_CURVE: UpdateMap(m_maps->tmp2_curve, m_maps_flags->tmp2_curve, data); break;
-  case TYPE_MAP_CRKCLT_CORR: UpdateMap(m_maps->ctscrk_corr, m_maps_flags->ctscrk_corr, data); break;
-  case TYPE_MAP_EH_PAUSE: UpdateMap(m_maps->eh_pause_table, m_maps_flags->eh_pause_table, data); break;
-  case TYPE_MAP_CRANKING_THRD: UpdateMap(m_maps->cranking_thrd, m_maps_flags->cranking_thrd, data); break;
-  case TYPE_MAP_CRANKING_TIME: UpdateMap(m_maps->cranking_time, m_maps_flags->cranking_time, data); break;
-  case TYPE_MAP_SMAPABAN_THRD: UpdateMap(m_maps->smapaban_thrd, m_maps_flags->smapaban_thrd, data); break;
-  case TYPE_MAP_KNOCK_ZONE: UpdateMap(m_maps->knock_zone, m_maps_flags->knock_zone, data); break;
-  case TYPE_MAP_GRTS_CURVE: UpdateMap(m_maps->grts_curve, m_maps_flags->grts_curve, data); break;
-  case TYPE_MAP_GRHEAT_DUTY: UpdateMap(m_maps->grheat_duty, m_maps_flags->grheat_duty, data); break;
-  case TYPE_MAP_PWMIAC_UCOEF: UpdateMap(m_maps->pwmiac_ucoef, m_maps_flags->pwmiac_ucoef, data); break;
-  case TYPE_MAP_AFTSTR_STRK0: UpdateMap(m_maps->aftstr_strk0, m_maps_flags->aftstr_strk0, data); break;
-  case TYPE_MAP_AFTSTR_STRK1: UpdateMap(m_maps->aftstr_strk1, m_maps_flags->aftstr_strk1, data); break;
-  case TYPE_MAP_GRVDELAY: UpdateMap(m_maps->grv_delay, m_maps_flags->grv_delay, data); break;
-  case TYPE_MAP_FTLS_CURVE: UpdateMap(m_maps->ftls_curve, m_maps_flags->ftls_curve, data); break;
-  case TYPE_MAP_EGTS_CURVE: UpdateMap(m_maps->egts_curve, m_maps_flags->egts_curve, data); break;
-  case TYPE_MAP_OPS_CURVE: UpdateMap(m_maps->ops_curve, m_maps_flags->ops_curve, data); break;
-  case TYPE_MAP_MANINJPWC: UpdateMap(m_maps->injpw_coef, m_maps_flags->injpw_coef, data); break;
-  case TYPE_MAP_MAF_CURVE: UpdateMap(m_maps->maf_curve, m_maps_flags->maf_curve, data); break;
-  case TYPE_MAP_FTLSCOR: UpdateMap(m_maps->ftls_corr, m_maps_flags->ftls_corr, data); break;
-  case TYPE_MAP_LAMBDA_ZONE: UpdateMap(m_maps->lambda_zone, m_maps_flags->lambda_zone, data); break;
-  case TYPE_MAP_FTS_CURVE: UpdateMap(m_maps->fts_curve, m_maps_flags->fts_curve, data); break;
-  case TYPE_MAP_FUELDENS_CORR: UpdateMap(m_maps->fueldens_corr, m_maps_flags->fueldens_corr, data); break;
-  case TYPE_MAP_XTAU_XFACC: UpdateMap(m_maps->xtau_xfacc, m_maps_flags->xtau_xfacc, data); break;
-  case TYPE_MAP_XTAU_XFDEC: UpdateMap(m_maps->xtau_xfdec, m_maps_flags->xtau_xfdec, data); break;
-  case TYPE_MAP_XTAU_TFACC: UpdateMap(m_maps->xtau_tfacc, m_maps_flags->xtau_tfacc, data); break;
-  case TYPE_MAP_XTAU_TFDEC: UpdateMap(m_maps->xtau_tfdec, m_maps_flags->xtau_tfdec, data); break;
-  case TYPE_MAP_INJNONLINP: UpdateMap(m_maps->inj_nonlinp_corr, m_maps_flags->inj_nonlinp_corr, data); break;
-  case TYPE_MAP_INJNONLING: UpdateMap(m_maps->inj_nonling_corr, m_maps_flags->inj_nonling_corr, data); break;
-  default: ASSERT(0);
-   //error
-   break;
+  ASSERT(0);
+  return;
  }
+ UpdateMap(m_maps->GetMap(data->tab_id), m_maps_flags->GetMap(data->tab_id), data);
 }
 
 namespace {
@@ -551,15 +395,14 @@ bool _FindZero(float* array, size_t size)
 }
 }
 
-
 bool CPMSeptabsController::_isCacheUpToDate(int id)
 {
- return _FindZero(_GetMap(id, false, m_maps_flags), _GetMapSize(id));
+ return _FindZero(_GetMap(id, false, m_maps_flags), FWMapsDataHolder::GetMapSize(id));
 }
 
 bool CPMSeptabsController::_IsModificationMade(int i_mapId) const
 {
- if (false==_CompareViewMap(i_mapId, _GetMapSize(i_mapId)))
+ if (false==_CompareViewMap(i_mapId, FWMapsDataHolder::GetMapSize(i_mapId)))
   return true;
 
  return false; //no modifications
@@ -567,13 +410,13 @@ bool CPMSeptabsController::_IsModificationMade(int i_mapId) const
 
 void CPMSeptabsController::_SynchronizeMap(int i_mapType)
 {
- float* pMap = mp_view->GetMap(i_mapType, false); //<--current
- size_t mapSize = _GetMapSize(i_mapType); //map size in items (not bytes)
+ float* pMap = mp_view->mp_SeptabsPanel->GetMap(i_mapType, false); //<--current
+ size_t mapSize = FWMapsDataHolder::GetMapSize(i_mapType); //map size in items (not bytes)
 
  size_t pieceSize = 16; //for all maps exept dwell
- if (i_mapType == TYPE_MAP_DWELLCNTRL || i_mapType == TYPE_MAP_CTS_CURVE || i_mapType == TYPE_MAP_ATS_CURVE || i_mapType == TYPE_MAP_TMP2_CURVE || i_mapType == TYPE_MAP_GRTS_CURVE || i_mapType == TYPE_MAP_FTS_CURVE || i_mapType == TYPE_MAP_FTLS_CURVE || i_mapType == TYPE_MAP_EGTS_CURVE || i_mapType == TYPE_MAP_OPS_CURVE || i_mapType == TYPE_MAP_MAF_CURVE || i_mapType == TYPE_MAP_BAROCORR || i_mapType == TYPE_MAP_AFTSTR_STRK0 || i_mapType == TYPE_MAP_AFTSTR_STRK1 || i_mapType == TYPE_MAP_PWMIAC_UCOEF || i_mapType == TYPE_MAP_GRVDELAY || i_mapType == TYPE_MAP_MANINJPWC || i_mapType == TYPE_MAP_FTLSCOR || i_mapType == TYPE_MAP_FUELDENS_CORR || i_mapType == TYPE_MAP_XTAU_XFACC || i_mapType == TYPE_MAP_XTAU_XFDEC || i_mapType == TYPE_MAP_XTAU_TFACC || i_mapType == TYPE_MAP_XTAU_TFDEC || i_mapType == TYPE_MAP_INJNONLINP || i_mapType == TYPE_MAP_INJNONLING)
+ if (i_mapType == ETMT_DWELLCNTRL || i_mapType == ETMT_CTS_CURVE || i_mapType == ETMT_ATS_CURVE || i_mapType == ETMT_TMP2_CURVE || i_mapType == ETMT_GRTS_CURVE || i_mapType == ETMT_FTS_CURVE || i_mapType == ETMT_FTLS_CURVE || i_mapType == ETMT_EGTS_CURVE || i_mapType == ETMT_OPS_CURVE || i_mapType == ETMT_MAF_CURVE || i_mapType == ETMT_BAROCORR || i_mapType == ETMT_AFTSTR_STRK0 || i_mapType == ETMT_AFTSTR_STRK1 || i_mapType == ETMT_PWMIAC_UCOEF || i_mapType == ETMT_GRVDELAY || i_mapType == ETMT_MANINJPWC || i_mapType == ETMT_FTLSCOR || i_mapType == ETMT_FUELDENS_CORR || i_mapType == ETMT_XTAU_XFACC || i_mapType == ETMT_XTAU_XFDEC || i_mapType == ETMT_XTAU_TFACC || i_mapType == ETMT_XTAU_TFDEC || i_mapType == ETMT_INJNONLINP || i_mapType == ETMT_INJNONLING)
   pieceSize = 8;
- else if (i_mapType == TYPE_MAP_KNOCK_ZONE || i_mapType == TYPE_MAP_LAMBDA_ZONE)
+ else if (i_mapType == ETMT_KNOCK_ZONE || i_mapType == ETMT_LAMBDA_ZONE)
   pieceSize = F_WRK_POINTS_F*2;
 
  size_t index = 0;
@@ -607,16 +450,16 @@ void CPMSeptabsController::_SynchronizeMap(int i_mapType)
   if ((pieceSize==index || a==(mapSize-1)) && packet.data_size > 0)
   {
    CString statusStr;
-   statusStr.Format(MLL::LoadString(IDS_PM_WRITING_TABLES), i_mapType - TYPE_MAP_SEP_START); 
+   statusStr.Format(MLL::LoadString(IDS_PM_WRITING_TABLES), i_mapType - ETMT_SEP_START); 
    mp_sbar->SetInformationText(statusStr);
    //store values of padding cells from cache
    packet.beginPadding = (packet.address > 0) ? _GetMap(i_mapType, false)[packet.address-1] : 0;
-   packet.endPadding = (packet.address + packet.data_size) < _GetMapSize(i_mapType) ? _GetMap(i_mapType, false)[(packet.address + packet.data_size)] : 0;
+   packet.endPadding = (packet.address + packet.data_size) < FWMapsDataHolder::GetMapSize(i_mapType) ? _GetMap(i_mapType, false)[(packet.address + packet.data_size)] : 0;
 
    size_t packet_data_size = packet.data_size;
    size_t packet_address = packet.address;
    
-   if (i_mapType == TYPE_MAP_KNOCK_ZONE || i_mapType == TYPE_MAP_LAMBDA_ZONE)
+   if (i_mapType == ETMT_KNOCK_ZONE || i_mapType == ETMT_LAMBDA_ZONE)
    { //allign data with 16 items boundaries (left and right)
     float block[68];
     size_t nleft = packet.address % F_WRK_POINTS_F;
@@ -683,7 +526,7 @@ void CPMSeptabsController::OnSaveButton(void)
  (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
  if (p_fwdcntr->IsFirmwareOpened())
  {
-  for(int id = TYPE_MAP_SEP_START; id <= TYPE_MAP_SEP_END; ++id)
+  for(int id = ETMT_SEP_START; id <= ETMT_SEP_END; ++id)
   {
    if (_isCacheUpToDate(id))
     p_fwdcntr->GetFWDM()->SetSepMap(id, _GetMap(id, false));
@@ -719,7 +562,7 @@ void CPMSeptabsController::OnDataCollected(int tabId /*= -1*/)
 void CPMSeptabsController::OnClose()
 {
  //save positions of windows of opened charts
- for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+ for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
   OnCloseMapWnd(mp_view->mp_SeptabsPanel->GetMapWindow(i), i);
 }
 
@@ -731,7 +574,7 @@ void CPMSeptabsController::OnCloseNotify()
 void CPMSeptabsController::OnSaveSettings()
 {
  //save positions of windows of opened charts
- for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
+ for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
   OnCloseMapWnd(mp_view->mp_SeptabsPanel->GetMapWindow(i), i);
 }
 
@@ -739,42 +582,8 @@ void CPMSeptabsController::OnChangeSettings(void)
 {
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mptms.m_attenuator_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_ATTENUATOR);
- mptms.m_dwellcntrl_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_DWELLCNTRL);
- mptms.m_cts_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CTS_CURVE);
- mptms.m_ats_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_ATS_CURVE);
- mptms.m_ats_aac_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_ATS_CORR);
- mptms.m_gasdose_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GASDOSE);
- mptms.m_barocorr_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_BAROCORR);
- mptms.m_manigntim_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_MANIGNTIM);
- mptms.m_tmp2_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_TMP2_CURVE);
- mptms.m_crktemp_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CRKCLT_CORR);
- mptms.m_eh_pause_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_EH_PAUSE);
- mptms.m_cranking_thrd_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CRANKING_THRD);
- mptms.m_cranking_time_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_CRANKING_TIME);
- mptms.m_smapaban_thrd_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_SMAPABAN_THRD);
- mptms.m_knock_zone_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_KNOCK_ZONE);
- mptms.m_grts_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GRTS_CURVE);
- mptms.m_grheat_duty_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GRHEAT_DUTY);
- mptms.m_pwmiac_ucoef_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_PWMIAC_UCOEF);
- mptms.m_aftstr_strk0_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK0);
- mptms.m_aftstr_strk1_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_AFTSTR_STRK1);
- mptms.m_grvaldel_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_GRVDELAY);
- mptms.m_ftls_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FTLS_CURVE);
- mptms.m_egts_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_EGTS_CURVE);
- mptms.m_ops_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_OPS_CURVE);
- mptms.m_maninjpwc_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_MANINJPWC);
- mptms.m_mafcurve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_MAF_CURVE);
- mptms.m_ftlscor_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FTLSCOR);
- mptms.m_lambda_zone_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_LAMBDA_ZONE);
- mptms.m_fts_curve_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FTS_CURVE);
- mptms.m_fueldens_corr_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_FUELDENS_CORR);
- mptms.m_xtau_xfacc_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_XFACC);
- mptms.m_xtau_xfdec_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_XFDEC);
- mptms.m_xtau_tfacc_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_TFACC);
- mptms.m_xtau_tfdec_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_XTAU_TFDEC);
- mptms.m_injnonlinp_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_INJNONLINP);
- mptms.m_injnonling_map = mp_view->mp_SeptabsPanel->GetPtMovStep(TYPE_MAP_INJNONLING);
+ for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
+  mptms.m_value[i] = mp_view->mp_SeptabsPanel->GetPtMovStep(i);
  mp_settings->SetMapPtMovStep(mptms);
 
  if (m_OnChangeSettings)

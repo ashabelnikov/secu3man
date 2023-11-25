@@ -71,6 +71,27 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void CalculateAndPlaceTablesCRC(BYTE* iop_data);
   void CalculateAndPlaceTablesCRC(void);
 
+  void GetSetMap(int i_index, int id, float* op_values, bool i_original = false);
+  void SetSetMap(int i_index, int id, const float* ip_values);
+
+  float GetOdometer(void); //TODO: use double for better accuracy
+  void SetOdometer(float odv); //TODO: use double for better accuracy
+
+  float GetConsFuel(void); //TODO: use double for better accuracy
+  void SetConsFuel(float cf); //TODO: use double for better accuracy
+
+  std::vector<_TSTRING> GetFunctionsSetNames(void);
+  void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
+
+  void SetEEFileName(const _TSTRING i_ee_file_name);
+  _TSTRING GetEEFileName(void);
+
+  std::set<int> GetCEErrorsList(void);
+  void ResetCEErrorsList(void);
+
+  bool GetSplitAngMode(int i_index);
+
+protected:
   void GetStartMap(int i_index, float* o_values, bool i_original = false);
   void GetIdleMap(int i_index,  float* o_values, bool i_original = false);
   void GetWorkMap(int i_index, float* o_values, bool i_original = false);
@@ -145,24 +166,6 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void GetPwm2Map(int i_index, float* o_values, bool i_original = false);
   void SetPwm2Map(int i_index, const float* i_values);
 
-  float GetOdometer(void); //TODO: use double for better accuracy
-  void SetOdometer(float odv); //TODO: use double for better accuracy
-
-  float GetConsFuel(void); //TODO: use double for better accuracy
-  void SetConsFuel(float cf); //TODO: use double for better accuracy
-
-  std::vector<_TSTRING> GetFunctionsSetNames(void);
-  void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
-
-  void SetEEFileName(const _TSTRING i_ee_file_name);
-  _TSTRING GetEEFileName(void);
-
-  std::set<int> GetCEErrorsList(void);
-  void ResetCEErrorsList(void);
-
-  bool GetSplitAngMode(int i_index);
-
-protected:
   virtual SECU3IO::params_t* GetParamsPtr(void);
   virtual EECUPlatform GetPlatformId(void);
 

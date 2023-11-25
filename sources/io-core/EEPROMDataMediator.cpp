@@ -1154,3 +1154,89 @@ void EEPROMDataMediator::SetConsFuel(float cf)
  SECU3Types::_ulong *p_cf = (SECU3Types::_ulong*)(getBytes() + EEPROM_ODOMETER_START + 5);
  (*p_cf) = MathHelpers::Round(cf * 262144.0f); //262144 = 2^18
 }
+
+void EEPROMDataMediator::GetSetMap(int i_index, int id, float* op_values, bool i_original/* = false*/)
+{
+ switch(id)
+ {
+  case ETMT_IGN_START: GetStartMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_IDLE: GetIdleMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_WORK: GetWorkMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_TEMP: GetTempMap(i_index, op_values, i_original); break;
+  case ETMT_IGN_TEMPI: GetTempIdlMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_VE: GetVEMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_VE2: GetVE2Map(i_index, op_values, i_original); break;
+  case ETMT_INJ_AFR: GetAFRMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_CRNK: GetCrnkMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_WRMP: GetWrmpMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_DEAD: GetDeadMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IDLR: GetIdlrMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IDLC: GetIdlcMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_THRASS: GetThrassMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AETPS: GetAETPSMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AEMAP: GetAEMAPMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AERPM: GetAERPMMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_AFTSTR: GetAftstrMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IT: GetITMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_ITRPM: GetITRPMMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_RIGID: GetRigidMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_EGOCRV: GetEGOCurveMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IACC: GetIACCorrMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IACCW: GetIACCorrWMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_IATCLT: GetIATCLTMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_TPSSWT: GetTpsswtMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_GTSC: GetGtscMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_GPSC: GetGpscMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_ATSC: GetAtscMap(i_index, op_values, i_original); break;
+  case ETMT_PWM1: GetPwm1Map(i_index, op_values, i_original); break;
+  case ETMT_PWM2: GetPwm2Map(i_index, op_values, i_original); break;
+  case ETMT_INJ_IACMAT: GetIACMATMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_TPSZON: GetTpszonMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_CYLMULT: GetInjCylMultMap(i_index, op_values, i_original); break;
+  case ETMT_INJ_CYLADD: GetInjCylAddMap(i_index, op_values, i_original); break;
+  default: ASSERT(0);
+ }
+}
+
+void EEPROMDataMediator::SetSetMap(int i_index, int id, const float* ip_values)
+{
+ switch(id)
+ {
+  case ETMT_IGN_START: SetStartMap(i_index, ip_values); break;
+  case ETMT_IGN_IDLE: SetIdleMap(i_index, ip_values); break;
+  case ETMT_IGN_WORK: SetWorkMap(i_index, ip_values); break;
+  case ETMT_IGN_TEMP: SetTempMap(i_index, ip_values); break;
+  case ETMT_IGN_TEMPI: SetTempIdlMap(i_index, ip_values); break;
+  case ETMT_INJ_VE: SetVEMap(i_index, ip_values); break;
+  case ETMT_INJ_VE2: SetVE2Map(i_index, ip_values); break;
+  case ETMT_INJ_AFR: SetAFRMap(i_index, ip_values); break;
+  case ETMT_INJ_CRNK: SetCrnkMap(i_index, ip_values); break;
+  case ETMT_INJ_WRMP: SetWrmpMap(i_index, ip_values); break;
+  case ETMT_INJ_DEAD: SetDeadMap(i_index, ip_values); break;
+  case ETMT_INJ_IDLR: SetIdlrMap(i_index, ip_values); break;
+  case ETMT_INJ_IDLC: SetIdlcMap(i_index, ip_values); break;
+  case ETMT_INJ_THRASS: SetThrassMap(i_index, ip_values); break;
+  case ETMT_INJ_AETPS: SetAETPSMap(i_index, ip_values); break;
+  case ETMT_INJ_AEMAP: SetAEMAPMap(i_index, ip_values); break;
+  case ETMT_INJ_AERPM: SetAERPMMap(i_index, ip_values); break;
+  case ETMT_INJ_AFTSTR: SetAftstrMap(i_index, ip_values); break;
+  case ETMT_INJ_IT: SetITMap(i_index, ip_values); break;
+  case ETMT_INJ_ITRPM: SetITRPMMap(i_index, ip_values); break;
+  case ETMT_INJ_RIGID: SetRigidMap(i_index, ip_values); break;
+  case ETMT_INJ_EGOCRV: SetEGOCurveMap(i_index, ip_values); break;
+  case ETMT_INJ_IACC: SetIACCorrMap(i_index, ip_values); break;
+  case ETMT_INJ_IACCW: SetIACCorrWMap(i_index, ip_values); break;
+  case ETMT_INJ_IATCLT: SetIATCLTMap(i_index, ip_values); break;
+  case ETMT_INJ_TPSSWT: SetTpsswtMap(i_index, ip_values); break;
+  case ETMT_INJ_GTSC: SetGtscMap(i_index, ip_values); break;
+  case ETMT_INJ_GPSC: SetGpscMap(i_index, ip_values); break;
+  case ETMT_INJ_ATSC: SetAtscMap(i_index, ip_values); break;
+  case ETMT_PWM1: SetPwm1Map(i_index, ip_values); break;
+  case ETMT_PWM2: SetPwm2Map(i_index, ip_values); break;
+  case ETMT_INJ_IACMAT: SetIACMATMap(i_index, ip_values); break;
+  case ETMT_INJ_TPSZON: SetTpszonMap(i_index, ip_values); break;
+  case ETMT_INJ_CYLMULT: SetInjCylMultMap(i_index, ip_values); break;
+  case ETMT_INJ_CYLADD: SetInjCylAddMap(i_index, ip_values); break;
+  default: ASSERT(0);
+ }
+}

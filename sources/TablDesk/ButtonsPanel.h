@@ -56,41 +56,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   void OnShow(bool show);
 
   //Read/Write access
-  float* GetStartMap(bool i_original);
-  float* GetIdleMap(bool i_original);
-  float* GetWorkMap(bool i_original);
-  float* GetTempMap(bool i_original);
-  float* GetTempIdlMap(bool i_original);
-  float* GetVEMap(bool i_original);
-  float* GetAFRMap(bool i_original);
-  float* GetCrnkMap(bool i_original);
-  float* GetWrmpMap(bool i_original);
-  float* GetDeadMap(bool i_original);
-  float* GetIdlrMap(bool i_original);
-  float* GetIdlcMap(bool i_original);
-  float* GetThrassMap(bool i_original);
-  float* GetAETPSMap(bool i_original);
-  float* GetAERPMMap(bool i_original);
-  float* GetAftstrMap(bool i_original);
-  float* GetITMap(bool i_original);
-  float* GetITRPMMap(bool i_original);
-  float* GetRigidMap(bool i_original);
-  float* GetEGOCurveMap(bool i_original);
-  float* GetIACCMap(bool i_original);
-  float* GetIACCWMap(bool i_original);
-  float* GetIATCLTMap(bool i_original);
-  float* GetTpsswtMap(bool i_original);
-  float* GetGtscMap(bool i_original);
-  float* GetGpscMap(bool i_original);
-  float* GetAtscMap(bool i_original);
-  float* GetPwm1Map(bool i_original);
-  float* GetPwm2Map(bool i_original);
-  float* GetIACMATMap(bool i_original);
-  float* GetVE2Map(bool i_original);
-  float* GetTpszonMap(bool i_original);
-  float* GetCylMultMap(bool i_original);
-  float* GetCylAddMap(bool i_original);
-  float* GetAEMAPMap(bool i_original);
+  float* GetMap(int mapId, bool i_original);
 
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);  

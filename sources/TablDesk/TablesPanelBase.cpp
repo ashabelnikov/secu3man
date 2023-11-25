@@ -28,7 +28,7 @@
 #include "common/dpiaware.h"
 #include "common/GDIHelpers.h"
 #include "DLLLinkedFunctions.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
@@ -158,8 +158,8 @@ void CTablesPanelBase::EnableEmbedMapWnd(bool embed, const CRect& rc, int begin,
 
 bool CTablesPanelBase::Is3DMap(int i)
 {
- return (i == TYPE_MAP_DA_WORK || i == TYPE_MAP_INJ_VE || i == TYPE_MAP_INJ_VE2 || i == TYPE_MAP_INJ_AFR || 
-         i == TYPE_MAP_INJ_IT || i == TYPE_MAP_PWM1 || i == TYPE_MAP_PWM2 || i == TYPE_MAP_GASDOSE || i == TYPE_MAP_KNOCK_ZONE || i == TYPE_MAP_LAMBDA_ZONE);
+ return (i == ETMT_IGN_WORK || i == ETMT_INJ_VE || i == ETMT_INJ_VE2 || i == ETMT_INJ_AFR || i == ETMT_INJ_IT ||
+         i == ETMT_PWM1 || i == ETMT_PWM2 || i == ETMT_GASDOSE || i == ETMT_KNOCK_ZONE || i == ETMT_LAMBDA_ZONE);
 }
 
 float CTablesPanelBase::GetPtMovStep(int wndType)

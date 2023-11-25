@@ -31,7 +31,7 @@
 #include "common/MathHelpers.h"
 #include "GMEInjVEDlg.h"
 #include "GridModeEditorInjDlg.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "ui-core/MsgBox.h"
 
 #define LDQUEUE_SIZE 500 //approx. at least 5 seconds of records
@@ -561,7 +561,7 @@ float* CAutoTuneController::GetLamDelMap(int id)
 
 int CAutoTuneController::_GetActiveVEMapId(void)
 {
- return (0==m_active_ve) ? TYPE_MAP_INJ_VE : TYPE_MAP_INJ_VE2;
+ return (0==m_active_ve) ? ETMT_INJ_VE : ETMT_INJ_VE2;
 }
 
 const float* CAutoTuneController::_GetLoadGrid(int grid /* = -1*/)

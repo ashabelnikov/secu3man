@@ -72,8 +72,6 @@ class AFX_EXT_CLASS CSepTablesDeskDlg : public CModelessUpdatableDialog, public 
   virtual void setOnOpenMapWnd(EventWithHWND OnFunction);
   virtual void setOnSaveButton(EventHandler OnFunction);
 
-  virtual float* GetMap(int i_mapType, bool i_original);
-
   void OnShow(bool show);
 
   void EnableSaveButton(bool enable);

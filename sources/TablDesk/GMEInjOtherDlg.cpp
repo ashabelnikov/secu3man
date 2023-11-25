@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "GMEInjOtherDlg.h"
-#include "MapIds.h"
+#include "io-core/MapIds.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
@@ -370,43 +370,43 @@ void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, floa
 void CGMEInjOtherDlg::OnChangeCrnk(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_CRNK);
+  m_OnChange(ETMT_INJ_CRNK);
 }
 
 void CGMEInjOtherDlg::OnChangeDead(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_DEAD);
+  m_OnChange(ETMT_INJ_DEAD);
 }
 
 void CGMEInjOtherDlg::OnChangeEGOCrv(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_EGOCRV);
+  m_OnChange(ETMT_INJ_EGOCRV);
 }
 
 void CGMEInjOtherDlg::OnChangeIATCLT(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_IATCLT);
+  m_OnChange(ETMT_INJ_IATCLT);
 }
 
 void CGMEInjOtherDlg::OnChangeAtsc(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_ATSC);
+  m_OnChange(ETMT_INJ_ATSC);
 }
 
 void CGMEInjOtherDlg::OnChangeGtsc(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_GTSC);
+  m_OnChange(ETMT_INJ_GTSC);
 }
 
 void CGMEInjOtherDlg::OnChangeGpsc(void)
 {
  if (m_OnChange)
-  m_OnChange(TYPE_MAP_INJ_GPSC);
+  m_OnChange(ETMT_INJ_GPSC);
 }
 
 void CGMEInjOtherDlg::_UpdateDynamicGrids(void)

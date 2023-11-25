@@ -37,7 +37,7 @@
 #include "MainFrame/StatusBarManager.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
 #include "TablDesk/ButtonsPanel.h"
-#include "TablDesk/MapIds.h"
+#include "io-core/MapIds.h"
 #include "fwimpexp/S3FFileDataIO.h"
 #include "fwimpexp/S3FImpExpController.h"
 #include "Settings/IsettingsData.h"
@@ -50,185 +50,29 @@ using namespace SECU3IO;
 //------------------------------ Helpful functions ----------------------------------
 bool CPMTablesController::_CompareViewMap(int i_mapType, size_t size) const
 {
- return std::equal(mp_view->GetMap(i_mapType, false),
-                   mp_view->GetMap(i_mapType, false) + size,
-                   mp_view->GetMap(i_mapType, true));
+ return std::equal(mp_view->mp_ButtonsPanel->GetMap(i_mapType, false),
+                   mp_view->mp_ButtonsPanel->GetMap(i_mapType, false) + size,
+                   mp_view->mp_ButtonsPanel->GetMap(i_mapType, true));
 }
 
 float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps /*= NULL*/)
 {
  if (!p_maps)
- {
   p_maps = i_original ? m_omaps : m_maps;
- }
 
- switch(i_mapType)
- {//ignition maps
-  case TYPE_MAP_DA_START:
-   return p_maps->f_str;
-  case TYPE_MAP_DA_IDLE:
-   return p_maps->f_idl;
-  case TYPE_MAP_DA_WORK:
-   return p_maps->f_wrk;
-  case TYPE_MAP_DA_TEMP_CORR:
-   return p_maps->f_tmp;
-  case TYPE_MAP_DA_TEMPI_CORR:
-   return p_maps->f_tmp_idl;
-  //fuel injection
-  case TYPE_MAP_INJ_VE:
-   return p_maps->inj_ve;
-  case TYPE_MAP_INJ_VE2:
-   return p_maps->inj_ve2;
-  case TYPE_MAP_INJ_AFR:
-   return p_maps->inj_afr;
-  case TYPE_MAP_INJ_CRNK:
-   return p_maps->inj_cranking;
-  case TYPE_MAP_INJ_WRMP:
-   return p_maps->inj_warmup;
-  case TYPE_MAP_INJ_DEAD:
-   return p_maps->inj_dead_time;
-  case TYPE_MAP_INJ_IDLR:
-   return p_maps->inj_iac_run_pos;
-  case TYPE_MAP_INJ_IDLC:
-   return p_maps->inj_iac_crank_pos;
-  case TYPE_MAP_INJ_THRASS:
-   return p_maps->inj_thrass;
-  case TYPE_MAP_INJ_AETPS:
-   return p_maps->inj_ae_tps;
-  case TYPE_MAP_INJ_AEMAP:
-   return p_maps->inj_ae_map;
-  case TYPE_MAP_INJ_AERPM:
-   return p_maps->inj_ae_rpm;
-  case TYPE_MAP_INJ_AFTSTR:
-   return p_maps->inj_aftstr;
-  case TYPE_MAP_INJ_IT:
-   return p_maps->inj_timing;
-  case TYPE_MAP_INJ_ITRPM:
-   return p_maps->inj_target_rpm;
-  case TYPE_MAP_INJ_RIGID:
-   return p_maps->inj_idl_rigidity;
-  case TYPE_MAP_INJ_EGOCRV:
-   return p_maps->inj_ego_curve;
-  case TYPE_MAP_INJ_IACC:
-   return p_maps->inj_iac_corr;
-  case TYPE_MAP_INJ_IACCW:
-   return p_maps->inj_iac_corr_w;
-  case TYPE_MAP_INJ_IATCLT:
-   return p_maps->inj_iatclt_corr;
-  case TYPE_MAP_INJ_TPSSWT:
-   return p_maps->inj_tpsswt;
-  case TYPE_MAP_INJ_GTSC:
-   return p_maps->inj_gts_corr;
-  case TYPE_MAP_INJ_GPSC:
-   return p_maps->inj_gps_corr;
-  case TYPE_MAP_INJ_ATSC:
-   return p_maps->inj_ats_corr;
-  case TYPE_MAP_PWM1:
-   return p_maps->pwm_duty1;
-  case TYPE_MAP_PWM2:
-   return p_maps->pwm_duty2;
-  case TYPE_MAP_INJ_IACMAT:
-   return p_maps->iac_mat_corr;
-  case TYPE_MAP_INJ_TPSZON:
-   return p_maps->inj_tpszon;
-  case TYPE_MAP_INJ_CYLMULT:
-   return p_maps->inj_cylmult;
-  case TYPE_MAP_INJ_CYLADD:
-   return p_maps->inj_cyladd;
- }
- return NULL; //undefined type of map
-}
-
-namespace {
-size_t _GetMapSize(int i_mapType)
-{
- switch(i_mapType)
- {//ignition maps
-  case TYPE_MAP_DA_START:
-   return F_STR_POINTS;
-  case TYPE_MAP_DA_IDLE:
-   return F_IDL_POINTS;
-  case TYPE_MAP_DA_WORK:
-   return F_WRK_POINTS_L * F_WRK_POINTS_F;
-  case TYPE_MAP_DA_TEMP_CORR:
-   return F_TMP_POINTS;
-  case TYPE_MAP_DA_TEMPI_CORR:
-   return F_TMP_POINTS;
-  //fuel injection maps
-  case TYPE_MAP_INJ_VE:
-   return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
-  case TYPE_MAP_INJ_VE2:
-   return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
-  case TYPE_MAP_INJ_AFR:
-   return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
-  case TYPE_MAP_INJ_CRNK:
-   return INJ_CRANKING_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_INJ_WRMP:
-   return INJ_WARMUP_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_INJ_DEAD:
-   return INJ_DT_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_INJ_IDLR:
-  case TYPE_MAP_INJ_IDLC:
-   return INJ_IAC_POS_TABLE_SIZE;
-  case TYPE_MAP_INJ_THRASS:
-   return INJ_THRASS_SIZE;
-  case TYPE_MAP_INJ_AETPS:
-   return INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; //bins and values
-  case TYPE_MAP_INJ_AEMAP:
-   return INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2; //bins and values
-  case TYPE_MAP_INJ_AERPM:
-   return INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; //bins and values
-  case TYPE_MAP_INJ_AFTSTR:
-   return INJ_AFTSTR_LOOKUP_TABLE_SIZE;
-  case TYPE_MAP_INJ_IT:
-   return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
-  case TYPE_MAP_INJ_ITRPM:
-   return INJ_TARGET_RPM_TABLE_SIZE;
-  case TYPE_MAP_INJ_RIGID:
-   return INJ_IDL_RIGIDITY_TABLE_SIZE;
-  case TYPE_MAP_INJ_EGOCRV:
-   return INJ_EGO_CURVE_SIZE+2;
-  case TYPE_MAP_INJ_IACC:
-   return INJ_IAC_CORR_SIZE+2;
-  case TYPE_MAP_INJ_IACCW:
-   return INJ_IAC_CORR_W_SIZE+2;
-  case TYPE_MAP_INJ_IATCLT:
-   return INJ_IATCLT_CORR_SIZE+2;
-  case TYPE_MAP_INJ_TPSSWT:
-   return INJ_TPSSWT_SIZE;
-  case TYPE_MAP_INJ_GTSC:
-   return INJ_GTS_CORR_SIZE;
-  case TYPE_MAP_INJ_GPSC:
-   return INJ_GPS_CORR_SIZE+2;
-  case TYPE_MAP_INJ_ATSC:
-   return INJ_ATS_CORR_SIZE;
-  case TYPE_MAP_PWM1:
-   return F_WRK_POINTS_L * F_WRK_POINTS_F;
-  case TYPE_MAP_PWM2:
-   return F_WRK_POINTS_L * F_WRK_POINTS_F;
-  case TYPE_MAP_INJ_IACMAT:
-   return INJ_ATS_CORR_SIZE;
-  case TYPE_MAP_INJ_TPSZON:
-   return INJ_TPSZON_SIZE;
-  case TYPE_MAP_INJ_CYLMULT:
-  case TYPE_MAP_INJ_CYLADD:
-   return INJ_CYLADD_SIZE;
- }
- ASSERT(0);
- return 0; //undefined type of map
-}
+ return p_maps->GetMap(i_mapType);
 }
 
 void CPMTablesController::_MoveMapToChart(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps /*= NULL*/)
 {
  std::copy(_GetMap(i_mapType, i_original, p_maps),
-  _GetMap(i_mapType, i_original, p_maps) + _GetMapSize(i_mapType),
-  mp_view->GetMap(i_mapType, i_original));
+  _GetMap(i_mapType, i_original, p_maps) + SECU3FWMapsItem::GetMapSize(i_mapType),
+  mp_view->mp_ButtonsPanel->GetMap(i_mapType, i_original));
 }
 
 void CPMTablesController::_MoveMapsToCharts(bool i_original, SECU3FWMapsItem* p_maps /*= NULL*/)
 {//ignition maps
- for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+ for(int id = ETMT_SET_START; id <= ETMT_SET_END; ++id)
   _MoveMapToChart(id, i_original, p_maps);
 }
 
@@ -237,8 +81,8 @@ void CPMTablesController::_ClearAcquisitionFlags(void)
  m_maps_flags->name = _T("");
 
  //See TablDesk/MapIds.h for more information
- for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
-  std::fill(_GetMap(id, false, m_maps_flags), _GetMap(id, false, m_maps_flags) + _GetMapSize(id), .0f);
+ for(int id = ETMT_SET_START; id <= ETMT_SET_END; ++id)
+  std::fill(_GetMap(id, false, m_maps_flags), _GetMap(id, false, m_maps_flags) + SECU3FWMapsItem::GetMapSize(id), .0f);
 }
 
 void CPMTablesController::_ResetModification(void)
@@ -335,41 +179,8 @@ void CPMTablesController::OnActivate(void)
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_START, mptms.m_start_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_IDLE, mptms.m_idle_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_WORK, mptms.m_work_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_DA_TEMPI_CORR, mptms.m_tempi_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_VE2, mptms.m_ve2_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_WRMP, mptms.m_wrmp_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_DEAD, mptms.m_dead_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IDLR, mptms.m_idlr_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IDLC, mptms.m_idlc_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_THRASS, mptms.m_thrass_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AETPS, mptms.m_aetps_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AEMAP, mptms.m_aemap_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AERPM, mptms.m_aerpm_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_AFTSTR, mptms.m_aftstr_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IT, mptms.m_it_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_ITRPM, mptms.m_itrpm_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_RIGID, mptms.m_rigid_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_EGOCRV, mptms.m_egocrv_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACC, mptms.m_iacc_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACCW, mptms.m_iaccw_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IATCLT, mptms.m_iatclt_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_TPSSWT, mptms.m_tpsswt_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_GTSC, mptms.m_gtsc_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_GPSC, mptms.m_gpsc_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_TPSZON, mptms.m_tpszon_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CYLMULT, mptms.m_cylmult_map);
- mp_view->mp_ButtonsPanel->SetPtMovStep(TYPE_MAP_INJ_CYLADD, mptms.m_cyladd_map);
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
+  mp_view->mp_ButtonsPanel->SetPtMovStep(i, mptms.m_value[i]);
 }
 
 void CPMTablesController::OnDeactivate(void)
@@ -442,7 +253,7 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
    {
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
    const EditTabPar* data = (const EditTabPar*)i_packet_data;
-   if (i_descriptor != EDITAB_PAR || (data->tab_id < TYPE_MAP_SET_START || data->tab_id > TYPE_MAP_SET_END))
+   if (i_descriptor != EDITAB_PAR || (data->tab_id < ETMT_SET_START || data->tab_id > ETMT_SET_END))
     mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR, 255); //<-- want all tables
    else
    {//Очищаем флаги, сохраняем принятые данные и идем на продолжение приема
@@ -525,123 +336,20 @@ void UpdateMap(float* map, float* flag, const EditTabPar* data)
 }
 void CPMTablesController::_UpdateCache(const EditTabPar* data)
 {
- switch(data->tab_id)
+ if (data->tab_id == ETMT_NAME_STR)
+ { 
+  m_maps->name = data->name_data;
+  m_maps_flags->name = _T("1");
+ }
+ else
  {
-  case ETMT_NAME_STR: //name of set
-   m_maps->name = data->name_data;
-   m_maps_flags->name = _T("1");
-   break;
-  //ignition maps
-  case ETMT_STRT_MAP: //start map
-   UpdateMap(m_maps->f_str, m_maps_flags->f_str, data);
-   break;
-  case ETMT_IDLE_MAP: //idle map
-   UpdateMap(m_maps->f_idl, m_maps_flags->f_idl, data);
-   break;
-  case ETMT_WORK_MAP: //work map
-   UpdateMap(m_maps->f_wrk, m_maps_flags->f_wrk, data);
-   break;
-  case ETMT_TEMP_MAP: //temp. corr. map (working)
-   UpdateMap(m_maps->f_tmp, m_maps_flags->f_tmp, data);
-   break;
-  case ETMT_TEMPI_MAP: //temp. corr. map (idling)
-   UpdateMap(m_maps->f_tmp_idl, m_maps_flags->f_tmp_idl, data);
-   break;
-  //fuel injection maps
-  case ETMT_VE_MAP: //ve map
-   UpdateMap(m_maps->inj_ve, m_maps_flags->inj_ve, data);
-   break;
-  case ETMT_VE2_MAP: //ve map
-   UpdateMap(m_maps->inj_ve2, m_maps_flags->inj_ve2, data);
-   break;
-  case ETMT_AFR_MAP: //afr map
-   UpdateMap(m_maps->inj_afr, m_maps_flags->inj_afr, data);
-   break;
-  case ETMT_CRNK_MAP: //cranking pw map
-   UpdateMap(m_maps->inj_cranking, m_maps_flags->inj_cranking, data);
-   break;
-  case ETMT_WRMP_MAP: //warmup enrichment map
-   UpdateMap(m_maps->inj_warmup, m_maps_flags->inj_warmup, data);
-   break;
-  case ETMT_DEAD_MAP: //injector's dead time map
-   UpdateMap(m_maps->inj_dead_time, m_maps_flags->inj_dead_time, data);
-   break;
-  case ETMT_IDLR_MAP: //run IAC pos map
-   UpdateMap(m_maps->inj_iac_run_pos, m_maps_flags->inj_iac_run_pos, data);
-   break;
-  case ETMT_IDLC_MAP: //cranking IAC pos map
-   UpdateMap(m_maps->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos, data);
-   break;
-  case ETMT_THRASS_MAP: //throttle assistant map
-   UpdateMap(m_maps->inj_thrass, m_maps_flags->inj_thrass, data);
-   break;
-  case ETMT_AETPS_MAP: //AE TPS map
-   UpdateMap(m_maps->inj_ae_tps, m_maps_flags->inj_ae_tps, data);
-   break;
-  case ETMT_AEMAP_MAP: //AE MAP map
-   UpdateMap(m_maps->inj_ae_map, m_maps_flags->inj_ae_map, data);
-   break;
-  case ETMT_AERPM_MAP: //AE TPS map
-   UpdateMap(m_maps->inj_ae_rpm, m_maps_flags->inj_ae_rpm, data);
-   break;
-  case ETMT_AFTSTR_MAP: //afterstart enrichment map
-   UpdateMap(m_maps->inj_aftstr, m_maps_flags->inj_aftstr, data);
-   break;
-  case ETMT_IT_MAP: //inj.timing map
-   UpdateMap(m_maps->inj_timing, m_maps_flags->inj_timing, data);
-   break;
-  case ETMT_ITRPM_MAP: //idling RPM map
-   UpdateMap(m_maps->inj_target_rpm, m_maps_flags->inj_target_rpm, data);
-   break;
-  case ETMT_RIGID_MAP: //idl. regulator's rigidity map
-   UpdateMap(m_maps->inj_idl_rigidity, m_maps_flags->inj_idl_rigidity, data);
-   break;
-  case ETMT_EGOCRV_MAP: //WBO emulation
-   UpdateMap(m_maps->inj_ego_curve, m_maps_flags->inj_ego_curve, data);
-   break;
-  case ETMT_IACC_MAP: //mixture correction vs IAC pos
-   UpdateMap(m_maps->inj_iac_corr, m_maps_flags->inj_iac_corr, data);
-   break;
-  case ETMT_IACCW_MAP: //weight of mixture correction vs IAC pos
-   UpdateMap(m_maps->inj_iac_corr_w, m_maps_flags->inj_iac_corr_w, data);
-   break;
-  case ETMT_IATCLT_MAP: //IAT/CLT correction vs air flow
-   UpdateMap(m_maps->inj_iatclt_corr, m_maps_flags->inj_iatclt_corr, data);
-   break;
-  case ETMT_TPSSWT_MAP: //MAP/TPS switch point vs RPM
-   UpdateMap(m_maps->inj_tpsswt, m_maps_flags->inj_tpsswt, data);
-   break;
-  case ETMT_GTSC_MAP: //Inj. PW correction coefficient  vs gas temperature
-   UpdateMap(m_maps->inj_gts_corr, m_maps_flags->inj_gts_corr, data);
-   break;
-  case ETMT_GPSC_MAP: //Inj. PW correction coefficient  vs gas pressure
-   UpdateMap(m_maps->inj_gps_corr, m_maps_flags->inj_gps_corr, data);
-   break;
-  case ETMT_ATSC_MAP: //Inj. PW correction coefficient  vs air temperature
-   UpdateMap(m_maps->inj_ats_corr, m_maps_flags->inj_ats_corr, data);
-   break;
-  case ETMT_PWM1_MAP: //PWM1 map
-   UpdateMap(m_maps->pwm_duty1, m_maps_flags->pwm_duty1, data);
-   break;
-  case ETMT_PWM2_MAP: //PWM2 map
-   UpdateMap(m_maps->pwm_duty2, m_maps_flags->pwm_duty2, data);
-   break;
-  case ETMT_IACMAT_MAP: //IAC position's correction vs MAT
-   UpdateMap(m_maps->iac_mat_corr, m_maps_flags->iac_mat_corr, data);
-   break;
-  case ETMT_TPSZON_MAP: //MAP/TPS load axis allocation
-   UpdateMap(m_maps->inj_tpszon, m_maps_flags->inj_tpszon, data);
-   break;
-  case ETMT_CYLMULT_MAP: //Injection PW multiplier
-   UpdateMap(m_maps->inj_cylmult, m_maps_flags->inj_cylmult, data);
-   break;
-  case ETMT_CYLADD_MAP: //Injection PW addition
-   UpdateMap(m_maps->inj_cyladd, m_maps_flags->inj_cyladd, data);
-   break;
+  if (data->tab_id < ETMT_SET_START || data->tab_id > ETMT_SET_END)
+  {
+   ASSERT(0);
+   return;
+  }
 
-  default: ASSERT(0);
-   //error
-   break;
+  UpdateMap(m_maps->GetMap(data->tab_id), m_maps_flags->GetMap(data->tab_id), data);
  }
 }
 
@@ -660,9 +368,9 @@ bool CPMTablesController::_IsCacheUpToDate(void)
   return false;
 
  //See TablDesk/MapIds.h for more information
- for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+ for(int id = ETMT_SET_START; id <= ETMT_SET_END; ++id)
  {
-  if (!_FindZero(_GetMap(id, false, m_maps_flags), _GetMapSize(id)))
+  if (!_FindZero(_GetMap(id, false, m_maps_flags), SECU3FWMapsItem::GetMapSize(id)))
    return false;
  }
 
@@ -675,9 +383,9 @@ bool CPMTablesController::_IsModificationMade(void) const
   return true;
 
  //See TablDesk/MapIds.h for more information
- for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+ for(int id = ETMT_SET_START; id <= ETMT_SET_END; ++id)
  {
-  if (false==_CompareViewMap(id, _GetMapSize(id)))
+  if (false==_CompareViewMap(id, SECU3FWMapsItem::GetMapSize(id)))
    return true;
  }
 
@@ -686,11 +394,11 @@ bool CPMTablesController::_IsModificationMade(void) const
 
 void CPMTablesController::_SynchronizeMap(int i_mapType)
 {
- float* pMap = mp_view->GetMap(i_mapType, false); //<--current
- size_t mapSize = _GetMapSize(i_mapType); //map size in items (not bytes)
+ float* pMap = mp_view->mp_ButtonsPanel->GetMap(i_mapType, false); //<--current
+ size_t mapSize = SECU3FWMapsItem::GetMapSize(i_mapType); //map size in items (not bytes)
 
  size_t pieceSize = 16; //for all maps exept cranking PW and inj. dead time and rigidity function
- if (i_mapType == TYPE_MAP_INJ_CRNK || i_mapType == TYPE_MAP_INJ_DEAD || i_mapType == TYPE_MAP_INJ_RIGID || i_mapType == TYPE_MAP_INJ_EGOCRV || i_mapType == TYPE_MAP_INJ_IACC || i_mapType == TYPE_MAP_INJ_IATCLT)
+ if (i_mapType == ETMT_INJ_CRNK || i_mapType == ETMT_INJ_DEAD || i_mapType == ETMT_INJ_RIGID || i_mapType == ETMT_INJ_EGOCRV || i_mapType == ETMT_INJ_IACC || i_mapType == ETMT_INJ_IATCLT)
   pieceSize = 8;
 
  size_t index;
@@ -728,7 +436,7 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
    mp_sbar->SetInformationText(statusStr);
    //store values of padding cells from cache
    packet.beginPadding = (packet.address > 0) ? _GetMap(i_mapType, false)[packet.address-1] : 0;
-   packet.endPadding = (packet.address + packet.data_size) < _GetMapSize(i_mapType) ? _GetMap(i_mapType, false)[(packet.address + packet.data_size)] : 0;
+   packet.endPadding = (packet.address + packet.data_size) < SECU3FWMapsItem::GetMapSize(i_mapType) ? _GetMap(i_mapType, false)[(packet.address + packet.data_size)] : 0;
    //send packet!
    mp_comm->m_pControlApp->SendPacket(EDITAB_PAR, &packet);
    Sleep(20);
@@ -754,7 +462,7 @@ void CPMTablesController::OnMapChanged(int i_mapType)
 
 void CPMTablesController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 {
- if (i_mapType == TYPE_MAP_GME_INJ_WND)
+ if (i_mapType == ETMT_GME_INJ_WND)
  {
   mp_settings->SetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
   mp_settings->SetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
@@ -845,7 +553,7 @@ void CPMTablesController::OnImportFromS3F(void)
 
   //send updated data to SECU-3
   //See TablDesk/MapIds.h for more information
-  for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+  for(int id = ETMT_SET_START; id <= ETMT_SET_END; ++id)
    _SynchronizeMap(id);
 
   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
@@ -927,10 +635,10 @@ void CPMTablesController::OnTableDeskChangesTimer(void)
 void CPMTablesController::OnClose()
 {
  //save positions of windows of opened charts
- for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
   OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(i), i);
- OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
- OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(ETMT_GME_IGN_WND), ETMT_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(ETMT_GME_INJ_WND), ETMT_GME_INJ_WND);
 }
 
 void CPMTablesController::OnCloseNotify()
@@ -943,10 +651,10 @@ void CPMTablesController::OnCloseNotify()
 void CPMTablesController::OnSaveSettings()
 {
  //save positions of windows of opened charts
- for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
   OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(i), i);
- OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
- OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(ETMT_GME_IGN_WND), ETMT_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_ButtonsPanel->GetMapWindow(ETMT_GME_INJ_WND), ETMT_GME_INJ_WND);
 }
 
 void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
@@ -962,41 +670,8 @@ void CPMTablesController::OnChangeSettings(void)
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mptms.m_start_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_START);
- mptms.m_idle_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_IDLE);
- mptms.m_work_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_WORK);
- mptms.m_temp_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
- mptms.m_tempi_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_DA_TEMPI_CORR);
- mptms.m_ve_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
- mptms.m_ve2_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_VE2);
- mptms.m_afr_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
- mptms.m_crnk_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);
- mptms.m_wrmp_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_WRMP);
- mptms.m_dead_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_DEAD);
- mptms.m_idlr_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IDLR);
- mptms.m_idlc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IDLC);
- mptms.m_thrass_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_THRASS);
- mptms.m_aetps_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AETPS);
- mptms.m_aemap_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AEMAP);
- mptms.m_aerpm_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AERPM);
- mptms.m_aftstr_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_AFTSTR);
- mptms.m_it_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IT);
- mptms.m_itrpm_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_ITRPM);
- mptms.m_rigid_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_RIGID);
- mptms.m_egocrv_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_EGOCRV);
- mptms.m_iacc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACC);
- mptms.m_iaccw_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACCW);
- mptms.m_iatclt_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IATCLT);
- mptms.m_tpsswt_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_TPSSWT);
- mptms.m_gtsc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_GTSC);
- mptms.m_gpsc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
- mptms.m_atsc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
- mptms.m_pwm1_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_PWM1);
- mptms.m_pwm2_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_PWM2);
- mptms.m_iacmat_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
- mptms.m_tpszon_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_TPSZON);
- mptms.m_cylmult_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CYLMULT);
- mptms.m_cyladd_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_CYLADD);
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
+  mptms.m_value[i] = mp_view->mp_ButtonsPanel->GetPtMovStep(i);
  mp_settings->SetMapPtMovStep(mptms);
 
  if (m_OnChangeSettings)

@@ -46,6 +46,7 @@ set(HEADERS
   iocore_api.h
   LogReader.h
   LogWriter.h
+  MapIds.h
   NumericConv.h
   PacketDataProxy.h
   ParamsIO.h

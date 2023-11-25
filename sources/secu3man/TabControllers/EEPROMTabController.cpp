@@ -42,7 +42,7 @@
 #include "FirmwareFileUtils.h"
 #include "TabControllersCommunicator.h"
 #include "TablDesk/ButtonsPanel.h"
-#include "TablDesk/MapIds.h"
+#include "io-core/MapIds.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "CEErrorIdStr.h"
 #include "ErrorMsg.h"
@@ -185,41 +185,8 @@ void CEEPROMTabController::OnActivate(void)
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_START, mptms.m_start_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_IDLE, mptms.m_idle_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_WORK, mptms.m_work_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_TEMPI_CORR, mptms.m_tempi_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_VE2, mptms.m_ve2_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_WRMP, mptms.m_wrmp_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_DEAD, mptms.m_dead_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLR, mptms.m_idlr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLC, mptms.m_idlc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_THRASS, mptms.m_thrass_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AETPS, mptms.m_aetps_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AEMAP, mptms.m_aemap_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AERPM, mptms.m_aerpm_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AFTSTR, mptms.m_aftstr_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IT, mptms.m_it_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ITRPM, mptms.m_itrpm_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_RIGID, mptms.m_rigid_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_EGOCRV, mptms.m_egocrv_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACC, mptms.m_iacc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACCW, mptms.m_iaccw_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IATCLT, mptms.m_iatclt_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_TPSSWT, mptms.m_tpsswt_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GTSC, mptms.m_gtsc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GPSC, mptms.m_gpsc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM1, mptms.m_pwm1_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_PWM2, mptms.m_pwm2_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACMAT, mptms.m_iacmat_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_TPSZON, mptms.m_tpszon_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CYLMULT, mptms.m_cylmult_map);
- mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CYLADD, mptms.m_cyladd_map);
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i )
+  mp_view->mp_TablesPanel->SetPtMovStep(i, mptms.m_value[i]);
 
  //disable "Load grids" menu item if firmware is not opened
  CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
@@ -336,10 +303,10 @@ void CEEPROMTabController::OnConnection(const bool i_online)
 bool CEEPROMTabController::OnClose(void)
 {
  //save positions of windows of opened charts
- for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
   OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(i), i);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(ETMT_GME_IGN_WND), ETMT_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(ETMT_GME_INJ_WND), ETMT_GME_INJ_WND);
 
  if (m_active && (!mp_comm->m_pBootLoader->IsIdle() || m_waiting_bl_timer.isActive()))
   if (!ErrorMsg::AskUserAboutTabLeaving())
@@ -368,10 +335,10 @@ bool CEEPROMTabController::OnAskChangeTab(void)
 void CEEPROMTabController::OnSaveSettings(void)
 {
  //save positions of windows of opened charts
- for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
   OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(i), i);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
- OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(ETMT_GME_IGN_WND), ETMT_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(ETMT_GME_INJ_WND), ETMT_GME_INJ_WND);
 }
 
 void CEEPROMTabController::OnOpenEEPROMFromFile(void)
@@ -593,121 +560,16 @@ bool CEEPROMTabController::CheckChangesAskAndSaveEEPROM(void)
 //эта функция не обновляет графики, нужно еще вызывать UpdateOpenedCharts()!
 void CEEPROMTabController::SetViewChartsValues(void)
 {
- //Can't set RPM grid, because it is stored in the firmware
- //m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
-
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
  mp_eedm->GetDefParamValues(FUNSET_PAR, &params);
  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
 
- int funset_index = 0;
-
- mp_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
- mp_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(true),true);
-
- mp_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(false),false);
- mp_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(true),true);
-
- mp_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(false),false);
- mp_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(true),true);
-
- mp_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(false),false);
- mp_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(true),true);
-
- mp_eedm->GetTempIdlMap(funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(false),false);
- mp_eedm->GetTempIdlMap(funset_index,mp_view->mp_TablesPanel->GetTempIdlMap(true),true);
-
- //fuel injection
- mp_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(false),false);
- mp_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(true),true);
-
- mp_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(false),false);
- mp_eedm->GetVE2Map(funset_index,mp_view->mp_TablesPanel->GetVE2Map(true),true);
-
- mp_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(false),false);
- mp_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(true),true);
-
- mp_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(false),false);
- mp_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(true),true);
-
- mp_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(false),false);
- mp_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(true),true);
-
- mp_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(false),false);
- mp_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(true),true);
-
- mp_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(false),false);
- mp_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(true),true);
-
- mp_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(false),false);
- mp_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(true),true);
-
- mp_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(false),false);
- mp_eedm->GetThrassMap(funset_index,mp_view->mp_TablesPanel->GetThrassMap(true),true);
-
- mp_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(false),false);
- mp_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(true),true);
-
- mp_eedm->GetAEMAPMap(funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(false),false);
- mp_eedm->GetAEMAPMap(funset_index,mp_view->mp_TablesPanel->GetAEMAPMap(true),true);
-
- mp_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(false),false);
- mp_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(true),true);
-
- mp_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(false),false);
- mp_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(true),true);
-
- mp_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(false),false);
- mp_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(true),true);
-
- mp_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(false),false);
- mp_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(true),true);
-
- mp_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(false),false);
- mp_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(true),true);
-
- mp_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(false),false);
- mp_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(true),true);
-
- mp_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(false),false);
- mp_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(true),true);
-
- mp_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(false),false);
- mp_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(true),true);
-
- mp_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(false),false);
- mp_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(true),true);
-
- mp_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(false),false);
- mp_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(true),true);
-
- mp_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(false),false);
- mp_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(true),true);
-
- mp_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(false),false);
- mp_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(true),true);
-
- mp_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
- mp_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
-
- mp_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(false),false);
- mp_eedm->GetPwm1Map(funset_index,mp_view->mp_TablesPanel->GetPwm1Map(true),true);
-
- mp_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(false),false);
- mp_eedm->GetPwm2Map(funset_index,mp_view->mp_TablesPanel->GetPwm2Map(true),true);
-
- mp_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(false),false);
- mp_eedm->GetIACMATMap(funset_index,mp_view->mp_TablesPanel->GetIACMATMap(true),true);
-
- mp_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(false),false);
- mp_eedm->GetTpszonMap(funset_index,mp_view->mp_TablesPanel->GetTpszonMap(true),true);
-
- mp_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(false),false);
- mp_eedm->GetInjCylMultMap(funset_index,mp_view->mp_TablesPanel->GetCylMultMap(true),true);
-
- mp_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(false),false);
- mp_eedm->GetInjCylAddMap(funset_index,mp_view->mp_TablesPanel->GetCylAddMap(true),true);
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
+ {
+  mp_eedm->GetSetMap(0, i, mp_view->mp_TablesPanel->GetMap(i, false), false);
+  mp_eedm->GetSetMap(0, i, mp_view->mp_TablesPanel->GetMap(i, true), true);
+ }
 }
 
 
@@ -748,117 +610,7 @@ bool CEEPROMTabController::IsEEPROMOpened()
 
 void CEEPROMTabController::OnMapChanged(int i_type)
 {
- int funset_index = 0;
- switch(i_type)
- {
-   //ignition maps
-  case TYPE_MAP_DA_START:
-   mp_eedm->SetStartMap(funset_index, mp_view->mp_TablesPanel->GetStartMap(false));
-   break;
-  case TYPE_MAP_DA_IDLE:
-   mp_eedm->SetIdleMap(funset_index, mp_view->mp_TablesPanel->GetIdleMap(false));
-   break;
-  case TYPE_MAP_DA_WORK:
-   mp_eedm->SetWorkMap(funset_index, mp_view->mp_TablesPanel->GetWorkMap(false));
-   break;
-  case TYPE_MAP_DA_TEMP_CORR:
-   mp_eedm->SetTempMap(funset_index, mp_view->mp_TablesPanel->GetTempMap(false));
-   break;
-  case TYPE_MAP_DA_TEMPI_CORR:
-   mp_eedm->SetTempIdlMap(funset_index, mp_view->mp_TablesPanel->GetTempIdlMap(false));
-   break;
-   //fuel injection maps
-  case TYPE_MAP_INJ_VE:
-   mp_eedm->SetVEMap(funset_index, mp_view->mp_TablesPanel->GetVEMap(false));
-   break;
-  case TYPE_MAP_INJ_VE2:
-   mp_eedm->SetVE2Map(funset_index, mp_view->mp_TablesPanel->GetVE2Map(false));
-   break;
-  case TYPE_MAP_INJ_AFR:
-   mp_eedm->SetAFRMap(funset_index, mp_view->mp_TablesPanel->GetAFRMap(false));
-   break;
-  case TYPE_MAP_INJ_CRNK:
-   mp_eedm->SetCrnkMap(funset_index, mp_view->mp_TablesPanel->GetCrnkMap(false));
-   break;
-  case TYPE_MAP_INJ_WRMP:
-   mp_eedm->SetWrmpMap(funset_index, mp_view->mp_TablesPanel->GetWrmpMap(false));
-   break;
-  case TYPE_MAP_INJ_DEAD:
-   mp_eedm->SetDeadMap(funset_index, mp_view->mp_TablesPanel->GetDeadMap(false));
-   break;
-  case TYPE_MAP_INJ_IDLR:
-   mp_eedm->SetIdlrMap(funset_index, mp_view->mp_TablesPanel->GetIdlrMap(false));
-   break;
-  case TYPE_MAP_INJ_IDLC:
-   mp_eedm->SetIdlcMap(funset_index, mp_view->mp_TablesPanel->GetIdlcMap(false));
-   break;
-  case TYPE_MAP_INJ_THRASS:
-   mp_eedm->SetThrassMap(funset_index, mp_view->mp_TablesPanel->GetThrassMap(false));
-   break;
-  case TYPE_MAP_INJ_AETPS:
-   mp_eedm->SetAETPSMap(funset_index, mp_view->mp_TablesPanel->GetAETPSMap(false));
-   break;
-  case TYPE_MAP_INJ_AEMAP:
-   mp_eedm->SetAEMAPMap(funset_index, mp_view->mp_TablesPanel->GetAEMAPMap(false));
-   break;
-  case TYPE_MAP_INJ_AERPM:
-   mp_eedm->SetAERPMMap(funset_index, mp_view->mp_TablesPanel->GetAERPMMap(false));
-   break;
-  case TYPE_MAP_INJ_AFTSTR:
-   mp_eedm->SetAftstrMap(funset_index, mp_view->mp_TablesPanel->GetAftstrMap(false));
-   break;
-  case TYPE_MAP_INJ_IT:
-   mp_eedm->SetITMap(funset_index, mp_view->mp_TablesPanel->GetITMap(false));
-   break;
-  case TYPE_MAP_INJ_ITRPM:
-   mp_eedm->SetITRPMMap(funset_index, mp_view->mp_TablesPanel->GetITRPMMap(false));
-   break;
-  case TYPE_MAP_INJ_RIGID:
-   mp_eedm->SetRigidMap(funset_index, mp_view->mp_TablesPanel->GetRigidMap(false));
-   break;
-  case TYPE_MAP_INJ_EGOCRV:
-   mp_eedm->SetEGOCurveMap(funset_index, mp_view->mp_TablesPanel->GetEGOCurveMap(false));
-   break;
-  case TYPE_MAP_INJ_IACC:
-   mp_eedm->SetIACCorrMap(funset_index, mp_view->mp_TablesPanel->GetIACCMap(false));
-   break;
-  case TYPE_MAP_INJ_IACCW:
-   mp_eedm->SetIACCorrWMap(funset_index, mp_view->mp_TablesPanel->GetIACCWMap(false));
-   break;
-  case TYPE_MAP_INJ_IATCLT:
-   mp_eedm->SetIATCLTMap(funset_index, mp_view->mp_TablesPanel->GetIATCLTMap(false));
-   break;
-  case TYPE_MAP_INJ_TPSSWT:
-   mp_eedm->SetTpsswtMap(funset_index, mp_view->mp_TablesPanel->GetTpsswtMap(false));
-   break;
-  case TYPE_MAP_INJ_GTSC:
-   mp_eedm->SetGtscMap(funset_index, mp_view->mp_TablesPanel->GetGtscMap(false));
-   break;
-  case TYPE_MAP_INJ_GPSC:
-   mp_eedm->SetGpscMap(funset_index, mp_view->mp_TablesPanel->GetGpscMap(false));
-   break;
-  case TYPE_MAP_INJ_ATSC:
-   mp_eedm->SetAtscMap(funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
-   break;
-  case TYPE_MAP_PWM1:
-   mp_eedm->SetPwm1Map(funset_index, mp_view->mp_TablesPanel->GetPwm1Map(false));
-   break;
-  case TYPE_MAP_PWM2:
-   mp_eedm->SetPwm2Map(funset_index, mp_view->mp_TablesPanel->GetPwm2Map(false));
-   break;
-  case TYPE_MAP_INJ_IACMAT:
-   mp_eedm->SetIACMATMap(funset_index, mp_view->mp_TablesPanel->GetIACMATMap(false));
-   break;
-  case TYPE_MAP_INJ_TPSZON:
-   mp_eedm->SetTpszonMap(funset_index, mp_view->mp_TablesPanel->GetTpszonMap(false));
-   break;
-  case TYPE_MAP_INJ_CYLMULT:
-   mp_eedm->SetInjCylMultMap(funset_index, mp_view->mp_TablesPanel->GetCylMultMap(false));
-   break;
-  case TYPE_MAP_INJ_CYLADD:
-   mp_eedm->SetInjCylAddMap(funset_index, mp_view->mp_TablesPanel->GetCylAddMap(false));
-   break;
- }
+ mp_eedm->SetSetMap(0, i_type, mp_view->mp_TablesPanel->GetMap(i_type, false));
 }
 
 void CEEPROMTabController::OnModificationCheckTimer(void)
@@ -1105,41 +857,8 @@ void CEEPROMTabController::OnChangeSettingsMapEd(void)
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
- mptms.m_start_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_START);
- mptms.m_idle_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_IDLE);
- mptms.m_work_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_WORK);
- mptms.m_temp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
- mptms.m_tempi_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_TEMPI_CORR);
- mptms.m_ve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
- mptms.m_ve2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_VE2);
- mptms.m_afr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
- mptms.m_crnk_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);
- mptms.m_wrmp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_WRMP);
- mptms.m_dead_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_DEAD);
- mptms.m_idlr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLR);
- mptms.m_idlc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLC);
- mptms.m_thrass_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_THRASS);
- mptms.m_aetps_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AETPS);
- mptms.m_aemap_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AEMAP);
- mptms.m_aerpm_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AERPM);
- mptms.m_aftstr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AFTSTR);
- mptms.m_it_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IT);
- mptms.m_itrpm_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ITRPM);
- mptms.m_rigid_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_RIGID);
- mptms.m_egocrv_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_EGOCRV);
- mptms.m_iacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACC);
- mptms.m_iaccw_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACCW);
- mptms.m_iatclt_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IATCLT);
- mptms.m_tpsswt_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_TPSSWT);
- mptms.m_gtsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GTSC);
- mptms.m_gpsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
- mptms.m_atsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
- mptms.m_pwm1_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM1);
- mptms.m_pwm2_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_PWM2);
- mptms.m_iacmat_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACMAT);
- mptms.m_tpszon_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_TPSZON);
- mptms.m_cylmult_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CYLMULT);
- mptms.m_cyladd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CYLADD);
+ for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
+  mptms.m_value[i] = mp_view->mp_TablesPanel->GetPtMovStep(i);
  mp_settings->SetMapPtMovStep(mptms);
 }
 

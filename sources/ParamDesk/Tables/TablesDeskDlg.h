@@ -85,7 +85,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
 
   virtual void SetTablesSetName(const _TSTRING& name);
   virtual _TSTRING GetTablesSetName(void) const;
-  virtual float* GetMap(int i_mapType, bool i_original);
 
   virtual void SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,
    float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
