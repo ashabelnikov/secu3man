@@ -255,6 +255,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("EGO correction delay after fuel cut"), _T("str"), 0, 255, 1, 1, &d.ego_fc_delay, _T("After the fuel supply is resumed, the lambda correction will not start working immediately, but after a specified time in strokes."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Задержка лямбда коррекции после обогащения при ускорении"), _T("т"), 0, 255, 1, 1, &d.ego_ac_delay, _T("После завершения работы обогащения при ускорении лямбда коррекция начнет работать не сразу, а спустя заданное время в тактах"));
+ else
+  dfd.AppendItem(_T("EGO correction delay after acceleration enrichment"), _T("str"), 0, 255, 1, 1, &d.ego_ac_delay, _T("After finishing acceleration enrichment the lambda correction will not start working immediately, but after a specified time in strokes."));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));
