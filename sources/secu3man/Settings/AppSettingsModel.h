@@ -172,6 +172,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetOpsAverage(void) const;
   virtual int GetMAFAverage(void) const;
   virtual int GetFtsAverage(void) const;
+  virtual int GetTargAFRAverage(void) const;
 
   virtual int GetTitleFontSize(void) const;
   virtual int GetValueFontSize(void) const;
@@ -366,6 +367,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optOpsAverage;
   OptField_t<int>  m_optMAFAverage;
   OptField_t<int>  m_optFtsAverage;
+  OptField_t<int>  m_optTargAFRAverage;
 
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
@@ -756,6 +758,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetFts[2][2];
   OptField_t<int> m_optMetEGOCorr2[2][2];
   OptField_t<int> m_optMetSensAFR2[2][2];
+  OptField_t<int> m_optMetTargAFR[2][2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
@@ -780,7 +783,6 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<COLORREF> m_optColUniOut4;
   OptField_t<COLORREF> m_optColUniOut5;
   OptField_t<COLORREF> m_optColUniOut6;
-
 
   //AutoTune
   OptField_t<std::vector<int> > m_optLambdaDelay;
