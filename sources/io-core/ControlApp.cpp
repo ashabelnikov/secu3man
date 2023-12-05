@@ -687,7 +687,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int afrmap = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &afrmap))
   return false;
- sensorDat.afrmap = ((float)afrmap) / AFR_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ sensorDat.afrmap = MathHelpers::RoundP1(((float)afrmap) / AFR_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  //Corrected MAT
  int tchrg = 0;
