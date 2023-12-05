@@ -24,6 +24,7 @@
  */
 
 #include "stdafx.h"
+#include <windowsx.h>
 #include "secu3man.h"
 #include "Resources/resource.h"
 
@@ -374,4 +375,20 @@ CMainFrameManager* CSecu3manApp::GetMainFrameManager(void) const
 LogWriter* CSecu3manApp::GetLogWriter(void) const
 {
  return m_pLogWriter;
+}
+
+BOOL CSecu3manApp::PreTranslateMessage(MSG* pMsg)
+{
+ if (pMsg->message == WM_MOUSEWHEEL)
+ {
+  HWND hwnd = WindowFromPoint(CPoint(GET_X_LPARAM(pMsg->lParam), GET_Y_LPARAM(pMsg->lParam)));
+
+  TCHAR wcName[16];
+  GetClassName(hwnd, wcName, 16);
+
+  if (0==_tcscmp(wcName, _T("#32770"))) //dialog class
+   pMsg->hwnd = hwnd;
+ }
+  
+ return CWinApp::PreTranslateMessage(pMsg);
 }

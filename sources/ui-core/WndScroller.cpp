@@ -204,7 +204,7 @@ bool CWndScroller::_OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 LRESULT CWndScroller::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
- if (lParam) //Do nothing if it is not standard scroll bar
+ if (lParam && uMsg != WM_MOUSEWHEEL) //Do nothing if it is not standard scroll bar
   return CWindowSubClasser::WndProcSub(uMsg, wParam, lParam);
 
  switch(uMsg)

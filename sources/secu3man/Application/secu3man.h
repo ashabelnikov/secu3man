@@ -58,6 +58,8 @@ class CSecu3manApp : public CWinApp, public ISECU3Man
  protected:
   DECLARE_MESSAGE_MAP()
 
+  virtual BOOL PreTranslateMessage(MSG* pMsg);
+
  private:
   CMainFrameManager*     m_pMainFrameManager;
   CAppSettingsManager*   m_pAppSettingsManager;
