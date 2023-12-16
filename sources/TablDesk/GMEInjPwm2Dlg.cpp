@@ -40,13 +40,13 @@ END_MESSAGE_MAP()
 
 CGMEInjPwm2Dlg::CGMEInjPwm2Dlg()
 : m_pwm2_map(16, 16, false, false, NULL, 3)
-, mp_pwm2Map(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
- //empty
+ for(size_t i = 0; i < 2; ++i)
+  mp_pwm2Map[i] = NULL;
 }
 
 CGMEInjPwm2Dlg::~CGMEInjPwm2Dlg()
@@ -72,7 +72,7 @@ BOOL CGMEInjPwm2Dlg::OnInitDialog()
   CloneWndFont(this, &m_font, -1, false);
 
  m_pwm2_map.SetRange(0.0f, 100.0f);
- m_pwm2_map.AttachMap(mp_pwm2Map);
+ m_pwm2_map.AttachMap(mp_pwm2Map[1], mp_pwm2Map[0]);
  m_pwm2_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_pwm2_map.ShowLabels(true, true);
  m_pwm2_map.SetDecimalPlaces(1, 0, 0);
@@ -104,7 +104,13 @@ LPCTSTR CGMEInjPwm2Dlg::GetDialogID(void) const
 void CGMEInjPwm2Dlg::BindMaps(float* pPWM2)
 {
  ASSERT(pPWM2);
- mp_pwm2Map = pPWM2;
+ mp_pwm2Map[1] = pPWM2;
+}
+
+void CGMEInjPwm2Dlg::BindMapsOrig(float* pPWM2)
+{
+ ASSERT(pPWM2);
+ mp_pwm2Map[0] = pPWM2;
 }
 
 void CGMEInjPwm2Dlg::BindRPMGrid(float* pGrid)

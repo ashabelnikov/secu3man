@@ -72,6 +72,7 @@ class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
   static const UINT IDD;
 
   void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp, float* pTempIdl);
+  void BindMapsOrig(float* pStart, float* pIdle, float* pWork, float* pTemp, float* pTempIdl);
   void BindRPMGrid(float* pGrid);
   void BindCLTGrid(float* pGrid);
   void BindLoadGrid(float* pGrid);
@@ -99,6 +100,8 @@ class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
   afx_msg void OnClose();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+  virtual void OnOK();
+  virtual void OnCancel();
   DECLARE_MESSAGE_MAP()
 
   EventResult   m_IsAllowed;
@@ -140,11 +143,11 @@ class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
   CButton m_cltmap_sel;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
-  float* mp_startMap;
-  float* mp_idleMap;
-  float* mp_workMap;
-  float* mp_tempMap;
-  float* mp_tempIdlMap;
+  float* mp_startMap[2];
+  float* mp_idleMap[2];
+  float* mp_workMap[2];
+  float* mp_tempMap[2];
+  float* mp_tempIdlMap[2];
   float* mp_rpmGrid;
   float* mp_cltGrid;
   float* mp_lodGrid;

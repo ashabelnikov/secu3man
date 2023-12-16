@@ -20,6 +20,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
 include_directories(../)
 project(${PROJECT})
+set(LIBRARIES ui-core io-core)
 
 set(HEADERS
   CEDeskDlg.h
@@ -119,5 +120,5 @@ set (SOURCES
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
-target_link_libraries(${PROJECT} ui-core io-core)
+target_link_libraries(${PROJECT} ${LIBRARIES})
 

@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include "MathHelpers.h"
 
 struct GDIHelpers
@@ -162,6 +163,18 @@ struct GDIHelpers
  static COLORREF InvRGB(BYTE r, BYTE g, BYTE b) { return (~RGB(r,g,b)) & 0xFFFFFF; }
  static COLORREF InvColor(COLORREF color) { return (~color) & 0xFFFFFF; }
  static COLORREF swapRB(DWORD rgb) { return RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)); }
+
+#undef min //fucking stuff
+#undef max
+
+ static COLORREF Brighten(COLORREF cr, int val)
+ {
+  BYTE r, g, b;
+  r = (BYTE)std::min(255, std::max(0, GetRValue(cr) + val));
+  g = (BYTE)std::min(255, std::max(0, GetGValue(cr) + val));
+  b = (BYTE)std::min(255, std::max(0, GetBValue(cr) + val));
+  return RGB(r, g, b);
+ }
 
  static DrawEmptyRectangle(CDC& dc, CRect& rc)
  {

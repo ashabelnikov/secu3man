@@ -559,7 +559,7 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
    if (!m_ovf_msgbox)
    {
     m_ovf_msgbox = true;
-    SECUMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
+    SECUMessageBox(MLL::LoadString(IDS_SD_IGL_OVERFLOW));
     m_ovf_msgbox = false;
    }
   }
@@ -572,7 +572,7 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
    if (!m_maf_ovf_msgbox)
    {
     m_maf_ovf_msgbox = true;
-    SECUMessageBox(_T("Overflow detected when calculating constant for MAF inj. PW equation! Change configuration to eliminate this error."));
+    SECUMessageBox(MLL::LoadString(IDS_MAF_IGL_OVERFLOW));
     m_maf_ovf_msgbox = false;
    }
   }

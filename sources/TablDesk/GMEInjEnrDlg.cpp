@@ -53,15 +53,19 @@ CGMEInjEnrDlg::CGMEInjEnrDlg()
 , m_aetps_map(1, 8)
 , m_aerpm_map(1, 4)
 , m_aemap_map(1, 8)
-, mp_AftstrMap(NULL)
-, mp_WrmpMap(NULL)
-, mp_AETPSMap(NULL)
-, mp_AERPMMap(NULL)
-, mp_AEMAPMap(NULL)
 , mp_cltGrid(NULL)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
+ for(size_t i = 0; i < 2; ++i)
+ {
+  mp_AftstrMap[i] = NULL;
+  mp_WrmpMap[i] = NULL;
+  mp_AETPSMap[i] = NULL;
+  mp_AERPMMap[i] = NULL;
+  mp_AEMAPMap[i] = NULL;
+ }
+
  m_aftstr_map.SetDecimalPlaces(1, 0, 0);
  m_wrmp_map.SetDecimalPlaces(1, 0, 0);
  m_aetps_map.SetDecimalPlaces(1, 0, 0);
@@ -100,7 +104,7 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_aftstr_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnChangeAftstr));
  m_aftstr_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveAftstr));
  m_aftstr_map.SetRange(.0f, 199.0f);
- m_aftstr_map.AttachMap(mp_AftstrMap);
+ m_aftstr_map.AttachMap(mp_AftstrMap[1], mp_AftstrMap[0]);
  m_aftstr_map.AttachLabels(mp_cltGrid, NULL);
  m_aftstr_map.ShowLabels(true, false);
  m_aftstr_map.SetFont(&m_font);
@@ -110,7 +114,7 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_wrmp_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnChangeWrmp));
  m_wrmp_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveWrmp));
  m_wrmp_map.SetRange(.0f, 199.0f);
- m_wrmp_map.AttachMap(mp_WrmpMap);
+ m_wrmp_map.AttachMap(mp_WrmpMap[1], mp_WrmpMap[0]);
  m_wrmp_map.AttachLabels(mp_cltGrid, NULL);
  m_wrmp_map.ShowLabels(true, false);
  m_wrmp_map.SetFont(&m_font);
@@ -120,8 +124,8 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_aetps_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnChangeAETPS));
  m_aetps_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveAETPS));
  m_aetps_map.SetRange(-55.0f, 199.0f);
- m_aetps_map.AttachMap(mp_AETPSMap);
- m_aetps_map.AttachLabels(mp_AETPSMap + 8, NULL);
+ m_aetps_map.AttachMap(mp_AETPSMap[1], mp_AETPSMap[0]);
+ m_aetps_map.AttachLabels(mp_AETPSMap[1] + 8, NULL);
  m_aetps_map.ShowLabels(true, false);
  m_aetps_map.SetFont(&m_font);
  m_aetps_map.EnableAbroadMove(true, true);
@@ -130,8 +134,8 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_aerpm_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnChangeAERPM));
  m_aerpm_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveAERPM));
  m_aerpm_map.SetRange(.0f, 199.0f);
- m_aerpm_map.AttachMap(mp_AERPMMap);
- m_aerpm_map.AttachLabels(mp_AERPMMap + 4, NULL);
+ m_aerpm_map.AttachMap(mp_AERPMMap[1], mp_AERPMMap[0]);
+ m_aerpm_map.AttachLabels(mp_AERPMMap[1] + 4, NULL);
  m_aerpm_map.ShowLabels(true, false);
  m_aerpm_map.SetFont(&m_font);
  m_aerpm_map.EnableAbroadMove(true, false);
@@ -140,8 +144,8 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_aemap_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnChangeAEMAP));
  m_aemap_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveAEMAP));
  m_aemap_map.SetRange(-55.0f, 199.0f);
- m_aemap_map.AttachMap(mp_AEMAPMap);
- m_aemap_map.AttachLabels(mp_AEMAPMap + 8, NULL);
+ m_aemap_map.AttachMap(mp_AEMAPMap[1], mp_AEMAPMap[0]);
+ m_aemap_map.AttachLabels(mp_AEMAPMap[1] + 8, NULL);
  m_aemap_map.ShowLabels(true, false);
  m_aemap_map.SetFont(&m_font);
  m_aemap_map.EnableAbroadMove(true, true);
@@ -176,19 +180,37 @@ LPCTSTR CGMEInjEnrDlg::GetDialogID(void) const
 void CGMEInjEnrDlg::BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pAEMAP)
 {
  ASSERT(pAftstr);
- mp_AftstrMap = pAftstr;
+ mp_AftstrMap[1] = pAftstr;
 
  ASSERT(pWrmp);
- mp_WrmpMap = pWrmp;
+ mp_WrmpMap[1] = pWrmp;
 
  ASSERT(pAETPS);
- mp_AETPSMap = pAETPS;
+ mp_AETPSMap[1] = pAETPS;
 
  ASSERT(pAERPM);
- mp_AERPMMap = pAERPM;
+ mp_AERPMMap[1] = pAERPM;
 
  ASSERT(pAEMAP);
- mp_AEMAPMap = pAEMAP;
+ mp_AEMAPMap[1] = pAEMAP;
+}
+
+void CGMEInjEnrDlg::BindMapsOrig(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pAEMAP)
+{
+ ASSERT(pAftstr);
+ mp_AftstrMap[0] = pAftstr;
+
+ ASSERT(pWrmp);
+ mp_WrmpMap[0] = pWrmp;
+
+ ASSERT(pAETPS);
+ mp_AETPSMap[0] = pAETPS;
+
+ ASSERT(pAERPM);
+ mp_AERPMMap[0] = pAERPM;
+
+ ASSERT(pAEMAP);
+ mp_AEMAPMap[0] = pAEMAP;
 }
 
 void CGMEInjEnrDlg::BindCLTGrid(float* pGrid)
@@ -210,9 +232,9 @@ void CGMEInjEnrDlg::UpdateView(bool axisLabels /*= false*/)
   m_wrmp_map.AttachLabels(mp_cltGrid, NULL); //update axis labels
  }
 
- m_aetps_map.AttachLabels(mp_AETPSMap + 8, NULL);
- m_aerpm_map.AttachLabels(mp_AERPMMap + 4, NULL);
- m_aemap_map.AttachLabels(mp_AEMAPMap + 8, NULL);
+ m_aetps_map.AttachLabels(mp_AETPSMap[1] + 8, NULL);
+ m_aerpm_map.AttachLabels(mp_AERPMMap[1] + 4, NULL);
+ m_aemap_map.AttachLabels(mp_AEMAPMap[1] + 8, NULL);
 
  m_aftstr_map.UpdateDisplay();
  m_wrmp_map.UpdateDisplay();

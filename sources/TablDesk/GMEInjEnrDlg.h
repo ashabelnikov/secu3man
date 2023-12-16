@@ -41,6 +41,7 @@ class CGMEInjEnrDlg : public CTabDialog
  ~CGMEInjEnrDlg();
 
   void BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pAEMAP);
+  void BindMapsOrig(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pAEMAP);
   void BindCLTGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
   void UpdateView(bool axisLabels = false);
@@ -81,11 +82,11 @@ class CGMEInjEnrDlg : public CTabDialog
   CStatic m_ctrls[5];
   std::auto_ptr<CtrlScaler> mp_cscl;  
 
-  float* mp_AftstrMap;
-  float* mp_WrmpMap;
-  float* mp_AETPSMap;
-  float* mp_AERPMMap;
-  float* mp_AEMAPMap;
+  float* mp_AftstrMap[2];
+  float* mp_WrmpMap[2];
+  float* mp_AETPSMap[2];
+  float* mp_AERPMMap[2];
+  float* mp_AEMAPMap[2];
 
   float* mp_cltGrid;
 

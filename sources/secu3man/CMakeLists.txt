@@ -18,8 +18,8 @@ ADD_DEFINITIONS(-D_WIN32_WINDOWS=0x0501)
 ADD_DEFINITIONS(-DWINVER=0x0501)
 endif()
 
-set(LIBRARIES about fwimpexp hexutils io-core midesk
-  paramdesk tabldesk ui-core
+set(LIBRARIES ui-core io-core about fwimpexp hexutils midesk
+  paramdesk tabldesk
   )
 
 set(SYSLIB Htmlhelp.lib)

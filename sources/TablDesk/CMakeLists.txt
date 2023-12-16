@@ -21,6 +21,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
 include_directories(../)
 project(${PROJECT})
+set(LIBRARIES ui-core)
 
 set(HEADERS
   AutoTuneController.h
@@ -77,4 +78,4 @@ set(SOURCES
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
-target_link_libraries(${PROJECT} ui-core)
+target_link_libraries(${PROJECT} ${LIBRARIES})

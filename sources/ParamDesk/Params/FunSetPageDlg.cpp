@@ -451,9 +451,9 @@ void CFunSetPageDlg::OnChangeDataLoadSrc()
  //edit engine size here in the modal dialog window if firmware has no fuel injection support (Injection tab is disabled in ignition-only firmwares)
  if (m_params.load_src_cfg == 4 && !m_fuel_injection) //MAF
  {
-  CDynFieldsContainer dfd(this, _T("Редактирование знчения (Edit value)"), 120, true);
+  CDynFieldsContainer dfd(this, MLL::GetString(IDS_EDIT_VALUE), 120, true);
   float engineSize = m_params.inj_cyl_disp * m_params.cyl_num;
-  dfd.AppendItem(_T("Объем двигателя (Engine size)"), _T("L"), 0.01f, 8.0f, 0.0001f, 4, &engineSize, _T("Объем двигателя в литрах\nEngine size in litres"));
+  dfd.AppendItem(MLL::GetString(IDS_ENGINE_SIZE), _T("L"), 0.01f, 8.0f, 0.0001f, 4, &engineSize, MLL::GetString(IDS_ENGINE_SIZE_TT));
   if (dfd.DoModal()==IDOK)
   {
    //calculate new value of cylinder's displacement

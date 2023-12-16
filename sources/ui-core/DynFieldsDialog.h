@@ -102,12 +102,14 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 
     if (intVal)
     {
-     p_edit = new CEditEx(CEditEx::MODE_INT, true);
+     bool sign = (vMin < 0) || (vMax < 0);
+     p_edit = new CEditEx(CEditEx::MODE_INT | (sign ? CEditEx::MODE_SIGNED : 0), true);
      intValm = *intVal;
     }
     else if (fltVal)
     {
-     p_edit = new CEditEx(CEditEx::MODE_FLOAT, true);
+     bool sign = (vMin < 0) || (vMax < 0);
+     p_edit = new CEditEx(CEditEx::MODE_FLOAT | (sign ? CEditEx::MODE_SIGNED : 0), true);
      fltValm = *fltVal;
     }
     else if (blVal)

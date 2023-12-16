@@ -55,6 +55,7 @@ class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
   static const UINT IDD;
 
   void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2, float* pTpszon, float* pCylMult, float* pCylAdd, float* pAEMAP, float* pThrass);
+  void BindMapsOrig(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2, float* pTpszon, float* pCylMult, float* pCylAdd, float* pAEMAP, float* pThrass);
   void BindRPMGrid(float* pGrid);
   void BindCLTGrid(float* pGrid);
   void BindLoadGrid(float* pGrid, float* pGrid2);
@@ -88,6 +89,8 @@ class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+  virtual void OnOK();
+  virtual void OnCancel();
   DECLARE_MESSAGE_MAP()
 
  private:

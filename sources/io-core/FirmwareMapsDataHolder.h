@@ -368,6 +368,7 @@ struct FWMapsDataHolder
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
  {
+  maps.resize(setNum);
   for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
    std::fill(GetMap(i), GetMap(i) + GetMapSize(i), .0f);
  }

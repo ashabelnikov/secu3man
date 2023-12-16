@@ -43,14 +43,14 @@ END_MESSAGE_MAP()
 
 CGMEInjPwm1Dlg::CGMEInjPwm1Dlg()
 : m_pwm1_map(16, 16, false, false, NULL, 3)
-, mp_pwm1Map(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
 , m_splitAng(false)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
- //empty
+ for(size_t i = 0; i < 2; ++i)
+  mp_pwm1Map[i] = NULL;
 }
 
 CGMEInjPwm1Dlg::~CGMEInjPwm1Dlg()
@@ -80,7 +80,7 @@ BOOL CGMEInjPwm1Dlg::OnInitDialog()
  else
   m_pwm1_map.SetRange(0.0f, 100.0f);  //PWM duty
 
- m_pwm1_map.AttachMap(mp_pwm1Map);
+ m_pwm1_map.AttachMap(mp_pwm1Map[1], mp_pwm1Map[0]);
  m_pwm1_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_pwm1_map.ShowLabels(true, true);
  m_pwm1_map.SetDecimalPlaces(1, 0, 0);
@@ -112,7 +112,13 @@ LPCTSTR CGMEInjPwm1Dlg::GetDialogID(void) const
 void CGMEInjPwm1Dlg::BindMaps(float* pPWM1)
 {
  ASSERT(pPWM1);
- mp_pwm1Map = pPWM1;
+ mp_pwm1Map[1] = pPWM1;
+}
+
+void CGMEInjPwm1Dlg::BindMapsOrig(float* pPWM1)
+{
+ ASSERT(pPWM1);
+ mp_pwm1Map[0] = pPWM1;
 }
 
 void CGMEInjPwm1Dlg::BindRPMGrid(float* pGrid)

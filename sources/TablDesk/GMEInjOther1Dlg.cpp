@@ -55,15 +55,19 @@ CGMEInjOther1Dlg::CGMEInjOther1Dlg()
 , m_cylmult_map(1, 8)
 , m_cyladd_map(1, 8)
 , m_thrass_map(1, 16)
-, mp_TpsswtMap(NULL)
-, mp_TpszonMap(NULL)
-, mp_CylMultMap(NULL)
-, mp_CylAddMap(NULL)
-, mp_ThrassMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
+ for(size_t i = 0; i < 2; ++i)
+ {
+  mp_TpsswtMap[i] = NULL;
+  mp_TpszonMap[i] = NULL;
+  mp_CylMultMap[i] = NULL;
+  mp_CylAddMap[i] = NULL;
+  mp_ThrassMap[i] = NULL;
+ }
+
  m_tpsswt_map.SetDecimalPlaces(1, 0, 0);
  m_tpszon_map.SetDecimalPlaces(1, 0, 0);
  m_cylmult_map.SetDecimalPlaces(3, 0, 0);
@@ -103,7 +107,7 @@ BOOL CGMEInjOther1Dlg::OnInitDialog()
  m_tpsswt_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnChangeTpsswt));
  m_tpsswt_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnAbroadMoveTpsswt));
  m_tpsswt_map.SetRange(.0f, 100.0f);
- m_tpsswt_map.AttachMap(mp_TpsswtMap);
+ m_tpsswt_map.AttachMap(mp_TpsswtMap[1], mp_TpsswtMap[0]);
  m_tpsswt_map.AttachLabels(mp_rpmGrid, NULL);
  m_tpsswt_map.ShowLabels(true, false);
  m_tpsswt_map.SetFont(&m_font);
@@ -113,7 +117,7 @@ BOOL CGMEInjOther1Dlg::OnInitDialog()
  m_tpszon_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnChangeTpszon));
  m_tpszon_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnAbroadMoveTpszon));
  m_tpszon_map.SetRange(.0f, 100.0f);
- m_tpszon_map.AttachMap(mp_TpszonMap);
+ m_tpszon_map.AttachMap(mp_TpszonMap[1], mp_TpszonMap[0]);
  m_tpszon_map.AttachLabels(mp_rpmGrid, NULL);
  m_tpszon_map.ShowLabels(true, false);
  m_tpszon_map.SetFont(&m_font);
@@ -123,7 +127,7 @@ BOOL CGMEInjOther1Dlg::OnInitDialog()
  m_cylmult_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnChangeCylMult));
  m_cylmult_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnAbroadMoveCylMult));
  m_cylmult_map.SetRange(.5f, 1.49f);
- m_cylmult_map.AttachMap(mp_CylMultMap);
+ m_cylmult_map.AttachMap(mp_CylMultMap[1], mp_CylMultMap[0]);
  m_cylmult_map.AttachLabels(inj_cyladd_slots, NULL);
  m_cylmult_map.ShowLabels(true, false);
  m_cylmult_map.SetFont(&m_font);
@@ -133,7 +137,7 @@ BOOL CGMEInjOther1Dlg::OnInitDialog()
  m_cyladd_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnChangeCylAdd));
  m_cyladd_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnAbroadMoveCylAdd));
  m_cyladd_map.SetRange(-3.2f, 3.2f);
- m_cyladd_map.AttachMap(mp_CylAddMap);
+ m_cyladd_map.AttachMap(mp_CylAddMap[1], mp_CylAddMap[0]);
  m_cyladd_map.AttachLabels(inj_cyladd_slots, NULL);
  m_cyladd_map.ShowLabels(true, false);
  m_cyladd_map.SetFont(&m_font);
@@ -143,7 +147,7 @@ BOOL CGMEInjOther1Dlg::OnInitDialog()
  m_thrass_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnChangeThrass));
  m_thrass_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOther1Dlg::OnAbroadMoveThrass));
  m_thrass_map.SetRange(.0f, 100.0f);
- m_thrass_map.AttachMap(mp_ThrassMap);
+ m_thrass_map.AttachMap(mp_ThrassMap[1], mp_ThrassMap[0]);
  m_thrass_map.AttachLabels(mp_rpmGrid, NULL);
  m_thrass_map.ShowLabels(true, false);
  m_thrass_map.SetFont(&m_font);
@@ -179,19 +183,37 @@ LPCTSTR CGMEInjOther1Dlg::GetDialogID(void) const
 void CGMEInjOther1Dlg::BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd, float* pThrass)
 {
  ASSERT(pTpsswt);
- mp_TpsswtMap = pTpsswt;
+ mp_TpsswtMap[1] = pTpsswt;
 
  ASSERT(pTpszon);
- mp_TpszonMap = pTpszon;
+ mp_TpszonMap[1] = pTpszon;
 
  ASSERT(pCylMult);
- mp_CylMultMap = pCylMult;
+ mp_CylMultMap[1] = pCylMult;
 
  ASSERT(pCylAdd);
- mp_CylAddMap = pCylAdd;
+ mp_CylAddMap[1] = pCylAdd;
 
  ASSERT(pThrass);
- mp_ThrassMap = pThrass;
+ mp_ThrassMap[1] = pThrass;
+}
+
+void CGMEInjOther1Dlg::BindMapsOrig(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd, float* pThrass)
+{
+ ASSERT(pTpsswt);
+ mp_TpsswtMap[0] = pTpsswt;
+
+ ASSERT(pTpszon);
+ mp_TpszonMap[0] = pTpszon;
+
+ ASSERT(pCylMult);
+ mp_CylMultMap[0] = pCylMult;
+
+ ASSERT(pCylAdd);
+ mp_CylAddMap[0] = pCylAdd;
+
+ ASSERT(pThrass);
+ mp_ThrassMap[0] = pThrass;
 }
 
 void CGMEInjOther1Dlg::BindRPMGrid(float* pGrid)

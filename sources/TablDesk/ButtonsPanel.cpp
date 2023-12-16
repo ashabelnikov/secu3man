@@ -1574,6 +1574,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
  {
   mp_gridModeEditorIgnDlg.reset(new CGridModeEditorIgnDlg());
   mp_gridModeEditorIgnDlg->BindMaps(m_md[ETMT_IGN_START].active, m_md[ETMT_IGN_IDLE].active, m_md[ETMT_IGN_WORK].active, m_md[ETMT_IGN_TEMP].active, m_md[ETMT_IGN_TEMPI].active);
+  mp_gridModeEditorIgnDlg->BindMapsOrig(m_md[ETMT_IGN_START].original, m_md[ETMT_IGN_IDLE].original, m_md[ETMT_IGN_WORK].original, m_md[ETMT_IGN_TEMP].original, m_md[ETMT_IGN_TEMPI].original);
   mp_gridModeEditorIgnDlg->BindRPMGrid(GetRPMGrid());
   mp_gridModeEditorIgnDlg->BindCLTGrid(GetCLTGrid());
   mp_gridModeEditorIgnDlg->BindLoadGrid(GetLoadGrid());
@@ -1619,6 +1620,13 @@ void CButtonsPanel::OnGridModeEditingInj()
                                     GetMap(ETMT_INJ_CRNK, false), GetMap(ETMT_INJ_DEAD, false), GetMap(ETMT_INJ_EGOCRV, false), GetMap(ETMT_INJ_IATCLT, false), GetMap(ETMT_INJ_TPSSWT, false), GetMap(ETMT_INJ_ATSC, false),
                                     GetMap(ETMT_INJ_GTSC, false), GetMap(ETMT_INJ_GPSC, false), GetMap(ETMT_PWM1, false), GetMap(ETMT_PWM2, false), GetMap(ETMT_INJ_IACMAT, false), GetMap(ETMT_INJ_VE2, false), GetMap(ETMT_INJ_TPSZON, false),
                                     GetMap(ETMT_INJ_CYLMULT, false), GetMap(ETMT_INJ_CYLADD, false), GetMap(ETMT_INJ_AEMAP, false), GetMap(ETMT_INJ_THRASS, false));
+
+  mp_gridModeEditorInjDlg->BindMapsOrig(GetMap(ETMT_INJ_VE, true), GetMap(ETMT_INJ_AFR, true), GetMap(ETMT_INJ_IT, true), GetMap(ETMT_INJ_IDLC, true), GetMap(ETMT_INJ_IDLR, true), GetMap(ETMT_INJ_ITRPM, true), GetMap(ETMT_INJ_RIGID, true),
+                                    GetMap(ETMT_INJ_IACC, true), GetMap(ETMT_INJ_IACCW, true), GetMap(ETMT_INJ_AFTSTR, true), GetMap(ETMT_INJ_WRMP, true), GetMap(ETMT_INJ_AETPS, true), GetMap(ETMT_INJ_AERPM, true),
+                                    GetMap(ETMT_INJ_CRNK, true), GetMap(ETMT_INJ_DEAD, true), GetMap(ETMT_INJ_EGOCRV, true), GetMap(ETMT_INJ_IATCLT, true), GetMap(ETMT_INJ_TPSSWT, true), GetMap(ETMT_INJ_ATSC, true),
+                                    GetMap(ETMT_INJ_GTSC, true), GetMap(ETMT_INJ_GPSC, true), GetMap(ETMT_PWM1, true), GetMap(ETMT_PWM2, true), GetMap(ETMT_INJ_IACMAT, true), GetMap(ETMT_INJ_VE2, true), GetMap(ETMT_INJ_TPSZON, true),
+                                    GetMap(ETMT_INJ_CYLMULT, true), GetMap(ETMT_INJ_CYLADD, true), GetMap(ETMT_INJ_AEMAP, true), GetMap(ETMT_INJ_THRASS, true));
+
   mp_gridModeEditorInjDlg->BindRPMGrid(GetRPMGrid());
   mp_gridModeEditorInjDlg->BindCLTGrid(GetCLTGrid());
   mp_gridModeEditorInjDlg->BindLoadGrid(GetLoadGrid(), &m_ve2_map_load_slots[0]);

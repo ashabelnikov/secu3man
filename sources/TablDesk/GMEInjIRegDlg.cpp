@@ -59,18 +59,22 @@ CGMEInjIRegDlg::CGMEInjIRegDlg()
 , m_iacc_map(1, 8)
 , m_iaccw_map(1, 16)
 , m_iacmat_map(1, 16)
-, mp_IdlcMap(NULL)
-, mp_IdlrMap(NULL)
-, mp_ITRPMMap(NULL)
-, mp_RigidMap(NULL)
-, mp_IACCMap(NULL)
-, mp_IACCWMap(NULL)
-, mp_IACMATMap(NULL)
 , mp_cltGrid(NULL)
 , mp_temperGrid(NULL)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
+ for(size_t i = 0; i < 2; ++i)
+ {
+  mp_IdlcMap[i] = NULL;
+  mp_IdlrMap[i] = NULL;
+  mp_ITRPMMap[i] = NULL;
+  mp_RigidMap[i] = NULL;
+  mp_IACCMap[i] = NULL;
+  mp_IACCWMap[i] = NULL;
+  mp_IACMATMap[i] = NULL;
+ }
+
  m_tpsGrid.reserve(32);
  m_iacGrid.reserve(32);
  m_idlc_map.SetDecimalPlaces(1, 0, 0);
@@ -115,7 +119,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_idlc_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeIdlc));
  m_idlc_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIdlc));
  m_idlc_map.SetRange(.0f, 100.0f);
- m_idlc_map.AttachMap(mp_IdlcMap);
+ m_idlc_map.AttachMap(mp_IdlcMap[1], mp_IdlcMap[0]);
  m_idlc_map.AttachLabels(mp_cltGrid, NULL);
  m_idlc_map.ShowLabels(true, false);
  m_idlc_map.SetFont(&m_font);
@@ -125,7 +129,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_idlr_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeIdlr));
  m_idlr_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIdlr));
  m_idlr_map.SetRange(.0f, 100.0f);
- m_idlr_map.AttachMap(mp_IdlrMap);
+ m_idlr_map.AttachMap(mp_IdlrMap[1], mp_IdlrMap[0]);
  m_idlr_map.AttachLabels(mp_cltGrid, NULL);
  m_idlr_map.ShowLabels(true, false);
  m_idlr_map.SetFont(&m_font);
@@ -135,7 +139,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_itrpm_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeITRPM));
  m_itrpm_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveITRPM));
  m_itrpm_map.SetRange(.0f, 2500.0f);
- m_itrpm_map.AttachMap(mp_ITRPMMap);
+ m_itrpm_map.AttachMap(mp_ITRPMMap[1], mp_ITRPMMap[0]);
  m_itrpm_map.AttachLabels(mp_cltGrid, NULL);
  m_itrpm_map.ShowLabels(true, false);
  m_itrpm_map.SetFont(&m_font);
@@ -145,7 +149,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_rigid_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeRigid));
  m_rigid_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveRigid));
  m_rigid_map.SetRange(.0f, 5.0f);
- m_rigid_map.AttachMap(mp_RigidMap);
+ m_rigid_map.AttachMap(mp_RigidMap[1], mp_RigidMap[0]);
  m_rigid_map.AttachLabels(RigidGrid, NULL);
  m_rigid_map.ShowLabels(true, false);
  m_rigid_map.SetFont(&m_font);
@@ -157,7 +161,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_iacc_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeIACC));
  m_iacc_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIACC));
  m_iacc_map.SetRange(.0f, 1.99f);
- m_iacc_map.AttachMap(mp_IACCMap);
+ m_iacc_map.AttachMap(mp_IACCMap[1], mp_IACCMap[0]);
  m_iacc_map.AttachLabels(&m_tpsGrid[0], NULL);
  m_iacc_map.ShowLabels(true, false);
  m_iacc_map.SetFont(&m_font);
@@ -167,7 +171,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_iaccw_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeIACCW));
  m_iaccw_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIACCW));
  m_iaccw_map.SetRange(.0f, 1.00f);
- m_iaccw_map.AttachMap(mp_IACCWMap);
+ m_iaccw_map.AttachMap(mp_IACCWMap[1], mp_IACCWMap[0]);
  m_iaccw_map.AttachLabels(&m_iacGrid[0], NULL);
  m_iaccw_map.ShowLabels(true, false);
  m_iaccw_map.SetFont(&m_font);
@@ -177,7 +181,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_iacmat_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnChangeIACMAT));
  m_iacmat_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIACMAT));
  m_iacmat_map.SetRange(-25.0f, 25.00f);
- m_iacmat_map.AttachMap(mp_IACMATMap);
+ m_iacmat_map.AttachMap(mp_IACMATMap[1], mp_IACMATMap[0]);
  m_iacmat_map.AttachLabels(&mp_temperGrid[0], NULL);
  m_iacmat_map.ShowLabels(true, false);
  m_iacmat_map.SetFont(&m_font);
@@ -215,27 +219,51 @@ LPCTSTR CGMEInjIRegDlg::GetDialogID(void) const
 void CGMEInjIRegDlg::BindMaps(float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT)
 {
  ASSERT(pIdlc);
- mp_IdlcMap = pIdlc;
+ mp_IdlcMap[1] = pIdlc;
 
  ASSERT(pIdlr);
- mp_IdlrMap = pIdlr;
+ mp_IdlrMap[1] = pIdlr;
 
  ASSERT(pITRPM);
- mp_ITRPMMap = pITRPM;
+ mp_ITRPMMap[1] = pITRPM;
 
  ASSERT(pRigid);
- mp_RigidMap = pRigid;
+ mp_RigidMap[1] = pRigid;
 
  ASSERT(pIACC);
- mp_IACCMap = pIACC;
+ mp_IACCMap[1] = pIACC;
 
  ASSERT(pIACCW);
- mp_IACCWMap = pIACCW;
+ mp_IACCWMap[1] = pIACCW;
 
  ASSERT(pIACMAT);
- mp_IACMATMap = pIACMAT;
+ mp_IACMATMap[1] = pIACMAT;
 
  _UpdateDynamicGrids();
+}
+
+void CGMEInjIRegDlg::BindMapsOrig(float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT)
+{
+ ASSERT(pIdlc);
+ mp_IdlcMap[0] = pIdlc;
+
+ ASSERT(pIdlr);
+ mp_IdlrMap[0] = pIdlr;
+
+ ASSERT(pITRPM);
+ mp_ITRPMMap[0] = pITRPM;
+
+ ASSERT(pRigid);
+ mp_RigidMap[0] = pRigid;
+
+ ASSERT(pIACC);
+ mp_IACCMap[0] = pIACC;
+
+ ASSERT(pIACCW);
+ mp_IACCWMap[0] = pIACCW;
+
+ ASSERT(pIACMAT);
+ mp_IACMATMap[0] = pIACMAT;
 }
 
 void CGMEInjIRegDlg::BindTemperGrid(float* pGrid)
@@ -367,8 +395,8 @@ void CGMEInjIRegDlg::OnChangeIACMAT(void)
 
 void CGMEInjIRegDlg::_UpdateDynamicGrids(void)
 {
- m_tpsGrid = MathHelpers::BuildGridFromRange(mp_IACCMap[8], mp_IACCMap[8+1], 8);
- m_iacGrid = MathHelpers::BuildGridFromRange(mp_IACCWMap[16], mp_IACCWMap[16+1], 16);
+ m_tpsGrid = MathHelpers::BuildGridFromRange(mp_IACCMap[1][8], mp_IACCMap[1][8+1], 8);
+ m_iacGrid = MathHelpers::BuildGridFromRange(mp_IACCWMap[1][16], mp_IACCWMap[1][16+1], 16);
 }
 
 void CGMEInjIRegDlg::OnAbroadMoveIdlc(CMapEditorCtrl::AbroadDir direction, int column)

@@ -41,6 +41,7 @@ class CGMEInjIRegDlg : public CTabDialog
  ~CGMEInjIRegDlg();
 
   void BindMaps(float* pIdlc, float* pIdlr, float* pITPRM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT);
+  void BindMapsOrig(float* pIdlc, float* pIdlr, float* pITPRM, float* pRigid, float* pIACC, float* pIACCW, float* pIACMAT);
   void BindTemperGrid(float* pGrid); //rest temperature
   void BindCLTGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
@@ -89,13 +90,13 @@ class CGMEInjIRegDlg : public CTabDialog
   CMapEditorCtrl m_iacmat_map;
   CStatic m_ctrls[7];
 
-  float* mp_IdlcMap;
-  float* mp_IdlrMap;
-  float* mp_ITRPMMap;
-  float* mp_RigidMap;
-  float* mp_IACCMap;
-  float* mp_IACCWMap;
-  float* mp_IACMATMap;
+  float* mp_IdlcMap[2];
+  float* mp_IdlrMap[2];
+  float* mp_ITRPMMap[2];
+  float* mp_RigidMap[2];
+  float* mp_IACCMap[2];
+  float* mp_IACCWMap[2];
+  float* mp_IACMATMap[2];
 
   float* mp_temperGrid;
   float* mp_cltGrid;

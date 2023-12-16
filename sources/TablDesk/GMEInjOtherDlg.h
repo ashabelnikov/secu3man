@@ -41,6 +41,7 @@ class CGMEInjOtherDlg : public CTabDialog
  ~CGMEInjOtherDlg();
 
   void BindMaps(float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pAtsc, float* pGtsc, float* pGpsc);
+  void BindMapsOrig(float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pAtsc, float* pGtsc, float* pGpsc);
   void BindTemperGrid(float* pGrid); //rest temperature
   void BindCLTGrid(float* pGrid); //CLT grid
   void BindDeadGrid(float* pGrid);
@@ -93,13 +94,13 @@ class CGMEInjOtherDlg : public CTabDialog
   CMapEditorCtrl m_gpsc_map;
   CStatic m_ctrls[7];
 
-  float* mp_CrnkMap;
-  float* mp_DeadMap;
-  float* mp_EGOCrvMap;
-  float* mp_IATCLTMap;
-  float* mp_AtscMap;
-  float* mp_GtscMap;
-  float* mp_GpscMap;
+  float* mp_CrnkMap[2];
+  float* mp_DeadMap[2];
+  float* mp_EGOCrvMap[2];
+  float* mp_IATCLTMap[2];
+  float* mp_AtscMap[2];
+  float* mp_GtscMap[2];
+  float* mp_GpscMap[2];
 
   float* mp_temperGrid;
   float* mp_deadGrid;

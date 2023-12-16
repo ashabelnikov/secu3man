@@ -40,13 +40,13 @@ END_MESSAGE_MAP()
 
 CGMEInjAFRDlg::CGMEInjAFRDlg()
 : m_afr_map(16, 16, false, false, NULL, 3)
-, mp_AFRMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
- //empty
+ for(size_t i = 0; i < 2; ++i)
+  mp_AFRMap[i] = NULL;
 }
 
 CGMEInjAFRDlg::~CGMEInjAFRDlg()
@@ -72,7 +72,7 @@ BOOL CGMEInjAFRDlg::OnInitDialog()
   CloneWndFont(this, &m_font, -1, false);
 
  m_afr_map.SetRange(8.0f, 22.0f);
- m_afr_map.AttachMap(mp_AFRMap);
+ m_afr_map.AttachMap(mp_AFRMap[1], mp_AFRMap[0]);
  m_afr_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_afr_map.ShowLabels(true, true);
  m_afr_map.SetDecimalPlaces(1, 0, 0);
@@ -104,7 +104,13 @@ LPCTSTR CGMEInjAFRDlg::GetDialogID(void) const
 void CGMEInjAFRDlg::BindMaps(float* pAFR)
 {
  ASSERT(pAFR);
- mp_AFRMap = pAFR;
+ mp_AFRMap[1] = pAFR;
+}
+
+void CGMEInjAFRDlg::BindMapsOrig(float* pAFR)
+{
+ ASSERT(pAFR);
+ mp_AFRMap[0] = pAFR;
 }
 
 void CGMEInjAFRDlg::BindRPMGrid(float* pGrid)

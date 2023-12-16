@@ -43,6 +43,7 @@ class CGMEInjITDlg : public CTabDialog
  ~CGMEInjITDlg();
 
   void BindMaps(float* pIT);
+  void BindMapsOrig(float* pIT);
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
@@ -81,7 +82,7 @@ class CGMEInjITDlg : public CTabDialog
   int m_it_mode_val;
   EventHandler m_on_change_sett;
 
-  float* mp_ITMap;
+  float* mp_ITMap[2];
   float* mp_rpmGrid;
   const float* mp_loadGrid;
 

@@ -41,6 +41,7 @@ class CGMEInjAFRDlg : public CTabDialog
  ~CGMEInjAFRDlg();
 
   void BindMaps(float* pAFR);
+  void BindMapsOrig(float* pAFR);
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
@@ -66,7 +67,7 @@ class CGMEInjAFRDlg : public CTabDialog
   CFont m_font;
   std::auto_ptr<CtrlScaler> mp_cscl;
 
-  float* mp_AFRMap;
+  float* mp_AFRMap[2];
   float* mp_rpmGrid;
   const float* mp_loadGrid;
   bool m_initialized;

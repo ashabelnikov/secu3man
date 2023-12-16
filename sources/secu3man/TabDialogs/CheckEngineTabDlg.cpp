@@ -213,7 +213,6 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  m_ltft_map.SetFont(&m_font);
  m_ltft_map.EnableAbroadMove(false, false);
  m_ltft_map.SetValueIncrement(0.1f);
- m_ltft_map.SetSelection(0, 0, false);
 
  m_ltft2_map.SetRange(-24.7f, 24.7f);
  m_ltft2_map.AttachMap(const_cast<float*>(mp_trimTab2));
@@ -223,7 +222,6 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  m_ltft2_map.SetFont(&m_font);
  m_ltft2_map.EnableAbroadMove(false, false);
  m_ltft2_map.SetValueIncrement(0.1f);
- m_ltft2_map.SetSelection(0, 0, false);
 
  m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control

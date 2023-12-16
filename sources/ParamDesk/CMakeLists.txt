@@ -21,6 +21,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 include_directories(../)
 include_directories(../ParamDesk)
 project(${PROJECT})
+set(LIBRARIES ui-core tabldesk)
 
 set(HEADERS
   Application/StdAfx.h
@@ -96,4 +97,4 @@ endforeach(src_file ${SOURCES})
 set_source_files_properties(Application/StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES} ${RESOURCES})
-target_link_libraries(${PROJECT} ui-core tabldesk)
+target_link_libraries(${PROJECT} ${LIBRARIES})

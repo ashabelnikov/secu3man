@@ -246,6 +246,19 @@ void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float*
  m_pPwm2PageDlg->BindMaps(pPwm2);
 }
 
+void CGridModeEditorInjDlg::BindMapsOrig(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc, float* pPwm1, float* pPwm2, float* pIACMAT, float* pVE2, float* pTpszon, float* pCylMult, float* pCylAdd, float* pAEMAP, float* pThrass)
+{
+ m_pVEPageDlg->BindMapsOrig(pVE, pVE2);
+ m_pAFRPageDlg->BindMapsOrig(pAFR);
+ m_pITPageDlg->BindMapsOrig(pIT);
+ m_pIRegPageDlg->BindMapsOrig(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW, pIACMAT);
+ m_pEnrPageDlg->BindMapsOrig(pAftstr, pWrmp, pAETPS, pAERPM, pAEMAP);
+ m_pOtherPageDlg->BindMapsOrig(pCrnk, pDead, pEGOCrv, pIATCLT, pAtsc, pGtsc, pGpsc);
+ m_pOther1PageDlg->BindMapsOrig(pTpsswt, pTpszon, pCylMult, pCylAdd, pThrass);
+ m_pPwm1PageDlg->BindMapsOrig(pPwm1);
+ m_pPwm2PageDlg->BindMapsOrig(pPwm2);
+}
+
 void CGridModeEditorInjDlg::BindRPMGrid(float* pGrid)
 {
  m_pVEPageDlg->BindRPMGrid(pGrid);
@@ -489,4 +502,16 @@ void CGridModeEditorInjDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMinTrackSize.x = dpi.ScaleX(600);
   lpMMI->ptMinTrackSize.y = dpi.ScaleY(450);
  }
+}
+
+void CGridModeEditorInjDlg::OnOK()
+{
+ //don't call parent's OnOK, because we don't want this dialog to be closed with VK_RETURN
+}
+
+void CGridModeEditorInjDlg::OnCancel()
+{
+ if (m_OnCloseMapWnd)
+  m_OnCloseMapWnd(this->m_hWnd, ETMT_GME_INJ_WND);
+ Super::OnCancel();
 }

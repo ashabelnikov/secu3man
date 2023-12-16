@@ -25,7 +25,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
 include_directories(../)
-set(LIBRARIES setupapi.lib)
+set(LIBRARIES setupapi.lib ui-core)
 
 project(${PROJECT})
 

@@ -24,11 +24,18 @@
  */
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MapEditorCtrl.h"
 #include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "common/fastdelegate.h"
-#include "ui-core/EditEx.h"
+#include "common/LangLayer.h"
+#include "common/StrUtils.h"
+#include "EditEx.h"
+#include "FileDialogEx.h"
+#include "DynFieldsDialog.h"
+#include "MsgBox.h"
+#include "InitMenuPopup.h"
 
 static TCHAR templateStr[] = _T("88888888888888");
 
@@ -45,20 +52,8 @@ class CEditExCustomKeys : public CEditEx
   void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
   {
    CEditEx::OnChar(nChar, nRepCnt, nFlags);
-   if (nChar==VK_RETURN)
+   if (nChar == VK_RETURN)
     m_onChar(nChar, this);
-
-   else if (nChar==VK_TAB) //DLGC_WANTALLKEYS brake TABSTOP and we make it to work again
-   {
-    CWnd* pWnd = GetParent()->GetParent()->GetNextDlgTabItem(GetParent(), (GetKeyState(VK_SHIFT)&0x8000)?TRUE:FALSE);
-    //deactivate edit box in previous control
-    CMapEditorCtrl* pParent = dynamic_cast<CMapEditorCtrl*>(GetParent());
-    if (pParent && pParent != pWnd)
-     pParent->_DeactivateEdit();
-    //activate next control
-    if (pWnd)
-     pWnd->SetFocus();
-   }
   }
 
   void IncrementEdit(float incVal)
@@ -67,10 +62,7 @@ class CEditExCustomKeys : public CEditEx
    if (GetValue(value))
    {   
     value+=incVal;
-    if (value < m_min)
-     value = m_min;
-    else if  (value > m_max)
-     value = m_max;
+    value = MathHelpers::RestrictValue(value, m_min, m_max);
     SetValue(value);
    }
    else
@@ -79,37 +71,9 @@ class CEditExCustomKeys : public CEditEx
 
   void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
   {
-   if (nChar==VK_LEFT || nChar==VK_RIGHT || nChar==VK_UP || nChar==VK_DOWN)
-   {
-    int nStartChar, nEndChar;
-    GetSel(nStartChar, nEndChar);
-    if (nChar==VK_LEFT)
-    {
-     if (nStartChar <= 0)
-     {
-      m_onChar(nChar, this);
-      return;
-     }
-    }
-    else if (nChar==VK_RIGHT)
-    {
-     CString str;
-     GetWindowText(str);
-     if (nStartChar >= str.GetLength())
-     {
-      m_onChar(nChar, this);
-      return;
-     }
-    }
-    else
-    {
-     m_onChar(nChar, this);
-     return;
-    }
-   }
-   else if (nChar==VK_OEM_6)
+   if (nChar==VK_OEM_6 || nChar==0x57)         // "]" or "W"
     IncrementEdit(m_increment);
-   else if (nChar==VK_OEM_5)
+   else if (nChar==VK_OEM_5 || nChar==0x51)    // "\" or "Q"
     IncrementEdit(-m_increment);
 
    CEditEx::OnKeyDown(nChar, nRepCnt, nFlags);
@@ -123,6 +87,18 @@ class CEditExCustomKeys : public CEditEx
 
   UINT OnGetDlgCode()
   {
+   const MSG *pMsg = GetCurrentMessage();
+   pMsg = ((const MSG *)pMsg->lParam);
+
+   if (pMsg != NULL)
+   {
+    if (pMsg->message == WM_KEYDOWN)
+    {
+     if (pMsg->wParam == VK_ESCAPE || pMsg->wParam == VK_TAB) //skip Esc and TAB keys, so parent dialog will be able to close by Esc and change focus of controls using TAB key
+      return 0;
+    }
+   }
+
    return CEditEx::OnGetDlgCode() | DLGC_WANTALLKEYS;
   }
 
@@ -169,12 +145,13 @@ BEGIN_MESSAGE_MAP(CEditExCustomKeys, CEditEx)
  ON_WM_CTLCOLOR_REFLECT()
 END_MESSAGE_MAP()
 
-
 int CMapEditorCtrl::m_gradSaturation = 120;
 int CMapEditorCtrl::m_gradBrightness = 255;
 bool CMapEditorCtrl::m_boldFont = false;
 bool CMapEditorCtrl::m_spotMarkers = true;
 float CMapEditorCtrl::m_spotMarkersSize = 1.0f;
+CMapEditorCtrl* CMapEditorCtrl::mp_other = NULL;
+char CMapEditorCtrl::m_csvsep_symb = ';';
  
 void CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize)
 {
@@ -196,6 +173,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_vMinVal(0.0f)
 , m_vMaxVal(10.0f)
 , mp_map(NULL)
+, mp_mapOrig(NULL)
 , mp_horizLabels(NULL)
 , mp_vertLabels(NULL)
 , m_decPlaces(2)
@@ -203,6 +181,11 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_decPlacesV(0)
 , m_cur_i(0)
 , m_cur_j(0)
+, m_end_i(0)
+, m_end_j(0)
+, m_tp_i(0)
+, m_tp_j(0)
+, m_sel_changed(true) //need to update list of selection
 , m_label_width(-1) //not initialized
 , m_label_height(-1) //not initialized
 , m_horizShow(false)
@@ -225,6 +208,8 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_bgrdBrush(GetSysColor(COLOR_3DFACE))
 , m_ballCoord(0,0)
 , m_ballBrush(GDIHelpers::InvColor(RGB(255, 64, 64)))
+, m_lbuttondown(false)
+, mp_tooltip(NULL)
 {
  m_horizLabels.reserve(16);
  m_vertLabels.reserve(16);
@@ -243,6 +228,7 @@ CMapEditorCtrl::~CMapEditorCtrl()
 {
  delete[] mp_itemColors;
  delete[] mp_mapTr;
+ delete mp_tooltip;
 }
 
 BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
@@ -250,20 +236,62 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_WM_PAINT()
  ON_WM_DESTROY()
  ON_WM_LBUTTONDOWN()
+ ON_WM_LBUTTONUP()
+ ON_WM_LBUTTONDBLCLK()
+ ON_WM_MOUSEMOVE()
+ ON_WM_MOUSEWHEEL()
  ON_WM_SETFOCUS()
  ON_WM_KILLFOCUS()
  ON_WM_ENABLE()
  ON_MESSAGE(WM_SETFONT, OnWMSetFont)
  ON_MESSAGE(WM_GETFONT, OnWMGetFont)
  ON_WM_SIZE()
+ ON_WM_KEYDOWN()
+ ON_WM_GETDLGCODE()
+ ON_WM_CONTEXTMENU()
+ ON_WM_INITMENUPOPUP()
+ ON_COMMAND(ID_MAPED_POPUP_INC, OnInc)
+ ON_COMMAND(ID_MAPED_POPUP_DEC, OnDec)
+ ON_COMMAND(ID_MAPED_POPUP_SETTO, OnSetTo)
+ ON_COMMAND(ID_MAPED_POPUP_SUB, OnSub)
+ ON_COMMAND(ID_MAPED_POPUP_ADD, OnAdd)
+ ON_COMMAND(ID_MAPED_POPUP_MUL, OnMul)
+ ON_COMMAND(ID_MAPED_POPUP_REV, OnRevert)
+ ON_COMMAND(ID_MAPED_POPUP_EXPORTCSV, OnExportCsv)
+ ON_COMMAND(ID_MAPED_POPUP_IMPORTCSV, OnImportCsv)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INC, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_DEC, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SETTO, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SUB, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_ADD, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_MUL, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_REV, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_IMPORTCSV, OnUpdateImportCsv)
 END_MESSAGE_MAP()
+
+UINT CMapEditorCtrl::OnGetDlgCode()
+{
+ const MSG *pMsg = GetCurrentMessage();
+ pMsg = ((const MSG *)pMsg->lParam);
+
+ if (pMsg != NULL)
+ {
+  if (pMsg->message == WM_KEYDOWN)
+  {
+   if (pMsg->wParam == VK_ESCAPE || pMsg->wParam == VK_TAB) //don't eat Esc and TAB keys, so parent dialog will be able to process them
+    return 0;
+  }
+ }
+
+ return Super::OnGetDlgCode() | DLGC_WANTALLKEYS;
+}
 
 BOOL CMapEditorCtrl::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
 {
  BOOL result = CWnd::CreateEx(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE, NULL, NULL, dwStyle,
                rect.left, rect.top, rect.Width(), rect.Height(), pParent->GetSafeHwnd(), (HMENU)((UINT_PTR)id));
  if (!result)
-  AfxMessageBox(_T("Error creating MapEditorCtrl control's window!"));
+  SECUMessageBox(_T("Error creating MapEditorCtrl control's window!"));
 
  return result;
 }
@@ -305,6 +333,132 @@ void CMapEditorCtrl::OnDestroy()
   m_clipRgn.DeleteObject(); 
 
  m_forceRedraw = true;
+}
+
+void CMapEditorCtrl::OnUpdateSetTo(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(!m_readOnly);
+}
+
+void CMapEditorCtrl::OnUpdateImportCsv(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(!m_readOnly);
+}
+
+BOOL CMapEditorCtrl::PreTranslateMessage(MSG * pMsg)
+{
+ if (mp_tooltip)
+  mp_tooltip->RelayEvent(pMsg);
+
+ return Super::PreTranslateMessage(pMsg);
+} 
+
+BOOL CMapEditorCtrl::OnEraseBkgnd(CDC* pDC) 
+{
+ return TRUE; //prevent flickering
+}
+
+void CMapEditorCtrl::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
+{
+ MenuHelpers::InitMenuPopup(this, pMenu, nIndex, bSysMenu);
+}
+
+void CMapEditorCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+ CMenu menu;
+ VERIFY(menu.LoadMenu(IDR_MAPEDITOR_POPUP_MENU));
+ CMenu *pSub = menu.GetSubMenu(0);
+ pSub->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
+}
+
+void CMapEditorCtrl::OnSize(UINT nType, int cx, int cy)
+{
+ Super::OnSize(nType, cx, cy);
+
+ //make program to recreate bitmaps because new size may differ
+ if (mp_bmOldGrid && m_dcGrid.GetSafeHdc())
+ {
+  m_dcGrid.SelectObject(mp_bmOldGrid);
+  m_bmGrid.DeleteObject();
+ }
+
+ if (mp_bmOldMark && m_dcMark.GetSafeHdc())
+ {
+  m_dcMark.SelectObject(mp_bmOldMark);
+  m_bmMark.DeleteObject();
+ }
+
+ //update position of edit if it is active
+ if (mp_edit.get())
+ {
+  CDC* pDC = GetDC();
+  CRect rect = _GetItemRect(pDC, m_cur_i, m_cur_j);
+  ReleaseDC(pDC);
+
+  if (NULL!=m_clipRgn.GetSafeHandle())
+   m_clipRgn.DeleteObject();
+  m_clipRgn.CreateRectRgn(rect.left, rect.top, rect.right, rect.bottom);
+
+  mp_edit->MoveWindow(&rect);
+ }
+
+ Redraw();
+}
+
+LRESULT CMapEditorCtrl::OnWMSetFont(WPARAM wParam, LPARAM lParam)
+{
+ if(wParam != NULL)
+ {
+  CFont *pFont = CFont::FromHandle((HFONT)wParam);
+  if(pFont != NULL)
+  {
+   LOGFONT tLogFont;
+   memset(&tLogFont, 0, sizeof(LOGFONT));
+   if (pFont->GetLogFont(&tLogFont))
+   {
+    if((HFONT)m_cFont != NULL)
+    {
+     m_cFont.DeleteObject();
+     ASSERT((HFONT)m_cFont == NULL);
+    }	
+    if (m_boldFont)
+     tLogFont.lfWeight = 700;
+    m_cFont.CreateFontIndirect(&tLogFont);
+   }
+  }
+ }
+
+ if(lParam && ::IsWindow(m_hWnd))
+  Redraw(); //redraw all elements
+
+ return 0;
+}
+
+LRESULT CMapEditorCtrl::OnWMGetFont(WPARAM wParam, LPARAM lParam)
+{
+ return (LRESULT)((HFONT)m_cFont);
+}
+
+void CMapEditorCtrl::OnSetFocus(CWnd* pLast)
+{
+ Super::OnSetFocus(pLast);
+ if (m_dcGrid.GetSafeHdc())
+ {
+  _DrawGrid();
+  CClientDC dc(this);
+  _ShowImage(&dc);
+ }
+}
+
+void CMapEditorCtrl::OnKillFocus(CWnd* pNewWnd)
+{
+ Super::OnKillFocus(pNewWnd);
+ if (m_dcGrid.GetSafeHdc())
+ {
+  _DrawGrid();
+  CClientDC dc(this);
+  _ShowImage(&dc);
+ }
 }
 
 void CMapEditorCtrl::OnPaint()
@@ -358,226 +512,61 @@ void CMapEditorCtrl::OnPaint()
  _ShowImage(&dc);
 }
 
-void CMapEditorCtrl::_DrawGrid(int ii /*=-1*/, int jj /*=-1*/)
-{
- bool upd_all = (ii == -1 || jj == -1);
- if (NULL==m_dcGrid.GetSafeHdc())
-  return;
-
- if (upd_all)
- { //draw all cells
-  CRect rc;
-  GetClientRect(&rc);
-  m_dcGrid.FillRect(rc, &m_bgrdBrush); //fill client rect with background
-  for(int i = 0; i < m_rows; ++i)
-  {
-   for(int j = 0; j < m_cols; ++j)
-   {
-    float value = _GetItemTr(i,j);
-    CRect rect = _GetItemRect(&m_dcGrid, i, j);
-    int index = _GetGradIndex(value);
-    COLORREF customColor = _GetItem<COLORREF>(mp_itemColors, i, j);
-    m_dcGrid.SetBkColor(IsWindowEnabled() ? (customColor ? customColor : m_gradColor[index]) : GetSysColor(COLOR_3DFACE));
-    m_dcGrid.SetBkMode(TRANSPARENT);
-    m_dcGrid.FillSolidRect(rect, IsWindowEnabled() ? (customColor ? customColor : m_gradColor[index]) : GetSysColor(COLOR_3DFACE));
-    _DrawItem(m_dcGrid, rect, _FloatToStr(value, m_decPlaces));
-   }
-  }
- }
- else
- { //draw only certain cell
-  CRect rect = _GetItemRect(&m_dcGrid, ii, jj);
-  m_dcGrid.FillRect(rect, &m_bgrdBrush); //fill cell rect with background
-  float value = _GetItemTr(ii,jj);
-  int index = _GetGradIndex(value);
-  COLORREF customColor = _GetItem<COLORREF>(mp_itemColors, ii, jj);
-  m_dcGrid.SetBkColor(IsWindowEnabled() ? (customColor ? customColor : m_gradColor[index]) : GetSysColor(COLOR_3DFACE));
-  m_dcGrid.SetBkMode(TRANSPARENT);
-  m_dcGrid.FillSolidRect(rect, IsWindowEnabled() ? (customColor ? customColor : m_gradColor[index]) : GetSysColor(COLOR_3DFACE));
-  _DrawItem(m_dcGrid, rect, _FloatToStr(value, m_decPlaces));
- }
-}
-
-void CMapEditorCtrl::_DrawLabels(void)
-{
- if (NULL==m_dcGrid.GetSafeHdc())
-  return;
- //draw vertical labels
- if (mp_vertLabels && m_vertShow)
- {
-  for(int i = 0; i < m_rows; ++i)
-  {
-   CRect rect = _GetItemRect(&m_dcGrid, i, 0);
-   CFont* oldFont = m_dcGrid.SelectObject(&m_cFont);
-   m_dcGrid.TextOut(0, rect.top, m_vertLabels[i]);
-   m_dcGrid.SelectObject(oldFont); 
-  }
- }
- 
- //draw horizontal labels
- if (mp_horizLabels && m_horizShow)
- {
-  CRect clrc;
-  GetClientRect(&clrc);
-  for(int j = 0; j < m_cols; ++j)
-  {
-   CRect rect = _GetItemRect(&m_dcGrid, 0, j);
-   CFont* oldFont = m_dcGrid.SelectObject(&m_cFont);
-   m_dcGrid.TextOut(rect.left, clrc.bottom - m_label_height, m_horizLabels[j]);
-   m_dcGrid.SelectObject(oldFont); 
-  }
- }
-}
-
-void CMapEditorCtrl::_DrawMarkers(void)
-{
- if (m_dcMark.GetSafeHdc()==NULL)
-  return;
- CRect rc;
- GetClientRect(&rc);
- m_dcMark.FillRect(rc, &m_blackBrush);
-
- if (IsWindowEnabled() && m_showMarkers)
- { 
-  if (mp_horizLabels || mp_vertLabels)
-  {
-   if (m_spotMarkers)
-   {//ball
-    CRect rect = _GetItemRect(&m_dcMark, 0, 0);
-    int r = MathHelpers::Round((((float)rect.Height())/2)*m_spotMarkersSize);
-    CObject* oldBrush =  m_dcMark.SelectObject(&m_ballBrush); 
-    m_dcMark.Ellipse(m_ballCoord.x - r, m_ballCoord.y - r, m_ballCoord.x + r, m_ballCoord.y + r);
-    m_dcMark.SelectObject(oldBrush);
-   }
-   else
-   {//rectangle
-    for (size_t i = 0; i < m_markedItems.size(); ++i)
-     _DrawMarker(&m_dcMark, m_markedItems[i].x, m_markedItems[i].y);
-   }
-  }
- }
-}
-
-void CMapEditorCtrl::_ShowImage(CDC* pDC, CRect* p_rect /*=NULL*/)
-{
- if (NULL==pDC || NULL==pDC->GetSafeHdc() || NULL==m_dcGrid.GetSafeHdc() || NULL==m_dcMark.GetSafeHdc())
-  return;
- CDC memDC;
- CBitmap memBmp;
- CRect rc;
- GetClientRect(&rc);
-
- memDC.CreateCompatibleDC(pDC);
- 
- if (p_rect)
- { //show specified rect only
-  memBmp.CreateCompatibleBitmap(pDC, p_rect->Width(), p_rect->Height());
-  CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
-  if (memDC.GetSafeHdc() != NULL)
-  {
-   memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcGrid, p_rect->left, p_rect->top, SRCCOPY);
-   memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcMark, p_rect->left, p_rect->top, SRCINVERT);
-   if (NULL!=m_clipRgn.GetSafeHandle())
-    pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
-   pDC->BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &memDC, p_rect->left, p_rect->top, SRCCOPY);
-   if (NULL!=m_clipRgn.GetSafeHandle())
-    pDC->SelectClipRgn(NULL, RGN_COPY);
-  }
-  memDC.SelectObject(oldBmp);
- }
- else
- { //show full size image
-  memBmp.CreateCompatibleBitmap(pDC, rc.Width(), rc.Height());
-  CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
-  if (memDC.GetSafeHdc() != NULL)
-  {
-   memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcGrid, 0, 0, SRCCOPY);
-   memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcMark, 0, 0, SRCINVERT);
-   if (NULL!=m_clipRgn.GetSafeHandle())
-    pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
-   pDC->BitBlt(0, 0, rc.Width(), rc.Height(), &memDC, 0, 0, SRCCOPY);
-   if (NULL!=m_clipRgn.GetSafeHandle())
-    pDC->SelectClipRgn(NULL, RGN_COPY);
-  }
-  memDC.SelectObject(oldBmp);
- }
-}
-
-void CMapEditorCtrl::_DrawItem(CDC& dc, const CRect& rect, LPCTSTR text)
-{
- dc.Draw3dRect(&rect, RGB(0,0,0), RGB(0,0,0));
- CFont* oldFont = dc.SelectObject(&m_cFont);
- dc.SetTextColor(GetSysColor(IsWindowEnabled() ? COLOR_WINDOWTEXT : COLOR_GRAYTEXT));
- dc.DrawText(text, (LPRECT)&rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE); 
- dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
- dc.SelectObject(oldFont);
-}
-
-void CMapEditorCtrl::SetRange(float i_min, float i_max)
-{
- m_minVal = i_min;
- m_maxVal = i_max;
-}
-
-int CMapEditorCtrl::_GetGradIndex(float value)
-{
- float minVal = m_absGrad ? m_minVal : m_vMinVal;
- float maxVal = m_absGrad ? m_maxVal : m_vMaxVal;
- float div = ((maxVal - minVal)/((float)m_gradColor.size()));
- int index = MathHelpers::Round((value - (minVal)) / (div == 0 ? 0.000001f : div));
- if (index < 0) index = 0;
- if (index > (int)m_gradColor.size()-1) index = (int)m_gradColor.size()-1;
- return index;
-}
-
-void CMapEditorCtrl::AttachMap(float* p_map)
-{
- ASSERT(p_map);
- mp_map = p_map;
- _UpdateMinMaxElems();
-}
-
 void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
-{
- for(int i = 0; i < m_rows; ++i)
+{  
+ if (mp_other && mp_other != this)
  {
-  for(int j = 0; j < m_cols; ++j)
-  {   
-   CRect rect = _GetItemRect(&m_dcGrid, i, j);
-   if (rect.PtInRect(point))
+  float value = 0;
+  if (!mp_other->_ValidateItem(mp_other->mp_edit.get(), &value))
+   mp_other->_DeactivateEdit(); 
+ }
+
+ int i, j;
+ if (_CellByPoint(point, i, j))
+ {
+  m_lbuttondown = true;
+  if ((mp_edit.get() && mp_edit->GetSafeHwnd()))
+  {
+   float value = 0;
+   if (_ValidateItem(mp_edit.get(), &value))
    {
-    if ((mp_edit.get() && mp_edit->GetSafeHwnd()))
+    if (m_OnChange)
     {
-     float value = 0;
-     if (_ValidateItem(mp_edit.get(), &value))
+     float previousValue = _GetItemTr(m_cur_i, m_cur_j);       
+     _SetItemTr(m_cur_i, m_cur_j, value); //save result
+     if (previousValue != value)
      {
-      if (m_OnChange)
+      m_OnChange();
+      if (!m_absGrad)
       {
-       float previousValue = _GetItemTr(m_cur_i, m_cur_j);       
-       _SetItemTr(m_cur_i, m_cur_j, value); //save result
-       if (previousValue != value)
-       {
-        m_OnChange();
-        if (!m_absGrad)
-        {
-         _UpdateMinMaxElems();
-         _DrawGrid();    //redraw grid because gradient should be updated
-         _DrawLabels();
-         CClientDC dc(this);
-         _ShowImage(&dc);
-        }
-       }
+       _UpdateMinMaxElems();
+       _DrawGrid();    //redraw grid because gradient should be updated
+       CClientDC dc(this);
+       _ShowImage(&dc);
       }
-      _DeactivateEdit();
-      m_cur_i = i; m_cur_j = j;
-      _ActivateEdit();       
      }
     }
-    else
-    { //no previous controls created, just create new control
-     m_cur_i = i; m_cur_j = j;
-     _ActivateEdit();    
+    _DeactivateEdit();
+
+    bool redraw = _SelChange(i, j, i, j);
+    if (redraw)
+    {
+     _DrawGrid();
+     CClientDC dc(this);
+     _ShowImage(&dc); //update only selected cells
     }
+   }
+  }
+  else
+  { //no previous controls created, just update position of selection
+   SetFocus();
+   bool redraw = _SelChange(i, j, i, j);
+   if (redraw)
+   {
+    _DrawGrid();
+    _DrawLabels();
+    CClientDC dc(this);
+    _ShowImage(&dc);
    }
   }
  }
@@ -585,32 +574,149 @@ void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
  return Super::OnLButtonDown(nFlags, point);
 }
 
-CRect CMapEditorCtrl::_GetItemRect(CDC* pDC, int i , int j)
+void CMapEditorCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 {
- CRect rc;
- GetClientRect(&rc);
- int w_off = _GetLabelWidth(pDC);
- int h_off = _GetLabelHeight(pDC);
- rc.left+=w_off;
- rc.bottom-=h_off;
- int space  = 2;
- float width  = ((float)(rc.right - rc.left) - ((float)m_cols)*space) / ((float)m_cols);
- float height = ((float)(rc.bottom - rc.top) - ((float)m_rows)*space) / ((float)m_rows);
- return CRect(MathHelpers::Round(j*(width+space))+w_off, MathHelpers::Round((m_rows-1-i)*(height+space)), MathHelpers::Round(j*(width+space) + width)+w_off, MathHelpers::Round((m_rows-1-i)*(height+space) + height));
+ _SelChange(m_cur_i, m_cur_j, m_end_i, m_end_j); //notify about change of selection
+
+ m_lbuttondown = false;
+
+ return Super::OnLButtonUp(nFlags, point);
 }
 
-CRect CMapEditorCtrl::_GetMarkerRect(int i, int j, int inflate /*=2*/)
+void CMapEditorCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
- CRect rect = _GetItemRect(&m_dcMark, i, j);
- rect.InflateRect(inflate,inflate,inflate,inflate);
- return rect;
+ if (m_readOnly)
+ {
+  Super::OnLButtonDblClk(nFlags, point);
+  return;
+ }
+
+ int i, j;
+ if (_CellByPoint(point, i, j))
+ {
+  if ((mp_edit.get() && mp_edit->GetSafeHwnd()))
+  {
+   float value = 0;
+   if (_ValidateItem(mp_edit.get(), &value))
+   {
+    if (m_OnChange)
+    {
+     float previousValue = _GetItemTr(m_cur_i, m_cur_j);       
+     _SetItemTr(m_cur_i, m_cur_j, value); //save result
+     if (previousValue != value)
+     {
+      m_OnChange();
+      if (!m_absGrad)
+      {
+       _UpdateMinMaxElems();
+       _DrawGrid();    //redraw grid because gradient should be updated
+       CClientDC dc(this);
+       _ShowImage(&dc);
+      }
+     }
+    }
+    _DeactivateEdit();
+    _SelChange(i, j, i, j);
+    _ActivateEdit();
+   }
+  }
+  else
+  { //no previous controls created, just create new control
+   bool redraw = _SelChange(i, j, i, j);
+   if (redraw)
+   {
+    _DrawGrid();
+    CClientDC dc(this);
+    _ShowImage(&dc); //update only selected cells
+   }
+   _ActivateEdit();
+  }
+ }
+
+ Super::OnLButtonDblClk(nFlags, point);
 }
 
-CString CMapEditorCtrl::_FloatToStr(float value, int decPlaces)
+void CMapEditorCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
- TCHAR buff[16];
- _stprintf(buff, "%.*f", decPlaces, value);
- return buff;
+ if (mp_edit.get() || !m_dcGrid.GetSafeHdc())
+ {
+  Super::OnMouseMove(nFlags, point);
+  return;
+ }
+
+ int i, j;
+ if (_CellByPoint(point, i, j))
+ {
+  if (m_lbuttondown && (nFlags & MK_LBUTTON))
+  {
+   bool redraw = _SelChange(m_cur_i, m_cur_j, i, j, false);
+   if (redraw)
+   {
+    _DrawGrid();
+    CClientDC dc(this);
+    _ShowImage(&dc); //update only selected cells
+   }
+  }
+  else if (mp_mapOrig)
+  {
+   if (!mp_tooltip)
+   { //activate toolttip
+    _ActivateTooltip(i, j);
+   }
+   else if (m_tp_i != i || m_tp_j != j)
+   {
+    mp_tooltip->Activate(false);
+    delete mp_tooltip;
+    _ActivateTooltip(i, j);
+   }
+  }
+ }
+
+ Super::OnMouseMove(nFlags, point);
+}
+
+BOOL CMapEditorCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+ if (m_readOnly)
+ {
+  return Super::OnMouseWheel(nFlags, zDelta, pt);
+ }
+
+ if (mp_edit.get())
+ {
+  float value = 0;
+  if (mp_edit->GetValue(value))
+  {   
+   value+= zDelta > 0 ? m_increment : -m_increment;
+   value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+   mp_edit->SetValue(value);
+  }
+  else
+   mp_edit->SetValue(0.0f);
+
+  return Super::OnMouseWheel(nFlags, zDelta, pt);
+ }
+
+ const std::vector<std::pair<int, int> >& sel = GetSelection();
+ for(size_t i = 0; i < sel.size(); ++i)
+ {
+  float value = _GetItemTr(sel[i].first, sel[i].second);
+  value+= zDelta > 0 ? m_increment : -m_increment;
+  value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+  _SetItemTr(sel[i].first, sel[i].second, value);
+ }
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);
+ 
+ return Super::OnMouseWheel(nFlags, zDelta, pt);
 }
 
 void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
@@ -632,67 +738,292 @@ void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
    {
     _UpdateMinMaxElems();
     _DrawGrid();     //redraw grid because gradient should be updated
-    _DrawLabels();
     CClientDC dc(this);
     _ShowImage(&dc);
    }
   }
  }
 
- switch(nChar)
+ if (nChar==VK_RETURN)
  {
-  case VK_UP:
-   if (m_cur_i < m_rows-1)
+  _DeactivateEdit();
+ }
+}
+
+void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+ if ((nChar >= 0x30 && nChar <= 0x39) || nChar==VK_OEM_MINUS)
+ { //activate edit when user start to type a number
+  _ActivateEdit();
+  CString cs;
+  if (nChar==VK_OEM_MINUS)
+   cs.Insert(0, '-');
+  else
+   cs.Insert(0, nChar);
+
+  mp_edit->SetWindowText(cs);
+
+  Super::OnKeyDown(nChar, nRepCnt, nFlags);
+  return;
+ }
+
+ switch(nChar)
+ { 
+  case VK_HOME:
    {
-    _DeactivateEdit();
-    m_cur_i++;
-    _ActivateEdit();
-   }
-   else
-   {
-    if (m_enAbroadUp)
+    bool redraw;
+    if (GetKeyState(VK_CONTROL) & 0x8000)
+     redraw = _SelChange(m_rows-1, m_cur_j, m_rows-1, m_cur_j);
+    else
+     redraw = _SelChange(m_cur_i, 0, m_cur_i, 0);      
+    if (redraw)
     {
-     _DeactivateEdit();
-     if (m_OnAbroadMove)
-      m_OnAbroadMove(ABROAD_UP, m_cur_j);
+     _DrawGrid();
+     CClientDC dc(this);
+     _ShowImage(&dc); //update only selected cells
     }
    }
    break;
-  case VK_RETURN:                 //move down if user pressed Enter key
-  case VK_DOWN:
-   if (m_cur_i > 0)
+  case VK_END:
    {
-    _DeactivateEdit();
-    m_cur_i--;
-    _ActivateEdit();
+    bool redraw;
+    if (GetKeyState(VK_CONTROL) & 0x8000)
+     redraw = _SelChange(0, m_cur_j, 0, m_cur_j);
+    else
+     redraw = _SelChange(m_cur_i, m_cols-1, m_cur_i, m_cols-1); 
+    if (redraw)
+    {
+     _DrawGrid();
+     CClientDC dc(this);
+     _ShowImage(&dc); //update only selected cells
+    }
+   }
+   break;
+
+  case VK_INSERT:
+   _ActivateEdit();
+   break;
+
+  case VK_RETURN:                 //move down if user pressed Enter key
+   if (GetSelection().size() < 2) //ignore Return key if more than one cell is selected
+   {
+    bool redraw;
+    if (m_cur_i > 0)
+    {
+     redraw = _SelChange(m_cur_i-1, m_cur_j, m_cur_i-1, m_cur_j);
+    }
+    else
+    {
+     if (m_cur_j < m_cols-1)   
+      redraw = _SelChange(m_rows-1, m_cur_j+1, m_rows-1, m_cur_j+1);
+     else
+      redraw = _SelChange(m_rows-1, 0, m_rows-1, 0);
+    }
+
+    if (redraw)
+    {
+     _DrawGrid();
+     CClientDC dc(this);
+     _ShowImage(&dc); //update only selected cells
+    }
+   }
+   break;
+
+  case VK_UP:
+   if ((GetKeyState(VK_SHIFT) & 0x8000))
+   {
+    if (m_end_i < m_rows-1)
+    {
+     bool redraw = _SelChange(m_cur_i, m_cur_j, m_end_i + 1, m_end_j);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
    }
    else
    {
-    if (m_enAbroadDown)
+    if (m_cur_i < m_rows-1)
     {
-     _DeactivateEdit();
-     if (m_OnAbroadMove)
-      m_OnAbroadMove(ABROAD_DOWN, m_cur_j);
+     bool redraw = _SelChange(m_cur_i + 1, m_cur_j,  m_cur_i + 1, m_cur_j);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
+    else
+    {
+     if (m_enAbroadUp)
+     {
+      bool redraw = _SelChange(m_cur_i, m_cur_j, m_cur_i, m_cur_j);
+      if (redraw)
+      {
+       _DrawGrid();
+       CClientDC dc(this);
+       _ShowImage(&dc); //update only selected cells
+      }
+
+      if (m_OnAbroadMove)
+       m_OnAbroadMove(ABROAD_UP, m_cur_j);
+     }
+    }
+   }
+   break;
+  case VK_DOWN:
+   if ((GetKeyState(VK_SHIFT) & 0x8000))
+   {
+    if (m_end_i > 0)
+    {
+     bool redraw = _SelChange(m_cur_i, m_cur_j, m_end_i - 1, m_end_j);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
+   }
+   else
+   {
+    if (m_cur_i > 0)
+    {
+     bool redraw = _SelChange(m_cur_i - 1, m_cur_j, m_cur_i - 1, m_cur_j);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
+    else
+    {
+     if (m_enAbroadDown)
+     {
+      bool redraw = _SelChange(m_cur_i, m_cur_j, m_cur_i, m_cur_j);
+      if (redraw)
+      {
+       _DrawGrid();
+       CClientDC dc(this);
+       _ShowImage(&dc); //update only selected cells
+      }
+
+      if (m_OnAbroadMove)
+       m_OnAbroadMove(ABROAD_DOWN, m_cur_j);
+     }
     }
    }
    break;
   case VK_LEFT:
-   if (m_cur_j > 0)
+   if ((GetKeyState(VK_SHIFT) & 0x8000))
    {
-    _DeactivateEdit();
-    m_cur_j--;
-    _ActivateEdit();
+    if (m_end_j > 0)
+    {
+     bool redraw = _SelChange(m_cur_i, m_cur_j, m_end_i, m_end_j - 1);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
+   }
+   else
+   {
+    if (m_cur_j > 0)
+    {
+     bool redraw = _SelChange(m_cur_i, m_cur_j - 1, m_cur_i, m_cur_j - 1);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
    }
    break;
   case VK_RIGHT:
-   if (m_cur_j < m_cols-1)
+   if ((GetKeyState(VK_SHIFT) & 0x8000))
    {
-    _DeactivateEdit();
-    m_cur_j++;
-    _ActivateEdit();
+    if (m_end_j < m_cols-1)
+    {
+     bool redraw = _SelChange(m_cur_i, m_cur_j, m_end_i, m_end_j + 1);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
+   }
+   else
+   {
+    if (m_cur_j < m_cols-1)
+    {
+     bool redraw = _SelChange(m_cur_i, m_cur_j + 1, m_cur_i, m_cur_j + 1);
+     if (redraw)
+     {
+      _DrawGrid();
+      CClientDC dc(this);
+      _ShowImage(&dc); //update only selected cells
+     }
+    }
    }
    break;
- } 
+
+  case 0x57:  //"W"
+  case VK_OEM_6:   //"]"
+  case VK_OEM_PERIOD: //"."
+   if (m_readOnly) break;
+   {
+    const std::vector<std::pair<int, int> >& sel = GetSelection();
+    for(size_t i = 0; i < sel.size(); ++i)
+    {
+     float value = _GetItemTr(sel[i].first, sel[i].second);
+     value+= m_increment;
+     value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+     _SetItemTr(sel[i].first, sel[i].second, value);
+    }
+    m_OnChange();
+    if (!m_absGrad)
+    {
+     _UpdateMinMaxElems();
+    }
+    _DrawGrid();  //fully redraw grid because gradient should be updated
+    CClientDC dc(this);
+    _ShowImage(&dc);
+   }
+   break;
+
+  case 0x51:   //"Q"
+  case VK_OEM_5: //"\"
+  case VK_OEM_COMMA: //","
+   if (m_readOnly) break;
+   {
+    const std::vector<std::pair<int, int> >& sel = GetSelection();
+    for(size_t i = 0; i < sel.size(); ++i)
+    {
+     float value = _GetItemTr(sel[i].first, sel[i].second);
+     value-= m_increment;
+     value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+     _SetItemTr(sel[i].first, sel[i].second, value);
+    }
+    m_OnChange();
+    if (!m_absGrad)
+    {
+     _UpdateMinMaxElems();
+    }
+   _DrawGrid(); //fully redraw grid because gradient should be updated
+   CClientDC dc(this);
+   _ShowImage(&dc);
+  }
+  break;
+ }
+
+ Super::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
@@ -715,102 +1046,13 @@ void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
    {
     _UpdateMinMaxElems();
     _DrawGrid();   //redraw grid because gradient should be updated
-    _DrawLabels();
     CClientDC dc(this);
     _ShowImage(&dc);
    }
   }
  }
-}
 
-bool CMapEditorCtrl::_ValidateItem(CEditExCustomKeys* pItem, float* p_value /*= NULL*/)
-{
- float value = 0;
- bool convres = pItem->GetValue(value); 
- pItem->m_error = !(convres && value >= m_minVal && value <= m_maxVal);
- pItem->Invalidate();
- if (p_value && !pItem->m_error)
-  *p_value = value; //save result of there are no errors
- return !pItem->m_error;
-}
-
-void CMapEditorCtrl::OnSetFocus(CWnd* pLast)
-{
- if (mp_edit.get() && mp_edit->GetSafeHwnd())
-  mp_edit->SetFocus(); //already exists, just set focus
- else
-  _ActivateEdit(); //create and initialize edit box
-
- Super::OnSetFocus(pLast);
-}
-
-void CMapEditorCtrl::OnKillFocus(CWnd* pNewWnd)
-{
- Super::OnKillFocus(pNewWnd);
-}
-
-void CMapEditorCtrl::_ActivateEdit(bool onselchange /*= true*/)
-{ 
- if (m_readOnly) return;
- CDC* pDC = GetDC();
- CRect rect = _GetItemRect(pDC, m_cur_i, m_cur_j);
- ReleaseDC(pDC);
- m_clipRgn.CreateRectRgn(rect.left, rect.top, rect.right, rect.bottom);
-//ASSERT(!mp_edit.get());
- mp_edit.reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditChar), fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditKill), m_minVal, m_maxVal, m_increment));
- mp_edit->Create(WS_BORDER | WS_CHILD | WS_VISIBLE | ES_CENTER, rect, this, 0);
- mp_edit->SetDecimalPlaces(m_decPlaces);
- mp_edit->SetValue(_GetItemTr(m_cur_i, m_cur_j));
- mp_edit->SetFocus();
- mp_edit->SetSel(0, -1); //select all text
- mp_edit->SetFont(GetFont(), TRUE);
-
- if (m_OnSelChange && onselchange)
-  m_OnSelChange();
-}
-
-void CMapEditorCtrl::_DeactivateEdit(void)
-{
- if (mp_edit.get() && mp_edit->GetSafeHwnd())
-  mp_edit->DestroyWindow();
- mp_edit.reset();
-
- if (NULL!=m_clipRgn.GetSafeHandle())
-  m_clipRgn.DeleteObject();
-}
-
-LRESULT CMapEditorCtrl::OnWMSetFont(WPARAM wParam, LPARAM lParam)
-{
- if(wParam != NULL)
- {
-  CFont *pFont = CFont::FromHandle((HFONT)wParam);
-  if(pFont != NULL)
-  {
-   LOGFONT tLogFont;
-   memset(&tLogFont, 0, sizeof(LOGFONT));
-   if (pFont->GetLogFont(&tLogFont))
-   {
-    if((HFONT)m_cFont != NULL)
-    {
-     m_cFont.DeleteObject();
-     ASSERT((HFONT)m_cFont == NULL);
-    }	
-    if (m_boldFont)
-     tLogFont.lfWeight = 700;
-    m_cFont.CreateFontIndirect(&tLogFont);
-   }
-  }
- }
-
- if(lParam && ::IsWindow(m_hWnd))
-  Redraw(); //redraw all elements
-
- return 0;
-}
-
-LRESULT CMapEditorCtrl::OnWMGetFont(WPARAM wParam, LPARAM lParam)
-{
- return (LRESULT)((HFONT)m_cFont);
+ _DeactivateEdit();
 }
 
 void CMapEditorCtrl::setOnAbroadMove(EventHandler2 OnCB)
@@ -821,6 +1063,24 @@ void CMapEditorCtrl::setOnAbroadMove(EventHandler2 OnCB)
 void CMapEditorCtrl::setOnChange(EventHandler OnCB)
 {
  m_OnChange = OnCB;
+}
+
+void CMapEditorCtrl::setOnSelChange(EventHandler OnCB)
+{
+ m_OnSelChange = OnCB;
+}
+
+void CMapEditorCtrl::setOnValueTransform(EventHandler3 OnCB)
+{
+ m_OnValueTransform = OnCB;
+}
+
+void CMapEditorCtrl::AttachMap(float* p_map, float* p_mapOrig /*= NULL*/)
+{
+ ASSERT(p_map);
+ mp_map = p_map;
+ mp_mapOrig = p_mapOrig;
+ _UpdateMinMaxElems();
 }
 
 void CMapEditorCtrl::AttachLabels(const float* horizLabels, const float* vertLabels)
@@ -845,43 +1105,15 @@ void CMapEditorCtrl::AttachLabels(const float* horizLabels, const float* vertLab
  }
 }
 
-int CMapEditorCtrl::_GetLabelWidth(CDC* pDC)
+void CMapEditorCtrl::SetCSVSepSymbol(char sepsymb)
 {
- if (m_label_width >= 0)
-  return m_label_width;
-
- m_label_width = 0;
- if (mp_vertLabels && m_vertShow)
- {
-  for (size_t i = 0; i < m_vertLabels.size(); ++i)
-  {
-   CSize sz = pDC->GetTextExtent(m_vertLabels[i]);
-   if (sz.cx > m_label_width)
-    m_label_width = sz.cx;
-  }
- 
-  //apply mimimum label's width
-  CSize sz = pDC->GetTextExtent(templateStr, m_minLabelWidthInChars);
-  if (sz.cx > m_label_width)
-   m_label_width = sz.cx;
- }
-   
- return m_label_width;
+ m_csvsep_symb = sepsymb;
 }
 
-int CMapEditorCtrl::_GetLabelHeight(CDC* pDC)
+void CMapEditorCtrl::SetRange(float i_min, float i_max)
 {
- if (m_label_height >= 0)
-  return m_label_height;
-
- m_label_height = 0;
- if (mp_horizLabels && m_horizShow)
- {
-  CSize sz = pDC->GetTextExtent(m_horizLabels[0]);
-  m_label_height = sz.cy;
- }
-
- return m_label_height;
+ m_minVal = i_min;
+ m_maxVal = i_max;
 }
 
 void CMapEditorCtrl::SetDecimalPlaces(int value, int horiz, int vert)
@@ -891,54 +1123,9 @@ void CMapEditorCtrl::SetDecimalPlaces(int value, int horiz, int vert)
  m_decPlacesV = vert;
 }
 
-void CMapEditorCtrl::_DrawMarker(CDC* pDC, int i, int j)
+void CMapEditorCtrl::SetValueIncrement(float inc)
 {
- CRect rect = _GetMarkerRect(i, j, 2);
- CBrush * oldBrush = (CBrush*)pDC->SelectStockObject(NULL_BRUSH);
- CPen* oldPen = pDC->SelectObject(&redPen);
- pDC->Rectangle(rect);
- pDC->SelectObject(oldBrush);
- pDC->SelectObject(oldPen);
-}
-
-void CMapEditorCtrl::_2DLookupH(float x, std::vector<int>& pt)
-{
- pt.clear();
- if (x <= mp_horizLabels[0]) { pt.push_back(0); return; }
- if (x >= mp_horizLabels[m_cols-1]) { pt.push_back(m_cols-1); return; }
-
- float dv = 3.0f;
- for(int i = 1; i < m_cols; ++i)
- {
-  float d = mp_horizLabels[i] - mp_horizLabels[i-1];
-  if (x <= mp_horizLabels[i])
-  {
-   if (x < (mp_horizLabels[i-1] + d/dv)) pt.push_back(i-1);
-   else if (x > (mp_horizLabels[i] - d/dv)) pt.push_back(i);
-   else { pt.push_back(i-1); pt.push_back(i); }
-   break;
-  }
- }
-}
-
-void CMapEditorCtrl::_2DLookupV(float x, std::vector<int>& pt)
-{
- pt.clear();
- if (x <= _GetVGrid(0)) { pt.push_back(0); return; }
- if (x >= _GetVGrid(m_rows-1)) { pt.push_back(m_rows-1); return; }
-
- float dv = 3.0f;
- for(int i = 1; i < m_rows; ++i)
- {
-  float d = _GetVGrid(i) - _GetVGrid(i-1);
-  if (x <= _GetVGrid(i))
-  {
-   if (x < (_GetVGrid(i-1) + d/dv)) pt.push_back(i-1);
-   else if (x > (_GetVGrid(i) - d/dv)) pt.push_back(i);
-   else { pt.push_back(i-1); pt.push_back(i); }
-   break;
-  }
- }
+ m_increment = inc;
 }
 
 void CMapEditorCtrl::SetArguments(float i_arg, float j_arg)
@@ -1055,27 +1242,46 @@ void CMapEditorCtrl::ShowLabels(bool horizShow, bool vertShow)
  m_vertShow = vertShow;
 }
 
-void CMapEditorCtrl::SetSelection(int i, int j, bool onselchange /*= true*/)
+void CMapEditorCtrl::SetSelection(int i, int j)
 {
  _DeactivateEdit();
+ SetFocus();
  
- if (i >= m_rows-1)
+ if (i > m_rows-1)
   i = m_rows-1;
- m_cur_i = i;
-
- if (j >= m_cols-1)
+ if (j > m_cols-1)
   j = m_cols-1;
- m_cur_j = j;
 
- _ActivateEdit(onselchange);
+ bool redraw = _SelChange(i, j, i, j);
+ if (redraw)
+ {
+  _DrawGrid();
+  _DrawLabels(); 
+  CClientDC dc(this);
+  _ShowImage(&dc);
+ }
 }
 
-std::pair<int, int> CMapEditorCtrl::GetSelection(void)
+const std::vector<std::pair<int, int> >& CMapEditorCtrl::GetSelection(void)
 {
- if (mp_edit.get())
-  return std::make_pair(m_cur_i, m_cur_j);
- else
-  return std::make_pair(-1, -1);
+ if (m_sel_changed)
+ { //update list of selected cells only if selection actually changed, see also _SelChange() method
+  m_sel.clear();
+  int size_i = abs(m_cur_i - m_end_i);
+  int size_j = abs(m_cur_j - m_end_j);
+  for(int i = 0; i <= size_i; ++i)
+  {
+   for(int j = 0; j <= size_j; ++j)
+   {
+    int ii = (m_end_i > m_cur_i) ? m_cur_i + i : m_cur_i - i;
+    int jj = (m_end_j > m_cur_j) ? m_cur_j + j : m_cur_j - j;
+    m_sel.push_back(std::make_pair(ii, jj));   
+   }
+  }
+  m_sel_changed = false;
+ }
+
+ return m_sel;
 }
 
 void CMapEditorCtrl::EnableAbroadMove(bool up, bool down)
@@ -1084,29 +1290,42 @@ void CMapEditorCtrl::EnableAbroadMove(bool up, bool down)
  m_enAbroadDown = down;
 }
 
-void CMapEditorCtrl::UpdateDisplay(int i /*=-1*/, int j /*=-1*/)
+void CMapEditorCtrl::UpdateDisplay(const std::vector<std::pair<int, int> >* p_updList /*= NULL*/)
 {
- bool upd_all = (i == -1 || j == -1);
  if (mp_edit.get() && mp_edit->GetSafeHwnd())
  {
-  if (upd_all || (m_cur_i == i && m_cur_j == j))
+  if (!p_updList)
+  {
    mp_edit->SetValue(_GetItemTr(m_cur_i, m_cur_j));
+  }
+  else
+  {
+   for(size_t i = 0; i < p_updList->size(); ++i)
+   {
+    if (m_cur_i == (*p_updList)[i].first && m_cur_j == (*p_updList)[i].second)
+    { //update value in the active edit box
+     mp_edit->SetValue(_GetItemTr(m_cur_i, m_cur_j));
+     break;
+    }
+   }
+  }
  }
 
  _UpdateMinMaxElems();
 
  CClientDC dc(this);
- if (upd_all)
+ if (!p_updList)
  { //update full region
   _DrawGrid();
   _DrawLabels();
   _ShowImage(&dc);
  }
  else
- { //update specified cell only
-  _DrawGrid(i, j);
-  if (m_dcGrid.GetSafeHdc())
-   _ShowImage(&dc, &_GetItemRect(&m_dcGrid, i, j));
+ { //update specified cells only
+  _DrawGrid(p_updList);
+  CRect sel_rc;
+  _GetSelRect(sel_rc);
+  _ShowImage(&dc, &sel_rc);
  }
 }
 
@@ -1133,11 +1352,6 @@ void CMapEditorCtrl::ShowMarkers(bool show, bool redraw /*=true*/)
  }
 }
 
-void CMapEditorCtrl::SetValueIncrement(float inc)
-{
- m_increment = inc;
-}
-
 void CMapEditorCtrl::SetGradientList(const std::vector<COLORREF>& colors)
 {
  m_gradColor = colors;
@@ -1148,9 +1362,698 @@ void CMapEditorCtrl::SetItemColor(int i, int j, COLORREF color)
  _SetItem<COLORREF>(mp_itemColors, i, j, color);
 }
 
-void CMapEditorCtrl::setOnSelChange(EventHandler OnCB)
+void CMapEditorCtrl::Redraw(void)
 {
- m_OnSelChange = OnCB;
+ m_forceRedraw = true;
+ Invalidate();
+}
+
+bool CMapEditorCtrl::GetSpotMarkers(void)
+{
+ return m_spotMarkers;
+}
+
+void CMapEditorCtrl::OnInc()
+{
+ const std::vector<std::pair<int, int> >& sel = GetSelection();
+ for(size_t i = 0; i < sel.size(); ++i)
+ {
+  float value = _GetItemTr(sel[i].first, sel[i].second);
+  value+= m_increment;
+  value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+  _SetItemTr(sel[i].first, sel[i].second, value);
+ }
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);   
+}
+
+void CMapEditorCtrl::OnDec()
+{
+ const std::vector<std::pair<int, int> >& sel = GetSelection();
+ for(size_t i = 0; i < sel.size(); ++i)
+ {
+  float value = _GetItemTr(sel[i].first, sel[i].second);
+  value-= m_increment;
+  value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+  _SetItemTr(sel[i].first, sel[i].second, value);
+ }
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);   
+}
+
+void CMapEditorCtrl::OnSetTo()
+{
+ CDynFieldsContainer dfd(this, _T(""), 120, true);
+ float value = .0f;
+ dfd.AppendItem(MLL::GetString(IDS_MAPED_POPUP_SETTO), _T(""), m_minVal, m_maxVal, m_increment, m_decPlaces, &value, MLL::GetString(IDS_MAPED_POPUP_SETTO_TT));
+ if (dfd.DoModal()==IDOK)
+ {
+  value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+  const std::vector<std::pair<int, int> >& sel = GetSelection();
+  for(size_t i = 0; i < sel.size(); ++i)
+   _SetItemTr(sel[i].first, sel[i].second, value);
+
+  m_OnChange();
+  if (!m_absGrad)
+  {
+   _UpdateMinMaxElems();
+  }
+
+  _DrawGrid();
+  CClientDC dc(this);
+  _ShowImage(&dc);   
+ }
+}
+
+void CMapEditorCtrl::OnSub()
+{
+ CDynFieldsContainer dfd(this, _T(""), 120, true);
+ float sub = .0f;
+ dfd.AppendItem(MLL::GetString(IDS_MAPED_POPUP_SUB), _T(""), m_minVal, m_maxVal, m_increment, m_decPlaces, &sub, MLL::GetString(IDS_MAPED_POPUP_SUB_TT));
+ if (dfd.DoModal()==IDOK)
+ {
+  const std::vector<std::pair<int, int> >& sel = GetSelection();
+  for(size_t i = 0; i < sel.size(); ++i)
+  {
+   float value = _GetItemTr(sel[i].first, sel[i].second);
+   value-= sub;
+   value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+   _SetItemTr(sel[i].first, sel[i].second, value);
+  }
+
+  m_OnChange();
+  if (!m_absGrad)
+  {
+   _UpdateMinMaxElems();
+  }
+
+  _DrawGrid();
+  CClientDC dc(this);
+  _ShowImage(&dc);   
+ }
+}
+
+void CMapEditorCtrl::OnAdd()
+{
+ CDynFieldsContainer dfd(this, _T(""), 120, true);
+ float add = .0f;
+ dfd.AppendItem(MLL::GetString(IDS_MAPED_POPUP_ADD), _T(""), m_minVal, m_maxVal, m_increment, m_decPlaces, &add, MLL::GetString(IDS_MAPED_POPUP_ADD_TT));
+ if (dfd.DoModal()==IDOK)
+ {
+  const std::vector<std::pair<int, int> >& sel = GetSelection();
+  for(size_t i = 0; i < sel.size(); ++i)
+  {
+   float value = _GetItemTr(sel[i].first, sel[i].second);
+   value+= add;
+   value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+   _SetItemTr(sel[i].first, sel[i].second, value);
+  }
+
+  m_OnChange();
+  if (!m_absGrad)
+  {
+   _UpdateMinMaxElems();
+  }
+
+  _DrawGrid();
+  CClientDC dc(this);
+  _ShowImage(&dc);   
+ }
+}
+
+void CMapEditorCtrl::OnMul()
+{
+ CDynFieldsContainer dfd(this, _T(""), 120, true);
+ float mul = .0f;
+ dfd.AppendItem(MLL::GetString(IDS_MAPED_POPUP_MUL), _T(""), -m_maxVal, m_maxVal, m_increment, m_decPlaces, &mul, MLL::GetString(IDS_MAPED_POPUP_MUL_TT));
+ if (dfd.DoModal()==IDOK)
+ {
+  const std::vector<std::pair<int, int> >& sel = GetSelection();
+  for(size_t i = 0; i < sel.size(); ++i)
+  {
+   float value = _GetItemTr(sel[i].first, sel[i].second);
+   value*= mul;
+   value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
+   _SetItemTr(sel[i].first, sel[i].second, value);
+  }
+
+  m_OnChange();
+  if (!m_absGrad)
+  {
+   _UpdateMinMaxElems();
+  }
+
+  _DrawGrid();
+  CClientDC dc(this);
+  _ShowImage(&dc);   
+ }
+}
+
+void CMapEditorCtrl::OnRevert()
+{
+ const std::vector<std::pair<int, int> >& sel = GetSelection();
+ for(size_t i = 0; i < sel.size(); ++i)
+ {
+  float value = _GetItemTrO(sel[i].first, sel[i].second);
+  _SetItemTr(sel[i].first, sel[i].second, value);
+ }
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid(); //update all cells because if at least one cell is changed, we should update gradient of all cells
+ CClientDC dc(this);
+ _ShowImage(&dc);   
+}
+
+void CMapEditorCtrl::OnExportCsv()
+{
+ static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
+ CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ save.m_ofn.lpstrDefExt = _T("CSV");
+ if (save.DoModal()==IDOK)
+ {
+  FILE* fh = _tfopen(save.GetPathName(), _T("wb+"));
+  if (NULL == fh)
+  {
+   SECUMessageBox(_T("Can't open file for writing!"), MB_OK | MB_ICONERROR);
+   return;
+  }
+
+  char temp[16];
+  sprintf(temp, "%%s%c", m_csvsep_symb);
+
+  //write function's values
+  for(int i = m_rows-1; i >= 0; --i)
+  {
+   for(int j = 0; j < m_cols; ++j)
+   {
+    float value = _GetItemTr(i, j);
+    CString s;
+    s.Format(_T("%.*f"), m_decPlaces, (float)value);
+
+    if (j == m_cols-1)
+     fprintf(fh, "%s\r\n", (LPCTSTR)s);    
+    else
+     fprintf(fh, temp, (LPCTSTR)s);
+   }   
+  }
+
+  //write horizontal axis's grid
+  for(int j = 0; j < m_cols; ++j)
+  {   
+   if (j == m_cols-1)
+    fprintf(fh, "%s", (LPCTSTR)m_horizLabels[j]);    
+   else
+    fprintf(fh, temp, (LPCTSTR)m_horizLabels[j]);
+  }
+
+  fclose(fh);
+ }
+}
+
+void CMapEditorCtrl::OnImportCsv()
+{
+ static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
+ CFileDialogEx open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ if (open.DoModal()==IDOK)
+ {
+  FILE* file = fopen(open.GetPathName(), "r");
+  if (NULL == file)
+  {
+   SECUMessageBox("Can't open file for reading!", MB_OK | MB_ICONERROR);
+   return;
+  }
+  //parse file
+  std::vector<std::vector<std::string> > csv;
+  char line[8192+1];
+  while (fgets(line, 8192, file))
+  {
+   csv.push_back(StrUtils::TokenizeStr(line, m_csvsep_symb));
+  }
+
+  fclose(file);
+
+  if (csv.size() != (size_t)(m_rows+1))
+  {
+   SECUMessageBox("Error reading csv file! Incorrect number of rows.", MB_OK | MB_ICONERROR);
+   return;
+  }
+  
+  for(size_t i = 0; i < csv.size(); ++i)
+  {
+   if (csv[i].size() != (size_t)m_cols)
+   {
+    SECUMessageBox("Error reading csv file! Incorrect number of values in row.", MB_OK | MB_ICONERROR);
+    return;
+   }
+  }
+
+  //set read values
+  for(int i = 0; i < m_rows; ++i)
+   for(int j = 0; j < m_cols; ++j)
+    _SetItemTr((m_rows-1)-i, j, (float)atof(csv[i][j].c_str())); //save result
+
+  m_OnChange();
+  if (!m_absGrad)
+  {
+   _UpdateMinMaxElems();
+  }
+
+  _DrawGrid();
+  _DrawLabels();
+  CClientDC dc(this);
+  _ShowImage(&dc);   
+ }
+}
+
+bool CMapEditorCtrl::_CellByPoint(CPoint point, int& oi, int& oj)
+{
+ int i = 0;
+ bool found = false;
+ for(; i < m_rows; ++i)
+ { //find row
+  CRect rect = _GetItemRect(&m_dcGrid, i, 0);
+  if (point.y >= rect.top && point.y <= rect.bottom)
+  {
+   found = true;
+   break;
+  }
+ }
+
+ if (found)
+ { //find cell
+  found = false;
+  int j = 0;
+  for(; j < m_cols; ++j)
+  {   
+   CRect rect = _GetItemRect(&m_dcGrid, 0, j);
+   if (point.x >= rect.left && point.x <= rect.right)
+   {
+    oi = i, oj = j; //save result
+    return true;
+   }
+  }
+ }
+
+ return false;
+}
+
+bool CMapEditorCtrl::_isCellInSelRect(int i, int j)
+{
+ return (((m_end_i >= m_cur_i) && i >= m_cur_i && i <= m_end_i) || ((m_end_i < m_cur_i) && i <= m_cur_i && i >= m_end_i)) &&
+        (((m_end_j >= m_cur_j) && j >= m_cur_j && j <= m_end_j) || ((m_end_j < m_cur_j) && j <= m_cur_j && j >= m_end_j));
+}
+
+void CMapEditorCtrl::_GetSelRect(CRect& o_rc)
+{
+ CRect rc_lt = _GetItemRect(&m_dcGrid, std::min(m_cur_i, m_end_i), std::min(m_cur_j, m_end_j));
+ CRect rc_rb = _GetItemRect(&m_dcGrid, std::max(m_cur_i, m_end_i), std::max(m_cur_j, m_end_j));
+ o_rc.left = rc_lt.left, o_rc.top =  rc_lt.bottom;
+ o_rc.right = rc_rb.right, o_rc.bottom = rc_rb.top;
+}
+
+CRect CMapEditorCtrl::_GetItemRect(CDC* pDC, int i , int j)
+{
+ CRect rc;
+ GetClientRect(&rc);
+ int w_off = _GetLabelWidth(pDC);
+ int h_off = _GetLabelHeight(pDC);
+ rc.left+=w_off;
+ rc.bottom-=h_off;
+ int space  = 2;
+ float width  = ((float)(rc.right - rc.left) - ((float)m_cols)*space) / ((float)m_cols);
+ float height = ((float)(rc.bottom - rc.top) - ((float)m_rows)*space) / ((float)m_rows);
+ return CRect(MathHelpers::Round(j*(width+space))+w_off, MathHelpers::Round((m_rows-1-i)*(height+space)), MathHelpers::Round(j*(width+space) + width)+w_off, MathHelpers::Round((m_rows-1-i)*(height+space) + height));
+}
+
+CRect CMapEditorCtrl::_GetMarkerRect(int i, int j, int inflate /*=2*/)
+{
+ CRect rect = _GetItemRect(&m_dcMark, i, j);
+ rect.InflateRect(inflate,inflate,inflate,inflate);
+ return rect;
+}
+
+int CMapEditorCtrl::_GetLabelWidth(CDC* pDC)
+{
+ if (m_label_width >= 0)
+  return m_label_width;
+
+ m_label_width = 0;
+ if (mp_vertLabels && m_vertShow)
+ {
+  for (size_t i = 0; i < m_vertLabels.size(); ++i)
+  {
+   CSize sz = pDC->GetTextExtent(m_vertLabels[i]);
+   if (sz.cx > m_label_width)
+    m_label_width = sz.cx;
+  }
+ 
+  //apply mimimum label's width
+  CSize sz = pDC->GetTextExtent(templateStr, m_minLabelWidthInChars);
+  if (sz.cx > m_label_width)
+   m_label_width = sz.cx;
+ }
+   
+ return m_label_width;
+}
+
+int CMapEditorCtrl::_GetLabelHeight(CDC* pDC)
+{
+ if (m_label_height >= 0)
+  return m_label_height;
+
+ m_label_height = 0;
+ if (mp_horizLabels && m_horizShow)
+ {
+  CSize sz = pDC->GetTextExtent(m_horizLabels[0]);
+  m_label_height = sz.cy;
+ }
+
+ return m_label_height;
+}
+
+void CMapEditorCtrl::_DrawItem(CDC& dc, int i, int j)
+{
+ float value = _GetItemTr(i, j);
+ CRect rect = _GetItemRect(&dc, i, j);
+ int index = _GetGradIndex(value);
+ COLORREF customColor = _GetItem<COLORREF>(mp_itemColors, i, j);
+ COLORREF gradColor = customColor ? customColor : m_gradColor[index];
+ if (_isCellInSelRect(i, j))
+ {
+  if (::GetFocus()==m_hWnd)      
+   gradColor = RGB(220,220,220);
+  else
+   gradColor = GDIHelpers::Brighten(gradColor, 80);
+ }
+ dc.SetBkColor(IsWindowEnabled() ? gradColor : GetSysColor(COLOR_3DFACE));
+ dc.FillSolidRect(rect, IsWindowEnabled() ? gradColor : GetSysColor(COLOR_3DFACE));
+ dc.Draw3dRect(&rect, RGB(0,0,0), RGB(0,0,0));
+ dc.DrawText(_FloatToStr(value, m_decPlaces), (LPRECT)&rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE); 
+}
+
+void CMapEditorCtrl::_DrawGrid(const std::vector<std::pair<int, int> >* p_updList /*= NULL*/)
+{
+ if (NULL==m_dcGrid.GetSafeHdc())
+  return;
+
+ if (!p_updList)
+ { //draw all cells
+  CRect rc;
+  GetClientRect(&rc);
+  rc.left+=_GetLabelWidth(&m_dcGrid);
+  rc.bottom-=_GetLabelHeight(&m_dcGrid);
+  m_dcGrid.FillRect(rc, &m_bgrdBrush); //fill client rect with background
+  m_dcGrid.SetBkMode(TRANSPARENT);
+  m_dcGrid.SetTextColor(GetSysColor(IsWindowEnabled() ? COLOR_WINDOWTEXT : COLOR_GRAYTEXT));
+  CFont* oldFont = m_dcGrid.SelectObject(&m_cFont);
+  for(int i = 0; i < m_rows; ++i)
+   for(int j = 0; j < m_cols; ++j)
+    _DrawItem(m_dcGrid, i, j);
+  m_dcGrid.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
+  m_dcGrid.SelectObject(oldFont);
+ }
+ else
+ { //draw only certain cell(s)
+  CRect sel_rc;
+  _GetSelRect(sel_rc);
+  m_dcGrid.FillRect(sel_rc, &m_bgrdBrush); //fill cell rect with background
+  m_dcGrid.SetBkMode(TRANSPARENT);
+  m_dcGrid.SetTextColor(GetSysColor(IsWindowEnabled() ? COLOR_WINDOWTEXT : COLOR_GRAYTEXT));
+  CFont* oldFont = m_dcGrid.SelectObject(&m_cFont);
+  for(size_t s = 0; s < p_updList->size(); ++s)
+   _DrawItem(m_dcGrid, (*p_updList)[s].first, (*p_updList)[s].second);
+  m_dcGrid.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
+  m_dcGrid.SelectObject(oldFont);
+ }
+}
+
+void CMapEditorCtrl::_DrawLabels(void)
+{
+ if (NULL==m_dcGrid.GetSafeHdc())
+  return;
+ //draw vertical labels
+ if (mp_vertLabels && m_vertShow)
+ {
+  CRect rc;
+  GetClientRect(&rc);
+  rc.right = rc.left + _GetLabelWidth(&m_dcGrid);
+  m_dcGrid.FillRect(rc, &m_bgrdBrush); //fill rect with background
+  m_dcGrid.SetTextAlign(TA_LEFT|TA_TOP|TA_NOUPDATECP);
+  CFont* oldFont = m_dcGrid.SelectObject(&m_cFont);
+  for(int i = 0; i < m_rows; ++i)
+  {
+   CRect rect = _GetItemRect(&m_dcGrid, i, 0);
+   m_dcGrid.TextOut(0, rect.top + (rect.Height() - m_label_height) / 2, m_vertLabels[i]);
+  }
+  m_dcGrid.SelectObject(oldFont); 
+  m_dcGrid.SetTextAlign(TA_LEFT|TA_TOP|TA_NOUPDATECP);
+ }
+ 
+ //draw horizontal labels
+ if (mp_horizLabels && m_horizShow)
+ {
+  CRect clrc;
+  GetClientRect(&clrc);
+  CRect rc = clrc;
+  rc.top = rc.bottom - _GetLabelHeight(&m_dcGrid);
+  m_dcGrid.FillRect(rc, &m_bgrdBrush); //fill rect with background
+  m_dcGrid.SetTextAlign(TA_CENTER|TA_TOP|TA_NOUPDATECP);
+  CFont* oldFont = m_dcGrid.SelectObject(&m_cFont);
+  for(int j = 0; j < m_cols; ++j)
+  {
+   CRect rect = _GetItemRect(&m_dcGrid, 0, j);
+   m_dcGrid.TextOut(rect.CenterPoint().x, clrc.bottom - m_label_height, m_horizLabels[j]);
+  }
+  m_dcGrid.SelectObject(oldFont); 
+  m_dcGrid.SetTextAlign(TA_LEFT|TA_TOP|TA_NOUPDATECP);
+ }
+}
+
+void CMapEditorCtrl::_DrawMarker(CDC* pDC, int i, int j)
+{
+ CRect rect = _GetMarkerRect(i, j, 2);
+ CBrush * oldBrush = (CBrush*)pDC->SelectStockObject(NULL_BRUSH);
+ CPen* oldPen = pDC->SelectObject(&redPen);
+ pDC->Rectangle(rect);
+ pDC->SelectObject(oldBrush);
+ pDC->SelectObject(oldPen);
+}
+
+void CMapEditorCtrl::_DrawMarkers(void)
+{
+ if (m_dcMark.GetSafeHdc()==NULL)
+  return;
+ CRect rc;
+ GetClientRect(&rc);
+ m_dcMark.FillRect(rc, &m_blackBrush);
+
+ if (IsWindowEnabled() && m_showMarkers)
+ { 
+  if (mp_horizLabels || mp_vertLabels)
+  {
+   if (m_spotMarkers)
+   {//ball
+    CRect rect = _GetItemRect(&m_dcMark, 0, 0);
+    int r = MathHelpers::Round((((float)rect.Height())/2)*m_spotMarkersSize);
+    CObject* oldBrush =  m_dcMark.SelectObject(&m_ballBrush); 
+    m_dcMark.Ellipse(m_ballCoord.x - r, m_ballCoord.y - r, m_ballCoord.x + r, m_ballCoord.y + r);
+    m_dcMark.SelectObject(oldBrush);
+   }
+   else
+   {//rectangle
+    for (size_t i = 0; i < m_markedItems.size(); ++i)
+     _DrawMarker(&m_dcMark, m_markedItems[i].x, m_markedItems[i].y);
+   }
+  }
+ }
+}
+
+void CMapEditorCtrl::_ShowImage(CDC* pDC, CRect* p_rect /*=NULL*/)
+{
+ if (NULL==pDC || NULL==pDC->GetSafeHdc() || NULL==m_dcGrid.GetSafeHdc() || NULL==m_dcMark.GetSafeHdc())
+  return;
+ CDC memDC;
+ CBitmap memBmp;
+ CRect rc;
+ GetClientRect(&rc);
+
+ memDC.CreateCompatibleDC(pDC);
+ 
+ if (p_rect)
+ { //show specified rect only
+  memBmp.CreateCompatibleBitmap(pDC, p_rect->Width(), p_rect->Height());
+  CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
+  if (memDC.GetSafeHdc() != NULL)
+  {
+   memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcGrid, p_rect->left, p_rect->top, SRCCOPY);
+   memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcMark, p_rect->left, p_rect->top, SRCINVERT);
+   if (NULL!=m_clipRgn.GetSafeHandle())
+    pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
+   pDC->BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &memDC, p_rect->left, p_rect->top, SRCCOPY);
+   if (NULL!=m_clipRgn.GetSafeHandle())
+    pDC->SelectClipRgn(NULL, RGN_COPY);
+  }
+  memDC.SelectObject(oldBmp);
+ }
+ else
+ { //show full size image
+  memBmp.CreateCompatibleBitmap(pDC, rc.Width(), rc.Height());
+  CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
+  if (memDC.GetSafeHdc() != NULL)
+  {
+   memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcGrid, 0, 0, SRCCOPY);
+   memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcMark, 0, 0, SRCINVERT);
+   if (NULL!=m_clipRgn.GetSafeHandle())
+    pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
+   pDC->BitBlt(0, 0, rc.Width(), rc.Height(), &memDC, 0, 0, SRCCOPY);
+   if (NULL!=m_clipRgn.GetSafeHandle())
+    pDC->SelectClipRgn(NULL, RGN_COPY);
+  }
+  memDC.SelectObject(oldBmp);
+ }
+}
+
+int CMapEditorCtrl::_GetGradIndex(float value)
+{
+ float minVal = m_absGrad ? m_minVal : m_vMinVal;
+ float maxVal = m_absGrad ? m_maxVal : m_vMaxVal;
+ float div = ((maxVal - minVal)/((float)m_gradColor.size()));
+ int index = MathHelpers::Round((value - (minVal)) / (div == 0 ? 0.000001f : div));
+ if (index < 0) index = 0;
+ if (index > (int)m_gradColor.size()-1) index = (int)m_gradColor.size()-1;
+ return index;
+}
+
+bool CMapEditorCtrl::_ValidateItem(CEditExCustomKeys* pItem, float* p_value /*= NULL*/)
+{ 
+ float value = 0;
+ bool convres = pItem->GetValue(value); 
+ pItem->m_error = !(convres && value >= m_minVal && value <= m_maxVal);
+ pItem->Invalidate();
+ if (p_value && !pItem->m_error)
+  *p_value = value; //save result of there are no errors
+ return !pItem->m_error;
+}
+
+bool CMapEditorCtrl::_SelChange(int cur_i, int cur_j, int end_i, int end_j, bool notify /*= true*/)
+{
+ bool changed = (m_cur_i != cur_i) | (m_cur_j != cur_j) | (m_end_i != end_i) | (m_end_j != end_j);
+ if (changed)
+  m_sel_changed = true;
+ m_cur_i = cur_i, m_cur_j = cur_j;
+ m_end_i = end_i, m_end_j = end_j;
+ if (m_OnSelChange && changed && notify)
+  m_OnSelChange();
+ return changed;
+}
+
+void CMapEditorCtrl::_ActivateTooltip(int i, int j)
+{
+ mp_tooltip = new CToolTipCtrl();
+ mp_tooltip->Create(this);
+ mp_tooltip->AddTool(this);
+ mp_tooltip->Activate(true);
+ mp_tooltip->SetDelayTime(10, TTDT_INITIAL); // length of time the pointer must remain stationary within a tool's bounding rectangle before the tool tip window appears.
+ mp_tooltip->SetDelayTime(10, TTDT_AUTOPOP); // amount of time the tooltip window remains visible if the pointer is stationary within a tool's bounding rectangle
+ mp_tooltip->SetDelayTime(10, TTDT_RESHOW);  // amount of time it takes for subsequent tooltip windows to appear as the pointer moves from one tool to another.
+ float value = _GetItemTrO(i, j);
+ CString s = MLL::LoadString(IDS_ORIG_TOOLTIP);
+ s+= _FloatToStr(value, m_decPlaces);
+ mp_tooltip->UpdateTipText(s, this);
+ m_tp_i = i, m_tp_j = j;
+}
+
+void CMapEditorCtrl::_ActivateEdit()
+{ 
+ if (m_readOnly) return;
+ CDC* pDC = GetDC();
+ CRect rect = _GetItemRect(pDC, m_cur_i, m_cur_j);
+ ReleaseDC(pDC);
+ m_clipRgn.CreateRectRgn(rect.left, rect.top, rect.right, rect.bottom);
+ mp_edit.reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditChar), fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditKill), m_minVal, m_maxVal, m_increment));
+ mp_edit->Create(WS_BORDER | WS_CHILD | WS_VISIBLE | ES_CENTER, rect, this, 0);
+ mp_edit->SetDecimalPlaces(m_decPlaces);
+ mp_edit->SetValue(_GetItemTr(m_cur_i, m_cur_j));
+ mp_edit->SetFocus();
+ //set cursor to the right 
+ CString str;
+ mp_edit->GetWindowText(str);
+ mp_edit->SetSel(str.GetLength(), str.GetLength());
+ mp_edit->SetFont(GetFont(), TRUE);
+
+ mp_other = this;
+}
+
+void CMapEditorCtrl::_DeactivateEdit(void)
+{
+ if (mp_edit.get() && mp_edit->GetSafeHwnd())
+  mp_edit->DestroyWindow();
+ mp_edit.reset();
+ mp_other = NULL;
+
+ if (NULL!=m_clipRgn.GetSafeHandle())
+  m_clipRgn.DeleteObject();
+}
+
+void CMapEditorCtrl::_2DLookupH(float x, std::vector<int>& pt)
+{
+ pt.clear();
+ if (x <= mp_horizLabels[0]) { pt.push_back(0); return; }
+ if (x >= mp_horizLabels[m_cols-1]) { pt.push_back(m_cols-1); return; }
+
+ float dv = 3.0f;
+ for(int i = 1; i < m_cols; ++i)
+ {
+  float d = mp_horizLabels[i] - mp_horizLabels[i-1];
+  if (x <= mp_horizLabels[i])
+  {
+   if (x < (mp_horizLabels[i-1] + d/dv)) pt.push_back(i-1);
+   else if (x > (mp_horizLabels[i] - d/dv)) pt.push_back(i);
+   else { pt.push_back(i-1); pt.push_back(i); }
+   break;
+  }
+ }
+}
+
+void CMapEditorCtrl::_2DLookupV(float x, std::vector<int>& pt)
+{
+ pt.clear();
+ if (x <= _GetVGrid(0)) { pt.push_back(0); return; }
+ if (x >= _GetVGrid(m_rows-1)) { pt.push_back(m_rows-1); return; }
+
+ float dv = 3.0f;
+ for(int i = 1; i < m_rows; ++i)
+ {
+  float d = _GetVGrid(i) - _GetVGrid(i-1);
+  if (x <= _GetVGrid(i))
+  {
+   if (x < (_GetVGrid(i-1) + d/dv)) pt.push_back(i-1);
+   else if (x > (_GetVGrid(i) - d/dv)) pt.push_back(i);
+   else { pt.push_back(i-1); pt.push_back(i); }
+   break;
+  }
+ }
 }
 
 void CMapEditorCtrl::_UpdateMinMaxElems(void)
@@ -1172,11 +2075,6 @@ void CMapEditorCtrl::_UpdateMinMaxElems(void)
  m_vMaxVal = *std::max_element(ptr, ptr + size);
 }
 
-void CMapEditorCtrl::setOnValueTransform(EventHandler3 OnCB)
-{
- m_OnValueTransform = OnCB;
-}
-
 void CMapEditorCtrl::_SetItemTr(int i, int j, float value)
 {
  if (m_OnValueTransform)
@@ -1193,52 +2091,10 @@ float CMapEditorCtrl::_GetItemTr(int i, int j)
   return _GetItem<float>(mp_map, i,j);
 }
 
-void CMapEditorCtrl::Redraw(void)
+float CMapEditorCtrl::_GetItemTrO(int i, int j)
 {
- m_forceRedraw = true;
- Invalidate();
-}
-
-bool CMapEditorCtrl::GetSpotMarkers(void)
-{
- return m_spotMarkers;
-}
-
-void CMapEditorCtrl::OnSize(UINT nType, int cx, int cy)
-{
- Super::OnSize(nType, cx, cy);
-
- //make program to recreate bitmaps because new size may differ
- if (mp_bmOldGrid && m_dcGrid.GetSafeHdc())
- {
-  m_dcGrid.SelectObject(mp_bmOldGrid);
-  m_bmGrid.DeleteObject();
- }
-
- if (mp_bmOldMark && m_dcMark.GetSafeHdc())
- {
-  m_dcMark.SelectObject(mp_bmOldMark);
-  m_bmMark.DeleteObject();
- }
-
- //update position of edit if it is active
- if (mp_edit.get())
- {
-  CDC* pDC = GetDC();
-  CRect rect = _GetItemRect(pDC, m_cur_i, m_cur_j);
-  ReleaseDC(pDC);
-
-  if (NULL!=m_clipRgn.GetSafeHandle())
-   m_clipRgn.DeleteObject();
-  m_clipRgn.CreateRectRgn(rect.left, rect.top, rect.right, rect.bottom);
-
-  mp_edit->MoveWindow(&rect);
- }
-
- Redraw();
-}
-
-BOOL CMapEditorCtrl::OnEraseBkgnd(CDC* pDC) 
-{
- return TRUE; //prevent flickering
+ if (m_OnValueTransform)
+  return m_OnValueTransform(_GetItem<float>(mp_mapOrig, i,j), 0); //to chart
+ else
+  return _GetItem<float>(mp_mapOrig, i,j);
 }

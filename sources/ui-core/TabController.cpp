@@ -28,6 +28,7 @@
 #include "TabDialog.h"
 #include "ITabControllerEvent.h"
 #include "common/MathHelpers.h"
+#include "MsgBox.h"
 
 enum tcOrient
 {
@@ -168,7 +169,7 @@ void CTabController::CreateTabPage(bool create /* = false*/)
 
   if (0==result)
   {
-   AfxMessageBox(_T("Error creating Tab control page dialog!"));
+   SECUMessageBox(_T("Error creating Tab control page dialog!"));
    return;
   }
 
@@ -214,14 +215,14 @@ int CTabController::AddPage(CString name, CTabDialog* pPageDlg)
   HRSRC hrsrc  = FindResource(_GetResourceModule(), pPageDlg->GetDialogID(), RT_DIALOG);
   if (NULL==hrsrc)
   {
-   AfxMessageBox(_T("Resource not found!"));
+   SECUMessageBox(_T("Resource not found!"));
    return -1;  //error
   }
 
   HGLOBAL hglb = LoadResource(_GetResourceModule(), hrsrc);
   if (NULL==hglb)
   {
-   AfxMessageBox(_T("Resource load failed!"));
+   SECUMessageBox(_T("Resource load failed!"));
    return -1;  //error
   }
   pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb);
@@ -249,14 +250,14 @@ int CTabController::AddPage(CString name, CTabDialog* pPageDlg, const int nImage
   HRSRC hrsrc  = FindResource(_GetResourceModule(), pPageDlg->GetDialogID(), RT_DIALOG);
   if (NULL==hrsrc)
   {
-   AfxMessageBox(_T("Resource not found!"));
+   SECUMessageBox(_T("Resource not found!"));
    return -1; //error
   }
 
   HGLOBAL hglb = LoadResource(_GetResourceModule(), hrsrc);
   if (NULL==hglb)
   {
-   AfxMessageBox(_T("Resource load failed!"));
+   SECUMessageBox(_T("Resource load failed!"));
    return -1; //error
   }
 

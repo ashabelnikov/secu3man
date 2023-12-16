@@ -67,8 +67,6 @@ CGMEInjVEDlg::CGMEInjVEDlg()
 , m_ve2_map(16, 16, false, false, NULL, 3) 
 , m_lamdel_map(3, 3, false, false, NULL, 3)
 , m_celwgt_map(16, 16, false, false, NULL, 3, true) //read-only
-, mp_VEMap(NULL)
-, mp_VEMap2(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
 , mp_loadGrid2(NULL)
@@ -81,7 +79,11 @@ CGMEInjVEDlg::CGMEInjVEDlg()
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
- //empty
+ for(size_t i = 0; i < 2; ++i)
+ {
+  mp_VEMap[i] = NULL;
+  mp_VEMap2[i] = NULL;
+ }
 }
 
 CGMEInjVEDlg::~CGMEInjVEDlg()
@@ -138,7 +140,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  }
 
  m_ve_map.SetRange(.0f, 1.99f);
- m_ve_map.AttachMap(mp_VEMap);
+ m_ve_map.AttachMap(mp_VEMap[1], mp_VEMap[0]);
  m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_ve_map.ShowLabels(true, true);
  m_ve_map.SetDecimalPlaces(3, 0, 0);
@@ -146,13 +148,12 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve_map.EnableAbroadMove(false, false);
  m_ve_map.SetValueIncrement(0.01f);
  m_ve_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
- m_ve_map.SetSelection(0, 0, false);
 
  if (0==m_active_ve)
   m_ve_map.ShowWindow(SW_SHOW); //show 1st map
 
  m_ve2_map.SetRange(.0f, 1.99f);
- m_ve2_map.AttachMap(mp_VEMap2);
+ m_ve2_map.AttachMap(mp_VEMap2[1], mp_VEMap2[0]);
  m_ve2_map.AttachLabels(mp_rpmGrid, mp_loadGrid2);
  m_ve2_map.ShowLabels(true, true);
  m_ve2_map.SetDecimalPlaces(3, 0, 0);
@@ -160,7 +161,6 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve2_map.EnableAbroadMove(false, false);
  m_ve2_map.SetValueIncrement(0.01f);
  m_ve2_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
- m_ve2_map.SetSelection(0, 0, false);
 
  if (1==m_active_ve)
   m_ve2_map.ShowWindow(SW_SHOW); //show 2nd map
@@ -259,7 +259,7 @@ void CGMEInjVEDlg::OnUpdateControlsAutoTune1(CCmdUI* pCmdUI)
 
 void CGMEInjVEDlg::OnUpdateControlsAutoTune2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_IsReady && IsWindowEnabled() && (GetVECtrl().GetSelection().first != -1));
+ pCmdUI->Enable(m_IsReady && IsWindowEnabled() && GetVECtrl().GetSelection().size());
 }
 
 void CGMEInjVEDlg::OnUpdateControlsAutoTune3(CCmdUI* pCmdUI)
@@ -278,9 +278,17 @@ LPCTSTR CGMEInjVEDlg::GetDialogID(void) const
 void CGMEInjVEDlg::BindMaps(float* pVE, float* pVE2)
 {
  ASSERT(pVE);
- mp_VEMap = pVE;
+ mp_VEMap[1] = pVE;
  ASSERT(pVE2);
- mp_VEMap2 = pVE2;
+ mp_VEMap2[1] = pVE2;
+}
+
+void CGMEInjVEDlg::BindMapsOrig(float* pVE, float* pVE2)
+{
+ ASSERT(pVE);
+ mp_VEMap[0] = pVE;
+ ASSERT(pVE2);
+ mp_VEMap2[0] = pVE2;
 }
 
 void CGMEInjVEDlg::BindRPMGrid(float* pGrid)
@@ -400,18 +408,22 @@ void CGMEInjVEDlg::OnCelBlkButton()
   return;
  CMapEditorCtrl& ve_map = GetVECtrl();
 
- std::pair<int, int> sel = ve_map.GetSelection();
- bool* p_cell = &mp_CelBlkMap[(sel.first * 16) + sel.second];
+ const std::vector<std::pair<int, int> >& sel = ve_map.GetSelection();
+ if (0==sel.size())
+ {
+  ASSERT(0); //no selection!
+  return;
+ }
+
+ bool* p_cell = &mp_CelBlkMap[(sel[0].first * 16) + sel[0].second];
  if (*p_cell == true)
  {
   *p_cell = false;
-  ve_map.SetItemColor(sel.first, sel.second, 0);
   m_celblk_button.SetWindowText(MLL::LoadString(IDS_GME_INJ_CELBLK));
  }
  else
  {
   *p_cell = true;
-  ve_map.SetItemColor(sel.first, sel.second, colorBlocked);
   m_celblk_button.SetWindowText(MLL::LoadString(IDS_GME_INJ_CELUNBLK));
  }
 
@@ -428,7 +440,14 @@ void CGMEInjVEDlg::OnCelBlkButton()
   ve_map.UpdateDisplay(); //all cells
  }
  else
-  ve_map.UpdateDisplay(sel.first, sel.second);
+ {
+  for(size_t i = 0; i < sel.size(); ++i)
+  {
+   mp_CelBlkMap[(sel[i].first * 16) + sel[i].second] = *p_cell;
+   ve_map.SetItemColor(sel[i].first, sel[i].second, *p_cell ? colorBlocked : 0);
+  } 
+  ve_map.UpdateDisplay(&sel); //update only selected items
+ }
 }
 
 void CGMEInjVEDlg::OnSmoothButton()
@@ -442,8 +461,8 @@ void CGMEInjVEDlg::OnSelChangeVE(void)
  if (!mp_CelBlkMap)
   return;
  CMapEditorCtrl& ve_map = GetVECtrl();
- std::pair<int, int> sel = ve_map.GetSelection();
- bool* p_cell = &mp_CelBlkMap[(sel.first * 16) + sel.second];
+ const std::vector<std::pair<int, int> >& sel = ve_map.GetSelection();
+ bool* p_cell = &mp_CelBlkMap[(sel[0].first * 16) + sel[0].second];
 
  UpdateDialogControls(this, true);
 
@@ -520,10 +539,10 @@ void CGMEInjVEDlg::SetStrStpCaption(const _TSTRING& str)
  m_strstp_button.SetWindowText(str.c_str());
 }
 
-void CGMEInjVEDlg::UpdateCelWgtMapCell(int l, int r)
+void CGMEInjVEDlg::UpdateCelWgtMapCell(const std::vector<std::pair<int, int> >* p_updList /*= NULL*/)
 {
  if (m_celwgt_map.GetSafeHwnd())
-  m_celwgt_map.UpdateDisplay(l, r);
+  m_celwgt_map.UpdateDisplay(p_updList);
 }
 
 bool CGMEInjVEDlg::GetBlkAllCheck(void)
@@ -541,7 +560,7 @@ bool CGMEInjVEDlg::GetRstAllCheck(void)
  return m_rstall_check.GetCheck() == BST_CHECKED;
 }
 
-std::pair<int, int> CGMEInjVEDlg::GetVESelection(void)
+const std::vector<std::pair<int, int> >& CGMEInjVEDlg::GetVESelection(void)
 {
  CMapEditorCtrl& ve_map = GetVECtrl();
  return ve_map.GetSelection();

@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "MultiLEDCtrl.h"
 #include "common/MathHelpers.h"
+#include "MsgBox.h"
 
 //if you create control via resource editor, you must specify this class name in the control's properties
 #define MAPEDITORCTRL_CLASSNAME  _T("MultiLEDCtrl")  // Window class name
@@ -62,7 +63,7 @@ BOOL CMultiLEDCtrl::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
  BOOL result = CWnd::CreateEx(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE, NULL, NULL, dwStyle,
                rect.left, rect.top, rect.Width(), rect.Height(), pParent->GetSafeHwnd(), (HMENU)((UINT_PTR)id));
  if (!result)
-  AfxMessageBox(_T("Error creating MultiLEDCtrl control's window!"));
+  SECUMessageBox(_T("Error creating MultiLEDCtrl control's window!"));
 
  return result;
 }

@@ -259,7 +259,9 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
   m_afrhits[l_idx][r_idx]++;
   if (m_afrhits[l_idx][r_idx] > MAX_AFR_HITS)
    m_afrhits[l_idx][r_idx] = MAX_AFR_HITS;
-  mp_view->UpdateCelWgtMapCell(l_idx, r_idx);
+  std::vector<std::pair<int, int> > sel;
+  sel.push_back(std::make_pair(l_idx, r_idx)); //update single cell
+  mp_view->UpdateCelWgtMapCell(&sel); //Possible bug: will gradient be updated?
  }
 }
 
@@ -394,17 +396,20 @@ void CAutoTuneController::ResetStat(void)
     m_lastchg[l][r] = 0; //any cell allowed for changes
    }
   }
-  mp_view->UpdateCelWgtMapCell(-1, -1); //update all cells
+  mp_view->UpdateCelWgtMapCell(); //update all cells
  }
  else
  {
-  std::pair<int, int> sel = mp_view->GetVESelection();
-  int l = sel.first, r = sel.second;
-  m_scatter[l][r].clear();
-  m_avdists[l][r] = std::numeric_limits<float>::max();
-  m_afrhits[l][r] = 0;
-  m_lastchg[l][r] = 0; //any cell allowed for changes
-  mp_view->UpdateCelWgtMapCell(l, r); //update selected cell
+  const std::vector<std::pair<int, int> >& sel = mp_view->GetVESelection();
+  for(size_t i = 0; i < sel.size(); ++i)
+  {
+   int l = sel[i].first, r = sel[i].second;
+   m_scatter[l][r].clear();
+   m_avdists[l][r] = std::numeric_limits<float>::max();
+   m_afrhits[l][r] = 0;
+   m_lastchg[l][r] = 0; //any cell allowed for changes
+  }
+  mp_view->UpdateCelWgtMapCell(&sel); //update selected cells. Possible bug: will gradient be updated?
  }
 }
 

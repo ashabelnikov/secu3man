@@ -41,6 +41,7 @@ class CGMEInjPwm1Dlg : public CTabDialog
  ~CGMEInjPwm1Dlg();
 
   void BindMaps(float* pAFR);
+  void BindMapsOrig(float* pAFR);
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
@@ -68,7 +69,7 @@ class CGMEInjPwm1Dlg : public CTabDialog
   CFont m_font;
   std::auto_ptr<CtrlScaler> mp_cscl;
 
-  float* mp_pwm1Map;
+  float* mp_pwm1Map[2];
   float* mp_rpmGrid;
   const float* mp_loadGrid;
  

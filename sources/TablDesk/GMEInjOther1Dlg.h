@@ -41,6 +41,7 @@ class CGMEInjOther1Dlg : public CTabDialog
  ~CGMEInjOther1Dlg();
 
   void BindMaps(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd, float* pThrass);
+  void BindMapsOrig(float* pTpsswt, float* pTpszon, float* pCylMult, float* pCylAdd, float* pThrass);
   void BindRPMGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
   void UpdateView(bool axisLabels = false);
@@ -80,11 +81,11 @@ class CGMEInjOther1Dlg : public CTabDialog
   CMapEditorCtrl m_thrass_map;
   CStatic m_ctrls[5];
 
-  float* mp_TpsswtMap;
-  float* mp_TpszonMap;
-  float* mp_CylMultMap;
-  float* mp_CylAddMap;
-  float* mp_ThrassMap;
+  float* mp_TpsswtMap[2];
+  float* mp_TpszonMap[2];
+  float* mp_CylMultMap[2];
+  float* mp_CylAddMap[2];
+  float* mp_ThrassMap[2];
 
   float* mp_rpmGrid;
   std::auto_ptr<CtrlScaler> mp_cscl;

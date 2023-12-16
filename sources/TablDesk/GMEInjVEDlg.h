@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <vector>
 #include "common/FastDelegate.h"
 #include "ui-core/TabDialog.h"
 #include "ui-core/MapEditorCtrl.h"
@@ -44,6 +45,7 @@ class CGMEInjVEDlg : public CTabDialog
  ~CGMEInjVEDlg();
 
   void BindMaps(float* pVE, float* pVE2);
+  void BindMapsOrig(float* pVE, float* pVE2);
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(const float* pGrid, bool updateLabels = false);
   void BindLoadGrid2(const float* pGrid, bool updateLabels = false);
@@ -65,12 +67,12 @@ class CGMEInjVEDlg : public CTabDialog
   void setOnChangeLamDel(EventHandler OnCB);
   void SetStatusText(const _TSTRING& str);
   void SetStrStpCaption(const _TSTRING& str);
-  void UpdateCelWgtMapCell(int l, int r);
+  void UpdateCelWgtMapCell(const std::vector<std::pair<int, int> >* p_updList = NULL);
   void setOnSmooth(EventHandler OnCB);
   bool GetBlkAllCheck(void);
   bool GetFinishCheck(void);
   bool GetRstAllCheck(void);
-  std::pair<int, int> GetVESelection(void);
+  const std::vector<std::pair<int, int> >& GetVESelection(void);
   void setOnSelectVEMap(EventWithCode OnCB);
 
   void SetActiveVEMap(int vemapid);
@@ -129,8 +131,8 @@ class CGMEInjVEDlg : public CTabDialog
   CMapEditorCtrl m_celwgt_map;
   CFont m_font;
 
-  float* mp_VEMap;
-  float* mp_VEMap2;
+  float* mp_VEMap[2];
+  float* mp_VEMap2[2];
   float* mp_rpmGrid;
   const float* mp_loadGrid;
   const float* mp_loadGrid2;

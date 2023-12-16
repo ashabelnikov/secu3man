@@ -44,13 +44,15 @@ END_MESSAGE_MAP()
 
 CGMEInjITDlg::CGMEInjITDlg()
 : m_it_map(16, 16, false, false, NULL, 3)
-, mp_ITMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
 , m_it_mode_val(0)
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
+ for(size_t i = 0; i < 2; ++i)
+  mp_ITMap[i] = NULL;
+
  m_it_map.setOnValueTransform(fastdelegate::MakeDelegate(this, &CGMEInjITDlg::OnValueTransform));
 }
 
@@ -78,7 +80,7 @@ BOOL CGMEInjITDlg::OnInitDialog()
   CloneWndFont(this, &m_font, -1, false);
 
  m_it_map.SetRange(.0f, 720.0f);
- m_it_map.AttachMap(mp_ITMap);
+ m_it_map.AttachMap(mp_ITMap[1], mp_ITMap[0]);
  m_it_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_it_map.ShowLabels(true, true);
  m_it_map.SetDecimalPlaces(1, 0, 0);
@@ -126,7 +128,13 @@ LPCTSTR CGMEInjITDlg::GetDialogID(void) const
 void CGMEInjITDlg::BindMaps(float* pIT)
 {
  ASSERT(pIT);
- mp_ITMap = pIT;
+ mp_ITMap[1] = pIT;
+}
+
+void CGMEInjITDlg::BindMapsOrig(float* pIT)
+{
+ ASSERT(pIT);
+ mp_ITMap[0] = pIT;
 }
 
 void CGMEInjITDlg::BindRPMGrid(float* pGrid)
@@ -215,7 +223,7 @@ void CGMEInjITDlg::_GetITModeRange(float& y1, float& y2)
 void CGMEInjITDlg::_TransformValues(void)
 {
  for (int i = 0; i < 16*16; ++i)
-  mp_ITMap[i] = OnValueTransform(OnValueTransform(mp_ITMap[i], 0), 1);
+  mp_ITMap[1][i] = OnValueTransform(OnValueTransform(mp_ITMap[1][i], 0), 1);
 }
 
 void CGMEInjITDlg::OnSize( UINT nType, int cx, int cy )

@@ -11,6 +11,23 @@
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 #pragma code_page(1251)
 
+IDR_MAPEDITOR_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "Инкремент",               ID_MAPED_POPUP_INC
+        MENUITEM "Декремент",               ID_MAPED_POPUP_DEC
+        MENUITEM "Установить значения",     ID_MAPED_POPUP_SETTO
+        MENUITEM "Вычесть из значений",     ID_MAPED_POPUP_SUB
+        MENUITEM "Прибавить к значениям",   ID_MAPED_POPUP_ADD
+        MENUITEM "Умножить значения",       ID_MAPED_POPUP_MUL
+        MENUITEM "Вернуться к оригиналу",   ID_MAPED_POPUP_REV
+        MENUITEM SEPARATOR
+        MENUITEM "Экспортировать в csv",    ID_MAPED_POPUP_EXPORTCSV
+        MENUITEM "Импортировать из csv",    ID_MAPED_POPUP_IMPORTCSV
+    END
+END
+
 IDD_SCRLMSGBOX DIALOGEX 0, 0, 210, 260
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_CLIPCHILDREN
 CAPTION "MessageBox"
@@ -33,6 +50,19 @@ CAPTION "DynFieldsDialog"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,80,80,50,14
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+  IDS_MAPED_POPUP_SETTO  "Новое значение"
+  IDS_MAPED_POPUP_SUB    "Отнимаемое значение"
+  IDS_MAPED_POPUP_ADD    "Прибавляемое значение"
+  IDS_MAPED_POPUP_MUL    "Умножаемое значение"
+  IDS_MAPED_POPUP_SETTO_TT  "Укажите новое значение для ячеек"
+  IDS_MAPED_POPUP_SUB_TT    "Укажите значение, которое необходимо вычесть из значений ячеек"
+  IDS_MAPED_POPUP_ADD_TT    "Укажите значение, которое необходимо прибавить к значениям ячеек"
+  IDS_MAPED_POPUP_MUL_TT    "Укажите значение, на которое необходимо умножить значения ячеек"
+  IDS_ORIG_TOOLTIP  "Начальное значение: "
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -41,6 +71,23 @@ END
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 
+IDR_MAPEDITOR_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "Инкремент",               ID_MAPED_POPUP_INC
+        MENUITEM "Декремент",               ID_MAPED_POPUP_DEC
+        MENUITEM "Set values",              ID_MAPED_POPUP_SETTO
+        MENUITEM "Substract from values",   ID_MAPED_POPUP_SUB
+        MENUITEM "Add to values",           ID_MAPED_POPUP_ADD
+        MENUITEM "Multiply values",         ID_MAPED_POPUP_MUL
+        MENUITEM "Revert to original",      ID_MAPED_POPUP_REV
+        MENUITEM SEPARATOR
+        MENUITEM "Export to csv",           ID_MAPED_POPUP_EXPORTCSV
+        MENUITEM "Import from csv",         ID_MAPED_POPUP_IMPORTCSV
+    END
+END
+
 IDD_SCRLMSGBOX DIALOGEX 0, 0, 210, 260
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_CLIPCHILDREN
 CAPTION "MessageBox"
@@ -63,6 +110,19 @@ CAPTION "DynFieldsDialog"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,80,80,50,14
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+  IDS_MAPED_POPUP_SETTO  "New value"
+  IDS_MAPED_POPUP_SUB    "Value to be substracted"
+  IDS_MAPED_POPUP_ADD    "Value to be added"
+  IDS_MAPED_POPUP_MUL    "Value to multiply"
+  IDS_MAPED_POPUP_SETTO_TT  "Specify a new value for cells"
+  IDS_MAPED_POPUP_SUB_TT    "Specify a value, which will be substracted from cells"
+  IDS_MAPED_POPUP_ADD_TT    "Specify a value, which will be added to cells"
+  IDS_MAPED_POPUP_MUL_TT    "Specify a value, cells will be multiplied to"
+  IDS_ORIG_TOOLTIP  "Beginning value: "
 END
 
 /////////////////////////////////////////////////////////////////////////////

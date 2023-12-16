@@ -53,11 +53,21 @@ class CEditExWithEnter : public CEditEx
    CEditEx::OnChar(nChar, nRepCnt, nFlags);
    if (nChar==VK_RETURN)
     m_onEnter();
-   else if (nChar==VK_TAB) //DLGC_WANTALLKEYS brake TABSTOP and we make it to work again
-    GetNextWindow()->SetFocus();
   }
+
   UINT OnGetDlgCode()
   {
+   const MSG *pMsg = GetCurrentMessage();
+   pMsg = ((const MSG *)pMsg->lParam);
+
+   if (pMsg != NULL)
+   {
+    if (pMsg->message == WM_KEYDOWN)
+    {
+     if (pMsg->wParam == VK_TAB) //don't eat TAB key, othewise we will brake TABSTOP mechanism
+      return 0;
+    }
+   }
    return CEditEx::OnGetDlgCode() | DLGC_WANTALLKEYS;
   }
 

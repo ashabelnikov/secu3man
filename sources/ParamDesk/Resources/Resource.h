@@ -1066,6 +1066,11 @@
 #define IDD_SEPTABLES_DESK              1439
 #define IDC_TD_SEPTABLES_PANEL_HOLDER   1440
 #define IDS_SEP_SAVE_BUTTON_TT          1441
+#define IDS_ENGINE_SIZE                 1442
+#define IDS_ENGINE_SIZE_TT              1443
+#define IDS_EDIT_VALUE                  1444
+#define IDS_SD_IGL_OVERFLOW             1445
+#define IDS_MAF_IGL_OVERFLOW            1446
 #define IDS_IO_REMAPPING3I_IGN_O1_TT    1523
 #define IDS_IO_REMAPPING3I_IGN_O2_TT    1524
 #define IDS_IO_REMAPPING3I_IGN_O3_TT    1525

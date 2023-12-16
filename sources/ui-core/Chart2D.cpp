@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Chart2D.h"
 #include <math.h>
+#include "MsgBox.h"
 
 #define ROUND(x) (int)((x) + 0.5 - (double)((x) < 0))
 
@@ -139,7 +140,7 @@ BOOL CChart2D::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
  BOOL result = CWnd::CreateEx(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE, NULL, NULL, dwStyle,
                rect.left, rect.top, rect.Width(), rect.Height(), pParent->GetSafeHwnd(), (HMENU)id);
  if (!result)
-  AfxMessageBox(_T("Error creating Chart2D control's window!"));
+  SECUMessageBox(_T("Error creating Chart2D control's window!"));
 
  GetClientRect(&m_ctlRect);
  _CreateFont();

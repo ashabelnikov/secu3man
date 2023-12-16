@@ -82,14 +82,9 @@ END_MESSAGE_MAP()
 
 CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 : Super(CGridModeEditorIgnDlg::IDD, pParent)
-, mp_startMap(NULL)
-, mp_idleMap(NULL)
-, mp_workMap(NULL)
-, mp_tempMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_cltGrid(NULL)
 , mp_lodGrid(NULL)
-, mp_tempIdlMap(NULL)
 , m_en_aa_indication(false)
 , m_start_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_idle_map(1, 16, false, false, DLL::GetModuleHandle())
@@ -104,6 +99,15 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , m_initialized(false)
 , mp_cscl(new CtrlScaler)
 {
+ for(size_t i = 0; i < 2; ++i)
+ {
+  mp_startMap[i] = NULL;
+  mp_idleMap[i] = NULL;
+  mp_workMap[i] = NULL;
+  mp_tempMap[i] = NULL;
+  mp_tempIdlMap[i] = NULL;
+ }
+
  _ResetUseFlags();
  m_work_map_load_slots.reserve(32);
  m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
@@ -187,7 +191,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_start_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeStart));
  m_start_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveStart));
  m_start_map.SetRange(-15.0f, 55.0f);
- m_start_map.AttachMap(mp_startMap);
+ m_start_map.AttachMap(mp_startMap[1], mp_startMap[0]);
  m_start_map.AttachLabels(SECU3IO::start_map_rpm_slots, NULL);
  m_start_map.ShowLabels(true, false);
  m_start_map.SetFont(&m_font);
@@ -198,7 +202,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_idle_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeIdle));
  m_idle_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveIdle));
  m_idle_map.SetRange(-15.0f, 55.0f);
- m_idle_map.AttachMap(mp_idleMap);
+ m_idle_map.AttachMap(mp_idleMap[1], mp_idleMap[0]);
  m_idle_map.AttachLabels(mp_rpmGrid, NULL);
  m_idle_map.ShowLabels(false, false);
  m_idle_map.SetFont(&m_font);
@@ -209,7 +213,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_temp_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeTemp));
  m_temp_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveTemp));
  m_temp_map.SetRange(-15.0f, 25.0f);
- m_temp_map.AttachMap(mp_tempMap);
+ m_temp_map.AttachMap(mp_tempMap[1], mp_tempMap[0]);
  m_temp_map.AttachLabels(mp_cltGrid, NULL);
  m_temp_map.ShowLabels(true, false);
  m_temp_map.SetFont(&m_font);
@@ -220,7 +224,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_tempi_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeTempIdl));
  m_tempi_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveTempIdl));
  m_tempi_map.SetRange(-15.0f, 25.0f);
- m_tempi_map.AttachMap(mp_tempIdlMap);
+ m_tempi_map.AttachMap(mp_tempIdlMap[1], mp_tempIdlMap[0]);
  m_tempi_map.AttachLabels(mp_cltGrid, NULL);
  m_tempi_map.ShowLabels(true, false);
  m_tempi_map.SetFont(&m_font);
@@ -231,7 +235,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_work_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeWork));
  m_work_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveWork));
  m_work_map.SetRange(-15.0f, 55.00f);
- m_work_map.AttachMap(mp_workMap);
+ m_work_map.AttachMap(mp_workMap[1], mp_workMap[0]);
  m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
  m_work_map.ShowLabels(true, true);
  m_work_map.SetDecimalPlaces(2, 0, 0);
@@ -332,11 +336,20 @@ void CGridModeEditorIgnDlg::OnClose()
 
 void CGridModeEditorIgnDlg::BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp, float* pTempIdl)
 {
- mp_startMap = pStart;
- mp_idleMap = pIdle;
- mp_workMap = pWork;
- mp_tempMap = pTemp;
- mp_tempIdlMap = pTempIdl;
+ mp_startMap[1] = pStart;
+ mp_idleMap[1] = pIdle;
+ mp_workMap[1] = pWork;
+ mp_tempMap[1] = pTemp;
+ mp_tempIdlMap[1] = pTempIdl;
+}
+
+void CGridModeEditorIgnDlg::BindMapsOrig(float* pStart, float* pIdle, float* pWork, float* pTemp, float* pTempIdl)
+{
+ mp_startMap[0] = pStart;
+ mp_idleMap[0] = pIdle;
+ mp_workMap[0] = pWork;
+ mp_tempMap[0] = pTemp;
+ mp_tempIdlMap[0] = pTempIdl;
 }
 
 void CGridModeEditorIgnDlg::BindRPMGrid(float* pGrid)
@@ -568,4 +581,16 @@ void CGridModeEditorIgnDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMinTrackSize.x = dpi.ScaleX(600);
   lpMMI->ptMinTrackSize.y = dpi.ScaleY(450);
  }
+}
+
+void CGridModeEditorIgnDlg::OnOK()
+{
+ //don't call parent's OnOK, because we don't want this dialog to be closed with VK_RETURN
+}
+
+void CGridModeEditorIgnDlg::OnCancel()
+{
+ if (m_OnCloseMapWnd)
+  m_OnCloseMapWnd(this->m_hWnd, ETMT_GME_IGN_WND);
+ Super::OnCancel();
 }

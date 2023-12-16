@@ -25,9 +25,11 @@
 
 #include "stdafx.h"
 #include <map>
+#include "resource.h"
 #include "FirmwareDataMediator.h"
 #include "CRC16.h"
 #include "common/MathHelpers.h"
+#include "common/LangLayer.h"
 #include "FirmwareMapsDataHolder.h"
 #include "PlatformParamHolder.h"
 #include "SECU3IO.h"
@@ -37,6 +39,7 @@
 #include "BitMask.h"
 #include "Magnitude.h"
 #include "MapIds.h"
+#include "ui-core/MsgBox.h"
 
 //этот файл содержит платформенно-ориентированные фрагменты кода
 #pragma pack(1)
@@ -1779,7 +1782,7 @@ bool CFirmwareDataMediator::CheckRPMGridsCompatibility(const float* rpmGrid)
   if (rpmGrid[i] != slots[i])
    match = false;
  if (!match)
-  return (IDYES==AfxMessageBox(_T("RPM grids from firmware and source are not equal!\n Please inspect idle, work, VE, AFR, inj.timing, PWM1/split angle and PWM2 maps if you accept new RPM grid.\n Accept new RPM grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
+  return (IDYES==SECUMessageBox(MLL::LoadString(IDS_RPM_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
  return true;
 }
 
@@ -1791,7 +1794,7 @@ bool CFirmwareDataMediator::CheckCLTGridsCompatibility(const float* cltGrid)
   if (cltGrid[i] != slots[i])
    match = false;
  if (!match)
-  return (IDYES==AfxMessageBox(_T("CLT grids from firmware and source are not equal!\n Please inspect corresponding maps if you accept new CLT grid.\n Accept new CLT grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
+  return (IDYES==SECUMessageBox(MLL::LoadString(IDS_CLT_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
  return true;
 }
 
@@ -1803,7 +1806,7 @@ bool CFirmwareDataMediator::CheckLoadGridsCompatibility(const float* lodGrid)
   if (lodGrid[i] != slots[i])
    match = false;
  if (!match)
-  return (IDYES==AfxMessageBox(_T("Load grids from firmware and source are not equal!\n Please inspect work, VE, AFR, inj.timing, PWM1/split angle and PWM2 maps if you accept new load grid.\n Accept new load grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
+  return (IDYES==SECUMessageBox(MLL::LoadString(IDS_LOAD_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
  return true;
 }
 

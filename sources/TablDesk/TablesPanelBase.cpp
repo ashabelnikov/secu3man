@@ -31,6 +31,7 @@
 #include "io-core/MapIds.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/MapEditorCtrl.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CTablesPanelBase class
@@ -183,6 +184,7 @@ void CTablesPanelBase::SetCSVSepSymbol(char sepsymb)
 {
  DLL::Chart2DSetCSVSepSymbol(sepsymb);
  DLL::Chart3DSetCSVSepSymbol(sepsymb);
+ CMapEditorCtrl::SetCSVSepSymbol(sepsymb);
 }
 
 //------------------------------------------------------------------------

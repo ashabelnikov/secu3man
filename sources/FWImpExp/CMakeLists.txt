@@ -20,6 +20,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
 include_directories(../)
 project(${PROJECT})
+set(LIBRARIES io-core ui-core hexutils)
 
 set(HEADERS
   EEPROMImpExpController.h
@@ -76,4 +77,4 @@ set(SOURCES
   )
 
 add_library (${PROJECT} SHARED ${HEADERS} ${SOURCES})
-target_link_libraries(${PROJECT} io-core ui-core hexutils)
+target_link_libraries(${PROJECT} ${LIBRARIES})

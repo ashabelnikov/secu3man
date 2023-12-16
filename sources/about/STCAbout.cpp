@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "STCAbout.h"
+#include "ui-core/MsgBox.h"
 
 struct About_data
 {
@@ -71,7 +72,7 @@ void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgn
  hWindowBitmap = LoadBitmap(i_hInstance,bmpName);
  if (NULL==hWindowBitmap)
  {
-  AfxMessageBox(_T("Can't load bitmap"),MB_OK|MB_ICONSTOP);
+  SECUMessageBox(_T("Can't load bitmap"),MB_OK|MB_ICONSTOP);
   return;
  }
 
@@ -116,7 +117,7 @@ void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgn
 
  if (hWnd == NULL)
  {
-  AfxMessageBox(_T("Can't create window"),MB_OK | MB_ICONSTOP);
+  SECUMessageBox(_T("Can't create window"),MB_OK | MB_ICONSTOP);
   return;
  }
 
@@ -146,15 +147,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   case WM_CREATE:
    hResource = FindResource(d_about.hInstance,d_about.d_lprgnname,ABOUT_STC_RGN_RESOURCE_TYPE);
    if (NULL==hResource)
-    AfxMessageBox(_T("Can't find resource!"),MB_OK|MB_ICONSTOP);
+    SECUMessageBox(_T("Can't find resource!"),MB_OK|MB_ICONSTOP);
 
    resPoints = LoadResource(d_about.hInstance,hResource);
    if (NULL==resPoints)
-    AfxMessageBox(_T("Can't load resource!"),MB_OK|MB_ICONSTOP);
+    SECUMessageBox(_T("Can't load resource!"),MB_OK|MB_ICONSTOP);
 
    resSize = SizeofResource(d_about.hInstance,hResource);
    if (0==resSize)
-    AfxMessageBox(_T("Size of resource = 0 !"),MB_OK|MB_ICONSTOP);
+    SECUMessageBox(_T("Size of resource = 0 !"),MB_OK|MB_ICONSTOP);
 
    rgnPoints = LockResource(resPoints);
    hWindowRegion = ExtCreateRegion(NULL,resSize,(RGNDATA*)rgnPoints);

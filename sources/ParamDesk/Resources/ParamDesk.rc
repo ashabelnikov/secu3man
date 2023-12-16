@@ -2051,6 +2051,16 @@ REFPRS_I - Вход датчика давления хладагента кондиционера.\r\n
 "
 END
 
+
+STRINGTABLE
+BEGIN
+  IDS_ENGINE_SIZE "Объем двигателя"
+  IDS_ENGINE_SIZE_TT "Объем двигателя в литрах"
+  IDS_EDIT_VALUE "Редактирование значения"
+  IDS_SD_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДАД!\nИзмените значения параметров чтобы исключить эту ошибку."
+  IDS_MAF_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДМРВ!\nИзмените значения параметров чтобы исключить эту ошибку."
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -4122,6 +4132,15 @@ OPS_I - Oil pressure sensor input.\r\n
 FTS_I - Fuel temperature sensor input.\r\n
 REFPRS_I - A/C refrigerant's pressure sensor input.\r\n
 "
+END
+
+STRINGTABLE
+BEGIN
+  IDS_ENGINE_SIZE "Engine size"
+  IDS_ENGINE_SIZE_TT "Engine size in litres"
+  IDS_EDIT_VALUE "Edit value"
+  IDS_SD_IGL_OVERFLOW "Overflow detected when calculating constant for Speed-Density inj. PW equation!\nChange configuration to eliminate this error."
+  IDS_MAF_IGL_OVERFLOW "Overflow detected when calculating constant for MAF inj. PW equation!\nChange configuration to eliminate this error."
 END
 
 /////////////////////////////////////////////////////////////////////////////

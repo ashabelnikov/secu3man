@@ -59,13 +59,6 @@ CGMEInjOtherDlg::CGMEInjOtherDlg()
 , m_atsc_map(1, 16)
 , m_gtsc_map(1, 16)
 , m_gpsc_map(1, 17)
-, mp_CrnkMap(NULL)
-, mp_DeadMap(NULL)
-, mp_EGOCrvMap(NULL)
-, mp_IATCLTMap(NULL)
-, mp_AtscMap(NULL)
-, mp_GtscMap(NULL)
-, mp_GpscMap(NULL)
 , mp_temperGrid(NULL)
 , mp_deadGrid(NULL)
 , mp_rpmGrid(NULL)
@@ -73,6 +66,17 @@ CGMEInjOtherDlg::CGMEInjOtherDlg()
 , mp_cscl(new CtrlScaler)
 , m_initialized(false)
 {
+ for(size_t i = 0; i < 2; ++i)
+ {
+  mp_CrnkMap[i] = NULL;
+  mp_DeadMap[i] = NULL;
+  mp_EGOCrvMap[i] = NULL;
+  mp_IATCLTMap[i] = NULL;
+  mp_AtscMap[i] = NULL;
+  mp_GtscMap[i] = NULL;
+  mp_GpscMap[i] = NULL;
+ }
+
  m_egocrvGrid.reserve(32);
  m_iatcltGrid.reserve(32);
  m_gpscGrid.reserve(32);
@@ -122,7 +126,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_crnk_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeCrnk));
  m_crnk_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveCrnk));
  m_crnk_map.SetRange(0.3f, 26.0f);
- m_crnk_map.AttachMap(mp_CrnkMap);
+ m_crnk_map.AttachMap(mp_CrnkMap[1], mp_CrnkMap[0]);
  m_crnk_map.AttachLabels(mp_cltGrid, NULL);
  m_crnk_map.ShowLabels(true, false);
  m_crnk_map.SetFont(&m_font);
@@ -132,7 +136,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_dead0_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeDead));
  m_dead0_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveDead0));
  m_dead0_map.SetRange(0.2f, 16.0f);
- m_dead0_map.AttachMap(mp_DeadMap);
+ m_dead0_map.AttachMap(mp_DeadMap[1], mp_DeadMap[0]);
  m_dead0_map.AttachLabels(mp_deadGrid, NULL);
  m_dead0_map.ShowLabels(true, false);
  m_dead0_map.SetFont(&m_font);
@@ -142,7 +146,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_dead1_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeDead));
  m_dead1_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveDead1));
  m_dead1_map.SetRange(0.2f, 16.0f);
- m_dead1_map.AttachMap(mp_DeadMap + 16);
+ m_dead1_map.AttachMap(mp_DeadMap[1] + 16, mp_DeadMap[0] + 16);
  m_dead1_map.AttachLabels(mp_deadGrid + 16, NULL);
  m_dead1_map.ShowLabels(true, false);
  m_dead1_map.SetFont(&m_font);
@@ -152,7 +156,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_egocrv_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeEGOCrv));
  m_egocrv_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveEGOCrv));
  m_egocrv_map.SetRange(6.0f, 24.0f);
- m_egocrv_map.AttachMap(mp_EGOCrvMap);
+ m_egocrv_map.AttachMap(mp_EGOCrvMap[1], mp_EGOCrvMap[0]);
  m_egocrv_map.AttachLabels(&m_egocrvGrid[0], NULL);
  m_egocrv_map.ShowLabels(true, false);
  m_egocrv_map.SetFont(&m_font);
@@ -162,7 +166,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_iatclt_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeIATCLT));
  m_iatclt_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveIATCLT));
  m_iatclt_map.SetRange(.0f, 1.0f);
- m_iatclt_map.AttachMap(mp_IATCLTMap);
+ m_iatclt_map.AttachMap(mp_IATCLTMap[1], mp_IATCLTMap[0]);
  m_iatclt_map.AttachLabels(&m_iatcltGrid[0], NULL);
  m_iatclt_map.ShowLabels(true, false);
  m_iatclt_map.SetFont(&m_font);
@@ -172,7 +176,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_atsc_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeAtsc));
  m_atsc_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveAtsc));
  m_atsc_map.SetRange(0.5f, 1.5f);
- m_atsc_map.AttachMap(mp_AtscMap);
+ m_atsc_map.AttachMap(mp_AtscMap[1], mp_AtscMap[0]);
  m_atsc_map.AttachLabels(mp_temperGrid, NULL);
  m_atsc_map.ShowLabels(true, false);
  m_atsc_map.SetFont(&m_font);
@@ -182,7 +186,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_gtsc_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeGtsc));
  m_gtsc_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveGtsc));
  m_gtsc_map.SetRange(0.01f, 1.99f);
- m_gtsc_map.AttachMap(mp_GtscMap);
+ m_gtsc_map.AttachMap(mp_GtscMap[1], mp_GtscMap[0]);
  m_gtsc_map.AttachLabels(mp_temperGrid, NULL);
  m_gtsc_map.ShowLabels(true, false);
  m_gtsc_map.SetFont(&m_font);
@@ -192,7 +196,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_gpsc_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnChangeGpsc));
  m_gpsc_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveGpsc));
  m_gpsc_map.SetRange(0.01f, 1.99f);
- m_gpsc_map.AttachMap(mp_GpscMap);
+ m_gpsc_map.AttachMap(mp_GpscMap[1], mp_GpscMap[0]);
  m_gpsc_map.AttachLabels(&m_gpscGrid[0], NULL);
  m_gpsc_map.ShowLabels(true, false);
  m_gpsc_map.SetFont(&m_font);
@@ -231,27 +235,51 @@ LPCTSTR CGMEInjOtherDlg::GetDialogID(void) const
 void CGMEInjOtherDlg::BindMaps(float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pAtsc, float* pGtsc, float* pGpsc)
 {
  ASSERT(pCrnk);
- mp_CrnkMap = pCrnk;
+ mp_CrnkMap[1] = pCrnk;
 
  ASSERT(pDead);
- mp_DeadMap = pDead;
+ mp_DeadMap[1] = pDead;
 
  ASSERT(pEGOCrv);
- mp_EGOCrvMap = pEGOCrv;
+ mp_EGOCrvMap[1] = pEGOCrv;
 
  ASSERT(pIATCLT);
- mp_IATCLTMap = pIATCLT;
+ mp_IATCLTMap[1] = pIATCLT;
 
  ASSERT(pAtsc);
- mp_AtscMap = pAtsc;
+ mp_AtscMap[1] = pAtsc;
 
  ASSERT(pGtsc);
- mp_GtscMap = pGtsc;
+ mp_GtscMap[1] = pGtsc;
 
  ASSERT(pGpsc);
- mp_GpscMap = pGpsc;
+ mp_GpscMap[1] = pGpsc;
 
  _UpdateDynamicGrids();
+}
+
+void CGMEInjOtherDlg::BindMapsOrig(float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pAtsc, float* pGtsc, float* pGpsc)
+{
+ ASSERT(pCrnk);
+ mp_CrnkMap[0] = pCrnk;
+
+ ASSERT(pDead);
+ mp_DeadMap[0] = pDead;
+
+ ASSERT(pEGOCrv);
+ mp_EGOCrvMap[0] = pEGOCrv;
+
+ ASSERT(pIATCLT);
+ mp_IATCLTMap[0] = pIATCLT;
+
+ ASSERT(pAtsc);
+ mp_AtscMap[0] = pAtsc;
+
+ ASSERT(pGtsc);
+ mp_GtscMap[0] = pGtsc;
+
+ ASSERT(pGpsc);
+ mp_GpscMap[0] = pGpsc;
 }
 
 void CGMEInjOtherDlg::BindTemperGrid(float* pGrid)
@@ -411,9 +439,9 @@ void CGMEInjOtherDlg::OnChangeGpsc(void)
 
 void CGMEInjOtherDlg::_UpdateDynamicGrids(void)
 {
- m_egocrvGrid = MathHelpers::BuildGridFromRange(mp_EGOCrvMap[16], mp_EGOCrvMap[16+1], 16);
- m_iatcltGrid = MathHelpers::BuildGridFromRange(mp_IATCLTMap[8], mp_IATCLTMap[8+1], 8);
- m_gpscGrid = MathHelpers::BuildGridFromRange(mp_GpscMap[17], mp_GpscMap[17+1], 17);
+ m_egocrvGrid = MathHelpers::BuildGridFromRange(mp_EGOCrvMap[1][16], mp_EGOCrvMap[1][16+1], 16);
+ m_iatcltGrid = MathHelpers::BuildGridFromRange(mp_IATCLTMap[1][8], mp_IATCLTMap[1][8+1], 8);
+ m_gpscGrid = MathHelpers::BuildGridFromRange(mp_GpscMap[1][17], mp_GpscMap[1][17+1], 17);
 }
 
 void CGMEInjOtherDlg::OnAbroadMoveCrnk(CMapEditorCtrl::AbroadDir direction, int column)
