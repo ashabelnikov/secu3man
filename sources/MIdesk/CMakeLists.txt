@@ -67,6 +67,7 @@ set(HEADERS
   MIOps.h
   MIVentDuty.h
   MITargAFR.h
+  MIDiffAFR.h
   Resource.h
   RSDeskDlg.h
   RingBuffer.h
@@ -114,6 +115,7 @@ set (SOURCES
   MISynLoad.cpp
   MIVentDuty.cpp
   MITargAFR.cpp
+  MIDiffAFR.cpp
   RSDeskDlg.cpp
   StdAfx.cpp
   MIDesk.rc

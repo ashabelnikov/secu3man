@@ -224,6 +224,8 @@
 #define IDM_MI_MET_EGOCORR2             2306
 #define IDM_MI_MET_SENSAFR2             2307
 #define IDM_MI_MET_TARGAFR              2308
+#define IDM_MI_MET_DIFFAFR              2309
+#define IDM_MI_MET_DIFFAFR2             2310
 #define IDM_MI_MET_ROWS1                2311
 #define IDM_MI_MET_ROWS2                2312
 #define IDM_MI_MET_ROWS3                2313
@@ -368,6 +370,8 @@
 #define IDM_MI_GRH_EGOCORR2             2452
 #define IDM_MI_GRH_SENSAFR2             2453
 #define IDM_MI_GRH_TARGAFR              2454
+#define IDM_MI_GRH_DIFFAFR              2455
+#define IDM_MI_GRH_DIFFAFR2             2456
 #define IDS_MI_GRH_ADD_GAUGE            2457
 #define IDC_MI_KNOCK                    2458
 #define IDS_MI_TACHOMETER_V_UNIT        2459
@@ -513,3 +517,11 @@
 #define IDS_MI_TARGAFRGRAPH_V_UNIT      2599
 #define IDC_MI_TARGAFR                  2600
 #define IDC_MI_TARGAFRGRAPH             2601
+#define IDS_MI_DIFFAFR_TITLE            2602
+#define IDS_MI_DIFFAFR2_TITLE           2603
+#define IDC_MI_DIFFAFR                  2604
+#define IDC_MI_DIFFAFR2                 2605
+#define IDC_MI_DIFFAFRGRAPH             2606
+#define IDC_MI_DIFFAFR2GRAPH            2607
+#define IDS_MI_DIFFAFRGRAPH_V_UNIT      2608
+#define IDS_MI_DIFFAFR2GRAPH_V_UNIT     2609

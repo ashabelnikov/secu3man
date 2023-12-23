@@ -421,6 +421,8 @@ struct MetersCfg
  int m_optMetEGOCorr2[2];
  int m_optMetSensAFR2[2];
  int m_optMetTargAFR[2];
+ int m_optMetDiffAFR[2];
+ int m_optMetDiffAFR2[2];
 };
 
 typedef enum EInterLang

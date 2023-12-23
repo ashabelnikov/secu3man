@@ -785,6 +785,10 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetSensAFR2[i][1].name = _T("GrhSensAFR2");
   m_optMetTargAFR[i][0].name = _T("MetMapAFR");
   m_optMetTargAFR[i][1].name = _T("GrhMapAFR");
+  m_optMetDiffAFR[i][0].name = _T("MetDiffAFR");
+  m_optMetDiffAFR[i][1].name = _T("GrhDiffAFR");
+  m_optMetDiffAFR2[i][0].name = _T("MetDiffAFR2");
+  m_optMetDiffAFR2[i][1].name = _T("GrhDiffAFR2");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -1347,13 +1351,13 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColUniOut6,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][39*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][41*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
   mm.ReadInt(m_optMetRows[i],_T("2"), 1, 10);
-  int vmax = 40;
+  int vmax = 45;
   for (int g = 0, d = 0; g < 2; ++g)
   {
    mm.ReadInt(m_optMetRPM[i][g],metDef[i][d++], 0, vmax, true);
@@ -1395,6 +1399,8 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetEGOCorr2[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetSensAFR2[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetTargAFR[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetDiffAFR[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetDiffAFR2[i][g],metDef[i][d++], 0, vmax, true);
   }
  }
 
@@ -4187,6 +4193,16 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetTargAFR[i][g], _T("Target AFR"));
   else
    mm.WriteInt(m_optMetTargAFR[i][g], _T("Воздух/топливо целевое"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetDiffAFR[i][g], _T("AFR difference"));
+  else
+   mm.WriteInt(m_optMetDiffAFR[i][g], _T("Разность Воздух/топливо"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetDiffAFR2[i][g], _T("AFR difference2"));
+  else
+   mm.WriteInt(m_optMetDiffAFR2[i][g], _T("Разность Воздух/топливо2"));
   }
  }
 
@@ -6620,6 +6636,8 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0]);
   _cpyMetersConfig(o_cfg[i].m_optMetTargAFR, &m_optMetTargAFR[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0]);
  }
 }
 
@@ -6667,6 +6685,8 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0]);
   _cpyMetersConfig(i_cfg[i].m_optMetTargAFR, &m_optMetTargAFR[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0]);
  }
 }
 

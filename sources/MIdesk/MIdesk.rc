@@ -203,6 +203,10 @@ BEGIN
     IDS_MI_VENT_DUTY_TITLE  "Скважность Вент."
     IDS_MI_VENT_DUTY_V_UNIT "Скважн.Вент,%"
     IDS_MI_FTS_TITLE        "Температура топлива"
+    IDS_MI_DIFFAFR_TITLE    "Разность AFR"
+    IDS_MI_DIFFAFR2_TITLE   "Разность AFR2"
+    IDS_MI_DIFFAFRGRAPH_V_UNIT "Разн.AFR"
+    IDS_MI_DIFFAFR2GRAPH_V_UNIT "Разн.AFR2"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -552,6 +556,10 @@ BEGIN
     IDS_MI_VENT_DUTY_TITLE  "Fan's duty"
     IDS_MI_VENT_DUTY_V_UNIT "Fan's duty,%"
     IDS_MI_FTS_TITLE        "Fuel temperature"
+    IDS_MI_DIFFAFR_TITLE    "AFR difference"
+    IDS_MI_DIFFAFR2_TITLE   "AFR difference2"
+    IDS_MI_DIFFAFRGRAPH_V_UNIT "Diff.AFR"
+    IDS_MI_DIFFAFR2GRAPH_V_UNIT "Diff.AFR2"
 END
 
 STRINGTABLE DISCARDABLE 

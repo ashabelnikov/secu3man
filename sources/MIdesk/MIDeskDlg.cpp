@@ -73,6 +73,7 @@
 #include "MIFts.h"
 #include "ContextMenuManager.h"
 #include "MITargAFR.h"
+#include "MIDiffAFR.h"
 
 #undef max
 
@@ -88,10 +89,10 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
  ON_COMMAND(IDM_MI_MET_DEL_GAUGE, OnMetDeleteGauge)
  ON_UPDATE_COMMAND_UI(IDM_MI_MET_DEL_GAUGE, OnUpdateMetDelete)
- ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_TARGAFR, OnMetAddGauge)
- ON_COMMAND_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_TARGAFR, OnMetAddGauge)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_TARGAFR, OnUpdateMetAddGauge)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_TARGAFR, OnUpdateMetAddGauge)
+ ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_DIFFAFR2, OnMetAddGauge)
+ ON_COMMAND_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_DIFFAFR2, OnMetAddGauge)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_DIFFAFR2, OnUpdateMetAddGauge)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_DIFFAFR2, OnUpdateMetAddGauge)
  ON_COMMAND_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnMetNumOfRows)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnUpdateMetNumOfRows)
  ON_COMMAND_RANGE(IDM_MI_MET_TITLE_FONT050, IDM_MI_MET_TITLE_FONT150, OnMetTitleFont)
@@ -241,6 +242,10 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
  m_conflQVal.push_back(std::make_pair(0.0f, false));
  m_tarafrQVal[0].reserve(r);
  m_tarafrQVal[1].reserve(r);
+ m_diffAfrQVal[0].reserve(r);
+ m_diffAfrQVal[1].reserve(r);
+ m_diffAfr2QVal[0].reserve(r);
+ m_diffAfr2QVal[1].reserve(r);
 }
 
 CMIDeskDlg::~CMIDeskDlg()
@@ -540,6 +545,12 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
 
  m_tarafrQVal[0].push_back(std::make_pair(m_ringTargAFR.m_result, i_revdir));
  m_tarafrQVal[1].push_back(std::make_pair(i_values->afrmap, i_revdir));
+
+ m_diffAfrQVal[0].push_back(std::make_pair(m_ringSensAFR.m_result - m_ringTargAFR.m_result, i_revdir));
+ m_diffAfrQVal[1].push_back(std::make_pair(i_values->afr - i_values->afrmap, i_revdir));
+
+ m_diffAfr2QVal[0].push_back(std::make_pair(m_ringSensAFR2.m_result - m_ringTargAFR.m_result, i_revdir));
+ m_diffAfr2QVal[1].push_back(std::make_pair(i_values->afr2 - i_values->afrmap, i_revdir));
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -636,6 +647,10 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_ftsQVal[1].clear();
  m_tarafrQVal[0].clear();
  m_tarafrQVal[1].clear();
+ m_diffAfrQVal[0].clear();
+ m_diffAfrQVal[1].clear();
+ m_diffAfr2QVal[0].clear();
+ m_diffAfr2QVal[1].clear();
 }
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
@@ -944,7 +959,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBa
                     int *MetInjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMAPD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
                     int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2, int *MetTargAFR,
+                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2, int *MetTargAFR, int *MetDiffAFR, int *MetDiffAFR2,
                     int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize)
 {
  m_metCfg.clear();
@@ -987,6 +1002,8 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBa
  m_metCfg.insert(std::make_pair(IDM_MI_MET_EGOCORR2, MetEGOCorr2[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_SENSAFR2, MetSensAFR2[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_TARGAFR, MetTargAFR[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR, MetDiffAFR[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR2, MetDiffAFR2[0]));
 
  //graphs
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_RPM, MetRPM[1]));
@@ -1028,6 +1045,8 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBa
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_EGOCORR2, MetEGOCorr2[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_SENSAFR2, MetSensAFR2[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_TARGAFR, MetTargAFR[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR, MetDiffAFR[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR2, MetDiffAFR2[1]));
 
  m_metRows = MetRows;
  m_TitleFontSize = TitleFontSize;
@@ -1261,7 +1280,7 @@ void CMIDeskDlg::GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVB
                     int *MetInjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
                     int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
                     int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2, int *MetTargAFR,
+                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2, int *MetTargAFR, int *MetDiffAFR, int *MetDiffAFR2,
                     int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize)
 {
 
@@ -1307,6 +1326,8 @@ void CMIDeskDlg::GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVB
  MetEGOCorr2[0] = m_metCfg[IDM_MI_MET_EGOCORR2];
  MetSensAFR2[0] = m_metCfg[IDM_MI_MET_SENSAFR2];
  MetTargAFR[0] = m_metCfg[IDM_MI_MET_TARGAFR];
+ MetDiffAFR[0] = m_metCfg[IDM_MI_MET_DIFFAFR];
+ MetDiffAFR2[0] = m_metCfg[IDM_MI_MET_DIFFAFR2];
 
  MetRPM[1] = m_metCfg[IDM_MI_GRH_RPM];
  MetMAP[1] = m_metCfg[IDM_MI_GRH_MAP];
@@ -1347,6 +1368,8 @@ void CMIDeskDlg::GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVB
  MetEGOCorr2[1] = m_metCfg[IDM_MI_GRH_EGOCORR2];
  MetSensAFR2[1] = m_metCfg[IDM_MI_GRH_SENSAFR2];
  MetTargAFR[1] = m_metCfg[IDM_MI_GRH_TARGAFR];
+ MetDiffAFR[1] = m_metCfg[IDM_MI_GRH_DIFFAFR];
+ MetDiffAFR2[1] = m_metCfg[IDM_MI_GRH_DIFFAFR2];
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
@@ -2699,6 +2722,66 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_tarafrQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
+   break;
+  }
+  case IDM_MI_MET_DIFFAFR:
+  {
+   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+    break;
+   CMIDiffAFR* widget = new CMIDiffAFR();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->Create(this);
+   widget->BindVars(&m_diffAfrQVal[0], NULL, NULL);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
+   break;
+  }
+  case IDM_MI_GRH_DIFFAFR:
+  {
+   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+    break;
+   CMIDiffAFRGraph* widget = new CMIDiffAFRGraph();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->ShowCursor(m_show_graph_cursor);
+   widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
+   widget->Create(this);
+   widget->BindVars(&m_diffAfrQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
+   break;
+  }
+  case IDM_MI_MET_DIFFAFR2:
+  {
+   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+    break;
+   CMIDiffAFR2* widget = new CMIDiffAFR2();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->Create(this);
+   widget->BindVars(&m_diffAfr2QVal[0], NULL, NULL);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
+   break;
+  }
+  case IDM_MI_GRH_DIFFAFR2:
+  {
+   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+    break;
+   CMIDiffAFR2Graph* widget = new CMIDiffAFR2Graph();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->ShowCursor(m_show_graph_cursor);
+   widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
+   widget->Create(this);
+   widget->BindVars(&m_diffAfr2QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
