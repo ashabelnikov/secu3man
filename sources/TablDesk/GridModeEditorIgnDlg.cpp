@@ -408,8 +408,17 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const SECU3IO::SensorDat& dv)
  m_ac_value.SetValue(dv.airt_aalt);
  m_ic_value.SetValue(dv.idlreg_aac);
  m_oc_value.SetValue(dv.octan_aac);
+ 
+ //save value to the local copy
+ m_curDV.strt_use = dv.strt_use;
+ m_curDV.work_use = dv.work_use;
+ m_curDV.octan_use = dv.octan_use;
+ m_curDV.temp_use = dv.temp_use;
+ m_curDV.knkret_use = dv.knkret_use;
+ m_curDV.idle_use = dv.idle_use;
+ m_curDV.idlreg_use = dv.idlreg_use;
+ m_curDV.airt_use = dv.airt_use;
 
- m_curDV = dv;
  UpdateDialogControls(this, true);  //todo: check it for perfomance issues
 
  //updating work points:
