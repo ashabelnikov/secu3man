@@ -563,7 +563,7 @@ void CEEPROMTabController::SetViewChartsValues(void)
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
  mp_eedm->GetDefParamValues(FUNSET_PAR, &params);
- mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+ mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, params.load_src_cfg, params.use_load_grid, true);
 
  for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
  {
@@ -646,7 +646,7 @@ void CEEPROMTabController::OnParamDeskChangeInTab(void)
  if (descriptor==FUNSET_PAR)
  {
   SECU3IO::FunSetPar &params = (SECU3IO::FunSetPar&)paramdata;
-  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true); //force update
+  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, params.load_src_cfg, params.use_load_grid, true); //force update
  }
 }
 
@@ -882,7 +882,7 @@ void CEEPROMTabController::OnLoadGrids(void)
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
  mp_eedm->GetDefParamValues(FUNSET_PAR, &params);
- mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+ mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, params.load_src_cfg, params.use_load_grid, true);
 
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
 

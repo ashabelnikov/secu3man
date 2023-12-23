@@ -341,7 +341,7 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
  m_values.inj_tim_begin = MathHelpers::InjTimValueTransform(m_it_mode, m_values.inj_tim_begin, 0);
  m_values.inj_tim_end = MathHelpers::InjTimValueTransform(m_it_mode, m_values.inj_tim_end, 0);
 
- m_ringRPM.Append((float)i_values->frequen);
+ m_ringRPM.Append((float)i_values->rpm);
  m_ringKnock.Append((float)i_values->knock_k);
  m_ringVBat.Append(i_values->voltage);
  m_ringMAP.Append(i_values->pressure);
@@ -420,7 +420,7 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
  m_ringTargAFR.Calculate();
 
  m_rpmQVal[0].push_back(std::make_pair(m_ringRPM.m_result, i_revdir));
- m_rpmQVal[1].push_back(std::make_pair((float)i_values->frequen, i_revdir));
+ m_rpmQVal[1].push_back(std::make_pair((float)i_values->rpm, i_revdir));
 
  m_knockQVal[0].push_back(std::make_pair(m_ringKnock.m_result, i_revdir));
  m_knockQVal[1].push_back(std::make_pair(i_values->knock_k, i_revdir));

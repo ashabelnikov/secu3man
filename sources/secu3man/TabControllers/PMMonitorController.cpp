@@ -42,11 +42,12 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-CPMMonitorController::CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, TDVIEW* ip_tdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
+CPMMonitorController::CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, TDVIEW* ip_tdview, TDVIEW* ip_sdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : Super(ip_view)
 , mp_rsdview(ip_rsdview)
 , mp_cedview(ip_cedview)
 , mp_tdview(ip_tdview)
+, mp_sdview(ip_sdview)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
 , mp_settings(ip_settings)
@@ -191,11 +192,8 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      //устанавливаем значения приборов, разрешаем их и переходим в основной режим
      mp_view->SetValues(sd);
      mp_cedview->SetValues(sd->ce_errors);
-     mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->air_flow, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
-      sd->idle_aalt, sd->idle_use, sd->work_aalt, sd->work_use, sd->temp_aalt, sd->temp_use, sd->airt_aalt, sd->airt_use,
-      sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use, sd->tps, sd->choke_pos, sd->tpsdot, sd->voltage, sd->lambda_mx,
-      sd->tmp2, sd->baro_press, sd->load, sd->afr, sd->acceleration, sd->ephh_valve, sd->air_temp, sd->rigid_arg, sd->rigid_use,
-      sd->map2, sd->rxlaf, sd->aftstr_enr, sd->mapdot, sd->afr2);
+     mp_tdview->SetDynamicValues(sd);     
+     mp_sdview->SetDynamicValues(sd);       
      mp_view->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
      mp_cedview->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
      mp_tdview->EnableAdvanceAngleIndication(mp_comm->m_pControlApp->GetOnlineStatus());
@@ -229,11 +227,8 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      SensorDat* sd = (SensorDat*)(i_packet_data);
      mp_view->SetValues(sd);
      mp_cedview->SetValues(sd->ce_errors);
-     mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->air_flow, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
-      sd->idle_aalt, sd->idle_use, sd->work_aalt, sd->work_use, sd->temp_aalt, sd->temp_use, sd->airt_aalt, sd->airt_use,
-      sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use, sd->tps, sd->choke_pos, sd->tpsdot, sd->voltage, sd->lambda_mx,
-      sd->tmp2, sd->baro_press, sd->load, sd->afr, sd->acceleration, sd->ephh_valve, sd->air_temp, sd->rigid_arg, sd->rigid_use,
-      sd->map2, sd->rxlaf, sd->aftstr_enr, sd->mapdot, sd->afr2);
+     mp_tdview->SetDynamicValues(sd);
+     mp_sdview->SetDynamicValues(sd);
     }
    }
    else

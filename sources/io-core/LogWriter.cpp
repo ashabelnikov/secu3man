@@ -115,7 +115,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
    (BYTE)time.wMinute,
    (BYTE)time.wSecond,
    time.wMilliseconds,
-   p_sensors->frequen,
+   p_sensors->rpm,
    p_sensors->adv_angle,
    p_sensors->pressure,
    p_sensors->voltage,
@@ -186,7 +186,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
    DwordToString(p_sensors->ce_errors, ce_errors);
 
    fprintf(m_out_handle, m_csv_data_template,
-                        p_sensors->frequen,
+                        p_sensors->rpm,
                         p_sensors->adv_angle,
                         p_sensors->pressure,          //MAP
                         p_sensors->voltage,

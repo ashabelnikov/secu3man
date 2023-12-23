@@ -42,7 +42,6 @@
 #include "TablDesk/GridModeEditorIgnDlg.h"
 #include "TablDesk/GridModeEditorInjDlg.h"
 #include "io-core/MapIds.h"
-#include "TablDesk/DynamicValues.h"
 
 #undef max
 
@@ -168,50 +167,10 @@ void CLPTablesController::OnDeactivate(void)
 void CLPTablesController::DisplayCurrentRecord(SECU3IO::SensorDat* sd)
 {
  if (m_firmware_opened && (mp_gridModeEditorIgnDlg.get() || mp_gridModeEditorInjDlg.get()))
- {
-  TablDesk::DynVal dv;
-  dv.rpm = sd->frequen;
-  dv.temp = sd->temperat;
-  dv.air_flow = sd->air_flow;
-  dv.adv_ang = sd->adv_angle;
-  dv.knock_retard = sd->knock_retard;
-  dv.knkret_use = sd->knkret_use;
-  dv.strt_aalt = sd->strt_aalt;
-  dv.strt_use = sd->strt_use;
-  dv.idle_aalt = sd->idle_aalt;
-  dv.idle_use = sd->idle_use;
-  dv.work_aalt = sd->work_aalt;
-  dv.work_use = sd->work_use;
-  dv.temp_aalt = sd->temp_aalt;
-  dv.temp_use = sd->temp_use;
-  dv.airt_aalt = sd->airt_aalt;
-  dv.airt_use = sd->airt_use;
-  dv.idlreg_aac = sd->idlreg_aac;
-  dv.idlreg_use = sd->idlreg_use;
-  dv.octan_aac = sd->octan_aac;
-  dv.octan_use = sd->octan_use;
-  dv.tps = sd->tps;
-  dv.iac_pos = sd->choke_pos;
-  dv.tpsdot = sd->tpsdot;
-  dv.voltage = sd->voltage;
-  dv.lambda_mx = sd->lambda_mx;
-  dv.tmp2 = sd->tmp2;      //GTS
-  dv.baro_press = sd->baro_press;
-  dv.load = sd->load;
-  dv.afr = sd->afr;
-  dv.acceleration = sd->acceleration;
-  dv.ie = sd->ephh_valve;
-  dv.air_temp = sd->air_temp;
-  dv.rigid_arg = sd->rigid_arg;
-  dv.rigid_use = sd->rigid_use;
-  dv.map2 = sd->map2; //GPS
-  dv.rxlaf = sd->rxlaf; //RxL air flow
-  dv.aftstr_enr = sd->aftstr_enr;
-  dv.mapdot = sd->mapdot;
-  if (mp_gridModeEditorIgnDlg.get())
-   mp_gridModeEditorIgnDlg->SetDynamicValues(dv);
+ {  if (mp_gridModeEditorIgnDlg.get())
+   mp_gridModeEditorIgnDlg->SetDynamicValues(*sd);
   if (mp_gridModeEditorInjDlg.get())
-   mp_gridModeEditorInjDlg->SetDynamicValues(dv);
+   mp_gridModeEditorInjDlg->SetDynamicValues(*sd);
  }
 }
 
@@ -340,9 +299,7 @@ void CLPTablesController::_OnGmeIgnButton(void)
    EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
    p_eedm->GetDefParamValues(FUNSET_PAR, &funsetPar);
   }
-  float upper_pressure = (funsetPar.load_src_cfg == 1) ? std::numeric_limits<float>::max() : funsetPar.map_upper_pressure;
-  //do not force update if MAP(baro) is selected! Because if MAP(baro) is selected, upper pressure will be updated in CGridModeEditorIgnDlg::SetDynamicValues()
-  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, upper_pressure, funsetPar.use_load_grid, funsetPar.load_src_cfg != 1);
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, funsetPar.map_upper_pressure, funsetPar.load_src_cfg, funsetPar.use_load_grid, true);
 
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
 
@@ -393,9 +350,7 @@ void CLPTablesController::_OnGmeInjButton(void)
    EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
    p_eedm->GetDefParamValues(FUNSET_PAR, &funsetPar);
   }
-  float upper_pressure = (funsetPar.load_src_cfg == 1) ? std::numeric_limits<float>::max() : funsetPar.map_upper_pressure;
-  //do not force update if MAP(baro) is selected! Because if MAP(baro) is selected, upper pressure will be updated in CGridModeEditorIgnDlg::SetDynamicValues()
-  mp_gridModeEditorInjDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, upper_pressure, funsetPar.use_load_grid, funsetPar.load_src_cfg != 1);
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(funsetPar.map_lower_pressure, funsetPar.map_upper_pressure, funsetPar.load_src_cfg, funsetPar.use_load_grid, true);
 
   mp_gridModeEditorInjDlg->SetITMode(mp_settings->GetITEdMode());
   mp_gridModeEditorInjDlg->SetSplitAngMode(_GetSplitAngMode()); //splitting

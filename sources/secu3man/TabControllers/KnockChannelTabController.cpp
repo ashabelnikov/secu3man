@@ -442,13 +442,13 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
  mp_view->AppendPoint(p_packet->knock_k);
 
  //update statictics only of RPM is rising
- if (p_packet->frequen > m_currentRPM)
+ if (p_packet->rpm > m_currentRPM)
  {
   //обновляем новым значением буфер функции сигнала ДД от оборотов
   //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
   //2. Если ячейка функции не заполнена значениями - добавляем значение. Если ячейка функции
   //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом.
-  int index_unchecked = MathHelpers::Round((p_packet->frequen - 200.f) / 60.f);
+  int index_unchecked = MathHelpers::Round((p_packet->rpm - 200.f) / 60.f);
   if (index_unchecked < 0)
    index_unchecked = 0;
   if (index_unchecked > (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1))
@@ -466,7 +466,7 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
  }
 
  //сохраняем текущее значение оборотов
- m_currentRPM = p_packet->frequen;
+ m_currentRPM = p_packet->rpm;
 }
 
 void CKnockChannelTabController::_PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function)

@@ -30,6 +30,7 @@
 
 #include "common/ParamPageEvents.h"
 #include "common/unicodesupport.h"
+#include "ITablesDeskView.h"
 #include "ui-core/UpdatableDialog.h"
 
 class CSeptabsPanel;
@@ -37,7 +38,7 @@ class CSeptabsPanel;
 /////////////////////////////////////////////////////////////////////////////
 // CTablesDeskDlg dialog
 
-class AFX_EXT_CLASS CSepTablesDeskDlg : public CModelessUpdatableDialog, public ParamPageEvents
+class AFX_EXT_CLASS CSepTablesDeskDlg : public CModelessUpdatableDialog, public ITablesDeskView, public ParamPageEvents
 {
   typedef CModelessUpdatableDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
@@ -78,6 +79,11 @@ class AFX_EXT_CLASS CSepTablesDeskDlg : public CModelessUpdatableDialog, public 
 
   //CSeptabsPanel
   std::auto_ptr<CSeptabsPanel> mp_SeptabsPanel;
+
+  //---------ITablesDeskView interface --------------------------
+  virtual void SetDynamicValues(const SECU3IO::SensorDat* sd);
+  virtual void EnableAdvanceAngleIndication(bool i_enable) { /*not used*/ };
+  //-------------------------------------------------------------
 
  // Implementation
  protected:

@@ -29,8 +29,10 @@
 #include <deque>
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
-#include "DynamicValues.h"
 #include "common/ObjectTimer.h"
+#include "LdaxCfg.h"
+
+namespace SECU3IO { struct SensorDat; };
 
 class CGridModeEditorInjDlg;
 class CGMEInjVEDlg;
@@ -63,7 +65,7 @@ struct NodePoint
 
 #define PTS_PER_NODE 16
 
-class CAutoTuneController
+class CAutoTuneController : public LdaxCfg
 {
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate0<> EventHandler;
@@ -76,12 +78,12 @@ class CAutoTuneController
 
  void Init(void);
 
- void SetDynamicValues(const TablDesk::DynVal& dv);
+ void SetDynamicValues(const SECU3IO::SensorDat& dv);
 
  void BindMaps(float* pVE, float* pAFR, float* pVE2);
  void BindRPMGrid(float* pGrid);
  void BindLoadGrid(const float* pGrid1, const float* pGrid2);
- void SetLoadAxisCfg(float minVal, float maxVal, bool useTable);
+ virtual void SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate = false);
  void SetVE2MapFunc(int func); // 0 - 1st map, 1 - mult, 2 - add
  void SetAFRError(float afrError);
  void SetStatSize(int statSize);
@@ -149,13 +151,7 @@ class CAutoTuneController
   const float* mp_lodGrid1; //load grid set for VE1
   const float* mp_lodGrid2; //load grid set for VE2
 
-  float m_ldaxMin;
-  float m_ldaxMax;
-  float m_baro_press;
-  bool m_ldaxNeedsUpdate;
-  bool m_ldaxUseTable;
-  const float* mp_lodGridx; //current load grid selected for VE1 (mp_lodGrid1 or m_dynGrid)
-  std::vector<float> m_dynGrid; //dynamically generated load grid
+  const float* mp_lodGridx; //current load grid selected for VE1 (mp_lodGrid1 or m_work_map_load_slots)
   float m_afrerr;
 
   CGMEInjVEDlg* mp_view;

@@ -57,9 +57,6 @@ CButtonsPanel::CButtonsPanel(bool enableAutoTune /*=false*/, bool onlineMode /*=
 , m_it_mode(0)
 , m_active_ve(0)
 , m_splitAng(false)
-, m_ldaxUseTable(false)
-, m_ldaxMinVal(0)
-, m_ldaxMaxVal(0)
 , m_ve2_map_func(0)
 , m_initialized(false)
 {
@@ -1584,7 +1581,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
   mp_gridModeEditorIgnDlg->setOnOpenMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnOpenMapWnd));
   mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
   VERIFY(mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL));
-  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable, false==m_onlineMode); //force update in offline mode
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(ldaxGetMin(), ldaxGetMax(), ldaxGetCfg(), ldaxIsTable(), false==m_onlineMode); //force update in offline mode
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
   m_md[ETMT_GME_IGN_WND].state = 1;
   m_md[ETMT_GME_IGN_WND].handle = mp_gridModeEditorIgnDlg->m_hWnd;
@@ -1610,7 +1607,7 @@ void CButtonsPanel::OnGridModeEditingInj()
    mp_autoTuneCntr->BindRPMGrid(GetRPMGrid());
    mp_autoTuneCntr->BindLoadGrid(GetLoadGrid(), &m_ve2_map_load_slots[0]);
    mp_autoTuneCntr->BindMaps(GetMap(ETMT_INJ_VE, false), GetMap(ETMT_INJ_AFR, false), GetMap(ETMT_INJ_VE2, false));
-   mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
+   mp_autoTuneCntr->SetLoadAxisCfg(ldaxGetMin(), ldaxGetMax(), ldaxGetCfg(), ldaxIsTable());
    mp_autoTuneCntr->SetVE2MapFunc(m_ve2_map_func);
    mp_autoTuneCntr->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
    mp_autoTuneCntr->Init();
@@ -1637,7 +1634,7 @@ void CButtonsPanel::OnGridModeEditingInj()
   mp_gridModeEditorInjDlg->setOnChangeSettings(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnChangeSettingsGME));
   mp_gridModeEditorInjDlg->SetActiveVEMap(m_active_ve); 
   VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
-  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable, false==m_onlineMode); //force update in offline mode
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(ldaxGetMin(), ldaxGetMax(), ldaxGetCfg(), ldaxIsTable(), false==m_onlineMode); //force update in offline mode
   mp_gridModeEditorInjDlg->SetITMode(m_it_mode);
   mp_gridModeEditorInjDlg->SetSplitAngMode(m_splitAng); //splitting
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
@@ -2009,7 +2006,7 @@ void CButtonsPanel::EnableAdvanceAngleIndication(bool i_enable)
   mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
 }
 
-void CButtonsPanel::SetDynamicValues(const TablDesk::DynVal& dv)
+void CButtonsPanel::SetDynamicValues(const SECU3IO::SensorDat& dv)
 {
  if (mp_gridModeEditorIgnDlg.get())
   mp_gridModeEditorIgnDlg->SetDynamicValues(dv);
@@ -2222,21 +2219,18 @@ void CButtonsPanel::OnSize(UINT nType, int cx, int cy)
  }
 }
 
-void CButtonsPanel::SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable, bool forceUpdate /*= false*/)
+void CButtonsPanel::SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate /*= false*/)
 {
- m_ldaxMinVal = minVal;
- m_ldaxMaxVal = maxVal;
- m_ldaxCfg = loadSrc;
- m_ldaxUseTable = useTable;
+ LdaxCfg::SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable, forceUpdate); //save values
 
  if (mp_gridModeEditorIgnDlg.get())
-  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable, forceUpdate);
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable, forceUpdate);
 
  if (mp_gridModeEditorInjDlg.get())
-  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable, forceUpdate);
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable, forceUpdate);
 
  if (mp_autoTuneCntr.get())
-  mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal, m_ldaxUseTable);
+  mp_autoTuneCntr->SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable);
 }
 
 void CButtonsPanel::SetVE2MapFunc(int func)

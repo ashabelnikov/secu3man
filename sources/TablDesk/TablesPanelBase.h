@@ -29,6 +29,7 @@
 #include <map>
 #include <vector>
 #include "common/FastDelegate.h"
+#include "LdaxCfg.h"
 
 struct MapData
 {
@@ -53,7 +54,7 @@ class CToolTipCtrlEx;
 /////////////////////////////////////////////////////////////////////////////
 // CTablesPanelBase class
 
-class AFX_EXT_CLASS CTablesPanelBase
+class AFX_EXT_CLASS CTablesPanelBase : public LdaxCfg
 {
  public:
   typedef fastdelegate::FastDelegate0<> EventHandler;
@@ -93,6 +94,7 @@ class AFX_EXT_CLASS CTablesPanelBase
 
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param);
+  static void __cdecl OnGetXAxisLabelLoad(LPTSTR io_label_string, int index, void* i_param);
 
   HWND _ChartParentHwnd(void);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);

@@ -36,7 +36,6 @@
 class CButtonsPanel;
 class CTDContextMenuManager;
 
-
 /////////////////////////////////////////////////////////////////////////////
 // CTablesDeskDlg dialog
 
@@ -44,6 +43,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
 {
  typedef CModelessUpdatableDialog Super;
  typedef fastdelegate::FastDelegate0<> EventHandler;
+ typedef fastdelegate::FastDelegate1<int> EventWithCode;
+ typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
 
  public:
   CTablesDeskDlg(CWnd* pParent = NULL);
@@ -55,7 +56,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   void SetTitle(const CString& i_str);
   void GetTitle(CString& o_str);
 
-  //----------interface implementation---------------------------
   virtual bool IsEnabled(void);
   virtual void Enable(bool enable);
   virtual void Show(bool show);
@@ -86,11 +86,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void SetTablesSetName(const _TSTRING& name);
   virtual _TSTRING GetTablesSetName(void) const;
 
-  virtual void SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,
-   float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
-   float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use, float tps, float iac_pos,
-   int tpsdot, float voltage, float add_i1, float tmp2, float baro_press, float load, float afr, bool acceleration, bool ie, float air_temp,
-   float rigid_arg, bool rigid_use, float map2, int rxlaf, bool aftstr_enr, int mapdot, float afr2);
+  //---------ITablesDeskView interface --------------------------
+  virtual void SetDynamicValues(const SECU3IO::SensorDat* sd);
   virtual void EnableAdvanceAngleIndication(bool i_enable);
   //-------------------------------------------------------------
 

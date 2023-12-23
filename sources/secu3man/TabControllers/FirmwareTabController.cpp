@@ -1102,7 +1102,7 @@ void CFirmwareTabController::SetViewChartsValues(void)
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
  mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
- mp_view->mp_TablesPanel->mp_ButtonsPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+ mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, params.load_src_cfg, params.use_load_grid, true);
 
  if (m_current_funset_index==-1)
   return;
@@ -1264,7 +1264,7 @@ void CFirmwareTabController::OnParamDeskChangeInTab(void)
  if (descriptor==FUNSET_PAR)
  {
   SECU3IO::FunSetPar &params = (SECU3IO::FunSetPar&)paramdata;
-  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true); //force update
+  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, params.load_src_cfg, params.use_load_grid, true); //force update
  }
 }
 
@@ -1387,7 +1387,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
   //apply load axis's grid settings for all related maps
   SECU3IO::FunSetPar params;
   mp_fwdm->GetDefParamValues(FUNSET_PAR, &params);
-  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, 0, params.use_load_grid, true);
+  mp_view->mp_TablesPanel->SetLoadAxisCfg(params.map_lower_pressure, params.map_upper_pressure, params.load_src_cfg, params.use_load_grid, true);
 
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }

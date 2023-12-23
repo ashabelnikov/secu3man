@@ -175,7 +175,19 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
  {
   switch(m_operation_state)
   {
-   case 0: //Read out RPM grid
+   case 0: //Read out FUNSET_PAR
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_PARAMS));
+    if (i_descriptor != FUNSET_PAR)
+     mp_comm->m_pControlApp->ChangeContext(FUNSET_PAR);
+    else
+    {//save read parameters
+     const FunSetPar* data = (const FunSetPar*)i_packet_data;
+     mp_view->mp_SeptabsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg, data->use_load_grid);
+     m_operation_state = 1;
+    }
+    break;
+
+   case 1: //Read out RPM grid
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_RPMGRD));
     if (i_descriptor != RPMGRD_PAR)
      mp_comm->m_pControlApp->ChangeContext(RPMGRD_PAR);
@@ -183,10 +195,10 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
     {//save RPM grid
      const SepTabPar* data = (const SepTabPar*)i_packet_data;
      memcpy(m_rpmGrid, data->table_data, F_RPM_SLOTS*sizeof(float)); //save RPM grid
-     m_operation_state = 1;
+     m_operation_state = 2;
     }
     break;
-   case 1: //Read out CLT grid
+   case 2: //Read out CLT grid
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_CLTGRD));
     if (i_descriptor != CLTGRD_PAR)
      mp_comm->m_pControlApp->ChangeContext(CLTGRD_PAR);
@@ -194,10 +206,10 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
     {//save CLT grid
      const SepTabPar* data = (const SepTabPar*)i_packet_data;
      memcpy(m_cltGrid, data->table_data, F_TMP_SLOTS*sizeof(float)); //save CLT grid
-     m_operation_state = 2;
+     m_operation_state = 3;
     }
     break;
-   case 2: //Read out load grid
+   case 3: //Read out load grid
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_LODGRD));
     if (i_descriptor != LODGRD_PAR)
      mp_comm->m_pControlApp->ChangeContext(LODGRD_PAR);
@@ -284,7 +296,7 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
  {
   switch(m_operation_state)
   {
-   case 0: //Read out RPM grid
+   case 0:
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
     mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR, m_collectId);
     m_operation_state = 1;
@@ -295,7 +307,7 @@ bool CPMSeptabsController::CollectData(const BYTE i_descriptor, const void* i_pa
      m_operation_state = 0;
      break;
     }
-    //update chache and perform checking
+    //update cache and perform checking
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
     if (_isCacheUpToDate(data->tab_id))
@@ -414,7 +426,13 @@ void CPMSeptabsController::_SynchronizeMap(int i_mapType)
  size_t mapSize = FWMapsDataHolder::GetMapSize(i_mapType); //map size in items (not bytes)
 
  size_t pieceSize = 16; //for all maps exept dwell
- if (i_mapType == ETMT_DWELLCNTRL || i_mapType == ETMT_CTS_CURVE || i_mapType == ETMT_ATS_CURVE || i_mapType == ETMT_TMP2_CURVE || i_mapType == ETMT_GRTS_CURVE || i_mapType == ETMT_FTS_CURVE || i_mapType == ETMT_FTLS_CURVE || i_mapType == ETMT_EGTS_CURVE || i_mapType == ETMT_OPS_CURVE || i_mapType == ETMT_MAF_CURVE || i_mapType == ETMT_BAROCORR || i_mapType == ETMT_AFTSTR_STRK0 || i_mapType == ETMT_AFTSTR_STRK1 || i_mapType == ETMT_PWMIAC_UCOEF || i_mapType == ETMT_GRVDELAY || i_mapType == ETMT_MANINJPWC || i_mapType == ETMT_FTLSCOR || i_mapType == ETMT_FUELDENS_CORR || i_mapType == ETMT_XTAU_XFACC || i_mapType == ETMT_XTAU_XFDEC || i_mapType == ETMT_XTAU_TFACC || i_mapType == ETMT_XTAU_TFDEC || i_mapType == ETMT_INJNONLINP || i_mapType == ETMT_INJNONLING)
+ if (i_mapType == ETMT_DWELLCNTRL || i_mapType == ETMT_CTS_CURVE || i_mapType == ETMT_ATS_CURVE || i_mapType == ETMT_TMP2_CURVE ||
+     i_mapType == ETMT_GRTS_CURVE || i_mapType == ETMT_FTS_CURVE || i_mapType == ETMT_FTLS_CURVE || i_mapType == ETMT_EGTS_CURVE ||
+     i_mapType == ETMT_OPS_CURVE || i_mapType == ETMT_MAF_CURVE || i_mapType == ETMT_BAROCORR || i_mapType == ETMT_AFTSTR_STRK0 ||
+     i_mapType == ETMT_AFTSTR_STRK1 || i_mapType == ETMT_PWMIAC_UCOEF || i_mapType == ETMT_GRVDELAY || i_mapType == ETMT_MANINJPWC ||
+     i_mapType == ETMT_FTLSCOR || i_mapType == ETMT_FUELDENS_CORR || i_mapType == ETMT_XTAU_XFACC || i_mapType == ETMT_XTAU_XFDEC ||
+     i_mapType == ETMT_XTAU_TFACC || i_mapType == ETMT_XTAU_TFDEC || i_mapType == ETMT_INJNONLINP || i_mapType == ETMT_INJNONLING ||
+     i_mapType == ETMT_EGO_DELAY)
   pieceSize = 8;
  else if (i_mapType == ETMT_KNOCK_ZONE || i_mapType == ETMT_LAMBDA_ZONE)
   pieceSize = F_WRK_POINTS_F*2;
@@ -598,4 +616,9 @@ void CPMSeptabsController::setOnChangeSettings(EventHandler OnCB)
 void CPMSeptabsController::OnSettingsChanged(void)
 {
  mp_view->mp_SeptabsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+}
+
+void CPMSeptabsController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
+{
+ mp_view->mp_SeptabsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg, data->use_load_grid);
 }

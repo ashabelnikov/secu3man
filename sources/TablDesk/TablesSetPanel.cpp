@@ -119,7 +119,7 @@ void CTablesSetPanel::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(1330));
+  mp_scr->SetViewSize(cx, da.ScaleY(1350));
 }
 
 void CTablesSetPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
@@ -257,4 +257,10 @@ void CTablesSetPanel::OnShow(bool show)
 {
  mp_ButtonsPanel->OnShow(show);
  mp_SeptabsPanel->OnShow(show);
+}
+
+void CTablesSetPanel::SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable, bool forceUpdate /*= false*/)
+{
+ mp_ButtonsPanel->SetLoadAxisCfg(minVal, maxVal, loadSrc, useTable, forceUpdate);
+ mp_SeptabsPanel->SetLoadAxisCfg(minVal, maxVal, loadSrc, useTable, forceUpdate);
 }

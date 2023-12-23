@@ -251,7 +251,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   o_data.aftstr_enr = CHECKBIT16(s3l.flags, 1);
   o_data.iac_cl_loop = CHECKBIT16(s3l.flags, 0);
 
-  o_data.frequen = s3l.frequen;
+  o_data.rpm = s3l.rpm;
   o_data.adv_angle = s3l.adv_angle;
   o_data.pressure = s3l.pressure;
   o_data.voltage = s3l.voltage;
@@ -338,7 +338,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_time.wSecond = wSecond;
  o_time.wMilliseconds = wMilliseconds * 10; //переводим из сотых в миллисекунды
 
- int frequen,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan,st_block,acceleration,fc_revlim,floodclear,sys_locked,ce_state,ign_i,cond_i,epas_i,log_mark, aftstr_enr, iac_cl_loop = 0;
+ int rpm,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan,st_block,acceleration,fc_revlim,floodclear,sys_locked,ce_state,ign_i,cond_i,epas_i,log_mark, aftstr_enr, iac_cl_loop = 0;
  int tpsdot = 0, mapdot=  0, rxlaf = 0;
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
  float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
@@ -347,7 +347,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  char ce_errors[35] = {0};
 
  result = sscanf(mp_recBuff + CSV_TIME_PANE_LEN, m_csv_data_template,
-                &frequen,
+                &rpm,
                 &adv_angle,
                 &pressure,
                 &voltage,
@@ -432,7 +432,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   ce_bits|= (ce_errors[i] == '1') ? (mask >> i) : 0;
  }
  //Save all data fields
- o_data.frequen = frequen;
+ o_data.rpm = rpm;
  o_data.adv_angle = adv_angle;
  o_data.pressure = pressure;
  o_data.voltage = voltage;

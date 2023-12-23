@@ -1,4 +1,3 @@
-
 /* SECU-3  - An open source, free engine control unit
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 
@@ -20,61 +19,32 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file DynamicValues.h
+/** \file MITargAFR.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-namespace TablDesk
+#include "MeasInstrBase.h"
+
+class AFX_EXT_CLASS CMITargAFR : public MeasInstrBase
 {
- struct DynVal
- {
-  int rpm;
-  float temp;
-  int air_flow;
+ public:
+  CMITargAFR();
+  virtual ~CMITargAFR();
 
-  float adv_ang;
-  float knock_retard;
-  bool knkret_use;
-  float strt_aalt;
-  bool strt_use;
-  float idle_aalt;
-  bool idle_use;
-  float work_aalt;
-  bool work_use;
-  float temp_aalt;
-  bool temp_use;
-  float airt_aalt;
-  bool airt_use;
-  float idlreg_aac;
-  bool idlreg_use;
-  float octan_aac;
-  bool octan_use;
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};
 
-  float tps;
-  float iac_pos;
-  int tpsdot;
-  float voltage;
-  float lambda_mx;  //lambda sensor (mixed voltages from 2 sensors)
-  float tmp2;
-  float baro_press;
-  float load;
+class AFX_EXT_CLASS CMITargAFRGraph : public MeasInstrBase
+{
+ public:
+  CMITargAFRGraph();
+  virtual ~CMITargAFRGraph();
 
-  float afr;
-  float afr2;
-  bool acceleration; //acceleration/deceleration
-  bool ie; //fuel cut if = 0
-
-  float air_temp; //IAT
-
-  float rigid_arg; //idling regulator rigidity's argument
-  bool rigid_use;
-
-  float map2;  //gas pressure sensor
-
-  int rxlaf;
-  bool aftstr_enr;
-  int mapdot;
- };
-}
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

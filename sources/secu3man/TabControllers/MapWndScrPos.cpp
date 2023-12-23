@@ -501,6 +501,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_InjNonLinGMapWnd_W = rc.right - rc.left;
    sz.m_InjNonLinGMapWnd_H = rc.bottom - rc.top;
    break;
+  case ETMT_EGO_DELAY:
+   ws.m_EGODelayMapWnd_X = rc.left;
+   ws.m_EGODelayMapWnd_Y = rc.top;
+   sz.m_EGODelayMapWnd_W = rc.right - rc.left;
+   sz.m_EGODelayMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -828,6 +834,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case ETMT_INJNONLING:
    X = ws.m_InjNonLinGMapWnd_X, Y = ws.m_InjNonLinGMapWnd_Y;
    W = sz.m_InjNonLinGMapWnd_W, H = sz.m_InjNonLinGMapWnd_H;
+   break;
+  case ETMT_EGO_DELAY:
+   X = ws.m_EGODelayMapWnd_X, Y = ws.m_EGODelayMapWnd_Y;
+   W = sz.m_EGODelayMapWnd_W, H = sz.m_EGODelayMapWnd_H;
    break;
 
   default:

@@ -509,7 +509,8 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
   {
    TCHAR string[64];
    _tcscpy(string, LabelText.c_str());
-   m_pOnGetYAxisLabel(string, ValueIndex, m_param_on_get_y_axis_label);
+   if (ValueIndex >= 0)
+    m_pOnGetYAxisLabel(string, ValueIndex, m_param_on_get_y_axis_label);
    LabelText = string;
   }
  }
@@ -521,20 +522,23 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
    { //custom labels
     TCHAR string[64];
     _tcscpy(string, LabelText.c_str());
-    m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
+    if (ValueIndex >= 0)
+     m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
     LabelText = string;
    }
   }
   else if (1==m_horizontal_axis_grid_mode)  //begin & end bins
   {
    AnsiString as;
-   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[ValueIndex]);
+   if (ValueIndex >= 0)
+    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[ValueIndex]);
    LabelText = as;
   }
   else if (2==m_horizontal_axis_grid_mode)  //separate bins mode
   {
    AnsiString as;
-   as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[ValueIndex + m_count_of_function_points]);
+   if (ValueIndex >= 0)
+    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[ValueIndex + m_count_of_function_points]);
    LabelText = as;
   }
  }

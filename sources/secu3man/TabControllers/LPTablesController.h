@@ -29,7 +29,6 @@
 #include <vector>
 #include "common/unicodesupport.h"
 #include "common/fastdelegate.h"
-#include "TablDesk/DynamicValues.h"
 #include "MapWndScrPos.h"
 #include "io-core/FirmwareMapsDataHolder.h"
 

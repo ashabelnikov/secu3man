@@ -32,6 +32,7 @@
 #include "GMEInjVEDlg.h"
 #include "GridModeEditorInjDlg.h"
 #include "io-core/MapIds.h"
+#include "io-core/SECU3IO.h"
 #include "ui-core/MsgBox.h"
 
 #define LDQUEUE_SIZE 500 //approx. at least 5 seconds of records
@@ -44,7 +45,7 @@
 
 #pragma warning(disable : 4355)  
 
-float blendAfr(const TablDesk::DynVal& dv)
+float blendAfr(const SECU3IO::SensorDat& dv)
 {
  if (dv.afr!=.0f && dv.afr2!=.0f)
   return (dv.afr + dv.afr2) / 2.0f;
@@ -63,10 +64,6 @@ CAutoTuneController::CAutoTuneController()
 , mp_lodGrid2(NULL)
 , mp_lodGridx(NULL)
 , m_active(false)
-, m_ldaxMin(1.0f)
-, m_ldaxMax(16.0f)
-, m_ldaxNeedsUpdate(false)
-, m_baro_press(101.3f) //sea level atmospheric pressure by default
 , m_afrerr(0.1f)
 , mp_view(NULL)
 , m_fifoReady(false)
@@ -81,13 +78,11 @@ CAutoTuneController::CAutoTuneController()
 , m_minTPS(0.0)
 , m_maxTPS(100.0)
 , m_cltThrd(70.0)
-, m_ldaxUseTable(false)
 , m_ve2mf(0) //use 1st VE map (neither mul or add)
 , m_active_ve(0) //1st VE map is active by default
 , m_tunSoft(1.0f)
 {
- m_dynGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
- mp_lodGridx = &m_dynGrid[0]; //select default load grid for VE1
+ mp_lodGridx = &m_work_map_load_slots[0]; //select default load grid for VE1
 
  for (int l = 0; l < VEMAP_LOAD_SIZE; ++l)
  {
@@ -119,27 +114,25 @@ size_t CAutoTuneController::_CalcFIFOSize(void)
  return MathHelpers::Round((m_maxLamDel * LDQUEUE_SIZE_MIN) / dtm);
 }
 
-void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
+void CAutoTuneController::SetDynamicValues(const SECU3IO::SensorDat& dv)
 {
  if (!m_active)
   return; //not in active state or FIFO is not initialized
 
  //update load axis grid if necessry
- bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
- if (m_ldaxNeedsUpdate || (!MathHelpers::IsEqualFlt(m_baro_press, dv.baro_press, 0.01f) && useBaroMax))
+ if (m_ldaxNeedsUpdate || ldaxWatchBaroPress(dv.baro_press))
  {
-  if (m_ldaxUseTable)
+  if (ldaxIsTable())
   {
    mp_lodGridx = mp_lodGrid1;   //use for VE1 load grid map set by BindLoadGrid()
   }
   else
   {
-   m_dynGrid = MathHelpers::BuildGridFromRange(m_ldaxMin, (useBaroMax ? dv.baro_press : m_ldaxMax), VEMAP_LOAD_SIZE);
-   mp_lodGridx = &m_dynGrid[0];//use for VE1 dynamically generated load grid map
+   m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetBaroMax(), VEMAP_LOAD_SIZE);
+   mp_lodGridx = &m_work_map_load_slots[0];//use for VE1 dynamically generated load grid map
   }
   m_ldaxNeedsUpdate = false;
  }
- m_baro_press = dv.baro_press;
 
  //Add new item into the FIFO
  LogDataEntry lde, e;
@@ -147,9 +140,9 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  lde.load = dv.load;
  lde.afr = blendAfr(dv); //because we have single VE map, but two oxygen sensors
  lde.ae = dv.acceleration; //acceleration/deceleration
- lde.ie = dv.ie;  //fuel cut
+ lde.ie = dv.ephh_valve;  //fuel cut
  lde.tps = dv.tps;
- lde.clt = dv.temp; //coolant temperature
+ lde.clt = dv.temperat; //coolant temperature
  lde.time = GetTickCount(); //time when data entry arrived
 
  m_logdata.push_front(lde);
@@ -624,13 +617,9 @@ void CAutoTuneController::setOnMapChanged(EventWithCode OnFunction)
  m_OnMapChanged = OnFunction;
 }
 
-void CAutoTuneController::SetLoadAxisCfg(float minVal, float maxVal, bool useTable)
+void CAutoTuneController::SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate /*= false*/)
 {
- if (!MathHelpers::IsEqualFlt(m_ldaxMin, minVal, 0.01f) || !MathHelpers::IsEqualFlt(m_ldaxMax, maxVal, 0.01f) || (m_ldaxUseTable != useTable))
-  m_ldaxNeedsUpdate = true;
- m_ldaxMin = minVal;
- m_ldaxMax = maxVal;
- m_ldaxUseTable = useTable;
+ LdaxCfg::SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable);
 }
 
 void CAutoTuneController::BindRPMGrid(float* pGrid)

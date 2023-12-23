@@ -1871,3 +1871,47 @@ void __cdecl CSeptabsPanel::OnWndActivationInjNonLinGTable(void* i_param, long c
 }
 
 //------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeEGODelayMap(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_EGO_DELAY);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseEGODelayMap(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_EGO_DELAY].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_EGO_DELAY].handle, ETMT_EGO_DELAY);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationEGODelayMap(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_EGO_DELAY].handle, cmd);
+}
+
+//------------------------------------------------------------------------

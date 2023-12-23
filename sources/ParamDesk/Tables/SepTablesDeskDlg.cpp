@@ -300,3 +300,9 @@ void CSepTablesDeskDlg::EnableSaveButton(bool enable)
  m_enable_save_button = enable;
  UpdateDialogControls(this, TRUE);
 }
+
+void CSepTablesDeskDlg::SetDynamicValues(const SECU3IO::SensorDat* sd)
+{
+ if (!mp_SeptabsPanel.get()) return;
+ mp_SeptabsPanel->SetDynamicValues(*sd);
+}

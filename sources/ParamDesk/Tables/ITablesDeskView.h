@@ -28,54 +28,14 @@
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
 
-//Интерфейс для взаимодействия с панелью редактирования таблиц (представлением)
-//Особенность: Любой из следующих методов интерфейса может быть вызван независимо
-//от того - видна вкладка или нет (кроме SetCurSel()).
+namespace SECU3IO { struct SensorDat; };
 
 class ITablesDeskView
 {
  public:
-  typedef fastdelegate::FastDelegate0<> EventHandler;
-  typedef fastdelegate::FastDelegate1<int> EventWithCode;
-  typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
+  //Dynamically indicated values in the GME window(s)
+  virtual void SetDynamicValues(const SECU3IO::SensorDat* sd) = 0;
 
-  //Common
-  virtual bool IsEnabled(void) = 0;                               //Возвращает true если представление разрешено
-  virtual void Enable(bool enable) = 0;                           //enable/disable view
-  virtual void Show(bool show) = 0;                               //показать/спрятать контент представления
-  virtual void ShowOpenedCharts(bool i_show) = 0;                 //show/hide opened charts
-  virtual void UpdateOpenedCharts(void) = 0;                      //update opened charts
-  virtual void TransformValues(void) = 0;                         //transform values in maps
-  virtual void SetReadOnlyTablesSetName(bool readonly) = 0;       //enable/disable tables set's name edit box
-  virtual void SetModificationFlag(bool value) = 0;               //set/reset modification flag
-  virtual void MakeChartsChildren(bool children) = 0;             //make charts children to "parameters and monitor" window
-  virtual void EnableToggleMapWnd(bool toggle) = 0;               //enabling toggling of map windows/buttos
-  virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index) = 0; //Set names of read-only and read/write tables
-  virtual void SetRPMGrid(const float* values) = 0;               //Set RPM grid for horizontal axis of tables
-  virtual void SetCLTGrid(const float* values) = 0;               //Set CLT grid for horizontal axis of tables
-  virtual void SetLoadGrid(const float* values) = 0;              //Set load grid for vertical axis of tables
-  virtual void CloseAllCharts(void) = 0;                          //close all charts' windows
-
-  //events
-  virtual void setOnMapChanged(EventWithCode OnFunction) = 0;     //обработцик будет вызываться при изменении в любой из таблиц
-  virtual void setOnCloseMapWnd(EventWithHWND OnFunction) = 0;    //обработцик будет вызываться при закрытии окна с таблицей
-  virtual void setOnOpenMapWnd(EventWithHWND OnFunction) = 0;     //обработцик будет вызываться при открытии окна с таблицей  
-  virtual void setOnSaveButton(EventHandler OnFunction) = 0;      //обработчик будет вызываться при нажатии кнопки "сохранить"
-  virtual void setOnChangeTablesSetName(EventHandler OnFunction) = 0;//обработчик будет вызываться при нажатии кнопки "сохранить"
-  virtual void setOnLoadTablesFrom(EventWithCode OnFunction) = 0; //обработчик будет вызываться при выборе п. меню для загрузки таблиц.
-  virtual void setOnSaveTablesTo(EventWithCode OnFunction) = 0;   //обработчик будет вызываться при выборе п. меню для сохранения таблиц.
-  virtual void setOnImportFromS3F(EventHandler OnFunction) = 0;   //
-  virtual void setOnExportToS3F(EventHandler OnFunction) = 0;     //
-
-  //Data access
-  virtual void SetTablesSetName(const _TSTRING& name) = 0;        //set name to edit box 
-  virtual _TSTRING GetTablesSetName(void) const = 0;              //get name from edit box
-
-  //Dynamically indicated values
-  virtual void SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,//set values dynamycally indicated in the GMW window
-   float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
-   float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use, float tps, float iac_pos, 
-   int tpsdot, float voltage, float add_i1, float tmp2, float baro_press, float load, float afr, bool acceleration, bool ie, float air_temp,
-   float rigid_arg, bool rigid_use, float map2, int rxlaf, bool aftstr_enr, int mapdot, float afr2) = 0;
-  virtual void EnableAdvanceAngleIndication(bool i_enable) = 0;   //enable/disable grid mode editing window
+  //enable/disable indication of ignition timing values in GME window
+  virtual void EnableAdvanceAngleIndication(bool i_enable) = 0;
 };

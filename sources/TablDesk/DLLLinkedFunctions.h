@@ -58,6 +58,8 @@ namespace DLL
  typedef float (__cdecl *Chart2DGetPtMovingStep_Addr) (HWND hWnd);
  typedef void (__cdecl *Chart2DUpdateYRange_Addr) (HWND hWnd, float i_fnc_min, float i_fnc_max);
  typedef void (__cdecl *Chart2DSetCSVSepSymbol_Addr) (char sepsymb);
+ typedef void (__cdecl *Chart2DSetAxisTitle_Addr)(HWND hWnd, int i_axis, LPCTSTR i_axis_title);
+ typedef void (__cdecl *Chart2DRefresh_Addr)(HWND hWnd);
 
  //3D
  typedef HWND (__cdecl *Chart3DCreate_Addr) (HWND parent, const float *ip_original_function, float *iop_modified_function, const float *ip_x_axis_grid_values, int i_x_count_of_points, int i_z_count_of_points, float i_aai_min, float i_aai_max, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
@@ -102,6 +104,8 @@ namespace DLL
  extern Chart2DGetPtMovingStep_Addr     Chart2DGetPtMovingStep;
  extern Chart2DUpdateYRange_Addr        Chart2DUpdateYRange;
  extern Chart2DSetCSVSepSymbol_Addr     Chart2DSetCSVSepSymbol;
+ extern Chart2DSetAxisTitle_Addr        Chart2DSetAxisTitle;
+ extern Chart2DRefresh_Addr             Chart2DRefresh;
 
  extern Chart3DCreate_Addr              Chart3DCreate;
  extern Chart3DUpdate_Addr              Chart3DUpdate;

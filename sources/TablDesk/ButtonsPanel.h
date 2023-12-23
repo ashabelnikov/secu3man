@@ -33,6 +33,7 @@
 #include "TablesPanelBase.h"
 
 class CAutoTuneController;
+namespace SECU3IO { struct SensorDat; };
 
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
@@ -66,9 +67,9 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   //used for grid mode editing window
   void EnableAdvanceAngleIndication(bool i_enable);
 
-  void SetDynamicValues(const TablDesk::DynVal& dv);
+  void SetDynamicValues(const SECU3IO::SensorDat& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable, bool forceUpdate = false);
+  virtual void SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate = false);
   void SetVE2MapFunc(int func);
 
   virtual void EnableFuelInjection(bool i_enable);
@@ -368,11 +369,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
  protected:
   CStatic m_setidx;
   bool m_choke_op_enabled;
-
-  float m_ldaxMinVal;
-  float m_ldaxMaxVal;
-  int m_ldaxCfg;
-  bool m_ldaxUseTable;
   
   int m_it_mode;
   int m_active_ve;

@@ -58,6 +58,8 @@ extern "C"
  float __declspec(dllexport)  __cdecl Chart2DGetPtMovingStep(HWND hWnd);
  void  __declspec(dllexport)  __cdecl Chart2DUpdateYRange(HWND parent, float i_fnc_min, float i_fnc_max);
  void  __declspec(dllexport)  __cdecl Chart2DSetCSVSepSymbol(char sepsymb);
+ void  __declspec(dllexport)  __cdecl Chart2DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR i_axis_title);
+ void  __declspec(dllexport)  __cdecl Chart2DRefresh(HWND hWnd);
 }
 
 extern HINSTANCE hInst;
@@ -94,7 +96,7 @@ HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float
  if (ip_x_axis_grid_values)
  {
   if (0==i_bins_mode) //0,1 modes
-   memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * i_count_of_points);
+   memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * i_count_of_points);   
   else //mode 2
    memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * 5); //5 values: min,max,inc,dec places,min diff
  }
@@ -220,7 +222,7 @@ void __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted)
    pForm->Chart1->LeftAxis->Inverted = i_inverted;
    break;
   default:
-   MessageBox(hWnd, _T("Chart2DSetInverted: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   MessageBox(hWnd, _T("Chart2DInverseAxis: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
    break;
  }
 }
@@ -363,3 +365,34 @@ void __cdecl Chart2DSetCSVSepSymbol(char sepsymb)
 {
  TForm2D::m_csvsep_symb = sepsymb;
 }
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR i_axis_title)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ switch(i_axis)
+ {
+  case 0: //Y
+   pForm->Chart1->LeftAxis->Title->Caption = pForm->m_y_axis_title = i_axis_title;
+   break;
+  case 1: //X
+   pForm->Chart1->BottomAxis->Title->Caption = pForm->m_x_axis_title = i_axis_title;
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart2DSetAxisTitle: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DRefresh(HWND hWnd)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->Chart1->Refresh();
+}
+
+//---------------------------------------------------------------------------

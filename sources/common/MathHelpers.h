@@ -48,7 +48,7 @@ namespace MathHelpers
 
  //Round floating point number to the value with 0.1 precision (e.g. 14.68 ==> 14.7)
  template <class FPN>
- FPN RoundP1(FPN f)
+ inline FPN RoundP1(FPN f)
  {
   return floor((f * 10 ) + 0.5f) / 10;
  }
@@ -269,7 +269,7 @@ namespace MathHelpers
 
   //Restrict specified value to min and max
  template <class T>
- T RestrictValue(T i_value, T i_min, T i_max)
+ inline T RestrictValue(T i_value, T i_min, T i_max)
  {
   if (i_value < i_min)
    i_value = i_min;
@@ -392,7 +392,7 @@ namespace MathHelpers
  //Compare two floating point numbers
  //Note: this function may work incorrectly with small values of e due to features of floating point numbers' representation.
  template <class T>
- bool IsEqualFlt(T a, T b, T e)
+ inline bool IsEqualFlt(T a, T b, T e)
  {
   return fabs(a - b) < e;
  }

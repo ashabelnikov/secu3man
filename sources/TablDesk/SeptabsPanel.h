@@ -29,6 +29,8 @@
 #include "common/FastDelegate.h"
 #include "TablesPanelBase.h"
 
+namespace SECU3IO { struct SensorDat; };
+
 /////////////////////////////////////////////////////////////////////////////
 // CSeptabsPanel dialog
 
@@ -77,6 +79,10 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   virtual void MakeChartsChildren(bool children);
 
   void EnableEmbedMapWnd(bool embed, const CRect& rc);
+
+  virtual void SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate = false);
+
+  void SetDynamicValues(const SECU3IO::SensorDat& dv);
 
  public: //set event handlers
   void setOnRPMGridEditButton(EventHandler OnFunction);
@@ -130,6 +136,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnViewXtauTfDecMap();
   afx_msg void OnViewInjNonLinPMap();
   afx_msg void OnViewInjNonLinGMap();
+  afx_msg void OnViewEGODelayMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -167,6 +174,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnUpdateViewXtauTfDecMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewInjNonLinPMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewInjNonLinGMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewEGODelayMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsFWC(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsGRD(CCmdUI* pCmdUI);
@@ -334,6 +342,10 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnChangeInjNonLinGTable(void* i_param);
   static void __cdecl OnCloseInjNonLinGTable(void* i_param);
   static void __cdecl OnWndActivationInjNonLinGTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeEGODelayMap(void* i_param);
+  static void __cdecl OnCloseEGODelayMap(void* i_param);
+  static void __cdecl OnWndActivationEGODelayMap(void* i_param, long cmd);
 
  private:
   EventHandler m_OnRPMGridEditButton;

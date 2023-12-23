@@ -309,7 +309,7 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
      m_view->UpdateView(true);
      m_baroPrev = sd->baro_press; //update cached value
     }
-    m_view->SetArguments(sd->frequen, sd->load, sd->strt_use);
+    m_view->SetArguments(sd->rpm, sd->load, sd->strt_use);
    }
    break;
  }//switch

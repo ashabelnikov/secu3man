@@ -182,6 +182,8 @@ struct WndSettings
  int m_InjNonLinPMapWnd_Y;
  int m_InjNonLinGMapWnd_X;
  int m_InjNonLinGMapWnd_Y;
+ int m_EGODelayMapWnd_X;
+ int m_EGODelayMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -339,6 +341,8 @@ struct WndSize
  int m_InjNonLinPMapWnd_H;
  int m_InjNonLinGMapWnd_W;
  int m_InjNonLinGMapWnd_H;
+ int m_EGODelayMapWnd_W;
+ int m_EGODelayMapWnd_H;
 };
 
 //Holds windows's state data

@@ -73,6 +73,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CDialog
 
   void EnableEmbedMapWnd(bool embed, const CRect& rc);
 
+  void SetLoadAxisCfg(float minVal, float maxVal, int loadSrc, bool useTable, bool forceUpdate = false);
+
   std::auto_ptr<CButtonsPanel> mp_ButtonsPanel;  //set of maps
   std::auto_ptr<CSeptabsPanel> mp_SeptabsPanel;  //group of separate maps
 

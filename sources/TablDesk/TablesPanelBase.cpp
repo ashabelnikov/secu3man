@@ -24,6 +24,7 @@
  */
 
 #include "stdafx.h"
+#include "resource.h"
 #include "TablesPanelBase.h"
 #include "common/dpiaware.h"
 #include "common/GDIHelpers.h"
@@ -209,6 +210,20 @@ void __cdecl CTablesPanelBase::OnGetXAxisLabelCLT(LPTSTR io_label_string, int in
   return;
  }
  _stprintf(io_label_string, _T("%d"), MathHelpers::Round(_this->GetCLTGrid()[index]));
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesPanelBase::OnGetXAxisLabelLoad(LPTSTR io_label_string, int index, void* i_param)
+{
+ CTablesPanelBase* _this = static_cast<CTablesPanelBase*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //WTF?
+  return;
+ }
+
+ float value = _this->ldaxIsTable() ? _this->GetLoadGrid()[index] : _this->m_work_map_load_slots[index];
+ _stprintf(io_label_string, _T("%d"), MathHelpers::Round(value));
 }
 
 //------------------------------------------------------------------------

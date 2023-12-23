@@ -106,6 +106,7 @@ BEGIN
     CONTROL         "Настр. крив. ДТВГ",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,629,96,18
     CONTROL         "Настр. крив. ДДМ",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,648,96,18
     CONTROL         "Кривая расхода ДМРВ",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,667,96,18
+    CONTROL         "Задержка ДК",IDC_TD_EGO_DELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,686,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -116,7 +117,7 @@ BEGIN
     GROUPBOX        "Наборы таблиц",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,350
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,370
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -874,6 +875,10 @@ BEGIN
     IDS_INJNONLING_MAP         "Коррекция нелинейности форсунки (газ)"
     IDS_TD_INJNONLINP_MAP_TT   "Таблица коррекции нелинейности форсунки при малых длительностях впрыска для бензина."
     IDS_TD_INJNONLING_MAP_TT   "Таблица коррекции нелинейности форсунки при малых длительностях впрыска для газа."
+    IDS_TD_EGO_DELAY_MAP_TT    "Задержка сигнала с датчика кислорода в зависимости от нагрузки на двигатель."
+    IDS_EGO_DELAY_MAP          "Зависимость задержки ДК от нагрузки на двигатель"
+    IDS_MAPS_LOADKPA_UNIT      "Нагрузка (кПа)"
+    IDS_MAPS_LOADPRC_UNIT      "Нагрузка (%)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -977,6 +982,7 @@ BEGIN
     CONTROL         "Tune EGTS curve",IDC_TD_EGTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,629,96,18
     CONTROL         "Tune OPS curve",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,648,96,18
     CONTROL         "MAF flow curve",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,667,96,18
+    CONTROL         "EGO delay",IDC_TD_EGO_DELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,686,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -987,7 +993,7 @@ BEGIN
     GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,350
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,370
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1747,6 +1753,10 @@ BEGIN
     IDS_INJNONLING_MAP         "Correction of injector's non-linearity (gas)"
     IDS_TD_INJNONLINP_MAP_TT   "Table of correction of injector's non-linearity, used on small inj. PWs (petrol)"
     IDS_TD_INJNONLING_MAP_TT   "Table of correction of injector's non-linearity, used on small inj. PWs (gas)"
+    IDS_TD_EGO_DELAY_MAP_TT    "Delay of signal from the EGO sensor vs engine load."
+    IDS_EGO_DELAY_MAP          "EGO delay vs engine load"
+    IDS_MAPS_LOADKPA_UNIT      "Load (kPa)"
+    IDS_MAPS_LOADPRC_UNIT      "Load (%)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

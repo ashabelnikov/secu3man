@@ -91,10 +91,6 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , m_work_map(16, 16, false, false, DLL::GetModuleHandle(), 3)
 , m_temp_map(1, 16, false, false, DLL::GetModuleHandle())
 , m_tempi_map(1, 16, false, false, DLL::GetModuleHandle())
-, m_ldaxMin(1.0f)
-, m_ldaxMax(16.0f)
-, m_ldaxNeedsUpdate(false)
-, m_ldaxUseTable(false)
 , mp_acronLink(new CLabel)
 , m_initialized(false)
 , mp_cscl(new CtrlScaler)
@@ -109,9 +105,6 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
  }
 
  _ResetUseFlags();
- m_work_map_load_slots.reserve(32);
- m_work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
- m_curDV.baro_press = 101.3f; //sea level atmospheric pressure by default
 
  wrk_caption_wrk = MLL::GetString(IDS_GME_WM_CAPTION_WRKTEXT);
  wrk_caption_str = MLL::GetString(IDS_GME_WM_CAPTION_STRTEXT);
@@ -236,7 +229,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_work_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveWork));
  m_work_map.SetRange(-15.0f, 55.00f);
  m_work_map.AttachMap(mp_workMap[1], mp_workMap[0]);
- m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
+ m_work_map.AttachLabels(mp_rpmGrid, ldaxIsTable() ? mp_lodGrid : &m_work_map_load_slots[0]);
  m_work_map.ShowLabels(true, true);
  m_work_map.SetDecimalPlaces(2, 0, 0);
  m_work_map.SetFont(&m_font);
@@ -374,7 +367,7 @@ void CGridModeEditorIgnDlg::UpdateView(bool axisLabels /*= false*/)
   if (axisLabels)
   {
    m_idle_map.AttachLabels(mp_rpmGrid, NULL);
-   m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
+   m_work_map.AttachLabels(mp_rpmGrid, ldaxIsTable() ? mp_lodGrid : &m_work_map_load_slots[0]);
    m_temp_map.AttachLabels(mp_cltGrid, NULL);
    m_tempi_map.AttachLabels(mp_cltGrid, NULL);
   }
@@ -402,13 +395,12 @@ void CGridModeEditorIgnDlg::EnableAdvanceAngleIndication(bool i_enable)
   UpdateDialogControls(this, true);
 }
 
-void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
+void CGridModeEditorIgnDlg::SetDynamicValues(const SECU3IO::SensorDat& dv)
 {
- bool baroChanged = false;
  if (!GetSafeHwnd())
   return;
 
- m_aa_value.SetValue(dv.adv_ang);
+ m_aa_value.SetValue(dv.adv_angle);
  m_kc_value.SetValue(dv.knock_retard);
  m_im_value.SetValue(dv.idle_aalt);
  m_wm_value.SetValue(dv.strt_use ? dv.strt_aalt : dv.work_aalt);
@@ -416,9 +408,6 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_ac_value.SetValue(dv.airt_aalt);
  m_ic_value.SetValue(dv.idlreg_aac);
  m_oc_value.SetValue(dv.octan_aac);
-
- if (m_curDV.baro_press != dv.baro_press)
-  baroChanged = true;
 
  m_curDV = dv;
  UpdateDialogControls(this, true);  //todo: check it for perfomance issues
@@ -431,17 +420,16 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_idle_map.SetArguments(0, (float)dv.rpm);
 
  m_temp_map.ShowMarkers(dv.temp_use && !dv.strt_use && !dv.idlreg_use, true);
- m_temp_map.SetArguments(0, dv.temp);
+ m_temp_map.SetArguments(0, dv.temperat);
 
  m_tempi_map.ShowMarkers(dv.temp_use && !dv.strt_use && dv.idlreg_use, true);
- m_tempi_map.SetArguments(0, dv.temp);
+ m_tempi_map.SetArguments(0, dv.temperat);
 
  //Update vertical axis of work map
- bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
- if (m_ldaxNeedsUpdate || (baroChanged && useBaroMax))
+ if (m_ldaxNeedsUpdate || ldaxWatchBaroPress(dv.baro_press))
  {
-  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? m_curDV.baro_press : m_ldaxMax, 16);
-  m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetBaroMax(), 16);
+  m_work_map.AttachLabels(mp_rpmGrid, ldaxIsTable() ? mp_lodGrid : &m_work_map_load_slots[0]);
   m_work_map.UpdateDisplay();
   m_ldaxNeedsUpdate = false;
  }
@@ -450,20 +438,15 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_work_map.SetArguments(dv.load, (float)dv.rpm);
 }
 
-void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal, bool useTable, bool forceUpdate /*=false*/)
+void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate /*=false*/)
 {
- if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal) || (m_ldaxUseTable != useTable))
-  m_ldaxNeedsUpdate = true;
- m_ldaxMin = minVal;
- m_ldaxMax = maxVal;
- m_ldaxUseTable = useTable;
+ LdaxCfg::SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable);
 
- if (m_ldaxNeedsUpdate && forceUpdate)
+ //do not update if MAP(baro) is selected! Because if MAP(baro) is selected, upper pressure will be updated in SetDynamicValues() method
+ if ((m_ldaxNeedsUpdate && !ldaxIsUseBaroMax()) || forceUpdate)
  {
-  if (m_ldaxMax > 500.0f) //prevent program crach
-   m_ldaxMax = 500.0f; //kPa
-  m_work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, m_ldaxMax, 16);
-  m_work_map.AttachLabels(mp_rpmGrid, m_ldaxUseTable ? mp_lodGrid : &m_work_map_load_slots[0]);
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetBaroMax(), 16);
+  m_work_map.AttachLabels(mp_rpmGrid, ldaxIsTable() ? mp_lodGrid : &m_work_map_load_slots[0]);
   m_work_map.UpdateDisplay(); 
   m_ldaxNeedsUpdate = false;
  }

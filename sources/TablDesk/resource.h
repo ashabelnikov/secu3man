@@ -85,6 +85,11 @@
 #define IDB_CES_DOWN                    5096
 #define IDB_CES_FOCUSED                 5097
 #define IDB_CES_DISABLED                5098
+#define IDC_TD_EGO_DELAY_MAP            5099
+#define IDS_TD_EGO_DELAY_MAP_TT         5100
+#define IDS_EGO_DELAY_MAP               5101
+#define IDS_MAPS_LOADKPA_UNIT           5102
+#define IDS_MAPS_LOADPRC_UNIT           5103
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

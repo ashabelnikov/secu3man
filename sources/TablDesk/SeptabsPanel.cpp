@@ -132,6 +132,7 @@ void CSeptabsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_XTAU_TFDEC_MAP, *m_md[ETMT_XTAU_TFDEC].mp_button);
  DDX_Control(pDX, IDC_TD_INJNONLINP_MAP, *m_md[ETMT_INJNONLINP].mp_button);
  DDX_Control(pDX, IDC_TD_INJNONLING_MAP, *m_md[ETMT_INJNONLING].mp_button);
+ DDX_Control(pDX, IDC_TD_EGO_DELAY_MAP, *m_md[ETMT_EGO_DELAY].mp_button);
 
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
@@ -180,6 +181,7 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_BN_CLICKED(IDC_TD_XTAU_TFDEC_MAP, OnViewXtauTfDecMap)
  ON_BN_CLICKED(IDC_TD_INJNONLINP_MAP, OnViewInjNonLinPMap)
  ON_BN_CLICKED(IDC_TD_INJNONLING_MAP, OnViewInjNonLinGMap)
+ ON_BN_CLICKED(IDC_TD_EGO_DELAY_MAP, OnViewEGODelayMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -223,6 +225,7 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_XTAU_TFDEC_MAP, OnUpdateViewXtauTfDecMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_INJNONLINP_MAP, OnUpdateViewInjNonLinPMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_INJNONLING_MAP, OnUpdateViewInjNonLinGMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_EGO_DELAY_MAP, OnUpdateViewEGODelayMap)
  ON_WM_DESTROY()
  ON_WM_SIZE()
  ON_WM_TIMER()
@@ -293,6 +296,7 @@ BOOL CSeptabsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_XTAU_TFDEC].mp_button, MLL::GetString(IDS_TD_XTAU_TFDEC_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJNONLINP].mp_button, MLL::GetString(IDS_TD_INJNONLINP_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJNONLING].mp_button, MLL::GetString(IDS_TD_INJNONLING_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_EGO_DELAY].mp_button, MLL::GetString(IDS_TD_EGO_DELAY_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -332,7 +336,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
   if (m_disable_vscroll)
    mp_scr->SetViewSize(cx, da.ScaleY(1));
   else
-   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1200 : 650));
+   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1220 : 670));
  }
 
 }
@@ -632,6 +636,13 @@ void CSeptabsPanel::OnUpdateViewInjNonLinGMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[ETMT_INJNONLING].state) ? TRUE : FALSE );
 }
 
+void CSeptabsPanel::OnUpdateViewEGODelayMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable && (m_fuel_injection));
+ pCmdUI->SetCheck( (m_md[ETMT_EGO_DELAY].state) ? TRUE : FALSE );
+}
+
 void CSeptabsPanel::UpdateOpenedCharts(void)
 {
  for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
@@ -705,6 +716,8 @@ void CSeptabsPanel::EnableFuelInjection(bool i_enable)
   DLL::Chart2DEnable(m_md[ETMT_INJNONLINP].handle, i_enable && IsAllowed());
  if (m_md[ETMT_INJNONLING].state && ::IsWindow(m_md[ETMT_INJNONLING].handle))
   DLL::Chart2DEnable(m_md[ETMT_INJNONLING].handle, i_enable && IsAllowed());
+ if (m_md[ETMT_EGO_DELAY].state && ::IsWindow(m_md[ETMT_EGO_DELAY].handle))
+  DLL::Chart2DEnable(m_md[ETMT_EGO_DELAY].handle, i_enable && IsAllowed());
 }
 
 void CSeptabsPanel::EnableGasdose(bool enable)
@@ -2196,6 +2209,46 @@ void CSeptabsPanel::OnViewInjNonLinGMap()
  }
 }
 
+void CSeptabsPanel::OnViewEGODelayMap()
+{
+ MapData &md = m_md[ETMT_EGO_DELAY];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  if (!ldaxIsUseBaroMax())
+   m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetMax(), 16);
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 1.0, 2000.0, GetLoadGrid(), 16,
+    ldaxGetTitle(), //x unit
+    MLL::GetString(IDS_MAPS_STROKE_UNIT).c_str(),  //y unit
+    MLL::GetString(IDS_EGO_DELAY_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, 1, _T("%.0f"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, 1, OnGetXAxisLabelLoad, static_cast<CTablesPanelBase*>(this));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeEGODelayMap,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseEGODelayMap,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationEGODelayMap, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_EGO_DELAY);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
 void CSeptabsPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -2305,4 +2358,37 @@ void CSeptabsPanel::_EnableCharts(bool enable)
 void CSeptabsPanel::EnableEmbedMapWnd(bool embed, const CRect& rc)
 {
  CTablesPanelBase::EnableEmbedMapWnd(embed, rc, ETMT_SEP_START, ETMT_SEP_END);
+}
+
+void CSeptabsPanel::SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate /*= false*/)
+{
+ bool updateTitle = (ldaxCfg != ldaxGetCfg() && ::IsWindow(m_md[ETMT_EGO_DELAY].handle));
+  
+ LdaxCfg::SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable);
+
+ if (updateTitle)
+ {
+  DLL::Chart2DSetAxisTitle(m_md[ETMT_EGO_DELAY].handle, 1, ldaxGetTitle());
+ }
+
+ //do not update if MAP(baro) is selected! Because if MAP(baro) is selected, upper pressure will be updated in SetDynamicValues() method
+ if ((m_ldaxNeedsUpdate && !ldaxIsUseBaroMax()) || forceUpdate)
+ {
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetBaroMax(), 16);
+  if (::IsWindow(m_md[ETMT_EGO_DELAY].handle))
+   DLL::Chart2DRefresh(m_md[ETMT_EGO_DELAY].handle); //make chart to refresh axis
+  m_ldaxNeedsUpdate = false;
+ }
+}
+
+void CSeptabsPanel::SetDynamicValues(const SECU3IO::SensorDat& dv)
+{
+ //Update load axis either if axis configuration has been changed or a barometer value has been changed
+ if (m_ldaxNeedsUpdate || ldaxWatchBaroPress(dv.baro_press))
+ {
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetBaroMax(), 16);
+  if (::IsWindow(m_md[ETMT_EGO_DELAY].handle))
+   DLL::Chart2DRefresh(m_md[ETMT_EGO_DELAY].handle); //make chart to refresh axis
+  m_ldaxNeedsUpdate = false;
+ }
 }

@@ -74,6 +74,8 @@ class CPMSeptabsController : public CPMControllerBase<CSepTablesDeskDlg>, public
   void setOnChangeSettings(EventHandler OnCB);
 
   void OnSettingsChanged(void);
+
+  void OnFunSetChanged(const SECU3IO::FunSetPar* data);
   
  private:
   //Events from view

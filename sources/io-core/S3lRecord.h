@@ -32,7 +32,7 @@ struct s3lRecord
  BYTE  mm;
  BYTE  ss;
  WORD  ms;
- WORD  frequen;
+ WORD  rpm;
  float adv_angle;
  float pressure;
  float voltage;

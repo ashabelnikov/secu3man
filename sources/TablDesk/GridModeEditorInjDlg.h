@@ -29,7 +29,9 @@
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
 #include "ui-core/TabController.h"
-#include "DynamicValues.h"
+#include "LdaxCfg.h"
+
+namespace SECU3IO { struct SensorDat; };
 
 class CGMEInjVEDlg;
 class CGMEInjAFRDlg;
@@ -41,7 +43,7 @@ class CGMEInjOther1Dlg;
 class CGMEInjPwm1Dlg;
 class CGMEInjPwm2Dlg;
 
-class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
+class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog, public LdaxCfg
 {
   typedef CDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
@@ -62,9 +64,9 @@ class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
   void UpdateView(bool axisLabels = false);
   void UpdateDialogControls(void);
 
-  void SetDynamicValues(const TablDesk::DynVal& dv);
+  void SetDynamicValues(const SECU3IO::SensorDat& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable, bool forceUpdate = false);
+  virtual void SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate = false);
 
   void SetITMode(int mode);
   int GetITMode(void) const;
@@ -121,12 +123,6 @@ class AFX_EXT_CLASS CGridModeEditorInjDlg : public CDialog
   std::auto_ptr<CGMEInjPwm1Dlg> m_pPwm1PageDlg;
   std::auto_ptr<CGMEInjPwm2Dlg> m_pPwm2PageDlg;
 
-  float m_ldaxMin;
-  float m_ldaxMax;
-  bool m_ldaxNeedsUpdate;
-  bool m_ldaxUseTable;
-  float m_baro_press;
-  std::vector<float> m_work_map_load_slots;
   std::vector<float> m_ve2_map_load_slots;
   float* mp_lodGrid;
 

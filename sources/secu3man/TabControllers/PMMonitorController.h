@@ -42,8 +42,9 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
   typedef CRSDeskDlg RSDVIEW;
   typedef CCEDeskDlg CEDVIEW;
   typedef ITablesDeskView TDVIEW;
+  typedef ITablesDeskView SDVIEW;
  public:
-  CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, TDVIEW* ip_tdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
+  CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, TDVIEW* ip_tdview, TDVIEW* ip_sdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CPMMonitorController();
 
   //настройки программы изменились
@@ -73,6 +74,7 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
   CRSDeskDlg* mp_rsdview;
   CCEDeskDlg* mp_cedview;
   TDVIEW* mp_tdview;
+  SDVIEW* mp_sdview;
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
   ISettingsData* mp_settings;

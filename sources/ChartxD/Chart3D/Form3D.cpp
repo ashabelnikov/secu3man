@@ -370,7 +370,8 @@ void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
   {
    TCHAR string[64];
    _tcscpy(string, LabelText.c_str());
-   m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
+   if (ValueIndex >= 0)
+    m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
    LabelText = string;
   }
  }

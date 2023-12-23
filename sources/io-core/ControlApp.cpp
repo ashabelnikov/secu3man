@@ -299,7 +299,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
 
  //частота вращения коленвала двигателя
- if (false == mp_pdp->Hex16ToBin(raw_packet, &sensorDat.frequen))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &sensorDat.rpm))
   return false;
 
  //давление во впускном коллекторе
@@ -562,7 +562,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  int mode = (iit >> 14) & 0x3;
  float inj_timing = ((float)(iit & 0x3FFF)) / 16.0f; //inj.timing in crankshaft degrees
- float inj_pw_degr = (((360.0f/(1000.0f*60.0f))* sensorDat.frequen) * sensorDat.inj_pw); //inj. PW in crankshaft degrees
+ float inj_pw_degr = (((360.0f/(1000.0f*60.0f))* sensorDat.rpm) * sensorDat.inj_pw); //inj. PW in crankshaft degrees
  if (mode == 0)
  { //begin
   sensorDat.inj_tim_begin = inj_timing;
@@ -1880,7 +1880,14 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
  {
   size_t data_size = 0;
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
-  if (editTabPar.tab_id == ETMT_INJ_CRNK || editTabPar.tab_id == ETMT_INJ_DEAD || editTabPar.tab_id == ETMT_INJ_RIGID || editTabPar.tab_id == ETMT_INJ_EGOCRV || editTabPar.tab_id == ETMT_INJ_IACC || editTabPar.tab_id == ETMT_INJ_IATCLT || editTabPar.tab_id == ETMT_DWELLCNTRL || editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE || editTabPar.tab_id == ETMT_FTLS_CURVE || editTabPar.tab_id == ETMT_EGTS_CURVE || editTabPar.tab_id == ETMT_OPS_CURVE || editTabPar.tab_id == ETMT_MAF_CURVE || editTabPar.tab_id == ETMT_BAROCORR || editTabPar.tab_id == ETMT_AFTSTR_STRK0 || editTabPar.tab_id == ETMT_AFTSTR_STRK1 || editTabPar.tab_id == ETMT_PWMIAC_UCOEF || editTabPar.tab_id == ETMT_GRVDELAY || editTabPar.tab_id == ETMT_MANINJPWC || editTabPar.tab_id == ETMT_FTLSCOR || editTabPar.tab_id == ETMT_FUELDENS_CORR || editTabPar.tab_id == ETMT_XTAU_XFACC || editTabPar.tab_id == ETMT_XTAU_XFDEC || editTabPar.tab_id == ETMT_XTAU_TFACC || editTabPar.tab_id == ETMT_XTAU_TFDEC || editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING)
+  if (editTabPar.tab_id == ETMT_INJ_CRNK || editTabPar.tab_id == ETMT_INJ_DEAD || editTabPar.tab_id == ETMT_INJ_RIGID || editTabPar.tab_id == ETMT_INJ_EGOCRV ||
+      editTabPar.tab_id == ETMT_INJ_IACC || editTabPar.tab_id == ETMT_INJ_IATCLT || editTabPar.tab_id == ETMT_DWELLCNTRL || editTabPar.tab_id == ETMT_CTS_CURVE ||
+      editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE ||
+      editTabPar.tab_id == ETMT_FTLS_CURVE || editTabPar.tab_id == ETMT_EGTS_CURVE || editTabPar.tab_id == ETMT_OPS_CURVE || editTabPar.tab_id == ETMT_MAF_CURVE ||
+      editTabPar.tab_id == ETMT_BAROCORR || editTabPar.tab_id == ETMT_AFTSTR_STRK0 || editTabPar.tab_id == ETMT_AFTSTR_STRK1 || editTabPar.tab_id == ETMT_PWMIAC_UCOEF ||
+      editTabPar.tab_id == ETMT_GRVDELAY || editTabPar.tab_id == ETMT_MANINJPWC || editTabPar.tab_id == ETMT_FTLSCOR || editTabPar.tab_id == ETMT_FUELDENS_CORR ||
+      editTabPar.tab_id == ETMT_XTAU_XFACC || editTabPar.tab_id == ETMT_XTAU_XFDEC || editTabPar.tab_id == ETMT_XTAU_TFACC || editTabPar.tab_id == ETMT_XTAU_TFDEC ||
+      editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING || editTabPar.tab_id == ETMT_EGO_DELAY)
   {
    size_t div = 2;
    if (size % div)
@@ -1921,7 +1928,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
     }
     else if (editTabPar.tab_id == ETMT_BAROCORR)
      editTabPar.table_data[i] = ((address+i) >= BAROCORR_SIZE) ? (value / BAROCORR_MAPSX_M_FACTOR) : (((float)value) / BAROCORR_MAPS_M_FACTOR) * 100.0f; //%
-    else if (editTabPar.tab_id == ETMT_AFTSTR_STRK0 || editTabPar.tab_id == ETMT_AFTSTR_STRK1)
+    else if (editTabPar.tab_id == ETMT_AFTSTR_STRK0 || editTabPar.tab_id == ETMT_AFTSTR_STRK1 || editTabPar.tab_id == ETMT_EGO_DELAY)
      editTabPar.table_data[i] = ((float)value);
     else if (editTabPar.tab_id == ETMT_PWMIAC_UCOEF)
      editTabPar.table_data[i] = ((float)value / PWMIAC_UCOEF_MAPS_M_FACTOR);
@@ -4375,12 +4382,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * 2.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
-   else if (packet_data->tab_id == ETMT_AFTSTR_STRK0)
-   {
-    int value = MathHelpers::Round(packet_data->table_data[i]);
-    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
-   }
-   else if (packet_data->tab_id == ETMT_AFTSTR_STRK1)
+   else if (packet_data->tab_id == ETMT_AFTSTR_STRK0 || packet_data->tab_id == ETMT_AFTSTR_STRK1 || packet_data->tab_id == ETMT_EGO_DELAY)
    {
     int value = MathHelpers::Round(packet_data->table_data[i]);
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);

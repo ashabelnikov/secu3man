@@ -30,8 +30,9 @@
 #include <limits>
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
-#include "DynamicValues.h"
 #include "ui-core/MapEditorCtrl.h"
+#include "io-core/SECU3IO.h"
+#include "LdaxCfg.h"
 
 #undef max
 
@@ -59,7 +60,7 @@ class CStaticDisp : public CStatic
 };
 
 
-class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
+class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog, public LdaxCfg
 {
   typedef CDialog Super;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
@@ -80,9 +81,9 @@ class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
 
   void EnableAdvanceAngleIndication(bool i_enable);
 
-  void SetDynamicValues(const TablDesk::DynVal& dv);
+  void SetDynamicValues(const SECU3IO::SensorDat& dv);
 
-  void SetLoadAxisCfg(float minVal, float maxVal, bool useTable, bool forceUpdate = false);
+  virtual void SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate = false);
 
  public:
   void setIsAllowed(EventResult IsFunction);
@@ -154,13 +155,7 @@ class AFX_EXT_CLASS CGridModeEditorIgnDlg : public CDialog
   bool m_en_aa_indication;
   CFont m_font;
   CFont m_fieldFont;
-  TablDesk::DynVal m_curDV;
-
-  float m_ldaxMin;
-  float m_ldaxMax;
-  bool m_ldaxUseTable;
-  bool m_ldaxNeedsUpdate;
-  std::vector<float> m_work_map_load_slots;
+  SECU3IO::SensorDat m_curDV;
 
   std::auto_ptr<CLabel> mp_acronLink;
   bool m_initialized;

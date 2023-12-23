@@ -457,6 +457,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optXtauTfDecMapWnd;
   OptField_t<POINT> m_optInjNonLinPMapWnd;
   OptField_t<POINT> m_optInjNonLinGMapWnd;
+  OptField_t<POINT> m_optEGODelayMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -534,6 +535,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optXtauTfDecMapWnd1;
   OptField_t<POINT> m_optInjNonLinPMapWnd1;
   OptField_t<POINT> m_optInjNonLinGMapWnd1;
+  OptField_t<POINT> m_optEGODelayMapWnd1;
 
   //window's sizes
   OptField_t<POINT> m_optMainFrmWndSize;
@@ -611,6 +613,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optXtauTfDecMapWndSize;
   OptField_t<POINT> m_optInjNonLinPMapWndSize;
   OptField_t<POINT> m_optInjNonLinGMapWndSize;
+  OptField_t<POINT> m_optEGODelayMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -688,6 +691,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optXtauTfDecMapWndSize1;
   OptField_t<POINT> m_optInjNonLinPMapWndSize1;
   OptField_t<POINT> m_optInjNonLinGMapWndSize1;
+  OptField_t<POINT> m_optEGODelayMapWndSize1;
 
   //window state
   OptField_t<int> m_optMainFrmWndState;
@@ -899,6 +903,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepXtauTfDecMap;
   OptField_t<float> m_optPtMovStepInjNonLinPMap;
   OptField_t<float> m_optPtMovStepInjNonLinGMap;
+  OptField_t<float> m_optPtMovStepEGODelayMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;

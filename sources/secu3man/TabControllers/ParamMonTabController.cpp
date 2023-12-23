@@ -64,7 +64,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
 , mp_sbar(ip_sbar)
 , mp_settings(ip_settings)
 , mp_idccntr(new CPMInitDataCollector(ip_comm, ip_sbar))
-, mp_moncntr(new CPMMonitorController(ip_view->mp_MIDeskDlg.get(),ip_view->mp_RSDeskDlg.get(), ip_view->mp_CEDeskDlg.get(), ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar, ip_settings))
+, mp_moncntr(new CPMMonitorController(ip_view->mp_MIDeskDlg.get(),ip_view->mp_RSDeskDlg.get(), ip_view->mp_CEDeskDlg.get(), ip_view->mp_TablesDeskDlg.get(), ip_view->mp_SeptabsDeskDlg.get(), ip_comm, ip_sbar, ip_settings))
 , mp_parcntr(new CPMParamsController(ip_view->mp_ParamDeskDlg.get(), ip_comm, ip_sbar, MakeDelegate(this, &CParamMonTabController::OnPDRequestsDataCollection), MakeDelegate(this, &CParamMonTabController::OnParametersChanged), ip_settings))
 , mp_tabcntr(new CPMTablesController(ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar, ip_settings))
 , mp_sepcntr(new CPMSeptabsController(ip_view->mp_SeptabsDeskDlg.get(), ip_comm, ip_sbar, ip_settings, MakeDelegate(this, &CParamMonTabController::OnSepRequestsDataCollection)))
@@ -397,6 +397,7 @@ void CParamMonTabController::OnParametersChanged(const BYTE i_descriptor, const 
  if (i_descriptor == FUNSET_PAR)
  {
   mp_tabcntr->OnFunSetChanged((const FunSetPar*)ip_packet);
+  mp_sepcntr->OnFunSetChanged((const FunSetPar*)ip_packet);
  }
 }
 

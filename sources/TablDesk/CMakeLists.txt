@@ -29,7 +29,6 @@ set(HEADERS
   CESettingsDlg.h
   DLLLinkedFunctions.h
   DwellCalcDlg.h
-  DynamicValues.h
   GridModeEditorIgnDlg.h
   GridModeEditorInjDlg.h
   GMEInjVEDlg.h
@@ -41,6 +40,7 @@ set(HEADERS
   GMEInjOther1Dlg.h
   GMEInjPwm1Dlg.h
   GMEInjPwm2Dlg.h
+  LdaxCfg.h
   resource.h
   RPMGridEditDlg.h
   StdAfx.h
@@ -68,6 +68,7 @@ set(SOURCES
   GMEInjPwm1Dlg.cpp
   GMEInjPwm2Dlg.cpp
   RPMGridEditDlg.cpp
+  LdaxCfg.cpp
   StdAfx.cpp
   TablDesk.cpp
   TablDesk.rc

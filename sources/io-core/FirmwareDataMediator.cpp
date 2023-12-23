@@ -284,7 +284,9 @@ typedef struct
  _uint inj_nonling_corr[INJ_NONLIN_SIZE];
  _uint inj_nonling_bins[INJ_NONLIN_SIZE];
 
- _uchar reserved[1067];
+ _uint inj_ego_delay[EGO_DELAY_SIZE];
+
+ _uchar reserved[1035];
 }fw_ex_tabs_t;
 
 
@@ -1663,6 +1665,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetXtauTfDecMap(op_fwd->xtau_tfdec);
  GetInjNonLinPMap(op_fwd->inj_nonlinp_corr);
  GetInjNonLinGMap(op_fwd->inj_nonling_corr);
+ GetEGODelayMap(op_fwd->inj_ego_delay);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1762,6 +1765,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetXtauTfDecMap(ip_fwd->xtau_tfdec);
  SetInjNonLinPMap(ip_fwd->inj_nonlinp_corr);
  SetInjNonLinGMap(ip_fwd->inj_nonling_corr);
+ SetEGODelayMap(ip_fwd->inj_ego_delay);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -2824,6 +2828,24 @@ void CFirmwareDataMediator::SetInjNonLinGMap(const float* ip_values)
   p_fd->extabs.inj_nonling_bins[i] = MathHelpers::Round(ip_values[i+INJ_NONLIN_SIZE] * 312.5);
 }
 
+void CFirmwareDataMediator::GetEGODelayMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < EGO_DELAY_SIZE; i++)
+  op_values[i] = p_fd->extabs.inj_ego_delay[i];
+}
+
+void CFirmwareDataMediator::SetEGODelayMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < EGO_DELAY_SIZE; i++)
+  p_fd->extabs.inj_ego_delay[i] = MathHelpers::Round(ip_values[i]);
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -3462,6 +3484,7 @@ void CFirmwareDataMediator::GetSepMap(int id, float* op_values, bool i_original 
   case ETMT_XTAU_TFDEC: GetXtauTfDecMap(op_values, i_original); break;
   case ETMT_INJNONLINP: GetInjNonLinPMap(op_values, i_original); break;
   case ETMT_INJNONLING: GetInjNonLinGMap(op_values, i_original); break;
+  case ETMT_EGO_DELAY: GetEGODelayMap(op_values, i_original); break;
   default: ASSERT(0);
  }
 }
@@ -3506,6 +3529,7 @@ void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
   case ETMT_XTAU_TFDEC: SetXtauTfDecMap(ip_values); break;
   case ETMT_INJNONLINP: SetInjNonLinPMap(ip_values); break;
   case ETMT_INJNONLING: SetInjNonLinGMap(ip_values); break;
+  case ETMT_EGO_DELAY: SetEGODelayMap(ip_values); break;
   default: ASSERT(0);
  }
 }

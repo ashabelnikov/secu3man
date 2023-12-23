@@ -51,6 +51,8 @@ namespace DLL
  Chart2DGetPtMovingStep_Addr     Chart2DGetPtMovingStep = NULL;
  Chart2DUpdateYRange_Addr        Chart2DUpdateYRange = NULL;
  Chart2DSetCSVSepSymbol_Addr     Chart2DSetCSVSepSymbol = NULL;
+ Chart2DSetAxisTitle_Addr        Chart2DSetAxisTitle = NULL;
+ Chart2DRefresh_Addr             Chart2DRefresh = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
@@ -123,6 +125,9 @@ namespace DLL
    Chart2DSetPtMovingStep = NULL;
    Chart2DUpdateYRange = NULL;
    Chart2DSetCSVSepSymbol = NULL;
+   Chart2DSetAxisTitle = NULL;
+   Chart2DRefresh = NULL;
+
    //3D
    Chart3DCreate = NULL;
    Chart3DUpdate = NULL;
@@ -166,6 +171,9 @@ namespace DLL
    LoadFunction(hModule, Chart2DGetPtMovingStep, "Chart2DGetPtMovingStep", status);
    LoadFunction(hModule, Chart2DUpdateYRange, "Chart2DUpdateYRange", status);
    LoadFunction(hModule, Chart2DSetCSVSepSymbol, "Chart2DSetCSVSepSymbol", status);
+   LoadFunction(hModule, Chart2DSetAxisTitle, "Chart2DSetAxisTitle", status);
+   LoadFunction(hModule, Chart2DRefresh, "Chart2DRefresh", status);
+
    //3D
    LoadFunction(hModule, Chart3DCreate, "Chart3DCreate", status);
    LoadFunction(hModule, Chart3DUpdate, "Chart3DUpdate", status);
