@@ -394,10 +394,12 @@ typedef struct
  _uchar ego_fc_delay;
  _uchar ego_ac_delay;
 
+ _uchar ltft_algo;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1966];
+ _uchar reserved[1965];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3283,6 +3285,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.ego_fc_delay = exd.ego_fc_delay;
  o_data.ego_ac_delay = exd.ego_ac_delay;
+
+ o_data.ltft_algo = exd.ltft_algo;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3398,6 +3402,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.ego_fc_delay = i_data.ego_fc_delay;
  exd.ego_ac_delay = i_data.ego_ac_delay;
+
+ exd.ltft_algo = i_data.ltft_algo;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

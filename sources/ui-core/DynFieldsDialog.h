@@ -26,6 +26,7 @@
 #pragma once
 #include "common/unicodesupport.h"
 #include <list>
+#include <vector>
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/UpdatableDialog.h"
@@ -61,6 +62,9 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
   //Adds a check box
   bool AppendItem(const _TSTRING& caption, bool* p_value, const _TSTRING& tooltip);
 
+  //Adds a combo box
+  bool AppendItem(const _TSTRING& caption, const std::vector<_TSTRING>& ItemList, int* p_value, const _TSTRING& tooltip);
+
   void AllowToolTips(bool allowToolTips);
   void Apply(void);
   int GetContentHeight(void);
@@ -79,7 +83,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
   struct ItemData
   {
    ItemData()
-   : p_edit(NULL), p_spin(NULL), p_capt(NULL), p_unit(NULL), p_check(NULL), intVal(NULL), fltVal(NULL), separator(false), blVal(NULL)
+   : p_edit(NULL), p_spin(NULL), p_capt(NULL), p_unit(NULL), p_check(NULL), p_combo(NULL), intVal(NULL), fltVal(NULL), separator(false), blVal(NULL), comboVal(NULL)
    {
    }
 
@@ -90,6 +94,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
     delete p_capt;
     delete p_unit;
     delete p_check;
+    delete p_combo;
    }
 
    bool Init(void)
@@ -115,8 +120,14 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
     else if (blVal)
     {
      p_check = new CButton;
-     p_capt = new CStatic;
      blValm = *blVal;
+     return true;
+    }
+    else if (comboVal)
+    {
+     p_combo = new CComboBox;
+     p_capt = new CStatic;
+     comboValm = *comboVal;
      return true;
     }
     else
@@ -164,6 +175,29 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
      p_check->SetWindowText(caption);
      p_check->ShowWindow(SW_SHOW); 
      p_check->SetFont(parent->GetFont());     
+     groupIdx++;  //increment group index
+     return true;
+    }
+    else if (comboVal)
+    { //combo box
+     int topOffset = 5;
+     int captWidth = 125;
+     int comboWidth = 51;
+     //define coordinates
+     CRect captRect(leftOffset, topOffset+(groupIdx*(groupHeight+vertClearance)), leftOffset+captWidth, topOffset+(groupIdx*(groupHeight+vertClearance))+groupHeight);    
+     CRect combRect(captRect.right, captRect.top, captRect.right + comboWidth, captRect.bottom+(captRect.Height()*itemList.size()));
+     //caption
+     ::MapDialogRect(parent->GetSafeHwnd(), &captRect);
+     VERIFY(p_capt->Create(caption, WS_CHILD | WS_VISIBLE, captRect, parent, idCntr++));
+     p_capt->SetWindowText(caption);
+     p_capt->SetFont(parent->GetFont());
+     //combo
+     ::MapDialogRect(parent->GetSafeHwnd(), &combRect);
+     p_combo->CreateEx(WS_EX_CLIENTEDGE, "ComboBox", NULL, WS_CHILD|WS_VISIBLE|WS_GROUP|WS_TABSTOP|CBS_DROPDOWN|WS_VSCROLL|CBS_AUTOHSCROLL, combRect, parent, idCntr++, NULL);
+     for(size_t i = 0; i < itemList.size(); ++i)
+      p_combo->AddString(itemList[i].c_str());
+     p_combo->ShowWindow(SW_SHOW); 
+     p_combo->SetFont(parent->GetFont());
      groupIdx++;  //increment group index
      return true;
     }
@@ -221,6 +255,8 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
      p_edit->DDX_Value(pDX, p_edit->GetDlgCtrlID(), fltValm);
     else if (blVal)
      DDX_Check_bool(pDX, p_check->GetDlgCtrlID(), blValm);
+    else if (comboVal)
+     DDX_CBIndex_int(pDX, p_combo->GetDlgCtrlID(), comboValm);
     else {ASSERT(0);}
    }
 
@@ -234,6 +270,8 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
      *fltVal = fltValm;
     if (blVal)
      *blVal = blValm;
+    if (comboVal)
+     *comboVal = comboValm;
    }
 
    CEditEx* p_edit;
@@ -241,6 +279,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
    CStatic* p_capt;
    CStatic* p_unit;
    CButton* p_check;
+   CComboBox* p_combo;
 
    CString caption;
    CString unit;
@@ -252,6 +291,9 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
    float fltValm;
    bool blValm;
    bool separator;
+   int*  comboVal;
+   int  comboValm;
+   std::vector<_TSTRING> itemList;
 
    float vMin;
    float vMax;
@@ -285,6 +327,7 @@ class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value, const _TSTRING& tooltip = _TSTRING());
   bool AppendItem(const _TSTRING& caption); //adds separator
   bool AppendItem(const _TSTRING& caption, bool* p_value, const _TSTRING& tooltip = _TSTRING()); //adds a check box
+  bool AppendItem(const _TSTRING& caption, const std::vector<_TSTRING>& ItemList, int* p_value, const _TSTRING& tooltip = _TSTRING()); //adds a combo box
 
   virtual INT_PTR DoModal();
 

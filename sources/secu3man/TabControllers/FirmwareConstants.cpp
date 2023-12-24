@@ -431,6 +431,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Long Term Fuel Trim"));
 
+ std::vector<_TSTRING> ltft_algos;
+ ltft_algos.push_back(_T("Standard"));
+ ltft_algos.push_back(_T("Kosh"));
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Выбор алгоритма LTFT"), ltft_algos, &d.ltft_algo, _T("Выбор алгоритма LTFT."));
+ else
+  dfd.AppendItem(_T("Select LTFT algorithm"), ltft_algos, &d.ltft_algo, _T("Selection of LTFT algorithm"));
+
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Использование коррекции"), _T(""), 0, 3, 1, 1, &d.ltft_mode, _T("0 - адаптация по лямбде выключена; 1 - включена только для бензина (GAS_V=0); 2 - включена только для газа (GAS_V=1); 3 - включена и для газа и для бензина."));
  else

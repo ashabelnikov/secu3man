@@ -115,6 +115,10 @@ BOOL CDynFieldsDialog::OnInitDialog()
   {
    VERIFY(mp_ttc->AddWindow(it->p_check, (LPCTSTR)it->tooltip));
   }
+  else if (it->p_combo)
+  {
+   VERIFY(mp_ttc->AddWindow(it->p_combo, (LPCTSTR)it->tooltip));
+  }
  }
  mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
  mp_ttc->ActivateToolTips(m_allowToolTips);
@@ -159,6 +163,7 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.fltVal = NULL;
  id.intVal = p_value;
  id.blVal = NULL;
+ id.comboVal = NULL;
  id.tooltip = tooltip.c_str();
  id.separator = false;
  m_fl.push_back(id);
@@ -177,6 +182,7 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const _TSTRING& unit,
  id.fltVal = p_value;
  id.intVal = NULL;
  id.blVal = NULL;
+ id.comboVal = NULL;
  id.tooltip = tooltip.c_str();
  id.separator = false;
  m_fl.push_back(id);
@@ -199,8 +205,24 @@ bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, bool* p_value, const 
  id.fltVal = NULL;
  id.intVal = NULL;
  id.blVal = p_value;
+ id.comboVal = NULL;
  id.tooltip = tooltip.c_str();
  id.separator = false;
+ m_fl.push_back(id);
+ return true;
+}
+
+bool CDynFieldsDialog::AppendItem(const _TSTRING& caption, const std::vector<_TSTRING>& ItemList, int* p_value, const _TSTRING& tooltip)
+{
+ ItemData id;
+ id.caption = caption.c_str();
+ id.fltVal = NULL;
+ id.intVal = NULL;
+ id.blVal = NULL;
+ id.comboVal = p_value;
+ id.tooltip = tooltip.c_str();
+ id.separator = false;
+ id.itemList = ItemList;
  m_fl.push_back(id);
  return true;
 }
@@ -351,6 +373,11 @@ bool CDynFieldsContainer::AppendItem(const _TSTRING& caption)
 bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, bool* p_value, const _TSTRING& tooltip)
 {
  return m_dlg.AppendItem(caption, p_value, tooltip);
+}
+
+bool CDynFieldsContainer::AppendItem(const _TSTRING& caption, const std::vector<_TSTRING>& ItemList, int* p_value, const _TSTRING& tooltip)
+{
+ return m_dlg.AppendItem(caption, ItemList, p_value, tooltip);
 }
 
 void CDynFieldsContainer::OnOK()
