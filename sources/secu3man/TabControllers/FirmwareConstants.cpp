@@ -435,39 +435,62 @@ void CFirmwareTabController::OnEditFwConsts(void)
  ltft_algos.push_back(_T("Standard"));
  ltft_algos.push_back(_T("Kosh"));
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Выбор алгоритма LTFT"), ltft_algos, &d.ltft_algo, _T("Выбор алгоритма LTFT."));
+  dfd.AppendItem(_T("Выбор алгоритма LTFT"), ltft_algos, &d.ltft_algo, _T("Выбор алгоритма LTFT. Параметры, которые не используются алгоритмом 'Kosh' отмечены *"));
  else
-  dfd.AppendItem(_T("Select LTFT algorithm"), ltft_algos, &d.ltft_algo, _T("Selection of LTFT algorithm"));
+  dfd.AppendItem(_T("Select LTFT algorithm"), ltft_algos, &d.ltft_algo, _T("Selection of LTFT algorithm. Parameters, which are not used by 'Kosh' algorithm are marked with *"));
+
+ std::vector<_TSTRING> ltft_modes;
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+ {
+  ltft_modes.push_back(_T("Выкл"));
+  ltft_modes.push_back(_T("Бензин"));
+  ltft_modes.push_back(_T("Газ"));
+  ltft_modes.push_back(_T("Бенз+Газ"));
+  dfd.AppendItem(_T("Использование коррекции"), ltft_modes,  &d.ltft_mode, _T("Выкл - адаптация по лямбде выключена; Бензин - включена только для бензина (GAS_V=0); Газ - включена только для газа (GAS_V=1); Бенз+Газ - включена и для газа и для бензина."));
+ }
+ else
+ {
+  ltft_modes.push_back(_T("OFF"));
+  ltft_modes.push_back(_T("Petrol"));
+  ltft_modes.push_back(_T("Gas"));
+  ltft_modes.push_back(_T("Petrol+Gas"));
+  dfd.AppendItem(_T("Use of LTFT"), ltft_modes, &d.ltft_mode, _T("OFF - LTFT is turned off; Petrol - LTFT is working only for petrol (GAS_V=0); Gas - LTFT is working only for gas (GAS_V=1); Petrol+Gas - LTFT is working for both petrol and gas"));
+ }
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Использование коррекции"), _T(""), 0, 3, 1, 1, &d.ltft_mode, _T("0 - адаптация по лямбде выключена; 1 - включена только для бензина (GAS_V=0); 2 - включена только для газа (GAS_V=1); 3 - включена и для газа и для бензина."));
+  dfd.AppendItem(_T("Нижний порог ДТОЖ разрешения адаптации"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt, _T("Процесс адаптации включится только когда температура двигателя превысит этот порог."));
  else
-  dfd.AppendItem(_T("Use of LTFT"), _T(""), 0, 3, 1, 1, &d.ltft_mode, _T("0 - LTFT is turned off; 1 - LTFT is working only for petrol (GAS_V=0); 2 - LTFT is working only for gas (GAS_V=1); 3 - LTFT is working for both petrol and gas"));
+  dfd.AppendItem(_T("Lower CLT threshold for LTFT"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt, _T("LTFT learning will work only when coolant temperature is above this threshold."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Температура разрешения адаптации"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt, _T("Процесс адаптации включится только когда температура двигателя превысит этот порог."));
+  dfd.AppendItem(_T("Верхний порог ДТОЖ разрешения адаптации"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt_up, _T("Процесс адаптации выключится когда температура двигателя превысит этот порог."));
  else
-  dfd.AppendItem(_T("CLT threshold for LTFT"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt, _T("LTFT learning will work only when coolant temperature is above this threshold."));
+  dfd.AppendItem(_T("Upper CLT threshold for LTFT"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_clt_up, _T("LTFT learning will stop to work when coolant temperature is above this threshold."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Допуск на стационарность для адаптации"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Определяет зону вокруг обучаемой ячейки таблицы, в которую должна попасть режимная точка. Используется по осям оборотов и нагрузки."));
+  dfd.AppendItem(_T("Верхний порог разрешения адаптации по ДТВ"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_iat_up, _T("Процесс адаптации выключится когда температура воздуха на впуске превысит этот порог."));
  else
-  dfd.AppendItem(_T("Stationarity tolerance for learning"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Defines zone around the learning cell in table into which the regime point should fall. It is used for rpm and load axises."));
+  dfd.AppendItem(_T("Upper IAT threshold for LTFT"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_iat_up, _T("LTFT learning will stop to work when intake manifold temperature is above this threshold."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Время стационарности рабочей точки в секундах"), _T("сек"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Адаптация ячейки происходит только когда рабочая точка находится в ее зоне в течение этого времени. Этот параметр используется только если соответствующий параметр в тактах установлено в 0."));
+  dfd.AppendItem(_T("Допуск на стационарность для адаптации*"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Определяет зону вокруг обучаемой ячейки таблицы, в которую должна попасть режимная точка. Используется по осям оборотов и нагрузки."));
  else
-  dfd.AppendItem(_T("Stationarity time for regime point in second"), _T("sec"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Learning of a cell will be performed only when regime point resides in its zone during this period of time. This parameter is used only if corresponding parameter in strokes is set to 0."));
+  dfd.AppendItem(_T("Stationarity tolerance for learning*"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Defines zone around the learning cell in table into which the regime point should fall. It is used for rpm and load axises."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Время стационарности рабочей точки в тактах"), _T("т"), 0, 255, 1, 0, &d.ltft_stab_str, _T("Адаптация ячейки происходит только когда рабочая точка находится в ее зоне в течение этого числа тактов. Если это значение установлено в 0, то вместо тактов используется время."));
+  dfd.AppendItem(_T("Время стационарности рабочей точки в секундах*"), _T("сек"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Адаптация ячейки происходит только когда рабочая точка находится в ее зоне в течение этого времени. Этот параметр используется только если соответствующий параметр в тактах установлено в 0."));
  else
-  dfd.AppendItem(_T("Stationarity time for regime point in strokes"), _T("str"), 0, 255, 1, 0, &d.ltft_stab_str, _T("Learning of a cell will be performed only when regime point resides in its zone during this number of strokes. If this parameter is set to 0, then time is used instead of strokes."));
+  dfd.AppendItem(_T("Stationarity time for regime point in second*"), _T("sec"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Learning of a cell will be performed only when regime point resides in its zone during this period of time. This parameter is used only if corresponding parameter in strokes is set to 0."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Градиент таблицы адаптации"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Определает скорость изменения соседних ячеек. Чем выше значение, тем больше меняются соседние ячейки при адаптации текущей ячейки."));
+  dfd.AppendItem(_T("Время стационарности рабочей точки в тактах*"), _T("т"), 0, 255, 1, 0, &d.ltft_stab_str, _T("Адаптация ячейки происходит только когда рабочая точка находится в ее зоне в течение этого числа тактов. Если это значение установлено в 0, то вместо тактов используется время."));
  else
-  dfd.AppendItem(_T("Learning gradient"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Determines the rate of change of adjacent cells. The higher the value, the more neighboring cells change when learning the current cell."));
+  dfd.AppendItem(_T("Stationarity time for regime point in strokes*"), _T("str"), 0, 255, 1, 0, &d.ltft_stab_str, _T("Learning of a cell will be performed only when regime point resides in its zone during this number of strokes. If this parameter is set to 0, then time is used instead of strokes."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Градиент таблицы адаптации/коэфф.выравнивания"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Определает скорость изменения соседних ячеек. Чем выше значение, тем больше меняются соседние ячейки при адаптации текущей ячейки. В алгоритме 'Kosh' это коэффициент выравнивания."));
+ else
+  dfd.AppendItem(_T("Learning gradient/allignment factor"), _T(""), 0.0f, 0.99f, 0.005f, 3, &d.ltft_learn_grad, _T("Determines the rate of change of adjacent cells. The higher the value, the more neighboring cells change when learning the current cell. In the 'Kosh' algorithm this is allignment factor."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Абс. давление газа разрешения адаптации"), _T("кПа"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpa, _T("Процесс адаптации включится только когда абсолютное давление газа превысит этот порог."));
@@ -480,19 +503,19 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Diff. gas pressure threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 0.1f, 1, &d.ltft_learn_gpd, _T("LTFT learning will work only when differential gas pressure (GPS - MAP) is above this threshold. To disable this threshold set value to zero."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Радиус обучения соседей"), _T(""), 0, 16, 1, 1, &d.ltft_neigh_rad, _T("Определяет удаление (от текущей ячейки в таблице) в пределах которого обучаются соседние ячейки. Чем выше значение, тем на более дальние окружающие ячейки оказывается влияние."));
+  dfd.AppendItem(_T("Радиус обучения соседей*"), _T(""), 0, 16, 1, 1, &d.ltft_neigh_rad, _T("Определяет удаление (от текущей ячейки в таблице) в пределах которого обучаются соседние ячейки. Чем выше значение, тем на более дальние окружающие ячейки оказывается влияние."));
  else
-  dfd.AppendItem(_T("Neighbours' learning radius"), _T(""), 0, 16, 1, 1, &d.ltft_neigh_rad, _T("Determines the distance (from the current cell in the table) within which adjacent cells are trained(altered). The higher the value, the more distant surrounding cells are affected."));
+  dfd.AppendItem(_T("Neighbours' learning radius*"), _T(""), 0, 16, 1, 1, &d.ltft_neigh_rad, _T("Determines the distance (from the current cell in the table) within which adjacent cells are trained(altered). The higher the value, the more distant surrounding cells are affected."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Число устойчивых переключений уровня сигнала ДК"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("Требуемое число устойчивых переключений уровня сигнала ДК во время нахождения рабочей точки в зоне ячейки. Чем выше значение, тем медленнее будет происходть адаптация."));
+  dfd.AppendItem(_T("Число устойчивых переключений уровня сигнала ДК*"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("Требуемое число устойчивых переключений уровня сигнала ДК во время нахождения рабочей точки в зоне ячейки. Чем выше значение, тем медленнее будет происходть адаптация."));
  else
-  dfd.AppendItem(_T("Number of successive switches of EGO sensor's signal"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("The required number of successive switchings of the EGO sensor's signal level while the operating point is in the cell area. The higher the value, the slower the learning will be."));
+  dfd.AppendItem(_T("Number of successive switches of EGO sensor's signal*"), _T(""), 0, 16, 1, 1, &d.ltft_sigswt_num, _T("The required number of successive switchings of the EGO sensor's signal level while the operating point is in the cell area. The higher the value, the slower the learning will be."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Обучать таблицу LTFT на ХХ"), &d.ltft_on_idling, _T("Если галочка установлена, то обновление значений в таблице LTFT будет происходить при закрытом дросселе. В противном случае обновление значений LTFT будет происходить только в рабочих режимах."));
+  dfd.AppendItem(_T("Обучать таблицу LTFT на ХХ*"), &d.ltft_on_idling, _T("Если галочка установлена, то обновление значений в таблице LTFT будет происходить при закрытом дросселе. В противном случае обновление значений LTFT будет происходить только в рабочих режимах."));
  else
-  dfd.AppendItem(_T("Learn LTFT map on idling"), &d.ltft_on_idling, _T("If the checkbox is checked, then LTFT map will be updated on idling, otherwise LTFT map will be updated only on working modes."));
+  dfd.AppendItem(_T("Learn LTFT map on idling*"), &d.ltft_on_idling, _T("If the checkbox is checked, then LTFT map will be updated on idling, otherwise LTFT map will be updated only on working modes."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Ограничение LTFT коррекции снизу"), _T("%"), -24.6f, .0f, 0.1f, 1, &d.ltft_min, _T("Значения долговременной коррекции в таблице LTFT не могут быть меньше этого значения."));
@@ -503,6 +526,36 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Ограничение LTFT коррекции сверху"), _T("%"), .0f, 24.6f, 0.1f, 1, &d.ltft_max, _T("Значения долговременной коррекции в таблице LTFT не могут быть больше этого значения."));
  else
   dfd.AppendItem(_T("Top limit of LTFT correction"), _T("%"), .0f, 24.6f, 0.1f, 1, &d.ltft_max, _T("Values in the LTFT map can not be greater than this value."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Нижний порог оборотов адаптации"), _T("мин-1"), 0, 25000, 10, 5, &d.ltft_learn_rpm[0], _T("Процесс адаптации прекратится когда обороты двигателя будут ниже этого порога."));
+ else
+  dfd.AppendItem(_T("Lower RPM threshold for LTFT"), _T("min-1"), 0, 25000, 10, 5, &d.ltft_learn_rpm[0], _T("LTFT learning will stop to work when RPM is below this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Верхний порог оборотов адаптации"), _T("мин-1"), 0, 25000, 10, 5, &d.ltft_learn_rpm[1], _T("Процесс адаптации прекратится когда обороты двигателя будут выше этого порога."));
+ else
+  dfd.AppendItem(_T("Upper RPM threshold for LTFT"), _T("min-1"), 0, 25000, 10, 5, &d.ltft_learn_rpm[1], _T("LTFT learning will stop to work when RPM is above this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Нижний порог нагрузки адаптации"), _T("кПа"), 0.0f, 500.0f, 1.0f, 2, &d.ltft_learn_load[0], _T("Процесс адаптации прекратится когда нагрузка двигателя (кПа/%) будет ниже этого порога."));
+ else
+  dfd.AppendItem(_T("Lower load threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 1.0f, 2, &d.ltft_learn_load[0], _T("LTFT learning will stop to work when engine load (kPa/%) is below this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Верхний порог нагрузки адаптации"), _T("кПа"), 0.0f, 500.0f, 1.0f, 2, &d.ltft_learn_load[1], _T("Процесс адаптации прекратится когда нагрузка двигателя (кПа/%) будет выше этого порога."));
+ else
+  dfd.AppendItem(_T("Upper load threshold for LTFT"), _T("kPa"), 0.0f, 500.0f, 1.0f, 2, &d.ltft_learn_load[1], _T("LTFT learning will stop to work when engine load (kPa/%) is above this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Отрицательный порог нечувствительности LTFT (Kosh)"), _T("%"), 0.0f, 10.0f, 0.1f, 1, &d.ltft_dead_band[0], _T("Процесс адаптации не начнется пока лямбда коррекция выше этого порога. Данный параметр используется только алгоритмом 'Kosh'."));
+ else
+  dfd.AppendItem(_T("Negative insensitivity LTFT threshold (Kosh)"), _T("%"), 0.0f, 10.0f, 0.1f, 1, &d.ltft_dead_band[0], _T("LTFT learning will not start while EGO correction is above this threshold. This parameter is used by 'Kosh' algorithm only."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Положительный порог нечувствительности LTFT (Kosh)"), _T("%"), 0.0f, 10.0f, 0.1f, 1, &d.ltft_dead_band[1], _T("Процесс адаптации не начнется пока лямбда коррекция ниже этого порога. Данный параметр используется только алгоритмом 'Kosh'"));
+ else
+  dfd.AppendItem(_T("Positive insensitivity LTFT threshold (Kosh)"), _T("%"), 0.0f, 10.0f, 0.1f, 1, &d.ltft_dead_band[1], _T("LTFT learning will not start while EGO correction is below this threshold. This parameter is used by 'Kosh' algorithm only."));
 
  //Bluetooth
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)

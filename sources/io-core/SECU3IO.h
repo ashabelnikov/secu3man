@@ -857,7 +857,9 @@ const int INPAVNUM = 14;
   float pwron_time1;
 
   int    ltft_mode;       //!< 0 - LTFT is turned off, 1 - use only for petrol, 2 - use only for gas, 3 - use for both petrol and gas
-  float  ltft_learn_clt;  //!< Temperature threshold for learning
+  float  ltft_learn_clt;  //!< Temperature threshold for learning (lower)
+  float  ltft_learn_clt_up;  //!< Temperature threshold for learning (upper)
+  float  ltft_learn_iat_up;  //!< IAT threshold for learning (upper)
   float  ltft_cell_band;  //!< cell band in %
   float  ltft_stab_time;  //!< Learn stability time
   float  ltft_learn_grad; //!< Learning gradient
@@ -903,6 +905,11 @@ const int INPAVNUM = 14;
   int ego_ac_delay;
 
   int ltft_algo;
+
+  int ltft_learn_rpm[2];
+  float ltft_learn_load[2];
+
+  float ltft_dead_band[2];
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

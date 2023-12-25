@@ -395,11 +395,18 @@ typedef struct
  _uchar ego_ac_delay;
 
  _uchar ltft_algo;
+ _int   ltft_learn_clt_up;  //!< upper temperature threshold for learning, value in 0.25C units
+ _int   ltft_learn_iat_up;  //!< upper IAT threshold for learning, value in 0.25C units
+
+ _uint ltft_learn_rpm[2];
+ _uint ltft_learn_load[2];
+
+ _uchar ltft_dead_band[2];
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1965];
+ _uchar reserved[1951];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3287,6 +3294,18 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.ego_ac_delay = exd.ego_ac_delay;
 
  o_data.ltft_algo = exd.ltft_algo;
+
+ o_data.ltft_learn_clt_up = ((float)exd.ltft_learn_clt_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.ltft_learn_iat_up = ((float)exd.ltft_learn_iat_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ o_data.ltft_learn_rpm[0] = exd.ltft_learn_rpm[0];
+ o_data.ltft_learn_rpm[1] = exd.ltft_learn_rpm[1];
+
+ o_data.ltft_learn_load[0] = ((float)exd.ltft_learn_load[0]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.ltft_learn_load[1] = ((float)exd.ltft_learn_load[1]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ o_data.ltft_dead_band[0] = (((float)exd.ltft_dead_band[0]) / 512.0f) * 100.f; //%
+ o_data.ltft_dead_band[1] = (((float)exd.ltft_dead_band[1]) / 512.0f) * 100.f; //%
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3404,6 +3423,18 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.ego_ac_delay = i_data.ego_ac_delay;
 
  exd.ltft_algo = i_data.ltft_algo;
+
+ exd.ltft_learn_clt_up = MathHelpers::Round(i_data.ltft_learn_clt_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.ltft_learn_iat_up = MathHelpers::Round(i_data.ltft_learn_iat_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ exd.ltft_learn_rpm[0] = i_data.ltft_learn_rpm[0];
+ exd.ltft_learn_rpm[1] = i_data.ltft_learn_rpm[1];
+
+ exd.ltft_learn_load[0] = MathHelpers::Round(i_data.ltft_learn_load[0] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.ltft_learn_load[1] = MathHelpers::Round(i_data.ltft_learn_load[1] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ exd.ltft_dead_band[0] = MathHelpers::Round((i_data.ltft_dead_band[0] / 100.f) * 512.0f);
+ exd.ltft_dead_band[1] = MathHelpers::Round((i_data.ltft_dead_band[1] / 100.f) * 512.0f);
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
