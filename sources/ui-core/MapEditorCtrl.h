@@ -103,8 +103,11 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   afx_msg void OnExportCsv();
   afx_msg void OnImportCsv();
   afx_msg void OnRevert();
+  afx_msg void OnClipboardCopy();
+  afx_msg void OnClipboardPaste();
   afx_msg void OnUpdateSetTo(CCmdUI* pCmdUI);
   afx_msg void OnUpdateImportCsv(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateClipboardPaste(CCmdUI* pCmdUI);
   afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   BOOL PreTranslateMessage(MSG *pMsg);
   DECLARE_MESSAGE_MAP()
@@ -139,6 +142,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   bool _CellByPoint(CPoint point, int& oi, int& oj);
   void _GetSelRect(CRect& o_rc);
   void _ActivateTooltip(int i, int j);
+  void _ClipboardCopy(void);
+  void _ClipboardPaste(void);
 
   inline  CString _FloatToStr(float value, int decPlaces) //used for drawing of items
   {

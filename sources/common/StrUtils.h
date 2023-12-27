@@ -48,11 +48,23 @@ class StrUtils
    return result;
   }
 
-  static _TSTRING ltrim(const _TSTRING& str)
+  static inline _TSTRING ltrim(const _TSTRING& str, const TCHAR* t = _T(" "))
   {
-   size_t first = str.find_first_not_of(_T(' '));
+   size_t first = str.find_first_not_of(t);
    if (_TSTRING::npos == first)
     return str;
    return str.substr(first, _TSTRING::npos);
   }
+
+  static inline _TSTRING rtrim(const _TSTRING& str, const TCHAR* t = _T(" "))
+  {
+   _TSTRING s = str;
+   size_t first = s.find_last_not_of(t);
+   if (_TSTRING::npos==first)
+    s.clear();
+   else
+    s.erase(first + 1);
+   return s;
+  }
+
 };

@@ -23,6 +23,9 @@ BEGIN
         MENUITEM "Умножить значения",       ID_MAPED_POPUP_MUL
         MENUITEM "Вернуться к оригиналу",   ID_MAPED_POPUP_REV
         MENUITEM SEPARATOR
+        MENUITEM "Копировать"               ID_MAPED_POPUP_COPY
+        MENUITEM "Вставить"                 ID_MAPED_POPUP_PASTE
+        MENUITEM SEPARATOR
         MENUITEM "Экспортировать в csv",    ID_MAPED_POPUP_EXPORTCSV
         MENUITEM "Импортировать из csv",    ID_MAPED_POPUP_IMPORTCSV
     END
@@ -75,13 +78,16 @@ IDR_MAPEDITOR_POPUP_MENU MENU
 BEGIN
     POPUP "POPUP_MENU"
     BEGIN
-        MENUITEM "Инкремент",               ID_MAPED_POPUP_INC
-        MENUITEM "Декремент",               ID_MAPED_POPUP_DEC
+        MENUITEM "Increment",               ID_MAPED_POPUP_INC
+        MENUITEM "Decrement",               ID_MAPED_POPUP_DEC
         MENUITEM "Set values",              ID_MAPED_POPUP_SETTO
         MENUITEM "Substract from values",   ID_MAPED_POPUP_SUB
         MENUITEM "Add to values",           ID_MAPED_POPUP_ADD
         MENUITEM "Multiply values",         ID_MAPED_POPUP_MUL
         MENUITEM "Revert to original",      ID_MAPED_POPUP_REV
+        MENUITEM SEPARATOR
+        MENUITEM "Copy"                     ID_MAPED_POPUP_COPY
+        MENUITEM "Paste"                    ID_MAPED_POPUP_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Export to csv",           ID_MAPED_POPUP_EXPORTCSV
         MENUITEM "Import from csv",         ID_MAPED_POPUP_IMPORTCSV

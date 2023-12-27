@@ -1,4 +1,4 @@
-/* SECU-3  - An open source, free engine control unit
+  /* SECU-3  - An open source, free engine control unit
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 
    This program is free software: you can redistribute it and/or modify
@@ -259,6 +259,8 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_COMMAND(ID_MAPED_POPUP_REV, OnRevert)
  ON_COMMAND(ID_MAPED_POPUP_EXPORTCSV, OnExportCsv)
  ON_COMMAND(ID_MAPED_POPUP_IMPORTCSV, OnImportCsv)
+ ON_COMMAND(ID_MAPED_POPUP_COPY, OnClipboardCopy)
+ ON_COMMAND(ID_MAPED_POPUP_PASTE, OnClipboardPaste)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INC, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_DEC, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SETTO, OnUpdateSetTo)
@@ -341,6 +343,11 @@ void CMapEditorCtrl::OnUpdateSetTo(CCmdUI* pCmdUI)
 }
 
 void CMapEditorCtrl::OnUpdateImportCsv(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(!m_readOnly);
+}
+
+void CMapEditorCtrl::OnUpdateClipboardPaste(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(!m_readOnly);
 }
@@ -769,6 +776,20 @@ void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
  switch(nChar)
  { 
+  case 0x43:   //"C"
+   if (GetKeyState(VK_CONTROL) & 0x8000)
+   { //Ctrl+C
+    _ClipboardCopy();
+   }
+   break;
+   
+  case 0x56:   //"V"
+   if (GetKeyState(VK_CONTROL) & 0x8000)
+   { //Ctrl+V
+    _ClipboardPaste();
+   }
+   break;
+
   case VK_HOME:
    {
     bool redraw;
@@ -801,7 +822,12 @@ void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    break;
 
   case VK_INSERT:
-   _ActivateEdit();
+    if (GetKeyState(VK_CONTROL) & 0x8000)
+     _ClipboardCopy(); //Ctrl+Insert
+    else if (GetKeyState(VK_SHIFT) & 0x8000)
+     _ClipboardPaste(); //Shift+Insert
+    else
+     _ActivateEdit();
    break;
 
   case VK_RETURN:                 //move down if user pressed Enter key
@@ -1055,6 +1081,16 @@ void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
  _DeactivateEdit();
 }
 
+void CMapEditorCtrl::OnClipboardCopy()
+{
+ _ClipboardCopy();
+}
+
+void CMapEditorCtrl::OnClipboardPaste()
+{
+ _ClipboardPaste();
+}
+
 void CMapEditorCtrl::setOnAbroadMove(EventHandler2 OnCB)
 {
  m_OnAbroadMove = OnCB;
@@ -1267,17 +1303,11 @@ const std::vector<std::pair<int, int> >& CMapEditorCtrl::GetSelection(void)
  if (m_sel_changed)
  { //update list of selected cells only if selection actually changed, see also _SelChange() method
   m_sel.clear();
-  int size_i = abs(m_cur_i - m_end_i);
-  int size_j = abs(m_cur_j - m_end_j);
-  for(int i = 0; i <= size_i; ++i)
-  {
-   for(int j = 0; j <= size_j; ++j)
-   {
-    int ii = (m_end_i > m_cur_i) ? m_cur_i + i : m_cur_i - i;
-    int jj = (m_end_j > m_cur_j) ? m_cur_j + j : m_cur_j - j;
-    m_sel.push_back(std::make_pair(ii, jj));   
-   }
-  }
+  int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
+  int ei = std::min(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+  for(int i = bi; i >= ei; --i)
+   for(int j = bj; j <= ej; ++j)
+    m_sel.push_back(std::make_pair(i, j));
   m_sel_changed = false;
  }
 
@@ -1680,16 +1710,17 @@ bool CMapEditorCtrl::_CellByPoint(CPoint point, int& oi, int& oj)
 
 bool CMapEditorCtrl::_isCellInSelRect(int i, int j)
 {
- return (((m_end_i >= m_cur_i) && i >= m_cur_i && i <= m_end_i) || ((m_end_i < m_cur_i) && i <= m_cur_i && i >= m_end_i)) &&
-        (((m_end_j >= m_cur_j) && j >= m_cur_j && j <= m_end_j) || ((m_end_j < m_cur_j) && j <= m_cur_j && j >= m_end_j));
+ int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
+ int ei = std::min(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+ return (i <= bi) && (i >= ei) && (j >= bj) && (j <= ej);
 }
 
 void CMapEditorCtrl::_GetSelRect(CRect& o_rc)
 {
- CRect rc_lt = _GetItemRect(&m_dcGrid, std::min(m_cur_i, m_end_i), std::min(m_cur_j, m_end_j));
- CRect rc_rb = _GetItemRect(&m_dcGrid, std::max(m_cur_i, m_end_i), std::max(m_cur_j, m_end_j));
- o_rc.left = rc_lt.left, o_rc.top =  rc_lt.bottom;
- o_rc.right = rc_rb.right, o_rc.bottom = rc_rb.top;
+ CRect rc_lt = _GetItemRect(&m_dcGrid, std::max(m_cur_i, m_end_i), std::min(m_cur_j, m_end_j));
+ CRect rc_rb = _GetItemRect(&m_dcGrid, std::min(m_cur_i, m_end_i), std::max(m_cur_j, m_end_j));
+ o_rc.left = rc_lt.left, o_rc.top =  rc_lt.top;
+ o_rc.right = rc_rb.right, o_rc.bottom = rc_rb.bottom;
 }
 
 CRect CMapEditorCtrl::_GetItemRect(CDC* pDC, int i , int j)
@@ -1703,7 +1734,8 @@ CRect CMapEditorCtrl::_GetItemRect(CDC* pDC, int i , int j)
  int space  = 2;
  float width  = ((float)(rc.right - rc.left) - ((float)m_cols)*space) / ((float)m_cols);
  float height = ((float)(rc.bottom - rc.top) - ((float)m_rows)*space) / ((float)m_rows);
- return CRect(MathHelpers::Round(j*(width+space))+w_off, MathHelpers::Round((m_rows-1-i)*(height+space)), MathHelpers::Round(j*(width+space) + width)+w_off, MathHelpers::Round((m_rows-1-i)*(height+space) + height));
+ return CRect(MathHelpers::Round(j*(width+space))+w_off, MathHelpers::Round(((m_rows-1)-i)*(height+space)),
+              MathHelpers::Round(j*(width+space) + width)+w_off, MathHelpers::Round(((m_rows-1)-i)*(height+space) + height));
 }
 
 CRect CMapEditorCtrl::_GetMarkerRect(int i, int j, int inflate /*=2*/)
@@ -2097,4 +2129,121 @@ float CMapEditorCtrl::_GetItemTrO(int i, int j)
   return m_OnValueTransform(_GetItem<float>(mp_mapOrig, i,j), 0); //to chart
  else
   return _GetItem<float>(mp_mapOrig, i,j);
+}
+
+void CMapEditorCtrl::_ClipboardCopy(void)
+{
+ int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
+ int ei = std::min(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+ CString str;
+ for(int i = bi; i >= ei; --i)
+ {
+  for(int j = bj; j <= ej; ++j)
+  {      
+   float value = _GetItemTr(i, j);
+   CString s;
+   if (j == ej)
+    s.Format(_T("%.*f\r\n"), m_decPlaces, (float)value);
+   else
+    s.Format(_T("%.*f\t"), m_decPlaces, (float)value);
+   str+=s;
+  }
+ }
+
+ // Open the clipboard, empty it and place new data
+ if(::OpenClipboard(this->m_hWnd))
+ {
+  ::EmptyClipboard();
+
+  // Allocate a global memory object for the text.  
+  HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (str.GetLength() + 1) * sizeof(TCHAR)); 
+  if (hglbCopy == NULL) 
+  { 
+   CloseClipboard(); 
+   return; 
+  } 
+ 
+  // Lock the handle and copy the text to the buffer.  
+  LPTSTR lptstrCopy = (LPTSTR)GlobalLock(hglbCopy);
+  _tcscpy(lptstrCopy, (LPCTSTR)str); 
+  GlobalUnlock(hglbCopy); 
+ 
+  // Place the handle on the clipboard.  
+  ::SetClipboardData(CF_TEXT, hglbCopy); 
+  /*
+  CRect src;
+  _GetSelRect(src);  
+  CDC* pWndDC  = GetWindowDC();
+  CDC bmDC;
+  bmDC.CreateCompatibleDC(pWndDC);
+  CBitmap bitmap;
+  bitmap.CreateCompatibleBitmap(pWndDC, src.Width(), src.Height());
+  CBitmap* oldBitmap = bmDC.SelectObject(&bitmap);
+  bmDC.BitBlt(0,0, src.Width(), src.Height(), pWndDC, src.left+1, src.top+1, SRCCOPY);
+  bmDC.SelectObject(oldBitmap);
+  HBITMAP hBitmap = (HBITMAP)bitmap.Detach();
+  ::SetClipboardData (CF_BITMAP, hBitmap);
+  */
+  ::CloseClipboard();
+ }
+}
+
+void CMapEditorCtrl::_ClipboardPaste(void)
+{
+ if (::IsClipboardFormatAvailable(CF_TEXT) && ::OpenClipboard(this->m_hWnd)) 
+ {
+  HGLOBAL hglb = GetClipboardData(CF_TEXT); 
+  if (hglb != NULL) 
+  { 
+   LPTSTR lptstr = (LPTSTR)GlobalLock(hglb); 
+   if (lptstr != NULL) 
+   {     
+    //parse string
+    _TSSTREAM ss(lptstr);
+    std::vector<std::vector<_TSTRING> > csv;
+    _TSTRING line;
+    while (std::getline(ss, line, _T('\n')))
+    {
+     line = StrUtils::rtrim(line, _T("\t\n\r"));
+     csv.push_back(StrUtils::TokenizeStr(line.c_str(), _T('\t')));
+    }
+
+    GlobalUnlock(hglb); 
+
+    TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
+
+    int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
+    for(size_t i = 0; i < csv.size(); ++i)
+    {
+     for(size_t j = 0; j < csv[i].size(); ++j)
+     {
+      int ii = bi - i, jj = bj + j;  
+      if (ii < 0)
+       ii = 0;
+      if (jj >= m_cols)
+       jj = m_cols-1;
+
+       //change decimal point, thus it will be compatible with our current locale
+      _TSTRING& s = csv[i][j];
+       std::size_t pos = s.find_first_of(_T(".,"));
+       if (pos != _TSTRING::npos)
+        s[pos] = decPt;
+       
+      _SetItemTr(ii, jj, (float)atof(s.c_str())); //save result
+     }     
+    }
+
+    m_OnChange();
+    if (!m_absGrad)
+    {
+     _UpdateMinMaxElems();
+    }
+ 
+    _DrawGrid();  //fully redraw grid because gradient should be updated
+    CClientDC dc(this);
+    _ShowImage(&dc);
+   } 
+  } 
+  CloseClipboard();     
+ }
 }

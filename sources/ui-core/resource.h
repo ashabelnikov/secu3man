@@ -23,3 +23,5 @@
 #define IDS_MAPED_POPUP_ADD_TT    7522
 #define IDS_MAPED_POPUP_MUL_TT    7523
 #define IDS_ORIG_TOOLTIP          7524
+#define ID_MAPED_POPUP_COPY       7525
+#define ID_MAPED_POPUP_PASTE      7526
