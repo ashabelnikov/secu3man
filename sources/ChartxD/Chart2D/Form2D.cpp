@@ -45,6 +45,7 @@ char TForm2D::m_csvsep_symb = ',';
 //---------------------------------------------------------------------------
 __fastcall TForm2D::TForm2D(HWND parent)
 : TForm(parent)
+, m_hInst(NULL)
 , m_count_of_function_points(0)
 , m_fnc_min(0.0f), m_fnc_max(0.0f)
 , mp_original_function(NULL)
@@ -274,11 +275,28 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
  PM_Import->Caption = string;
  ::LoadString(hInstance, IDS_PM_IMPORT_CSV, string, 1024);
  PM_ImportCSV->Caption = string;
+ ::LoadString(hInstance, IDS_PM_INC, string, 1024);
+ PM_Inc->Caption = string;
+ ::LoadString(hInstance, IDS_PM_DEC, string, 1024);
+ PM_Dec->Caption = string;
+ ::LoadString(hInstance, IDS_PM_SETTO, string, 1024);
+ PM_SetTo->Caption = string;
+ ::LoadString(hInstance, IDS_PM_SUB, string, 1024);
+ PM_Sub->Caption = string;
+ ::LoadString(hInstance, IDS_PM_ADD, string, 1024);
+ PM_Add->Caption = string;
+ ::LoadString(hInstance, IDS_PM_MUL, string, 1024);
+ PM_Mul->Caption = string;
+ ::LoadString(hInstance, IDS_PM_COPY, string, 1024);
+ PM_Copy->Caption = string;
+ ::LoadString(hInstance, IDS_PM_PASTE, string, 1024);
+ PM_Paste->Caption = string;
 }
 
 //---------------------------------------------------------------------------
 void TForm2D::InitHints(HINSTANCE hInstance)
 {
+ m_hInst = hInstance; //save HINSTANCE for further use
  char string[1024 + 1];
  ::LoadString(hInstance, IDS_TT_SMOOTHING_3_POINTS, string, 1024);
  Smoothing3x->Hint = string;
@@ -789,13 +807,13 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  //Implement keyboard actions related to chart
  if (ActiveControl == Chart1)
  {
-  if (Key == VK_UP)
+  if (Key == VK_UP || Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
   { //move points upward
    ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
-  else if (Key == VK_DOWN)
+  else if (Key == VK_DOWN || Key == VK_OEM_5 || Key == VK_OEM_COMMA)
   { //move points downward
    ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
@@ -808,6 +826,37 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   else if (Key == VK_RIGHT)
   { //move selection to the right
    SelRightArrow(Shift.Contains(ssShift));
+  }
+  else if (Key == 0x43 && Shift.Contains(ssCtrl))
+  { //Ctrl+C
+   ClipboardCopy();
+  }
+  else if (Key == 0x56 && Shift.Contains(ssCtrl))
+  { //Ctrl+V
+   ClipboardPaste();
+  }
+  else if (Key == VK_INSERT)
+  {
+   if (Shift.Contains(ssCtrl))
+    ClipboardCopy();
+   else if (Shift.Contains(ssShift))
+    ClipboardPaste();
+  }
+  else if (Key == VK_HOME)
+  { //move selection point to the left end
+   MarkPoints(false);
+   m_selpts.clear();
+   m_selpts.push_back(0);
+   m_val_n = 0;
+   MarkPoints(true);
+  }
+  else if (Key == VK_END)
+  { //move selection point to the right end
+   MarkPoints(false);
+   m_selpts.clear();
+   m_selpts.push_back(m_count_of_function_points-1);
+   m_val_n = m_count_of_function_points-1;
+   MarkPoints(true);
   }
  }
 
@@ -1064,3 +1113,171 @@ void __fastcall TForm2D::OnImportCSV(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void TForm2D::ClipboardCopy(void)
+{
+ if (m_selpts.size())
+ {
+  AnsiString valFmt = Chart1->Series[0]->ValueFormat;
+  AnsiString str;
+  for(size_t i = 0; i < m_selpts.size(); ++i)
+  {
+   AnsiString as = FormatFloat(valFmt, mp_modified_function[m_selpts[i]]);  
+   if (i==m_selpts.size()-1)
+    as+="\r\n";
+   else
+    as+="\t";
+   str+=as;
+  }
+
+  Clipboard()->AsText = str;
+ }
+}
+
+void TForm2D::ClipboardPaste(void)
+{
+ if (Clipboard()->HasFormat(CF_TEXT) && m_selpts.size())
+ {
+  //parse string
+  AnsiString str = Clipboard()->AsText;
+ 
+  std::vector<_TSTRING> lines = StrUtils::TokenizeStr(str.c_str(), '\n');
+  std::vector<std::vector<_TSTRING> > csv;
+  for(size_t i = 0; i < lines.size(); ++i)
+  {
+   _TSTRING line = StrUtils::rtrim(lines[i], "\t\n\r");
+   csv.push_back(StrUtils::TokenizeStr(line.c_str(), '\t'));
+  }
+
+  TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
+ 
+  for(size_t i = 0; i < csv[0].size(); ++i)
+  {
+   int index = m_selpts[0] + i;
+   if (index < m_count_of_function_points)
+   {
+    //change decimal point, thus it will be compatible with our current locale
+    _TSTRING& s = csv[0][i];
+    std::size_t pos = s.find_first_of(_T(".,"));
+    if (pos != _TSTRING::npos)
+     s[pos] = decPt;
+
+    RestrictAndSetValue(index, atof(s.c_str()));
+   }
+  }
+
+  if (m_pOnChange)
+   m_pOnChange(m_param_on_change);    
+ }
+}
+
+void __fastcall TForm2D::OnCopy(TObject *Sender)
+{
+ ClipboardCopy();
+}
+
+void __fastcall TForm2D::OnPaste(TObject *Sender)
+{
+ ClipboardPaste();
+}
+
+void __fastcall TForm2D::OnInc(TObject *Sender)
+{
+ for(size_t i = 0; i < m_selpts.size(); ++i)
+ {
+  float value = mp_modified_function[m_selpts[i]];
+  value+=m_pt_moving_step;
+  RestrictAndSetValue(m_selpts[i], value);   
+ }
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+void __fastcall TForm2D::OnDec(TObject *Sender)
+{
+ for(size_t i = 0; i < m_selpts.size(); ++i)
+ {
+  float value = mp_modified_function[m_selpts[i]];
+  value-=m_pt_moving_step;
+  RestrictAndSetValue(m_selpts[i], value);   
+ }
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+void __fastcall TForm2D::OnSetTo(TObject *Sender)
+{
+ Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
+ PtMovStepDlg->SetValue(m_pt_moving_step);
+ char title[1024 + 1];
+ ::LoadString(m_hInst, IDS_DLG_SETTO, title, 1024);
+ PtMovStepDlg->SetTitle(title);
+ if (PtMovStepDlg->ShowModal()==mrOk)
+ {
+  for(size_t i = 0; i < m_selpts.size(); ++i)
+  {
+   RestrictAndSetValue(m_selpts[i], PtMovStepDlg->GetValue());   
+  }
+ }
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+void __fastcall TForm2D::OnSub(TObject *Sender)
+{
+ Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
+ PtMovStepDlg->SetValue(m_pt_moving_step);
+ char title[1024 + 1];
+ ::LoadString(m_hInst, IDS_DLG_SUB, title, 1024);
+ PtMovStepDlg->SetTitle(title);
+ if (PtMovStepDlg->ShowModal()==mrOk)
+ {
+  for(size_t i = 0; i < m_selpts.size(); ++i)
+  {
+   float value = mp_modified_function[m_selpts[i]];
+   value-=PtMovStepDlg->GetValue();
+   RestrictAndSetValue(m_selpts[i], value);   
+  }
+ }
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+void __fastcall TForm2D::OnAdd(TObject *Sender)
+{
+ Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
+ PtMovStepDlg->SetValue(m_pt_moving_step);
+ char title[1024 + 1];
+ ::LoadString(m_hInst, IDS_DLG_ADD, title, 1024);
+ PtMovStepDlg->SetTitle(title);
+ if (PtMovStepDlg->ShowModal()==mrOk)
+ {
+  for(size_t i = 0; i < m_selpts.size(); ++i)
+  {
+   float value = mp_modified_function[m_selpts[i]];
+   value+=PtMovStepDlg->GetValue();
+   RestrictAndSetValue(m_selpts[i], value);   
+  }
+ }
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+void __fastcall TForm2D::OnMul(TObject *Sender)
+{
+ Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
+ PtMovStepDlg->SetValue(m_pt_moving_step);
+ char title[1024 + 1];
+ ::LoadString(m_hInst, IDS_DLG_MUL, title, 1024);
+ PtMovStepDlg->SetTitle(title);
+ if (PtMovStepDlg->ShowModal()==mrOk)
+ {
+  for(size_t i = 0; i < m_selpts.size(); ++i)
+  {
+   float value = mp_modified_function[m_selpts[i]];
+   value*=PtMovStepDlg->GetValue();
+   RestrictAndSetValue(m_selpts[i], value);   
+  }
+ }
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}

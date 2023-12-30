@@ -69,6 +69,15 @@ class TForm2D : public TForm
   TMenuItem *PM_ExportCSV;
   TMenuItem *PM_Import;
   TMenuItem *PM_ImportCSV;
+  TMenuItem *Separator2;
+  TMenuItem *PM_Copy;
+  TMenuItem *PM_Paste;
+  TMenuItem *PM_Inc;
+  TMenuItem *PM_Dec;
+  TMenuItem *PM_SetTo;
+  TMenuItem *PM_Sub;
+  TMenuItem *PM_Add;
+  TMenuItem *PM_Mul;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
@@ -122,6 +131,14 @@ class TForm2D : public TForm
   void __fastcall FormCreate(TObject *Sender);
   void __fastcall OnExportCSV(TObject *Sender);
   void __fastcall OnImportCSV(TObject *Sender);
+  void __fastcall OnCopy(TObject *Sender);
+  void __fastcall OnPaste(TObject *Sender);
+  void __fastcall OnInc(TObject *Sender);
+  void __fastcall OnDec(TObject *Sender);
+  void __fastcall OnSetTo(TObject *Sender);
+  void __fastcall OnSub(TObject *Sender);
+  void __fastcall OnAdd(TObject *Sender);
+  void __fastcall OnMul(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);
@@ -174,6 +191,8 @@ class TForm2D : public TForm
   void __fastcall SelRightArrow(bool i_shift);
   bool __fastcall CheckBinForErrors(int itemIndex, float value);
   void __fastcall UpdateBins(void);
+  void ClipboardCopy(void);
+  void ClipboardPaste(void);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
 
  private:  // User declarations
@@ -210,6 +229,8 @@ class TForm2D : public TForm
   std::pair<int, int> m_prev_pt;
   std::vector<int> m_errors;    //for bins errors' checking
   int m_visibleMarkIdx;
+
+  HINSTANCE m_hInst;
 };
 #endif //_FORM2D_H_
 

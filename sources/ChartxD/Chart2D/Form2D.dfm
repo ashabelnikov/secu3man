@@ -620,6 +620,30 @@ object Form2D: TForm2D
   object PopupMenu: TPopupMenu
     Left = 723
     Top = 40
+    object PM_Inc: TMenuItem
+      Caption = 'Increment'
+      OnClick = OnInc
+    end
+    object PM_Dec: TMenuItem
+      Caption = 'Decrement'
+      OnClick = OnDec
+    end
+    object PM_SetTo: TMenuItem
+      Caption = 'Set values...'
+      OnClick = OnSetTo
+    end
+    object PM_Sub: TMenuItem
+      Caption = 'Substract ...'
+      OnClick = OnSub
+    end
+    object PM_Add: TMenuItem
+      Caption = 'Add ...'
+      OnClick = OnAdd
+    end
+    object PM_Mul: TMenuItem
+      Caption = 'Multiply ...'
+      OnClick = OnMul
+    end
     object PM_ZeroAllPoints: TMenuItem
       Caption = 'Zero all curve points'
       OnClick = OnZeroAllPoints
@@ -660,6 +684,17 @@ object Form2D: TForm2D
         Caption = '1'
         OnClick = OnImportCSV
       end
+    end
+    object Separator2: TMenuItem
+      Caption = '-'
+    end
+    object PM_Copy: TMenuItem
+      Caption = 'Copy Ctrl+C'
+      OnClick = OnCopy
+    end
+    object PM_Paste: TMenuItem
+      Caption = 'Paste Ctrl+V'
+      OnClick = OnPaste
     end
   end
 

@@ -29,3 +29,15 @@
 #define IDS_PM_EXPORT_CSV              224
 #define IDS_PM_IMPORT                  225
 #define IDS_PM_IMPORT_CSV              226
+#define IDS_PM_INC                     227
+#define IDS_PM_DEC                     228
+#define IDS_PM_SETTO                   229
+#define IDS_PM_SUB                     230
+#define IDS_PM_ADD                     231
+#define IDS_PM_MUL                     232
+#define IDS_DLG_SETTO                  233
+#define IDS_DLG_SUB                    234
+#define IDS_DLG_ADD                    235
+#define IDS_DLG_MUL                    236
+#define IDS_PM_COPY                    237
+#define IDS_PM_PASTE                   238

@@ -49,6 +49,7 @@ public:		// User declarations
         __fastcall TPtMovStepDlg(TComponent* Owner);
         void SetValue(float val);
         float GetValue(void) const;
+        void SetTitle(const AnsiString& str);
 private:
         double m_value;
         AnsiString m_valFmt;

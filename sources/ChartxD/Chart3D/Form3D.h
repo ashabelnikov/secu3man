@@ -143,6 +143,15 @@ class TForm3D : public TForm
   TMenuItem *PM_ExportCSV;
   TMenuItem *PM_Import;
   TMenuItem *PM_ImportCSV;
+  TMenuItem *Separator2;
+  TMenuItem *PM_Copy;
+  TMenuItem *PM_Paste;
+  TMenuItem *PM_Inc;
+  TMenuItem *PM_Dec;
+  TMenuItem *PM_SetTo;
+  TMenuItem *PM_Sub;
+  TMenuItem *PM_Add;
+  TMenuItem *PM_Mul;
   TOpenDialog* openDialog;
   TSaveDialog* saveDialog;
 
@@ -180,6 +189,14 @@ class TForm3D : public TForm
   void __fastcall OnCreateForm(TObject *Sender);
   void __fastcall OnExportCSV(TObject *Sender);
   void __fastcall OnImportCSV(TObject *Sender);
+  void __fastcall OnCopy(TObject *Sender);
+  void __fastcall OnPaste(TObject *Sender);
+  void __fastcall OnInc(TObject *Sender);
+  void __fastcall OnDec(TObject *Sender);
+  void __fastcall OnSetTo(TObject *Sender);
+  void __fastcall OnSub(TObject *Sender);
+  void __fastcall OnAdd(TObject *Sender);
+  void __fastcall OnMul(TObject *Sender);
 
  public:
   __fastcall TForm3D(HWND parent);
@@ -240,6 +257,8 @@ class TForm3D : public TForm
   void SetChartValue(int z, int index, double value);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
   void UpdateSystemColors(void);
+  void ClipboardCopy(void);
+  void ClipboardPaste(void);
 
  private: // User declarations
   //адрес функции которая будет вызываться после изменения данных
@@ -270,6 +289,8 @@ class TForm3D : public TForm
   std::deque<int> m_selpts;
   std::pair<int, int> m_prev_pt;
   int m_visibleMarkIdx;
+ 
+  HINSTANCE m_hInst;
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_

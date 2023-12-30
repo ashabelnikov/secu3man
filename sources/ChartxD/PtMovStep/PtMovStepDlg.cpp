@@ -99,3 +99,9 @@ float TPtMovStepDlg::GetValue(void) const
 }
 
 //---------------------------------------------------------------------------
+void TPtMovStepDlg::SetTitle(const AnsiString& str)
+{
+ Caption = str;
+}
+
+//---------------------------------------------------------------------------
