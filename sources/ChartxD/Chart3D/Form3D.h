@@ -162,6 +162,7 @@ class TForm3D : public TForm
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+  void __fastcall OnChart1DblClick(TObject *Sender);
   void __fastcall Chart1GetAxisLabel(TChartAxis *Sender, TChartSeries *Series, int ValueIndex, AnsiString &LabelText);
   void __fastcall CheckBox3dClick(TObject *Sender);
   void __fastcall CheckBoxBvClick(TObject *Sender);

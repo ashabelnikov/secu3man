@@ -374,6 +374,26 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TForm3D::OnChart1DblClick(TObject *Sender)
+{
+ if (!CheckBox3d->Checked)
+  return; //not used in 2D mode
+
+ int i = Series3D->GetCursorValueIndex();
+ if (i > 0)
+ {
+  --i; //delphi...
+  m_val_z = i / m_count_x;
+  m_val_x = i % m_count_x;
+
+  m_sel.Clear();
+  m_sel.Set(m_val_z, m_val_x, true);
+
+  Chart1->Invalidate();
+ }
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
       TChartSeries *Series, int ValueIndex, AnsiString &LabelText)
 {

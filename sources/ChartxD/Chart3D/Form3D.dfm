@@ -214,6 +214,7 @@ object Form3D: TForm3D
     OnEnter = OnEnterChart
     OnExit = OnExitChart
     OnMouseDown = OnChartMouseDown
+    OnDblClick = OnChart1DblClick
     OnAfterDraw = OnAfterDrawChart
     Anchors = [akTop, akLeft, akBottom, akRight]
     object Series1: TLineSeries
