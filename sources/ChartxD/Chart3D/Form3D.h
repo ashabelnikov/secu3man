@@ -36,8 +36,10 @@
 #include <Series.hpp>
 #include <Buttons.hpp>
 #include <Menus.hpp>
-#include <deque>
 #include "TChartEx.h"
+#include "TeeSurfa.hpp"
+#include "Selection.h"
+#include <utility>
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
@@ -81,6 +83,7 @@ class TForm3D : public TForm
   TLineSeries *Series30;
   TLineSeries *Series31;
   TLineSeries *Series32;
+  TIsoSurfaceSeries *Series3D;
   TLabel *LabelAfv;
   TLabel *LabelAfc;
   TTrackBar *TrackBarAf;
@@ -197,11 +200,13 @@ class TForm3D : public TForm
   void __fastcall OnSub(TObject *Sender);
   void __fastcall OnAdd(TObject *Sender);
   void __fastcall OnMul(TObject *Sender);
+  double __fastcall OnGetYValue(TChartSeries *Sender, int X, int Z); //from TIsoSurfaceSerie
+  void __fastcall OnAfterDrawChart(TObject *Sender);
 
  public:
   __fastcall TForm3D(HWND parent);
   __fastcall ~TForm3D();
-  void DataPrepare();
+  void DataPrepare(bool create);
 
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
   void SetOnChangeSettings(EventHandler i_pOnChange,void* i_param);
@@ -209,25 +214,22 @@ class TForm3D : public TForm
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
   void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnValueTransform(OnValueTransform i_pOnValueTransform, void* i_param);
-  void SetYAxisTitle(const AnsiString& title);
-  void SetChartTitle(const AnsiString& title);
 
   void Enable(bool enable);
   void InitPopupMenu(HINSTANCE hInstance);
   void InitHints(HINSTANCE hInstance);
   void SetPtValuesFormat(LPCTSTR ptValFormat);
 
+  void SetDimentions(int z, int x);
+  void SetRange(float ymin, float ymax);
+  void SetChartTitle(const AnsiString& title);
+  void SetXAxisTitle(const AnsiString& title);
+  void SetYAxisTitle(const AnsiString& title);
+
  public: //Properties
-  int m_count_x;
-  int m_count_z;
-  float m_u_slots[1024];
-  float m_fnc_min;
-  float m_fnc_max;
+  float m_u_slots[64];
   float *mp_modified_function;
   float *mp_original_function;
-  AnsiString m_u_title;
-  AnsiString m_x_title;
-  AnsiString m_y_title;
   AnsiString m_values_format_x;
   float m_pt_moving_step;
   static char m_csvsep_symb;
@@ -240,21 +242,23 @@ class TForm3D : public TForm
   void SetAirFlow(int flow);
   void MakeOneVisible(int flow);
   void MakeAllVisible(void);
-  void ShowPoints(bool show);
-  void FillChart(bool dir,int cm);
+  void FillChart(void);
   void HideAllSeries(void);
-  int __fastcall GetCurveSelIndex(void) const;
+  int __fastcall GetZPos(int z) const;
   void __fastcall ShiftPoints(float i_value);
   void __fastcall MarkPoints(bool i_mark);
   void __fastcall UnmarkPoints(void);
   void __fastcall SelLeftArrow(bool i_shift);
   void __fastcall SelRightArrow(bool i_shift);
+  void __fastcall SelDownArrow(bool i_shift); //only in 3D
+  void __fastcall SelUpArrow(bool i_shift);   //only in 3D
 
   void RestrictAndSetChartValue(int index, double v);
   void RestrictAndSetChartValue(int index_z, int index_x, double v);
   void __fastcall CopyCurve(int fromIndex, int toIndex);
   double GetChartValue(int z, int index);
   void SetChartValue(int z, int index, double value);
+  void UpdateChartValues(void);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
   void UpdateSystemColors(void);
   void ClipboardCopy(void);
@@ -274,23 +278,35 @@ class TForm3D : public TForm
   OnWndActivation m_pOnWndActivation;
   void* m_param_on_wnd_activation;
 
-  //адпес функции которая будет вызываться при рисовании надписей на оси X
+  //address of function which will be called at drawing labels on the X-axis
   OnGetAxisLabel m_pOnGetXAxisLabel;
   void* m_param_on_get_x_axis_label;
 
-  //optional callback function which will be called for transforming of each value
+  //optional callback function which will be called for transforming each value
   OnValueTransform m_pOnValueTransform;
   void* m_param_on_value_transform;
 
   int m_setval;
-  int m_val_n;
+  int m_val_x;
+  int m_val_z;
   int m_air_flow_position;
   bool m_chart_active;
-  std::deque<int> m_selpts;
+
   std::pair<int, int> m_prev_pt;
   int m_visibleMarkIdx;
  
   HINSTANCE m_hInst;
+  double m_3d_transparency;
+
+  Selection m_sel;
+
+  int m_count_z;
+  int m_count_x;
+  float m_fnc_min;
+  float m_fnc_max;
+  AnsiString m_x_title;
+  AnsiString m_y_title;
+  AnsiString m_u_title; //chart title
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_

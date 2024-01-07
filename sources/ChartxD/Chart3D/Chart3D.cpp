@@ -35,6 +35,7 @@
 #include "Form3D.h"
 #include "resource.h"
 #include "../ManageFrm.h"
+#include "../common/Chartxdid.h"
 #pragma hdrstop
 
 extern "C"
@@ -82,25 +83,22 @@ HWND __cdecl Chart3DCreate(HWND parent, float *original_function, float *modifie
 
  //Create a form
  TForm3D *pForm = new TForm3D(parent);
- pForm->m_count_x = x_count_of_points;
- pForm->m_count_z = z_count_of_points;
- pForm->m_u_title = chart_title;
+ pForm->SetDimentions(x_count_of_points, z_count_of_points);
+ pForm->SetRange(fnc_min, fnc_max);
+ pForm->SetChartTitle(chart_title);
+ pForm->SetXAxisTitle(x_axis_title);
+ pForm->SetYAxisTitle(y_axis_title);
  pForm->mp_modified_function = modified_function;
  pForm->mp_original_function = original_function;
- pForm->m_x_title = x_axis_title;
- pForm->m_y_title = y_axis_title;
- pForm->m_fnc_min = fnc_min;
- pForm->m_fnc_max = fnc_max;
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
- pForm->Chart1->LeftAxis->Title->Caption = MLL::LoadString(IDS_LEFT_AXIS_TITLE);
  pForm->LabelAfc->Caption = MLL::LoadString(IDS_AIR_FLOW_CAPTION_TEXT);
  pForm->CheckBoxBv->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
  pForm->InitPopupMenu(hInst);
  pForm->InitHints(hInst); //Set hints' text
 
- memcpy(pForm->m_u_slots, x_axis_grid_values, sizeof(float) * x_count_of_points);
- pForm->DataPrepare();
+ std::copy(x_axis_grid_values, x_axis_grid_values + x_count_of_points, pForm->m_u_slots);
+ pForm->DataPrepare(true);
  AddInstanceByHWND(pForm->Handle, pForm);
  return pForm->Handle;
 }
@@ -114,16 +112,11 @@ void __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_
 
  if (original_function && modified_function)
  {
-  //delete old values and then fill series again
-  for(int i = 0; i < pForm->Chart1->SeriesList->Count; i++)
-   for (;pForm->Chart1->Series[i]->Count() > 0;)
-    pForm->Chart1->Series[i]->Delete(pForm->Chart1->Series[i]->Count()-1);
-
   pForm->mp_original_function = original_function;
   pForm->mp_modified_function = modified_function;
  }
 
- pForm->DataPrepare();
+ pForm->DataPrepare(false);
 }
 
 //---------------------------------------------------------------------------
@@ -134,7 +127,7 @@ void __cdecl Chart3DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pO
   return;
  switch(i_axis)
  {
-  case 1: //X
+  case CXD_X_AXIS: //X
    pForm->SetOnGetXAxisLabel(i_pOnGetAxisLabel, i_param);
    break;
   default:
@@ -229,8 +222,7 @@ void __cdecl Chart3DSetFncRange(HWND hWnd, float fnc_min, float fnc_max)
  TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm)
   return;
- pForm->m_fnc_min = fnc_min;
- pForm->m_fnc_max = fnc_max;
+ pForm->SetRange(fnc_min, fnc_max);
 }
 
 //---------------------------------------------------------------------------
@@ -250,7 +242,7 @@ void __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle)
   return;
  switch(i_axis)
  {
-  case 1: //Y
+  case CXD_Y_AXIS: //Y
    pForm->SetYAxisTitle(axisTitle);
    break;
   default:

@@ -174,6 +174,7 @@ object Form3D: TForm3D
     Font.Height = -11
     Font.Name = 'MS Sans Serif'
     Font.Style = []
+    Enabled = False
   end
   object Chart1: TChartEx
     MarginLeft = 1
@@ -189,8 +190,8 @@ object Form3D: TForm3D
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     Title.Text.Strings = ('График рабочего УОЗ')
-    OnClickSeries = Chart1ClickSeries
     BottomAxis.Title.Caption = 'Обороты (мин-1)'
+    BottomAxis.LabelStyle = talText
     LeftAxis.Automatic = False
     LeftAxis.AutomaticMaximum = False
     LeftAxis.AutomaticMinimum = False
@@ -202,8 +203,10 @@ object Form3D: TForm3D
     View3D = False
     View3DOptions.Orthogonal = False
     View3DOptions.Zoom = 72
+    Chart3DPercent = 29
     TabOrder = 0
     TabStop = True
+    OnClickSeries = Chart1ClickSeries
     OnGetAxisLabel = Chart1GetAxisLabel
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
@@ -211,6 +214,7 @@ object Form3D: TForm3D
     OnEnter = OnEnterChart
     OnExit = OnExitChart
     OnMouseDown = OnChartMouseDown
+    OnAfterDraw = OnAfterDrawChart
     Anchors = [akTop, akLeft, akBottom, akRight]
     object Series1: TLineSeries
       Marks.ArrowLength = 8
@@ -867,6 +871,34 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+    end
+    object Series3D: TIsoSurfaceSeries
+      Marks.Arrow.Visible = True
+      Marks.Callout.Brush.Color = clBlack
+      Marks.Callout.Arrow.Visible = True
+      Marks.Visible = False
+      SeriesColor = clBlack
+      ShowInLegend = False
+      EndColor = clFuchsia
+      NumXValues = 16
+      NumZValues = 16
+      SideBrush.Color = clWhite
+      SideBrush.Style = bsClear
+      SmoothPalette = False
+      UsePalette = False
+      WireFrame = True
+      TimesZOrder = 16
+      Transparency = 10
+      XValues.Name = 'X'
+      XValues.Order = loNone
+      YValues.Name = 'Y'
+      YValues.Order = loNone
+      ZValues.Name = 'Z'
+      ZValues.Order = loNone
+      OnGetYValue = OnGetYValue
+      BandPen.Visible = False
+      Sides.Brush.Color = clWhite
+      Sides.Brush.Style = bsClear
     end
   end
   object ButtonAngleUp: TBitBtn

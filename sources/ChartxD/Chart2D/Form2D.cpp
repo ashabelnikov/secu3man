@@ -75,7 +75,7 @@ __fastcall TForm2D::TForm2D(HWND parent)
 , m_visibleMarkIdx(-1)
 {
  m_errors.reserve(32);
- memset(m_horizontal_axis_grid_values, 0, sizeof(float) * 256);
+ memset(m_horizontal_axis_grid_values, 0, sizeof(float) * 64);
  m_selpts.push_back(0);
  memset(m_binsEdit, NULL, sizeof(NULL) * 8);
  memset(m_binsUpDown, NULL, sizeof(NULL) * 8);
@@ -527,8 +527,7 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
   {
    TCHAR string[64];
    _tcscpy(string, LabelText.c_str());
-   if (ValueIndex >= 0)
-    m_pOnGetYAxisLabel(string, ValueIndex, m_param_on_get_y_axis_label);
+   m_pOnGetYAxisLabel(string, ValueIndex, m_param_on_get_y_axis_label);
    LabelText = string;
   }
  }
@@ -807,13 +806,13 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  //Implement keyboard actions related to chart
  if (ActiveControl == Chart1)
  {
-  if (Key == VK_UP || Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
+  if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
   { //move points upward
    ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
-  else if (Key == VK_DOWN || Key == VK_OEM_5 || Key == VK_OEM_COMMA)
+  else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA)
   { //move points downward
    ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
@@ -1049,10 +1048,28 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
   for(int i = 0; i < m_count_of_function_points; ++i)
   {
    AnsiString as;
-   if (m_horizontal_axis_grid_mode < 2) //0,1 modes
+   if (0==m_horizontal_axis_grid_mode) //array of labels
+   {
+    if (m_pOnGetXAxisLabel && m_param_on_get_x_axis_label)
+    {
+     TCHAR string[64];
+     _stprintf(string, m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
+     m_pOnGetXAxisLabel(string, i, m_param_on_get_x_axis_label);
+     as = string;
+    }
+    else
+    {
+     as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);     
+    }
+   }
+   else if (1==m_horizontal_axis_grid_mode) //begin, end bins
+   {
     as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
-   else  //mode 2
+   }
+   else  //mode 2 - separate editable bins
+   {
     as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_of_function_points]);
+   }
 
    if (i == m_count_of_function_points-1)
     fprintf(fh, "%s", as.c_str());    
@@ -1185,7 +1202,7 @@ void __fastcall TForm2D::OnInc(TObject *Sender)
  for(size_t i = 0; i < m_selpts.size(); ++i)
  {
   float value = mp_modified_function[m_selpts[i]];
-  value+=m_pt_moving_step;
+  value+=Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step;
   RestrictAndSetValue(m_selpts[i], value);   
  }
  if (m_pOnChange) 
@@ -1197,7 +1214,7 @@ void __fastcall TForm2D::OnDec(TObject *Sender)
  for(size_t i = 0; i < m_selpts.size(); ++i)
  {
   float value = mp_modified_function[m_selpts[i]];
-  value-=m_pt_moving_step;
+  value-=Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step;
   RestrictAndSetValue(m_selpts[i], value);   
  }
  if (m_pOnChange) 
@@ -1234,7 +1251,7 @@ void __fastcall TForm2D::OnSub(TObject *Sender)
   for(size_t i = 0; i < m_selpts.size(); ++i)
   {
    float value = mp_modified_function[m_selpts[i]];
-   value-=PtMovStepDlg->GetValue();
+   value-= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
    RestrictAndSetValue(m_selpts[i], value);   
   }
  }
@@ -1254,7 +1271,7 @@ void __fastcall TForm2D::OnAdd(TObject *Sender)
   for(size_t i = 0; i < m_selpts.size(); ++i)
   {
    float value = mp_modified_function[m_selpts[i]];
-   value+=PtMovStepDlg->GetValue();
+   value+=Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
    RestrictAndSetValue(m_selpts[i], value);   
   }
  }
@@ -1274,7 +1291,8 @@ void __fastcall TForm2D::OnMul(TObject *Sender)
   for(size_t i = 0; i < m_selpts.size(); ++i)
   {
    float value = mp_modified_function[m_selpts[i]];
-   value*=PtMovStepDlg->GetValue();
+   float mult = PtMovStepDlg->GetValue()==0 ? 1e-6 : PtMovStepDlg->GetValue(); //prevent division by zero
+   value*=Chart1->LeftAxis->Inverted ? 1.0f/mult : PtMovStepDlg->GetValue();
    RestrictAndSetValue(m_selpts[i], value);   
   }
  }

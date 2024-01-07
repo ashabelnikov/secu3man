@@ -11,7 +11,7 @@ BCB = $(MAKEDIR)\..
 !endif
 # ----------------------------------------------------------------------------
 PROJECT  = ..\..\binaries\ChartxD.dll
-OBJFILES = ManageFrm.obj ChartxD.obj Chart2D\Form2D.obj Chart2D\Chart2D.obj Chart3D\Form3D.obj Chart3D\Chart3D.obj TChartEx.obj TFloatUpDown.obj PtMovStep\PtMovStepDlg.obj
+OBJFILES = ManageFrm.obj ChartxD.obj Chart2D\Form2D.obj Chart2D\Chart2D.obj Chart3D\Form3D.obj Chart3D\Chart3D.obj TChartEx.obj TFloatUpDown.obj PtMovStep\PtMovStepDlg.obj Chart3D\Selection.obj
 RESDEPEN = $(RESFILES) Chart2D\Form2D.dfm Chart3D\Form3D.dfm PtMovStep\PtMovStepDlg.dfm
 RESFILES = Chart2D\resource.res Chart3D\resource.res PtMovStep\resource.res resource.res
 DEFFILE  = ChartxD.def
@@ -30,7 +30,7 @@ LINKER = ilink32
 # ----------------------------------------------------------------------------
 ALLOBJ = c0d32.obj $(OBJFILES)
 ALLRES = $(RESFILES)
-ALLLIB = $(LIBFILES) vcl.lib import32.lib cp32mt.lib Tee8C5.lib import32.lib cp32mt.lib
+ALLLIB = $(LIBFILES) vcl.lib import32.lib cp32mt.lib Tee8C5.lib import32.lib cp32mt.lib TeePro8C5.lib
 # ----------------------------------------------------------------------------
 .autodepend
 

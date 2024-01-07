@@ -4,7 +4,6 @@
 // Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
 
 #define IDS_EDITING_MAPS               200
-#define IDS_LEFT_AXIS_TITLE            201
 #define IDS_AIR_FLOW_CAPTION_TEXT      202
 #define IDS_BACK_SIDE_VIEW_CB          203
 #define IDS_PM_ZERO_ALL_POINTS         204

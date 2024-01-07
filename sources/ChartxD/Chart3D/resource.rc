@@ -12,7 +12,6 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 stringtable
 {
   IDS_EDITING_MAPS, "Редактирование карт"
-  IDS_LEFT_AXIS_TITLE, "УОЗ (град.)"
   IDS_AIR_FLOW_CAPTION_TEXT, "Расход воздуха:"
   IDS_BACK_SIDE_VIEW_CB, "вид сзади"
   IDS_PM_ZERO_ALL_POINTS, "Обнулить все точки кривой"
@@ -57,7 +56,6 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 stringtable
 {
   IDS_EDITING_MAPS, "Editing maps"
-  IDS_LEFT_AXIS_TITLE, "Advance angle (degr.)"
   IDS_AIR_FLOW_CAPTION_TEXT, "Air flow:"
   IDS_BACK_SIDE_VIEW_CB, "back view"
   IDS_PM_ZERO_ALL_POINTS, "Zero all curve points"

@@ -42,13 +42,6 @@
 char TForm3D::m_csvsep_symb = ',';
 
 //---------------------------------------------------------------------------
-//colours for 3D chart
-long col[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491,
-               0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
-               0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF,
-               0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
-
-//---------------------------------------------------------------------------
 __fastcall TForm3D::TForm3D(HWND parent)
 : TForm(parent)
 , m_hInst(NULL)
@@ -74,14 +67,16 @@ __fastcall TForm3D::TForm3D(HWND parent)
 , m_pOnValueTransform(NULL)
 , m_param_on_value_transform(NULL)
 , m_setval(0)
-, m_val_n(0)
+, m_val_x(0)
+, m_val_z(0)
 , m_air_flow_position(0)
 , m_values_format_x("%.00f")  //integer 
 , m_chart_active(false)
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
+, m_3d_transparency(10.0)
 {
- m_selpts.push_back(0);
+ //empty
 }
 
 //---------------------------------------------------------------------------
@@ -91,43 +86,33 @@ __fastcall TForm3D::~TForm3D()
 }
 
 //---------------------------------------------------------------------------
-void TForm3D::DataPrepare()
+void TForm3D::DataPrepare(bool create)
 {
- HideAllSeries();
- CheckBoxBv->Enabled = false;
- TrackBarAf->Max = m_count_z - 1;
- ShowPoints(true);
- m_setval = 0;
- m_val_n  = 0;
- 
- Chart1->Title->Text->Clear();
- Chart1->Title->Text->Add(m_u_title);
- Chart1->BottomAxis->Title->Caption = m_x_title;
- Chart1->LeftAxis->Title->Caption = m_y_title;
+ if (create)
+ { //create
+  //At the moment of creation we are in the 2D mode by default
+  UpdateSystemColors();
+  FillChart();
+  SetAirFlow(m_air_flow_position); //set trackbar position  //cr
 
- UpdateSystemColors();
-
- //диапазон значений на графике будет немного шире чем требуемый...
- int range = m_fnc_max - m_fnc_min;
- Chart1->LeftAxis->Maximum = m_fnc_max + range / 15.0f;
- Chart1->LeftAxis->Minimum = m_fnc_min - range / 20.0f;
-
- Chart1->Chart3DPercent = 29;
- FillChart(0, 0);
- 
- SetAirFlow(m_air_flow_position); //set trackbar position
- CheckBox3dClick(NULL);
-
- if (m_chart_active)
- {
-  UnmarkPoints();
-  MarkPoints(true);
-  Chart1->Title->Font->Style = TFontStyles() << fsBold;
+  if (m_chart_active)
+  {
+   MarkPoints(true);
+   Chart1->Title->Font->Style = TFontStyles() << fsBold;
+  }
+  else
+  {
+   UnmarkPoints();
+   Chart1->Title->Font->Style = TFontStyles();
+  }
  }
  else
- {
-  UnmarkPoints();
-  Chart1->Title->Font->Style = TFontStyles();
+ { //update
+  //When updating (after creation), we may be either in the 2D or 3D mode
+  if (CheckBox3d->Checked)
+   Series3D->ReCreateValues();
+  else
+   UpdateChartValues();
  }
 }
 
@@ -176,14 +161,19 @@ void TForm3D::SetOnValueTransform(OnValueTransform i_pOnValueTransform, void* i_
 //---------------------------------------------------------------------------
 void TForm3D::Enable(bool enable)
 {
- if (false==enable)
+ if (enable)
  {
-  for (int i = 0; i < 32; i++ )
-   Chart1->Series[i]->Active = false;
-  Chart1->Title->Font->Style = TFontStyles();
+  if (CheckBox3d->Checked)
+   MakeAllVisible(); //3D
+  else
+   MakeOneVisible(m_air_flow_position); //2D
  }
  else
-  DataPrepare();
+ { //disable all series
+  HideAllSeries();
+  Series3D->Active = false;
+  Chart1->Title->Font->Style = TFontStyles(); //set chart's title font to normal (not bold)
+ }
 
  Chart1->Enabled = enable;
  LabelAfv->Enabled = enable;
@@ -277,16 +267,18 @@ void TForm3D::InitHints(HINSTANCE hInstance)
 //---------------------------------------------------------------------------
 void TForm3D::SetPtValuesFormat(LPCTSTR ptValFormat)
 {
- for (int i = 0; i < 32; i++ )
+ for (int i = 0; i < m_count_z * 2; i++ )
   Chart1->Series[i]->ValueFormat = ptValFormat; //format for point values
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::TrackBarAfChange(TObject *Sender)
 {
+ if (CheckBox3d->Checked)
+  return; //in 3D mode user doesn't move track bar, it is disabled
+ //2D only:
  SetAirFlow(TrackBarAf->Position);
  m_setval = 0;
- m_val_n  = 0; 
  UnmarkPoints();
  MarkPoints(true);
 }
@@ -296,21 +288,25 @@ void __fastcall TForm3D::Chart1ClickSeries(TCustomChart *Sender,
       TChartSeries *Series, int ValueIndex, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
+ if (CheckBox3d->Checked)
+  return; //not used in 3D mode
+
  if (Series==Chart1->Series[m_air_flow_position + m_count_z])
  {
   //if Ctrl key is not pressed then, select single point
   if (!Shift.Contains(ssCtrl))
   {
    MarkPoints(false);
-   m_selpts.clear();
-   m_selpts.push_back(ValueIndex);
+   m_sel.Clear();
+   m_sel.Set(m_air_flow_position, ValueIndex, true);
    MarkPoints(true);
   }
 
   if (Button==mbLeft)
   {
-   m_setval  = 1;
-   m_val_n   = ValueIndex;
+   m_setval = 1;
+   m_val_x  = ValueIndex;
+   m_val_z  = CheckBoxBv->Checked ? m_count_z-1-m_air_flow_position : m_air_flow_position;
   }
  }
  m_prev_pt = std::make_pair(X, Y);
@@ -320,17 +316,18 @@ void __fastcall TForm3D::Chart1ClickSeries(TCustomChart *Sender,
 void __fastcall TForm3D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
+ if (CheckBox3d->Checked)
+  return; //not used in 3D mode
+
  //implementation of multiple points selection
  if (Shift.Contains(ssCtrl) && (m_prev_pt.first == X && m_prev_pt.second == Y))
  {
   MarkPoints(false);
-  std::deque<int>::iterator it = std::find(m_selpts.begin(), m_selpts.end(), m_val_n);
-  if (it == m_selpts.end())
-   m_selpts.push_back(m_val_n);
+  if (false==m_sel.Get(m_air_flow_position, m_val_x))
+   m_sel.Set(m_air_flow_position, m_val_x, true);
   else
-   m_selpts.erase(it);
+   m_sel.Set(m_air_flow_position, m_val_x, false);
   MarkPoints(true);
-  std::sort(m_selpts.begin(), m_selpts.end());
  }
 
  if ((m_pOnChange) && (m_setval))
@@ -347,7 +344,7 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
  {
   if (m_setval)
   {
-   m_visibleMarkIdx = m_val_n;
+   m_visibleMarkIdx = m_val_x;
    Chart1->Invalidate();
   }
   else
@@ -365,17 +362,15 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
  double v;
  if (m_setval)
  {//select on the fly point being moved
-  std::deque<int>::iterator it = std::find(m_selpts.begin(), m_selpts.end(), m_val_n);
-  if (it == m_selpts.end())
+  if (false==m_sel.Get(m_air_flow_position, m_val_x))
   {
-   m_selpts.push_back(m_val_n);
+   m_sel.Set(m_air_flow_position, m_val_x, true);
    MarkPoints(true);
-   std::sort(m_selpts.begin(), m_selpts.end());
   }
   //Move all selected points
   v = Chart1->Series[m_air_flow_position + m_count_z]->YScreenToValue(Y);
-  ShiftPoints(v - GetChartValue(m_air_flow_position, m_val_n));
- }
+  ShiftPoints(v - GetChartValue(m_air_flow_position, m_val_x));
+ } 
 }
 
 //---------------------------------------------------------------------------
@@ -386,11 +381,13 @@ void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
  { //X
   if (m_pOnGetXAxisLabel)
   {
-   TCHAR string[64];
-   _tcscpy(string, LabelText.c_str());
-   if (ValueIndex >= 0)
+   if (ValueIndex >= 0 && ValueIndex < m_count_x)
+   {
+    TCHAR string[64];
+    _tcscpy(string, LabelText.c_str());
     m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
-   LabelText = string;
+    LabelText = string;
+   }
   }
  }
 }
@@ -398,48 +395,48 @@ void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
 {
+ if (CheckBoxBv->Checked)
+  m_sel.InvertZ();
  if (CheckBox3d->Checked)
  { //3D
-  ShowPoints(false);
+  Series3D->CreateValues(m_count_x, m_count_z);
   Chart1->View3D  = true;
   MakeAllVisible();
   TrackBarAf->Enabled = false;
   TrackLeft->Enabled = false;
   TrackRight->Enabled = false;
   LabelAfv->Enabled = false;
+  LabelAfc->Enabled = false;
   CheckBoxBv->Enabled = true;
-  CheckBoxBvClick(NULL);
-  for (int i = 0; i < PopupMenu->Items->Count; i++)
-   PopupMenu->Items->Items[i]->Enabled = false;
-  PM_ZeroAllCurves->Enabled = true;
-  PM_SetPtMovStep->Enabled = true;
   PM_Export->Enabled = true;
   PM_Import->Enabled = true;
+  PM_HideMarks->Enabled = false;
+  PM_HideOldCurve->Enabled = false;
  }
  else
  { //2D
-  ShowPoints(true);
+  Series3D->Clear(); //delete values
+  UpdateChartValues();
   Chart1->View3D = false;
   MakeOneVisible(m_air_flow_position);
   TrackBarAf->Enabled = true;
   TrackLeft->Enabled = true;
   TrackRight->Enabled = true;
   LabelAfv->Enabled = true;
+  LabelAfc->Enabled = true;
   CheckBoxBv->Enabled = false;
-  FillChart(0, 0);
-  for (int i = 0; i < PopupMenu->Items->Count; i++)
-   PopupMenu->Items->Items[i]->Enabled = true;
+  PM_HideMarks->Enabled = true;
+  PM_HideOldCurve->Enabled = true;
  }
- //Fill bottom area when 3D view is turned on
- for (int i = 0; i < m_count_z; i++)
-  ((TPointSeries*)Chart1->Series[i + m_count_z])->DrawArea = CheckBox3d->Checked;  
 }
 
 //---------------------------------------------------------------------------
-//вид 3D графика сзади или спереди
+//Back view in 3D mode
 void __fastcall TForm3D::CheckBoxBvClick(TObject *Sender)
 {
- FillChart(!CheckBoxBv->Checked, 1);
+ m_val_z = m_count_z - 1 - m_val_z;
+ m_sel.InvertZ();
+ Series3D->ReCreateValues();
 }
 
 //---------------------------------------------------------------------------
@@ -456,14 +453,15 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 {
  if (!CheckBox3d->Checked)
  { //2D
-  for (int i = 0; i < 16; i++ )
-   RestrictAndSetChartValue(i, GetChartValue(m_air_flow_position, i) + m_pt_moving_step);
+  for (int x = 0; x < m_count_x; x++)
+   RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, x) + m_pt_moving_step);
  }
  else
  { //3D
-  for (int i = 0; i < m_count_z; i++ )
-   for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, GetItem_m(i, j) + m_pt_moving_step);
+  for (int z = 0; z < m_count_z; z++)
+   for (int x = 0; x < m_count_x; x++)
+    RestrictAndSetChartValue(z, x, GetItem_m(z, x) + m_pt_moving_step);
+  Series3D->ReCreateValues();
  }
 
  if (m_pOnChange)
@@ -475,14 +473,15 @@ void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 {
  if (!CheckBox3d->Checked)
  { //2D
-  for (int i = 0; i < 16; i++ )
-   RestrictAndSetChartValue(i, GetChartValue(m_air_flow_position, i) - m_pt_moving_step);
+  for (int x = 0; x < m_count_x; x++)
+   RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, x) - m_pt_moving_step);
  }
  else
  {//3D
-  for (int i = 0; i < m_count_z; i++ )
-   for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, GetItem_m(i, j) - m_pt_moving_step);
+  for (int z = 0; z < m_count_z; z++)
+   for (int x = 0; x < m_count_x; x++)
+    RestrictAndSetChartValue(z, x, GetItem_m(z, x) - m_pt_moving_step);
+  Series3D->ReCreateValues();
  }
 
  if (m_pOnChange)
@@ -495,23 +494,23 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
  if (!CheckBox3d->Checked)
  { //2D
   float* p_source_function = new float[m_count_x];
-  for (int i = 0; i < m_count_x; ++i)
-   p_source_function[i] = *GetItem_mp(m_air_flow_position, i);
+  for (int x = 0; x < m_count_x; ++x)
+   p_source_function[x] = *GetItem_mp(m_air_flow_position, x);
   MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 3);
   delete[] p_source_function;
-  for (int i = 0; i < m_count_x; i++ )
-   RestrictAndSetChartValue(i, GetItem_m(m_air_flow_position, i));
+  for (int x = 0; x < m_count_x; x++ )
+   RestrictAndSetChartValue(x, GetItem_m(m_air_flow_position, x));
  }
  else
  {//3D
   float* p_source_function = new float[m_count_z * m_count_x];
-  for (int i = 0; i < m_count_z * m_count_x; ++i)
-   p_source_function[i] = mp_modified_function[i];  
+  std::copy(mp_modified_function, mp_modified_function + (m_count_z * m_count_x), p_source_function);
   MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 3);
   delete[] p_source_function;
-  for (int i = 0; i < m_count_z; i++ )
-   for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, GetItem_m(i, j));
+  for (int z = 0; z < m_count_z; z++ )
+   for (int x = 0; x < m_count_x; x++ )
+    RestrictAndSetChartValue(z, x, GetItem_m(z, x));
+  Series3D->ReCreateValues();
  }
 
  if (m_pOnChange)
@@ -524,23 +523,23 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
  if (!CheckBox3d->Checked)
  { //2D
   float* p_source_function = new float[m_count_x];
-  for (int i = 0; i < m_count_x; ++i)
-   p_source_function[i] = *GetItem_mp(m_air_flow_position, i);
+  for (int x = 0; x < m_count_x; ++x)
+   p_source_function[x] = *GetItem_mp(m_air_flow_position, x);
   MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 5);
   delete[] p_source_function;
-  for (int i = 0; i < m_count_x; i++ )
-   RestrictAndSetChartValue(i, GetItem_m(m_air_flow_position, i));
+  for (int x = 0; x < m_count_x; x++ )
+   RestrictAndSetChartValue(x, GetItem_m(m_air_flow_position, x));
  }
  else
  { //3D
   float* p_source_function = new float[m_count_z * m_count_x];
-  for (int i = 0; i < m_count_z * m_count_x; ++i)
-   p_source_function[i] = mp_modified_function[i];  
+  std::copy(mp_modified_function, mp_modified_function + (m_count_z * m_count_x), p_source_function);
   MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 5);
   delete[] p_source_function;
-  for (int i = 0; i < m_count_z; i++ )
-   for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, GetItem_m(i, j)); 
+  for (int z = 0; z < m_count_z; z++ )
+   for (int x = 0; x < m_count_x; x++ )
+    RestrictAndSetChartValue(z, x, GetItem_m(z, x)); 
+  Series3D->ReCreateValues();
  }
 
  if (m_pOnChange)
@@ -601,134 +600,139 @@ void TForm3D::SetAirFlow(int flow)
 }
 
 //---------------------------------------------------------------------------
+//2D view
 void TForm3D::MakeOneVisible(int flow)
 {
- for(int i = 0; i < m_count_z; i++)
+ Series3D->Active = false;
+ for(int z = 0; z < m_count_z; z++)
  {
-  Chart1->Series[i]->Active = (i==flow) && !PM_HideOldCurve->Checked;
-  Chart1->Series[i+m_count_z]->Active = (i==flow);
+  Chart1->Series[z]->Active = (z==flow) && !PM_HideOldCurve->Checked;
+  Chart1->Series[z + m_count_z]->Active = (z==flow);
  }
 }
 
 //---------------------------------------------------------------------------
+//3D view
 void TForm3D::MakeAllVisible(void)
 {
- for(int i = 0; i < m_count_z; i++)
+ for(int z = 0; z < m_count_z; z++)
  {
-  Chart1->Series[i]->Active = false;
-  Chart1->Series[i + m_count_z]->Active = true;
+  Chart1->Series[z]->Active = false;
+  Chart1->Series[z + m_count_z]->Active = false;
  }
+ Series3D->Active = true;
 }
 
 //---------------------------------------------------------------------------
-void TForm3D::ShowPoints(bool show)
+void TForm3D::FillChart(void)
 {
- for (int i = 0; i < m_count_z; i++)
+ AnsiString as; 
+ for(int z = 0; z < m_count_z; z++)
  {
-  Chart1->Series[i]->Marks->Visible = false; //show;
-  Chart1->Series[i + m_count_z]->Marks->Visible = show;
-  ((TPointSeries*)Chart1->Series[i])->Pointer->Visible = show;
-  ((TPointSeries*)Chart1->Series[i + m_count_z])->Pointer->Visible = show;
- }
-}
-
-//---------------------------------------------------------------------------
-void TForm3D::FillChart(bool dir, int cm)
-{
- int d, k; AnsiString as;
- if (!dir)
-  d = 1, k = 0;
- else
-  d = -1, k = m_count_z - 1;
-
- //Clear all series
- for(int j = 0; j < m_count_z; j++)
- {
-  Chart1->Series[j]->Clear(); //original
-  Chart1->Series[j + m_count_z]->Clear(); //modified
- }
- //Add series again
- for(int j = 0; j < m_count_z; j++)
- {
-  for(int i = 0; i < m_count_x; i++)
-  {
-   as.sprintf(m_values_format_x.c_str(),m_u_slots[i]);
-   if (cm)
-   {//add only modified series, each serie has its own color
-    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i), as, TColor(col[j]));
-   }
-   else
-   {//add original and modified series
-    Chart1->Series[k]->Add(GetItem_o(j,i), as, clAqua); //original
-    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i), as, clRed); //modified
-   }
+  for(int x = 0; x < m_count_x; x++)
+  { //Add series
+   as.sprintf(m_values_format_x.c_str(), m_u_slots[x]);
+   Chart1->Series[z]->Add(GetItem_o(z, x), as, clAqua); //original
+   Chart1->Series[z + m_count_z]->Add(GetItem_m(z, x), as, clRed); //modified
   }
-  k+=d;
  }
 }
 
 //---------------------------------------------------------------------------
-//Скрывает все серии значений
+//2D only
 void TForm3D::HideAllSeries(void)
 {
- for(int i = 0; i < 32; i++)
-  Chart1->Series[i]->Active = false;
+ for(int z = 0; z < m_count_z * 2; z++)
+  Chart1->Series[z]->Active = false;
 }
 
 //---------------------------------------------------------------------------
-int __fastcall TForm3D::GetCurveSelIndex(void) const
+int __fastcall TForm3D::GetZPos(int z) const
 {
- return ((CheckBox3d->Checked && !CheckBoxBv->Checked) ? m_count_z - 1 - m_air_flow_position : m_air_flow_position);
+ return CheckBoxBv->Checked ? m_count_z - 1 - z : z;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::ShiftPoints(float i_value)
 {
- for(size_t i = 0; i < m_selpts.size(); ++i)
-  RestrictAndSetChartValue(m_selpts[i], GetChartValue(GetCurveSelIndex(), m_selpts[i]) + i_value);
+ if (!CheckBox3d->Checked)
+ { //2D
+  for(int x = 0; x < m_count_x; ++x)
+  {
+   if (true==m_sel.Get(m_air_flow_position, x))
+    RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, x) + i_value);
+  }
+ }
+ else
+ { //3D
+  for(int z = 0; z < m_count_x; ++z)
+  {
+   for(int x = 0; x < m_count_x; ++x)
+   {
+    if (true==m_sel.Get(z, x))
+     RestrictAndSetChartValue(GetZPos(z), x, GetItem_m(GetZPos(z), x) + i_value);
+   }
+  }
+  Series3D->ReCreateValues();
+ }
 }
 
 //---------------------------------------------------------------------------
+//Used in 2D only
 void __fastcall TForm3D::MarkPoints(bool i_mark)
 {
- TColor color = CheckBox3d->Checked ? TColor(col[m_air_flow_position]) : clRed;
- for(size_t i = 0; i < m_selpts.size(); ++i)
-  (Chart1->Series[GetCurveSelIndex() + m_count_z])->ValueColor[m_selpts[i]] = (i_mark ? clNavy : color);
+ for(int x = 0; x < m_count_x; ++x)
+ {
+  if (true==m_sel.Get(m_air_flow_position, x))
+   (Chart1->Series[m_air_flow_position + m_count_z])->ValueColor[x] = (i_mark ? clNavy : clRed);
+ }
 }
 
 //---------------------------------------------------------------------------
+//Used in 2D only
 void __fastcall TForm3D::UnmarkPoints(void)
 {
- TColor color = CheckBox3d->Checked ? TColor(col[m_air_flow_position]) : clRed;
- for(int i = 0; i < m_count_x; ++i)
-  (Chart1->Series[GetCurveSelIndex() + m_count_z])->ValueColor[i] = color;
+ for(int x = 0; x < m_count_x; ++x)
+ {
+  (Chart1->Series[m_air_flow_position + m_count_z])->ValueColor[x] = clRed;
+ }
 }
 
 //---------------------------------------------------------------------------
+//2D version
 // v - value in chart's format
 void TForm3D::RestrictAndSetChartValue(int index, double v)
 {
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
  SetItem(m_air_flow_position, index, v);
- SetChartValue(GetCurveSelIndex(), index, v);
+ SetChartValue(m_air_flow_position, index, v);
 }
 
 //---------------------------------------------------------------------------
+//3D version
 // v - value in chart's format
 void TForm3D::RestrictAndSetChartValue(int index_z, int index_x, double v)
 {
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
  SetItem(index_z, index_x, v);
- SetChartValue((!CheckBoxBv->Checked ? m_count_z - 1 - index_z : index_z), index_x, v);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::CopyCurve(int fromIndex, int toIndex)
 {
- for(int i = 0; i < m_count_x; ++i)
- { 
-  SetChartValue(toIndex, i, GetChartValue(fromIndex, i));
-  SetItem(toIndex, i, GetChartValue(fromIndex, i));
+ if (CheckBox3d->Checked)
+ {//3D
+  for(int x = 0; x < m_count_x; ++x)
+   SetItem(toIndex, x, GetItem_m(fromIndex, x));
+  Series3D->ReCreateValues();
+ }
+ else
+ {//2D
+  for(int x = 0; x < m_count_x; ++x)
+  { 
+   SetChartValue(toIndex, x, GetChartValue(fromIndex, x));
+   SetItem(toIndex, x, GetChartValue(fromIndex, x));
+  }
  }
 }
 
@@ -742,6 +746,15 @@ double TForm3D::GetChartValue(int z, int index)
 void TForm3D::SetChartValue(int z, int index, double value)
 {
  Chart1->Series[z + m_count_z]->YValue[index] = value;
+}
+
+//---------------------------------------------------------------------------
+//2D only
+void TForm3D::UpdateChartValues(void)
+{
+ for(int z = 0; z < m_count_x; ++z)
+  for(int x = 0; x < m_count_x; ++x)
+   SetChartValue(z, x, GetItem_m(z, x));
 }
 
 //---------------------------------------------------------------------------
@@ -762,8 +775,18 @@ void __fastcall TForm3D::WndProc(Messages::TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
 {
- for (int i = 0; i < m_count_x; i++ )
-  RestrictAndSetChartValue(i, 0);
+ if (CheckBox3d->Checked)
+ {//3D
+  for (int x = 0; x < m_count_x; x++ )
+   RestrictAndSetChartValue(GetZPos(m_val_z), x, 0);
+  Series3D->ReCreateValues();
+ }
+ else
+ {//2D
+  for (int x = 0; x < m_count_x; x++ )
+   RestrictAndSetChartValue(x, 0);
+ }
+
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -771,8 +794,17 @@ void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
 {
- for (int i = 0; i < m_count_x; i++ )
-  RestrictAndSetChartValue(i, GetChartValue(m_air_flow_position, 0));
+ if (CheckBox3d->Checked)
+ {//3D
+  for (int x = 0; x < m_count_x; x++)
+   RestrictAndSetChartValue(GetZPos(m_val_z), x, GetItem_m(GetZPos(m_val_z), 0));
+  Series3D->ReCreateValues();
+ }
+ else
+ {//2D
+  for (int x = 0; x < m_count_x; x++)
+   RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, 0));
+ }
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -780,11 +812,24 @@ void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 {
- double firstPtVal = GetChartValue(m_air_flow_position, 0);
- double lastPtVal = GetChartValue(m_air_flow_position, m_count_x - 1);
- double intrmPtCount = m_count_x - 1;
- for (int i = 1; i < m_count_x - 1; i++ )
-  RestrictAndSetChartValue(i, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * i));
+ if (CheckBox3d->Checked)
+ {//3D
+  double firstPtVal = GetItem_m(GetZPos(m_val_z), 0);
+  double lastPtVal = GetItem_m(GetZPos(m_val_z), m_count_x - 1);
+  double intrmPtCount = m_count_x - 1;
+  for (int x = 1; x < m_count_x - 1; x++ )
+   RestrictAndSetChartValue(GetZPos(m_val_z), x, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * x));
+  Series3D->ReCreateValues();
+ }
+ else
+ {//2D
+  double firstPtVal = GetChartValue(m_air_flow_position, 0);
+  double lastPtVal = GetChartValue(m_air_flow_position, m_count_x - 1);
+  double intrmPtCount = m_count_x - 1;
+  for (int x = 1; x < m_count_x - 1; x++ )
+   RestrictAndSetChartValue(x, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * x));
+ }
+
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -792,14 +837,25 @@ void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnZeroAllCurves(TObject *Sender)
 {
- for (int z = 0; z < m_count_z; z++ )
- {
-  for (int x = 0; x < m_count_x; x++ )
+ if (CheckBox3d->Checked)
+ {//3D
+  for (int z = 0; z < m_count_z; z++ )
+   for (int x = 0; x < m_count_x; x++ )
+    SetItem(z, x, 0);
+  Series3D->ReCreateValues();
+ }
+ else
+ {//2D
+  for (int z = 0; z < m_count_z; z++ )
   {
-   SetChartValue(z, x, 0);
-   SetItem(z, x, 0);
+   for (int x = 0; x < m_count_x; x++ )
+   {
+    SetChartValue(z, x, 0);
+    SetItem(z, x, 0);
+   }
   }
  }
+
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -807,14 +863,25 @@ void __fastcall TForm3D::OnZeroAllCurves(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
 {
- for (int z = 0; z < m_count_z; z++ )
- {
-  for (int x = 0; x < m_count_x; x++ )
+ if (CheckBox3d->Checked)
+ {//3D
+  for (int z = 0; z < m_count_z; z++ )
+   for (int x = 0; x < m_count_x; x++ )
+    SetItem(z, x, GetItem_m(GetZPos(m_val_z), x));
+  Series3D->ReCreateValues();
+ }
+ else
+ {//2D
+  for (int z = 0; z < m_count_z; z++ )
   {
-   SetChartValue(z, x, GetChartValue(m_air_flow_position, x));
-   SetItem(z, x, GetChartValue(m_air_flow_position, x));
+   for (int x = 0; x < m_count_x; x++ )
+   {
+    SetChartValue(z, x, GetChartValue(m_air_flow_position, x));
+    SetItem(z, x, GetChartValue(m_air_flow_position, x));
+   }
   }
  }
+
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -823,15 +890,32 @@ void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
 void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
 {
  double intrmPtCount = m_count_z - 1;
- for (int x = 0; x < m_count_x; x++ )
- {
-  for (int z = 1; z < m_count_z - 1; z++ )
+ if (CheckBox3d->Checked)
+ {//3D
+  for (int x = 0; x < m_count_x; x++ )
   {
-   double firstPtVal = GetChartValue(0, x);
-   double lastPtVal = GetChartValue(m_count_z - 1, x);
-   double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * z);
-   SetChartValue(z, x, value);
-   SetItem(z, x, value);
+   for (int z = 1; z < m_count_z - 1; z++ )
+   {
+    double firstPtVal = GetItem_m(0, x);
+    double lastPtVal = GetItem_m(m_count_z - 1, x);
+    double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * z);
+    SetItem(z, x, value);
+   }
+  }
+  Series3D->ReCreateValues();
+ }
+ else
+ {//2D
+  for (int x = 0; x < m_count_x; x++ )
+  {
+   for (int z = 1; z < m_count_z - 1; z++ )
+   {
+    double firstPtVal = GetChartValue(0, x);
+    double lastPtVal = GetChartValue(m_count_z - 1, x);
+    double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * z);
+    SetChartValue(z, x, value);
+    SetItem(z, x, value);
+   }
   }
  }
  if (m_pOnChange)
@@ -843,35 +927,41 @@ void __fastcall TForm3D::SelLeftArrow(bool i_shift)
 {
  if (i_shift)
  {//Shift key is pressed
-  if (m_selpts.size())
+  if (m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position))
   {
-   MarkPoints(false);
-   if (m_selpts.front() != m_val_n && m_selpts.back() != m_selpts.front())
+   if (!CheckBox3d->Checked) MarkPoints(false);
+   if (m_sel.Left() != m_val_x && m_sel.Left() != m_sel.Right())
    {
-    m_selpts.pop_back();
-    m_val_n = m_selpts.back();
+    for(int z = m_sel.Down(); z <= m_sel.Up(); ++z)
+     m_sel.PopRight(z);
+    m_val_x = m_sel.Right();
    }
    else
    {
-    m_val_n = m_selpts.front() - 1;
-    if (m_val_n >= 0)
-     m_selpts.push_front(m_val_n);
+    m_val_x = m_sel.Left() - 1;
+    if (m_val_x >= 0)
+    {
+     for(int z = m_sel.Down(); z <= m_sel.Up(); ++z)
+      m_sel.Set(z, m_val_x, true);
+    }
     else
-     m_val_n = 0;
+     m_val_x = 0;
    }
-   MarkPoints(true);
+   if (!CheckBox3d->Checked) MarkPoints(true);
+   else Chart1->Invalidate();
   }
  }
  else
  {//Without shift
-  MarkPoints(false);
-  int prev_pt = m_selpts.size() ? m_selpts.back() - 1 : 0;
+  if (!CheckBox3d->Checked) MarkPoints(false);
+  int prev_pt = m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position) ? m_sel.Right() - 1 : 0;
   if (prev_pt < 0)
    prev_pt = 0;
-  m_selpts.clear();
-  m_selpts.push_back(prev_pt);
-  MarkPoints(true);
-  m_val_n = prev_pt;
+  m_sel.Clear();
+  m_sel.Set(CheckBox3d->Checked ? m_val_z : m_air_flow_position, prev_pt, true);
+  if (!CheckBox3d->Checked) MarkPoints(true);
+  else Chart1->Invalidate();
+  m_val_x = prev_pt;
  }
 }
 
@@ -880,35 +970,121 @@ void __fastcall TForm3D::SelRightArrow(bool i_shift)
 {
  if (i_shift)
  { //Shift key is pressed
-  if (m_selpts.size())
+  if (m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position))
   {
-   MarkPoints(false);
-   if (m_selpts.back() != m_val_n && m_selpts.back() != m_selpts.front())
+   if (!CheckBox3d->Checked) MarkPoints(false);
+   if (m_sel.Right() != m_val_x &&  m_sel.Left() != m_sel.Right())
    {
-    m_selpts.pop_front();
-    m_val_n = m_selpts.front();
+    for(int z = m_sel.Down(); z <= m_sel.Up(); ++z)
+     m_sel.PopLeft(z);
+    m_val_x = m_sel.Left();
    }
    else
    {
-    m_val_n = m_selpts.back() + 1;
-    if (m_val_n < m_count_x)
-     m_selpts.push_back(m_val_n);
+    m_val_x = m_sel.Right() + 1;
+    if (m_val_x < m_count_x)
+    {
+     for(int z = m_sel.Down(); z <= m_sel.Up(); ++z)
+      m_sel.Set(z, m_val_x, true);
+    }
     else
-     m_val_n = m_count_x-1;
+    {
+     m_val_x = m_count_x - 1;
+    }
    }
-   MarkPoints(true);
+   if (!CheckBox3d->Checked) MarkPoints(true);
+   else Chart1->Invalidate();
   }
  }
  else
  { //Without shift
-  MarkPoints(false);
-  int next_pt = m_selpts.size() ? m_selpts.back() + 1 : 0;
+  if (!CheckBox3d->Checked) MarkPoints(false);
+  int next_pt = m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position) ? m_sel.Right() + 1 : 0;
   if (next_pt >= m_count_x)
-   next_pt = m_count_x-1;
-  m_selpts.clear();
-  m_selpts.push_back(next_pt);
-  MarkPoints(true);
-  m_val_n = next_pt;
+   next_pt = m_count_x - 1;
+  m_sel.Clear();
+  m_sel.Set(CheckBox3d->Checked ? m_val_z : m_air_flow_position, next_pt, true);
+  if (!CheckBox3d->Checked) MarkPoints(true);
+  else Chart1->Invalidate();
+  m_val_x = next_pt;
+ }
+}
+
+void __fastcall TForm3D::SelUpArrow(bool i_shift)
+{
+ if (!CheckBox3d->Checked)
+ { //2D
+  if (m_air_flow_position < (m_count_z-1))
+   ++m_air_flow_position;
+  SetAirFlow(m_air_flow_position);
+  return;
+ }
+
+ if (i_shift)
+ { //Shift key is pressed
+  if (m_sel.Up() != m_val_z &&  m_sel.Down() != m_sel.Up())
+  {
+   m_sel.Clear(m_sel.Down());
+   m_val_z = m_sel.Down();
+  }
+  else
+  {
+   m_val_z = m_sel.Up() + 1;
+   if (m_val_z < m_count_z)
+    m_sel.CopyRow(m_val_z - 1, m_val_z);
+   else
+    m_val_z = m_count_z-1;
+  }
+  Chart1->Invalidate();
+ }
+ else
+ { //Without shift  
+  if (m_val_z < (m_count_z-1))
+  {
+   m_sel.Clear();
+   ++m_val_z;
+  }
+  m_sel.Set(m_val_z, m_val_x, true);
+  Chart1->Invalidate();
+ }
+}
+
+void __fastcall TForm3D::SelDownArrow(bool i_shift)
+{
+ if (!CheckBox3d->Checked)
+ { //2D
+  if (m_air_flow_position > 0)
+   --m_air_flow_position;
+  SetAirFlow(m_air_flow_position);
+  return;
+ }
+
+ if (i_shift)
+ { //Shift key is pressed
+  if (m_sel.Down() != m_val_z && m_sel.Down() != m_sel.Up())
+  {
+   m_sel.Clear(m_sel.Up());
+   m_val_z = m_sel.Up();
+  }
+  else
+  {
+   m_val_z = m_sel.Down() - 1;
+   if (m_val_z >= 0)
+    m_sel.CopyRow(m_val_z + 1, m_val_z);  
+   else
+    m_val_z = 0;
+  }
+  Chart1->Invalidate();
+ }
+ else
+ { //Without shift  
+  if (m_val_z > 0)
+  {
+   m_sel.Clear();
+   --m_val_z;
+  }
+  m_sel.Set(m_val_z, m_val_x, true);
+  Chart1->Invalidate();
  }
 }
 
@@ -918,13 +1094,13 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  //Implement keyboard actions related to chart
  if (ActiveControl == Chart1)
  {
-  if (Key == VK_UP || Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
+  if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
   { //move points upward
    ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
-  else if (Key == VK_DOWN || Key == VK_OEM_5 || Key == VK_OEM_COMMA)
+  else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA)
   { //move points downward
    ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
@@ -938,21 +1114,13 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   { //move selection to the right
    SelRightArrow(Shift.Contains(ssShift));
   }
-  else if (Key == 'Z')
+  else if (Key == VK_DOWN)
   { //decrement curve index
-   if (CheckBox3d->Checked) UnmarkPoints();   //3D view
-   if (m_air_flow_position > 0)
-    --m_air_flow_position;
-   SetAirFlow(m_air_flow_position);
-   if (CheckBox3d->Checked) MarkPoints(true); //3D view
+   SelDownArrow(Shift.Contains(ssShift));
   }
-  else if (Key == 'X')
+  else if (Key == VK_UP)
   { //increment curve index
-   if (CheckBox3d->Checked) UnmarkPoints();   //3D view
-   if (m_air_flow_position < (m_count_z-1))
-    ++m_air_flow_position;
-   SetAirFlow(m_air_flow_position);
-   if (CheckBox3d->Checked) MarkPoints(true); //3D view
+   SelUpArrow(Shift.Contains(ssShift));
   }
   else if (Key == 'B')
   {
@@ -966,11 +1134,11 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   else if (Key == 'Q')
   { //toggle area view
    if (((TPointSeries*)Chart1->Series[0 + m_count_z])->DrawArea)
-    for (int i = 0; i < m_count_z; i++)
-     ((TPointSeries*)Chart1->Series[i + m_count_z])->DrawArea = False;  
+    for (int z = 0; z < m_count_z; z++)
+     ((TPointSeries*)Chart1->Series[z + m_count_z])->DrawArea = False;
    else
-    for (int i = 0; i < m_count_z; i++)
-     ((TPointSeries*)Chart1->Series[i + m_count_z])->DrawArea = True;  
+    for (int z = 0; z < m_count_z; z++)
+     ((TPointSeries*)Chart1->Series[z + m_count_z])->DrawArea = True;
   }
   else if (Key == 'A')
   {
@@ -996,6 +1164,32 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    if (Chart1->View3DOptions->Elevation < 0)
     Chart1->View3DOptions->Elevation = 0;
   }
+  else if (Key == 'R')
+  { //zoom+
+   Chart1->View3DOptions->Zoom+=1;
+   if (Chart1->View3DOptions->Zoom > 100)
+    Chart1->View3DOptions->Zoom = 100;
+  }
+  else if (Key == 'F')
+  { //zoom-
+   Chart1->View3DOptions->Zoom-=1;
+   if (Chart1->View3DOptions->Zoom < 0)
+    Chart1->View3DOptions->Zoom = 0;
+  }
+  else if (Key == 'T')
+  { //transparency+
+   m_3d_transparency+=1.0;
+   if (m_3d_transparency > 100.0)
+    m_3d_transparency = 100.0;
+   Series3D->Transparency = m_3d_transparency;
+  }
+  else if (Key == 'G')
+  { //transparency-
+   m_3d_transparency-=1.0;
+   if (m_3d_transparency < .0)
+    m_3d_transparency = .0;
+   Series3D->Transparency = m_3d_transparency;
+  }
   else if (Key == 0x43 && Shift.Contains(ssCtrl))
   { //Ctrl+C
    ClipboardCopy();
@@ -1003,6 +1197,13 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   else if (Key == 0x56 && Shift.Contains(ssCtrl))
   { //Ctrl+V
    ClipboardPaste();
+  }
+  else if (Key == 'E')
+  { //3D walls on/off
+   if (Chart1->View3DWalls)
+    Chart1->View3DWalls = false;
+   else
+    Chart1->View3DWalls = true;
   }
   else if (Key == VK_INSERT)
   {
@@ -1014,17 +1215,23 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   else if (Key == VK_HOME)
   { //move selection point to the left end
    MarkPoints(false);
-   m_selpts.clear();
-   m_selpts.push_back(0);
-   m_val_n = 0;
+   m_sel.Clear();
+   m_val_x = 0;
+   if (CheckBox3d->Checked)
+    m_sel.Set(m_val_z, m_val_x, true);
+   else
+    m_sel.Set(m_air_flow_position, m_val_x, true);
    MarkPoints(true);
   }
   else if (Key == VK_END)
   { //move selection point to the right end
    MarkPoints(false);
-   m_selpts.clear();
-   m_selpts.push_back(m_count_x-1);
-   m_val_n = m_count_x-1;
+   m_sel.Clear();
+   m_val_x = m_count_x-1;
+   if (CheckBox3d->Checked)
+    m_sel.Set(m_val_z, m_val_x, true);
+   else
+    m_sel.Set(m_air_flow_position, m_val_x, true);
    MarkPoints(true);
   }
  }
@@ -1066,17 +1273,17 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnEnterChart(TObject* Sender)
 {
- MarkPoints(true);
- Chart1->Title->Font->Style = TFontStyles() << fsBold;
  m_chart_active = true;
+ if (!CheckBox3d->Checked) MarkPoints(true);
+ Chart1->Title->Font->Style = TFontStyles() << fsBold;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnExitChart(TObject* Sender)
 {
- MarkPoints(false);
- Chart1->Title->Font->Style = TFontStyles();
  m_chart_active = false;
+ if (!CheckBox3d->Checked) MarkPoints(false);
+ Chart1->Title->Font->Style = TFontStyles();
 }
 
 //---------------------------------------------------------------------------
@@ -1103,22 +1310,23 @@ void __fastcall TForm3D::FormDeactivate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnCopyToCurve(TObject *Sender)
 {
- if (Sender == PM_CopyToCurve0)       CopyCurve(m_air_flow_position, 0);
- else if (Sender == PM_CopyToCurve1)  CopyCurve(m_air_flow_position, 1);
- else if (Sender == PM_CopyToCurve2)  CopyCurve(m_air_flow_position, 2);
- else if (Sender == PM_CopyToCurve3)  CopyCurve(m_air_flow_position, 3);
- else if (Sender == PM_CopyToCurve4)  CopyCurve(m_air_flow_position, 4);
- else if (Sender == PM_CopyToCurve5)  CopyCurve(m_air_flow_position, 5);
- else if (Sender == PM_CopyToCurve6)  CopyCurve(m_air_flow_position, 6);
- else if (Sender == PM_CopyToCurve7)  CopyCurve(m_air_flow_position, 7);
- else if (Sender == PM_CopyToCurve8)  CopyCurve(m_air_flow_position, 8);
- else if (Sender == PM_CopyToCurve9)  CopyCurve(m_air_flow_position, 9);
- else if (Sender == PM_CopyToCurve10) CopyCurve(m_air_flow_position, 10);
- else if (Sender == PM_CopyToCurve11) CopyCurve(m_air_flow_position, 11);
- else if (Sender == PM_CopyToCurve12) CopyCurve(m_air_flow_position, 12);
- else if (Sender == PM_CopyToCurve13) CopyCurve(m_air_flow_position, 13);
- else if (Sender == PM_CopyToCurve14) CopyCurve(m_air_flow_position, 14);
- else if (Sender == PM_CopyToCurve15) CopyCurve(m_air_flow_position, 15);
+ int z = GetZPos(CheckBox3d->Checked ? m_val_z : m_air_flow_position);
+ if (Sender == PM_CopyToCurve0)       CopyCurve(z, 0);
+ else if (Sender == PM_CopyToCurve1)  CopyCurve(z, 1);
+ else if (Sender == PM_CopyToCurve2)  CopyCurve(z, 2);
+ else if (Sender == PM_CopyToCurve3)  CopyCurve(z, 3);
+ else if (Sender == PM_CopyToCurve4)  CopyCurve(z, 4);
+ else if (Sender == PM_CopyToCurve5)  CopyCurve(z, 5);
+ else if (Sender == PM_CopyToCurve6)  CopyCurve(z, 6);
+ else if (Sender == PM_CopyToCurve7)  CopyCurve(z, 7);
+ else if (Sender == PM_CopyToCurve8)  CopyCurve(z, 8);
+ else if (Sender == PM_CopyToCurve9)  CopyCurve(z, 9);
+ else if (Sender == PM_CopyToCurve10) CopyCurve(z, 10);
+ else if (Sender == PM_CopyToCurve11) CopyCurve(z, 11);
+ else if (Sender == PM_CopyToCurve12) CopyCurve(z, 12);
+ else if (Sender == PM_CopyToCurve13) CopyCurve(z, 13);
+ else if (Sender == PM_CopyToCurve14) CopyCurve(z, 14);
+ else if (Sender == PM_CopyToCurve15) CopyCurve(z, 15);
  else return;
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -1127,22 +1335,23 @@ void __fastcall TForm3D::OnCopyToCurve(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnCopyFromCurve(TObject *Sender)
 {
- if (Sender == PM_CopyFromCurve0)       CopyCurve(0, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve1)  CopyCurve(1, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve2)  CopyCurve(2, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve3)  CopyCurve(3, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve4)  CopyCurve(4, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve5)  CopyCurve(5, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve6)  CopyCurve(6, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve7)  CopyCurve(7, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve8)  CopyCurve(8, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve9)  CopyCurve(9, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve10) CopyCurve(10, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve11) CopyCurve(11, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve12) CopyCurve(12, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve13) CopyCurve(13, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve14) CopyCurve(14, m_air_flow_position);
- else if (Sender == PM_CopyFromCurve15) CopyCurve(15, m_air_flow_position);
+ int z = GetZPos(CheckBox3d->Checked ? m_val_z : m_air_flow_position);
+ if (Sender == PM_CopyFromCurve0)       CopyCurve(0, z);
+ else if (Sender == PM_CopyFromCurve1)  CopyCurve(1, z);
+ else if (Sender == PM_CopyFromCurve2)  CopyCurve(2, z);
+ else if (Sender == PM_CopyFromCurve3)  CopyCurve(3, z);
+ else if (Sender == PM_CopyFromCurve4)  CopyCurve(4, z);
+ else if (Sender == PM_CopyFromCurve5)  CopyCurve(5, z);
+ else if (Sender == PM_CopyFromCurve6)  CopyCurve(6, z);
+ else if (Sender == PM_CopyFromCurve7)  CopyCurve(7, z);
+ else if (Sender == PM_CopyFromCurve8)  CopyCurve(8, z);
+ else if (Sender == PM_CopyFromCurve9)  CopyCurve(9, z);
+ else if (Sender == PM_CopyFromCurve10) CopyCurve(10, z);
+ else if (Sender == PM_CopyFromCurve11) CopyCurve(11, z);
+ else if (Sender == PM_CopyFromCurve12) CopyCurve(12, z);
+ else if (Sender == PM_CopyFromCurve13) CopyCurve(13, z);
+ else if (Sender == PM_CopyFromCurve14) CopyCurve(14, z);
+ else if (Sender == PM_CopyFromCurve15) CopyCurve(15, z);
  else return;
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -1211,29 +1420,15 @@ void TForm3D::UpdateSystemColors(void)
  Chart1->LeftAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
  Chart1->BottomAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
  Chart1->BottomAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
- for(int i = 0; i < m_count_z; i++)
+ for(int z = 0; z < m_count_z; z++)
  {
-  Chart1->Series[i]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
-  Chart1->Series[i+m_count_z]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+  Chart1->Series[z]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+  Chart1->Series[z+m_count_z]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
  }
  Chart1->Frame->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
  Chart1->LeftAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
  Chart1->BottomAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
  Chart1->DepthAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
-}
-
-//---------------------------------------------------------------------------
-void TForm3D::SetYAxisTitle(const AnsiString& title)
-{
- m_y_title = title;
- Chart1->LeftAxis->Title->Caption = title;
-}
-
-//---------------------------------------------------------------------------
-void TForm3D::SetChartTitle(const AnsiString& title)
-{
- m_u_title = title;
- Chart1->Title->Text->SetText(title.c_str());
 }
 
 //---------------------------------------------------------------------------
@@ -1255,12 +1450,12 @@ void __fastcall TForm3D::OnExportCSV(TObject *Sender)
   AnsiString valFmt = Chart1->Series[0]->ValueFormat;
   if (CheckBoxBv->Checked)
   {
-   for(int j = 0; j < m_count_z; j++)
+   for(int z = 0; z < m_count_z; z++)
    {
-    for(int i = 0; i < m_count_x; i++)
+    for(int x = 0; x < m_count_x; x++)
     {
-     AnsiString as = FormatFloat(valFmt, GetItem_m(j,i));  
-     if (i == m_count_x-1)
+     AnsiString as = FormatFloat(valFmt, GetItem_m(z, x));  
+     if (x == m_count_x-1)
       fprintf(fh, "%s\r\n", as.c_str());    
      else
       fprintf(fh, temp, as.c_str());
@@ -1269,12 +1464,12 @@ void __fastcall TForm3D::OnExportCSV(TObject *Sender)
   }
   else
   {
-   for(int j = m_count_z-1; j >= 0; j--)
+   for(int z = m_count_z-1; z >= 0; z--)
    {
-    for(int i = 0; i < m_count_x; i++)
+    for(int x = 0; x < m_count_x; x++)
     {
-     AnsiString as = FormatFloat(valFmt, GetItem_m(j,i));  
-     if (i == m_count_x-1)
+     AnsiString as = FormatFloat(valFmt, GetItem_m(z, x));  
+     if (x == m_count_x-1)
       fprintf(fh, "%s\r\n", as.c_str());    
      else
       fprintf(fh, temp, as.c_str());
@@ -1283,11 +1478,20 @@ void __fastcall TForm3D::OnExportCSV(TObject *Sender)
   }
 
   //write horizontal axis's grid
-  for(int i = 0; i < m_count_x; i++)
+  for(int x = 0; x < m_count_x; x++)
   {
    AnsiString as;
-   as.sprintf(m_values_format_x.c_str(),m_u_slots[i]);
-   if (i == m_count_x-1)
+   if (m_pOnGetXAxisLabel && m_param_on_get_x_axis_label)
+   {
+    TCHAR string[64];  
+    _stprintf(string, m_values_format_x.c_str(), m_u_slots[x]);
+    m_pOnGetXAxisLabel(string, x, m_param_on_get_x_axis_label);
+    as = string;
+   }
+   else
+    as.sprintf(m_values_format_x.c_str(), m_u_slots[x]);
+
+   if (x == m_count_x-1)
     fprintf(fh, "%s\r\n", as.c_str());    
    else
     fprintf(fh, temp, as.c_str());
@@ -1336,23 +1540,23 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
   if (CheckBoxBv->Checked)
   {
    //set read values
-   for(int j = 0; j < m_count_z; j++)
-    for(int i = 0; i < m_count_x; i++)
-     SetItem(j, i, atof(csv[j][i].c_str()));
+   for(int z = 0; z < m_count_z; z++)
+    for(int x = 0; x < m_count_x; x++)     
+     RestrictAndSetChartValue(z, x, atof(csv[z][x].c_str()));
   }
   else
   {
    //set read values
-   for(int j = 0; j < m_count_z; j++)
-    for(int i = 0; i < m_count_x; i++)
-     SetItem(j, i, atof(csv[(m_count_z-1)-j][i].c_str()));
+   for(int z = 0; z < m_count_z; z++)
+    for(int x = 0; x < m_count_x; x++)     
+     RestrictAndSetChartValue(z, x, atof(csv[(m_count_z-1)-z][x].c_str()));
   }
 
-  //delete old values and then fill series again
-  for(int i = 0; i < Chart1->SeriesList->Count; i++)
-   for (;Chart1->Series[i]->Count() > 0;)
-    Chart1->Series[i]->Delete(Chart1->Series[i]->Count()-1);
-  DataPrepare();
+  //Update
+  if (CheckBox3d->Checked)
+   Series3D->ReCreateValues();  
+  else
+   UpdateChartValues();
 
   if (m_pOnChange)
    m_pOnChange(m_param_on_change);
@@ -1376,59 +1580,128 @@ void __fastcall TForm3D::TrackRightClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TForm3D::ClipboardCopy(void)
 {
- if (m_selpts.size())
- {
-  AnsiString valFmt = Chart1->Series[0]->ValueFormat;
-  AnsiString str;
-  for(size_t i = 0; i < m_selpts.size(); ++i)
+ if (CheckBox3d->Checked)
+ {//3D
+  if (m_sel.Size())
   {
-   AnsiString as = FormatFloat(valFmt, GetChartValue(m_air_flow_position, m_selpts[i]));  
-   if (i==m_selpts.size()-1)
-    as+="\r\n";
-   else
-    as+="\t";
-   str+=as;
+   AnsiString valFmt = Chart1->Series[0]->ValueFormat;
+   AnsiString str;
+   for(int z = m_sel.Up(); z >= m_sel.Down(); --z)
+   {
+    for(int x = m_sel.Left(); x <= m_sel.Right(); ++x)
+    {
+     AnsiString as = FormatFloat(valFmt, GetItem_m(z, x));  
+     if (x==m_sel.Right())
+      as+="\r\n";
+     else
+      as+="\t";
+     str+=as;
+    }
+   }
+   Clipboard()->AsText = str;
   }
-
-  Clipboard()->AsText = str;
+ }
+ else
+ {//2D
+  if (m_sel.Size(m_air_flow_position))
+  {
+   AnsiString valFmt = Chart1->Series[0]->ValueFormat;
+   AnsiString str;
+   for(int x = m_sel.Left(); x <= m_sel.Right(); ++x)
+   {
+    AnsiString as = FormatFloat(valFmt, GetChartValue(m_air_flow_position, x));  
+    if (x==m_sel.Right())
+     as+="\r\n";
+    else
+     as+="\t";
+    str+=as;
+   }
+   Clipboard()->AsText = str;
+  } 
  }
 }
 
 //---------------------------------------------------------------------------
 void TForm3D::ClipboardPaste(void)
 {
- if (Clipboard()->HasFormat(CF_TEXT) && m_selpts.size())
+ if (Clipboard()->HasFormat(CF_TEXT))
  {
-  //parse string
-  AnsiString str = Clipboard()->AsText;
- 
-  std::vector<_TSTRING> lines = StrUtils::TokenizeStr(str.c_str(), '\n');
-  std::vector<std::vector<_TSTRING> > csv;
-  for(size_t i = 0; i < lines.size(); ++i)
-  {
-   _TSTRING line = StrUtils::rtrim(lines[i], "\t\n\r");
-   csv.push_back(StrUtils::TokenizeStr(line.c_str(), '\t'));
-  }
-
-  TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
- 
-  for(size_t i = 0; i < csv[0].size(); ++i)
-  {
-   int index = m_selpts[0] + i;
-   if (index < m_count_x)
+  if (CheckBox3d->Checked)
+  {//3D
+   if (m_sel.Size())
    {
-    //change decimal point, thus it will be compatible with our current locale
-    _TSTRING& s = csv[0][i];
-    std::size_t pos = s.find_first_of(_T(".,"));
-    if (pos != _TSTRING::npos)
-     s[pos] = decPt;
+    //parse string
+    AnsiString str = Clipboard()->AsText; 
+    std::vector<_TSTRING> lines = StrUtils::TokenizeStr(str.c_str(), '\n');
+    std::vector<std::vector<_TSTRING> > csv;
+    for(size_t i = 0; i < lines.size(); ++i)
+    {
+     _TSTRING line = StrUtils::rtrim(lines[i], "\t\n\r");
+     csv.push_back(StrUtils::TokenizeStr(line.c_str(), '\t'));
+    }
 
-    RestrictAndSetChartValue(index, atof(s.c_str()));
+    TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
+ 
+    for(size_t z = 0; z < csv.size(); ++z)
+    {
+     int index_z = (CheckBoxBv->Checked ? m_count_z-1-m_sel.Up() : m_sel.Up()) - z;
+     if (index_z >= 0)
+     {
+      for(size_t x = 0; x < csv[z].size(); ++x)
+      {
+       int index_x = m_sel.Left() + x;
+       if (index_x < m_count_x)
+       {
+        //change decimal point, thus it will be compatible with our current locale
+        _TSTRING& s = csv[z][x];
+        std::size_t pos = s.find_first_of(_T(".,"));
+        if (pos != _TSTRING::npos)
+         s[pos] = decPt;
+
+        RestrictAndSetChartValue(index_z, index_x, atof(s.c_str()));
+       }
+      }
+     }
+    }
+    Series3D->ReCreateValues();
+    if (m_pOnChange)
+     m_pOnChange(m_param_on_change);
    }
   }
+  else
+  {//2D
+   if (m_sel.Size(m_air_flow_position))
+   {
+    //parse string
+    AnsiString str = Clipboard()->AsText; 
+    std::vector<_TSTRING> lines = StrUtils::TokenizeStr(str.c_str(), '\n');
+    std::vector<std::vector<_TSTRING> > csv;
+    for(size_t i = 0; i < lines.size(); ++i)
+    {
+     _TSTRING line = StrUtils::rtrim(lines[i], "\t\n\r");
+     csv.push_back(StrUtils::TokenizeStr(line.c_str(), '\t'));
+    }
 
-  if (m_pOnChange)
-   m_pOnChange(m_param_on_change);    
+    TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
+ 
+    for(size_t x = 0; x < csv[0].size(); ++x)
+    {
+     int index = m_sel.Left() + x;
+     if (index < m_count_x)
+     {
+      //change decimal point, thus it will be compatible with our current locale
+      _TSTRING& s = csv[0][x];
+      std::size_t pos = s.find_first_of(_T(".,"));
+      if (pos != _TSTRING::npos)
+       s[pos] = decPt;
+
+      RestrictAndSetChartValue(index, atof(s.c_str()));
+     }
+    }
+    if (m_pOnChange)
+     m_pOnChange(m_param_on_change);    
+   }
+  }
  }
 }
 
@@ -1447,27 +1720,17 @@ void __fastcall TForm3D::OnPaste(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnInc(TObject *Sender)
 {
- for(size_t i = 0; i < m_selpts.size(); ++i)
- {
-  float value = GetChartValue(m_air_flow_position, m_selpts[i]);
-  value+=m_pt_moving_step;
-  RestrictAndSetChartValue(m_selpts[i], value);   
- }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
+ ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnDec(TObject *Sender)
 {
- for(size_t i = 0; i < m_selpts.size(); ++i)
- {
-  float value = GetChartValue(m_air_flow_position, m_selpts[i]);
-  value-=m_pt_moving_step;
-  RestrictAndSetChartValue(m_selpts[i], value);   
- }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
+ ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
@@ -1480,9 +1743,27 @@ void __fastcall TForm3D::OnSetTo(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
-  for(size_t i = 0; i < m_selpts.size(); ++i)
-  {
-   RestrictAndSetChartValue(m_selpts[i], PtMovStepDlg->GetValue());   
+  if (!CheckBox3d->Checked)
+  { //2D
+   for(int x = 0; x < m_count_x; ++x)
+   {
+    if (false==m_sel.Get(m_air_flow_position, x))
+     continue;  
+    RestrictAndSetChartValue(x, PtMovStepDlg->GetValue());   
+   }
+  }
+  else
+  { //3D
+   for(int z = 0; z < m_count_z; ++z)
+   {
+    for(int x = 0; x < m_count_x; ++x)
+    {
+     if (false==m_sel.Get(z, x))
+      continue;
+     RestrictAndSetChartValue(GetZPos(z), x, PtMovStepDlg->GetValue());
+    }
+   }
+   Series3D->ReCreateValues();
   }
  }
  if (m_pOnChange) 
@@ -1499,11 +1780,31 @@ void __fastcall TForm3D::OnSub(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
-  for(size_t i = 0; i < m_selpts.size(); ++i)
-  {
-   float value = GetChartValue(m_air_flow_position, m_selpts[i]);
-   value-=PtMovStepDlg->GetValue();
-   RestrictAndSetChartValue(m_selpts[i], value);   
+  if (!CheckBox3d->Checked)
+  { //2D
+   for(int x = 0; x < m_count_x; ++x)
+   {
+    if (false==m_sel.Get(m_air_flow_position, x))
+     continue;  
+    float value = GetChartValue(m_air_flow_position, x);
+    value-= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
+    RestrictAndSetChartValue(x, value);   
+   }
+  }
+  else
+  { //3D
+   for(int z = 0; z < m_count_z; ++z)
+   {
+    for(int x = 0; x < m_count_x; ++x)
+    {
+     if (false==m_sel.Get(z, x))
+      continue;
+     float value = GetItem_m(GetZPos(z), x);
+     value-= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
+     RestrictAndSetChartValue(GetZPos(z), x, value);
+    }
+   }
+   Series3D->ReCreateValues();
   }
  }
  if (m_pOnChange) 
@@ -1520,11 +1821,31 @@ void __fastcall TForm3D::OnAdd(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
-  for(size_t i = 0; i < m_selpts.size(); ++i)
-  {
-   float value = GetChartValue(m_air_flow_position, m_selpts[i]);
-   value+=PtMovStepDlg->GetValue();
-   RestrictAndSetChartValue(m_selpts[i], value);   
+  if (!CheckBox3d->Checked)
+  { //2D
+   for(int x = 0; x < m_count_x; ++x)
+   {
+    if (false==m_sel.Get(m_air_flow_position, x))
+     continue;  
+    float value = GetChartValue(m_air_flow_position, x);
+    value+= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
+    RestrictAndSetChartValue(x, value);   
+   }
+  }
+  else
+  { //3D
+   for(int z = 0; z < m_count_z; ++z)
+   {
+    for(int x = 0; x < m_count_x; ++x)
+    {
+     if (false==m_sel.Get(z, x))
+      continue;
+     float value = GetItem_m(GetZPos(z), x);
+     value+= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
+     RestrictAndSetChartValue(GetZPos(z), x, value);
+    }
+   }
+   Series3D->ReCreateValues();
   }
  }
  if (m_pOnChange) 
@@ -1541,15 +1862,131 @@ void __fastcall TForm3D::OnMul(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
-  for(size_t i = 0; i < m_selpts.size(); ++i)
-  {
-   float value = GetChartValue(m_air_flow_position, m_selpts[i]);
-   value*=PtMovStepDlg->GetValue();
-   RestrictAndSetChartValue(m_selpts[i], value);
+  if (!CheckBox3d->Checked)
+  { //2D
+   for(int x = 0; x < m_count_x; ++x)
+   {
+    if (false==m_sel.Get(m_air_flow_position, x))
+     continue;  
+    float value = GetChartValue(m_air_flow_position, x);
+    float mult = PtMovStepDlg->GetValue()==0 ? 1e-6 : PtMovStepDlg->GetValue();
+    value*= Chart1->LeftAxis->Inverted ? 1.0f/mult : PtMovStepDlg->GetValue();
+    RestrictAndSetChartValue(x, value);   
+   }
+  }
+  else
+  { //3D
+   for(int z = 0; z < m_count_z; ++z)
+   {
+    for(int x = 0; x < m_count_x; ++x)
+    {
+     if (false==m_sel.Get(z, x))
+      continue;
+     float value = GetItem_m(GetZPos(z), x);
+     float mult = PtMovStepDlg->GetValue()==0 ? 1e-6 : PtMovStepDlg->GetValue();
+     value*= Chart1->LeftAxis->Inverted ? 1.0f/mult : PtMovStepDlg->GetValue();
+     RestrictAndSetChartValue(GetZPos(z), x, value);
+    }
+   }
+   Series3D->ReCreateValues();
   }
  }
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+double __fastcall TForm3D::OnGetYValue(TChartSeries *Sender, int X, int Z)
+{
+ X--, Z--; //delphi...
+
+ if (CheckBoxBv->Checked)
+  Z = (m_count_z-1) - Z; //invert order along Z-axis
+  
+ //Avoid issue, appeared when values of functions are equal.
+ //So, we add very small values to make function's points different
+ double delta = (X + Z) * 1e-12;
+ return GetItem_m(Z, X) + delta;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnAfterDrawChart(TObject *Sender)
+{
+ if (!CheckBox3d->Checked)
+  return;
+
+ for(int Z = 0; Z < m_count_z; ++Z)
+ {
+  for(int X = 0; X < m_count_x; ++X)
+  {
+   if (false==m_sel.Get(Z, X))
+    continue;
+
+   int ptIdx = (Z * m_count_x) + X;
+
+   int x = Series3D->CalcXPos(ptIdx);
+   int y = Series3D->CalcYPos(ptIdx);
+   int z = Series3D->CalcZPos(ptIdx);
+
+   TCanvas3D *pCanvas = Chart1->Canvas;
+   pCanvas->Pen->Color = clNavy;
+
+   if ((m_val_z==Z && m_val_x==X) && m_chart_active)
+    pCanvas->Pen->Width = 2;
+   else
+    pCanvas->Pen->Width = 1;
+
+   pCanvas->Brush->Color = clNavy;
+
+   int d = 7;
+   pCanvas->MoveTo3D(x - d, y, z - d);
+   pCanvas->LineTo3D(x - d, y, z + d);
+   pCanvas->LineTo3D(x + d, y, z + d);
+   pCanvas->LineTo3D(x + d, y, z - d);
+   pCanvas->LineTo3D(x - d, y, z - d);
+  }
+ }
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetDimentions(int z, int x)
+{
+ TrackBarAf->Max = m_count_z - 1;
+ m_sel.SetDimentions(z, x);
+ m_count_z = z;
+ m_count_x = x;
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetRange(float ymin, float ymax)
+{
+ m_fnc_min = ymin;
+ m_fnc_max = ymax;
+ //value range on the graph will be slightly wider than required...
+ int range = m_fnc_max - m_fnc_min;
+ Chart1->LeftAxis->Maximum = m_fnc_max + range / 15.0f;
+ Chart1->LeftAxis->Minimum = m_fnc_min - range / 20.0f;
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetChartTitle(const AnsiString& title)
+{
+ m_u_title = title;
+ Chart1->Title->Text->SetText(title.c_str());
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetXAxisTitle(const AnsiString& title)
+{
+ m_x_title = title;
+ Chart1->BottomAxis->Title->Caption = title;
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetYAxisTitle(const AnsiString& title)
+{
+ m_y_title = title;
+ Chart1->LeftAxis->Title->Caption = title;
 }
 
 //---------------------------------------------------------------------------

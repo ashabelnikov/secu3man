@@ -35,6 +35,7 @@
 #include "Form2D.h"
 #include "resource.h"
 #include "../ManageFrm.h"
+#include "../common/Chartxdid.h"
 #pragma hdrstop
 
 extern "C"
@@ -178,10 +179,10 @@ void __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_
   return;
  switch(i_axis)
  {
-  case 0: //Y
+  case CXD_Y_AXIS: //Y
    pForm->Chart1->LeftAxis->AxisValuesFormat = i_format_string;
    break;
-  case 1: //X
+  case CXD_X_AXIS: //X
    pForm->m_horizontal_axis_values_format = i_format_string;
    break;
   default:
@@ -198,10 +199,10 @@ void __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pO
   return;
  switch(i_axis)
  {
-  case 0: //Y
+  case CXD_Y_AXIS: //Y
    pForm->SetOnGetYAxisLabel(i_pOnGetAxisLabel, i_param);
    break;
-  case 1: //X
+  case CXD_X_AXIS: //X
    pForm->SetOnGetXAxisLabel(i_pOnGetAxisLabel, i_param);
    break;
   default:
@@ -218,7 +219,7 @@ void __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted)
   return;
  switch(i_axis)
  {
-  case 0: //Y
+  case CXD_Y_AXIS: //Y
    pForm->Chart1->LeftAxis->Inverted = i_inverted;
    break;
   default:
@@ -271,7 +272,7 @@ void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_begi
 
  switch(i_axis)
  {
-  case 1: //X
+  case CXD_X_AXIS: //X
    pForm->ShowXEdits(i_show);
    pForm->CfgXEdits(0, i_beginMin, i_beginMax, i_spinStep, limitText, spinDecimalPlaces); //begin
    pForm->CfgXEdits(1, i_endMin, i_endMax, i_spinStep, limitText, spinDecimalPlaces);     //end
@@ -292,7 +293,7 @@ void __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float 
 
  switch(i_axis)
  {
-  case 1: //X
+  case CXD_X_AXIS: //X
    pForm->SetXEditVal(0, i_begin);
    pForm->SetXEditVal(1, i_end);
    break;
@@ -374,10 +375,10 @@ void __cdecl Chart2DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR i_axis_title)
   return;
  switch(i_axis)
  {
-  case 0: //Y
+  case CXD_Y_AXIS: //Y
    pForm->Chart1->LeftAxis->Title->Caption = pForm->m_y_axis_title = i_axis_title;
    break;
-  case 1: //X
+  case CXD_X_AXIS: //X
    pForm->Chart1->BottomAxis->Title->Caption = pForm->m_x_axis_title = i_axis_title;
    break;
   default:
