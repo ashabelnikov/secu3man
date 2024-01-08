@@ -46,7 +46,7 @@ char TForm2D::m_csvsep_symb = ',';
 __fastcall TForm2D::TForm2D(HWND parent)
 : TForm(parent)
 , m_hInst(NULL)
-, m_count_of_function_points(0)
+, m_count_x(0)
 , m_fnc_min(0.0f), m_fnc_max(0.0f)
 , mp_original_function(NULL)
 , mp_modified_function(NULL)
@@ -75,7 +75,7 @@ __fastcall TForm2D::TForm2D(HWND parent)
 , m_visibleMarkIdx(-1)
 {
  m_errors.reserve(32);
- memset(m_horizontal_axis_grid_values, 0, sizeof(float) * 64);
+ std::fill(m_horizontal_axis_grid_values, m_horizontal_axis_grid_values + 256, .0f);
  m_selpts.push_back(0);
  memset(m_binsEdit, NULL, sizeof(NULL) * 8);
  memset(m_binsUpDown, NULL, sizeof(NULL) * 8);
@@ -105,12 +105,12 @@ void TForm2D::DataPrepare()
  Chart1->LeftAxis->Title->Caption = m_y_axis_title;
  Chart1->BottomAxis->Title->Caption = m_x_axis_title;
 
- for(int i = 0; i < m_count_of_function_points; i++)
+ for(int i = 0; i < m_count_x; i++)
  {
   if (m_horizontal_axis_grid_mode < 2) //0,1 modes
    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
   else  //mode 2
-   as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_of_function_points]);
+   as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i + m_count_x]);
    
   Series1->Add(mp_original_function[i], as, clAqua);
   Series2->Add(mp_modified_function[i], as, clRed);
@@ -329,7 +329,7 @@ void TForm2D::InitBins(void)
  ButtonShowBins->Visible = true;
  m_horizontal_axis_grid_mode = 2; //mode 2
 
- if (m_count_of_function_points > 8)
+ if (m_count_x > 8)
   ::MessageBox(NULL, "You can not use more than 8 function points in this mode", "Error", MB_OK);
 
  m_binsEdit[0] = Edit1; m_binsUpDown[0] = UpDown1;
@@ -345,7 +345,7 @@ void TForm2D::InitBins(void)
  UpdateBinsPosition();
 
  //hide unnecessary edit boxes
- for(int i = m_count_of_function_points; i < 8; ++i)
+ for(int i = m_count_x; i < 8; ++i)
  { m_binsEdit[i]->Visible = false; m_binsUpDown[i]->Visible = false; }
 
  //Set limits and values
@@ -355,12 +355,12 @@ void TForm2D::InitBins(void)
 void __fastcall TForm2D::UpdateBins(void)
 {
  //Set limits and values
- for(int i = 0; i < m_count_of_function_points; ++i)
+ for(int i = 0; i < m_count_x; ++i)
  {
   m_binsUpDown[i]->DecimalPlaces = (int)m_horizontal_axis_grid_values[3];
   m_binsUpDown[i]->FloatMin = m_horizontal_axis_grid_values[0];
   m_binsUpDown[i]->FloatMax = m_horizontal_axis_grid_values[1];
-  m_binsUpDown[i]->FloatPosition = mp_modified_function[i+m_count_of_function_points];
+  m_binsUpDown[i]->FloatPosition = mp_modified_function[i + m_count_x];
   m_binsUpDown[i]->FloatIncrement = m_horizontal_axis_grid_values[2];
  }
 }
@@ -459,7 +459,7 @@ void __fastcall TForm2D::FormClose(TObject *Sender, TCloseAction &Action)
   m_pOnClose(m_param_on_close);
  m_setval  = 0;
  m_val_n   = 0;
- m_count_of_function_points = 0;
+ m_count_x = 0;
  m_chart_title_text = "";
  mp_original_function = NULL;
  mp_modified_function = NULL;
@@ -486,12 +486,12 @@ void __fastcall TForm2D::ButtonAngleDownClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 {
- float* p_source_function = new float[m_count_of_function_points];
- std::copy(mp_modified_function, mp_modified_function + m_count_of_function_points, p_source_function);
- MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_of_function_points, 3);
+ float* p_source_function = new float[m_count_x];
+ std::copy(mp_modified_function, mp_modified_function + m_count_x, p_source_function);
+ MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_x, 3);
  delete[] p_source_function;
 
- for (int i = 0; i < m_count_of_function_points; i++ )
+ for (int i = 0; i < m_count_x; i++ )
   Series2->YValue[i] = mp_modified_function[i];
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -500,12 +500,12 @@ void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::Smoothing5xClick(TObject *Sender)
 {
- float* p_source_function = new float[m_count_of_function_points];
- std::copy(mp_modified_function, mp_modified_function + m_count_of_function_points, p_source_function);
- MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_of_function_points, 5);
+ float* p_source_function = new float[m_count_x];
+ std::copy(mp_modified_function, mp_modified_function + m_count_x, p_source_function);
+ MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_x, 5);
  delete[] p_source_function;
 
- for (int i = 0; i < m_count_of_function_points; i++ )
+ for (int i = 0; i < m_count_x; i++ )
   Series2->YValue[i] = mp_modified_function[i];
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -527,7 +527,7 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
   {
    TCHAR string[64];
    _tcscpy(string, LabelText.c_str());
-   m_pOnGetYAxisLabel(string, ValueIndex, m_param_on_get_y_axis_label);
+    m_pOnGetYAxisLabel(string, ValueIndex, m_param_on_get_y_axis_label);
    LabelText = string;
   }
  }
@@ -555,7 +555,7 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
   {
    AnsiString as;
    if (ValueIndex >= 0)
-    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[ValueIndex + m_count_of_function_points]);
+    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[ValueIndex + m_count_x]);
    LabelText = as;
   }
  }
@@ -572,7 +572,7 @@ void TForm2D::RestrictAndSetValue(int index, double v)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::ShiftFunction(float i_value)
 {
- for (int i = 0; i < m_count_of_function_points; ++i )
+ for (int i = 0; i < m_count_x; ++i )
  {
   RestrictAndSetValue(i, Series2->YValue[i] + i_value);
  }
@@ -607,7 +607,7 @@ void __fastcall TForm2D::WndProc(Messages::TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnZeroAllPoints(TObject *Sender)
 {
- for (int i = 0; i < m_count_of_function_points; ++i )
+ for (int i = 0; i < m_count_x; ++i )
   RestrictAndSetValue(i, 0);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -616,7 +616,7 @@ void __fastcall TForm2D::OnZeroAllPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnDuplicate1stPoint(TObject *Sender)
 {
- for (int i = 0; i < m_count_of_function_points; i++ )
+ for (int i = 0; i < m_count_x; i++ )
   RestrictAndSetValue(i, Series2->YValue[0]);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -626,9 +626,9 @@ void __fastcall TForm2D::OnDuplicate1stPoint(TObject *Sender)
 void __fastcall TForm2D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 {
  double firstPtVal = Series2->YValue[0];
- double lastPtVal = Series2->YValue[m_count_of_function_points - 1];
- double intrmPtCount = m_count_of_function_points - 1;
- for (int i = 1; i < m_count_of_function_points - 1; i++ )
+ double lastPtVal = Series2->YValue[m_count_x - 1];
+ double intrmPtCount = m_count_x - 1;
+ for (int i = 1; i < m_count_x - 1; i++ )
   RestrictAndSetValue(i, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * i));
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -643,8 +643,8 @@ void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
  if (1!=sscanf(EditXEnd->Text.c_str(), "%lf", &eValue))
   return;
    
- double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
- for(int i = 0; i < m_count_of_function_points; ++i)
+ double step = (eValue - bValue) / ((double)m_count_x - 1);
+ for(int i = 0; i < m_count_x; ++i)
   m_horizontal_axis_grid_values[i] = bValue + (step * i);
  Chart1->Invalidate();
 
@@ -661,8 +661,8 @@ void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
  if (1!=sscanf(EditXEnd->Text.c_str(), "%lf", &eValue))
   return;
 
- double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
- for(int i = 0; i < m_count_of_function_points; ++i)
+ double step = (eValue - bValue) / ((double)m_count_x - 1);
+ for(int i = 0; i < m_count_x; ++i)
   m_horizontal_axis_grid_values[i] = bValue + (step * i);
  Chart1->Invalidate();
 
@@ -677,14 +677,14 @@ void __fastcall TForm2D::BinsEditOnChange(TObject *Sender)
  if (1!=sscanf(((TEdit*)Sender)->Text.c_str(), "%lf", &Value))
   return;
 
- for(int i = 0; i < m_count_of_function_points; ++i)
+ for(int i = 0; i < m_count_x; ++i)
  {
   if (m_binsEdit[i]==Sender)
   {
    //Check changed item for errors
    if (true==CheckBinForErrors(i, Value))
     m_errors.push_back(i);
-   mp_modified_function[i+m_count_of_function_points] = Value;
+   mp_modified_function[i + m_count_x] = Value;
    break;
   }
  }
@@ -693,7 +693,7 @@ void __fastcall TForm2D::BinsEditOnChange(TObject *Sender)
  std::vector<int>::iterator it = m_errors.begin();  
  while(it!=m_errors.end())
  {
-  if (false==CheckBinForErrors(*it, mp_modified_function[(*it)+m_count_of_function_points]))
+  if (false==CheckBinForErrors(*it, mp_modified_function[(*it) + m_count_x]))
   {//OK
    m_binsEdit[*it]->Brush->Color = clWindow; //return background color to default
    m_binsEdit[*it]->Invalidate();
@@ -722,11 +722,11 @@ bool __fastcall TForm2D::CheckBinForErrors(int itemIndex, float value)
   return true;
  else if (value > m_horizontal_axis_grid_values[1]) //compare with max
   return true;
- else if (((itemIndex < m_count_of_function_points-1) ? (m_horizontal_axis_grid_values[4] > fabs(value - (mp_modified_function[(itemIndex+1)+m_count_of_function_points]))) : 0) ||
-          ((itemIndex >  0) ? (m_horizontal_axis_grid_values[4] > fabs(value - (mp_modified_function[(itemIndex-1)+m_count_of_function_points]))) : 0))
+ else if (((itemIndex < m_count_x-1) ? (m_horizontal_axis_grid_values[4] > fabs(value - (mp_modified_function[(itemIndex+1)+m_count_x]))) : 0) ||
+          ((itemIndex >  0) ? (m_horizontal_axis_grid_values[4] > fabs(value - (mp_modified_function[(itemIndex-1)+m_count_x]))) : 0))
   return true;
- else if (((itemIndex < m_count_of_function_points-1) ? (value > (mp_modified_function[(itemIndex+1)+m_count_of_function_points])) : 0) ||
-          ((itemIndex >  0) ? (value < (mp_modified_function[(itemIndex-1)+m_count_of_function_points])) : 0))
+ else if (((itemIndex < m_count_x-1) ? (value > (mp_modified_function[(itemIndex+1)+m_count_x])) : 0) ||
+          ((itemIndex >  0) ? (value < (mp_modified_function[(itemIndex-1)+m_count_x])) : 0))
   return true;
  else
   return false; //Ok
@@ -780,10 +780,10 @@ void __fastcall TForm2D::SelRightArrow(bool i_shift)
   else
   {
    m_val_n = m_selpts.back() + 1;
-   if (m_val_n < m_count_of_function_points)
+   if (m_val_n < m_count_x)
     m_selpts.push_back(m_val_n);
    else
-    m_val_n = m_count_of_function_points-1;
+    m_val_n = m_count_x-1;
   }
   MarkPoints(true);
  }
@@ -791,8 +791,8 @@ void __fastcall TForm2D::SelRightArrow(bool i_shift)
  { //Without shift
   MarkPoints(false);
   int next_pt = m_selpts.size() ? m_selpts.back() + 1 : 0;
-  if (next_pt >= m_count_of_function_points)
-   next_pt = m_count_of_function_points-1;
+  if (next_pt >= m_count_x)
+   next_pt = m_count_x-1;
   m_selpts.clear();
   m_selpts.push_back(next_pt);
   MarkPoints(true);
@@ -853,8 +853,8 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   { //move selection point to the right end
    MarkPoints(false);
    m_selpts.clear();
-   m_selpts.push_back(m_count_of_function_points-1);
-   m_val_n = m_count_of_function_points-1;
+   m_selpts.push_back(m_count_x-1);
+   m_val_n = m_count_x-1;
    MarkPoints(true);
   }
  }
@@ -987,8 +987,8 @@ void __fastcall TForm2D::UpdateBinsPosition(void)
 {
  //Set position of edit boxes
  float lr_space = 5;
- float horz_step = (float(PanelBins->Width)-(lr_space*2)-(Edit1->Width+UpDown1->Width)) /  float(m_count_of_function_points-1);
- for(int i = 0; i < m_count_of_function_points; ++i)
+ float horz_step = (float(PanelBins->Width)-(lr_space*2)-(Edit1->Width+UpDown1->Width)) /  float(m_count_x-1);
+ for(int i = 0; i < m_count_x; ++i)
  {
   m_binsUpDown[i]->Visible = True;
   m_binsEdit[i]->Visible = True;
@@ -1035,17 +1035,17 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
 
   //write function's values
   AnsiString valFmt = Chart1->Series[0]->ValueFormat;
-  for(int i = 0; i < m_count_of_function_points; ++i)
+  for(int i = 0; i < m_count_x; ++i)
   {
    AnsiString as = FormatFloat(valFmt, mp_modified_function[i]);  
-   if (i == m_count_of_function_points-1)
+   if (i == m_count_x-1)
     fprintf(fh, "%s\r\n", as.c_str());    
    else
     fprintf(fh, temp, as.c_str());
   }
 
   //write horizontal axis's grid
-  for(int i = 0; i < m_count_of_function_points; ++i)
+  for(int i = 0; i < m_count_x; ++i)
   {
    AnsiString as;
    if (0==m_horizontal_axis_grid_mode) //array of labels
@@ -1068,10 +1068,10 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
    }
    else  //mode 2 - separate editable bins
    {
-    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_of_function_points]);
+    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_x]);
    }
 
-   if (i == m_count_of_function_points-1)
+   if (i == m_count_x-1)
     fprintf(fh, "%s", as.c_str());    
    else
     fprintf(fh, temp, as.c_str());
@@ -1108,14 +1108,14 @@ void __fastcall TForm2D::OnImportCSV(TObject *Sender)
    return;
   }
 
-  if (csv[0].size() != (size_t)m_count_of_function_points || csv[1].size() != (size_t)m_count_of_function_points)
+  if (csv[0].size() != (size_t)m_count_x || csv[1].size() != (size_t)m_count_x)
   {
    ::MessageBox(NULL, "Error reading csv file! Incorrect number of values.", "Error", MB_OK | MB_ICONERROR);
    return;
   }
 
   //copy new data
-  for(int i = 0; i < m_count_of_function_points; ++i)
+  for(int i = 0; i < m_count_x; ++i)
    mp_modified_function[i] = atof(csv[0][i].c_str());
   //delete old values and fill series again
   for (;Series1->Count() > 0;)
@@ -1170,7 +1170,7 @@ void TForm2D::ClipboardPaste(void)
   for(size_t i = 0; i < csv[0].size(); ++i)
   {
    int index = m_selpts[0] + i;
-   if (index < m_count_of_function_points)
+   if (index < m_count_x)
    {
     //change decimal point, thus it will be compatible with our current locale
     _TSTRING& s = csv[0][i];

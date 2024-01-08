@@ -84,7 +84,7 @@ HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float
 
  //Create a form
  TForm2D* pForm = new TForm2D(parent);
- pForm->m_count_of_function_points = i_count_of_points;
+ pForm->m_count_x = i_count_of_points;
  pForm->m_chart_title_text = i_chart_title;
  pForm->m_x_axis_title = i_x_axis_title;
  pForm->m_y_axis_title = i_y_axis_title;
@@ -97,9 +97,9 @@ HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float
  if (ip_x_axis_grid_values)
  {
   if (0==i_bins_mode) //0,1 modes
-   memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * i_count_of_points);   
+   std::copy(ip_x_axis_grid_values, ip_x_axis_grid_values + i_count_of_points, pForm->m_horizontal_axis_grid_values);
   else //mode 2
-   memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * 5); //5 values: min,max,inc,dec places,min diff
+   std::copy(ip_x_axis_grid_values, ip_x_axis_grid_values + 5, pForm->m_horizontal_axis_grid_values); //5 values: min,max,inc,dec places,min diff
  }
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);

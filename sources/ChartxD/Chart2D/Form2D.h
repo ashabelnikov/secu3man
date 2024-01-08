@@ -164,12 +164,12 @@ class TForm2D : public TForm
   void UpdateSystemColors(void);
 
  public: //properties
-  int m_count_of_function_points;
+  int m_count_x;
   float m_fnc_min;
   float m_fnc_max;
   const float *mp_original_function;
   float *mp_modified_function;
-  float m_horizontal_axis_grid_values[64];
+  float m_horizontal_axis_grid_values[256];
   AnsiString m_horizontal_axis_values_format;  //for axis, not for edit bins
   AnsiString m_chart_title_text;
   AnsiString m_x_axis_title;
