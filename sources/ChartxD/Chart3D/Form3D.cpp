@@ -75,6 +75,10 @@ __fastcall TForm3D::TForm3D(HWND parent)
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
 , m_3d_transparency(10.0)
+, m_mc_xpos(-1)
+, m_mc_ypos(-1)
+, m_mc_rotation(0)
+, m_mc_elevation(0)
 {
  //empty
 }
@@ -317,7 +321,10 @@ void __fastcall TForm3D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
  if (CheckBox3d->Checked)
+ {
+  m_mc_xpos = m_mc_ypos = -1;
   return; //not used in 3D mode
+ }
 
  //implementation of multiple points selection
  if (Shift.Contains(ssCtrl) && (m_prev_pt.first == X && m_prev_pt.second == Y))
@@ -336,9 +343,39 @@ void __fastcall TForm3D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
-      int X, int Y)
+void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+ if (CheckBox3d->Checked)
+ { //remember position of mouse cursor and current position of camera
+  m_mc_xpos = X;
+  m_mc_ypos = Y;
+  m_mc_rotation = Chart1->View3DOptions->Rotation; 
+  m_mc_elevation = Chart1->View3DOptions->Elevation; 
+ }
+
+ if (ActiveControl != Chart1)
+ {
+  ActiveControl = Chart1;
+  m_chart_active = true;
+ }
+
+ OnEnterChart(NULL);
+
+ if (!Active)
+  SetFocus();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y)
+{
+ if (CheckBox3d->Checked && m_mc_xpos != -1 && m_mc_ypos != -1)
+ { //change position of camera using current and stored coordinates of the mouse cursor
+  int r = (X - m_mc_xpos) / 4;
+  int e = (m_mc_ypos - Y) / 4;
+  Chart1->View3DOptions->Rotation = m_mc_rotation + r;
+  Chart1->View3DOptions->Elevation = m_mc_elevation + e;
+ }
+
  //===========================================
  if (m_visibleMarkIdx != -1)
  {
@@ -1234,25 +1271,65 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   }
   else if (Key == VK_HOME)
   { //move selection point to the left end
-   MarkPoints(false);
-   m_sel.Clear();
-   m_val_x = 0;
-   if (CheckBox3d->Checked)
-    m_sel.Set(m_val_z, m_val_x, true);
+   if (Shift.Contains(ssCtrl))
+   {
+    if (CheckBox3d->Checked)
+    {
+     m_sel.Clear();
+     m_val_z = m_count_z-1;
+     m_sel.Set(m_val_z, m_val_x, true);
+     Chart1->Invalidate();
+    }
+   }
    else
-    m_sel.Set(m_air_flow_position, m_val_x, true);
-   MarkPoints(true);
+   {
+    if (CheckBox3d->Checked)
+    { //3D
+     m_sel.Clear();
+     m_val_x = 0;
+     m_sel.Set(m_val_z, m_val_x, true);
+     Chart1->Invalidate();
+    }
+    else
+    {
+     MarkPoints(false);
+     m_sel.Clear();
+     m_val_x = 0;
+     m_sel.Set(m_air_flow_position, m_val_x, true);
+     MarkPoints(true);
+    }
+   }
   }
   else if (Key == VK_END)
   { //move selection point to the right end
-   MarkPoints(false);
-   m_sel.Clear();
-   m_val_x = m_count_x-1;
-   if (CheckBox3d->Checked)
-    m_sel.Set(m_val_z, m_val_x, true);
+   if (Shift.Contains(ssCtrl))
+   {
+    if (CheckBox3d->Checked)
+    {
+     m_sel.Clear();
+     m_val_z = 0;
+     m_sel.Set(m_val_z, m_val_x, true);
+     Chart1->Invalidate();
+    }
+   }
    else
-    m_sel.Set(m_air_flow_position, m_val_x, true);
-   MarkPoints(true);
+   {
+    if (CheckBox3d->Checked)
+    { //3D
+     m_sel.Clear();
+     m_val_x = m_count_x-1;
+     m_sel.Set(m_val_z, m_val_x, true);
+     Chart1->Invalidate();
+    }
+    else
+    {
+     MarkPoints(false);
+     m_sel.Clear();
+     m_val_x = m_count_x-1;
+     m_sel.Set(m_air_flow_position, m_val_x, true);
+     MarkPoints(true);
+    }
+   }
   }
  }
 
@@ -1304,21 +1381,6 @@ void __fastcall TForm3D::OnExitChart(TObject* Sender)
  m_chart_active = false;
  if (!CheckBox3d->Checked) MarkPoints(false);
  Chart1->Title->Font->Style = TFontStyles();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
-{
- if (ActiveControl != Chart1)
- {
-  ActiveControl = Chart1;
-  m_chart_active = true;
- }
-
- OnEnterChart(NULL);
-
- if (!Active)
-  SetFocus();
 }
 
 //---------------------------------------------------------------------------

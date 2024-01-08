@@ -308,6 +308,12 @@ class TForm3D : public TForm
   AnsiString m_x_title;
   AnsiString m_y_title;
   AnsiString m_u_title; //chart title
+
+  //for changing position of camera using mouse:
+  int m_mc_xpos;
+  int m_mc_ypos;
+  int m_mc_rotation;
+  int m_mc_elevation;
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_
