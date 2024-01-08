@@ -114,7 +114,7 @@ void TForm3D::DataPrepare(bool create)
  { //update
   //When updating (after creation), we may be either in the 2D or 3D mode
   if (CheckBox3d->Checked)
-   Series3D->ReCreateValues();
+   UpdateSurfaceValues();
   else
    UpdateChartValues();
  }
@@ -406,7 +406,7 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift, int
   }
   //Move all selected points
   v = Chart1->Series[m_air_flow_position + m_count_z]->YScreenToValue(Y);
-  ShiftPoints(v - GetChartValue(m_air_flow_position, m_val_x));
+  ShiftPoints(v - GetItem_m(m_air_flow_position, m_val_x));
  } 
 }
 
@@ -493,7 +493,7 @@ void __fastcall TForm3D::CheckBoxBvClick(TObject *Sender)
 {
  m_val_z = m_count_z - 1 - m_val_z;
  m_sel.InvertZ();
- Series3D->ReCreateValues();
+ UpdateSurfaceValues();
 }
 
 //---------------------------------------------------------------------------
@@ -508,19 +508,7 @@ void __fastcall TForm3D::OnCloseForm(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 {
- if (!CheckBox3d->Checked)
- { //2D
-  for (int x = 0; x < m_count_x; x++)
-   RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, x) + m_pt_moving_step);
- }
- else
- { //3D
-  for (int z = 0; z < m_count_z; z++)
-   for (int x = 0; x < m_count_x; x++)
-    RestrictAndSetChartValue(z, x, GetItem_m(z, x) + m_pt_moving_step);
-  Series3D->ReCreateValues();
- }
-
+ ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step, true); //all
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -528,19 +516,7 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 {
- if (!CheckBox3d->Checked)
- { //2D
-  for (int x = 0; x < m_count_x; x++)
-   RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, x) - m_pt_moving_step);
- }
- else
- {//3D
-  for (int z = 0; z < m_count_z; z++)
-   for (int x = 0; x < m_count_x; x++)
-    RestrictAndSetChartValue(z, x, GetItem_m(z, x) - m_pt_moving_step);
-  Series3D->ReCreateValues();
- }
-
+ ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step, true); //all
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -566,8 +542,8 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
   delete[] p_source_function;
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
-    RestrictAndSetChartValue(z, x, GetItem_m(z, x));
-  Series3D->ReCreateValues();
+    RestrictAndSetValue(z, x, GetItem_m(z, x));
+  UpdateSurfaceValues();
  }
 
  if (m_pOnChange)
@@ -595,8 +571,8 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
   delete[] p_source_function;
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
-    RestrictAndSetChartValue(z, x, GetItem_m(z, x)); 
-  Series3D->ReCreateValues();
+    RestrictAndSetValue(z, x, GetItem_m(z, x)); 
+  UpdateSurfaceValues();
  }
 
  if (m_pOnChange)
@@ -710,14 +686,14 @@ int __fastcall TForm3D::GetZPos(int z) const
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm3D::ShiftPoints(float i_value)
+void __fastcall TForm3D::ShiftPoints(float i_value, bool all /*= false*/)
 {
  if (!CheckBox3d->Checked)
  { //2D
   for(int x = 0; x < m_count_x; ++x)
   {
-   if (true==m_sel.Get(m_air_flow_position, x))
-    RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, x) + i_value);
+   if (all || true==m_sel.Get(m_air_flow_position, x))
+    RestrictAndSetChartValue(x, GetItem_m(m_air_flow_position, x) + i_value);
   }
  }
  else
@@ -726,11 +702,11 @@ void __fastcall TForm3D::ShiftPoints(float i_value)
   {
    for(int x = 0; x < m_count_x; ++x)
    {
-    if (true==m_sel.Get(z, x))
-     RestrictAndSetChartValue(GetZPos(z), x, GetItem_m(GetZPos(z), x) + i_value);
+    if (all || true==m_sel.Get(z, x))
+     RestrictAndSetValue(GetZPos(z), x, GetItem_m(GetZPos(z), x) + i_value);
    }
   }
-  Series3D->ReCreateValues();
+  UpdateSurfaceValues();
  }
 }
 
@@ -768,7 +744,7 @@ void TForm3D::RestrictAndSetChartValue(int index, double v)
 //---------------------------------------------------------------------------
 //3D version
 // v - value in chart's format
-void TForm3D::RestrictAndSetChartValue(int index_z, int index_x, double v)
+void TForm3D::RestrictAndSetValue(int index_z, int index_x, double v)
 {
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
  SetItem(index_z, index_x, v);
@@ -781,22 +757,16 @@ void __fastcall TForm3D::CopyCurve(int fromIndex, int toIndex)
  {//3D
   for(int x = 0; x < m_count_x; ++x)
    SetItem(toIndex, x, GetItem_m(fromIndex, x));
-  Series3D->ReCreateValues();
+  UpdateSurfaceValues();
  }
  else
  {//2D
   for(int x = 0; x < m_count_x; ++x)
   { 
-   SetChartValue(toIndex, x, GetChartValue(fromIndex, x));
-   SetItem(toIndex, x, GetChartValue(fromIndex, x));
+   SetChartValue(toIndex, x, GetItem_m(fromIndex, x));
+   SetItem(toIndex, x, GetItem_m(fromIndex, x));
   }
  }
-}
-
-//---------------------------------------------------------------------------
-double TForm3D::GetChartValue(int z, int index)
-{
- return Chart1->Series[z + m_count_z]->YValue[index];
 }
 
 //---------------------------------------------------------------------------
@@ -812,6 +782,13 @@ void TForm3D::UpdateChartValues(void)
  for(int z = 0; z < m_count_x; ++z)
   for(int x = 0; x < m_count_x; ++x)
    SetChartValue(z, x, GetItem_m(z, x));
+}
+
+//---------------------------------------------------------------------------
+//3D only
+void TForm3D::UpdateSurfaceValues(void)
+{
+ Series3D->ReCreateValues();
 }
 
 //---------------------------------------------------------------------------
@@ -835,8 +812,8 @@ void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
  if (CheckBox3d->Checked)
  {//3D
   for (int x = 0; x < m_count_x; x++ )
-   RestrictAndSetChartValue(GetZPos(m_val_z), x, 0);
-  Series3D->ReCreateValues();
+   RestrictAndSetValue(GetZPos(m_val_z), x, 0);
+  UpdateSurfaceValues();
  }
  else
  {//2D
@@ -854,13 +831,13 @@ void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
  if (CheckBox3d->Checked)
  {//3D
   for (int x = 0; x < m_count_x; x++)
-   RestrictAndSetChartValue(GetZPos(m_val_z), x, GetItem_m(GetZPos(m_val_z), 0));
-  Series3D->ReCreateValues();
+   RestrictAndSetValue(GetZPos(m_val_z), x, GetItem_m(GetZPos(m_val_z), 0));
+  UpdateSurfaceValues();
  }
  else
  {//2D
   for (int x = 0; x < m_count_x; x++)
-   RestrictAndSetChartValue(x, GetChartValue(m_air_flow_position, 0));
+   RestrictAndSetChartValue(x, GetItem_m(m_air_flow_position, 0));
  }
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -875,13 +852,13 @@ void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
   double lastPtVal = GetItem_m(GetZPos(m_val_z), m_count_x - 1);
   double intrmPtCount = m_count_x - 1;
   for (int x = 1; x < m_count_x - 1; x++ )
-   RestrictAndSetChartValue(GetZPos(m_val_z), x, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * x));
-  Series3D->ReCreateValues();
+   RestrictAndSetValue(GetZPos(m_val_z), x, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * x));
+  UpdateSurfaceValues();
  }
  else
  {//2D
-  double firstPtVal = GetChartValue(m_air_flow_position, 0);
-  double lastPtVal = GetChartValue(m_air_flow_position, m_count_x - 1);
+  double firstPtVal = GetItem_m(m_air_flow_position, 0);
+  double lastPtVal = GetItem_m(m_air_flow_position, m_count_x - 1);
   double intrmPtCount = m_count_x - 1;
   for (int x = 1; x < m_count_x - 1; x++ )
    RestrictAndSetChartValue(x, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * x));
@@ -899,7 +876,7 @@ void __fastcall TForm3D::OnZeroAllCurves(TObject *Sender)
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
     SetItem(z, x, 0);
-  Series3D->ReCreateValues();
+  UpdateSurfaceValues();
  }
  else
  {//2D
@@ -925,7 +902,7 @@ void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
     SetItem(z, x, GetItem_m(GetZPos(m_val_z), x));
-  Series3D->ReCreateValues();
+  UpdateSurfaceValues();
  }
  else
  {//2D
@@ -933,8 +910,8 @@ void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
   {
    for (int x = 0; x < m_count_x; x++ )
    {
-    SetChartValue(z, x, GetChartValue(m_air_flow_position, x));
-    SetItem(z, x, GetChartValue(m_air_flow_position, x));
+    SetChartValue(z, x, GetItem_m(m_air_flow_position, x));
+    SetItem(z, x, GetItem_m(m_air_flow_position, x));
    }
   }
  }
@@ -959,7 +936,7 @@ void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
     SetItem(z, x, value);
    }
   }
-  Series3D->ReCreateValues();
+  UpdateSurfaceValues();
  }
  else
  {//2D
@@ -967,8 +944,8 @@ void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
   {
    for (int z = 1; z < m_count_z - 1; z++ )
    {
-    double firstPtVal = GetChartValue(0, x);
-    double lastPtVal = GetChartValue(m_count_z - 1, x);
+    double firstPtVal = GetItem_m(0, x);
+    double lastPtVal = GetItem_m(m_count_z - 1, x);
     double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * z);
     SetChartValue(z, x, value);
     SetItem(z, x, value);
@@ -1199,9 +1176,19 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   }
   else if (Key == 'A')
   {
-   Chart1->View3DOptions->Rotation+=1;
-   if (Chart1->View3DOptions->Rotation > 360)
-    Chart1->View3DOptions->Rotation = 360;
+   if (Shift.Contains(ssCtrl))
+   { //Ctrl+A
+    for(int z = 0; z < m_count_z; z++)
+     for(int x = 0; x < m_count_x; x++)
+      m_sel.Set(z, x, true);
+    Chart1->Invalidate();
+   }
+   else
+   {
+    Chart1->View3DOptions->Rotation+=1;
+    if (Chart1->View3DOptions->Rotation > 360)
+     Chart1->View3DOptions->Rotation = 360;
+   }
   }
   else if (Key == 'D')
   {
@@ -1624,19 +1611,19 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
    //set read values
    for(int z = 0; z < m_count_z; z++)
     for(int x = 0; x < m_count_x; x++)     
-     RestrictAndSetChartValue(z, x, atof(csv[z][x].c_str()));
+     RestrictAndSetValue(z, x, atof(csv[z][x].c_str()));
   }
   else
   {
    //set read values
    for(int z = 0; z < m_count_z; z++)
     for(int x = 0; x < m_count_x; x++)     
-     RestrictAndSetChartValue(z, x, atof(csv[(m_count_z-1)-z][x].c_str()));
+     RestrictAndSetValue(z, x, atof(csv[(m_count_z-1)-z][x].c_str()));
   }
 
   //Update
   if (CheckBox3d->Checked)
-   Series3D->ReCreateValues();  
+   UpdateSurfaceValues();
   else
    UpdateChartValues();
 
@@ -1691,7 +1678,7 @@ void TForm3D::ClipboardCopy(void)
    AnsiString str;
    for(int x = m_sel.Left(); x <= m_sel.Right(); ++x)
    {
-    AnsiString as = FormatFloat(valFmt, GetChartValue(m_air_flow_position, x));  
+    AnsiString as = FormatFloat(valFmt, GetItem_m(m_air_flow_position, x));  
     if (x==m_sel.Right())
      as+="\r\n";
     else
@@ -1740,12 +1727,12 @@ void TForm3D::ClipboardPaste(void)
         if (pos != _TSTRING::npos)
          s[pos] = decPt;
 
-        RestrictAndSetChartValue(index_z, index_x, atof(s.c_str()));
+        RestrictAndSetValue(index_z, index_x, atof(s.c_str()));
        }
       }
      }
     }
-    Series3D->ReCreateValues();
+    UpdateSurfaceValues();
     if (m_pOnChange)
      m_pOnChange(m_param_on_change);
    }
@@ -1842,10 +1829,10 @@ void __fastcall TForm3D::OnSetTo(TObject *Sender)
     {
      if (false==m_sel.Get(z, x))
       continue;
-     RestrictAndSetChartValue(GetZPos(z), x, PtMovStepDlg->GetValue());
+     RestrictAndSetValue(GetZPos(z), x, PtMovStepDlg->GetValue());
     }
    }
-   Series3D->ReCreateValues();
+   UpdateSurfaceValues();
   }
  }
  if (m_pOnChange) 
@@ -1868,7 +1855,7 @@ void __fastcall TForm3D::OnSub(TObject *Sender)
    {
     if (false==m_sel.Get(m_air_flow_position, x))
      continue;  
-    float value = GetChartValue(m_air_flow_position, x);
+    float value = GetItem_m(m_air_flow_position, x);
     value-= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
     RestrictAndSetChartValue(x, value);   
    }
@@ -1883,10 +1870,10 @@ void __fastcall TForm3D::OnSub(TObject *Sender)
       continue;
      float value = GetItem_m(GetZPos(z), x);
      value-= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
-     RestrictAndSetChartValue(GetZPos(z), x, value);
+     RestrictAndSetValue(GetZPos(z), x, value);
     }
    }
-   Series3D->ReCreateValues();
+   UpdateSurfaceValues();
   }
  }
  if (m_pOnChange) 
@@ -1909,7 +1896,7 @@ void __fastcall TForm3D::OnAdd(TObject *Sender)
    {
     if (false==m_sel.Get(m_air_flow_position, x))
      continue;  
-    float value = GetChartValue(m_air_flow_position, x);
+    float value = GetItem_m(m_air_flow_position, x);
     value+= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
     RestrictAndSetChartValue(x, value);   
    }
@@ -1924,10 +1911,10 @@ void __fastcall TForm3D::OnAdd(TObject *Sender)
       continue;
      float value = GetItem_m(GetZPos(z), x);
      value+= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
-     RestrictAndSetChartValue(GetZPos(z), x, value);
+     RestrictAndSetValue(GetZPos(z), x, value);
     }
    }
-   Series3D->ReCreateValues();
+   UpdateSurfaceValues();
   }
  }
  if (m_pOnChange) 
@@ -1950,7 +1937,7 @@ void __fastcall TForm3D::OnMul(TObject *Sender)
    {
     if (false==m_sel.Get(m_air_flow_position, x))
      continue;  
-    float value = GetChartValue(m_air_flow_position, x);
+    float value = GetItem_m(m_air_flow_position, x);
     float mult = PtMovStepDlg->GetValue()==0 ? 1e-6 : PtMovStepDlg->GetValue();
     value*= Chart1->LeftAxis->Inverted ? 1.0f/mult : PtMovStepDlg->GetValue();
     RestrictAndSetChartValue(x, value);   
@@ -1967,10 +1954,10 @@ void __fastcall TForm3D::OnMul(TObject *Sender)
      float value = GetItem_m(GetZPos(z), x);
      float mult = PtMovStepDlg->GetValue()==0 ? 1e-6 : PtMovStepDlg->GetValue();
      value*= Chart1->LeftAxis->Inverted ? 1.0f/mult : PtMovStepDlg->GetValue();
-     RestrictAndSetChartValue(GetZPos(z), x, value);
+     RestrictAndSetValue(GetZPos(z), x, value);
     }
    }
-   Series3D->ReCreateValues();
+   UpdateSurfaceValues();
   }
  }
  if (m_pOnChange)

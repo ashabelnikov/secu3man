@@ -246,7 +246,7 @@ class TForm3D : public TForm
   void FillChart(void);
   void HideAllSeries(void);
   int __fastcall GetZPos(int z) const;
-  void __fastcall ShiftPoints(float i_value);
+  void __fastcall ShiftPoints(float i_value, bool all = false);
   void __fastcall MarkPoints(bool i_mark);
   void __fastcall UnmarkPoints(void);
   void __fastcall SelLeftArrow(bool i_shift);
@@ -255,11 +255,11 @@ class TForm3D : public TForm
   void __fastcall SelUpArrow(bool i_shift);   //only in 3D
 
   void RestrictAndSetChartValue(int index, double v);
-  void RestrictAndSetChartValue(int index_z, int index_x, double v);
+  void RestrictAndSetValue(int index_z, int index_x, double v);
   void __fastcall CopyCurve(int fromIndex, int toIndex);
-  double GetChartValue(int z, int index);
   void SetChartValue(int z, int index, double value);
   void UpdateChartValues(void);
+  void UpdateSurfaceValues(void);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
   void UpdateSystemColors(void);
   void ClipboardCopy(void);
@@ -288,8 +288,8 @@ class TForm3D : public TForm
   void* m_param_on_value_transform;
 
   int m_setval;
-  int m_val_x;
-  int m_val_z;
+  int m_val_x; //x-position of the selection point
+  int m_val_z; //z-position of the selection point
   int m_air_flow_position;
   bool m_chart_active;
 
