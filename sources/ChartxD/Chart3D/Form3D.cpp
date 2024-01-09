@@ -79,6 +79,7 @@ __fastcall TForm3D::TForm3D(HWND parent)
 , m_mc_ypos(-1)
 , m_mc_rotation(0)
 , m_mc_elevation(0)
+, m_mc_allow(true)
 {
  //empty
 }
@@ -245,6 +246,10 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
  PM_Copy->Caption = string;
  ::LoadString(hInstance, IDS_PM_PASTE, string, 1024);
  PM_Paste->Caption = string;
+ ::LoadString(hInstance, IDS_PM_ALLOW_MOUSE_ZOOM, string, 1024);
+ PM_AllowMouseZoom->Caption = string;
+ ::LoadString(hInstance, IDS_PM_ALLOW_MOUSE_CAMERA, string, 1024);
+ PM_AllowMouseCamera->Caption = string;
 } 
 
 //---------------------------------------------------------------------------
@@ -345,7 +350,7 @@ void __fastcall TForm3D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
- if (CheckBox3d->Checked)
+ if (CheckBox3d->Checked && m_mc_allow)
  { //remember position of mouse cursor and current position of camera
   m_mc_xpos = X;
   m_mc_ypos = Y;
@@ -469,6 +474,7 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   PM_Import->Enabled = true;
   PM_HideMarks->Enabled = false;
   PM_HideOldCurve->Enabled = false;
+  PM_AllowMouseCamera->Enabled = true;
  }
  else
  { //2D
@@ -484,6 +490,7 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   CheckBoxBv->Enabled = false;
   PM_HideMarks->Enabled = true;
   PM_HideOldCurve->Enabled = true;
+  PM_AllowMouseCamera->Enabled = false;
  }
 }
 
@@ -1147,6 +1154,27 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   else if (Key == VK_RIGHT)
   { //move selection to the right
    SelRightArrow(Shift.Contains(ssShift));
+  }
+  else if (Key == VK_RETURN)
+  {
+   if (CheckBox3d->Checked)
+   {
+    if (m_val_z > 0)
+    { 
+     --m_val_z;
+    }
+    else
+    {     
+     m_val_z = m_count_z-1;
+     if (m_val_x < m_count_x-1)
+      ++m_val_x;     
+     else
+      m_val_x = 0;     
+    }
+    m_sel.Clear();
+    m_sel.Set(m_val_z, m_val_x, true);
+    Chart1->Invalidate();
+   }
   }
   else if (Key == VK_DOWN)
   { //decrement curve index
@@ -2056,6 +2084,42 @@ void TForm3D::SetYAxisTitle(const AnsiString& title)
 {
  m_y_title = title;
  Chart1->LeftAxis->Title->Caption = title;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnAllowMouseZoom(TObject *Sender)
+{
+ if (PM_AllowMouseZoom->Checked)
+ {
+  PM_AllowMouseZoom->Checked = false;
+  Chart1->Zoom->Allow = false;
+ }
+ else
+ {
+  m_mc_allow = false;
+  Chart1->Zoom->Allow = true;
+  PM_AllowMouseZoom->Checked = true;
+  PM_AllowMouseCamera->Checked = false;
+ }
+
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnAllowMouseCamera(TObject *Sender)
+{
+ if (PM_AllowMouseCamera->Checked)
+ {
+  PM_AllowMouseCamera->Checked = false;
+  m_mc_allow = false;
+ }
+ else
+ {
+  m_mc_allow = true;
+  Chart1->Zoom->Allow = false;
+  PM_AllowMouseCamera->Checked = true;
+  PM_AllowMouseZoom->Checked = false;
+ }
+ 
 }
 
 //---------------------------------------------------------------------------

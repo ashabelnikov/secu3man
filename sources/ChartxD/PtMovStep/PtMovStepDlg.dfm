@@ -23,6 +23,7 @@ object PtMovStepDlg: TPtMovStepDlg
     Caption = 'Ok'
     ModalResult = 1
     TabOrder = 0
+    Default = True
     OnClick = ButtonOkClick
   end
   object ButtonCancel: TButton

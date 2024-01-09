@@ -206,6 +206,7 @@ object Form3D: TForm3D
     Chart3DPercent = 29
     TabOrder = 0
     TabStop = True
+    Zoom.Allow = False
     OnClickSeries = Chart1ClickSeries
     OnGetAxisLabel = Chart1GetAxisLabel
     OnMouseMove = Chart1MouseMove
@@ -1282,6 +1283,16 @@ object Form3D: TForm3D
     object PM_Paste: TMenuItem
       Caption = 'Paste Ctrl+V'
       OnClick = OnPaste
+    end
+    object PM_AllowMouseZoom: TMenuItem
+      Caption = 'Mouse zoom'
+      OnClick = OnAllowMouseZoom
+    end
+    object PM_AllowMouseCamera: TMenuItem
+      Caption = 'Mouse camera'
+      Checked = True
+      Enabled = False
+      OnClick = OnAllowMouseCamera
     end
   end
   object openDialog: TOpenDialog

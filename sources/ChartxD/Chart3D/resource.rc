@@ -48,6 +48,8 @@ stringtable
   IDS_DLG_MUL    "Умножить значения"
   IDS_PM_COPY    "Копировать Ctrl+C"
   IDS_PM_PASTE   "Вставить Ctrl+V"
+  IDS_PM_ALLOW_MOUSE_ZOOM   "Маcштабирование мышью"
+  IDS_PM_ALLOW_MOUSE_CAMERA  "Вращение графика мышью"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -92,4 +94,6 @@ stringtable
   IDS_DLG_MUL    "Multiply values"
   IDS_PM_COPY    "Copy Ctrl+C"
   IDS_PM_PASTE   "Paste Ctrl+V"
+  IDS_PM_ALLOW_MOUSE_ZOOM   "Mouse zoom"
+  IDS_PM_ALLOW_MOUSE_CAMERA  "Mouse camera"
 }

@@ -40,3 +40,5 @@
 #define IDS_DLG_MUL                    236
 #define IDS_PM_COPY                    237
 #define IDS_PM_PASTE                   238
+#define IDS_PM_ALLOW_MOUSE_ZOOM        239
+#define IDS_PM_ALLOW_MOUSE_CAMERA      240

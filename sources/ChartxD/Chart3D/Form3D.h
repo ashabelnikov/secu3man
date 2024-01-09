@@ -155,6 +155,8 @@ class TForm3D : public TForm
   TMenuItem *PM_Sub;
   TMenuItem *PM_Add;
   TMenuItem *PM_Mul;
+  TMenuItem *PM_AllowMouseZoom;
+  TMenuItem *PM_AllowMouseCamera;
   TOpenDialog* openDialog;
   TSaveDialog* saveDialog;
 
@@ -201,6 +203,8 @@ class TForm3D : public TForm
   void __fastcall OnSub(TObject *Sender);
   void __fastcall OnAdd(TObject *Sender);
   void __fastcall OnMul(TObject *Sender);
+  void __fastcall OnAllowMouseZoom(TObject *Sender);
+  void __fastcall OnAllowMouseCamera(TObject *Sender);
   double __fastcall OnGetYValue(TChartSeries *Sender, int X, int Z); //from TIsoSurfaceSerie
   void __fastcall OnAfterDrawChart(TObject *Sender);
 
@@ -314,6 +318,7 @@ class TForm3D : public TForm
   int m_mc_ypos;
   int m_mc_rotation;
   int m_mc_elevation;
+  bool m_mc_allow;
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_
