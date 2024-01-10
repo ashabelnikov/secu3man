@@ -28,6 +28,9 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Ёкспортировать в csv",    ID_MAPED_POPUP_EXPORTCSV
         MENUITEM "»мпортировать из csv",    ID_MAPED_POPUP_IMPORTCSV
+        MENUITEM SEPARATOR
+        MENUITEM "—гладить 3х3",            ID_MAPED_POPUP_SMOOTH3X3
+        MENUITEM "—гладить 5х5",            ID_MAPED_POPUP_SMOOTH5X5
     END
 END
 
@@ -91,6 +94,9 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Export to csv",           ID_MAPED_POPUP_EXPORTCSV
         MENUITEM "Import from csv",         ID_MAPED_POPUP_IMPORTCSV
+        MENUITEM SEPARATOR
+        MENUITEM "Smoothing 3х3",           ID_MAPED_POPUP_SMOOTH3X3
+        MENUITEM "Smoothing 5х5",           ID_MAPED_POPUP_SMOOTH5X5
     END
 END
 

@@ -29,10 +29,10 @@
 // Enum Types
 enum LEDMemberEnum
 {
- led_rect,  //рамка
- led_on,    //включенное состояние
- led_off,   //выключенное сщстояние
- led_pos    //позиция
+ led_rect,  //frame
+ led_on,    //ON state
+ led_off,   //OFF state
+ led_pos    //position
 };
 
 /////////////////////////////////////////////////////////////////////////////

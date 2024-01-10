@@ -256,6 +256,8 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_COMMAND(ID_MAPED_POPUP_SUB, OnSub)
  ON_COMMAND(ID_MAPED_POPUP_ADD, OnAdd)
  ON_COMMAND(ID_MAPED_POPUP_MUL, OnMul)
+ ON_COMMAND(ID_MAPED_POPUP_SMOOTH3X3, OnSmoothing3x3)
+ ON_COMMAND(ID_MAPED_POPUP_SMOOTH5X5, OnSmoothing5x5)
  ON_COMMAND(ID_MAPED_POPUP_REV, OnRevert)
  ON_COMMAND(ID_MAPED_POPUP_EXPORTCSV, OnExportCsv)
  ON_COMMAND(ID_MAPED_POPUP_IMPORTCSV, OnImportCsv)
@@ -268,6 +270,8 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_ADD, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_MUL, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_REV, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH3X3, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH5X5, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_IMPORTCSV, OnUpdateImportCsv)
 END_MESSAGE_MAP()
 
@@ -1553,6 +1557,52 @@ void CMapEditorCtrl::OnMul()
   CClientDC dc(this);
   _ShowImage(&dc);   
  }
+}
+
+void CMapEditorCtrl::OnSmoothing3x3()
+{
+ float* p_source_function = new float[m_rows * m_cols];
+ bool* p_mask = new bool[m_rows * m_cols];
+ for(int i = 0; i < m_rows; ++i)
+  for(int j = 0; j < m_cols; ++j)
+   p_mask[i * m_cols + j] = _isCellInSelRect(i, j);
+ std::copy(mp_map, mp_map + (m_rows * m_cols), p_source_function);
+ MathHelpers::Smooth2D(p_source_function, mp_map, m_rows, m_cols, 3, p_mask);
+ delete[] p_source_function;
+ delete[] p_mask;
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);   
+}
+
+void CMapEditorCtrl::OnSmoothing5x5()
+{
+ float* p_source_function = new float[m_rows * m_cols];
+ bool* p_mask = new bool[m_rows * m_cols];
+ for(int i = 0; i < m_rows; ++i)
+  for(int j = 0; j < m_cols; ++j)
+   p_mask[i * m_cols + j] = _isCellInSelRect(i, j);
+ std::copy(mp_map, mp_map + (m_rows * m_cols), p_source_function);
+ MathHelpers::Smooth2D(p_source_function, mp_map, m_rows, m_cols, 5, p_mask);
+ delete[] p_source_function;
+ delete[] p_mask;
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);   
 }
 
 void CMapEditorCtrl::OnRevert()

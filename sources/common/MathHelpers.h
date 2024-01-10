@@ -87,7 +87,7 @@ namespace MathHelpers
  //Smoothing for 1D function using mooving avarage method with symmetrical kernel
  //i_kernel_size - нечетное число! Например 1,3,5,7...
  template <class T>
- bool Smooth1D(T* ip_in, T* op_out, size_t i_data_size, size_t i_kernel_size)
+ bool Smooth1D(T* ip_in, T* op_out, size_t i_data_size, size_t i_kernel_size, bool* ip_mask = NULL)
  {
   //Check input parameters
   if (!(i_kernel_size & 1) || i_kernel_size <= 0)
@@ -98,6 +98,11 @@ namespace MathHelpers
   int j, k, k2 = i_kernel_size / 2;
   for(size_t i = 0; i < i_data_size; ++i)
   {
+   if (ip_mask && !ip_mask[i])
+   {
+    op_out[i] = ip_in[i];
+    continue;    
+   }  
    op_out[i] = 0;
    T divisor = 0;
    for(k = -k2; k <= k2; ++k)
@@ -126,7 +131,7 @@ namespace MathHelpers
  // | . . . .
  //  ---X---
  template <class T>
- bool Smooth2D(T *in, T* out, int ySize, int xSize, size_t i_kernel_size)
+ bool Smooth2D(T *in, T* out, int ySize, int xSize, size_t i_kernel_size, bool* ip_mask = NULL)
  {
   //Check input parameters
   if (!(i_kernel_size & 1) || i_kernel_size == 0)
@@ -140,7 +145,13 @@ namespace MathHelpers
   {
    for(int j = 0; j < xSize; ++j)
    {
-    out[i*xSize + j] = 0;
+    int oi = i*xSize + j;
+    if (ip_mask && !ip_mask[oi])
+    {
+     out[oi] = in[oi];
+     continue;    
+    }  
+    out[oi] = 0;
     T divisor = 0;
     for(ki = -k2; ki <= k2; ++ki)
     {
@@ -150,12 +161,12 @@ namespace MathHelpers
       jj = (j + kj);
       if (ii >= 0 && ii < xSize && jj >= 0 && jj < ySize)
       {
-       out[i*xSize + j]+= in[ii*xSize + jj];
+       out[oi]+= in[ii*xSize + jj];
        divisor+= 1;
       }
      }
     }
-    out[i*xSize + j]/= divisor;
+    out[oi]/= divisor;
    }
   }
   return true;

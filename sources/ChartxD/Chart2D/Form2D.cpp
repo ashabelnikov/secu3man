@@ -487,10 +487,13 @@ void __fastcall TForm2D::ButtonAngleDownClick(TObject *Sender)
 void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 {
  float* p_source_function = new float[m_count_x];
+ bool* p_mask = new bool[m_count_x];
+ for(int x = 0; x < m_count_x; ++x)
+  p_mask[x] = (std::find(m_selpts.begin(), m_selpts.end(), x) != m_selpts.end()) ? true : false; 
  std::copy(mp_modified_function, mp_modified_function + m_count_x, p_source_function);
- MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_x, 3);
+ MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_x, 3, p_mask);
  delete[] p_source_function;
-
+ delete[] p_mask;
  for (int i = 0; i < m_count_x; i++ )
   Series2->YValue[i] = mp_modified_function[i];
  if (m_pOnChange)
@@ -501,10 +504,13 @@ void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 void __fastcall TForm2D::Smoothing5xClick(TObject *Sender)
 {
  float* p_source_function = new float[m_count_x];
+ bool* p_mask = new bool[m_count_x];
+ for(int x = 0; x < m_count_x; ++x)
+  p_mask[x] = (std::find(m_selpts.begin(), m_selpts.end(), x) != m_selpts.end()) ? true : false; 
  std::copy(mp_modified_function, mp_modified_function + m_count_x, p_source_function);
- MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_x, 5);
+ MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_x, 5, p_mask);
  delete[] p_source_function;
-
+ delete[] p_mask;
  for (int i = 0; i < m_count_x; i++ )
   Series2->YValue[i] = mp_modified_function[i];
  if (m_pOnChange)
@@ -833,6 +839,24 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   else if (Key == 0x56 && Shift.Contains(ssCtrl))
   { //Ctrl+V
    ClipboardPaste();
+  }
+  else if (Key == 'A')
+  {
+   if (Shift.Contains(ssCtrl))
+   { //Ctrl+A
+     MarkPoints(false);
+     m_selpts.clear();
+     for(int x = 0; x < m_count_x; x++)
+      m_selpts.push_back(x);
+     MarkPoints(true);
+   }
+  }
+  else if (Key == 'Q')
+  { //toggle area view
+   if (((TPointSeries*)Series2)->DrawArea)
+    ((TPointSeries*)Series2)->DrawArea = False;
+   else
+    ((TPointSeries*)Series2)->DrawArea = True;
   }
   else if (Key == VK_INSERT)
   {

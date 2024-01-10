@@ -536,7 +536,7 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
   float* p_source_function = new float[m_count_x];
   for (int x = 0; x < m_count_x; ++x)
    p_source_function[x] = *GetItem_mp(m_air_flow_position, x);
-  MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 3);
+  MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 3, m_sel.Get(m_air_flow_position));
   delete[] p_source_function;
   for (int x = 0; x < m_count_x; x++ )
    RestrictAndSetChartValue(x, GetItem_m(m_air_flow_position, x));
@@ -545,7 +545,9 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
  {//3D
   float* p_source_function = new float[m_count_z * m_count_x];
   std::copy(mp_modified_function, mp_modified_function + (m_count_z * m_count_x), p_source_function);
-  MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 3);
+  m_sel.InvertZ();
+  MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 3, m_sel.Get());
+  m_sel.InvertZ();
   delete[] p_source_function;
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
@@ -565,7 +567,7 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
   float* p_source_function = new float[m_count_x];
   for (int x = 0; x < m_count_x; ++x)
    p_source_function[x] = *GetItem_mp(m_air_flow_position, x);
-  MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 5);
+  MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 5, m_sel.Get(m_air_flow_position));
   delete[] p_source_function;
   for (int x = 0; x < m_count_x; x++ )
    RestrictAndSetChartValue(x, GetItem_m(m_air_flow_position, x));
@@ -574,7 +576,9 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
  { //3D
   float* p_source_function = new float[m_count_z * m_count_x];
   std::copy(mp_modified_function, mp_modified_function + (m_count_z * m_count_x), p_source_function);
-  MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 5);
+  m_sel.InvertZ();
+  MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 5, m_sel.Get());
+  m_sel.InvertZ();
   delete[] p_source_function;
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
@@ -1206,10 +1210,20 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   {
    if (Shift.Contains(ssCtrl))
    { //Ctrl+A
-    for(int z = 0; z < m_count_z; z++)
+    if (CheckBox3d->Checked)
+    {
+     for(int z = 0; z < m_count_z; z++)
+      for(int x = 0; x < m_count_x; x++)
+       m_sel.Set(z, x, true);
+     Chart1->Invalidate();
+    }
+    else
+    {
+     MarkPoints(false);
      for(int x = 0; x < m_count_x; x++)
-      m_sel.Set(z, x, true);
-    Chart1->Invalidate();
+      m_sel.Set(m_air_flow_position, x, true);
+     MarkPoints(true);
+    }
    }
    else
    {
