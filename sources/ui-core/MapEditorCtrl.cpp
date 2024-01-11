@@ -263,6 +263,7 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_COMMAND(ID_MAPED_POPUP_IMPORTCSV, OnImportCsv)
  ON_COMMAND(ID_MAPED_POPUP_COPY, OnClipboardCopy)
  ON_COMMAND(ID_MAPED_POPUP_PASTE, OnClipboardPaste)
+ ON_COMMAND(ID_MAPED_POPUP_INTERPOL, OnInterpolate)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INC, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_DEC, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SETTO, OnUpdateSetTo)
@@ -273,6 +274,7 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH3X3, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH5X5, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_IMPORTCSV, OnUpdateImportCsv)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INTERPOL, OnUpdateSetTo)
 END_MESSAGE_MAP()
 
 UINT CMapEditorCtrl::OnGetDlgCode()
@@ -1051,6 +1053,20 @@ void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    _ShowImage(&dc);
   }
   break;
+
+ case 'A': //Ctrl+A - select all cells
+  if (GetKeyState(VK_CONTROL) & 0x8000)
+  {
+   bool redraw = _SelChange(0, 0, m_rows-1, m_cols-1);
+   if (redraw)
+   {
+    _DrawGrid();
+    _DrawLabels(); 
+    CClientDC dc(this);
+    _ShowImage(&dc);
+   }
+  }
+  break;
  }
 
  Super::OnKeyDown(nChar, nRepCnt, nFlags);
@@ -1593,6 +1609,37 @@ void CMapEditorCtrl::OnSmoothing5x5()
  MathHelpers::Smooth2D(p_source_function, mp_map, m_rows, m_cols, 5, p_mask);
  delete[] p_source_function;
  delete[] p_mask;
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);   
+}
+
+void CMapEditorCtrl::OnInterpolate()
+{
+ int bi = std::min(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
+ int ei = std::max(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+
+ float func[2][2] =  {{_GetItemTr(bi, bj), _GetItemTr(bi, ej)},
+                      {_GetItemTr(ei, bj), _GetItemTr(ei, ej)}};
+
+ float xBins[2] = {(float)bj, (float)ej};
+ float yBins[2] = {(float)bi, (float)ei};
+
+ for(int i = bi; i <= ei; ++i)
+ {
+  for(int j = bj; j <= ej; ++j)
+  {
+   float value = MathHelpers::BilinearInterpolation<2, 2>((float)j, (float)i, func, xBins, yBins);
+   _SetItemTr(i, j, value);
+  }
+ }
 
  m_OnChange();
  if (!m_absGrad)

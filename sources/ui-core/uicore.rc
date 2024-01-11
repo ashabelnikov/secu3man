@@ -23,14 +23,15 @@ BEGIN
         MENUITEM "Умножить значения",       ID_MAPED_POPUP_MUL
         MENUITEM "Вернуться к оригиналу",   ID_MAPED_POPUP_REV
         MENUITEM SEPARATOR
-        MENUITEM "Копировать"               ID_MAPED_POPUP_COPY
-        MENUITEM "Вставить"                 ID_MAPED_POPUP_PASTE
+        MENUITEM "Копировать Ctrl+C"        ID_MAPED_POPUP_COPY
+        MENUITEM "Вставить Ctrl+V"          ID_MAPED_POPUP_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Экспортировать в csv",    ID_MAPED_POPUP_EXPORTCSV
         MENUITEM "Импортировать из csv",    ID_MAPED_POPUP_IMPORTCSV
         MENUITEM SEPARATOR
         MENUITEM "Сгладить 3х3",            ID_MAPED_POPUP_SMOOTH3X3
         MENUITEM "Сгладить 5х5",            ID_MAPED_POPUP_SMOOTH5X5
+        MENUITEM "Интерполировать"          ID_MAPED_POPUP_INTERPOL
     END
 END
 
@@ -89,14 +90,15 @@ BEGIN
         MENUITEM "Multiply values",         ID_MAPED_POPUP_MUL
         MENUITEM "Revert to original",      ID_MAPED_POPUP_REV
         MENUITEM SEPARATOR
-        MENUITEM "Copy"                     ID_MAPED_POPUP_COPY
-        MENUITEM "Paste"                    ID_MAPED_POPUP_PASTE
+        MENUITEM "Copy Ctrl+C"              ID_MAPED_POPUP_COPY
+        MENUITEM "Paste Ctrl+V"             ID_MAPED_POPUP_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Export to csv",           ID_MAPED_POPUP_EXPORTCSV
         MENUITEM "Import from csv",         ID_MAPED_POPUP_IMPORTCSV
         MENUITEM SEPARATOR
         MENUITEM "Smoothing 3х3",           ID_MAPED_POPUP_SMOOTH3X3
         MENUITEM "Smoothing 5х5",           ID_MAPED_POPUP_SMOOTH5X5
+        MENUITEM "Interpolate"              ID_MAPED_POPUP_INTERPOL
     END
 END
 

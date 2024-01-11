@@ -330,10 +330,13 @@ namespace MathHelpers
 
   AxisCellLookup(x, xBins, xSize, xi, xi1);
   AxisCellLookup(y, yBins, ySize, yi, yi1);
+ 
+  float dx = xBins[xi1] - xBins[xi];
+  float dy = yBins[yi1] - yBins[yi];
 
-  float f2 = function[yi1][xi] + ((function[yi1][xi1] - function[yi1][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
-  float f1 = function[yi][xi] + ((function[yi][xi1] - function[yi][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
-  return f1 + ((f2 - f1) * (y - yBins[yi])) / (yBins[yi1] - yBins[yi]);
+  float f2 = function[yi1][xi] + (dx==0 ? .0f : (((function[yi1][xi1] - function[yi1][xi]) * (x - xBins[xi])) / dx));
+  float f1 = function[yi][xi] +  (dx==0 ? .0f : (((function[yi][xi1] - function[yi][xi]) * (x - xBins[xi])) / dx));
+  return f1 + (dy==0 ? .0f : (((f2 - f1) * (y - yBins[yi])) / dy));
  }
 
  template<int xSize>

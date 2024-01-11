@@ -104,6 +104,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   afx_msg void OnImportCsv();
   afx_msg void OnSmoothing3x3();
   afx_msg void OnSmoothing5x5();
+  afx_msg void OnInterpolate();
   afx_msg void OnRevert();
   afx_msg void OnClipboardCopy();
   afx_msg void OnClipboardPaste();
