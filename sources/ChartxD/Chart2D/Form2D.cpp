@@ -291,6 +291,8 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
  PM_Copy->Caption = string;
  ::LoadString(hInstance, IDS_PM_PASTE, string, 1024);
  PM_Paste->Caption = string;
+ ::LoadString(hInstance, IDS_PM_INTERPOLATE, string, 1024);
+ PM_Interpolate->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -1174,6 +1176,7 @@ void TForm2D::ClipboardCopy(void)
  }
 }
 
+//---------------------------------------------------------------------------
 void TForm2D::ClipboardPaste(void)
 {
  if (Clipboard()->HasFormat(CF_TEXT) && m_selpts.size())
@@ -1211,16 +1214,19 @@ void TForm2D::ClipboardPaste(void)
  }
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnCopy(TObject *Sender)
 {
  ClipboardCopy();
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnPaste(TObject *Sender)
 {
  ClipboardPaste();
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnInc(TObject *Sender)
 {
  for(size_t i = 0; i < m_selpts.size(); ++i)
@@ -1233,6 +1239,7 @@ void __fastcall TForm2D::OnInc(TObject *Sender)
   m_pOnChange(m_param_on_change);    
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnDec(TObject *Sender)
 {
  for(size_t i = 0; i < m_selpts.size(); ++i)
@@ -1245,6 +1252,7 @@ void __fastcall TForm2D::OnDec(TObject *Sender)
   m_pOnChange(m_param_on_change);    
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnSetTo(TObject *Sender)
 {
  Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
@@ -1263,6 +1271,7 @@ void __fastcall TForm2D::OnSetTo(TObject *Sender)
   m_pOnChange(m_param_on_change);    
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnSub(TObject *Sender)
 {
  Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
@@ -1283,6 +1292,7 @@ void __fastcall TForm2D::OnSub(TObject *Sender)
   m_pOnChange(m_param_on_change);    
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnAdd(TObject *Sender)
 {
  Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
@@ -1303,6 +1313,7 @@ void __fastcall TForm2D::OnAdd(TObject *Sender)
   m_pOnChange(m_param_on_change);    
 }
 
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::OnMul(TObject *Sender)
 {
  Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
@@ -1323,3 +1334,47 @@ void __fastcall TForm2D::OnMul(TObject *Sender)
  if (m_pOnChange) 
   m_pOnChange(m_param_on_change);    
 }
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnInterpolate(TObject *Sender)
+{
+ if (m_selpts.size())
+ {
+  bool gap = false;
+  for(size_t i = 0; i < m_selpts.size()-1; ++i)
+  {
+   if (abs(m_selpts[i+1]-m_selpts[i]) > 1)
+   {
+    gap = true;
+    break;
+   }
+  }
+
+  std::deque<int> selpts;
+  if (!gap)
+  {
+   selpts.push_back(m_selpts.front());
+   selpts.push_back(m_selpts.back());
+  }
+  else
+  {
+   selpts = m_selpts;
+  }
+
+  for(size_t i = 0; i < selpts.size() - 1; ++i)
+  {
+   int size = selpts[i + 1] - selpts[i];
+   if (size < 2)
+    continue; //skip two neighbour selected points  
+   double firstPtVal = mp_modified_function[selpts[i]];
+   double lastPtVal = mp_modified_function[selpts[i + 1]];
+   for (int x = selpts[i] + 1; x < selpts[i + 1]; x++)
+    RestrictAndSetValue(x, firstPtVal + (((lastPtVal-firstPtVal) / ((double)size)) * (x-(selpts[i]))));
+  }
+ }
+
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+//---------------------------------------------------------------------------

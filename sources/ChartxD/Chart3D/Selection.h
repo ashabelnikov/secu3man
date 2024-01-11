@@ -25,6 +25,7 @@
 
 #ifndef _SELECTION_H_
 #define _SELECTION_H_
+#include  <vector>
 
 //---------------------------------------------------------------------------
 class Selection
@@ -48,7 +49,8 @@ class Selection
   void Set(int z, int x, bool value) { m_selpts[z][x] = value; }
   bool Get(int z, int x) { return m_selpts[z][x]; }
   bool* Get(int z) { return &m_selpts[z][0]; }  
-  bool* Get() { return &m_selpts[0][0]; }  
+  bool* Get() { return &m_selpts[0][0]; }
+  std::vector<int> GetSelIdxs(int z);
   void CopyRow(int zSrc, int zDst);
   void InvertZ(void);
 

@@ -250,6 +250,8 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
  PM_AllowMouseZoom->Caption = string;
  ::LoadString(hInstance, IDS_PM_ALLOW_MOUSE_CAMERA, string, 1024);
  PM_AllowMouseCamera->Caption = string;
+ ::LoadString(hInstance, IDS_PM_INTERPOLATE, string, 1024);
+ PM_Interpolate->Caption = string;
 } 
 
 //---------------------------------------------------------------------------
@@ -545,9 +547,9 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
  {//3D
   float* p_source_function = new float[m_count_z * m_count_x];
   std::copy(mp_modified_function, mp_modified_function + (m_count_z * m_count_x), p_source_function);
-  m_sel.InvertZ();
+  if (CheckBoxBv->Checked) m_sel.InvertZ();
   MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 3, m_sel.Get());
-  m_sel.InvertZ();
+  if (CheckBoxBv->Checked) m_sel.InvertZ();
   delete[] p_source_function;
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
@@ -576,9 +578,9 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
  { //3D
   float* p_source_function = new float[m_count_z * m_count_x];
   std::copy(mp_modified_function, mp_modified_function + (m_count_z * m_count_x), p_source_function);
-  m_sel.InvertZ();
+  if (CheckBoxBv->Checked) m_sel.InvertZ();
   MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 5, m_sel.Get());
-  m_sel.InvertZ();
+  if (CheckBoxBv->Checked) m_sel.InvertZ();
   delete[] p_source_function;
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
@@ -859,20 +861,19 @@ void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 {
  if (CheckBox3d->Checked)
  {//3D
-  double firstPtVal = GetItem_m(GetZPos(m_val_z), 0);
-  double lastPtVal = GetItem_m(GetZPos(m_val_z), m_count_x - 1);
-  double intrmPtCount = m_count_x - 1;
-  for (int x = 1; x < m_count_x - 1; x++ )
-   RestrictAndSetValue(GetZPos(m_val_z), x, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * x));
+  std::vector<int> selpts;
+  selpts.push_back(0);
+  selpts.push_back(m_count_x-1);
+  Interpolate2D(GetZPos(m_val_z), selpts);
   UpdateSurfaceValues();
  }
  else
  {//2D
-  double firstPtVal = GetItem_m(m_air_flow_position, 0);
-  double lastPtVal = GetItem_m(m_air_flow_position, m_count_x - 1);
-  double intrmPtCount = m_count_x - 1;
-  for (int x = 1; x < m_count_x - 1; x++ )
-   RestrictAndSetChartValue(x, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * x));
+  std::vector<int> selpts;
+  selpts.push_back(0);
+  selpts.push_back(m_count_x-1);
+  Interpolate2D(m_air_flow_position, selpts);
+  UpdateChartValues();  
  }
 
  if (m_pOnChange)
@@ -934,34 +935,15 @@ void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
 {
- double intrmPtCount = m_count_z - 1;
  if (CheckBox3d->Checked)
  {//3D
-  for (int x = 0; x < m_count_x; x++ )
-  {
-   for (int z = 1; z < m_count_z - 1; z++ )
-   {
-    double firstPtVal = GetItem_m(0, x);
-    double lastPtVal = GetItem_m(m_count_z - 1, x);
-    double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * z);
-    SetItem(z, x, value);
-   }
-  }
+  Interpolate3D(0, m_count_x-1, 0, m_count_z-1);
   UpdateSurfaceValues();
  }
  else
  {//2D
-  for (int x = 0; x < m_count_x; x++ )
-  {
-   for (int z = 1; z < m_count_z - 1; z++ )
-   {
-    double firstPtVal = GetItem_m(0, x);
-    double lastPtVal = GetItem_m(m_count_z - 1, x);
-    double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * z);
-    SetChartValue(z, x, value);
-    SetItem(z, x, value);
-   }
-  }
+  Interpolate3D(0, m_count_x-1, 0, m_count_z-1);
+  UpdateChartValues();
  }
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -2115,7 +2097,6 @@ void __fastcall TForm3D::OnAllowMouseZoom(TObject *Sender)
   PM_AllowMouseZoom->Checked = true;
   PM_AllowMouseCamera->Checked = false;
  }
-
 }
 
 //---------------------------------------------------------------------------
@@ -2132,8 +2113,89 @@ void __fastcall TForm3D::OnAllowMouseCamera(TObject *Sender)
   Chart1->Zoom->Allow = false;
   PM_AllowMouseCamera->Checked = true;
   PM_AllowMouseZoom->Checked = false;
+ } 
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnInterpolate(TObject *Sender)
+{
+ if (CheckBox3d->Checked)
+ { //3D
+  if (CheckBoxBv->Checked) m_sel.InvertZ();
+  std::vector<int> selpts;
+  selpts.push_back(m_sel.Left());
+  selpts.push_back(m_sel.Right());
+  Interpolate2D(m_sel.Down(), selpts);
+  Interpolate2D(m_sel.Up(), selpts);
+  Interpolate3D(m_sel.Left(), m_sel.Right(), m_sel.Down(), m_sel.Up());
+  if (CheckBoxBv->Checked) m_sel.InvertZ();
+  UpdateSurfaceValues();
  }
- 
+ else
+ { //2D
+  std::vector<int> selpts = m_sel.GetSelIdxs(m_air_flow_position);
+  Interpolate2D(m_air_flow_position, selpts);
+  UpdateChartValues();
+ }
+
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::Interpolate2D(int z, const std::vector<int>& i_selpts)
+{
+ if (i_selpts.size())
+ {
+  bool gap = false;
+  for(size_t i = 0; i < i_selpts.size()-1; ++i)
+  {
+   if (abs(i_selpts[i+1]-i_selpts[i]) > 1)
+   {
+    gap = true;
+    break;
+   }
+  }
+
+  std::vector<int> selpts;
+  if (!gap)
+  {
+   selpts.push_back(i_selpts.front());
+   selpts.push_back(i_selpts.back());
+  }
+  else
+  {
+   selpts = i_selpts;
+  }
+  
+  for(size_t i = 0; i < selpts.size() - 1; ++i)
+  {
+   int size = selpts[i + 1] - selpts[i];
+   if (size < 2)
+    continue; //skip two neighbour selected points  
+   double firstPtVal = GetItem_m(z, selpts[i]);
+   double lastPtVal = GetItem_m(z, selpts[i + 1]);
+   for (int x = selpts[i] + 1; x < selpts[i + 1]; x++)
+    RestrictAndSetValue(z, x, firstPtVal + (((lastPtVal-firstPtVal) / ((double)size)) * (x-(selpts[i]))));
+  }
+ }
+}
+
+//---------------------------------------------------------------------------
+//interpolate betwwen two z-curves (first and last)
+void TForm3D::Interpolate3D(int left, int right, int down, int up)
+{
+ double intrmPtCount = up - down;
+ for (int x = left; x <= right; ++x)
+ {
+  for (int z = down+1; z <= up-1; z++)
+  {
+   double firstPtVal = GetItem_m(down, x);
+   double lastPtVal = GetItem_m(up, x);
+   double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * (z-down));
+   RestrictAndSetValue(z, x, value);
+  }
+ }
 }
 
 //---------------------------------------------------------------------------

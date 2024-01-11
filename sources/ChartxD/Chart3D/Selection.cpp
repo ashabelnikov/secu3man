@@ -177,3 +177,15 @@ void Selection::InvertZ(void)
 }
 
 //---------------------------------------------------------------------------
+std::vector<int> Selection::GetSelIdxs(int z)
+{
+ std::vector<int> idxs;
+ for (int i = 0; i < m_count_x; ++i)
+ {
+  if (m_selpts[z][i])
+   idxs.push_back(i);
+ }
+ return idxs;
+}
+
+//---------------------------------------------------------------------------

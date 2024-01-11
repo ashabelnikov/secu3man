@@ -78,6 +78,7 @@ class TForm2D : public TForm
   TMenuItem *PM_Sub;
   TMenuItem *PM_Add;
   TMenuItem *PM_Mul;
+  TMenuItem *PM_Interpolate;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
@@ -139,6 +140,7 @@ class TForm2D : public TForm
   void __fastcall OnSub(TObject *Sender);
   void __fastcall OnAdd(TObject *Sender);
   void __fastcall OnMul(TObject *Sender);
+  void __fastcall OnInterpolate(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);

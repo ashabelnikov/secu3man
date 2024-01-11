@@ -50,6 +50,7 @@ stringtable
   IDS_PM_PASTE   "Вставить Ctrl+V"
   IDS_PM_ALLOW_MOUSE_ZOOM   "Маcштабирование мышью"
   IDS_PM_ALLOW_MOUSE_CAMERA  "Вращение графика мышью"
+  IDS_PM_INTERPOLATE "Интерполировать"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -96,4 +97,5 @@ stringtable
   IDS_PM_PASTE   "Paste Ctrl+V"
   IDS_PM_ALLOW_MOUSE_ZOOM   "Mouse zoom"
   IDS_PM_ALLOW_MOUSE_CAMERA  "Mouse camera"
+  IDS_PM_INTERPOLATE "Interpolate"
 }

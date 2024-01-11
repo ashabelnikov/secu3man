@@ -1244,6 +1244,10 @@ object Form3D: TForm3D
       Caption = 'Build shape using 1st and last curves'
       OnClick = OnBuildShapeUsing1stAndLastCurves
     end
+    object PM_Interpolate: TMenuItem
+      Caption = 'Interpolate'
+      OnClick = OnInterpolate
+    end
     object Separator1: TMenuItem
       Caption = '-'
     end

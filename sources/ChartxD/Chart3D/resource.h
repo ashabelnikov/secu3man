@@ -42,3 +42,4 @@
 #define IDS_PM_PASTE                   238
 #define IDS_PM_ALLOW_MOUSE_ZOOM        239
 #define IDS_PM_ALLOW_MOUSE_CAMERA      240
+#define IDS_PM_INTERPOLATE             241

@@ -41,6 +41,7 @@ stringtable
   IDS_DLG_MUL    "Умножить значения"
   IDS_PM_COPY    "Копировать Ctrl+C"
   IDS_PM_PASTE   "Вставить Ctrl+V"
+  IDS_PM_INTERPOLATE "Интерполировать"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -78,4 +79,5 @@ stringtable
   IDS_DLG_MUL    "Multiply values"
   IDS_PM_COPY    "Copy Ctrl+C"
   IDS_PM_PASTE   "Paste Ctrl+V"
+  IDS_PM_INTERPOLATE "Interpolate"
 }

@@ -33,3 +33,4 @@
 #define IDS_DLG_MUL                    128
 #define IDS_PM_COPY                    129
 #define IDS_PM_PASTE                   130
+#define IDS_PM_INTERPOLATE             131
