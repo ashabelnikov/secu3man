@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <io.h>
 #include <math.h>
+#include <algorithm>
 #include "SECU3IO.h"
 #include "BitMask.h"
 #include "s3lrecord.h"
@@ -55,10 +56,12 @@ using namespace SECU3IO;
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
 
+static char CSVTimeTemplateString[32];
 //"hh:mm:ss.ms", ms - hundreds of second
-const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
+//'#' will be replaced by decimal point symbol of current locale
+static const char cCSVTimeTemplateString[] = "%02d:%02d:%02d#%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
+static const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -82,6 +85,13 @@ LogReader::~LogReader()
 
 bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle, bool i_check /* = false*/)
 {
+ //update point in the time template string
+ strcpy(CSVTimeTemplateString, cCSVTimeTemplateString);
+ char* end = CSVTimeTemplateString + strlen(CSVTimeTemplateString);
+ char* ptr = std::find(CSVTimeTemplateString, end, '#');
+ if (ptr != end && ptr)
+  *ptr = _TDECIMAL_POINT(localeconv())[0];
+
  FILE* f_handle = _tfopen(i_file_name.c_str(), _T("rb"));
  if (NULL == f_handle)
  {
@@ -329,7 +339,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  //use ASCII version, file must not be in unicode
  int wHour, wMinute, wSecond, wMilliseconds;
 
- result = sscanf(mp_recBuff, cCSVTimeTemplateString, &wHour, &wMinute, &wSecond, &wMilliseconds);
+ result = sscanf(mp_recBuff, CSVTimeTemplateString, &wHour, &wMinute, &wSecond, &wMilliseconds);
  if (result != CSV_COUNT_TIME_VAL)
   return false;
 

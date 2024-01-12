@@ -33,8 +33,9 @@
 
 using namespace SECU3IO;
 
-const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";                                                                                                                                                                          //6.3     //6.3
-const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%5.1f%c %%5.1f%c %%6.1f%c %%4.2f%c %%5.1f%c %%4.2f%c %%07d%c %%6.2f%c %%5.1f%c %%02d%c %%05d%c %%5.1f%c %%9.3f%c %%6.2f%c %%5.2f%c %%5.2f%c %%5.1f%c %%01d%c %%05d%c %%s\r\n";
+static char CSVTimeTemplateString[32];
+static const char cCSVTimeTemplateString[] = "%02d:%02d:%02d#%02d"; //'#' will be replaced by decimal point symbol of current locale
+static const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%5.1f%c %%5.1f%c %%6.1f%c %%4.2f%c %%5.1f%c %%4.2f%c %%07d%c %%6.2f%c %%5.1f%c %%02d%c %%05d%c %%5.1f%c %%9.3f%c %%6.2f%c %%5.2f%c %%5.2f%c %%5.1f%c %%01d%c %%05d%c %%s\r\n";
 
 namespace {
 void DwordToString(DWORD value, char* str)
@@ -179,7 +180,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
   {
    //используем ASCII версию, файл не должен быть юникодным
    //"hh:mm:ss.ms", ms - сотые доли секунды
-   fprintf(m_out_handle, cCSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
+   fprintf(m_out_handle, CSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
 
    //Convert binary to string
    char ce_errors[35];
@@ -285,6 +286,13 @@ void LogWriter::OnConnection(const bool i_online)
 
 bool LogWriter::BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_name /* = NULL*/)
 {
+ //update point in the time template string
+ strcpy(CSVTimeTemplateString, cCSVTimeTemplateString);
+ char* end = CSVTimeTemplateString + strlen(CSVTimeTemplateString);
+ char* ptr = std::find(CSVTimeTemplateString, end, '#');
+ if (ptr != end && ptr)
+  *ptr = _TDECIMAL_POINT(localeconv())[0];
+
  //генерируем имя файла и открываем его
  SYSTEMTIME time;
  ::GetLocalTime(&time);
