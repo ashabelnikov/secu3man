@@ -88,6 +88,8 @@ class IOCORE_API LogReader
 
  private:
   int _CompareFileHandles(FILE* f1, FILE* f2);
+  bool ParseCE(char* str, int size, DWORD& result);
+  bool ParseTime(char* str, int size, unsigned int& wHour, unsigned int& wMinute, unsigned int& wSecond, unsigned int& wMilliseconds);
 
   _TSTRING m_file_name;         //имя открытого файла
   unsigned long m_record_count; //кол-во записей в файле
@@ -99,6 +101,7 @@ class IOCORE_API LogReader
   unsigned long m_record_size;
 
   char m_csv_separating_symbol;
+  char m_decimal_point;
   char m_csv_data_template[1024];
   unsigned long m_fileOffset;
   char *mp_recBuff;

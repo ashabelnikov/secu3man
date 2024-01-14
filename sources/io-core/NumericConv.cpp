@@ -27,6 +27,8 @@
 #include "NumericConv.h"
 #include "ctype.h"
 
+char CNumericConv::m_decpt = '.';
+
 //Конвертирует массив шестнадцатерично заданных чисел (два ASCII символа представляют один байт) в массив бинарно
 //заданных числел (unsigned char).
 //size - size in bytes

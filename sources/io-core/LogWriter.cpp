@@ -172,7 +172,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
    p_sensors->tchrg,             // value of corrected MAT
    m_pending_marks,
    service_flags,
-   p_sensors->ce_errors };
+   p_sensors->ce_errors};
 
    fwrite(&s3l, sizeof(s3l::s3lRecord), 1, m_out_handle);
   }

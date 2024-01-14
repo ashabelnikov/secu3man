@@ -33,6 +33,7 @@
 #include "SECU3IO.h"
 #include "BitMask.h"
 #include "s3lrecord.h"
+#include "NumericConv.h"
 
 using namespace SECU3IO;
 
@@ -41,14 +42,8 @@ using namespace SECU3IO;
 //maximum length of record including possible text header
 #define MAX_REC_BUF 4096
 
-//number of variables in the time field
-#define CSV_COUNT_TIME_VAL 4
-
 //number of variables in the data field
-#define CSV_COUNT_DATA_VAL 72
-
-//offset of data relatively to begin of string
-#define CSV_TIME_PANE_LEN 11
+#define CSV_COUNT_DATA_VAL 73
 
 //offset of the marks value in record
 #define CSV_MARKS_OFFSET 458
@@ -56,21 +51,15 @@ using namespace SECU3IO;
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
 
-static char CSVTimeTemplateString[32];
-//"hh:mm:ss.ms", ms - hundreds of second
-//'#' will be replaced by decimal point symbol of current locale
-static const char cCSVTimeTemplateString[] = "%02d:%02d:%02d#%02d";
-//данные
-static const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
-
 LogReader::LogReader()
 : m_file_handle(NULL)
 , m_record_count(0)
 , m_record_size(0)
 , m_current_record(0)
-, m_csv_separating_symbol(',')
+, m_csv_separating_symbol(';')
 , m_fileOffset(0)
 , m_logFmt(false) //csv format
+, m_decimal_point('.')
 {
  mp_recBuff = new char[MAX_REC_BUF + 1];
  SetSeparatingSymbol(m_csv_separating_symbol);
@@ -85,12 +74,7 @@ LogReader::~LogReader()
 
 bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle, bool i_check /* = false*/)
 {
- //update point in the time template string
- strcpy(CSVTimeTemplateString, cCSVTimeTemplateString);
- char* end = CSVTimeTemplateString + strlen(CSVTimeTemplateString);
- char* ptr = std::find(CSVTimeTemplateString, end, '#');
- if (ptr != end && ptr)
-  *ptr = _TDECIMAL_POINT(localeconv())[0];
+ m_decimal_point = localeconv()->decimal_point[0]; //update decimal point's character, use ASCII version
 
  FILE* f_handle = _tfopen(i_file_name.c_str(), _T("rb"));
  if (NULL == f_handle)
@@ -229,8 +213,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
 {
  VERIFY(!fseek(m_file_handle, m_fileOffset + (m_record_size*m_current_record), SEEK_SET));
 
- int service_flags = 0;
- int uniout_flags = 0;
+ unsigned int service_flags = 0;
+ unsigned int uniout_flags = 0;
 
  if (m_logFmt)
  { //binary format
@@ -322,25 +306,136 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  else
  {
 
- if (m_record_size == 0)
- {
-  if (fgets(mp_recBuff, MAX_REC_BUF, m_file_handle) == NULL)
-   return false;
- }
- else
- {
-  size_t real_count = fread(mp_recBuff, sizeof(char), m_record_size, m_file_handle);
-  if (real_count != m_record_size)
-   return false;
-  mp_recBuff[m_record_size] = 0; //terminate string
- }
+  if (m_record_size == 0)
+  {
+   if (fgets(mp_recBuff, MAX_REC_BUF, m_file_handle) == NULL)
+    return false;
+  }
+  else
+  {
+   size_t real_count = fread(mp_recBuff, sizeof(char), m_record_size, m_file_handle);
+   if (real_count != m_record_size)
+    return false;
+   mp_recBuff[m_record_size] = 0; //terminate string
+  }
 
- int result;
- //use ASCII version, file must not be in unicode
- int wHour, wMinute, wSecond, wMilliseconds;
+  int result = false;
+  //use ASCII version, file must not be in unicode
+  unsigned int wHour, wMinute, wSecond, wMilliseconds;
 
- result = sscanf(mp_recBuff, CSVTimeTemplateString, &wHour, &wMinute, &wSecond, &wMilliseconds);
- if (result != CSV_COUNT_TIME_VAL)
+  unsigned int rpm, air_flow, rxlaf = 0;
+  unsigned int carb,gas,ephh_valve,epm_valve,cool_fan,st_block,acceleration,fc_revlim,floodclear,sys_locked,ce_state,ign_i,cond_i,epas_i,log_mark, aftstr_enr, iac_cl_loop = 0;
+  int tpsdot = 0, mapdot = 0;
+  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
+  float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
+  float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
+  float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel, lambda_corr2, afr2, afrmap, tchrg;
+  DWORD ce_bits = 0;
+
+  CNumericConv::SetDecimalPoint(m_decimal_point); //set decimal point before using numeric functions
+
+  char* p = mp_recBuff; 
+  char* b = mp_recBuff;
+  int num = 0;  
+  while(p != 0)
+  {
+   if (*p == m_csv_separating_symbol || *p == '\r' || *p == '\n')
+   {
+    while(*b==' ' && b != p) ++b; //skip spaces
+    int size = p - b;
+    if (size <= 0)
+     return false; //An empty record
+
+    switch(num)
+    {
+     case  0: result = ParseTime(b, size, wHour, wMinute, wSecond, wMilliseconds); break;
+     case  1: result = CNumericConv::secu3_atoi_u32<5>(b, size, rpm); break;
+     case  2: result = CNumericConv::secu3_atof_32<5>(b, size, adv_angle); break;
+     case  3: result = CNumericConv::secu3_atof_32<6>(b, size, pressure); break;
+     case  4: result = CNumericConv::secu3_atof_32<5>(b, size, voltage); break;
+     case  5: result = CNumericConv::secu3_atof_32<6>(b, size, temperat); break;
+     case  6: result = CNumericConv::secu3_atof_32<4>(b, size, knock_k); break;
+     case  7: result = CNumericConv::secu3_atof_32<5>(b, size, knock_retard); break;
+     case  8: result = CNumericConv::secu3_atoi_u32<2>(b, size, air_flow); break;
+     case  9: result = CNumericConv::secu3_atoi_u1(b, size, carb); break;
+     case 10: result = CNumericConv::secu3_atoi_u1(b, size, gas); break;
+     case 11: result = CNumericConv::secu3_atoi_u1(b, size, ephh_valve); break;
+     case 12: result = CNumericConv::secu3_atoi_u1(b, size, epm_valve); break;
+     case 13: result = CNumericConv::secu3_atoi_u1(b, size, cool_fan); break;
+     case 14: result = CNumericConv::secu3_atoi_u1(b, size, st_block); break;
+     case 15: result = CNumericConv::secu3_atoi_u1(b, size, acceleration); break;
+     case 16: result = CNumericConv::secu3_atoi_u1(b, size, fc_revlim); break;
+     case 17: result = CNumericConv::secu3_atoi_u1(b, size, floodclear); break;
+     case 18: result = CNumericConv::secu3_atoi_u1(b, size, sys_locked); break;
+     case 19: result = CNumericConv::secu3_atoi_u1(b, size, ce_state); break;
+     case 20: result = CNumericConv::secu3_atoi_u1(b, size, ign_i); break;
+     case 21: result = CNumericConv::secu3_atoi_u1(b, size, cond_i); break;
+     case 22: result = CNumericConv::secu3_atoi_u1(b, size, epas_i); break;
+     case 23: result = CNumericConv::secu3_atoi_u1(b, size, aftstr_enr); break;
+     case 24: result = CNumericConv::secu3_atoi_u1(b, size, iac_cl_loop); break;
+     case 25: result = CNumericConv::secu3_atof_32<5>(b, size, tps); break;
+     case 26: result = CNumericConv::secu3_atof_32<5>(b, size, add_i1); break;
+     case 27: result = CNumericConv::secu3_atof_32<5>(b, size, add_i2); break;
+     case 28: result = CNumericConv::secu3_atof_32<5>(b, size, choke_pos); break;
+     case 29: result = CNumericConv::secu3_atof_32<5>(b, size, gasdose_pos); break;
+     case 30: result = CNumericConv::secu3_atof_32<5>(b, size, speed); break;
+     case 31: result = CNumericConv::secu3_atof_32<8>(b, size, distance); break;
+     case 32: result = CNumericConv::secu3_atof_32<7>(b, size, inj_ffd); break;
+     case 33: result = CNumericConv::secu3_atof_32<7>(b, size, inj_fff); break;
+     case 34: result = CNumericConv::secu3_atof_32<7>(b, size, air_temp); break;
+     case 35: result = CNumericConv::secu3_atof_32<5>(b, size, strt_aalt); break;
+     case 36: result = CNumericConv::secu3_atof_32<5>(b, size, idle_aalt); break;
+     case 37: result = CNumericConv::secu3_atof_32<5>(b, size, work_aalt); break;
+     case 38: result = CNumericConv::secu3_atof_32<5>(b, size, temp_aalt); break;
+     case 39: result = CNumericConv::secu3_atof_32<5>(b, size, airt_aalt); break;
+     case 40: result = CNumericConv::secu3_atof_32<5>(b, size, idlreg_aac); break;
+     case 41: result = CNumericConv::secu3_atof_32<5>(b, size, octan_aac); break;
+     case 42: result = CNumericConv::secu3_atof_32<5>(b, size, lambda_corr); break;
+     case 43: result = CNumericConv::secu3_atof_32<5>(b, size, inj_pw); break;
+     case 44: result = CNumericConv::secu3_atoi_32<5>(b, size, tpsdot); break;
+     case 45: result = CNumericConv::secu3_atof_32<6>(b, size, map2); break;
+     case 46: result = CNumericConv::secu3_atof_32<6>(b, size, tmp2); break;
+     case 47: result = CNumericConv::secu3_atof_32<6>(b, size, mapd); break;
+     case 48: result = CNumericConv::secu3_atof_32<5>(b, size, afr); break;
+     case 49: result = CNumericConv::secu3_atof_32<6>(b, size, load); break;
+     case 50: result = CNumericConv::secu3_atof_32<6>(b, size, baro_press); break;
+     case 51: result = CNumericConv::secu3_atof_32<5>(b, size, inj_tim_begin); break;
+     case 52: result = CNumericConv::secu3_atof_32<5>(b, size, inj_tim_end); break;
+     case 53: result = CNumericConv::secu3_atof_32<5>(b, size, grts); break;
+     case 54: result = CNumericConv::secu3_atof_32<5>(b, size, ftls); break;
+     case 55: result = CNumericConv::secu3_atof_32<6>(b, size, egts); break;
+     case 56: result = CNumericConv::secu3_atof_32<5>(b, size, ops); break;
+     case 57: result = CNumericConv::secu3_atof_32<5>(b, size, inj_duty); break;
+     case 58: result = CNumericConv::secu3_atof_32<4>(b, size, rigid_arg); break;
+     case 59: result = CNumericConv::secu3_atoi_u32<7>(b, size, rxlaf); break;
+     case 60: result = CNumericConv::secu3_atof_32<6>(b, size, maf); break;
+     case 61: result = CNumericConv::secu3_atof_32<5>(b, size, vent_duty); break;
+     case 62: result = CNumericConv::secu3_atoi_u32<2>(b, size, uniout_flags); break;
+     case 63: result = CNumericConv::secu3_atoi_32<5>(b, size, mapdot); break;
+     case 64: result = CNumericConv::secu3_atof_32<5>(b, size, fts); break;
+     case 65: result = CNumericConv::secu3_atof_32<8>(b, size, cons_fuel); break;
+     case 66: result = CNumericConv::secu3_atof_32<5>(b, size, lambda_corr2); break;
+     case 67: result = CNumericConv::secu3_atof_32<5>(b, size, afr2); break;
+     case 68: result = CNumericConv::secu3_atof_32<5>(b, size, afrmap); break;
+     case 69: result = CNumericConv::secu3_atof_32<5>(b, size, tchrg); break;
+     case 70: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
+     case 71: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
+     case 72: result = ParseCE(b, size, ce_bits); break;
+    }
+
+    b+=size+1;
+
+    if (!result) 
+     return false;
+    ++num;
+
+    if (*p == '\r' || *p == '\n')
+     break; //we have processed the last field
+   } 
+   ++p;
+  }
+
+ if (num != CSV_COUNT_DATA_VAL)
   return false;
 
  o_time.wHour = wHour;
@@ -348,99 +443,6 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_time.wSecond = wSecond;
  o_time.wMilliseconds = wMilliseconds * 10; //переводим из сотых в миллисекунды
 
- int rpm,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan,st_block,acceleration,fc_revlim,floodclear,sys_locked,ce_state,ign_i,cond_i,epas_i,log_mark, aftstr_enr, iac_cl_loop = 0;
- int tpsdot = 0, mapdot=  0, rxlaf = 0;
- float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
- float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
- float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
- float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel, lambda_corr2, afr2, afrmap, tchrg;
- char ce_errors[35] = {0};
-
- result = sscanf(mp_recBuff + CSV_TIME_PANE_LEN, m_csv_data_template,
-                &rpm,
-                &adv_angle,
-                &pressure,
-                &voltage,
-                &temperat,
-                &knock_k,
-                &knock_retard,
-                &air_flow,
-                &carb,
-                &gas,
-                &ephh_valve,
-                &epm_valve,
-                &cool_fan,
-                &st_block,
-                &acceleration,
-                &fc_revlim,
-                &floodclear,
-                &sys_locked,
-                &ce_state,
-                &ign_i,
-                &cond_i,
-                &epas_i,
-                &aftstr_enr,
-                &iac_cl_loop,
-                &tps,
-                &add_i1,
-                &add_i2,
-                &choke_pos,
-                &gasdose_pos,
-                &speed,
-                &distance,
-                &inj_ffd,
-                &inj_fff,
-                &air_temp,
-                &strt_aalt,
-                &idle_aalt,
-                &work_aalt,
-                &temp_aalt,
-                &airt_aalt,
-                &idlreg_aac,
-                &octan_aac,
-                &lambda_corr,
-                &inj_pw,
-                &tpsdot,
-                &map2,
-                &tmp2,
-                &mapd,
-                &afr,
-                &load,
-                &baro_press,
-                &inj_tim_begin,
-                &inj_tim_end,
-                &grts,
-                &ftls,
-                &egts,
-                &ops,
-                &inj_duty,
-                &rigid_arg,
-                &rxlaf,
-                &maf,
-                &vent_duty,
-                &uniout_flags,
-                &mapdot,
-                &fts,
-                &cons_fuel,
-                &lambda_corr2,
-                &afr2,
-                &afrmap,
-                &tchrg,
-                &log_mark,
-                &service_flags,
-                &ce_errors);
-
- if ((result != CSV_COUNT_DATA_VAL) || (strlen(ce_errors) != 32))
-  return false;
- //Convert CE errors bits from string to binary
- DWORD ce_bits = 0;
- for(size_t i = 0; i < 32; ++i)
- {
-  if (ce_errors[i] != '0' && ce_errors[i] != '1')
-   return false; //error (wrong char)
-  DWORD mask = 2147483648;
-  ce_bits|= (ce_errors[i] == '1') ? (mask >> i) : 0;
- }
  //Save all data fields
  o_data.rpm = rpm;
  o_data.adv_angle = adv_angle;
@@ -518,7 +520,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
 
  //universal outputs
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
-  o_data.uniout[i] = CHECKBIT8(uniout_flags, i);
+  o_data.uniout[i] = CHECKBIT8((int)uniout_flags, i);
 
  //Encode service flags
  o_data.knkret_use = CHECKBIT32(service_flags, 0);
@@ -563,8 +565,7 @@ unsigned long LogReader::GetCount(void) const
 
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
- int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ m_csv_separating_symbol = i_sep_symbol;
 }
 
 bool LogReader::IsNextPossible(void) const
@@ -633,5 +634,46 @@ bool LogReader::GetMRecord(int &o_marks, bool &o_errors)
   o_marks = mp_recBuff[CSV_MARKS_OFFSET] - 0x30;
   o_errors = mp_recBuff[CSV_CE_OFFSET] - 0x30;
  }
+ return true;
+}
+
+bool LogReader::ParseCE(char* str, int size, DWORD& result)
+{
+ if (size != 32)
+  return false;
+ //Convert CE errors bits from string to binary
+ DWORD ce_bits = 0;
+ for(size_t i = 0; i < 32; ++i)
+ {
+  if (str[i] != '0' && str[i] != '1')
+   return false; //error (wrong char)
+  DWORD mask = 2147483648;
+  ce_bits|= (str[i] == '1') ? (mask >> i) : 0;
+ }
+
+ result = ce_bits;
+ return true;
+}
+
+bool LogReader::ParseTime(char* str, int size, unsigned int& wHour, unsigned int& wMinute, unsigned int& wSecond, unsigned int& wMilliseconds)
+{
+ if (size!=11 || str[2]!=':' || str[5]!=':')
+  return false;
+
+ if (!CNumericConv::secu3_atoi_u32<2>(str, 2, wHour))
+  return false;
+ str+=3;
+ if (!CNumericConv::secu3_atoi_u32<2>(str, 2, wMinute))
+  return false;
+ str+=3;
+ if (!CNumericConv::secu3_atoi_u32<2>(str, 2, wSecond))
+  return false;
+
+ m_decimal_point = str[2]; //save decimal point
+ str+=3;
+
+ if (!CNumericConv::secu3_atoi_u32<2>(str, 2, wMilliseconds))
+  return false;
+
  return true;
 }

@@ -65,8 +65,135 @@ class IOCORE_API CNumericConv
 
   static BYTE   CheckSum_8_xor(const BYTE* i_buf,const int size);
 
+  static inline SetDecimalPoint(char decpt) { m_decpt = decpt; };
+
+  static inline bool secu3_atoi_u1(const char *str, int size, unsigned int& result)
+  {
+   if (size != 1 || str[0] < '0' || str[0] > '9')
+    return false;
+   result = str[0] - '0';
+   return true;
+  }
+
+  template <int maxDigits>
+  static bool secu3_atoi_u32(const char *str, int size, unsigned int& result)
+  {
+   if (size < 1 || size > maxDigits)
+    return false;
+   int sum = 0;
+   while (size--)
+   {
+    if ((*str) < '0' || (*str) > '9')
+     return false;
+    sum = (sum * 10) + ((*str) - '0');
+    str++;
+   }
+   result = sum;
+   return true;
+  }
+
+  template <int maxDigits>
+  static bool secu3_atoi_32(const char *str, int size, signed int& result)
+  {
+   if (size < 1)
+    return false;
+
+   signed int m;
+   if (*str == '-')
+   {
+    if (size < 2 || --size > maxDigits)
+     return false;
+    m = -1;
+    ++str;
+   }
+   else
+   {
+    if (size > maxDigits)
+     return false;
+    m = 1;
+   }
+
+   int sum = 0;
+   while (size--)
+   {
+    if ((*str) < '0' || (*str) > '9')
+     return false;
+    sum = (sum * 10) + ((*str) - '0');
+    str++;
+   }
+   result = sum * m;
+   return true;
+  }
+
+
+  template <int maxDigits>
+  static bool secu3_atof_32(const char *str, int size, float& result)
+  {
+   static const float scales[8] = {1.0f, 1e-1f, 1e-2f, 1e-3f, 1e-4f, 1e-5f, 1e-6f, 1e-7f};
+
+   if (0 == size)
+    return false; //at least one digit must exist
+
+   signed int m;
+   if (*str == '-')
+   { //negative
+    --size;  //skip sign character
+    ++str;
+    if (0 == size)
+     return false; //at least one digit must exist
+    m = -1;
+   }
+   else
+   { //positive
+    m = 1;
+   }
+
+   if (size > maxDigits)
+    return false; //number of digits must not exceed limit
+
+   const char* end = str + size;
+
+   signed int intpart = 0;
+   while (str != end)
+   {
+    if ((*str) == m_decpt)
+    {
+     ++str;
+     size = end - str; //calculate size of fractional part
+     break;
+    }
+    if ((*str) < '0' || (*str) > '9')
+     return false; //error, wrong character
+    intpart = (intpart * 10) + ((*str) - '0');
+    ++str;
+   }
+   intpart*= m; //apply sign
+
+   if (0==size)
+   {
+    result = (float)intpart;
+    return true; //ok, no fractional part
+   }
+
+   signed int fracpart = 0;
+   while (str != end)
+   {
+    if ((*str) < '0' || (*str) > '9')
+     return false; //error, wrong character
+    fracpart = (fracpart * 10) + ((*str) - '0');
+    ++str;
+   }
+
+   if (intpart <= 0)
+    fracpart = -fracpart; //copy sign
+
+   result = intpart + (fracpart * scales[size]);
+   return true; //ok
+  }
+
  private:
   static bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword);
+  static char m_decpt;
 };
 
 #endif //_NUMERICCONV_
