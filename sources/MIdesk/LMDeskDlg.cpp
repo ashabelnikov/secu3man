@@ -33,6 +33,7 @@
 
 BEGIN_MESSAGE_MAP(CLMDeskDlg, Super)
  ON_WM_CTLCOLOR()
+ ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 const UINT CLMDeskDlg::IDD = IDD_LOG_MARKS_DESK;
@@ -122,9 +123,14 @@ void CLMDeskDlg::SetValues(bool k1, bool k2, bool k3)
   {
    m_key_flags[i] = new_flags[i];
    if (m_key_flags[i])
+   {
+    KillTimer(i);
     m_key_text[i].SetWindowText(m_key_str[i].c_str());
+   }
    else
-    m_key_text[i].SetWindowText(_T(""));
+   {
+    SetTimer(i, 100, NULL);
+   }
   }
  }
 }
@@ -132,4 +138,15 @@ void CLMDeskDlg::SetValues(bool k1, bool k2, bool k3)
 void CLMDeskDlg::Resize(const CRect& i_rect)
 {
  //todo
+}
+
+void CLMDeskDlg::OnTimer(UINT nIDEvent)
+{ 
+ if (false==m_key_flags[nIDEvent])
+ {
+  m_key_text[nIDEvent].SetWindowText(_T(""));
+  KillTimer(nIDEvent);
+ }
+
+ Super::OnTimer(nIDEvent);
 }

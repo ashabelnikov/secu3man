@@ -302,6 +302,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   o_data.afr2 = s3l.afr2;
   o_data.afrmap = s3l.afrmap;
   o_data.tchrg = s3l.tchrg;
+  uniout_flags = s3l.uniout_flags;
+  service_flags = s3l.service_flags;
  }
  else
  {

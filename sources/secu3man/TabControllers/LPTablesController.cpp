@@ -119,7 +119,10 @@ void CLPTablesController::OnActivate(void)
  }
 
  if (m_firmware_opened && m_eeprom_opened)
+ {
   mp_view->FillMapSetCombo(mapsets);
+  mp_view->EnableMapSetCombo(true);
+ }
  else
   mp_view->EnableMapSetCombo(false);
 

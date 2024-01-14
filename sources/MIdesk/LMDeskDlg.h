@@ -45,7 +45,7 @@ class AFX_EXT_CLASS CLMDeskDlg : public CModelessDialog
   void Enable(bool enable);
   void SetValues(bool k1, bool k2, bool k3);
 
-  //изменение размеров окна
+  //change size of window
   void Resize(const CRect& i_rect);
 
   // Implementation
@@ -53,6 +53,7 @@ class AFX_EXT_CLASS CLMDeskDlg : public CModelessDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg HBRUSH OnCtlColor( CDC* pDC, CWnd* pWnd, UINT nCtlColor );
+  afx_msg void OnTimer(UINT nIDEvent);
   DECLARE_MESSAGE_MAP()
 
  private:
