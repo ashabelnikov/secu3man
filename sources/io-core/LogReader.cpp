@@ -51,7 +51,7 @@ using namespace SECU3IO;
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
 
-LogReader::LogReader()
+LogReader::LogReader(bool standalone /*= false*/)
 : m_file_handle(NULL)
 , m_record_count(0)
 , m_record_size(0)
@@ -60,6 +60,7 @@ LogReader::LogReader()
 , m_fileOffset(0)
 , m_logFmt(false) //csv format
 , m_decimal_point('.')
+, m_standalone(standalone)
 {
  mp_recBuff = new char[MAX_REC_BUF + 1];
  SetSeparatingSymbol(m_csv_separating_symbol);
@@ -74,6 +75,7 @@ LogReader::~LogReader()
 
 bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle, bool i_check /* = false*/)
 {
+ m_csvTitle.clear();
  m_decimal_point = localeconv()->decimal_point[0]; //update decimal point's character, use ASCII version
 
  FILE* f_handle = _tfopen(i_file_name.c_str(), _T("rb"));
@@ -121,12 +123,35 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
  else
  {//text format (.csv)
   m_logFmt = false;
+
+  //check if first line of file is title (just search for alphabetic symbols)  
+  fgets(mp_recBuff, MAX_REC_BUF, m_file_handle);
+  fseek(m_file_handle, 0, SEEK_SET);
+  char* p = mp_recBuff;
+  int alpha_count = 0;
+  while(*p && (p - mp_recBuff) < MAX_REC_BUF)
+  {
+   if (isalpha(*p))
+    ++alpha_count;
+   ++p;
+  }
+  if (alpha_count > 0)
+  {
+   m_csvTitle = mp_recBuff; //save string with title
+   //remove \r\n values
+   size_t first = m_csvTitle.find_last_not_of("\r\n");
+   if (std::string::npos==first)
+    m_csvTitle.clear();
+   else
+    m_csvTitle.erase(first + 1);
+  }
+  memset(mp_recBuff, 0, MAX_REC_BUF);
+  fseek(m_file_handle, 0, SEEK_SET);
+
   //check content of the first line of file
-  SYSTEMTIME o_time;
-  SECU3IO::SensorDat o_data;
-  int o_marks;
+  SYSTEMTIME o_time; SECU3IO::SensorDat o_data; int o_marks;
   bool result = GetRecord(o_time, o_data, o_marks);
-  if (result) 
+  if (result && alpha_count == 0) 
   {
    fseek(m_file_handle, 0, SEEK_SET);
    m_fileOffset = 0;
@@ -285,7 +310,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   o_data.baro_press = s3l.baro_press;
   o_data.inj_tim_begin = s3l.inj_tim_begin;
   o_data.inj_tim_end = s3l.inj_tim_end;
-  o_data.inj_ffh = (3600.0f * s3l.inj_fff) / ((float)m_fffConst);
+  o_data.inj_ffh = m_standalone ? s3l.inj_fff : ((3600.0f * s3l.inj_fff) / ((float)m_fffConst));
   o_data.grts = s3l.grts;
   o_data.ftls = s3l.ftls;
   o_data.egts = s3l.egts;
@@ -307,7 +332,6 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  }
  else
  {
-
   if (m_record_size == 0)
   {
    if (fgets(mp_recBuff, MAX_REC_BUF, m_file_handle) == NULL)
@@ -501,7 +525,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.ign_i = ign_i;
  o_data.cond_i = cond_i;
  o_data.epas_i = epas_i;
- o_data.inj_ffh = (3600.0f * inj_fff) / ((float)m_fffConst);
+ o_data.inj_ffh = m_standalone ? inj_fff : ((3600.0f * inj_fff) / ((float)m_fffConst));
  o_data.grts = grts;
  o_data.ftls = ftls;
  o_data.egts = egts;
@@ -678,4 +702,9 @@ bool LogReader::ParseTime(char* str, int size, unsigned int& wHour, unsigned int
   return false;
 
  return true;
+}
+
+const _TSTRING& LogReader::GetTitleStr(void) const
+{
+ return m_csvTitle;
 }

@@ -30,31 +30,24 @@
 #include "common/MathHelpers.h"
 #include "BitMask.h"
 #include "s3lrecord.h"
+#include "NumericConv.h"
 
 using namespace SECU3IO;
 
-static char CSVTimeTemplateString[32];
-static const char cCSVTimeTemplateString[] = "%02d:%02d:%02d#%02d"; //'#' will be replaced by decimal point symbol of current locale
-static const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%7.3f%c %%7.3f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%6.2f%c %%6.2f%c %%7.2f%c %%5.2f%c %%6.2f%c %%6.2f%c %%5.1f%c %%5.1f%c %%5.1f%c %%5.1f%c %%6.1f%c %%4.2f%c %%5.1f%c %%4.2f%c %%07d%c %%6.2f%c %%5.1f%c %%02d%c %%05d%c %%5.1f%c %%9.3f%c %%6.2f%c %%5.2f%c %%5.2f%c %%5.1f%c %%01d%c %%05d%c %%s\r\n";
+//maximum length of record including possible text header
+#define MAX_REC_BUF 4096
 
-namespace {
-void DwordToString(DWORD value, char* str)
-{
- DWORD z, i = 0;
- for (z = 2147483648; z > 0; z >>= 1)
-  str[i++] = ((value & z) == z) ? '1' : '0';
- str[i] = '\0';
-}
-}
-
-LogWriter::LogWriter()
+LogWriter::LogWriter(bool standalone /*= false*/)
 : m_is_busy(false)
 , m_out_handle(NULL)
-, m_csv_separating_symbol(',')
+, m_csv_separating_symbol(';')
 , m_pending_marks(0)
 , m_writeFields(false)
 , m_logFmt(false) //csv
+, m_decimal_point('.')
+, m_standalone(standalone)
 {
+ mp_recBuff = new char[MAX_REC_BUF + 1];
  SetSeparatingSymbol(m_csv_separating_symbol);
 }
 
@@ -63,6 +56,211 @@ LogWriter::~LogWriter()
  //finish log writing process if it is not finished yet
  if (IsLoggingInProcess())
   EndLogging();
+ delete[] mp_recBuff;
+}
+
+void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i_marks)
+{
+  //build service flags variable
+  WORD service_flags = 0;
+  WRITEBIT16(service_flags, 0, i_data.knkret_use);
+  WRITEBIT16(service_flags, 1, i_data.strt_use);
+  WRITEBIT16(service_flags, 2, i_data.idle_use);
+  WRITEBIT16(service_flags, 3, i_data.work_use);
+  WRITEBIT16(service_flags, 4, i_data.temp_use);
+  WRITEBIT16(service_flags, 5, i_data.airt_use);
+  WRITEBIT16(service_flags, 6, i_data.idlreg_use);
+  WRITEBIT16(service_flags, 7, i_data.octan_use);
+  WRITEBIT16(service_flags, 8, i_data.rigid_use);
+
+  int uniout_flags = 0;
+  for(int i= 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
+   WRITEBIT8(uniout_flags, i, i_data.uniout[i]);
+
+  if (m_logFmt)
+  {
+   WORD flags = 0;
+   WRITEBIT16(flags, 15, i_data.carb);
+   WRITEBIT16(flags, 14, i_data.gas);
+   WRITEBIT16(flags, 13, i_data.ephh_valve);
+   WRITEBIT16(flags, 12, i_data.epm_valve);
+   WRITEBIT16(flags, 11, i_data.cool_fan);
+   WRITEBIT16(flags, 10, i_data.st_block);
+   WRITEBIT16(flags, 9,  i_data.acceleration);
+   WRITEBIT16(flags, 8,  i_data.fc_revlim);
+   WRITEBIT16(flags, 7,  i_data.floodclear);
+   WRITEBIT16(flags, 6,  i_data.sys_locked);
+   WRITEBIT16(flags, 5,  i_data.ce_state);
+   WRITEBIT16(flags, 4,  i_data.ign_i);
+   WRITEBIT16(flags, 3,  i_data.cond_i);
+   WRITEBIT16(flags, 2,  i_data.epas_i);
+   WRITEBIT16(flags, 1,  i_data.aftstr_enr);
+   WRITEBIT16(flags, 0,  i_data.iac_cl_loop);
+                                            
+   s3l::s3lRecord s3l = {
+   (BYTE)i_time.wHour,
+   (BYTE)i_time.wMinute,
+   (BYTE)i_time.wSecond,
+   i_time.wMilliseconds,
+   i_data.rpm,
+   i_data.adv_angle,
+   i_data.pressure,
+   i_data.voltage,
+   i_data.temperat,
+   i_data.knock_k,
+   i_data.knock_retard,
+   i_data.air_flow,
+   flags,
+   i_data.tps,
+   i_data.add_i1,
+   i_data.add_i2,
+   i_data.choke_pos,
+   i_data.gasdose_pos,
+   i_data.speed,
+   i_data.distance,
+   MathHelpers::RestrictValue(i_data.inj_ffd, .0f, 999.999f),
+   i_data.inj_fff,
+   i_data.add_i2_mode ? i_data.air_temp : 999.99f, //magic number indicates that IAT is not used
+   i_data.strt_aalt,         // advance angle from start map
+   i_data.idle_aalt,         // advance angle from idle map
+   i_data.work_aalt,         // advance angle from work map
+   i_data.temp_aalt,         // advance angle from coolant temperature correction map
+   i_data.airt_aalt,         // advance angle from air temperature correction map
+   i_data.idlreg_aac,        // advance angle correction from idling RPM regulator
+   i_data.octan_aac,         // octane correction value
+   i_data.lambda_corr,       // lambda correction
+   i_data.inj_pw,            // injector pulse width
+   i_data.tpsdot,            // TPS dot (d%/dt)
+   i_data.map2,              // MAP2
+   i_data.tmp2,              // TMP2
+   i_data.mapd,              // MAP2 - MAP
+   i_data.afr,               // AFR from lambda sensor
+   i_data.load,              // Load
+   i_data.baro_press,        // Barometric pressure
+   i_data.inj_tim_begin,     // phase of beginning of inj. pulse
+   i_data.inj_tim_end,       // phase of the end of inj. pulse
+   i_data.grts,              // gas reducer's temperature
+   i_data.ftls,              // level of fuel in the tank
+   i_data.egts,              // exhaust gas temperature
+   i_data.ops,               // oil pressure
+   i_data.inj_duty,          // inj. duty                        
+   i_data.rigid_arg,         // IAC rigidity argument
+   i_data.rxlaf,             // RxL air flow                       
+   i_data.maf,               // mass air flow
+   i_data.vent_duty,         // cooling fan's duty
+   uniout_flags,                 // states of all universal outputs
+   i_data.mapdot,            // MAP dot (dP/dt), kPa/s
+   i_data.fts,               // FTS                        
+   i_data.cons_fuel,         // fuel odometer
+   i_data.lambda_corr2,      // lambda correction #2
+   i_data.afr2,              // AFR from lambda sensor
+   i_data.afrmap,            // value from AFR map
+   i_data.tchrg,             // value of corrected MAT
+   i_marks,
+   service_flags,
+   i_data.ce_errors};
+
+   fwrite(&s3l, sizeof(s3l::s3lRecord), 1, m_out_handle);
+  }
+  else
+  {
+   CNumericConv::SetDecimalPoint(m_decimal_point); //set decimal point before using numeric functions
+
+   char *p = mp_recBuff; int size, total = 0;
+
+   #define secu3_time_stamp(wHour, wMinute, wSecond, wMilliseconds) size = WriteTime(p, wHour, wMinute, wSecond, (wMilliseconds)/10), \
+                                                              total+=size, p+=size, *p++ = m_csv_separating_symbol, ++total;
+
+   #define secu3_itoa_u1(value, sz) size = CNumericConv::secu3_itoa_u1<sz>(p, value), \
+                                                              total+=size, p+=size, *p++ = m_csv_separating_symbol, ++total;
+
+   #define secu3_itoa_u32(value, sz) size = CNumericConv::secu3_itoa_u32<sz>(p, value), \
+                                                              total+=size, p+=size, *p++ = m_csv_separating_symbol, ++total;
+
+   #define secu3_itoa_32(value, sz) size = CNumericConv::secu3_itoa_32<sz>(p, value), \
+                                                              total+=size, p+=size, *p++ = m_csv_separating_symbol, ++total;
+
+   #define secu3_ftoa_32(value, sz, dp) size = CNumericConv::secu3_ftoa_32<sz>(p, value, dp), \
+                                                              total+=size, p+=size, *p++ = m_csv_separating_symbol, ++total;
+
+
+   secu3_time_stamp(i_time.wHour, i_time.wMinute, i_time.wSecond, i_time.wMilliseconds);
+   secu3_itoa_u32(i_data.rpm, 6);
+   secu3_ftoa_32 (i_data.adv_angle, 6, 2);
+   secu3_ftoa_32 (i_data.pressure, 7, 2);
+   secu3_ftoa_32 (i_data.voltage, 6, 2);
+   secu3_ftoa_32 (i_data.temperat, 7, 2);
+   secu3_ftoa_32 (i_data.knock_k, 5, 2);
+   secu3_ftoa_32 (i_data.knock_retard, 6, 2);
+   secu3_itoa_u32(i_data.air_flow, 3);
+   secu3_itoa_u1 (i_data.carb, 2);
+   secu3_itoa_u1 (i_data.gas, 2);
+   secu3_itoa_u1 (i_data.ephh_valve, 2);
+   secu3_itoa_u1 (i_data.epm_valve, 2);
+   secu3_itoa_u1 (i_data.cool_fan, 2);
+   secu3_itoa_u1 (i_data.st_block, 2);
+   secu3_itoa_u1 (i_data.acceleration, 2);
+   secu3_itoa_u1 (i_data.fc_revlim, 2);
+   secu3_itoa_u1 (i_data.floodclear, 2);
+   secu3_itoa_u1 (i_data.sys_locked, 2);
+   secu3_itoa_u1 (i_data.ce_state, 2);
+   secu3_itoa_u1 (i_data.ign_i, 2);
+   secu3_itoa_u1 (i_data.cond_i, 2);
+   secu3_itoa_u1 (i_data.epas_i, 2);
+   secu3_itoa_u1 (i_data.aftstr_enr, 2);
+   secu3_itoa_u1 (i_data.iac_cl_loop, 2);
+   secu3_ftoa_32 (i_data.tps, 6, 1);
+   secu3_ftoa_32 (i_data.add_i1, 7, 3);
+   secu3_ftoa_32 (i_data.add_i2, 7, 3);
+   secu3_ftoa_32 (i_data.choke_pos, 6, 1);
+   secu3_ftoa_32 (i_data.gasdose_pos, 6, 1);
+   secu3_ftoa_32 (i_data.speed, 6, 1);
+   secu3_ftoa_32 (i_data.distance, 8, 2);
+   secu3_ftoa_32 (MathHelpers::RestrictValue(i_data.inj_ffd, .0f, 999.999f), 8, 3);
+   secu3_ftoa_32 (i_data.inj_fff, 8, 3);
+   secu3_ftoa_32 (i_data.add_i2_mode ? i_data.air_temp : 999.99f, 7, 2); //magic number indicates that IAT is not used
+   secu3_ftoa_32 (i_data.strt_aalt, 7, 2);        // advance angle from start map
+   secu3_ftoa_32 (i_data.idle_aalt, 7, 2);        // advance angle from idle map
+   secu3_ftoa_32 (i_data.work_aalt, 7, 2);        // advance angle from work map
+   secu3_ftoa_32 (i_data.temp_aalt, 7, 2);        // advance angle from coolant temperature correction map
+   secu3_ftoa_32 (i_data.airt_aalt, 7, 2);        // advance angle from air temperature correction map
+   secu3_ftoa_32 (i_data.idlreg_aac,7, 2);        // advance angle correction from idling RPM regulator
+   secu3_ftoa_32 (i_data.octan_aac, 7, 2);        // octane correction value
+   secu3_ftoa_32 (i_data.lambda_corr, 7, 2);      // lambda correction
+   secu3_ftoa_32 (i_data.inj_pw, 7, 2);           // injector pulse width
+   secu3_itoa_u32(i_data.tpsdot, 6);              // TPS dot (d%/dt)
+   secu3_ftoa_32 (i_data.map2, 7, 2);             // MAP2
+   secu3_ftoa_32 (i_data.tmp2, 7, 2);             // TMP2
+   secu3_ftoa_32 (i_data.mapd, 8, 2);             // MAP2 - MAP
+   secu3_ftoa_32 (i_data.afr,  6, 2);             // AFR from lambda sensor
+   secu3_ftoa_32 (i_data.load, 7, 2);             // Load
+   secu3_ftoa_32 (i_data.baro_press, 7, 2);       // Barometric pressure
+   secu3_ftoa_32 (i_data.inj_tim_begin, 6, 1);    // phase of beginning of inj. pulse
+   secu3_ftoa_32 (i_data.inj_tim_end, 6, 1);      // phase of the end of inj. pulse
+   secu3_ftoa_32 (i_data.grts, 6, 1);             // gas reducer's temperature
+   secu3_ftoa_32 (i_data.ftls, 6, 1);
+   secu3_ftoa_32 (i_data.egts, 7, 1);
+   secu3_ftoa_32 (i_data.ops, 5, 2);
+   secu3_ftoa_32 (i_data.inj_duty, 6, 1);         // inj. duty                        
+   secu3_ftoa_32 (i_data.rigid_arg, 5, 2);        // IAC rigidity argument
+   secu3_itoa_u32(i_data.rxlaf, 8);               // RxL air flow                       
+   secu3_ftoa_32 (i_data.maf, 7, 2);
+   secu3_ftoa_32 (i_data.vent_duty, 6, 1);        // cooling fan's duty
+   secu3_itoa_u32(uniout_flags, 3);
+   secu3_itoa_32 (i_data.mapdot, 6);              // MAP dot (dP/dt), kPa/s
+   secu3_ftoa_32 (i_data.fts, 6, 1);              // FTS                        
+   secu3_ftoa_32 (i_data.cons_fuel, 10, 3);       // fuel odometer
+   secu3_ftoa_32 (i_data.lambda_corr2, 7, 2);     // lambda correction #2
+   secu3_ftoa_32 (i_data.afr2, 6, 2);             // AFR from lambda sensor #2
+   secu3_ftoa_32 (i_data.afrmap, 6, 2);           // AFR from map
+   secu3_ftoa_32 (i_data.tchrg, 6, 1);            // Tcharge            
+   secu3_itoa_u1 (i_marks, 2);                    // Log marks
+   secu3_itoa_u32(service_flags, 6);              // Service flags
+   size = WriteCE(p, i_data.ce_errors);           // CE errors
+   total+=size, p+=size; 
+   *p++ = '\r', *p++='\n', total+=2; //terminate line
+   fwrite(mp_recBuff, total, 1, m_out_handle);
+  }
 }
 
 void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
@@ -75,205 +273,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
   SYSTEMTIME time;
   ::GetLocalTime(&time);
 
-  //build service flags variable
-  WORD service_flags = 0;
-  WRITEBIT16(service_flags, 0, p_sensors->knkret_use);
-  WRITEBIT16(service_flags, 1, p_sensors->strt_use);
-  WRITEBIT16(service_flags, 2, p_sensors->idle_use);
-  WRITEBIT16(service_flags, 3, p_sensors->work_use);
-  WRITEBIT16(service_flags, 4, p_sensors->temp_use);
-  WRITEBIT16(service_flags, 5, p_sensors->airt_use);
-  WRITEBIT16(service_flags, 6, p_sensors->idlreg_use);
-  WRITEBIT16(service_flags, 7, p_sensors->octan_use);
-  WRITEBIT16(service_flags, 8, p_sensors->rigid_use);
-
-  int uniout_flags = 0;
-  for(int i= 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
-   WRITEBIT8(uniout_flags, i, p_sensors->uniout[i]);
-
-  if (m_logFmt)
-  {
-   WORD flags = 0;
-   WRITEBIT16(flags, 15, p_sensors->carb);
-   WRITEBIT16(flags, 14, p_sensors->gas);
-   WRITEBIT16(flags, 13, p_sensors->ephh_valve);
-   WRITEBIT16(flags, 12, p_sensors->epm_valve);
-   WRITEBIT16(flags, 11, p_sensors->cool_fan);
-   WRITEBIT16(flags, 10, p_sensors->st_block);
-   WRITEBIT16(flags, 9,  p_sensors->acceleration);
-   WRITEBIT16(flags, 8,  p_sensors->fc_revlim);
-   WRITEBIT16(flags, 7,  p_sensors->floodclear);
-   WRITEBIT16(flags, 6,  p_sensors->sys_locked);
-   WRITEBIT16(flags, 5,  p_sensors->ce_state);
-   WRITEBIT16(flags, 4,  p_sensors->ign_i);
-   WRITEBIT16(flags, 3,  p_sensors->cond_i);
-   WRITEBIT16(flags, 2,  p_sensors->epas_i);
-   WRITEBIT16(flags, 1,  p_sensors->aftstr_enr);
-   WRITEBIT16(flags, 0,  p_sensors->iac_cl_loop);
-                                            
-   s3l::s3lRecord s3l = {
-   (BYTE)time.wHour,
-   (BYTE)time.wMinute,
-   (BYTE)time.wSecond,
-   time.wMilliseconds,
-   p_sensors->rpm,
-   p_sensors->adv_angle,
-   p_sensors->pressure,
-   p_sensors->voltage,
-   p_sensors->temperat,
-   p_sensors->knock_k,
-   p_sensors->knock_retard,
-   p_sensors->air_flow,
-   flags,
-   p_sensors->tps,
-   p_sensors->add_i1,
-   p_sensors->add_i2,
-   p_sensors->choke_pos,
-   p_sensors->gasdose_pos,
-   p_sensors->speed,
-   p_sensors->distance,
-   MathHelpers::RestrictValue(p_sensors->inj_ffd, .0f, 999.999f),
-   p_sensors->inj_fff,
-   p_sensors->add_i2_mode ? p_sensors->air_temp : 999.99f, //magic number indicates that IAT is not used
-   p_sensors->strt_aalt,         // advance angle from start map
-   p_sensors->idle_aalt,         // advance angle from idle map
-   p_sensors->work_aalt,         // advance angle from work map
-   p_sensors->temp_aalt,         // advance angle from coolant temperature correction map
-   p_sensors->airt_aalt,         // advance angle from air temperature correction map
-   p_sensors->idlreg_aac,        // advance angle correction from idling RPM regulator
-   p_sensors->octan_aac,         // octane correction value
-   p_sensors->lambda_corr,       // lambda correction
-   p_sensors->inj_pw,            // injector pulse width
-   p_sensors->tpsdot,            // TPS dot (d%/dt)
-   p_sensors->map2,              // MAP2
-   p_sensors->tmp2,              // TMP2
-   p_sensors->mapd,              // MAP2 - MAP
-   p_sensors->afr,               // AFR from lambda sensor
-   p_sensors->load,              // Load
-   p_sensors->baro_press,        // Barometric pressure
-   p_sensors->inj_tim_begin,     // phase of beginning of inj. pulse
-   p_sensors->inj_tim_end,       // phase of the end of inj. pulse
-   p_sensors->grts,              // gas reducer's temperature
-   p_sensors->ftls,              // level of fuel in the tank
-   p_sensors->egts,              // exhaust gas temperature
-   p_sensors->ops,               // oil pressure
-   p_sensors->inj_duty,          // inj. duty                        
-   p_sensors->rigid_arg,         // IAC rigidity argument
-   p_sensors->rxlaf,             // RxL air flow                       
-   p_sensors->maf,               // mass air flow
-   p_sensors->vent_duty,         // cooling fan's duty
-   uniout_flags,                 // states of all universal outputs
-   p_sensors->mapdot,            // MAP dot (dP/dt), kPa/s
-   p_sensors->fts,               // FTS                        
-   p_sensors->cons_fuel,         // fuel odometer
-   p_sensors->lambda_corr2,      // lambda correction #2
-   p_sensors->afr2,              // AFR from lambda sensor
-   p_sensors->afrmap,            // value from AFR map
-   p_sensors->tchrg,             // value of corrected MAT
-   m_pending_marks,
-   service_flags,
-   p_sensors->ce_errors};
-
-   fwrite(&s3l, sizeof(s3l::s3lRecord), 1, m_out_handle);
-  }
-  else
-  {
-   //используем ASCII версию, файл не должен быть юникодным
-   //"hh:mm:ss.ms", ms - сотые доли секунды
-   fprintf(m_out_handle, CSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
-
-   //Convert binary to string
-   char ce_errors[35];
-   DwordToString(p_sensors->ce_errors, ce_errors);
-
-   fprintf(m_out_handle, m_csv_data_template,
-                        p_sensors->rpm,
-                        p_sensors->adv_angle,
-                        p_sensors->pressure,          //MAP
-                        p_sensors->voltage,
-                        p_sensors->temperat,
-                        p_sensors->knock_k,
-                        p_sensors->knock_retard,
-                        (int)p_sensors->air_flow,
-                        (int)p_sensors->carb,
-                        (int)p_sensors->gas,
-                        (int)p_sensors->ephh_valve,
-                        (int)p_sensors->epm_valve,
-                        (int)p_sensors->cool_fan,
-                        (int)p_sensors->st_block,
-                        (int)p_sensors->acceleration,
-                        (int)p_sensors->fc_revlim,
-                        (int)p_sensors->floodclear,
-                        (int)p_sensors->sys_locked,
-                        (int)p_sensors->ce_state,
-                        (int)p_sensors->ign_i,
-                        (int)p_sensors->cond_i,
-                        (int)p_sensors->epas_i,
-                        (int)p_sensors->aftstr_enr,
-                        (int)p_sensors->iac_cl_loop,
-                        p_sensors->tps,
-                        p_sensors->add_i1,
-                        p_sensors->add_i2,
-                        p_sensors->choke_pos,
-                        p_sensors->gasdose_pos,
-                        p_sensors->speed,
-                        p_sensors->distance,
-                        MathHelpers::RestrictValue(p_sensors->inj_ffd, .0f, 999.999f),
-                        p_sensors->inj_fff,
-                        p_sensors->add_i2_mode ? p_sensors->air_temp : 999.99f, //magic number indicates that IAT is not used
-
-                        p_sensors->strt_aalt,         // advance angle from start map
-                        p_sensors->idle_aalt,         // advance angle from idle map
-                        p_sensors->work_aalt,         // advance angle from work map
-                        p_sensors->temp_aalt,         // advance angle from coolant temperature correction map
-                        p_sensors->airt_aalt,         // advance angle from air temperature correction map
-                        p_sensors->idlreg_aac,        // advance angle correction from idling RPM regulator
-                        p_sensors->octan_aac,         // octane correction value
-                        p_sensors->lambda_corr,       // lambda correction
-
-                        p_sensors->inj_pw,            // injector pulse width
-
-                        p_sensors->tpsdot,            // TPS dot (d%/dt)
-
-                        p_sensors->map2,              // MAP2
-                        p_sensors->tmp2,              // TMP2
-                        p_sensors->mapd,              // MAP2 - MAP
-
-                        p_sensors->afr,               // AFR from lambda sensor
-                        p_sensors->load,              // Load
-                        p_sensors->baro_press,        // Barometric pressure
-                        p_sensors->inj_tim_begin,     // phase of beginning of inj. pulse
-                        p_sensors->inj_tim_end,       // phase of the end of inj. pulse
-
-                        p_sensors->grts,              // gas reducer's temperature
-
-                        p_sensors->ftls,
-                        p_sensors->egts,
-                        p_sensors->ops,
-
-                        p_sensors->inj_duty,          //inj. duty                        
-                        p_sensors->rigid_arg,         //IAC rigidity argument
-                        p_sensors->rxlaf,             //RxL air flow
-                       
-                        p_sensors->maf,
-                        p_sensors->vent_duty,         //cooling fan's duty
-                        uniout_flags,
-
-                        p_sensors->mapdot,            // MAP dot (dP/dt), kPa/s
-                        p_sensors->fts,               //FTS
-                        
-                        p_sensors->cons_fuel,         //fuel odometer
-
-                        p_sensors->lambda_corr2,      // lambda correction #2
-                        p_sensors->afr2,              // AFR from lambda sensor #2
-
-                        p_sensors->afrmap,
-                        p_sensors->tchrg,
-                         
-                        m_pending_marks,
-                        service_flags,
-                        ce_errors);
-  }
+  SetRecord(time, *p_sensors, m_pending_marks);
   m_pending_marks = 0; //reset after injection
  }
 }
@@ -283,46 +283,55 @@ void LogWriter::OnConnection(const bool i_online)
  //empty
 }
 
-
 bool LogWriter::BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_name /* = NULL*/)
 {
- //update point in the time template string
- strcpy(CSVTimeTemplateString, cCSVTimeTemplateString);
- char* end = CSVTimeTemplateString + strlen(CSVTimeTemplateString);
- char* ptr = std::find(CSVTimeTemplateString, end, '#');
- if (ptr != end && ptr)
-  *ptr = _TDECIMAL_POINT(localeconv())[0];
-
- //генерируем имя файла и открываем его
- SYSTEMTIME time;
- ::GetLocalTime(&time);
-
- _TSTRING full_file_name = i_folder;
- CString string;
- //yyyy.mm.dd_hh.mm.ss.csv
- if (m_logFmt)
-  string.Format(_T("%04d.%02d.%02d_%02d.%02d.%02d.s3l"),time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond); //binary format
+ if (m_standalone)
+ { //standalone
+  m_out_handle = _tfopen(i_folder.c_str(),_T("wb+"));
+ }
  else
-  string.Format(_T("%04d.%02d.%02d_%02d.%02d.%02d.csv"),time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond); //text format
+ {
+  m_decimal_point = localeconv()->decimal_point[0]; //update decimal point's character, use ASCII version
 
- full_file_name += _T("\\");
- full_file_name += string;
- *o_full_file_name = full_file_name;
+  //генерируем имя файла и открываем его
+  SYSTEMTIME time;
+  ::GetLocalTime(&time);
 
- m_out_handle = _tfopen(full_file_name.c_str(),_T("wb+"));
+  _TSTRING full_file_name = i_folder;
+  CString string;
+  //yyyy.mm.dd_hh.mm.ss.csv
+  if (m_logFmt)
+   string.Format(_T("%04d.%02d.%02d_%02d.%02d.%02d.s3l"),time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond); //binary format
+  else
+   string.Format(_T("%04d.%02d.%02d_%02d.%02d.%02d.csv"),time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond); //text format
+
+  full_file_name += _T("\\");
+  full_file_name += string;
+  *o_full_file_name = full_file_name;
+
+  m_out_handle = _tfopen(full_file_name.c_str(),_T("wb+"));
+ }
+
  if (NULL == m_out_handle)
   return false;
 
  //Write title fields into a first line of file, write fileds only when text format is selected!
  if (m_writeFields && false == m_logFmt)
  {
-  for(size_t i = 0; i < m_lff.size(); ++i)
+  if (m_title_str.size() && m_standalone)
   {
-   if (i == (m_lff.size()-1))
-    fprintf(m_out_handle, "%s\r\n", m_lff[i].c_str());
-   else
-    fprintf(m_out_handle, "%s%c", m_lff[i].c_str(), m_csv_separating_symbol);
+   fprintf(m_out_handle, "%s\r\n", m_title_str.c_str());
   }
+  else
+  {
+   for(size_t i = 0; i < m_lff.size(); ++i)
+   {
+    if (i == (m_lff.size()-1))
+     fprintf(m_out_handle, "%s\r\n", m_lff[i].c_str());
+    else
+     fprintf(m_out_handle, "%s%c", m_lff[i].c_str(), m_csv_separating_symbol);
+   }
+  }  
  }
   
  m_is_busy = true;
@@ -350,8 +359,7 @@ bool LogWriter::IsLoggingInProcess(void)
 
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
- int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ m_csv_separating_symbol = i_sep_symbol;
 }
 
 bool LogWriter::InjectMarks(int marks)
@@ -390,4 +398,60 @@ FILE* LogWriter::GetFileHandle(void)
 void LogWriter::SetFormat(bool logfmt)
 {
  m_logFmt = logfmt;
+}
+
+int LogWriter::WriteTime(char* str, unsigned int wHour, unsigned int wMinute, unsigned int wSecond, unsigned int wMilliseconds)
+{
+ int total = 0;
+
+ *str++ = CNumericConv::IntToStr[wHour][0];
+ *str++ = CNumericConv::IntToStr[wHour][1];
+ total+=2;
+ *str++ = ':';
+
+ *str++ = CNumericConv::IntToStr[wMinute][0];
+ *str++ = CNumericConv::IntToStr[wMinute][1];
+ total+=2;
+ *str++ = ':';
+
+ *str++ = CNumericConv::IntToStr[wSecond][0];
+ *str++ = CNumericConv::IntToStr[wSecond][1];
+ total+=2;
+ *str++ = m_decimal_point;
+
+ *str++ = CNumericConv::IntToStr[wMilliseconds][0];
+ *str++ = CNumericConv::IntToStr[wMilliseconds][1];
+ total+=2;
+
+ return total + 3;
+}
+
+int LogWriter::WriteCE(char* str, DWORD value)
+{
+ *str++ = ' ';
+ DWORD z, i = 0;
+ for (z = 2147483648; z > 0; z >>= 1)
+  str[i++] = ((value & z) == z) ? '1' : '0';
+ str[i] = '\0';
+ return 33;
+}
+
+void LogWriter::SetDecimalPoint(char decpt)
+{
+ m_decimal_point = decpt;
+}
+
+void LogWriter::SetTitleStr(const std::string& str)
+{
+ m_title_str = str;
+}
+
+const std::map<int, _TSTRING>& LogWriter::GetFieldList(void) const
+{
+ return m_lff;
+}
+
+void LogWriter::SetFieldList(const std::map<int, _TSTRING>& lff)
+{
+ m_lff = lff;
 }

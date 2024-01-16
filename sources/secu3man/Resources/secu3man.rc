@@ -35,6 +35,8 @@ BEGIN
         MENUITEM "Вставить метку 1    Ctrl + 1", ID_APP_LOG_MARK1
         MENUITEM "Вставить метку 2    Ctrl + 2", ID_APP_LOG_MARK2
         MENUITEM "Вставить метку 3    Ctrl + 3", ID_APP_LOG_MARK3
+        MENUITEM SEPARATOR 
+        MENUITEM "Конвертировать лог файл...", ID_APP_CONVERT_LOG
     END
     POPUP "&Вид"
     BEGIN
@@ -513,6 +515,29 @@ BEGIN
     CONTROL         "",IDC_INJDRV_TIP_PIC,"Static", SS_BITMAP | WS_VISIBLE, 5,5,310,230
 END
 
+IDD_LOGCONV_DIALOG DIALOGEX 0, 0, 300, 191
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Конвертер лог файлов"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Входной файл",IDC_LOGCONV_INPUT_GROUP,8,4,283,39
+    EDITTEXT        IDC_LOGCONV_INPUT_EDIT,16,18,213,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Выбрать",IDC_LOGCONV_INPUT_FILE_BTN,235,17,50,16
+    GROUPBOX        "Выходной файл",IDC_LOGCONV_OUTPUT_GROUP,7,48,285,115
+    EDITTEXT        IDC_LOGCONV_OUTPUT_EDIT,16,62,213,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Выбрать",IDC_LOGCONV_OUTPUT_FILE_BTN,235,61,50,16
+    CONTROL         "Бинарный формат",IDC_LOGCONV_FORMAT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,30,84,150,10
+    CONTROL         "Записать заголовок",IDC_LOGCONV_TITLE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,30,102,150,10
+    COMBOBOX        IDC_LOGCONV_DECPT_COMBO,30,122,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Символ десятичной дроби",IDC_LOGCONV_DECPT_CAPTION,68,124,100,10
+    LTEXT           "Символ разделения полей записи",IDC_LOGCONV_CSVSEP_CAPTION,68,144,100,10
+    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,191,113,40,10
+    DEFPUSHBUTTON   "Старт",IDC_LOGCONV_START_BTN,79,168,50,16
+    PUSHBUTTON      "Закрыть",IDCANCEL,162,168,50,16
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -979,6 +1004,19 @@ BEGIN
  IDS_CE_TRIMTAB2_RADIOBOX_TT     "Показать таблицу долговременной коррекции по ДК 2. Данная таблица хранит коррекцию смеси по ДК 2."
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_LOGCONV_INPUT_FILE_BTN_TT  "Выбрать входной файл. Имя входного файла не может совпадать с именем выходного файла."
+ IDS_LOGCONV_INPUT_EDIT_TT      "Имя выбранного входного файла."
+ IDS_LOGCONV_OUTPUT_FILE_BTN_TT "Выбрать выходной файл. Имя выходного файла не может совпадать с именем входного файла."
+ IDS_LOGCONV_OUTPUT_EDIT_TT     "Имя выбранного выходного файла."
+ IDS_LOGCONV_FORMAT_CHECK_TT    "Использовать бинарный формат. Если галочка не установлена, то будет использоваться текстовый формат (scv)"
+ IDS_LOGCONV_TITLE_CHECK_TT     "Записать заголовок в csv файл"
+ IDS_LOGCONV_DECPT_COMBO_TT     "Символ-разделитель десятичной дроби для значений полей в csv файле. Данный символ должен отличаться от символа, выбранного в качестве разделителя полей в csv файле."
+ IDS_LOGCONV_CSVSEP_COMBO_TT    "Символ-разделитель полей в csv файле. Данный символ должен отличаться от символа, выбранного для десятичной дроби."
+ IDS_LOGCONV_START_BTN_TT       "Запустить процесс конвертации"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -1009,6 +1047,8 @@ BEGIN
         MENUITEM "Insert mark 1    Ctrl + 1", ID_APP_LOG_MARK1
         MENUITEM "Insert mark 2    Ctrl + 2", ID_APP_LOG_MARK2
         MENUITEM "Insert mark 3    Ctrl + 3", ID_APP_LOG_MARK3
+        MENUITEM SEPARATOR 
+        MENUITEM "Convert log file...", ID_APP_CONVERT_LOG
     END
     POPUP "&View"
     BEGIN
@@ -1484,6 +1524,29 @@ BEGIN
     CONTROL         "",IDC_INJDRV_TIP_PIC,"Static", SS_BITMAP | WS_VISIBLE, 5,5,310,230
 END
 
+IDD_LOGCONV_DIALOG DIALOGEX 0, 0, 300, 191
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Log files converter"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Input file",IDC_LOGCONV_INPUT_GROUP,8,4,283,39
+    EDITTEXT        IDC_LOGCONV_INPUT_EDIT,16,18,213,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Select",IDC_LOGCONV_INPUT_FILE_BTN,235,17,50,16
+    GROUPBOX        "Output file",IDC_LOGCONV_OUTPUT_GROUP,7,48,285,115
+    EDITTEXT        IDC_LOGCONV_OUTPUT_EDIT,16,62,213,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Select",IDC_LOGCONV_OUTPUT_FILE_BTN,235,61,50,16
+    CONTROL         "Binary format",IDC_LOGCONV_FORMAT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,30,84,150,10
+    CONTROL         "Write title",IDC_LOGCONV_TITLE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,30,102,150,10
+    COMBOBOX        IDC_LOGCONV_DECPT_COMBO,30,122,30,12,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Decimal point symbol",IDC_LOGCONV_DECPT_CAPTION,68,124,100,10
+    LTEXT           "Field separator symbol",IDC_LOGCONV_CSVSEP_CAPTION,68,144,100,10
+    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,191,113,40,10
+    DEFPUSHBUTTON   "Start",IDC_LOGCONV_START_BTN,79,168,50,16
+    PUSHBUTTON      "Close",IDCANCEL,162,168,50,16
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -1948,6 +2011,20 @@ STRINGTABLE DISCARDABLE
 BEGIN
  IDS_CE_TRIMTAB1_RADIOBOX_TT     "Show Long Term Fiel Trim table of EGO sensor 1. This table storing EGO correction from EGO sensor 1."
  IDS_CE_TRIMTAB2_RADIOBOX_TT     "Show Long Term Fiel Trim table of EGO sensor 2. This table storing EGO correction from EGO sensor 2."
+END
+
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_LOGCONV_INPUT_FILE_BTN_TT  "Select the input file. Input and output files must be different."
+ IDS_LOGCONV_INPUT_EDIT_TT      "Name of the input file. "
+ IDS_LOGCONV_OUTPUT_FILE_BTN_TT "Select the output file. Input and output files must be different."
+ IDS_LOGCONV_OUTPUT_EDIT_TT     "Name of the output file"
+ IDS_LOGCONV_FORMAT_CHECK_TT    "Use binary format. If not checked, text format (csv) will be used"
+ IDS_LOGCONV_TITLE_CHECK_TT     "Write title into csv file"
+ IDS_LOGCONV_DECPT_COMBO_TT     "Decimal point's separator symbol for values of fields in the csv file. Decimal point's separator and fields' separator symbols must not match."
+ IDS_LOGCONV_CSVSEP_COMBO_TT    "Separator symbol between fields in the csv file. Decimal point's separator and fields' separator symbols must not match."
+ IDS_LOGCONV_START_BTN_TT       "Start the process of conversion"
 END
 
 /////////////////////////////////////////////////////////////////////////////

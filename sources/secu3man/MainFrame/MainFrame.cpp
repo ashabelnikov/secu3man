@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_TOGGLE_MAPWND, OnToggleMapWnd)
  ON_COMMAND(ID_APP_EMBED_MAPWND, OnEmbedMapWnd)
  ON_COMMAND(ID_HELP, OnHelp)
+ ON_COMMAND(ID_APP_CONVERT_LOG, OnAppConvertLogFile)
 
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
@@ -366,6 +367,11 @@ void CMainFrame::setOnEditSettings(EventHandler i_OnFunction)
 void CMainFrame::setOnHelp(EventHandler i_OnFunction)
 {
  m_OnHelp = i_OnFunction;
+}
+
+void CMainFrame::setOnAppConvertLogFile(EventHandler i_OnFunction)
+{
+ m_OnAppConvertLogFile = i_OnFunction;
 }
 
 void CMainFrame::OnClose()
@@ -700,6 +706,12 @@ void CMainFrame::OnEmbedMapWnd()
 {
  if (m_OnEmbedMapWnd)
   m_OnEmbedMapWnd();
+}
+
+void CMainFrame::OnAppConvertLogFile()
+{
+ if (m_OnAppConvertLogFile)
+  m_OnAppConvertLogFile();
 }
 
 void CMainFrame::CheckOnChildCharts(bool checked)

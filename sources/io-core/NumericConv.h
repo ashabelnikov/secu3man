@@ -30,6 +30,8 @@
 #ifndef _NUMERICCONV_
 #define _NUMERICCONV_
 
+#define INTP10_SIZE 10
+
 class IOCORE_API CNumericConv
 {
  public:
@@ -125,12 +127,9 @@ class IOCORE_API CNumericConv
    return true;
   }
 
-
   template <int maxDigits>
   static bool secu3_atof_32(const char *str, int size, float& result)
   {
-   static const float scales[8] = {1.0f, 1e-1f, 1e-2f, 1e-3f, 1e-4f, 1e-5f, 1e-6f, 1e-7f};
-
    if (0 == size)
     return false; //at least one digit must exist
 
@@ -191,9 +190,166 @@ class IOCORE_API CNumericConv
    return true; //ok
   }
 
+  template <int size>
+  static int secu3_ftoa_32(char* str, float value, unsigned int decplaces)
+  {
+   int c = 0, tens = 0;
+   int negative = 0;
+   float d = (value < 0) ? -.5f : .5f;
+   d*= neg_p10[decplaces];
+
+   if (value < 0)
+   {
+    value = -(value + d);
+    ++negative;
+   }
+   else
+   {
+    value = (value + d);
+   }
+
+   while(pos_p10[1 + tens++] <= value);
+
+   int sz = negative + tens + decplaces;
+   if (0 == tens)
+    sz++;
+   if (decplaces > 0)
+    sz++;
+
+   //fill left side with spaces to achieve required size
+   while(sz < size) str[c++] = ' ', ++sz;
+
+   if (negative)
+    str[c++] = '-';
+
+   if (0 == tens)
+    str[c++] = '0';
+
+   //process integer part
+   for (int i = 0; i < tens; ++i)
+   {
+    int idx = tens - i;
+    int digit = (int)(value * neg_p10[idx - 1]);
+    str[c++] = '0' + digit;
+    value-= ((float)digit * pos_p10[idx - 1]);
+   }
+
+   if (decplaces > 0)
+    str[c++] = m_decpt;
+
+   //process fractional part
+   for (unsigned int i = 0; i < decplaces; ++i)
+   {
+    value*= 10.0f;
+    int digit = (int)value;
+    str[c++] = '0' + digit;
+    value-= (float)digit;
+   }
+
+   str[c] = 0; //terminate string
+   return c;
+  }
+
+  template <int size>
+  static int secu3_itoa_u1(char* str, unsigned int value)
+  {
+   int start = 0, c = 0, i = size;
+   while(--i > 0) str[c++] = ' ';
+   str[c++] = '0' + value;
+   str[c] = 0;
+   return c;
+  }
+
+  template <int size>
+  static int secu3_itoa_u32(char* str, unsigned int value)
+  {
+   int start = 0, c = 0, i = size;
+   while(--i > INTP10_SIZE-1) str[c++] = ' ';
+
+   i = INTP10_SIZE-1;
+   while(i >= 0)
+   {
+    unsigned int v = value / int_p10[i];
+    value = value % int_p10[i];
+
+    if (v > 0 || start)
+    {
+     start = 1;
+     str[c++] = '0' + v;
+    }
+    else
+    {
+     if (i > 0)
+     {
+      if (i < size)
+       str[c++] = ' ';
+     }
+     else
+      str[c++] = '0';
+    }
+    --i;
+   }
+
+   str[c] = 0; //terminate string
+   return c;
+  }
+
+  template <int size>
+  static int secu3_itoa_32(char* str, signed int value)
+  {
+   int start = 0, c = 0, i = size;
+   bool sign = false;
+   if (value < 0)
+   {
+    value = -value;
+    sign = true;
+    --i;
+   }
+
+   while(--i > INTP10_SIZE-1) str[c++] = ' ';
+
+   i = INTP10_SIZE-1;
+   while(i >= 0)
+   {
+    signed int v = value / int_p10[i];
+    value = value % int_p10[i];
+ 
+    if (v > 0 || start)
+    {
+     start = 1;
+     if (sign)
+     {
+      str[c++] = '-';
+      sign = false;
+     }
+     str[c++] = '0' + v;
+    }
+    else
+    {
+     if (i > 0)
+     {
+      if (i < size - sign)
+       str[c++] = ' ';
+     }
+     else
+      str[c++] = '0';
+    }
+    --i;
+   }
+
+   str[c] = 0; //terminate string
+   return c;
+  }
+
+  static const char IntToStr[100][3];
+
  private:
   static bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword);
   static char m_decpt;
+  static const float neg_p10[];
+  static const float pos_p10[];
+  static unsigned int int_p10[INTP10_SIZE];
+  static const float scales[];
 };
 
 #endif //_NUMERICCONV_

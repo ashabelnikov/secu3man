@@ -33,11 +33,11 @@
 class IOCORE_API LogWriter : public IAPPEventHandler
 {
  public:
-  LogWriter();
+  LogWriter(bool standalone = false);
   virtual ~LogWriter();
 
   //Активирует механизм записи. Если активация прошла неудачто, то возвращает false.
-  //i_folder - полный путь к каталогу где будет находтся лог-файл.
+  //i_folder - полный путь к каталогу где будет находиться лог-файл.
   //o_full_file_name - переменная которая примет имя файла в который начнется запись
   bool BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_name = NULL);
 
@@ -59,6 +59,12 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //Set name of the specified field
   void SetFieldName(int fieldId, const _TSTRING& value);
 
+  //Get list log title's fields
+  const std::map<int, _TSTRING>& GetFieldList(void) const;
+
+  //Set list log title's fields
+  void SetFieldList(const std::map<int, _TSTRING>& lff);
+
   //enebale/disable writing of fields
   void SetWriteFields(bool value);
 
@@ -68,6 +74,15 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //Log file format: false - text, true - binary
   void SetFormat(bool logfmt);
 
+  //Write a record
+  void SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i_marks);
+
+  //Set decimal point symbol for floating point numbers
+  void SetDecimalPoint(char decpt);
+
+  //Set title string, used only in the standalone mode
+  void SetTitleStr(const std::string& str);
+
  public:
 
   //через эти обработчики данные поступают в механизм записи
@@ -75,6 +90,9 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   virtual void OnConnection(const bool i_online);
 
  private:
+  int WriteTime(char* str, unsigned int wHour, unsigned int wMinute, unsigned int wSecond, unsigned int wMilliseconds);
+  int WriteCE(char* str, DWORD value);
+
   std::map<int, _TSTRING> m_lff;
 
   //хэндл файла в который идет запись
@@ -83,11 +101,14 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //true - идет процесс записи, false - солдат спит, а служба идет.
   bool  m_is_busy;
 
+  char m_decimal_point;
   char m_csv_separating_symbol;
-  char m_csv_data_template[1024];
+  char *mp_recBuff;
 
   int m_pending_marks;
   bool m_writeFields;
 
   bool m_logFmt;
+  bool m_standalone;
+  std::string m_title_str;
 };

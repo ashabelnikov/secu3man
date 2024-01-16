@@ -47,6 +47,7 @@
 #include "ui-core/ImageUtils.h"
 #include "Application/RestartAPI.h"
 #include "ui-core/MsgBox.h"
+#include "LogConverterDlg.h"
 
 using namespace fastdelegate;
 
@@ -119,6 +120,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnEmbedMapWnd(MakeDelegate(this, &MainFrameController::OnEmbedMapWnd));
  mp_view->setOnEditSettings(MakeDelegate(this, &MainFrameController::OnEditSettings));
  mp_view->setOnHelp(MakeDelegate(this, &MainFrameController::OnHelp));
+ mp_view->setOnAppConvertLogFile(MakeDelegate(this, &MainFrameController::OnAppConvertLogFile));
 }
 
 MainFrameController::~MainFrameController()
@@ -647,4 +649,12 @@ void MainFrameController::OnHelp()
   SECUMessageBox(_T("File not found: ") + path);
  else
   VERIFY(::HtmlHelp(mp_view->m_hWnd, (LPCTSTR)path, HH_DISPLAY_TOPIC, NULL));
+}
+
+void MainFrameController::OnAppConvertLogFile()
+{
+ ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+ CLogConverterDlg dlg(NULL, m_pLogWriter, settings->GetFFFConst());
+ dlg.SetCSVSepSymbol(settings->GetCSVSepSymbol());
+ dlg.DoModal();
 }

@@ -90,6 +90,7 @@ class CMainFrame : public CFrameWnd
   void setOnEmbedMapWnd(EventHandler i_OnFunction);
   void setOnEditSettings(EventHandler i_OnFunction);
   void setOnHelp(EventHandler i_OnFunction);
+  void setOnAppConvertLogFile(EventHandler i_OnCreate);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -119,6 +120,7 @@ protected:
   afx_msg void OnAppSaveScreenshot5sec();
   afx_msg void OnAppSaveSettings();
   afx_msg void OnAppEditSettings();
+  afx_msg void OnAppConvertLogFile();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI);
@@ -166,6 +168,7 @@ private:
   EventHandler m_OnEmbedMapWnd;
   EventHandler m_OnEditSettings;
   EventHandler m_OnHelp;
+  EventHandler m_OnAppConvertLogFile;
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;

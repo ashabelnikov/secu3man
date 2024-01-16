@@ -33,7 +33,7 @@
 class IOCORE_API LogReader
 {
  public:
-  LogReader();
+  LogReader(bool standalone = false);
  ~LogReader();
 
   enum FileError
@@ -86,12 +86,15 @@ class IOCORE_API LogReader
 
   void SetFFFConst(int fffConst);
 
+  const std::string& GetTitleStr(void) const;
+
  private:
   int _CompareFileHandles(FILE* f1, FILE* f2);
   bool ParseCE(char* str, int size, DWORD& result);
   bool ParseTime(char* str, int size, unsigned int& wHour, unsigned int& wMinute, unsigned int& wSecond, unsigned int& wMilliseconds);
 
   _TSTRING m_file_name;         //имя открытого файла
+  std::string m_csvTitle;       //title of the csv file (1st record)
   unsigned long m_record_count; //кол-во записей в файле
   FILE* m_file_handle;          //указатель на файл
 
@@ -102,11 +105,10 @@ class IOCORE_API LogReader
 
   char m_csv_separating_symbol;
   char m_decimal_point;
-  char m_csv_data_template[1024];
   unsigned long m_fileOffset;
   char *mp_recBuff;
 
   int m_fffConst;
-
   bool m_logFmt;
+  bool m_standalone;
 };

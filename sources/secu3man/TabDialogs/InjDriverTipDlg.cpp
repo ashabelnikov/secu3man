@@ -43,8 +43,6 @@ void CInjDriverTipDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CInjDriverTipDlg, Super)
- ON_WM_DESTROY()
- ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

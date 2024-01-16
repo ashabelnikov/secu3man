@@ -48,6 +48,7 @@ set(HEADERS
   MainFrame/MainFrameController.h
   MainFrame/MainFrameManager.h
   MainFrame/StatusBarManager.h
+  MainFrame/LogConverterDlg.h
   Settings/AppSettingsController.h
   Settings/AppSettingsDlg.h
   Settings/AppSettingsManager.h
@@ -113,6 +114,7 @@ set(SOURCES
   MainFrame/MainFrameController.cpp
   MainFrame/MainFrameManager.cpp
   MainFrame/StatusBarManager.cpp
+  MainFrame/LogConverterDlg.cpp
   Settings/AppSettingsController.cpp
   Settings/AppSettingsDlg.cpp
   Settings/AppSettingsManager.cpp
