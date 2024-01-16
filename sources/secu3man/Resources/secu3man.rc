@@ -904,7 +904,7 @@ BEGIN
     IDS_APP_SETTINGS_LOGFOLDER_EDITBOX_TT "Введите путь для сохранения файлов содержащих логи работы блока (лог файлы) или нажмите кнопку справа для выбора пути. Это текстовые файлы с расширением .csv"
     IDS_APP_SETTINGS_LOGFOLDER_BUTTON_TT "Нажмите для выбора пути куда сохранять лог файлы."
     IDS_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER_TT "Установите галочку, если хотите чтобы лог файлы сохранялись в папку откуда запущена программа (в папку с secu3man.exe)."
-    IDS_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO_TT "Выбор символа, который будет использоваться для разделения полей в строках лог файла текстового формата (.csv)."
+    IDS_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO_TT "Выбор символа, который будет использоваться для разделения полей в строках лог файла текстового формата (.csv). Данный символ не должен совпадать с символом десятичной дроби, в противном случае файл лога будет нечитабельным!"
     IDS_APP_SETTINGS_ALWAYS_WRITE_LOG_TT "Включить постоянную запись логов (установлено по умолчанию, помогает при первичной настройке)."
     IDS_APP_SETTINGS_WRITE_LOG_TITLE_TT "Разрешить запись заголовка в первую строку лог файла. Отредактировать тексты полей заголовка можно в ini-файле. Заголовок записывается только в файлы лога текстового формата (.csv)."
     IDS_APP_SETTINGS_PLATFORM_SEL_COMBO_TT "Выберите тип процессора вашего блока. Это скорее всего ATMega644 или ATMega1284."
@@ -1538,8 +1538,8 @@ BEGIN
     PUSHBUTTON      "Select",IDC_LOGCONV_OUTPUT_FILE_BTN,235,61,50,16
     CONTROL         "Binary format",IDC_LOGCONV_FORMAT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,30,84,150,10
     CONTROL         "Write title",IDC_LOGCONV_TITLE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,30,102,150,10
-    COMBOBOX        IDC_LOGCONV_DECPT_COMBO,30,122,30,12,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_LOGCONV_DECPT_COMBO,30,122,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Decimal point symbol",IDC_LOGCONV_DECPT_CAPTION,68,124,100,10
     LTEXT           "Field separator symbol",IDC_LOGCONV_CSVSEP_CAPTION,68,144,100,10
     LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,191,113,40,10
@@ -1913,7 +1913,7 @@ BEGIN
     IDS_APP_SETTINGS_LOGFOLDER_EDITBOX_TT "Enter the path to save the files containing the logs from the unit (log files) or click the button on the right to select the path. These are text files with .csv extension"
     IDS_APP_SETTINGS_LOGFOLDER_BUTTON_TT "Click to select the path where to save the log files."
     IDS_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER_TT "Check the box if you want log files to be saved in the folder from where the program is running (in the folder with secu3man.exe)."
-    IDS_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO_TT "Select the character that will be used to separate the fields in the lines of the text format log file (.csv)."
+    IDS_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO_TT "Select the character that will be used to separate the fields in the lines of the text format log file (.csv). This symbol must not match with decimal point symbol, otherwise log file will be unreadable!"
     IDS_APP_SETTINGS_ALWAYS_WRITE_LOG_TT "Enable permanent logging (set by default, helps with the initial setup)."
     IDS_APP_SETTINGS_WRITE_LOG_TITLE_TT "Allow the header to be written to the first line of the log file. You can edit texts of header's fields in the ini-file. The header is writed only into log files of text format (.csv)."
     IDS_APP_SETTINGS_PLATFORM_SEL_COMBO_TT "Select processor type of your unit. This is most likely ATMega644 or ATMega1284."
