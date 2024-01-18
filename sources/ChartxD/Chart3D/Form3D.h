@@ -107,6 +107,7 @@ class TForm3D : public TForm
   TMenuItem *PM_HideMarks;
   TMenuItem *PM_HideOldCurve;
   TMenuItem *PM_Interpolate;
+  TMenuItem *PM_Classic3d;
 
   TMenuItem *PM_CopyToCurve;
   TMenuItem *PM_CopyToCurve0;
@@ -209,6 +210,8 @@ class TForm3D : public TForm
   double __fastcall OnGetYValue(TChartSeries *Sender, int X, int Z); //from TIsoSurfaceSerie
   void __fastcall OnAfterDrawChart(TObject *Sender);
   void __fastcall OnInterpolate(TObject *Sender);
+  void __fastcall OnClassic3d(TObject *Sender);
+  TSeriesPointerStyle __fastcall SeriesGetPointerStyle(TChartSeries *Sender, int ValueIndex);
 
  public:
   __fastcall TForm3D(HWND parent);
@@ -272,6 +275,10 @@ class TForm3D : public TForm
   void ClipboardPaste(void);
   void Interpolate2D(int z, const std::vector<int>& i_selpts);
   void Interpolate3D(int left, int right, int down, int up);
+  void __fastcall SetSeriesOrder(bool reverse);
+  void __fastcall ShowPoints(bool show);
+  void __fastcall SetSeriesTransparency(double transp);
+  void __fastcall SetSeriesColor(int z);
 
  private: // User declarations
   //адрес функции которая будет вызываться после изменения данных

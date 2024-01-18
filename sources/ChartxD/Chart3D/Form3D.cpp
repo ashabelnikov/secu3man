@@ -40,6 +40,10 @@
 #pragma resource "Form3D.dfm"
 
 char TForm3D::m_csvsep_symb = ',';
+//---------------------------------------------------------------------------
+//colours for 3D chart
+long col[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491, 0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
+               0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF, 0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
 
 //---------------------------------------------------------------------------
 __fastcall TForm3D::TForm3D(HWND parent)
@@ -74,7 +78,7 @@ __fastcall TForm3D::TForm3D(HWND parent)
 , m_chart_active(false)
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
-, m_3d_transparency(10.0)
+, m_3d_transparency(0.0)
 , m_mc_xpos(-1)
 , m_mc_ypos(-1)
 , m_mc_rotation(0)
@@ -96,6 +100,7 @@ void TForm3D::DataPrepare(bool create)
  if (create)
  { //create
   //At the moment of creation we are in the 2D mode by default
+  ShowPoints(true);
   UpdateSystemColors();
   FillChart();
   SetAirFlow(m_air_flow_position); //set trackbar position  //cr
@@ -114,7 +119,7 @@ void TForm3D::DataPrepare(bool create)
  else
  { //update
   //When updating (after creation), we may be either in the 2D or 3D mode
-  if (CheckBox3d->Checked)
+  if (CheckBox3d->Checked && !PM_Classic3d->Checked)
    UpdateSurfaceValues();
   else
    UpdateChartValues();
@@ -454,6 +459,10 @@ void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
    }
   }
  }
+ else if (Sender == Chart1->DepthAxis)
+ { //Z
+  LabelText.sprintf("%d", m_count_z - ValueIndex);
+ }
 }
 
 //---------------------------------------------------------------------------
@@ -463,6 +472,9 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   m_sel.InvertZ();
  if (CheckBox3d->Checked)
  { //3D
+  SetSeriesTransparency(m_3d_transparency);
+  SetSeriesOrder(PM_Classic3d->Checked && !CheckBoxBv->Checked);
+  ShowPoints(false);
   Series3D->CreateValues(m_count_x, m_count_z);
   Chart1->View3D  = true;
   MakeAllVisible();
@@ -477,9 +489,12 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   PM_HideMarks->Enabled = false;
   PM_HideOldCurve->Enabled = false;
   PM_AllowMouseCamera->Enabled = true;
+  PM_Classic3d->Enabled = true;
  }
  else
  { //2D
+  SetSeriesOrder(false); //normal z-order
+  ShowPoints(true);
   Series3D->Clear(); //delete values
   UpdateChartValues();
   Chart1->View3D = false;
@@ -493,6 +508,7 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   PM_HideMarks->Enabled = true;
   PM_HideOldCurve->Enabled = true;
   PM_AllowMouseCamera->Enabled = false;
+  PM_Classic3d->Enabled = false;
  }
 }
 
@@ -502,6 +518,12 @@ void __fastcall TForm3D::CheckBoxBvClick(TObject *Sender)
 {
  m_val_z = m_count_z - 1 - m_val_z;
  m_sel.InvertZ();
+
+ for (int z = 0; z < m_count_z; ++z)
+  SetSeriesColor(z);
+
+ UpdateChartValues();
+
  UpdateSurfaceValues();
 }
 
@@ -554,7 +576,10 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
     RestrictAndSetValue(z, x, GetItem_m(z, x));
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
 
  if (m_pOnChange)
@@ -585,7 +610,10 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
     RestrictAndSetValue(z, x, GetItem_m(z, x)); 
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
 
  if (m_pOnChange)
@@ -654,6 +682,8 @@ void TForm3D::MakeOneVisible(int flow)
  {
   Chart1->Series[z]->Active = (z==flow) && !PM_HideOldCurve->Checked;
   Chart1->Series[z + m_count_z]->Active = (z==flow);
+  for (int x = 0; x < m_count_x; ++x)
+   Chart1->Series[z + m_count_z]->ValueColor[x] = clRed;
  }
 }
 
@@ -664,9 +694,10 @@ void TForm3D::MakeAllVisible(void)
  for(int z = 0; z < m_count_z; z++)
  {
   Chart1->Series[z]->Active = false;
-  Chart1->Series[z + m_count_z]->Active = false;
+  Chart1->Series[z + m_count_z]->Active = PM_Classic3d->Checked;
+  SetSeriesColor(z);
  }
- Series3D->Active = true;
+ Series3D->Active = !PM_Classic3d->Checked;
 }
 
 //---------------------------------------------------------------------------
@@ -719,7 +750,10 @@ void __fastcall TForm3D::ShiftPoints(float i_value, bool all /*= false*/)
      RestrictAndSetValue(GetZPos(z), x, GetItem_m(GetZPos(z), x) + i_value);
    }
   }
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
 }
 
@@ -770,7 +804,10 @@ void __fastcall TForm3D::CopyCurve(int fromIndex, int toIndex)
  {//3D
   for(int x = 0; x < m_count_x; ++x)
    SetItem(toIndex, x, GetItem_m(fromIndex, x));
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  {//2D
@@ -792,9 +829,18 @@ void TForm3D::SetChartValue(int z, int index, double value)
 //2D only
 void TForm3D::UpdateChartValues(void)
 {
- for(int z = 0; z < m_count_x; ++z)
-  for(int x = 0; x < m_count_x; ++x)
-   SetChartValue(z, x, GetItem_m(z, x));
+ if (CheckBox3d->Checked && PM_Classic3d->Checked && !CheckBoxBv->Checked)
+ {
+  for(int z = 0; z < m_count_x; ++z)
+   for(int x = 0; x < m_count_x; ++x)
+    SetChartValue(m_count_z-1-z, x, GetItem_m(z, x));
+ }
+ else
+ {
+  for(int z = 0; z < m_count_x; ++z)
+   for(int x = 0; x < m_count_x; ++x)
+    SetChartValue(z, x, GetItem_m(z, x));
+ }
 }
 
 //---------------------------------------------------------------------------
@@ -826,7 +872,10 @@ void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
  {//3D
   for (int x = 0; x < m_count_x; x++ )
    RestrictAndSetValue(GetZPos(m_val_z), x, 0);
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  {//2D
@@ -845,7 +894,10 @@ void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
  {//3D
   for (int x = 0; x < m_count_x; x++)
    RestrictAndSetValue(GetZPos(m_val_z), x, GetItem_m(GetZPos(m_val_z), 0));
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  {//2D
@@ -865,7 +917,10 @@ void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
   selpts.push_back(0);
   selpts.push_back(m_count_x-1);
   Interpolate2D(GetZPos(m_val_z), selpts);
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  {//2D
@@ -888,7 +943,10 @@ void __fastcall TForm3D::OnZeroAllCurves(TObject *Sender)
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
     SetItem(z, x, 0);
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  {//2D
@@ -914,7 +972,10 @@ void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
   for (int z = 0; z < m_count_z; z++ )
    for (int x = 0; x < m_count_x; x++ )
     SetItem(z, x, GetItem_m(GetZPos(m_val_z), x));
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  {//2D
@@ -938,7 +999,10 @@ void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
  if (CheckBox3d->Checked)
  {//3D
   Interpolate3D(0, m_count_x-1, 0, m_count_z-1);
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  {//2D
@@ -1250,6 +1314,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    if (m_3d_transparency > 100.0)
     m_3d_transparency = 100.0;
    Series3D->Transparency = m_3d_transparency;
+   SetSeriesTransparency(m_3d_transparency);
   }
   else if (Key == 'G')
   { //transparency-
@@ -1257,6 +1322,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    if (m_3d_transparency < .0)
     m_3d_transparency = .0;
    Series3D->Transparency = m_3d_transparency;
+   SetSeriesTransparency(m_3d_transparency);
   }
   else if (Key == 0x43 && Shift.Contains(ssCtrl))
   { //Ctrl+C
@@ -1646,7 +1712,7 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
   }
 
   //Update
-  if (CheckBox3d->Checked)
+  if (CheckBox3d->Checked && !PM_Classic3d->Checked)
    UpdateSurfaceValues();
   else
    UpdateChartValues();
@@ -1756,7 +1822,10 @@ void TForm3D::ClipboardPaste(void)
       }
      }
     }
-    UpdateSurfaceValues();
+    if (PM_Classic3d->Checked)
+     UpdateChartValues();
+    else
+     UpdateSurfaceValues();
     if (m_pOnChange)
      m_pOnChange(m_param_on_change);
    }
@@ -1856,7 +1925,10 @@ void __fastcall TForm3D::OnSetTo(TObject *Sender)
      RestrictAndSetValue(GetZPos(z), x, PtMovStepDlg->GetValue());
     }
    }
-   UpdateSurfaceValues();
+   if (PM_Classic3d->Checked)
+    UpdateChartValues();
+   else
+    UpdateSurfaceValues();
   }
  }
  if (m_pOnChange) 
@@ -1897,7 +1969,10 @@ void __fastcall TForm3D::OnSub(TObject *Sender)
      RestrictAndSetValue(GetZPos(z), x, value);
     }
    }
-   UpdateSurfaceValues();
+   if (PM_Classic3d->Checked)
+    UpdateChartValues();
+   else
+    UpdateSurfaceValues();
   }
  }
  if (m_pOnChange) 
@@ -1938,7 +2013,10 @@ void __fastcall TForm3D::OnAdd(TObject *Sender)
      RestrictAndSetValue(GetZPos(z), x, value);
     }
    }
-   UpdateSurfaceValues();
+   if (PM_Classic3d->Checked)
+    UpdateChartValues();
+   else
+    UpdateSurfaceValues();
   }
  }
  if (m_pOnChange) 
@@ -1981,7 +2059,10 @@ void __fastcall TForm3D::OnMul(TObject *Sender)
      RestrictAndSetValue(GetZPos(z), x, value);
     }
    }
-   UpdateSurfaceValues();
+   if (PM_Classic3d->Checked)
+    UpdateChartValues();
+   else
+    UpdateSurfaceValues();
   }
  }
  if (m_pOnChange)
@@ -2005,7 +2086,7 @@ double __fastcall TForm3D::OnGetYValue(TChartSeries *Sender, int X, int Z)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnAfterDrawChart(TObject *Sender)
 {
- if (!CheckBox3d->Checked)
+ if (!CheckBox3d->Checked || PM_Classic3d->Checked)
   return;
 
  for(int Z = 0; Z < m_count_z; ++Z)
@@ -2129,7 +2210,10 @@ void __fastcall TForm3D::OnInterpolate(TObject *Sender)
   Interpolate2D(m_sel.Up(), selpts);
   Interpolate3D(m_sel.Left(), m_sel.Right(), m_sel.Down(), m_sel.Up());
   if (CheckBoxBv->Checked) m_sel.InvertZ();
-  UpdateSurfaceValues();
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
  }
  else
  { //2D
@@ -2195,6 +2279,124 @@ void TForm3D::Interpolate3D(int left, int right, int down, int up)
    double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * (z-down));
    RestrictAndSetValue(z, x, value);
   }
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnClassic3d(TObject *Sender)
+{
+ PM_Classic3d->Checked = (PM_Classic3d->Checked) ? false : true;
+ SetSeriesOrder(PM_Classic3d->Checked);
+
+ MakeAllVisible();
+ 
+ if (PM_Classic3d->Checked)
+  UpdateChartValues();
+ else
+  UpdateSurfaceValues();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::SetSeriesOrder(bool reverse)
+{
+ if (reverse)
+ {
+  Chart1->SeriesList->Items[16]  = Series32;
+  Chart1->SeriesList->Items[17]  = Series31;
+  Chart1->SeriesList->Items[18]  = Series30;
+  Chart1->SeriesList->Items[19]  = Series29;
+  Chart1->SeriesList->Items[20]  = Series28;
+  Chart1->SeriesList->Items[21]  = Series27;
+  Chart1->SeriesList->Items[22]  = Series26;
+  Chart1->SeriesList->Items[23]  = Series25;
+  Chart1->SeriesList->Items[24]  = Series24;
+  Chart1->SeriesList->Items[25]  = Series23;
+  Chart1->SeriesList->Items[26] = Series22;
+  Chart1->SeriesList->Items[27] = Series21;
+  Chart1->SeriesList->Items[28] = Series20;
+  Chart1->SeriesList->Items[29] = Series19;
+  Chart1->SeriesList->Items[30] = Series18;
+  Chart1->SeriesList->Items[31] = Series17;
+ }
+ else
+ {
+  Chart1->SeriesList->Items[16]  = Series17;
+  Chart1->SeriesList->Items[17]  = Series18;
+  Chart1->SeriesList->Items[18]  = Series19;
+  Chart1->SeriesList->Items[19]  = Series20;
+  Chart1->SeriesList->Items[20]  = Series21;
+  Chart1->SeriesList->Items[21]  = Series22;
+  Chart1->SeriesList->Items[22]  = Series23;
+  Chart1->SeriesList->Items[23]  = Series24;
+  Chart1->SeriesList->Items[24]  = Series25;
+  Chart1->SeriesList->Items[25]  = Series26;
+  Chart1->SeriesList->Items[26] = Series27;
+  Chart1->SeriesList->Items[27] = Series28;
+  Chart1->SeriesList->Items[28] = Series29;
+  Chart1->SeriesList->Items[29] = Series30;
+  Chart1->SeriesList->Items[30] = Series31;
+  Chart1->SeriesList->Items[31] = Series32;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::ShowPoints(bool show)
+{
+ for (int i = 0; i < m_count_z; i++)
+ {
+  Chart1->Series[i]->Marks->Visible = false; //show;
+  Chart1->Series[i + m_count_z]->Marks->Visible = show;
+  ((TPointSeries*)Chart1->Series[i])->Pointer->Visible = show;
+  ((TPointSeries*)Chart1->Series[i + m_count_z])->Pointer->Visible = true;
+  ((TPointSeries*)Chart1->Series[i + m_count_z])->Pointer->VertSize = CheckBox3d->Checked ? 1 : 4;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::SetSeriesTransparency(double transp)
+{
+ for (int i = 0; i < m_count_z; i++)
+  ((TLineSeries*)(Chart1->Series[i + m_count_z]))->Transparency = transp;
+}
+
+//---------------------------------------------------------------------------
+TSeriesPointerStyle __fastcall TForm3D::SeriesGetPointerStyle(TChartSeries *Sender, int ValueIndex)
+{
+ if (CheckBox3d->Checked && PM_Classic3d->Checked)
+ {
+  int z = m_count_z;
+  for(; z < m_count_z * 2; z++)
+  {
+   if (Chart1->Series[z] == Sender)
+    break;
+  }
+
+  if (z==m_count_z * 2 || ValueIndex < 0)
+   return TSeriesPointerStyle(psNothing); //error, can't find related serie
+
+  if (m_sel.Get(m_count_z - 1 - (z - m_count_z), ValueIndex))
+   return TSeriesPointerStyle(psRectangle); //selected
+  else
+   return TSeriesPointerStyle(psNothing); //not selected
+ }
+ else
+ {
+  return TSeriesPointerStyle(psRectangle);
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::SetSeriesColor(int z)
+{
+ if (CheckBoxBv->Checked)
+ {
+  for (int x = 0; x < m_count_x; ++x)
+   Chart1->Series[z + m_count_z]->ValueColor[x] = TColor(col[z]);
+ }
+ else
+ {
+  for (int x = 0; x < m_count_x; ++x)
+   Chart1->Series[z + m_count_z]->ValueColor[x] = TColor(col[m_count_z - 1 - z]);
  }
 }
 

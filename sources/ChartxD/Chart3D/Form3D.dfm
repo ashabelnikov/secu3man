@@ -192,6 +192,9 @@ object Form3D: TForm3D
     Title.Text.Strings = ('График рабочего УОЗ')
     BottomAxis.Title.Caption = 'Обороты (мин-1)'
     BottomAxis.LabelStyle = talText
+    DepthAxis.Visible = True
+    DepthAxis.Inverted = False
+    DepthAxis.LabelStyle = talText
     LeftAxis.Automatic = False
     LeftAxis.AutomaticMaximum = False
     LeftAxis.AutomaticMinimum = False
@@ -558,6 +561,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series18: TLineSeries
       Marks.ArrowLength = 8
@@ -579,6 +583,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series19: TLineSeries
       Marks.ArrowLength = 8
@@ -600,6 +605,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series20: TLineSeries
       Marks.ArrowLength = 8
@@ -621,6 +627,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series21: TLineSeries
       Marks.ArrowLength = 8
@@ -642,6 +649,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series22: TLineSeries
       Marks.ArrowLength = 8
@@ -663,6 +671,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series23: TLineSeries
       Marks.ArrowLength = 8
@@ -684,6 +693,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series24: TLineSeries
       Marks.ArrowLength = 8
@@ -705,6 +715,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series25: TLineSeries
       Marks.ArrowLength = 8
@@ -726,6 +737,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series26: TLineSeries
       Marks.ArrowLength = 8
@@ -747,6 +759,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series27: TLineSeries
       Marks.ArrowLength = 8
@@ -768,6 +781,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series28: TLineSeries
       Marks.ArrowLength = 8
@@ -789,6 +803,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series29: TLineSeries
       Marks.ArrowLength = 8
@@ -810,6 +825,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series30: TLineSeries
       Marks.ArrowLength = 8
@@ -831,6 +847,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series31: TLineSeries
       Marks.ArrowLength = 8
@@ -852,6 +869,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series32: TLineSeries
       Marks.ArrowLength = 8
@@ -873,6 +891,7 @@ object Form3D: TForm3D
       YValues.Multiplier = 1
       YValues.Order = loNone
       OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series3D: TIsoSurfaceSeries
       Marks.Arrow.Visible = True
@@ -890,7 +909,7 @@ object Form3D: TForm3D
       UsePalette = False
       WireFrame = True
       TimesZOrder = 16
-      Transparency = 10
+      Transparency = 0
       XValues.Name = 'X'
       XValues.Order = loNone
       YValues.Name = 'Y'
@@ -1297,6 +1316,11 @@ object Form3D: TForm3D
       Checked = True
       Enabled = False
       OnClick = OnAllowMouseCamera
+    end
+    object PM_Classic3d: TMenuItem
+      Caption = 'Classic 3D'
+      Enabled = False
+      OnClick = OnClassic3d
     end
   end
   object openDialog: TOpenDialog
