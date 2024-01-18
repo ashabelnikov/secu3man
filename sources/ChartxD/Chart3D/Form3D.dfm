@@ -192,9 +192,14 @@ object Form3D: TForm3D
     Title.Text.Strings = ('График рабочего УОЗ')
     BottomAxis.Title.Caption = 'Обороты (мин-1)'
     BottomAxis.LabelStyle = talText
-    DepthAxis.Visible = True
+    DepthAxis.Visible = False
     DepthAxis.Inverted = False
     DepthAxis.LabelStyle = talText
+    DepthAxis.Automatic = False
+    DepthAxis.AutomaticMaximum = False
+    DepthAxis.AutomaticMinimum = False
+    DepthAxis.Maximum = 16
+    DepthAxis.Minimum = 1
     LeftAxis.Automatic = False
     LeftAxis.AutomaticMaximum = False
     LeftAxis.AutomaticMinimum = False

@@ -461,7 +461,7 @@ void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
  }
  else if (Sender == Chart1->DepthAxis)
  { //Z
-  LabelText.sprintf("%d", m_count_z - ValueIndex);
+  LabelText.sprintf("%d", m_count_z - (ValueIndex-1));
  }
 }
 
