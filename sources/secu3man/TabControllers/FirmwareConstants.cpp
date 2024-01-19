@@ -260,6 +260,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("EGO correction delay after acceleration enrichment"), _T("str"), 0, 255, 1, 1, &d.ego_ac_delay, _T("After finishing acceleration enrichment the lambda correction will not start working immediately, but after a specified time in strokes."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длительность ОПП перед его убыванием"), _T("такт"), 0, 1000, 1, 1, &d.aftstr_flat_strokes, _T("После запуска двигателя ОПП будет держаться на одном уровне в течение данного времени перед тем, как начнет плавно убывать."));
+ else
+  dfd.AppendItem(_T("Duration of ASE before it will start to decrease"), _T("str"), 0, 1000, 1, 1, &d.aftstr_flat_strokes, _T("After starting the engine, the ASE will remain at the same level for a given time before it begins to gradually decrease."));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));
