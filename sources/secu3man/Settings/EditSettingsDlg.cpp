@@ -151,7 +151,8 @@ void CEditSettingsDlg::_HighlightSyntax(void)
  cf_var.crTextColor = RGB(0,0,255);
 
 
- for(int i = 0; i < buff.GetLength(); ++i)
+ int length = buff.GetLength();
+ for(int i = 0; i < length; ++i)
  {
   if (buff[i] == _T('\n'))
   {
@@ -186,7 +187,7 @@ void CEditSettingsDlg::_HighlightSyntax(void)
    m_edit.SetSelectionCharFormat(cf_var);   
    varS = -1;
   }
-  else if (buff[i] == _T(';'))
+  else if (buff[i] == _T(';') && commS==-1 && (i == length-1 || i == 0 || buff[i-1] != _T('\'') && buff[i+1] != _T('\''))  )
   {
    commS = idx;
    newline = false;

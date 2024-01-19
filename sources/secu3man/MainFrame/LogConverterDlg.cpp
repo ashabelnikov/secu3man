@@ -72,7 +72,7 @@ END_MESSAGE_MAP()
 
 namespace {
  const TCHAR *tdecpt_symb = _T(".,");
- const TCHAR *tcsvsep_symb = _T(";%,+|*");
+ const TCHAR *tcsvsep_symb = _T(";%,+|*=!#$&");
  char decpt_symb[16];
  char csvsep_symb[16];
 }

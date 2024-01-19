@@ -325,6 +325,37 @@ class IniIO
    return true;
   }
 
+  bool ReadChar(OptField_t<char>& field, const _TSTRING& defVal, const std::vector<std::pair<_TSTRING, char> >& patterns)
+  {
+   TCHAR read_str[256];
+   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   TCHAR* p = read_str;
+   while(*p==_T(' ') || *p==_T('\'')) ++p; //skip symbols
+   if (*p)
+   {
+    field.value = *p;
+    size_t count = patterns.size();
+    for(size_t i = 0; i < count; i++)
+    {
+     if (field.value == patterns[i].second)
+      return true;
+    }
+   }
+   field.value = defVal.c_str()[0]; //error: use default
+   return false;
+  }
+
+  bool WriteChar(const OptField_t<char>& field, const _TSTRING& comment = _T(""))
+  {
+   CString str;
+   str+=_T('\'');
+   str+= field.value;
+   str+=_T('\'');
+   AddComment(str, field.name, comment); //add optional comment
+   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   return true;
+  }
+
  private:
   void AddComment(CString& str, const _TSTRING& fieldName, const _TSTRING& comment)
   {

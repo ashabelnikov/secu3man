@@ -822,13 +822,17 @@ CAppSettingsModel::CAppSettingsModel()
  GetModuleFileName(hModule, m_current_directory, MAX_PATH);
  VERIFY(PathRemoveFileSpec(m_current_directory));
 
- m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\",\"  comma")),     ','));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\";\"  semicolon")), ';'));
- m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\":\"  colon")),     ':'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"%\"  percent")),   '%'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\",\"  comma")),     ','));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"+\"  plus")),      '+'));
- m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"-\"  minus")),     '-'));
- m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"*\"  star")),      '*'));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"|\"  stick")),     '|'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"*\"  star")),      '*'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"=\"  equals")),    '='));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"!\"  exclamation")), '!'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"#\"  hash")),      '#'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"$\"  dollar")),    '$'));
+ m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"&\"  ampersand")), '&'));
 
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("English")), _TSTRING(_T("english"))), IL_ENGLISH) );
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Russian")), _TSTRING(_T("russian"))), IL_RUSSIAN) );
@@ -884,8 +888,8 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadDword(m_optBaudRateApplication, _T("115200"), m_AllowableBaudRates);
  os.ReadDword(m_optBaudRateBootloader, _T("115200"), m_AllowableBaudRates);
  os.ReadString(m_optLogFilesFolder, m_current_directory);
- os.ReadInt(m_optCSVSepSymbol, _T("59"), m_AllowaleCSVSepSymbols);
- os.ReadInt(m_optMapCSVSepSymbol, _T("59"), m_AllowaleCSVSepSymbols);
+ os.ReadChar(m_optCSVSepSymbol, _T(";"), m_AllowaleCSVSepSymbols);
+ os.ReadChar(m_optMapCSVSepSymbol, _T(";"), m_AllowaleCSVSepSymbols);
  os.ReadInt(m_optUseAppFolder, _T("1"), 0, 1);
  os.ReadInt(m_optAlwaysWriteLog, _T("1"), 0, 1);
  os.ReadInt(m_optMIDeskUpdatePeriod, _T("40"), 0, 1000); 
@@ -1682,16 +1686,16 @@ bool CAppSettingsModel::WriteSettings(void)
  os.WriteInt(m_optAlwaysWriteLog);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  os.WriteComment(_T("Symbol used to separate fields in the CSV file. Accepted values: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
+  os.WriteComment(_T("Symbol used to separate fields in the CSV file. Accepted values: ;%,+|*=!#$&"));
  else
-  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файле. Допустимые значения: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
- os.WriteInt(m_optCSVSepSymbol);
+  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файле. Допустимые значения: ;%,+|*=!#$&"));
+ os.WriteChar(m_optCSVSepSymbol);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  os.WriteComment(_T("Symbol used to separate fields in the Map CSV file. Accepted values: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
+  os.WriteComment(_T("Symbol used to separate fields in the Map CSV file. Accepted values: ;%,+|*=!#$&"));
  else
-  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файлах таблиц. Допустимые значения: 44(,) 59(;) 58(:) 43(+) 45(-) 42(*) 124(|)"));
- os.WriteInt(m_optMapCSVSepSymbol);
+  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файлах таблиц. Допустимые значения: ;%,+|*=!#$&"));
+ os.WriteChar(m_optMapCSVSepSymbol);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Specifies how frequently virtual gauges and indicators will be updated (redraw). Value in the milliseconds"));
