@@ -164,6 +164,7 @@ namespace SECU3IO
   float inj_floodclear_tps;             //flood clear mode threshold
   int stbl_str_cnt;
   bool fldclr_start;
+  bool limcranpw;                       //limit max inj. PW on cranking
  };
 
  struct AnglesPar

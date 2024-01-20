@@ -45,6 +45,7 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_STARTER_FLDCLRTPS_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_STBLSTRCNT_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_STARTER_FLDCLRSTART_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_STARTER_LIMCRANPW_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,OnUpdateControls)
@@ -97,6 +98,7 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_STBLSTRCNT_EDIT, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRSTART_CHECK, OnUpdateInjGasChokeControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_LIMCRANPW_CHECK, OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg()
@@ -130,6 +132,7 @@ CStarterPageDlg::CStarterPageDlg()
  m_params.inj_floodclear_tps = 75.0f;
  m_params.stbl_str_cnt = 10;
  m_params.fldclr_start = true;
+ m_params.limcranpw = true;
 }
 
 LPCTSTR CStarterPageDlg::GetDialogID(void) const
@@ -161,6 +164,7 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_STARTER_STBLSTRCNT_EDIT, m_stblstrcnt_edit);
  DDX_Control(pDX, IDC_PD_STARTER_STBLSTRCNT_SPIN, m_stblstrcnt_spin);
  DDX_Control(pDX, IDC_PD_STARTER_FLDCLRSTART_CHECK, m_fldclrstart_check);
+ DDX_Control(pDX, IDC_PD_STARTER_LIMCRANPW_CHECK, m_limcranpw_check);
 
  m_starter_off_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
  m_smap_abandon_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
@@ -173,6 +177,7 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  m_fldclrtps_edit.DDX_Value(pDX, IDC_PD_STARTER_FLDCLRTPS_EDIT, m_params.inj_floodclear_tps);
  m_stblstrcnt_edit.DDX_Value(pDX, IDC_PD_STARTER_STBLSTRCNT_EDIT, m_params.stbl_str_cnt);
  DDX_Check_bool(pDX, IDC_PD_STARTER_FLDCLRSTART_CHECK, m_params.fldclr_start);
+ DDX_Check_bool(pDX, IDC_PD_STARTER_LIMCRANPW_CHECK, m_params.limcranpw);
 }
 
 void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -296,6 +301,7 @@ BOOL CStarterPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_stblstrcnt_spin, MLL::GetString(IDS_PD_STARTER_STBLSTRCNT_EDIT_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_fldclrstart_check, MLL::GetString(IDS_PD_STARTER_FLDCLRSTART_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_limcranpw_check, MLL::GetString(IDS_PD_STARTER_LIMCRANPW_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);

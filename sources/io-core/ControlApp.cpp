@@ -819,6 +819,7 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &strt_flags))
   return false;
  startrPar.fldclr_start = CHECKBIT8(strt_flags, 0);
+ startrPar.limcranpw = CHECKBIT8(strt_flags, 1);
 
  return true;
 }
@@ -3799,6 +3800,7 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin8ToHex(stbl_str_cnt, m_outgoing_packet);
  unsigned char flags = 0; //not used now
  WRITEBIT8(flags, 0, packet_data->fldclr_start);
+ WRITEBIT8(flags, 1, packet_data->limcranpw);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------

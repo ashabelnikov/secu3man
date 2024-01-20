@@ -107,6 +107,7 @@ BEGIN
     LTEXT           "такт",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,191,30,10
 
     CONTROL         "Разрешить запуск при продувке двигателя",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,210,137,15
+    CONTROL         "Ограничивать макс. длит. впрыска на пуске",IDC_PD_STARTER_LIMCRANPW_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,230,137,17
 END
 
 IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
@@ -2059,6 +2060,7 @@ BEGIN
   IDS_EDIT_VALUE "Редактирование значения"
   IDS_SD_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДАД!\nИзмените значения параметров чтобы исключить эту ошибку."
   IDS_MAF_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДМРВ!\nИзмените значения параметров чтобы исключить эту ошибку."
+  IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Ограничивать максимальное значение длительности впрыска при пуске двигателя."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2163,6 +2165,7 @@ BEGIN
     LTEXT           "str",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,191,30,10
 
     CONTROL         "Allow engine start in flood clear mode",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,210,137,15
+    CONTROL         "Limit max. inj. PW on cranking",IDC_PD_STARTER_LIMCRANPW_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,230,137,15
 END
 
 IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
@@ -4141,6 +4144,7 @@ BEGIN
   IDS_EDIT_VALUE "Edit value"
   IDS_SD_IGL_OVERFLOW "Overflow detected when calculating constant for Speed-Density inj. PW equation!\nChange configuration to eliminate this error."
   IDS_MAF_IGL_OVERFLOW "Overflow detected when calculating constant for MAF inj. PW equation!\nChange configuration to eliminate this error."
+  IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Limit maximum injection PW during cranking."
 END
 
 /////////////////////////////////////////////////////////////////////////////
