@@ -405,10 +405,12 @@ typedef struct
 
  _uint aftstr_flat_strokes;
 
+ _uchar inj_prime_times;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1949];
+ _uchar reserved[1948];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3310,6 +3312,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.ltft_dead_band[1] = (((float)exd.ltft_dead_band[1]) / 512.0f) * 100.f; //%
 
  o_data.aftstr_flat_strokes = exd.aftstr_flat_strokes;
+ o_data.inj_prime_times = exd.inj_prime_times;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3441,6 +3444,7 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.ltft_dead_band[1] = MathHelpers::Round((i_data.ltft_dead_band[1] / 100.f) * 512.0f);
 
  exd.aftstr_flat_strokes = i_data.aftstr_flat_strokes;
+ exd.inj_prime_times = i_data.inj_prime_times;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

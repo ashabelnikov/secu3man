@@ -265,6 +265,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Duration of ASE before it will start to decrease"), _T("str"), 0, 1000, 1, 1, &d.aftstr_flat_strokes, _T("After starting the engine, the ASE will remain at the same level for a given time before it begins to gradually decrease."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Множитель длительности предпускового впрыска"), _T("x"), 0, 10, 1, 1, &d.inj_prime_times, _T("Длительность предпускового впрыска будет увеличена в указанное количество раз"));
+ else
+  dfd.AppendItem(_T("Multiplier of the prime pulse duration"), _T("x"), 0, 10, 1, 1, &d.inj_prime_times, _T("Duration of the prime pulse will be increased by specified number of times"));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));
