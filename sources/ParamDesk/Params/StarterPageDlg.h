@@ -81,6 +81,8 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_starter_off_rpm_edit;
   CSpinButtonCtrlEx m_cranktoruntime_spin;
   CEditEx m_cranktoruntime_edit;
+  CSpinButtonCtrlEx m_cranktoruntime1_spin;
+  CEditEx m_cranktoruntime1_edit;
   CSpinButtonCtrlEx m_aftstrstr_spin[2];
   CEditEx m_aftstrstr_edit[2];
   CSpinButtonCtrlEx m_primecold_spin;

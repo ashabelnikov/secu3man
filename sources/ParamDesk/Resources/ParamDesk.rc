@@ -68,46 +68,51 @@ BEGIN
 
     EDITTEXT        IDC_PD_STARTER_CRANKTORUNTIME_EDIT,95,50,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_STARTER_CRANKTORUNTIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,50,13,17
-    LTEXT           "Время перехода РХХ в рабочее положение",IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,0,51,94,20
+    LTEXT           "Время перех. РХХ в рабоч. положение при -30°C",IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,0,51,94,20
     LTEXT           "сек.",IDC_PD_STARTER_CRANKTORUNTIME_UNIT,140,51,30,10
 
-    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR_EDIT,95,70,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,70,13,17
-    LTEXT           "Время обогащения после пуска в тактах (бенз)",IDC_PD_STARTER_AFTSTRSTR_CAPTION,0,71,94,20
-    LTEXT           "число",IDC_PD_STARTER_AFTSTRSTR_UNIT,140,71,30,10
+    EDITTEXT        IDC_PD_STARTER_CRANKTORUNTIME1_EDIT,95,70,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_CRANKTORUNTIME1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,70,13,17
+    LTEXT           "Время перех. РХХ в рабоч. положение при 70°C",IDC_PD_STARTER_CRANKTORUNTIME1_CAPTION,0,71,94,20
+    LTEXT           "сек.",IDC_PD_STARTER_CRANKTORUNTIME1_UNIT,140,71,30,10
 
-    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR1_EDIT,95,90,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,90,13,17
-    LTEXT           "Время обогащения после пуска в тактах (газ)",IDC_PD_STARTER_AFTSTRSTR1_CAPTION,0,91,94,20
-    LTEXT           "число",IDC_PD_STARTER_AFTSTRSTR1_UNIT,140,91,30,10
+    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR_EDIT,95,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,90,13,17
+    LTEXT           "Время обогащения после пуска в тактах (бенз)",IDC_PD_STARTER_AFTSTRSTR_CAPTION,0,91,94,20
+    LTEXT           "число",IDC_PD_STARTER_AFTSTRSTR_UNIT,140,91,30,10
 
-    EDITTEXT        IDC_PD_STARTER_PRIMECOLD_EDIT,95,110,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_PRIMECOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,110,13,17
-    LTEXT           "Впрыск перед пуском при -30°C",IDC_PD_STARTER_PRIMECOLD_CAPTION,0,111,94,20
-    LTEXT           "мс",IDC_PD_STARTER_PRIMECOLD_UNIT,140,111,30,10
+    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR1_EDIT,95,110,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,110,13,17
+    LTEXT           "Время обогащения после пуска в тактах (газ)",IDC_PD_STARTER_AFTSTRSTR1_CAPTION,0,111,94,20
+    LTEXT           "число",IDC_PD_STARTER_AFTSTRSTR1_UNIT,140,111,30,10
 
-    EDITTEXT        IDC_PD_STARTER_PRIMEHOT_EDIT,95,130,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_PRIMEHOT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,130,13,17
-    LTEXT           "Впрыск перед пуском при 70°C",IDC_PD_STARTER_PRIMEHOT_CAPTION,0,131,94,20
-    LTEXT           "мс",IDC_PD_STARTER_PRIMEHOT_UNIT,140,131,30,10
+    EDITTEXT        IDC_PD_STARTER_PRIMECOLD_EDIT,95,130,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_PRIMECOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,130,13,17
+    LTEXT           "Впрыск перед пуском при -30°C",IDC_PD_STARTER_PRIMECOLD_CAPTION,0,131,94,20
+    LTEXT           "мс",IDC_PD_STARTER_PRIMECOLD_UNIT,140,131,30,10
 
-    EDITTEXT        IDC_PD_STARTER_PRIMEDELAY_EDIT,95,150,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_PRIMEDELAY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
-    LTEXT           "Впрыск перед пуском - задержка",IDC_PD_STARTER_PRIMEDELAY_CAPTION,0,151,94,20
-    LTEXT           "сек",IDC_PD_STARTER_PRIMEDELAY_UNIT,140,151,30,10
+    EDITTEXT        IDC_PD_STARTER_PRIMEHOT_EDIT,95,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_PRIMEHOT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
+    LTEXT           "Впрыск перед пуском при 70°C",IDC_PD_STARTER_PRIMEHOT_CAPTION,0,151,94,20
+    LTEXT           "мс",IDC_PD_STARTER_PRIMEHOT_UNIT,140,151,30,10
 
-    EDITTEXT        IDC_PD_STARTER_FLDCLRTPS_EDIT,95,170,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_FLDCLRTPS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
-    LTEXT           "Порог вкл. режима продувки",IDC_PD_STARTER_FLDCLRTPS_CAPTION,0,171,94,20
-    LTEXT           "%",IDC_PD_STARTER_FLDCLRTPS_UNIT,140,171,30,10
+    EDITTEXT        IDC_PD_STARTER_PRIMEDELAY_EDIT,95,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_PRIMEDELAY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
+    LTEXT           "Впрыск перед пуском - задержка",IDC_PD_STARTER_PRIMEDELAY_CAPTION,0,171,94,20
+    LTEXT           "сек",IDC_PD_STARTER_PRIMEDELAY_UNIT,140,171,30,10
 
-    EDITTEXT        IDC_PD_STARTER_STBLSTRCNT_EDIT,95,190,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_STBLSTRCNT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
-    LTEXT           "Таймер блокировки стартера",IDC_PD_STARTER_STBLSTRCNT_CAPTION,0,191,94,20
-    LTEXT           "такт",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,191,30,10
+    EDITTEXT        IDC_PD_STARTER_FLDCLRTPS_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_FLDCLRTPS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Порог вкл. режима продувки",IDC_PD_STARTER_FLDCLRTPS_CAPTION,0,191,94,20
+    LTEXT           "%",IDC_PD_STARTER_FLDCLRTPS_UNIT,140,191,30,10
 
-    CONTROL         "Разрешить запуск при продувке двигателя",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,210,137,15
-    CONTROL         "Ограничивать макс. длит. впрыска на пуске",IDC_PD_STARTER_LIMCRANPW_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,230,137,17
+    EDITTEXT        IDC_PD_STARTER_STBLSTRCNT_EDIT,95,210,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_STBLSTRCNT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,210,13,17
+    LTEXT           "Таймер блокировки стартера",IDC_PD_STARTER_STBLSTRCNT_CAPTION,0,211,94,20
+    LTEXT           "такт",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,211,30,10
+
+    CONTROL         "Разрешить запуск при продувке двигателя",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,230,137,15
+    CONTROL         "Ограничивать макс. длит. впрыска на пуске",IDC_PD_STARTER_LIMCRANPW_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,250,137,17
 END
 
 IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
@@ -1787,13 +1792,13 @@ STRINGTABLE
 BEGIN
     IDS_PD_STARTER_OFF_RPM_EDIT_TT "Обороты, выше которых деактивируется выход блока ST_BLOCK, предназначенный для блокировки стартера. Поставьте 0, если хотите использовать таблицу."
     IDS_PD_STARTER_SMAP_ABANDON_RPM_EDIT_TT "Обороты, выше которых будет использоваться рабочая карта УОЗ или карта УОЗ ХХ. Ниже данных оборотов УОЗ будет использоваться из пусковой карты. Поставьте 0, если хотите использовать таблицу. Когда обороты двигателя превышают это значение, то прошивка считает, что двигатель запустился."
-    IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT "Задает время перехода РХХ из положения на пуске (см. таблицу «Положение РХХ на пуске») в рабочее положение (см. таблицу «Положение РХХ рабочее»). Чем больше значение, тем плавнее РХХ переходит в рабочее положение."
+    IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT "Задает время перехода РХХ из положения на пуске (см. таблицу «Положение РХХ на пуске») в рабочее положение при -30°C (см. таблицу «Положение РХХ рабочее»). Чем больше значение, тем плавнее РХХ переходит в рабочее положение."
     IDS_PD_STARTER_AFTSTRSTR_EDIT_TT "Задает время плавного убывания обогащения после пуска, которое вычисляется из таблицы «Обогащение после пуска». Обогащение включается после запуска двигателя, держится на заданном уровне указанное время и затем плавно убирается в течение заданного времени. Если установить значение данного параметра равным 0, то время плавного убывания обогащения будет вычисляться из таблицы 'Такты ОПП'"
     IDS_PD_STARTER_PRIMECOLD_EDIT_TT "Длительность впрыска перед пуском при -30°C (в миллисекундах). Поставьте это значение в 0, если хотите запретить впрыск перед пуском."
     IDS_PD_STARTER_PRIMEHOT_EDIT_TT "Длительность впрыска перед пуском при +70°C (в миллисекундах)"
     IDS_PD_STARTER_PRIMEDELAY_EDIT_TT "Задержка впрыска перед пуском (Prime Pulse). Если поставите значение 0, то впрыск будет осуществлен с появлением первых импульсов ДПКВ."
+    IDS_PD_STARTER_CRANKTORUNTIME2_EDIT_TT "Задает время перехода РХХ из положения на пуске (см. таблицу «Положение РХХ на пуске») в рабочее положение при 70°C (см. таблицу «Положение РХХ рабочее»). Чем больше значение, тем плавнее РХХ переходит в рабочее положение."
 END
-
 
 STRINGTABLE
 BEGIN
@@ -2126,46 +2131,51 @@ BEGIN
 
     EDITTEXT        IDC_PD_STARTER_CRANKTORUNTIME_EDIT,95,50,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_STARTER_CRANKTORUNTIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,50,13,17
-    LTEXT           "Time for going from crank to run position for IAC",IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,0,51,94,20
+    LTEXT           "Time for going from crank to run position for IAC at -30°C",IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,0,51,94,20
     LTEXT           "sec.",IDC_PD_STARTER_CRANKTORUNTIME_UNIT,140,51,30,10
 
-    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR_EDIT,95,70,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,70,13,17
-    LTEXT           "Afterstart enrichment time in strokes (petrol)",IDC_PD_STARTER_AFTSTRSTR_CAPTION,0,71,94,20
-    LTEXT           "num",IDC_PD_STARTER_AFTSTRSTR_UNIT,140,71,30,10
+    EDITTEXT        IDC_PD_STARTER_CRANKTORUNTIME1_EDIT,95,70,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_CRANKTORUNTIME1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,70,13,17
+    LTEXT           "Time for going from crank to run position for IAC at 70°C",IDC_PD_STARTER_CRANKTORUNTIME1_CAPTION,0,71,94,20
+    LTEXT           "sec.",IDC_PD_STARTER_CRANKTORUNTIME1_UNIT,140,71,30,10
 
-    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR1_EDIT,95,90,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,90,13,17
-    LTEXT           "Afterstart enrichment time in strokes (gas)",IDC_PD_STARTER_AFTSTRSTR1_CAPTION,0,91,94,20
-    LTEXT           "num",IDC_PD_STARTER_AFTSTRSTR1_UNIT,140,91,30,10
+    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR_EDIT,95,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,90,13,17
+    LTEXT           "Afterstart enrichment time in strokes (petrol)",IDC_PD_STARTER_AFTSTRSTR_CAPTION,0,91,94,20
+    LTEXT           "num",IDC_PD_STARTER_AFTSTRSTR_UNIT,140,91,30,10
 
-    EDITTEXT        IDC_PD_STARTER_PRIMECOLD_EDIT,95,110,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_PRIMECOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,110,13,17
-    LTEXT           "Prime pulse width at -30°C",IDC_PD_STARTER_PRIMECOLD_CAPTION,0,111,94,20
-    LTEXT           "ms",IDC_PD_STARTER_PRIMECOLD_UNIT,140,111,30,10
+    EDITTEXT        IDC_PD_STARTER_AFTSTRSTR1_EDIT,95,110,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_AFTSTRSTR1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,110,13,17
+    LTEXT           "Afterstart enrichment time in strokes (gas)",IDC_PD_STARTER_AFTSTRSTR1_CAPTION,0,111,94,20
+    LTEXT           "num",IDC_PD_STARTER_AFTSTRSTR1_UNIT,140,111,30,10
 
-    EDITTEXT        IDC_PD_STARTER_PRIMEHOT_EDIT,95,130,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_PRIMEHOT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,130,13,17
-    LTEXT           "Prime pulse width at 70°C",IDC_PD_STARTER_PRIMEHOT_CAPTION,0,131,94,20
-    LTEXT           "ms",IDC_PD_STARTER_PRIMEHOT_UNIT,140,131,30,10
+    EDITTEXT        IDC_PD_STARTER_PRIMECOLD_EDIT,95,130,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_PRIMECOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,130,13,17
+    LTEXT           "Prime pulse width at -30°C",IDC_PD_STARTER_PRIMECOLD_CAPTION,0,131,94,20
+    LTEXT           "ms",IDC_PD_STARTER_PRIMECOLD_UNIT,140,131,30,10
 
-    EDITTEXT        IDC_PD_STARTER_PRIMEDELAY_EDIT,95,150,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_PRIMEDELAY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
-    LTEXT           "Prime pulse delay",IDC_PD_STARTER_PRIMEDELAY_CAPTION,0,151,94,20
-    LTEXT           "sec",IDC_PD_STARTER_PRIMEDELAY_UNIT,140,151,30,10
+    EDITTEXT        IDC_PD_STARTER_PRIMEHOT_EDIT,95,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_PRIMEHOT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
+    LTEXT           "Prime pulse width at 70°C",IDC_PD_STARTER_PRIMEHOT_CAPTION,0,151,94,20
+    LTEXT           "ms",IDC_PD_STARTER_PRIMEHOT_UNIT,140,151,30,10
 
-    EDITTEXT        IDC_PD_STARTER_FLDCLRTPS_EDIT,95,170,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_FLDCLRTPS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
-    LTEXT           "Flood clear mode threshold",IDC_PD_STARTER_FLDCLRTPS_CAPTION,0,171,94,20
-    LTEXT           "%",IDC_PD_STARTER_FLDCLRTPS_UNIT,140,171,30,10
+    EDITTEXT        IDC_PD_STARTER_PRIMEDELAY_EDIT,95,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_PRIMEDELAY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
+    LTEXT           "Prime pulse delay",IDC_PD_STARTER_PRIMEDELAY_CAPTION,0,171,94,20
+    LTEXT           "sec",IDC_PD_STARTER_PRIMEDELAY_UNIT,140,171,30,10
 
-    EDITTEXT        IDC_PD_STARTER_STBLSTRCNT_EDIT,95,190,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_STARTER_STBLSTRCNT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
-    LTEXT           "Starter's blocking timer",IDC_PD_STARTER_STBLSTRCNT_CAPTION,0,191,94,20
-    LTEXT           "str",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,191,30,10
+    EDITTEXT        IDC_PD_STARTER_FLDCLRTPS_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_FLDCLRTPS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Flood clear mode threshold",IDC_PD_STARTER_FLDCLRTPS_CAPTION,0,191,94,20
+    LTEXT           "%",IDC_PD_STARTER_FLDCLRTPS_UNIT,140,191,30,10
 
-    CONTROL         "Allow engine start in flood clear mode",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,210,137,15
-    CONTROL         "Limit max. inj. PW on cranking",IDC_PD_STARTER_LIMCRANPW_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,230,137,15
+    EDITTEXT        IDC_PD_STARTER_STBLSTRCNT_EDIT,95,210,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_STARTER_STBLSTRCNT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,210,13,17
+    LTEXT           "Starter's blocking timer",IDC_PD_STARTER_STBLSTRCNT_CAPTION,0,211,94,20
+    LTEXT           "str",IDC_PD_STARTER_STBLSTRCNT_UNIT,140,211,30,10
+
+    CONTROL         "Allow engine start in flood clear mode",IDC_PD_STARTER_FLDCLRSTART_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,230,137,15
+    CONTROL         "Limit max. inj. PW on cranking",IDC_PD_STARTER_LIMCRANPW_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,250,137,15
 END
 
 IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
@@ -3875,11 +3885,12 @@ STRINGTABLE
 BEGIN
     IDS_PD_STARTER_OFF_RPM_EDIT_TT "When this RPM threshold exceeded, unit's output ST_BLOCK will be deactivated and thus, starter will be locked. Set to zero, if you want to use a map."
     IDS_PD_STARTER_SMAP_ABANDON_RPM_EDIT_TT "RPM exceeding which, firmware will switch to the work ignition timing map or the idle ignition timing map. If RPM is lower than specified threshold, the ignition advance angle from the cranking map will be used. Set to zero, if you want to use a map. When engine RPM exceed this value, firmware decide that engine is running."
-    IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT "Time for going from crank (see table «IAC position on cranking») position to run (see table «IAC position on run») position for IAC. The higher the value, the smoother IAC valve goes into the run position."
+    IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT "Time for going from crank (see table «IAC position on cranking») position to run (see table «IAC position on run») position for IAC at -30°C. The higher the value, the smoother IAC valve goes into the run position."
     IDS_PD_STARTER_AFTSTRSTR_EDIT_TT "Specifies decrease time of the after start enrichment, which calculated from the «After start enrichment» table. Enrichment turns on after engine start, keeps specified time at the set level and than smoothly decreases during the specified time. If you set value of this parameter to 0, then firmware will calculate decrease time of ASE using 'ASE strokes' map"
     IDS_PD_STARTER_PRIMECOLD_EDIT_TT "Injection (prime pulse) duration at -30°C (in milliseconds). Set this value to zero if you want to disable prime pulse."
     IDS_PD_STARTER_PRIMEHOT_EDIT_TT "Injection (prime pulse) duration at +70°C (in milliseconds)"
     IDS_PD_STARTER_PRIMEDELAY_EDIT_TT "Delay before prime pulse will be applied. If you set this value to 0, then system will generate prime pulse on first pulses from CKP sensor."
+    IDS_PD_STARTER_CRANKTORUNTIME2_EDIT_TT "Time for going from crank (see table «IAC position on cranking») position to run (see table «IAC position on run») position for IAC at 70°C. The higher the value, the smoother IAC valve goes into the run position."
 END
 
 STRINGTABLE

@@ -318,10 +318,12 @@ typedef struct params_t
 
  _uchar lambda_selch;
 
+ _uint  inj_cranktorun_time1;          // Time in seconds for going from the crank position to the run position (1 tick = 10ms)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[132];
+ _uchar reserved[130];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

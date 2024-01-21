@@ -756,7 +756,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& startrPar = m_recepted_packet.m_StartrPar;
- if (size != 16)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 18)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -820,6 +820,12 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
   return false;
  startrPar.fldclr_start = CHECKBIT8(strt_flags, 0);
  startrPar.limcranpw = CHECKBIT8(strt_flags, 1);
+
+ //IAC Crank to run time
+ int cranktorun_time1 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &cranktorun_time1))
+  return false;
+ startrPar.inj_cranktorun_time1 = float(cranktorun_time1) / 100.0f;
 
  return true;
 }
@@ -3802,6 +3808,8 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  WRITEBIT8(flags, 0, packet_data->fldclr_start);
  WRITEBIT8(flags, 1, packet_data->limcranpw);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+ int cranktorun_time1 = MathHelpers::Round(packet_data->inj_cranktorun_time1 * 100.0f);
+ mp_pdp->Bin16ToHex(cranktorun_time1, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 

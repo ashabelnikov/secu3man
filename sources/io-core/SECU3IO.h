@@ -156,7 +156,8 @@ namespace SECU3IO
  {
   int  starter_off;                     //порог выключения стартера (обороты)
   int  smap_abandon;                    //обороты перехода с пусковой карты на рабочую
-  float inj_cranktorun_time;            //sec.
+  float inj_cranktorun_time;            //sec. -30
+  float inj_cranktorun_time1;           //sec. +70
   int   inj_aftstr_strokes[2];          //strokes for petrol and for gas
   float inj_prime_cold;                 //prime pulse width at -30C
   float inj_prime_hot;                  //prime pulse width at 70C

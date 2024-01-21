@@ -43,75 +43,76 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Sizes of inputs' averaging buffers:"));
 
+ int avnmax = 24;
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения оборотов"), _T(""), 1, 8, 1, 0, &d.inpavnum[0], _T("Размер буфера усреднения оборотов. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения оборотов"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[0], _T("Размер буфера усреднения оборотов. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("Size of averaging buffer for RPM"), _T(""), 1, 8, 1, 0, &d.inpavnum[0], _T("Size of averaging buffer for RPM. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("Size of averaging buffer for RPM"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[0], _T("Size of averaging buffer for RPM. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ДАД"), _T(""), 1, 8, 1, 0, &d.inpavnum[1], _T("Размер буфера усреднения ДАД. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ДАД"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[1], _T("Размер буфера усреднения ДАД. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("Size of averaging buffer for MAP"), _T(""), 1, 8, 1, 0, &d.inpavnum[1], _T("Size of averaging buffer for MAP. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("Size of averaging buffer for MAP"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[1], _T("Size of averaging buffer for MAP. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения напряжения бортовой сети"), _T(""), 1, 8, 1, 0, &d.inpavnum[2], _T("Размер буфера усреднения напряжения бортовой сети. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения напряжения бортовой сети"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[2], _T("Размер буфера усреднения напряжения бортовой сети. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("Size of averaging buffer for board voltage"), _T(""), 1, 8, 1, 0, &d.inpavnum[2], _T("Size of averaging buffer for board voltage. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("Size of averaging buffer for board voltage"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[2], _T("Size of averaging buffer for board voltage. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ДТОЖ"), _T(""), 1, 8, 1, 0, &d.inpavnum[3], _T("Размер буфера усреднения ДТОЖ. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ДТОЖ"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[3], _T("Размер буфера усреднения ДТОЖ. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for CLT"), _T(""), 1, 8, 1, 0, &d.inpavnum[3], _T("Size of averaging buffer for CLT. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for CLT"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[3], _T("Size of averaging buffer for CLT. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ДПДЗ"), _T(""), 1, 8, 1, 0, &d.inpavnum[4], _T("Размер буфера усреднения ДПДЗ. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ДПДЗ"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[4], _T("Размер буфера усреднения ДПДЗ. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for TPS"), _T(""), 1, 8, 1, 0, &d.inpavnum[4], _T("Size of averaging buffer for TPS. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for TPS"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[4], _T("Size of averaging buffer for TPS. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I1"), _T(""), 1, 8, 1, 0, &d.inpavnum[5], _T("Размер буфера усреднения ADD_I1. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I1"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[5], _T("Размер буфера усреднения ADD_I1. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I1"), _T(""), 1, 8, 1, 0, &d.inpavnum[5], _T("Size of averaging buffer for ADD_I1. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I1"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[5], _T("Size of averaging buffer for ADD_I1. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I2"), _T(""), 1, 8, 1, 0, &d.inpavnum[6], _T("Размер буфера усреднения ADD_I2. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I2"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[6], _T("Размер буфера усреднения ADD_I2. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I2"), _T(""), 1, 8, 1, 0, &d.inpavnum[6], _T("Size of averaging buffer for ADD_I2. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I2"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[6], _T("Size of averaging buffer for ADD_I2. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I3"), _T(""), 1, 8, 1, 0, &d.inpavnum[8], _T("Размер буфера усреднения ADD_I3. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I3"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[8], _T("Размер буфера усреднения ADD_I3. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I3"), _T(""), 1, 8, 1, 0, &d.inpavnum[8], _T("Size of averaging buffer for ADD_I3. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I3"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[8], _T("Size of averaging buffer for ADD_I3. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I4"), _T(""), 1, 8, 1, 0, &d.inpavnum[9], _T("Размер буфера усреднения ADD_I4. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I4"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[9], _T("Размер буфера усреднения ADD_I4. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I4"), _T(""), 1, 8, 1, 0, &d.inpavnum[9], _T("Size of averaging buffer for ADD_I4. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I4"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[9], _T("Size of averaging buffer for ADD_I4. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I5"), _T(""), 1, 8, 1, 0, &d.inpavnum[10], _T("Размер буфера усреднения ADD_I5. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I5"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[10], _T("Размер буфера усреднения ADD_I5. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I5"), _T(""), 1, 8, 1, 0, &d.inpavnum[10], _T("Size of averaging buffer for ADD_I5. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I5"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[10], _T("Size of averaging buffer for ADD_I5. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I6"), _T(""), 1, 8, 1, 0, &d.inpavnum[11], _T("Размер буфера усреднения ADD_I6. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I6"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[11], _T("Размер буфера усреднения ADD_I6. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I6"), _T(""), 1, 8, 1, 0, &d.inpavnum[11], _T("Size of averaging buffer for ADD_I6. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I6"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[11], _T("Size of averaging buffer for ADD_I6. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I7"), _T(""), 1, 8, 1, 0, &d.inpavnum[12], _T("Размер буфера усреднения ADD_I7. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I7"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[12], _T("Размер буфера усреднения ADD_I7. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I7"), _T(""), 1, 8, 1, 0, &d.inpavnum[12], _T("Size of averaging buffer for ADD_I7. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I7"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[12], _T("Size of averaging buffer for ADD_I7. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения ADD_I8"), _T(""), 1, 8, 1, 0, &d.inpavnum[13], _T("Размер буфера усреднения ADD_I8. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I8"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[13], _T("Размер буфера усреднения ADD_I8. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for ADD_I8"), _T(""), 1, 8, 1, 0, &d.inpavnum[13], _T("Size of averaging buffer for ADD_I8. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I8"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[13], _T("Size of averaging buffer for ADD_I8. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Размер буфера усреднения скорости"), _T(""), 1, 8, 1, 0, &d.inpavnum[7], _T("Размер буфера усреднения скорости автомобиля. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
+  dfd.AppendItem(_T("Размер буфера усреднения скорости"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[7], _T("Размер буфера усреднения скорости автомобиля. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else
-  dfd.AppendItem(_T("size of averaging buffer for VSS"), _T(""), 1, 8, 1, 0, &d.inpavnum[7], _T("Size of averaging buffer for vehicle speed. The more averaging value, the greater smoothing, but at the same time the delay increases."));
+  dfd.AppendItem(_T("size of averaging buffer for VSS"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[7], _T("Size of averaging buffer for vehicle speed. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
  //idling regulator
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)

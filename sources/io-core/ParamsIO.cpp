@@ -180,6 +180,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->stbl_str_cnt = p_in->stbl_str_cnt;
     WRITEBIT8(p_params->strt_flags, 0, p_in->fldclr_start);
     WRITEBIT8(p_params->strt_flags, 1, p_in->limcranpw);
+    p_params->inj_cranktorun_time1 = MathHelpers::Round(p_in->inj_cranktorun_time1 * 100.0f);
    }
    break;
   case ADCCOR_PAR:
@@ -629,6 +630,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->stbl_str_cnt = p_params->stbl_str_cnt;
      p_out->fldclr_start = CHECKBIT8(p_params->strt_flags, 0);
      p_out->limcranpw = CHECKBIT8(p_params->strt_flags, 1);
+     p_out->inj_cranktorun_time1 = float(p_params->inj_cranktorun_time1) / 100.0f;
     }
     break;
    case ADCCOR_PAR:
