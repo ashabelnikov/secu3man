@@ -550,8 +550,8 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* ip_data, const PPFlas
 
  if ((sizeof(fw_data_t)) != p_fd->fw_data_size ||
   (sizeofcd != sizeof(cd_data_t)) || (p_cd->iorem.size != sizeof(iorem_slots_t)) ||
-  //supported major versions: 3
-  ((IOREM_MAJ_VER(p_cd->iorem.version) != 3)))
+  //supported major versions: 4
+  ((IOREM_MAJ_VER(p_cd->iorem.version) != 4)))
   compatible = false;
 
  return compatible;

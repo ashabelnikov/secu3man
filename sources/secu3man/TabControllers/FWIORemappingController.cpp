@@ -845,6 +845,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_ADD_I7));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_ADD_I8));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_MAP_I, FWDM::IOP3I_MAP_I));
+  m_defValMap.insert(std::make_pair(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_GPA4_I));
 
   //Fill view with values
   mp_view->ResetContent();
@@ -1900,6 +1901,14 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->EnableItem(FWDM::IOS3I_MAP_I, true); 
   mp_view->EnableInversion(FWDM::IOS3I_MAP_I, false);
  }
+
+  //GPA4_I
+  if (iov >= FWDM::IOV_V40) { 
+  mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_GPA4_I, _T("NONE"));
+  mp_view->EnableItem(FWDM::IOS3I_GPA4_I, true); 
+  mp_view->EnableInversion(FWDM::IOS3I_GPA4_I, true);
+ }
+
  mp_view->SetRedraw(true);
 }
 
@@ -2092,7 +2101,8 @@ bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
           iopId == FWDM::IOP3I_ADD_I4 || iopId == FWDM::IOP3I_IGNTIM || iopId == FWDM::IOP3I_MAP2 || iopId == FWDM::IOP3I_TMP2 || iopId == FWDM::IOP3I_ADD_I5 ||
           iopId == FWDM::IOP3I_AUTO_I || iopId == FWDM::IOP3I_ADD_I6 || iopId == FWDM::IOP3I_ADD_I7 || iopId == FWDM::IOP3I_ADD_I8 || iopId == FWDM::IOP3I_GRTEMP ||
           iopId == FWDM::IOP3I_FTLS_I || iopId == FWDM::IOP3I_EGTS_I || iopId == FWDM::IOP3I_OPS_I || iopId == FWDM::IOP3I_INJPWC_I || iopId == FWDM::IOP3I_INPUT1 ||
-          iopId == FWDM::IOP3I_INPUT2 || iopId == FWDM::IOP3I_REFPRS_I || iopId == FWDM::IOP3I_MAP_I || iopId == FWDM::IOP3I_MAF || iopId == FWDM::IOP3I_FTS_I || iopId == FWDM::IOP3I_LAMBDA2);
+          iopId == FWDM::IOP3I_INPUT2 || iopId == FWDM::IOP3I_REFPRS_I || iopId == FWDM::IOP3I_MAP_I || iopId == FWDM::IOP3I_MAF || iopId == FWDM::IOP3I_FTS_I || 
+          iopId == FWDM::IOP3I_LAMBDA2 || iopId == FWDM::IOP3I_GPA4_I);
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const
@@ -2100,7 +2110,7 @@ bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const
  if (m_enable_secu3t_features)
   return (iosId == FWDM::IOS_PS || iosId == FWDM::IOS_ADD_I1 || iosId == FWDM::IOS_ADD_I2 || iosId == FWDM::IOS_REF_S || iosId == FWDM::IOS_GAS_V || iosId == FWDM::IOS_CKPS || iosId == FWDM::IOS_MAP_S || iosId == FWDM::IOS_ADD_I4);
  else //SECU-3i
-  return (iosId == FWDM::IOS3I_PS || iosId == FWDM::IOS3I_ADD_I1 || iosId == FWDM::IOS3I_ADD_I2 || iosId == FWDM::IOS3I_REF_S || iosId == FWDM::IOS3I_GAS_V || iosId == FWDM::IOS3I_CKPS) || iosId == FWDM::IOS3I_ADD_I3 || iosId == FWDM::IOS3I_COND_I || iosId == FWDM::IOS3I_EPAS_I || iosId == FWDM::IOS3I_IGN_I || iosId == FWDM::IOS3I_ADD_I4 || iosId == FWDM::IOS3I_ADD_I5 || iosId == FWDM::IOS3I_ADD_I6 || iosId == FWDM::IOS3I_ADD_I7 || iosId == FWDM::IOS3I_ADD_I8 || iosId == FWDM::IOS3I_MAP_I;
+  return (iosId == FWDM::IOS3I_PS || iosId == FWDM::IOS3I_ADD_I1 || iosId == FWDM::IOS3I_ADD_I2 || iosId == FWDM::IOS3I_REF_S || iosId == FWDM::IOS3I_GAS_V || iosId == FWDM::IOS3I_CKPS) || iosId == FWDM::IOS3I_ADD_I3 || iosId == FWDM::IOS3I_COND_I || iosId == FWDM::IOS3I_EPAS_I || iosId == FWDM::IOS3I_IGN_I || iosId == FWDM::IOS3I_ADD_I4 || iosId == FWDM::IOS3I_ADD_I5 || iosId == FWDM::IOS3I_ADD_I6 || iosId == FWDM::IOS3I_ADD_I7 || iosId == FWDM::IOS3I_ADD_I8 || iosId == FWDM::IOS3I_MAP_I || iosId == FWDM::IOS3I_GPA4_I;
 }
 
 void CFWIORemappingController::_SetInvFlag(FWDM::IOSid iosId, bool inv)

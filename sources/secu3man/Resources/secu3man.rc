@@ -598,6 +598,7 @@ BEGIN
     IDS_EEPROM_TABL_BROKEN         "Данные таблиц в EEPROM повреждены (CRC)"
     IDS_ECUERROR_INJDUTY_LIMIT     "Превышение предела производительности форсунки"
     IDS_ECUERROR_EEPROM_LTFT_BROKEN "Данные таблицы обучения в EEPROM повреждены"
+    IDS_ECUERROR_STEPPERIC_FAULT   "Отказ шагового двигателя РХХ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1626,6 +1627,7 @@ BEGIN
     IDS_EEPROM_TABL_BROKEN         "Tables in EEPROM are broken (CRC)"
     IDS_ECUERROR_INJDUTY_LIMIT     "Reaching limit of injector's duty"
     IDS_ECUERROR_EEPROM_LTFT_BROKEN "LTFT map data in EEPROM is corrupted"
+    IDS_ECUERROR_STEPPERIC_FAULT   "Stepper IAC fault"
 END
 
 STRINGTABLE DISCARDABLE 

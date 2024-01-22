@@ -792,3 +792,4 @@
 #define IDS_LOGCONV_START_BTN_TT        4919
 #define IDD_LOGCONV_DIALOG              4920
 #define ID_APP_CONVERT_LOG              4921
+#define IDS_ECUERROR_STEPPERIC_FAULT    4922
