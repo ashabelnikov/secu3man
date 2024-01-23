@@ -846,6 +846,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_ADD_I8));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_MAP_I, FWDM::IOP3I_MAP_I));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_GPA4_I));
+  m_defValMap.insert(std::make_pair(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_GPA6_O));
 
   //Fill view with values
   mp_view->ResetContent();
@@ -1904,9 +1905,30 @@ void CFWIORemappingController::_PrepareLogic(void)
 
   //GPA4_I
   if (iov >= FWDM::IOV_V40) { 
+  mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_BC_INPUT,_T("BC_INPUT"));
+  mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_MAPSEL0, _T("MAPSEL0"));
+  mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
+  mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_INPUT1, _T("INPUT1"));
+  mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_REFPRS_I, _T("REFPRS_I"));
   mp_view->AddItem(FWDM::IOS3I_GPA4_I, FWDM::IOP3I_GPA4_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_GPA4_I, true); 
   mp_view->EnableInversion(FWDM::IOS3I_GPA4_I, true);
+ }
+
+ //GPA6_O
+ if (iov >= FWDM::IOV_V40) { 
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_UNI_OUT0, _T("UNI_OUT1"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_UNI_OUT1, _T("UNI_OUT2"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_UNI_OUT3, _T("UNI_OUT4"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_UNI_OUT4, _T("UNI_OUT5"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_UNI_OUT5, _T("UNI_OUT6"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
+ mp_view->AddItem(FWDM::IOS3I_GPA6_O, FWDM::IOP3I_GPA6_O, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS3I_GPA6_O, true);
+ mp_view->EnableInversion(FWDM::IOS3I_GPA6_O, true);
  }
 
  mp_view->SetRedraw(true);

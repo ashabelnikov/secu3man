@@ -156,8 +156,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_ADD_I8     =  37,     // ADD_I8      (input)
    IOP3I_MAP_I      =  38,     // MAP_I       (input)
    IOP3I_GPA4_I     =  39,     // GPA4_I      (input)
-   IOP3I_GPA5_I     =  40,     // GPA5_I      (input)   
-   IOP3I_GPA6_O     =  41,     // GPA6_O      (output)   
+   IOP3I_GPA6_O     =  40,     // GPA6_O      (output)   
+   IOP3I_GPA5_I     =  41,     // GPA5_I      (input)   
    //reserved slots are here
    IOP3I_RESERVED5  =  42,     // Reserved      ()
    IOP3I_RESERVED6  =  43,     // Reserved      ()
@@ -371,8 +371,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS3I_ADD_I8     =  37,     // ADD_I8      (input)
    IOS3I_MAP_I      =  38,     // MAP_I       (input)
    IOS3I_GPA4_I     =  39,     // GPA4_I      (input)
-   IOS3I_GPA5_I     =  40,     // GPA5_I      (input)
-   IOS3I_GPA6_O     =  41,     // GPA6_O      (output)
+   IOS3I_GPA6_O     =  40,     // GPA6_O      (output)
+   IOS3I_GPA5_I     =  41,     // GPA5_I      (input)  hidden
 // IOS_RESERVED5    =  42,     // Reserved    ()
 // IOS_RESERVED6    =  43,     // Reserved    ()
 // IOS_RESERVED7    =  44,     // Reserved    ()
@@ -381,7 +381,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOS_RESERVED10   =  47,     // Reserved    ()
 // IOS_RESERVED11   =  48,     // Reserved    ()
    //reserved slots are here
-   IOS3I_COUNT      =  40,
+   IOS3I_COUNT      =  41,
    //SECU-3T:   
    IOS_IGN_OUT1     =   0,     // IGN_OUT1
    IOS_IGN_OUT2     =   1,     // IGN_OUT2
@@ -457,7 +457,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V37 = 0x37,           //v3.7  ADD_I3 --> FTLS_I
    IOV_V38 = 0x38,           //v3.8  FTS_I added
    IOV_V39 = 0x39,           //v3.9  LAMBDA2 added, ADD_I4, IGNTIM and MAP2 for SECU3T added
-   IOV_V40 = 0x40            //v4.0  GPA4_I added, GPA5_I and GPA6_O reserved (hidden)
+   IOV_V40 = 0x40            //v4.0  GPA6_O and GPA4_I added, GPA5_I and GPA6_O reserved (hidden)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
