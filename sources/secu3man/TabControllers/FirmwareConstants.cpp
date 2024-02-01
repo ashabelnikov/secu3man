@@ -484,9 +484,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Upper IAT threshold for LTFT"), _T("°C"), 0.0f, 270.0f, 0.25f, 2, &d.ltft_learn_iat_up, _T("LTFT learning will stop to work when intake manifold temperature is above this threshold."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Допуск на стационарность для адаптации*"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Определяет зону вокруг обучаемой ячейки таблицы, в которую должна попасть режимная точка. Используется по осям оборотов и нагрузки."));
+  dfd.AppendItem(_T("Допуск на стационарность для адаптации*"), _T("%"), 0.0f, 50.0f, 0.5f, 1, &d.ltft_cell_band, _T("Определяет зону вокруг обучаемой ячейки таблицы, в которую должна попасть режимная точка. Используется по осям оборотов и нагрузки."));
  else
-  dfd.AppendItem(_T("Stationarity tolerance for learning*"), _T("%"), 0.0f, 99.0f, 0.5f, 1, &d.ltft_cell_band, _T("Defines zone around the learning cell in table into which the regime point should fall. It is used for rpm and load axises."));
+  dfd.AppendItem(_T("Stationarity tolerance for learning*"), _T("%"), 0.0f, 50.0f, 0.5f, 1, &d.ltft_cell_band, _T("Defines zone around the learning cell in table into which the regime point should fall. It is used for rpm and load axises."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Время стационарности рабочей точки в секундах*"), _T("сек"), 0.01f, 2.5f, 0.01f, 2, &d.ltft_stab_time, _T("Адаптация ячейки происходит только когда рабочая точка находится в ее зоне в течение этого времени. Этот параметр используется только если соответствующий параметр в тактах установлено в 0."));
