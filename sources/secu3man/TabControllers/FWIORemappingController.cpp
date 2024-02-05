@@ -794,6 +794,7 @@ void CFWIORemappingController::_PrepareLogic(void)
 
   //ADD_I4
   if (iov >= FWDM::IOV_V39) { 
+   mp_view->AddItem(FWDM::IOS_ADD_I4, FWDM::IOP_IGN, _T("IGN"));
    mp_view->AddItem(FWDM::IOS_ADD_I4, FWDM::IOP_LAMBDA2, _T("LAMBDA2"));
    mp_view->AddItem(FWDM::IOS_ADD_I4, FWDM::IOP_MAF, _T("MAF"));
    mp_view->AddItem(FWDM::IOS_ADD_I4, FWDM::IOP_IGNTIM, _T("IGNTIM"));
