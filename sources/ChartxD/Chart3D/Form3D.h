@@ -266,8 +266,8 @@ class TForm3D : public TForm
   void RestrictAndSetChartValue(int index, double v);
   void RestrictAndSetValue(int index_z, int index_x, double v);
   void __fastcall CopyCurve(int fromIndex, int toIndex);
-  void SetChartValue(int z, int index, double value);
-  void UpdateChartValues(void);
+  void SetChartValue(int z, int index, double value, bool orig = false);
+  void UpdateChartValues(bool orig = false);
   void UpdateSurfaceValues(void);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
   void UpdateSystemColors(void);

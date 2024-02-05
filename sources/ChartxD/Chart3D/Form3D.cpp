@@ -122,7 +122,7 @@ void TForm3D::DataPrepare(bool create)
   if (CheckBox3d->Checked && !PM_Classic3d->Checked)
    UpdateSurfaceValues();
   else
-   UpdateChartValues();
+   UpdateChartValues(true); //<-- update original too
  }
 }
 
@@ -496,7 +496,7 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   SetSeriesOrder(false); //normal z-order
   ShowPoints(true);
   Series3D->Clear(); //delete values
-  UpdateChartValues();
+  UpdateChartValues(true); //<-- update original too
   Chart1->View3D = false;
   MakeOneVisible(m_air_flow_position);
   TrackBarAf->Enabled = true;
@@ -820,14 +820,15 @@ void __fastcall TForm3D::CopyCurve(int fromIndex, int toIndex)
 }
 
 //---------------------------------------------------------------------------
-void TForm3D::SetChartValue(int z, int index, double value)
+void TForm3D::SetChartValue(int z, int index, double value, bool orig /*= false*/)
 {
- Chart1->Series[z + m_count_z]->YValue[index] = value;
+ int zz = orig ? z : z + m_count_z;
+ Chart1->Series[zz]->YValue[index] = value;
 }
 
 //---------------------------------------------------------------------------
 //2D only
-void TForm3D::UpdateChartValues(void)
+void TForm3D::UpdateChartValues(bool orig /*= false*/)
 {
  if (CheckBox3d->Checked && PM_Classic3d->Checked && !CheckBoxBv->Checked)
  {
@@ -840,6 +841,13 @@ void TForm3D::UpdateChartValues(void)
   for(int z = 0; z < m_count_x; ++z)
    for(int x = 0; x < m_count_x; ++x)
     SetChartValue(z, x, GetItem_m(z, x));
+ }
+
+ if (orig && !CheckBox3d->Checked)
+ { //update also original curves
+  for(int z = 0; z < m_count_x; ++z)
+   for(int x = 0; x < m_count_x; ++x)
+    SetChartValue(z, x, GetItem_o(z, x), true);
  }
 }
 
