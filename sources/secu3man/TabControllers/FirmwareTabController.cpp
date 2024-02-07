@@ -203,6 +203,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 }
 
 void CFirmwareTabController::OnActivate(void)
@@ -247,6 +248,7 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_TablesPanel->mp_ButtonsPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);

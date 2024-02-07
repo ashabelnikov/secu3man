@@ -76,6 +76,7 @@ class AFX_EXT_CLASS CTablesPanelBase : public LdaxCfg
   void SetPtMovStep(int wndType, float value);
 
   void SetCSVSepSymbol(char sepsymb);
+  void SetClassic2DKeys(bool classic);
 
  public: //установка обработчиков событий
   void setOnChangeSettings(EventHandler OnCB);

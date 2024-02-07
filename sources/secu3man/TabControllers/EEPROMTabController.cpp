@@ -143,6 +143,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
  mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_TablesPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
  VERIFY(mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true));
@@ -182,6 +183,7 @@ void CEEPROMTabController::OnActivate(void)
  mp_view->mp_ParamDeskDlg->SetFuelDensity(mp_settings->GetFuelDensity1(), mp_settings->GetFuelDensity2());
  mp_view->mp_TablesPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
  mp_view->mp_TablesPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_TablesPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);

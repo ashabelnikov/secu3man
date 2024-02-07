@@ -569,6 +569,7 @@ class ISettingsData
   virtual float GetFuelDensity1(void) const = 0;
   virtual float GetFuelDensity2(void) const = 0;
   virtual bool GetLogBinaryFmt(void) const = 0;
+  virtual bool GetClassic2DKeys(void) const = 0;
 
   //Fixtures's customization settings
   virtual int GetTachometerMax(void) const = 0;

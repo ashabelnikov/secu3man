@@ -188,6 +188,11 @@ void CTablesPanelBase::SetCSVSepSymbol(char sepsymb)
  CMapEditorCtrl::SetCSVSepSymbol(sepsymb);
 }
 
+void CTablesPanelBase::SetClassic2DKeys(bool classic)
+{
+ DLL::Chart3DSetClassic2DKeys(classic);
+}
+
 //------------------------------------------------------------------------
 void __cdecl CTablesPanelBase::OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param)
 {

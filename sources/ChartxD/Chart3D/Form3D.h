@@ -243,6 +243,7 @@ class TForm3D : public TForm
   AnsiString m_values_format_x;
   float m_pt_moving_step;
   static char m_csvsep_symb;
+  static bool m_classic2DKeys;
 
  private:
   float GetItem_m(int z, int x) const;

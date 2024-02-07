@@ -57,6 +57,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle);
  void  __declspec(dllexport)  __cdecl Chart3DSetTitle(HWND hWnd, LPCTSTR title);
  void  __declspec(dllexport)  __cdecl Chart3DSetCSVSepSymbol(char sepsymb);
+ void  __declspec(dllexport)  __cdecl Chart3DSetClassic2DKeys(bool classic);
 }
 
 extern HINSTANCE hInst;
@@ -274,6 +275,12 @@ void __cdecl Chart3DSetTitle(HWND hWnd, LPCTSTR title)
 void __cdecl Chart3DSetCSVSepSymbol(char sepsymb)
 {
  TForm3D::m_csvsep_symb = sepsymb;
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetClassic2DKeys(bool classic)
+{
+ TForm3D::m_classic2DKeys = classic;
 }
 
 //---------------------------------------------------------------------------

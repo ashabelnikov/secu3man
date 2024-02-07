@@ -71,6 +71,7 @@ namespace DLL
  Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle = NULL;
  Chart3DSetTitle_Addr            Chart3DSetTitle = NULL;
  Chart3DSetCSVSepSymbol_Addr     Chart3DSetCSVSepSymbol = NULL;
+ Chart3DSetClassic2DKeys_Addr    Chart3DSetClassic2DKeys = NULL;
 
  ChartxDSetLanguage_Addr         ChartxDSetLanguage = NULL;
  ChartxDShowHints_Addr           ChartxDShowHints = NULL;
@@ -145,6 +146,7 @@ namespace DLL
    Chart3DSetAxisTitle = NULL;
    Chart3DSetTitle = NULL;
    Chart3DSetCSVSepSymbol = NULL;
+   Chart3DSetClassic2DKeys = NULL;
    //common
    ChartxDSetLanguage = NULL;
    ChartxDShowHints = NULL;
@@ -192,6 +194,7 @@ namespace DLL
    LoadFunction(hModule, Chart3DSetAxisTitle, "Chart3DSetAxisTitle", status);
    LoadFunction(hModule, Chart3DSetTitle, "Chart3DSetTitle", status);
    LoadFunction(hModule, Chart3DSetCSVSepSymbol, "Chart3DSetCSVSepSymbol", status);
+   LoadFunction(hModule, Chart3DSetClassic2DKeys, "Chart3DSetClassic2DKeys", status);
    //common
    LoadFunction(hModule, ChartxDSetLanguage, "ChartxDSetLanguage", status);
    LoadFunction(hModule, ChartxDShowHints, "ChartxDShowHints", status);

@@ -148,6 +148,7 @@ void CPMSeptabsController::OnActivate(void)
  mp_view->Enable(false);
 
  mp_view->mp_SeptabsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_SeptabsPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
@@ -616,6 +617,7 @@ void CPMSeptabsController::setOnChangeSettings(EventHandler OnCB)
 void CPMSeptabsController::OnSettingsChanged(void)
 {
  mp_view->mp_SeptabsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_SeptabsPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 }
 
 void CPMSeptabsController::OnFunSetChanged(const SECU3IO::FunSetPar* data)

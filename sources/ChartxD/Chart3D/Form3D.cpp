@@ -40,6 +40,8 @@
 #pragma resource "Form3D.dfm"
 
 char TForm3D::m_csvsep_symb = ',';
+bool TForm3D::m_classic2DKeys = false;
+
 //---------------------------------------------------------------------------
 //colours for 3D chart
 long col[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491, 0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
@@ -1193,13 +1195,13 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  //Implement keyboard actions related to chart
  if (ActiveControl == Chart1)
  {
-  if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
+  if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD || (!CheckBox3d->Checked && m_classic2DKeys && Key == VK_UP))
   { //move points upward
    ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
-  else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA)
+  else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA || (!CheckBox3d->Checked && m_classic2DKeys && Key == VK_DOWN))
   { //move points downward
    ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
@@ -1234,11 +1236,11 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
     Chart1->Invalidate();
    }
   }
-  else if (Key == VK_DOWN)
+  else if (Key == VK_DOWN || Key == 'Z')
   { //decrement curve index
    SelDownArrow(Shift.Contains(ssShift));
   }
-  else if (Key == VK_UP)
+  else if (Key == VK_UP || Key == 'X')
   { //increment curve index
    SelUpArrow(Shift.Contains(ssShift));
   }

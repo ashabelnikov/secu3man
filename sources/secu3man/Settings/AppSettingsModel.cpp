@@ -76,6 +76,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogBinaryFmt(_T("LogBinaryFmt"))
 , m_optCreateWindows(_T("CreateWindows"))
 , m_optDbgVarsToFile(_T("DbgVarsToFile"))
+, m_optClassic2DKeys(_T("Classic2DKeys"))
+
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -918,6 +920,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optLogBinaryFmt, _T("0"), 0, 1);
  os.ReadInt(m_optCreateWindows, _T("1"), 0, 1);
  os.ReadInt(m_optDbgVarsToFile, _T("0"), 0, 1);
+ os.ReadInt(m_optClassic2DKeys, _T("0"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -1835,6 +1838,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Плотность топлива 2 (бензин), г/см3. Используется когда GAS_V = 1. Обратите внимание! Чтобы новое значение плотности вступило в силу, необходимо изменить значение одного или нескольких параметров на вкладке Впрыск!"));
  os.WriteFlt(m_optFuelDensity2, 4);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Use 'up' and 'down' arrow keys for changing values in 2D mode of table editor."));
+ else
+  os.WriteComment(_T("Использовать клавиши 'вверх' и 'вниз' для изменения значений в 2D режиме редактора таблиц"));
+ os.WriteInt(m_optClassic2DKeys); 
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section); 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -7415,4 +7424,9 @@ bool CAppSettingsModel::GetCreateWindows(void) const
 bool CAppSettingsModel::GetDbgVarsToFile(void) const
 {
  return m_optDbgVarsToFile.value;
+}
+
+bool CAppSettingsModel::GetClassic2DKeys(void) const
+{
+ return m_optClassic2DKeys.value;
 }

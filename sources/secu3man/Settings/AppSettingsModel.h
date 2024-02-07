@@ -109,6 +109,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetLogBinaryFmt(void) const;
   virtual bool GetEmbedMapWnd(void) const;
   virtual void SetEmbedMapWnd(bool toggle);
+  virtual bool GetClassic2DKeys(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -325,6 +326,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optLogBinaryFmt;
   OptField_t<bool> m_optCreateWindows;
   OptField_t<bool> m_optDbgVarsToFile;
+  OptField_t<bool> m_optClassic2DKeys;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;

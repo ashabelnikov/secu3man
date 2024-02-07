@@ -176,6 +176,7 @@ void CPMTablesController::OnActivate(void)
  mp_view->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
  mp_view->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_ButtonsPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);
@@ -686,4 +687,5 @@ void CPMTablesController::setOnChangeSettings(EventHandler OnCB)
 void CPMTablesController::OnSettingsChanged(void)
 {
  mp_view->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());
+ mp_view->mp_ButtonsPanel->SetClassic2DKeys(mp_settings->GetClassic2DKeys());
 }
