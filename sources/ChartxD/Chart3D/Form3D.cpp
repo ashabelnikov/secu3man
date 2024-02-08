@@ -109,12 +109,12 @@ void TForm3D::DataPrepare(bool create)
 
   if (m_chart_active)
   {
-   MarkPoints(true);
+   MarkPoints(true); //mark
    Chart1->Title->Font->Style = TFontStyles() << fsBold;
   }
   else
   {
-   UnmarkPoints();
+   MarkPoints(false); //unmark
    Chart1->Title->Font->Style = TFontStyles();
   }
  }
@@ -297,8 +297,7 @@ void __fastcall TForm3D::TrackBarAfChange(TObject *Sender)
  //2D only:
  SetAirFlow(TrackBarAf->Position);
  m_setval = 0;
- UnmarkPoints();
- MarkPoints(true);
+ MarkPoints(true); //update marked points
 }
 
 //---------------------------------------------------------------------------
@@ -314,7 +313,6 @@ void __fastcall TForm3D::Chart1ClickSeries(TCustomChart *Sender,
   //if Ctrl key is not pressed then, select single point
   if (!Shift.Contains(ssCtrl))
   {
-   MarkPoints(false);
    m_sel.Clear();
    m_sel.Set(m_air_flow_position, ValueIndex, true);
    MarkPoints(true);
@@ -343,7 +341,6 @@ void __fastcall TForm3D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
  //implementation of multiple points selection
  if (Shift.Contains(ssCtrl) && (m_prev_pt.first == X && m_prev_pt.second == Y))
  {
-  MarkPoints(false);
   if (false==m_sel.Get(m_air_flow_position, m_val_x))
    m_sel.Set(m_air_flow_position, m_val_x, true);
   else
@@ -761,21 +758,13 @@ void __fastcall TForm3D::ShiftPoints(float i_value, bool all /*= false*/)
 
 //---------------------------------------------------------------------------
 //Used in 2D only
-void __fastcall TForm3D::MarkPoints(bool i_mark)
+void __fastcall TForm3D::MarkPoints(bool i_mark /*=true*/)
 {
  for(int x = 0; x < m_count_x; ++x)
  {
-  if (true==m_sel.Get(m_air_flow_position, x))
-   (Chart1->Series[m_air_flow_position + m_count_z])->ValueColor[x] = (i_mark ? clNavy : clRed);
- }
-}
-
-//---------------------------------------------------------------------------
-//Used in 2D only
-void __fastcall TForm3D::UnmarkPoints(void)
-{
- for(int x = 0; x < m_count_x; ++x)
- {
+  if (true==m_sel.Get(m_air_flow_position, x) && i_mark)
+   (Chart1->Series[m_air_flow_position + m_count_z])->ValueColor[x] = clNavy;
+  else
   (Chart1->Series[m_air_flow_position + m_count_z])->ValueColor[x] = clRed;
  }
 }
@@ -1030,7 +1019,6 @@ void __fastcall TForm3D::SelLeftArrow(bool i_shift)
  {//Shift key is pressed
   if (m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position))
   {
-   if (!CheckBox3d->Checked) MarkPoints(false);
    if (m_sel.Left() != m_val_x && m_sel.Left() != m_sel.Right())
    {
     for(int z = m_sel.Down(); z <= m_sel.Up(); ++z)
@@ -1054,7 +1042,6 @@ void __fastcall TForm3D::SelLeftArrow(bool i_shift)
  }
  else
  {//Without shift
-  if (!CheckBox3d->Checked) MarkPoints(false);
   int prev_pt = m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position) ? m_sel.Right() - 1 : 0;
   if (prev_pt < 0)
    prev_pt = 0;
@@ -1073,7 +1060,6 @@ void __fastcall TForm3D::SelRightArrow(bool i_shift)
  { //Shift key is pressed
   if (m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position))
   {
-   if (!CheckBox3d->Checked) MarkPoints(false);
    if (m_sel.Right() != m_val_x &&  m_sel.Left() != m_sel.Right())
    {
     for(int z = m_sel.Down(); z <= m_sel.Up(); ++z)
@@ -1099,7 +1085,6 @@ void __fastcall TForm3D::SelRightArrow(bool i_shift)
  }
  else
  { //Without shift
-  if (!CheckBox3d->Checked) MarkPoints(false);
   int next_pt = m_sel.Size(CheckBox3d->Checked ? m_val_z : m_air_flow_position) ? m_sel.Right() + 1 : 0;
   if (next_pt >= m_count_x)
    next_pt = m_count_x - 1;
@@ -1118,6 +1103,7 @@ void __fastcall TForm3D::SelUpArrow(bool i_shift)
   if (m_air_flow_position < (m_count_z-1))
    ++m_air_flow_position;
   SetAirFlow(m_air_flow_position);
+  if (!CheckBox3d->Checked) MarkPoints(true);
   return;
  }
 
@@ -1157,6 +1143,7 @@ void __fastcall TForm3D::SelDownArrow(bool i_shift)
   if (m_air_flow_position > 0)
    --m_air_flow_position;
   SetAirFlow(m_air_flow_position);
+  if (!CheckBox3d->Checked) MarkPoints(true);
   return;
  }
 
@@ -1247,11 +1234,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   else if (Key == 'B')
   {
    if (CheckBox3d->Checked)
-   {
     CheckBoxBv->Checked = !CheckBoxBv->Checked;
-    UnmarkPoints();
-    MarkPoints(true);
-   }
   }
   else if (Key == 'Q')
   { //toggle area view
@@ -1274,8 +1257,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
      Chart1->Invalidate();
     }
     else
-    {
-     MarkPoints(false);
+    { //2D
      for(int x = 0; x < m_count_x; x++)
       m_sel.Set(m_air_flow_position, x, true);
      MarkPoints(true);
@@ -1378,8 +1360,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
      Chart1->Invalidate();
     }
     else
-    {
-     MarkPoints(false);
+    { //2D
      m_sel.Clear();
      m_val_x = 0;
      m_sel.Set(m_air_flow_position, m_val_x, true);
@@ -1409,8 +1390,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
      Chart1->Invalidate();
     }
     else
-    {
-     MarkPoints(false);
+    { //2D
      m_sel.Clear();
      m_val_x = m_count_x-1;
      m_sel.Set(m_air_flow_position, m_val_x, true);

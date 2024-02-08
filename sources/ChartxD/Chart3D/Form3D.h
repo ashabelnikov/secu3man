@@ -257,8 +257,7 @@ class TForm3D : public TForm
   void HideAllSeries(void);
   int __fastcall GetZPos(int z) const;
   void __fastcall ShiftPoints(float i_value, bool all = false);
-  void __fastcall MarkPoints(bool i_mark);
-  void __fastcall UnmarkPoints(void);
+  void __fastcall MarkPoints(bool i_mark = true);
   void __fastcall SelLeftArrow(bool i_shift);
   void __fastcall SelRightArrow(bool i_shift);
   void __fastcall SelDownArrow(bool i_shift); //only in 3D
