@@ -240,3 +240,9 @@ void CGMEInjITDlg::OnDestroy()
  Super::OnDestroy();
  m_initialized = false;
 }
+
+void CGMEInjITDlg::OnShow(bool show)
+{
+ if (show && m_it_map.GetSafeHwnd())
+  m_it_map.UpdateDisplay(); 
+}

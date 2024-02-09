@@ -56,8 +56,6 @@ class CGMEInjITDlg : public CTabDialog
   void SetITMode(int mode);
   int GetITMode(void) const;
 
- public:
-
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -69,6 +67,7 @@ class CGMEInjITDlg : public CTabDialog
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
+  virtual void OnShow(bool show);
 
  private:
   float OnValueTransform(float source, int direction);
