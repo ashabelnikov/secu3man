@@ -228,7 +228,7 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    secu3_ftoa_32 (i_data.octan_aac, 7, 2);        // octane correction value
    secu3_ftoa_32 (i_data.lambda_corr, 7, 2);      // lambda correction
    secu3_ftoa_32 (i_data.inj_pw, 7, 2);           // injector pulse width
-   secu3_itoa_u32(i_data.tpsdot, 6);              // TPS dot (d%/dt)
+   secu3_itoa_32 (i_data.tpsdot, 6);              // TPS dot (d%/dt)
    secu3_ftoa_32 (i_data.map2, 7, 2);             // MAP2
    secu3_ftoa_32 (i_data.tmp2, 7, 2);             // TMP2
    secu3_ftoa_32 (i_data.mapd, 8, 2);             // MAP2 - MAP
