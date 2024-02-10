@@ -36,6 +36,7 @@
 #include "DynFieldsDialog.h"
 #include "MsgBox.h"
 #include "InitMenuPopup.h"
+#include "Undo.h"
 
 static TCHAR templateStr[] = _T("88888888888888");
 
@@ -210,6 +211,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_ballBrush(GDIHelpers::InvColor(RGB(255, 64, 64)))
 , m_lbuttondown(false)
 , mp_tooltip(NULL)
+, mp_undo(new UndoCntr())
 {
  m_horizLabels.reserve(16);
  m_vertLabels.reserve(16);
@@ -218,9 +220,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 
  _RegisterWindowClass(hMod);
  m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, m_gradSaturation, m_gradBrightness);
- for(int i = 0; i < (rows*cols); ++i)
-  mp_itemColors[i] = 0;
-
+ std::fill(mp_itemColors, mp_itemColors + (rows*cols), 0);
  mp_mapTr = new float[m_rows * m_cols];
 }
 
@@ -229,6 +229,7 @@ CMapEditorCtrl::~CMapEditorCtrl()
  delete[] mp_itemColors;
  delete[] mp_mapTr;
  delete mp_tooltip;
+ delete mp_undo;
 }
 
 BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
@@ -264,6 +265,8 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_COMMAND(ID_MAPED_POPUP_COPY, OnClipboardCopy)
  ON_COMMAND(ID_MAPED_POPUP_PASTE, OnClipboardPaste)
  ON_COMMAND(ID_MAPED_POPUP_INTERPOL, OnInterpolate)
+ ON_COMMAND(ID_MAPED_POPUP_UNDO, OnUndo)
+ ON_COMMAND(ID_MAPED_POPUP_REDO, OnRedo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INC, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_DEC, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SETTO, OnUpdateSetTo)
@@ -275,6 +278,8 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH5X5, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_IMPORTCSV, OnUpdateImportCsv)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INTERPOL, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_UNDO, OnUpdateUndo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_REDO, OnUpdateRedo)
 END_MESSAGE_MAP()
 
 UINT CMapEditorCtrl::OnGetDlgCode()
@@ -346,6 +351,16 @@ void CMapEditorCtrl::OnDestroy()
 void CMapEditorCtrl::OnUpdateSetTo(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(!m_readOnly);
+}
+
+void CMapEditorCtrl::OnUpdateUndo(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(!m_readOnly && mp_undo->CanUndo());
+}
+
+void CMapEditorCtrl::OnUpdateRedo(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(!m_readOnly && mp_undo->CanRedo());
 }
 
 void CMapEditorCtrl::OnUpdateImportCsv(CCmdUI* pCmdUI)
@@ -546,9 +561,10 @@ void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
     if (m_OnChange)
     {
      float previousValue = _GetItemTr(m_cur_i, m_cur_j);       
-     _SetItemTr(m_cur_i, m_cur_j, value); //save result
      if (previousValue != value)
      {
+      mp_undo->Add();
+      _SetItemTr(m_cur_i, m_cur_j, value); //save result
       m_OnChange();
       if (!m_absGrad)
       {
@@ -615,9 +631,10 @@ void CMapEditorCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
     if (m_OnChange)
     {
      float previousValue = _GetItemTr(m_cur_i, m_cur_j);       
-     _SetItemTr(m_cur_i, m_cur_j, value); //save result
      if (previousValue != value)
      {
+      mp_undo->Add();
+      _SetItemTr(m_cur_i, m_cur_j, value); //save result
       m_OnChange();
       if (!m_absGrad)
       {
@@ -711,6 +728,7 @@ BOOL CMapEditorCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
  }
 
  const std::vector<std::pair<int, int> >& sel = GetSelection();
+ if (sel.size() > 0) mp_undo->Add();
  for(size_t i = 0; i < sel.size(); ++i)
  {
   float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -743,9 +761,10 @@ void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
  if (m_OnChange)
  {
   float previousValue = _GetItemTr(m_cur_i, m_cur_j);
-  _SetItemTr(m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
   {
+   mp_undo->Add();
+   _SetItemTr(m_cur_i, m_cur_j, value); //save result
    m_OnChange();
    if (!m_absGrad)
    {
@@ -1012,6 +1031,7 @@ void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    if (m_readOnly) break;
    {
     const std::vector<std::pair<int, int> >& sel = GetSelection();
+    if (sel.size() > 0) mp_undo->Add();
     for(size_t i = 0; i < sel.size(); ++i)
     {
      float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -1036,6 +1056,7 @@ void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    if (m_readOnly) break;
    {
     const std::vector<std::pair<int, int> >& sel = GetSelection();
+    if (sel.size() > 0) mp_undo->Add();
     for(size_t i = 0; i < sel.size(); ++i)
     {
      float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -1067,6 +1088,20 @@ void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    }
   }
   break;
+
+ case 'Z': //Ctrl+Z Undo
+  if (GetKeyState(VK_CONTROL) & 0x8000)
+  {
+   OnUndo();
+  }
+  break;
+
+ case 'Y': //Ctrl+Y Undo
+  if (GetKeyState(VK_CONTROL) & 0x8000)
+  {
+   OnRedo();
+  }
+  break;
  }
 
  Super::OnKeyDown(nChar, nRepCnt, nFlags);
@@ -1084,9 +1119,10 @@ void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
  if (m_OnChange)
  {
   float previousValue = _GetItemTr(m_cur_i, m_cur_j);
-  _SetItemTr(m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
   {
+   mp_undo->Add();
+   _SetItemTr(m_cur_i, m_cur_j, value); //save result
    m_OnChange();
    if (!m_absGrad)
    {
@@ -1136,6 +1172,7 @@ void CMapEditorCtrl::AttachMap(float* p_map, float* p_mapOrig /*= NULL*/)
  ASSERT(p_map);
  mp_map = p_map;
  mp_mapOrig = p_mapOrig;
+ mp_undo->Attach(mp_map, m_rows*m_cols);
  _UpdateMinMaxElems();
 }
 
@@ -1426,6 +1463,7 @@ bool CMapEditorCtrl::GetSpotMarkers(void)
 void CMapEditorCtrl::OnInc()
 {
  const std::vector<std::pair<int, int> >& sel = GetSelection();
+ if (sel.size() > 0) mp_undo->Add();
  for(size_t i = 0; i < sel.size(); ++i)
  {
   float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -1448,6 +1486,7 @@ void CMapEditorCtrl::OnInc()
 void CMapEditorCtrl::OnDec()
 {
  const std::vector<std::pair<int, int> >& sel = GetSelection();
+ if (sel.size() > 0) mp_undo->Add();
  for(size_t i = 0; i < sel.size(); ++i)
  {
   float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -1476,6 +1515,7 @@ void CMapEditorCtrl::OnSetTo()
  {
   value = MathHelpers::RestrictValue(value, m_minVal, m_maxVal);
   const std::vector<std::pair<int, int> >& sel = GetSelection();
+  if (sel.size() > 0) mp_undo->Add();
   for(size_t i = 0; i < sel.size(); ++i)
    _SetItemTr(sel[i].first, sel[i].second, value);
 
@@ -1499,6 +1539,7 @@ void CMapEditorCtrl::OnSub()
  if (dfd.DoModal()==IDOK)
  {
   const std::vector<std::pair<int, int> >& sel = GetSelection();
+  if (sel.size() > 0) mp_undo->Add();
   for(size_t i = 0; i < sel.size(); ++i)
   {
    float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -1527,6 +1568,7 @@ void CMapEditorCtrl::OnAdd()
  if (dfd.DoModal()==IDOK)
  {
   const std::vector<std::pair<int, int> >& sel = GetSelection();
+  if (sel.size() > 0) mp_undo->Add();
   for(size_t i = 0; i < sel.size(); ++i)
   {
    float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -1555,6 +1597,7 @@ void CMapEditorCtrl::OnMul()
  if (dfd.DoModal()==IDOK)
  {
   const std::vector<std::pair<int, int> >& sel = GetSelection();
+  if (sel.size() > 0) mp_undo->Add();
   for(size_t i = 0; i < sel.size(); ++i)
   {
    float value = _GetItemTr(sel[i].first, sel[i].second);
@@ -1577,6 +1620,7 @@ void CMapEditorCtrl::OnMul()
 
 void CMapEditorCtrl::OnSmoothing3x3()
 {
+ mp_undo->Add();
  float* p_source_function = new float[m_rows * m_cols];
  bool* p_mask = new bool[m_rows * m_cols];
  for(int i = 0; i < m_rows; ++i)
@@ -1600,6 +1644,7 @@ void CMapEditorCtrl::OnSmoothing3x3()
 
 void CMapEditorCtrl::OnSmoothing5x5()
 {
+ mp_undo->Add();
  float* p_source_function = new float[m_rows * m_cols];
  bool* p_mask = new bool[m_rows * m_cols];
  for(int i = 0; i < m_rows; ++i)
@@ -1632,6 +1677,8 @@ void CMapEditorCtrl::OnInterpolate()
  float xBins[2] = {(float)bj, (float)ej};
  float yBins[2] = {(float)bi, (float)ei};
 
+ mp_undo->Add();
+
  for(int i = bi; i <= ei; ++i)
  {
   for(int j = bj; j <= ej; ++j)
@@ -1655,6 +1702,7 @@ void CMapEditorCtrl::OnInterpolate()
 void CMapEditorCtrl::OnRevert()
 {
  const std::vector<std::pair<int, int> >& sel = GetSelection();
+ if (sel.size() > 0) mp_undo->Add();
  for(size_t i = 0; i < sel.size(); ++i)
  {
   float value = _GetItemTrO(sel[i].first, sel[i].second);
@@ -1754,6 +1802,8 @@ void CMapEditorCtrl::OnImportCsv()
     return;
    }
   }
+
+  mp_undo->Add();
 
   //set read values
   for(int i = 0; i < m_rows; ++i)
@@ -2307,6 +2357,8 @@ void CMapEditorCtrl::_ClipboardPaste(void)
 
     GlobalUnlock(hglb); 
 
+    mp_undo->Add();
+
     TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
 
     int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
@@ -2343,4 +2395,36 @@ void CMapEditorCtrl::_ClipboardPaste(void)
   } 
   CloseClipboard();     
  }
+}
+
+void CMapEditorCtrl::OnUndo()
+{
+ if (!mp_undo->CanUndo()) return;
+ mp_undo->DoUndo();
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);
+}
+
+void CMapEditorCtrl::OnRedo()
+{
+ if (!mp_undo->CanRedo()) return;
+ mp_undo->DoRedo();
+
+ m_OnChange();
+ if (!m_absGrad)
+ {
+  _UpdateMinMaxElems();
+ }
+
+ _DrawGrid();
+ CClientDC dc(this);
+ _ShowImage(&dc);
 }

@@ -89,8 +89,7 @@ HWND __cdecl Chart3DCreate(HWND parent, float *original_function, float *modifie
  pForm->SetChartTitle(chart_title);
  pForm->SetXAxisTitle(x_axis_title);
  pForm->SetYAxisTitle(y_axis_title);
- pForm->mp_modified_function = modified_function;
- pForm->mp_original_function = original_function;
+ pForm->AttachData(original_function, modified_function);
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->LabelAfc->Caption = MLL::LoadString(IDS_AIR_FLOW_CAPTION_TEXT);
@@ -113,8 +112,7 @@ void __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_
 
  if (original_function && modified_function)
  {
-  pForm->mp_original_function = original_function;
-  pForm->mp_modified_function = modified_function;
+  pForm->AttachData(original_function, modified_function);
  }
 
  pForm->DataPrepare(false);

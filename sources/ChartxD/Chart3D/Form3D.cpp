@@ -34,6 +34,7 @@
 #include "../common/StrUtils.h"
 #include "../PtmovStep/PtMovStepDlg.h"
 #include "../ManageFrm.h"
+#include "../ui-core/Undo.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -86,6 +87,7 @@ __fastcall TForm3D::TForm3D(HWND parent)
 , m_mc_rotation(0)
 , m_mc_elevation(0)
 , m_mc_allow(true)
+, mp_undo(new UndoCntr())
 {
  //empty
 }
@@ -93,7 +95,7 @@ __fastcall TForm3D::TForm3D(HWND parent)
 //---------------------------------------------------------------------------
 __fastcall TForm3D::~TForm3D()
 {
- //empty
+ delete mp_undo;
 }
 
 //---------------------------------------------------------------------------
@@ -320,6 +322,7 @@ void __fastcall TForm3D::Chart1ClickSeries(TCustomChart *Sender,
 
   if (Button==mbLeft)
   {
+   UndoAdd();
    m_setval = 1;
    m_val_x  = ValueIndex;
    m_val_z  = CheckBoxBv->Checked ? m_count_z-1-m_air_flow_position : m_air_flow_position;
@@ -538,6 +541,7 @@ void __fastcall TForm3D::OnCloseForm(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 {
+ UndoAdd();
  ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step, true); //all
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -546,6 +550,7 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 {
+ UndoAdd();
  ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step, true); //all
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -554,6 +559,7 @@ void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
 {
+ UndoAdd();
  if (!CheckBox3d->Checked)
  { //2D
   float* p_source_function = new float[m_count_x];
@@ -588,6 +594,7 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
 {
+ UndoAdd();
  if (!CheckBox3d->Checked)
  { //2D
   float* p_source_function = new float[m_count_x];
@@ -867,6 +874,7 @@ void __fastcall TForm3D::WndProc(Messages::TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
 {
+ UndoAdd();
  if (CheckBox3d->Checked)
  {//3D
   for (int x = 0; x < m_count_x; x++ )
@@ -889,6 +897,7 @@ void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
 {
+ UndoAdd();
  if (CheckBox3d->Checked)
  {//3D
   for (int x = 0; x < m_count_x; x++)
@@ -910,6 +919,7 @@ void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 {
+ UndoAdd();
  if (CheckBox3d->Checked)
  {//3D
   std::vector<int> selpts;
@@ -937,6 +947,7 @@ void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnZeroAllCurves(TObject *Sender)
 {
+ UndoAdd();
  if (CheckBox3d->Checked)
  {//3D
   for (int z = 0; z < m_count_z; z++ )
@@ -966,6 +977,7 @@ void __fastcall TForm3D::OnZeroAllCurves(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
 {
+ UndoAdd();
  if (CheckBox3d->Checked)
  {//3D
   for (int z = 0; z < m_count_z; z++ )
@@ -995,6 +1007,7 @@ void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
 {
+ UndoAdd();
  if (CheckBox3d->Checked)
  {//3D
   Interpolate3D(0, m_count_x-1, 0, m_count_z-1);
@@ -1184,12 +1197,14 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  {
   if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD || (!CheckBox3d->Checked && m_classic2DKeys && Key == VK_UP))
   { //move points upward
+   UndoAdd();
    ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
   else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA || (!CheckBox3d->Checked && m_classic2DKeys && Key == VK_DOWN))
   { //move points downward
+   UndoAdd();
    ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
@@ -1223,7 +1238,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
     Chart1->Invalidate();
    }
   }
-  else if (Key == VK_DOWN || Key == 'Z')
+  else if (Key == VK_DOWN || (Key == 'Z' && !Shift.Contains(ssCtrl)))
   { //decrement curve index
    SelDownArrow(Shift.Contains(ssShift));
   }
@@ -1330,6 +1345,14 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
     Chart1->View3DWalls = false;
    else
     Chart1->View3DWalls = true;
+  }
+  else if (Key == 'Z' && Shift.Contains(ssCtrl))
+  {
+   OnUndo(NULL);
+  }
+  else if (Key == 'Y' && Shift.Contains(ssCtrl))
+  {
+   OnRedo(NULL);
   }
   else if (Key == VK_INSERT)
   {
@@ -1459,6 +1482,7 @@ void __fastcall TForm3D::FormDeactivate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnCopyToCurve(TObject *Sender)
 {
+ UndoAdd();
  int z = GetZPos(CheckBox3d->Checked ? m_val_z : m_air_flow_position);
  if (Sender == PM_CopyToCurve0)       CopyCurve(z, 0);
  else if (Sender == PM_CopyToCurve1)  CopyCurve(z, 1);
@@ -1484,6 +1508,7 @@ void __fastcall TForm3D::OnCopyToCurve(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnCopyFromCurve(TObject *Sender)
 {
+ UndoAdd();
  int z = GetZPos(CheckBox3d->Checked ? m_val_z : m_air_flow_position);
  if (Sender == PM_CopyFromCurve0)       CopyCurve(0, z);
  else if (Sender == PM_CopyFromCurve1)  CopyCurve(1, z);
@@ -1686,6 +1711,7 @@ void __fastcall TForm3D::OnImportCSV(TObject *Sender)
    }
   }
 
+  UndoAdd();
   if (CheckBoxBv->Checked)
   {
    //set read values
@@ -1790,7 +1816,8 @@ void TForm3D::ClipboardPaste(void)
     }
 
     TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
- 
+
+    UndoAdd(); 
     for(size_t z = 0; z < csv.size(); ++z)
     {
      int index_z = (CheckBoxBv->Checked ? m_count_z-1-m_sel.Up() : m_sel.Up()) - z;
@@ -1836,6 +1863,7 @@ void TForm3D::ClipboardPaste(void)
 
     TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
  
+    UndoAdd();
     for(size_t x = 0; x < csv[0].size(); ++x)
     {
      int index = m_sel.Left() + x;
@@ -1872,6 +1900,7 @@ void __fastcall TForm3D::OnPaste(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnInc(TObject *Sender)
 {
+ UndoAdd();
  ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -1880,6 +1909,7 @@ void __fastcall TForm3D::OnInc(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnDec(TObject *Sender)
 {
+ UndoAdd();
  ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -1895,6 +1925,7 @@ void __fastcall TForm3D::OnSetTo(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   if (!CheckBox3d->Checked)
   { //2D
    for(int x = 0; x < m_count_x; ++x)
@@ -1920,9 +1951,9 @@ void __fastcall TForm3D::OnSetTo(TObject *Sender)
    else
     UpdateSurfaceValues();
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------
@@ -1935,6 +1966,7 @@ void __fastcall TForm3D::OnSub(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   if (!CheckBox3d->Checked)
   { //2D
    for(int x = 0; x < m_count_x; ++x)
@@ -1964,9 +1996,9 @@ void __fastcall TForm3D::OnSub(TObject *Sender)
    else
     UpdateSurfaceValues();
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------
@@ -1979,6 +2011,7 @@ void __fastcall TForm3D::OnAdd(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   if (!CheckBox3d->Checked)
   { //2D
    for(int x = 0; x < m_count_x; ++x)
@@ -2008,9 +2041,9 @@ void __fastcall TForm3D::OnAdd(TObject *Sender)
    else
     UpdateSurfaceValues();
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------
@@ -2023,6 +2056,7 @@ void __fastcall TForm3D::OnMul(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   if (!CheckBox3d->Checked)
   { //2D
    for(int x = 0; x < m_count_x; ++x)
@@ -2054,9 +2088,9 @@ void __fastcall TForm3D::OnMul(TObject *Sender)
    else
     UpdateSurfaceValues();
   }
+  if (m_pOnChange)
+   m_pOnChange(m_param_on_change);
  }
- if (m_pOnChange)
-  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
@@ -2190,6 +2224,7 @@ void __fastcall TForm3D::OnAllowMouseCamera(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnInterpolate(TObject *Sender)
 {
+ UndoAdd();
  if (CheckBox3d->Checked)
  { //3D
   if (CheckBoxBv->Checked) m_sel.InvertZ();
@@ -2388,6 +2423,73 @@ void __fastcall TForm3D::SetSeriesColor(int z)
   for (int x = 0; x < m_count_x; ++x)
    Chart1->Series[z + m_count_z]->ValueColor[x] = TColor(col[m_count_z - 1 - z]);
  }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::AttachData(const float* p_orig, float* p_modi)
+{
+ mp_original_function = p_orig;
+ mp_modified_function = p_modi; 
+ mp_undo->Attach(p_modi, m_count_x*m_count_z);
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::UndoAdd(void)
+{
+ if (!mp_undo) return;
+ mp_undo->Add();
+ PM_Undo->Enabled = mp_undo->CanUndo();
+ PM_Redo->Enabled = mp_undo->CanRedo();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnUndo(TObject *Sender)
+{
+ if (!mp_undo->CanUndo()) return;
+ mp_undo->DoUndo();
+
+ if (CheckBox3d->Checked)
+ { //3D
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
+ }
+ else
+ { //2D
+  UpdateChartValues();
+ }
+
+ PM_Undo->Enabled = mp_undo->CanUndo();
+ PM_Redo->Enabled = mp_undo->CanRedo();
+
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnRedo(TObject *Sender)
+{
+ if (!mp_undo->CanRedo()) return;
+ mp_undo->DoRedo();
+
+ if (CheckBox3d->Checked)
+ { //3D
+  if (PM_Classic3d->Checked)
+   UpdateChartValues();
+  else
+   UpdateSurfaceValues();
+ }
+ else
+ { //2D
+  UpdateChartValues();
+ }
+
+ PM_Undo->Enabled = mp_undo->CanUndo();
+ PM_Redo->Enabled = mp_undo->CanRedo();
+
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------

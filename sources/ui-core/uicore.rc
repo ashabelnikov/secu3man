@@ -32,6 +32,9 @@ BEGIN
         MENUITEM "—гладить 3х3",            ID_MAPED_POPUP_SMOOTH3X3
         MENUITEM "—гладить 5х5",            ID_MAPED_POPUP_SMOOTH5X5
         MENUITEM "»нтерполировать"          ID_MAPED_POPUP_INTERPOL
+        MENUITEM SEPARATOR
+        MENUITEM "Undo Ctrl+Z",             ID_MAPED_POPUP_UNDO
+        MENUITEM "Redo Ctrl+Y",             ID_MAPED_POPUP_REDO
     END
 END
 
@@ -99,6 +102,9 @@ BEGIN
         MENUITEM "Smoothing 3х3",           ID_MAPED_POPUP_SMOOTH3X3
         MENUITEM "Smoothing 5х5",           ID_MAPED_POPUP_SMOOTH5X5
         MENUITEM "Interpolate"              ID_MAPED_POPUP_INTERPOL
+        MENUITEM SEPARATOR
+        MENUITEM "Undo Ctrl+Z",             ID_MAPED_POPUP_UNDO
+        MENUITEM "Redo Ctrl+Y",             ID_MAPED_POPUP_REDO
     END
 END
 

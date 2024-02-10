@@ -29,6 +29,7 @@
 #include "common/fastdelegate.h"
 
 class CEditExCustomKeys;
+class UndoCntr;
 
 class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 {
@@ -109,9 +110,13 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   afx_msg void OnClipboardCopy();
   afx_msg void OnClipboardPaste();
   afx_msg void OnUpdateSetTo(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateUndo(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateRedo(CCmdUI* pCmdUI);
   afx_msg void OnUpdateImportCsv(CCmdUI* pCmdUI);
   afx_msg void OnUpdateClipboardPaste(CCmdUI* pCmdUI);
   afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
+  afx_msg void OnUndo();
+  afx_msg void OnRedo();
   BOOL PreTranslateMessage(MSG *pMsg);
   DECLARE_MESSAGE_MAP()
 
@@ -258,4 +263,6 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   bool m_forceRedraw;
   CPoint m_ballCoord;
   CBrush m_ballBrush;
+
+  UndoCntr* mp_undo;
 };

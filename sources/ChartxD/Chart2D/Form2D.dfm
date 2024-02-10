@@ -700,6 +700,16 @@ object Form2D: TForm2D
       Caption = 'Paste Ctrl+V'
       OnClick = OnPaste
     end
+    object PM_Undo: TMenuItem
+      Caption = 'Undo Ctrl+Z'
+      OnClick = OnUndo
+      Enabled = False
+    end
+    object PM_Redo: TMenuItem
+      Caption = 'Redo Ctrl+Y'
+      OnClick = OnRedo
+      Enabled = False
+    end
   end
 
   object openDialog: TOpenDialog

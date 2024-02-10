@@ -88,8 +88,7 @@ HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float
  pForm->m_chart_title_text = i_chart_title;
  pForm->m_x_axis_title = i_x_axis_title;
  pForm->m_y_axis_title = i_y_axis_title;
- pForm->mp_original_function = ip_original_function;
- pForm->mp_modified_function = iop_modified_function;
+ pForm->AttachData(ip_original_function, iop_modified_function);
  pForm->m_fnc_min = i_fnc_min;
  pForm->m_fnc_max = i_fnc_max;
 
@@ -127,8 +126,7 @@ void __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *
   for (;pForm->Series2->Count() > 0;)
    pForm->Series2->Delete(pForm->Series2->Count()-1);
 
-  pForm->mp_original_function = ip_original_function;
-  pForm->mp_modified_function = iop_modified_function;
+  pForm->AttachData(ip_original_function, iop_modified_function);
  }
  pForm->DataPrepare();
 }

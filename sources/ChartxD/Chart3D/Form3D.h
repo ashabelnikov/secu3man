@@ -46,6 +46,8 @@ typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
 typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, int index, void* i_param);
 typedef float (__cdecl *OnValueTransform)(void* i_param, float sourceVal, int direction);
 
+class UndoCntr;
+
 //---------------------------------------------------------------------------
 class TForm3D : public TForm
 {
@@ -157,6 +159,8 @@ class TForm3D : public TForm
   TMenuItem *PM_Sub;
   TMenuItem *PM_Add;
   TMenuItem *PM_Mul;
+  TMenuItem *PM_Undo;
+  TMenuItem *PM_Redo;
   TMenuItem *PM_AllowMouseZoom;
   TMenuItem *PM_AllowMouseCamera;
   TOpenDialog* openDialog;
@@ -205,6 +209,8 @@ class TForm3D : public TForm
   void __fastcall OnSub(TObject *Sender);
   void __fastcall OnAdd(TObject *Sender);
   void __fastcall OnMul(TObject *Sender);
+  void __fastcall OnUndo(TObject *Sender);
+  void __fastcall OnRedo(TObject *Sender);
   void __fastcall OnAllowMouseZoom(TObject *Sender);
   void __fastcall OnAllowMouseCamera(TObject *Sender);
   double __fastcall OnGetYValue(TChartSeries *Sender, int X, int Z); //from TIsoSurfaceSerie
@@ -236,10 +242,10 @@ class TForm3D : public TForm
   void SetXAxisTitle(const AnsiString& title);
   void SetYAxisTitle(const AnsiString& title);
 
+  void __fastcall AttachData(const float* p_orig, float* p_modi);
+
  public: //Properties
   float m_u_slots[64];
-  float *mp_modified_function;
-  float *mp_original_function;
   AnsiString m_values_format_x;
   float m_pt_moving_step;
   static char m_csvsep_symb;
@@ -280,7 +286,12 @@ class TForm3D : public TForm
   void __fastcall SetSeriesTransparency(double transp);
   void __fastcall SetSeriesColor(int z);
 
+  void UndoAdd(void);
+
  private: // User declarations
+  float *mp_modified_function;
+  const float *mp_original_function;
+
   //адрес функции которая будет вызываться после изменения данных
   EventHandler m_pOnChange;
   void* m_param_on_change;
@@ -330,6 +341,8 @@ class TForm3D : public TForm
   int m_mc_rotation;
   int m_mc_elevation;
   bool m_mc_allow;
+
+  UndoCntr* mp_undo;
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_

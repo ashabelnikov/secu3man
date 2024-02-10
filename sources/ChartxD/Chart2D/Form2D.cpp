@@ -36,6 +36,7 @@
 #include "../common/StrUtils.h"
 #include "../PtMovStep/PtMovStepDlg.h"
 #include "../ManageFrm.h"
+#include "../ui-core/Undo.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "Form2D.dfm"
@@ -73,6 +74,7 @@ __fastcall TForm2D::TForm2D(HWND parent)
 , m_horizontal_axis_grid_mode(0) //0 mode is default
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
+, mp_undo(new UndoCntr())
 {
  m_errors.reserve(32);
  std::fill(m_horizontal_axis_grid_values, m_horizontal_axis_grid_values + 256, .0f);
@@ -84,7 +86,7 @@ __fastcall TForm2D::TForm2D(HWND parent)
 //---------------------------------------------------------------------------
 __fastcall TForm2D::~TForm2D()
 {
- //empty
+ delete mp_undo;
 }
 
 //---------------------------------------------------------------------------
@@ -385,6 +387,7 @@ void __fastcall TForm2D::Chart1ClickSeries(TCustomChart *Sender,
 
   if (Button==mbLeft) //левая кнопка мышки?
   {
+   UndoAdd();
    m_setval  = 1;
    m_val_n = ValueIndex;
   }
@@ -472,6 +475,7 @@ void __fastcall TForm2D::FormClose(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::ButtonAngleUpClick(TObject *Sender)
 {
+ UndoAdd();
  ShiftFunction(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -480,6 +484,7 @@ void __fastcall TForm2D::ButtonAngleUpClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::ButtonAngleDownClick(TObject *Sender)
 {
+ UndoAdd();
  ShiftFunction(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -488,6 +493,7 @@ void __fastcall TForm2D::ButtonAngleDownClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 {
+ UndoAdd();
  float* p_source_function = new float[m_count_x];
  bool* p_mask = new bool[m_count_x];
  for(int x = 0; x < m_count_x; ++x)
@@ -505,6 +511,7 @@ void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::Smoothing5xClick(TObject *Sender)
 {
+ UndoAdd();
  float* p_source_function = new float[m_count_x];
  bool* p_mask = new bool[m_count_x];
  for(int x = 0; x < m_count_x; ++x)
@@ -615,6 +622,7 @@ void __fastcall TForm2D::WndProc(Messages::TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnZeroAllPoints(TObject *Sender)
 {
+ UndoAdd();
  for (int i = 0; i < m_count_x; ++i )
   RestrictAndSetValue(i, 0);
  if (m_pOnChange)
@@ -624,6 +632,7 @@ void __fastcall TForm2D::OnZeroAllPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnDuplicate1stPoint(TObject *Sender)
 {
+ UndoAdd();
  for (int i = 0; i < m_count_x; i++ )
   RestrictAndSetValue(i, Series2->YValue[0]);
  if (m_pOnChange)
@@ -633,6 +642,7 @@ void __fastcall TForm2D::OnDuplicate1stPoint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 {
+ UndoAdd();
  double firstPtVal = Series2->YValue[0];
  double lastPtVal = Series2->YValue[m_count_x - 1];
  double intrmPtCount = m_count_x - 1;
@@ -816,12 +826,14 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  {
   if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
   { //move points upward
+   UndoAdd();
    ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
   else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA)
   { //move points downward
+   UndoAdd();
    ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
@@ -882,6 +894,14 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    m_selpts.push_back(m_count_x-1);
    m_val_n = m_count_x-1;
    MarkPoints(true);
+  }
+  else if (Key == 'Z' && Shift.Contains(ssCtrl))
+  {
+   OnUndo(NULL);
+  }
+  else if (Key == 'Y' && Shift.Contains(ssCtrl))
+  {
+   OnRedo(NULL);
   }
  }
 
@@ -1140,6 +1160,8 @@ void __fastcall TForm2D::OnImportCSV(TObject *Sender)
    return;
   }
 
+  UndoAdd();
+
   //copy new data
   for(int i = 0; i < m_count_x; ++i)
    mp_modified_function[i] = atof(csv[0][i].c_str());
@@ -1194,6 +1216,8 @@ void TForm2D::ClipboardPaste(void)
 
   TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
  
+  UndoAdd();
+
   for(size_t i = 0; i < csv[0].size(); ++i)
   {
    int index = m_selpts[0] + i;
@@ -1229,6 +1253,7 @@ void __fastcall TForm2D::OnPaste(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnInc(TObject *Sender)
 {
+ UndoAdd();
  for(size_t i = 0; i < m_selpts.size(); ++i)
  {
   float value = mp_modified_function[m_selpts[i]];
@@ -1242,6 +1267,7 @@ void __fastcall TForm2D::OnInc(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnDec(TObject *Sender)
 {
+ UndoAdd();
  for(size_t i = 0; i < m_selpts.size(); ++i)
  {
   float value = mp_modified_function[m_selpts[i]];
@@ -1262,13 +1288,14 @@ void __fastcall TForm2D::OnSetTo(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   for(size_t i = 0; i < m_selpts.size(); ++i)
   {
    RestrictAndSetValue(m_selpts[i], PtMovStepDlg->GetValue());   
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------
@@ -1281,15 +1308,16 @@ void __fastcall TForm2D::OnSub(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   for(size_t i = 0; i < m_selpts.size(); ++i)
   {
    float value = mp_modified_function[m_selpts[i]];
    value-= Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
    RestrictAndSetValue(m_selpts[i], value);   
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------
@@ -1302,15 +1330,16 @@ void __fastcall TForm2D::OnAdd(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   for(size_t i = 0; i < m_selpts.size(); ++i)
   {
    float value = mp_modified_function[m_selpts[i]];
    value+=Chart1->LeftAxis->Inverted ? -PtMovStepDlg->GetValue() : PtMovStepDlg->GetValue();
    RestrictAndSetValue(m_selpts[i], value);   
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------
@@ -1323,6 +1352,7 @@ void __fastcall TForm2D::OnMul(TObject *Sender)
  PtMovStepDlg->SetTitle(title);
  if (PtMovStepDlg->ShowModal()==mrOk)
  {
+  UndoAdd();
   for(size_t i = 0; i < m_selpts.size(); ++i)
   {
    float value = mp_modified_function[m_selpts[i]];
@@ -1330,9 +1360,9 @@ void __fastcall TForm2D::OnMul(TObject *Sender)
    value*=Chart1->LeftAxis->Inverted ? 1.0f/mult : PtMovStepDlg->GetValue();
    RestrictAndSetValue(m_selpts[i], value);   
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
- if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
 }
 
 //---------------------------------------------------------------------------
@@ -1361,6 +1391,8 @@ void __fastcall TForm2D::OnInterpolate(TObject *Sender)
    selpts = m_selpts;
   }
 
+  UndoAdd();
+
   for(size_t i = 0; i < selpts.size() - 1; ++i)
   {
    int size = selpts[i + 1] - selpts[i];
@@ -1371,10 +1403,59 @@ void __fastcall TForm2D::OnInterpolate(TObject *Sender)
    for (int x = selpts[i] + 1; x < selpts[i + 1]; x++)
     RestrictAndSetValue(x, firstPtVal + (((lastPtVal-firstPtVal) / ((double)size)) * (x-(selpts[i]))));
   }
+  if (m_pOnChange) 
+   m_pOnChange(m_param_on_change);    
  }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::AttachData(const float* p_orig, float* p_modi)
+{
+ mp_original_function = p_orig;
+ mp_modified_function = p_modi; 
+ mp_undo->Attach(p_modi, m_count_x);
+}
+
+
+//---------------------------------------------------------------------------
+void TForm2D::UndoAdd(void)
+{
+ if (!mp_undo) return;
+ mp_undo->Add();
+ PM_Undo->Enabled = mp_undo->CanUndo();
+ PM_Redo->Enabled = mp_undo->CanRedo();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnUndo(TObject *Sender)
+{
+ if (!mp_undo->CanUndo()) return;
+ mp_undo->DoUndo();
+
+ for (int i = 0; i < m_count_x; i++ )
+  Series2->YValue[i] = mp_modified_function[i];
+
+ PM_Undo->Enabled = mp_undo->CanUndo();
+ PM_Redo->Enabled = mp_undo->CanRedo();
 
  if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnRedo(TObject *Sender)
+{
+ if (!mp_undo->CanRedo()) return;
+ mp_undo->DoRedo();
+
+ for (int i = 0; i < m_count_x; i++ )
+  Series2->YValue[i] = mp_modified_function[i];
+
+ PM_Undo->Enabled = mp_undo->CanUndo();
+ PM_Redo->Enabled = mp_undo->CanRedo();
+
+ if (m_pOnChange) 
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------

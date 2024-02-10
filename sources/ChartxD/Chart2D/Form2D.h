@@ -45,6 +45,8 @@ typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, int index, void* 
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
 typedef void (__cdecl *OnChangeValue)(void* i_param, int type, float value);
 
+class UndoCntr;
+
 //---------------------------------------------------------------------------
 class TForm2D : public TForm
 {
@@ -79,6 +81,8 @@ class TForm2D : public TForm
   TMenuItem *PM_Add;
   TMenuItem *PM_Mul;
   TMenuItem *PM_Interpolate;
+  TMenuItem *PM_Undo;
+  TMenuItem *PM_Redo;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
@@ -141,6 +145,8 @@ class TForm2D : public TForm
   void __fastcall OnAdd(TObject *Sender);
   void __fastcall OnMul(TObject *Sender);
   void __fastcall OnInterpolate(TObject *Sender);
+  void __fastcall OnUndo(TObject *Sender);
+  void __fastcall OnRedo(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);
@@ -165,12 +171,12 @@ class TForm2D : public TForm
   void InitBins(void);
   void UpdateSystemColors(void);
 
+  void __fastcall AttachData(const float* p_orig, float* p_modi);
+
  public: //properties
   int m_count_x;
   float m_fnc_min;
   float m_fnc_max;
-  const float *mp_original_function;
-  float *mp_modified_function;
   float m_horizontal_axis_grid_values[256];
   AnsiString m_horizontal_axis_values_format;  //for axis, not for edit bins
   AnsiString m_chart_title_text;
@@ -181,6 +187,11 @@ class TForm2D : public TForm
   static char m_csvsep_symb;
 
  private:
+  void UndoAdd(void);
+
+  const float *mp_original_function;
+  float *mp_modified_function;
+
   TEdit* m_binsEdit[8];
   TFloatUpDown* m_binsUpDown[8];
 
@@ -233,6 +244,8 @@ class TForm2D : public TForm
   int m_visibleMarkIdx;
 
   HINSTANCE m_hInst;
+
+  UndoCntr* mp_undo;
 };
 #endif //_FORM2D_H_
 
