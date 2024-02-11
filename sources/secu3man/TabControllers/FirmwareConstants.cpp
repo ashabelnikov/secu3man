@@ -166,9 +166,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Coeff. of rpm in argument of idl. rigidity map"), _T(""), 0.0f, 48.0f, 0.05f, 2, &d.irr_k_rpm, _T("The coefficient of the rpm share in the argument along the horizontal axis in the idling rigidity map. The higher the value, the more the idlign rigidity will depend on the engine's rpm."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Использовать специальный алгоритм для холодного двигателя"), _T(""), 0, 1, 1, 1, &d.cold_eng_int, _T("Использовать отдельный алгоритм для регулятора ХХ при холодном двигателе (1). Установите в 0, чтобы использовать одинаковый алгоритм для холодного и горячего двигателя."));
+  dfd.AppendItem(_T("Использовать специальный алгоритм для холодного двигателя"), _T(""), 0, 1, 1, 1, &d.cold_eng_int, _T("Использовать отдельный алгоритм для регулятора ХХ при холодном двигателе (1). Установите в 0, чтобы использовать одинаковый алгоритм для холодного и горячего двигателя. В алгоритме для холодного двигателя регулятор будет включаться только когда текущие обороты ниже целевых и падают, при этом будет использоваться только интегральная часть регулятора."));
  else
-  dfd.AppendItem(_T("Use special algorithm for cold engine"), _T(""), 0, 1, 1, 1, &d.cold_eng_int, _T("Use separate closed loop algorithm when engine is cold (1). Set to 0 for using same algorithm for cold and hot engine."));
+  dfd.AppendItem(_T("Use special algorithm for cold engine"), _T(""), 0, 1, 1, 1, &d.cold_eng_int, _T("Use separate closed loop algorithm when engine is cold (1). Set to 0 for using same algorithm for cold and hot engine. In the algorithm for a cold engine, regulator will be used only when current RPM is below the target and falling, while only the integral part of regulator will be used."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Выбор алгоритма входа в режим ХХ"), _T(""), 0, 1, 1, 1, &d.thrass_algo,_T("Если установлен 0: положение РДВ плавно уменьшается каждые 100мс на 'Шаг уменьшения добавки после выхода РХХ' eсли дроссель закрыт и обороты ниже 2-го порога оборотов\nЕсли установлена 1: условием является только закрытый дроссель (обороты не принимаются во внимание)."));
