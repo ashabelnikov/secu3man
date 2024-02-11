@@ -1035,6 +1035,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  idlRegPar.preg_mode = CHECKBIT8(idl_flags, 3);
  idlRegPar.idl_useiacclongas = CHECKBIT8(idl_flags, 4);
  idlRegPar.use_thrassmap = CHECKBIT8(idl_flags, 5);
+ idlRegPar.with_iacreg = CHECKBIT8(idl_flags, 6);
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
@@ -3724,6 +3725,7 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  WRITEBIT8(flags, 3, packet_data->preg_mode);
  WRITEBIT8(flags, 4, packet_data->idl_useiacclongas);
  WRITEBIT8(flags, 5, packet_data->use_thrassmap);
+ WRITEBIT8(flags, 6, packet_data->with_iacreg);
  
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 

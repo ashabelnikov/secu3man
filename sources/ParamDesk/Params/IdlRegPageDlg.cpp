@@ -60,6 +60,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_IDLREG_PMODE_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USECLIACONGAS_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USETHRASSMAP_CHECK, OnChangeDataThrass)
+ ON_BN_CLICKED(IDC_PD_IDLREG_WITH_IACREG_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTORS_CAPTION,OnUpdateControls)
 
@@ -98,6 +99,8 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_TURN_ON_TEMP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_TURN_ON_TEMP_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_TURN_ON_TEMP_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_WITH_IACREG_CHECK,OnUpdateFuelInjectionControls)
 
  //closed loop related:
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USECLOSEDLOOP_CHECK,OnUpdateFuelInjectionControls)
@@ -224,6 +227,7 @@ CIdlRegPageDlg::CIdlRegPageDlg()
  m_params.idl_useiacclongas = true;
  m_params.iac_reg_db = 10;
  m_params.use_thrassmap = false;
+ m_params.with_iacreg = false;
 }
 
 LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
@@ -252,6 +256,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_USE_ONGAS, m_use_regongas);
  DDX_Control(pDX, IDC_PD_IDLREG_PMODE_CHECK, m_preg_mode_check);
  DDX_Control(pDX, IDC_PD_IDLREG_USETHRASSMAP_CHECK, m_use_thrassmap_check);
+ DDX_Control(pDX, IDC_PD_IDLREG_WITH_IACREG_CHECK, m_with_iacreg_check);
  //closed loop related:
  DDX_Control(pDX, IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, m_use_closedloop);
  DDX_Control(pDX, IDC_PD_IDLREG_IDLTORUNADD_SPIN, m_idltorunadd_spin);
@@ -292,6 +297,8 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USE_ONGAS, m_params.use_regongas);
  DDX_Check_bool(pDX, IDC_PD_IDLREG_PMODE_CHECK, m_params.preg_mode);
+ DDX_Check_bool(pDX, IDC_PD_IDLREG_WITH_IACREG_CHECK, m_params.with_iacreg);
+
  //closed loop related:
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, m_params.closed_loop);
  m_idltorunadd_edit.DDX_Value(pDX, IDC_PD_IDLREG_IDLTORUNADD_EDIT, m_params.idl_to_run_add);
@@ -529,6 +536,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_iac_deadband_spin, MLL::GetString(IDS_PD_IDLREG_IAC_DEADBAND_EDIT_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_use_thrassmap_check, MLL::GetString(IDS_PD_IDLREG_USETHRASSMAP_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_with_iacreg_check, MLL::GetString(IDS_PD_IDLREG_WITH_IACREG_CHECK_TT)));
       
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);

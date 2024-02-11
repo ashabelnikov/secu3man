@@ -344,6 +344,8 @@ BEGIN
     LTEXT           "мин-1",IDC_PD_IDLREG_IAC_DEADBAND_UNIT,140,461,30,10
 
     CONTROL         "Использовать closed-loop на газу",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,480,115,16
+
+    CONTROL         "Не отключать УОЗ РХХ во время работы РДВ РХХ",IDC_PD_IDLREG_WITH_IACREG_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,500,115,20
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -2076,6 +2078,7 @@ BEGIN
   IDS_SD_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДАД!\nИзмените значения параметров чтобы исключить эту ошибку."
   IDS_MAF_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДМРВ!\nИзмените значения параметров чтобы исключить эту ошибку."
   IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Ограничивать максимальное значение длительности впрыска при пуске двигателя."
+  IDS_PD_IDLREG_WITH_IACREG_CHECK_TT "Не отключать УОЗ РХХ во время работы РДВ РХХ. Если галочка не установлена, то УОЗ РХХ будет работать только если обороты находятся в мертвой зоне РДВ РХХ."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2418,6 +2421,8 @@ BEGIN
     LTEXT           "min-1",IDC_PD_IDLREG_IAC_DEADBAND_UNIT,140,461,30,10
 
     CONTROL         "Use closed loop on gas fuel",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,480,115,16
+
+    CONTROL         "Ign.tim. idling regulator works together with IAC regulator",IDC_PD_IDLREG_WITH_IACREG_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,500,115,20
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -4176,6 +4181,7 @@ BEGIN
   IDS_SD_IGL_OVERFLOW "Overflow detected when calculating constant for Speed-Density inj. PW equation!\nChange configuration to eliminate this error."
   IDS_MAF_IGL_OVERFLOW "Overflow detected when calculating constant for MAF inj. PW equation!\nChange configuration to eliminate this error."
   IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Limit maximum injection PW during cranking."
+  IDS_PD_IDLREG_WITH_IACREG_CHECK_TT "Do not turn off the Ign.tim. idling regulator while the IAC idling regulator is operating. If checkbox is not checked, then the Ign.tim. regulator will work only if RPM is in the dead zone of the IAC regulator."
 END
 
 /////////////////////////////////////////////////////////////////////////////

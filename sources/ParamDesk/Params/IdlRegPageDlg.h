@@ -79,6 +79,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_preg_mode_check;
   CButton m_use_claicongas_check;
   CButton m_use_thrassmap_check;
+  CButton m_with_iacreg_check;
   CSpinButtonCtrlEx m_goal_rpm_spin;
   CEditEx m_goal_rpm_edit;
   CSpinButtonCtrlEx m_factor_pos_spin;

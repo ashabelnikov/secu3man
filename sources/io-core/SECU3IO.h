@@ -235,6 +235,7 @@ namespace SECU3IO
   bool  idl_useiacclongas;
   int iac_reg_db;
   bool use_thrassmap;                   //use throttle assist map
+  bool with_iacreg;
  };
 
  struct CarburPar
