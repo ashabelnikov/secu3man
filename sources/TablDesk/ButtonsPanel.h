@@ -295,22 +295,18 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnChangeEGOCrvMap(void* i_param);
   static void __cdecl OnCloseEGOCrvMap(void* i_param);
   static void __cdecl OnWndActivationEGOCrvMap(void* i_param, long cmd);
-  static void __cdecl OnChangeEGOCrvXAxisEdit(void* i_param, int i_type, float i_value);
 
   static void __cdecl OnChangeIACCMap(void* i_param);
   static void __cdecl OnCloseIACCMap(void* i_param);
   static void __cdecl OnWndActivationIACCMap(void* i_param, long cmd);
-  static void __cdecl OnChangeIACCXAxisEdit(void* i_param, int i_type, float i_value);
 
   static void __cdecl OnChangeIACCWMap(void* i_param);
   static void __cdecl OnCloseIACCWMap(void* i_param);
   static void __cdecl OnWndActivationIACCWMap(void* i_param, long cmd);
-  static void __cdecl OnChangeIACCWXAxisEdit(void* i_param, int i_type, float i_value);
 
   static void __cdecl OnChangeIATCLTMap(void* i_param);
   static void __cdecl OnCloseIATCLTMap(void* i_param);
   static void __cdecl OnWndActivationIATCLTMap(void* i_param, long cmd);
-  static void __cdecl OnChangeIATCLTXAxisEdit(void* i_param, int i_type, float i_value);
 
   static void __cdecl OnChangeTpsswtMap(void* i_param);
   static void __cdecl OnCloseTpsswtMap(void* i_param);
@@ -323,7 +319,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnChangeGpscMap(void* i_param);
   static void __cdecl OnCloseGpscMap(void* i_param);
   static void __cdecl OnWndActivationGpscMap(void* i_param, long cmd);
-  static void __cdecl OnChangeGpscXAxisEdit(void* i_param, int i_type, float i_value);
 
   static void __cdecl OnChangeAtscMap(void* i_param);
   static void __cdecl OnCloseAtscMap(void* i_param);

@@ -224,50 +224,6 @@ void __cdecl CSeptabsPanel::OnGetAttenuatorYAxisLabel(LPTSTR io_label_string, in
 }
 
 //------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
-if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_CTS_CURVE, false)[16 + i_type] = i_value;
-
- //allow controller to detect changes
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_CTS_CURVE);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeATSXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
- 
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_ATS_CURVE, false)[16 + i_type] = i_value;
-
- //allow controller to detect changes
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_ATS_CURVE);
-}
-
-//------------------------------------------------------------------------
 void __cdecl CSeptabsPanel::OnChangeGasdoseTable(void* i_param)
 {
  CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
@@ -325,27 +281,6 @@ void __cdecl CSeptabsPanel::OnCloseBarocorrTable(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_BAROCORR].handle, ETMT_BAROCORR);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeBarocorrXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_BAROCORR, false)[9 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_BAROCORR);
 }
 
 //------------------------------------------------------------------------
@@ -407,28 +342,6 @@ void __cdecl CSeptabsPanel::OnCloseTmp2CurveTable(void* i_param)
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_TMP2_CURVE].handle, ETMT_TMP2_CURVE);
 }
-
-//------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeTmp2CurveXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_TMP2_CURVE, false)[16 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_TMP2_CURVE);
-}
-
 
 //------------------------------------------------------------------------
 void __cdecl CSeptabsPanel::OnChangeCrkTempTable(void* i_param)
@@ -851,27 +764,6 @@ void __cdecl CSeptabsPanel::OnCloseGrtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeGrtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_GRTS_CURVE, false)[16 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_GRTS_CURVE);
-}
-
-//------------------------------------------------------------------------
 void __cdecl CSeptabsPanel::OnWndActivationGrtsCurveTable(void* i_param, long cmd)
 {
  CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
@@ -1136,27 +1028,6 @@ void __cdecl CSeptabsPanel::OnCloseFtlsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeFtlsCurveXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_FTLS_CURVE, false)[17 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_FTLS_CURVE);
-}
-
-//------------------------------------------------------------------------
 void __cdecl CSeptabsPanel::OnWndActivationFtlsCurveTable(void* i_param, long cmd)
 {
  CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
@@ -1201,27 +1072,6 @@ void __cdecl CSeptabsPanel::OnCloseEgtsCurveTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeEgtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_EGTS_CURVE, false)[17 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_EGTS_CURVE);
-}
-
-//------------------------------------------------------------------------
 void __cdecl CSeptabsPanel::OnWndActivationEgtsCurveTable(void* i_param, long cmd)
 {
  CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
@@ -1263,27 +1113,6 @@ void __cdecl CSeptabsPanel::OnCloseOpsCurveTable(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_OPS_CURVE].handle, ETMT_OPS_CURVE);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeOpsCurveXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_OPS_CURVE, false)[17 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_OPS_CURVE);
 }
 
 //------------------------------------------------------------------------
@@ -1372,27 +1201,6 @@ void __cdecl CSeptabsPanel::OnCloseMAFCurveTable(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_MAF_CURVE].handle, ETMT_MAF_CURVE);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeMAFCurveXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_MAF_CURVE, false)[64 + 1 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_MAF_CURVE);
 }
 
 //------------------------------------------------------------------------
@@ -1525,27 +1333,6 @@ void __cdecl CSeptabsPanel::OnCloseFtsCurveTable(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_FTS_CURVE].handle, ETMT_FTS_CURVE);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CSeptabsPanel::OnChangeFtsCurveXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_FTS_CURVE, false)[17 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_FTS_CURVE);
 }
 
 //------------------------------------------------------------------------

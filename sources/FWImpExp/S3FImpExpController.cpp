@@ -199,7 +199,7 @@ void S3FImportController::OnOkPressed(void)
   memcpy(mp_fwd->injpw_coef, mp_s3f_io->GetData().injpw_coef, sizeof(float) * (INJPWCOEF_LUT_SIZE));
 
  if (mp_view->GetFWDFlag(FLAG_MAFCURVE_MAP))
-  memcpy(mp_fwd->maf_curve, mp_s3f_io->GetData().maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+1+2));
+  memcpy(mp_fwd->maf_curve, mp_s3f_io->GetData().maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+2+1));
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
   memcpy(mp_fwd->ftls_corr, mp_s3f_io->GetData().ftls_corr, sizeof(float) * FTLSCOR_UCOEF_SIZE);
@@ -731,7 +731,7 @@ void S3FExportController::OnOkPressed(void)
   memcpy(mp_s3f_io->GetDataLeft().injpw_coef, mp_fwd->injpw_coef, sizeof(float) * (INJPWCOEF_LUT_SIZE));
 
  if (mp_view->GetFWDFlag(FLAG_MAFCURVE_MAP))
-  memcpy(mp_s3f_io->GetDataLeft().maf_curve, mp_fwd->maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+1+2));
+  memcpy(mp_s3f_io->GetDataLeft().maf_curve, mp_fwd->maf_curve, sizeof(float) * (MAF_FLOW_CURVE_SIZE+2+1));
 
  if (mp_view->GetFWDFlag(FLAG_FTLSCOR_MAP))
   memcpy(mp_s3f_io->GetDataLeft().ftls_corr, mp_fwd->ftls_corr, sizeof(float) * FTLSCOR_UCOEF_SIZE);

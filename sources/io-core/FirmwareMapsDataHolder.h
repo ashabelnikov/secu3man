@@ -352,7 +352,7 @@ struct FWMapsDataHolder
  float egts_curve[EGTS_LOOKUP_TABLE_SIZE+2];
  float ops_curve[OPS_LOOKUP_TABLE_SIZE+2];
  float injpw_coef[INJPWCOEF_LUT_SIZE];
- float maf_curve[MAF_FLOW_CURVE_SIZE+1+2];
+ float maf_curve[MAF_FLOW_CURVE_SIZE+2+1];
  float ftls_corr[FTLSCOR_UCOEF_SIZE];
  float lambda_zone[F_WRK_POINTS_L * F_WRK_POINTS_F]; //lambda zones vs rpm & load
  float fts_curve[FTS_LOOKUP_TABLE_SIZE+2]; //FTS curve
@@ -458,7 +458,7 @@ struct FWMapsDataHolder
    case ETMT_EGTS_CURVE: return EGTS_LOOKUP_TABLE_SIZE+2;
    case ETMT_OPS_CURVE: return OPS_LOOKUP_TABLE_SIZE+2;
    case ETMT_MANINJPWC: return INJPWCOEF_LUT_SIZE;
-   case ETMT_MAF_CURVE: return MAF_FLOW_CURVE_SIZE+1+2;
+   case ETMT_MAF_CURVE: return MAF_FLOW_CURVE_SIZE+2+1;
    case ETMT_FTLSCOR: return FTLSCOR_UCOEF_SIZE;
    case ETMT_LAMBDA_ZONE: return F_WRK_POINTS_L * F_WRK_POINTS_F;
    case ETMT_FTS_CURVE: return FTS_LOOKUP_TABLE_SIZE+2;

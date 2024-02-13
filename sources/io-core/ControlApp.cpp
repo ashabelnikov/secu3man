@@ -1932,7 +1932,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      if (address < 64)
       editTabPar.table_data[i] = (((float)value) / MAFS_MULT);
      else
-      editTabPar.table_data[i] = ((address+i) > 64) ? (value * ADC_DISCRETE) : value;
+      editTabPar.table_data[i] = ((address+i) < 66) ? (value * ADC_DISCRETE) : value;
     }
     else if (editTabPar.tab_id == ETMT_BAROCORR)
      editTabPar.table_data[i] = ((address+i) >= BAROCORR_SIZE) ? (value / BAROCORR_MAPSX_M_FACTOR) : (((float)value) / BAROCORR_MAPS_M_FACTOR) * 100.0f; //%
@@ -4362,7 +4362,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     if (packet_data->address < MAF_FLOW_CURVE_SIZE)
      value = MathHelpers::Round(packet_data->table_data[i] * MAFS_MULT);
     else
-     value = MathHelpers::Round((packet_data->address == 64) ? packet_data->table_data[i] : packet_data->table_data[i] / ADC_DISCRETE);
+     value = MathHelpers::Round((packet_data->address == 66) ? packet_data->table_data[i] : packet_data->table_data[i] / ADC_DISCRETE);
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_BAROCORR)

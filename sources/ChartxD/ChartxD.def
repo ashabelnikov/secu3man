@@ -12,8 +12,6 @@ EXPORTS
   Chart2DShow                = _Chart2DShow
   Chart2DSetOnWndActivation  = _Chart2DSetOnWndActivation
   Chart2DEnable              = _Chart2DEnable
-  Chart2DSetAxisEdits        = _Chart2DSetAxisEdits
-  Chart2DUpdateAxisEdits     = _Chart2DUpdateAxisEdits
   Chart2DSetPtValuesFormat   = _Chart2DSetPtValuesFormat
   Chart2DSetPtMovingStep     = _Chart2DSetPtMovingStep
   Chart2DGetPtMovingStep     = _Chart2DGetPtMovingStep

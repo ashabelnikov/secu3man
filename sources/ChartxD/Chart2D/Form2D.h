@@ -159,10 +159,9 @@ class TForm2D : public TForm
   void SetOnGetYAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
-  void ShowXEdits(bool i_show);
-  void SetXEditsCB(OnChangeValue i_pOnChangeValue, void* i_param);
-  void CfgXEdits(int i_type, float i_min, float i_max, float i_step, int limitText, int spinDecimalPlaces);
-  void SetXEditVal(int i_type, float i_value);
+  void ShowXEdits(void);
+  void CfgXEdits(void);
+  void SetXEditVal(void);
 
   void Enable(bool i_enable);
   void InitPopupMenu(HINSTANCE hInstance);
@@ -178,6 +177,7 @@ class TForm2D : public TForm
   float m_fnc_min;
   float m_fnc_max;
   float m_horizontal_axis_grid_values[256];
+  float m_horizontal_axis_values[256]; //dynamically generated values in the "begin & end" mode
   AnsiString m_horizontal_axis_values_format;  //for axis, not for edit bins
   AnsiString m_chart_title_text;
   AnsiString m_x_axis_title;
@@ -231,10 +231,6 @@ class TForm2D : public TForm
   //адрес функции которая будет вызываться при свертывании/развертывании окна
   OnWndActivation m_pOnWndActivation;
   void* m_param_on_wnd_activation;
-
-  //адрес функции которая будет вызываться при изменении соответствующего лимита по оси X (edit controls)
-  OnChangeValue m_pOnChangeXEditValue;
-  void* m_param_on_change_xedit_value;
 
   bool m_setval;
   int  m_val_n;

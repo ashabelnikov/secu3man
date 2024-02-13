@@ -295,7 +295,7 @@ void CButtonsPanel::OnViewStartMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_START_MAP).c_str(), false);
+    MLL::GetString(IDS_START_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationStartMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeStartMap,this);
   DLL::Chart2DSetOnChangeSettings(md.handle,OnChangeSettingsCME,this);
@@ -331,7 +331,7 @@ void CButtonsPanel::OnViewIdleMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,-15.0,55.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_IDLE_MAP).c_str(), false);
+    MLL::GetString(IDS_IDLE_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIdleMap,this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeIdleMap,this);
@@ -402,7 +402,7 @@ void CButtonsPanel::OnViewTempMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,-15.0,25.0,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_TEMPCORR_MAP).c_str(), false);
+    MLL::GetString(IDS_TEMPCORR_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTempMap,this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTempMap,this);
@@ -438,7 +438,7 @@ void CButtonsPanel::OnViewTempIdlMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,-15.0,25.0,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_TEMPCORRI_MAP).c_str(), false);
+    MLL::GetString(IDS_TEMPCORRI_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTempIdlMap,this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTempIdlMap,this);
@@ -582,7 +582,7 @@ void CButtonsPanel::OnViewCrnkMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.25f, 100.0, GetCLTGrid(), 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
-    MLL::GetString(IDS_CRNK_MAP).c_str(), false);
+    MLL::GetString(IDS_CRNK_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationCrnkMap,this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.01f"));
@@ -619,7 +619,7 @@ void CButtonsPanel::OnViewWrmpMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0f,199.0f, GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_WRMP_UNIT).c_str(),
-    MLL::GetString(IDS_WRMP_MAP).c_str(), false);
+    MLL::GetString(IDS_WRMP_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationWrmpMap,this);
@@ -655,7 +655,7 @@ void CButtonsPanel::OnViewDeadMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, -1.0f, 12.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DEAD_UNIT).c_str(),
-    MLL::GetString(IDS_DEAD_MAP).c_str(), false);
+    MLL::GetString(IDS_DEAD_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationDeadMap,this);
@@ -692,7 +692,7 @@ void CButtonsPanel::OnViewIdlrMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0f,100.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
-    MLL::GetString(IDS_IDLR_MAP).c_str(), false);
+    MLL::GetString(IDS_IDLR_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIdlrMap,this);
@@ -728,7 +728,7 @@ void CButtonsPanel::OnViewIdlcMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0f,100.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
-    MLL::GetString(IDS_IDLC_MAP).c_str(), false);
+    MLL::GetString(IDS_IDLC_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIdlcMap,this);
@@ -764,7 +764,7 @@ void CButtonsPanel::OnViewThrassMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.0f, 100.0f, GetRPMGrid(), 16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
-    MLL::GetString(IDS_THRASS_MAP).c_str(), false);
+    MLL::GetString(IDS_THRASS_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationThrassMap,this);
@@ -801,7 +801,7 @@ void CButtonsPanel::OnViewAETPSMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,-55.0f,199.0f,bins_lims,8,
     MLL::GetString(IDS_MAPS_DPDT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AETPS_UNIT).c_str(),
-    MLL::GetString(IDS_AETPS_MAP).c_str(), true); //<-- use horizontal axis bins
+    MLL::GetString(IDS_AETPS_MAP).c_str(), CXD_BM_NM); //<-- use horizontal axis bins
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationAETPSMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeAETPSMap,this);
@@ -837,7 +837,7 @@ void CButtonsPanel::OnViewAEMAPMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,-55.0f,199.0f,bins_lims,8,
     MLL::GetString(IDS_MAPS_DPRDT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AEMAP_UNIT).c_str(),
-    MLL::GetString(IDS_AEMAP_MAP).c_str(), true); //<-- use horizontal axis bins
+    MLL::GetString(IDS_AEMAP_MAP).c_str(), CXD_BM_NM); //<-- use horizontal axis bins
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationAEMAPMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeAEMAPMap,this);
@@ -874,7 +874,7 @@ void CButtonsPanel::OnViewAERPMMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0f,199.0f,bins_lims,4,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AERPM_UNIT).c_str(),
-    MLL::GetString(IDS_AERPM_MAP).c_str(), true); //<--use horizontal axis bins
+    MLL::GetString(IDS_AERPM_MAP).c_str(), CXD_BM_NM); //<--use horizontal axis bins
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationAERPMMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeAERPMMap,this);
@@ -909,7 +909,7 @@ void CButtonsPanel::OnViewAftstrMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0f,199.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFTSTR_UNIT).c_str(),
-    MLL::GetString(IDS_AFTSTR_MAP).c_str(), false);
+    MLL::GetString(IDS_AFTSTR_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationAftstrMap,this);
@@ -983,7 +983,7 @@ void CButtonsPanel::OnViewITRPMMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0f,2500.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
-    MLL::GetString(IDS_ITRPM_MAP).c_str(), false);
+    MLL::GetString(IDS_ITRPM_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
@@ -1020,7 +1020,7 @@ void CButtonsPanel::OnViewRigidMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0f,5.0f,SECU3IO::rigid_map_slots,8,
     MLL::GetString(IDS_MAPS_RIGID_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
-    MLL::GetString(IDS_RIGID_MAP).c_str(), false);
+    MLL::GetString(IDS_RIGID_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationRigidMap,this);
@@ -1053,21 +1053,20 @@ void CButtonsPanel::OnViewEGOCrvMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 6.00, 24.00, NULL, 16,
+  const float bins_lims[7] = {0.0f, 5.5f, 0.0f, 5.5f, 0.01f, -1.0f, -1.0f}; //min 0, max 5.5, inc 0.01, -1 limit text, -1 dec places
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 6.00, 24.00, bins_lims, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),
-    MLL::GetString(IDS_EGO_CURVE_MAP).c_str(), false);
+    MLL::GetString(IDS_EGO_CURVE_MAP).c_str(), CXD_BM_BE);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationEGOCrvMap, this);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(md.handle, CXD_X_AXIS, true, 0, 5.5f, 0, 5.5f, 0.01f, -1, -1, OnChangeEGOCrvXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, NULL, NULL);
   DLL::Chart2DSetOnChange(md.handle, OnChangeEGOCrvMap, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle, OnCloseEGOCrvMap, this);
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(md.handle, CXD_X_AXIS, md.active[16], md.active[16+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, ETMT_INJ_EGOCRV);
@@ -1093,21 +1092,20 @@ void CButtonsPanel::OnViewIACCMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00f, 1.99f, NULL, 8,
+  const float bins_lims[7] = {0.0f, 100.0f, 0.0f, 100.0f, 0.5f, -1.0f, -1.0f}; //min 0, max 100.0, inc 0.5, -1 limit text, -1 dec places
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00f, 1.99f, bins_lims, 8,
     MLL::GetString(IDS_MAPS_IACPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
-    MLL::GetString(IDS_IACC_CURVE_MAP).c_str(), false);
+    MLL::GetString(IDS_IACC_CURVE_MAP).c_str(), CXD_BM_BE);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIACCMap, this);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(md.handle, CXD_X_AXIS, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, NULL, NULL);
   DLL::Chart2DSetOnChange(md.handle, OnChangeIACCMap, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle, OnCloseIACCMap, this);
   DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(md.handle, CXD_X_AXIS, md.active[8], md.active[8+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, ETMT_INJ_IACC);
@@ -1133,21 +1131,20 @@ void CButtonsPanel::OnViewIACCWMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00, 1.00, NULL, 16,
+  const float bins_lims[7] = {0.0f, 100.0f, 0.0f, 100.0f, 0.5f, -1.0f, -1.0f}; //min 0, max 100.0, inc 0.5, -1 limit text, -1 dec places
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00, 1.00, bins_lims, 16,
     MLL::GetString(IDS_MAPS_TPSPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
-    MLL::GetString(IDS_IACCW_CURVE_MAP).c_str(), false);
+    MLL::GetString(IDS_IACCW_CURVE_MAP).c_str(), CXD_BM_BE);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIACCWMap, this);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(md.handle, CXD_X_AXIS, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCWXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, NULL, NULL);
   DLL::Chart2DSetOnChange(md.handle, OnChangeIACCWMap, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle, OnCloseIACCWMap, this);
   DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(md.handle, CXD_X_AXIS, md.active[16], md.active[16+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, ETMT_INJ_IACCW);
@@ -1173,20 +1170,19 @@ void CButtonsPanel::OnViewIATCLTMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00, 1.00, NULL, 8,
+  const float bins_lims[7] = {.0f, 2000000.0f, .0f, 2000000.0f, 100.0f, 7.0f, .0f};
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00, 1.00, bins_lims, 8,
     MLL::GetString(IDS_MAPS_AIRFLOW_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
-    MLL::GetString(IDS_IATCLT_CORR_MAP).c_str(), false);
+    MLL::GetString(IDS_IATCLT_CORR_MAP).c_str(), CXD_BM_BE);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIATCLTMap, this);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.000"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DSetAxisEdits(md.handle, CXD_X_AXIS, true, 0, 2000000.0f, 0, 2000000.0f, 100.0f, 7, 0, OnChangeIATCLTXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, NULL, NULL);
   DLL::Chart2DSetOnChange(md.handle, OnChangeIATCLTMap, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle, OnCloseIATCLTMap, this);
   DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(md.handle, CXD_X_AXIS, md.active[8], md.active[8+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, ETMT_INJ_IATCLT);
@@ -1216,7 +1212,7 @@ void CButtonsPanel::OnViewTpsswtMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active,0.0,100.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TPSSWT_UNIT).c_str(),
-    MLL::GetString(IDS_TPSSWT_MAP).c_str(), false);
+    MLL::GetString(IDS_TPSSWT_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTpsswtMap,this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTpsswtMap,this);
@@ -1253,7 +1249,7 @@ void CButtonsPanel::OnViewGtscMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.01f, 1.99f, SECU3IO::temp_map_tmp_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
-    MLL::GetString(IDS_GTSC_MAP).c_str(), false);
+    MLL::GetString(IDS_GTSC_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationGtscMap,this);
@@ -1286,20 +1282,19 @@ void CButtonsPanel::OnViewGpscMap()
  if ((!md.state)&&(DLL::Chart2DCreate))
  {
   md.state = 1;
-  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00f, 1.99f, NULL, 17,
+  const float bins_lims[7] = {50.0f, 500.0f, 100.0f, 500.0f, 2.0f, 3.0f, .0f}; //min 50, max 500, min 100, max 500, inc 2, 3 limit text, 0 dec places
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.00f, 1.99f, bins_lims, 17,
     MLL::GetString(IDS_MAPS_PRESS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
-    MLL::GetString(IDS_GPSC_MAP).c_str(), false);
+    MLL::GetString(IDS_GPSC_MAP).c_str(), CXD_BM_BE);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationGpscMap, this);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
-  DLL::Chart2DSetAxisEdits(md.handle, CXD_X_AXIS, true, 50.0f, 500.0f, 100.0f, 500.0f, 2.0f, 3, 0, OnChangeGpscXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, NULL, NULL);
   DLL::Chart2DSetOnChange(md.handle, OnChangeGpscMap, this);
   DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(md.handle, OnCloseGpscMap, this);
   DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(md.handle, CXD_X_AXIS, md.active[17], md.active[17+1]);
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, ETMT_INJ_GPSC);
@@ -1329,7 +1324,7 @@ void CButtonsPanel::OnViewAtscMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.5f, 1.5f, SECU3IO::temp_map_tmp_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
-    MLL::GetString(IDS_ATSC_MAP).c_str(), false);
+    MLL::GetString(IDS_ATSC_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationAtscMap,this);
@@ -1436,7 +1431,7 @@ void CButtonsPanel::OnViewIACMATMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, -25.0f, 25.0f, SECU3IO::temp_map_tmp_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_CORR_UNIT).c_str(),
-    MLL::GetString(IDS_IACMAT_MAP).c_str(), false);
+    MLL::GetString(IDS_IACMAT_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationIACMATMap,this);
@@ -1473,7 +1468,7 @@ void CButtonsPanel::OnViewTpszonMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.0, 100.0, GetRPMGrid(), 16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TPSZON_UNIT).c_str(),
-    MLL::GetString(IDS_TPSZON_MAP).c_str(), false);
+    MLL::GetString(IDS_TPSZON_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationTpszonMap,this);
   DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
   DLL::Chart2DSetOnChange(md.handle,OnChangeTpszonMap,this);
@@ -1509,7 +1504,7 @@ void CButtonsPanel::OnViewCylMultMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.5f, 1.49f, SECU3IO::inj_cyladd_map_slots, 8,
     MLL::GetString(IDS_MAPS_CYLADD_UNIT).c_str(), //x
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),  //y
-    MLL::GetString(IDS_INJ_CYLMULT_MAP).c_str(), false);
+    MLL::GetString(IDS_INJ_CYLMULT_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.000"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationCylMultMap,this);
@@ -1545,7 +1540,7 @@ void CButtonsPanel::OnViewCylAddMap()
   md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, -3.2f, 3.2f, SECU3IO::inj_cyladd_map_slots, 8,
     MLL::GetString(IDS_MAPS_CYLADD_UNIT).c_str(),  //x
     MLL::GetString(IDS_MAPS_CYLADDY_UNIT).c_str(), //y
-    MLL::GetString(IDS_INJ_CYLADD_MAP).c_str(), false);
+    MLL::GetString(IDS_INJ_CYLADD_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationCylAddMap,this);
@@ -1981,17 +1976,6 @@ void CButtonsPanel::UpdateOpenedCharts(void)
    DLL::Chart3DUpdate(m_md[i].handle, GetMap(i, true), GetMap(i, false));
   else
    DLL::Chart2DUpdate(m_md[i].handle, GetMap(i, true), GetMap(i, false));
-
-  if (i==ETMT_INJ_EGOCRV)
-   DLL::Chart2DUpdateAxisEdits(m_md[i].handle, 1, GetMap(i, false)[16], GetMap(i, false)[16+1]);
-  if (i==ETMT_INJ_IACC)
-   DLL::Chart2DUpdateAxisEdits(m_md[i].handle, 1, GetMap(i, false)[8], GetMap(i, false)[8+1]);
-  if (i==ETMT_INJ_IACCW)
-   DLL::Chart2DUpdateAxisEdits(m_md[i].handle, 1, GetMap(i, false)[16], GetMap(i, false)[16+1]);
-  if (i==ETMT_INJ_IATCLT)
-   DLL::Chart2DUpdateAxisEdits(m_md[i].handle, 1, GetMap(i, false)[8], GetMap(i, false)[8+1]);
-  if (i==ETMT_INJ_GPSC)
-   DLL::Chart2DUpdateAxisEdits(m_md[i].handle, 1, GetMap(i, false)[17], GetMap(i, false)[17+1]);
  }
 
  if (mp_gridModeEditorIgnDlg.get() && m_md[ETMT_GME_IGN_WND].state)

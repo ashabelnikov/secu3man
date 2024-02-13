@@ -764,8 +764,13 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ops_curve[i] = MathHelpers::Round(m_data.ops_curve[i] * INT_MULTIPLIER);
  for(i = 0; i < INJPWCOEF_LUT_SIZE; ++i)
   p_sepMaps->injpw_coef[i] = MathHelpers::Round(m_data.injpw_coef[i] * INT_MULTIPLIER);
- for(i = 0; i < MAF_FLOW_CURVE_SIZE+1+2; ++i)
+
+ for(i = 0; i < MAF_FLOW_CURVE_SIZE; ++i)
   p_sepMaps->maf_curve[i] = MathHelpers::Round(m_data.maf_curve[i] * INT_MULTIPLIER);
+ p_sepMaps->maf_curve[i++] = MathHelpers::Round(m_data.maf_curve[MAF_FLOW_CURVE_SIZE+2] * INT_MULTIPLIER);
+ p_sepMaps->maf_curve[i++] = MathHelpers::Round(m_data.maf_curve[MAF_FLOW_CURVE_SIZE+0] * INT_MULTIPLIER);
+ p_sepMaps->maf_curve[i] = MathHelpers::Round(m_data.maf_curve[MAF_FLOW_CURVE_SIZE+1] * INT_MULTIPLIER);
+
  for(i = 0; i < FTLSCOR_UCOEF_SIZE; ++i)
   p_sepMaps->ftls_corr[i] = MathHelpers::Round(m_data.ftls_corr[i] * INT_MULTIPLIER);
  for(i = 0; i < FTS_LOOKUP_TABLE_SIZE+2; ++i)
@@ -1051,8 +1056,13 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.ops_curve[i] = p_sepMaps->ops_curve[i] / INT_MULTIPLIER;
  for(i = 0; i < INJPWCOEF_LUT_SIZE; ++i)
   m_data.injpw_coef[i] = p_sepMaps->injpw_coef[i] / INT_MULTIPLIER;
- for(i = 0; i < MAF_FLOW_CURVE_SIZE+1+2; ++i)
+
+ for(i = 0; i < MAF_FLOW_CURVE_SIZE; ++i)
   m_data.maf_curve[i] = p_sepMaps->maf_curve[i] / INT_MULTIPLIER;
+ m_data.maf_curve[i++] = p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+1] / INT_MULTIPLIER;
+ m_data.maf_curve[i++] = p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+2] / INT_MULTIPLIER;
+ m_data.maf_curve[i] = p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+0] / INT_MULTIPLIER;
+
  for(i = 0; i < FTLSCOR_UCOEF_SIZE; ++i)
   m_data.ftls_corr[i] = p_sepMaps->ftls_corr[i] / INT_MULTIPLIER;
  for(i = 0; i < FTS_LOOKUP_TABLE_SIZE+2; ++i)

@@ -252,7 +252,7 @@ typedef struct
  _int injpw_coef[INJPWCOEF_LUT_SIZE];
 
  //MAF flow curve
- _uint maf_curve[MAF_FLOW_CURVE_SIZE+1+2];
+ _uint maf_curve[MAF_FLOW_CURVE_SIZE+2+1];
 
  //FTLS correction coefficient vs board voltage
  _uint ftlscor_ucoef[FTLSCOR_UCOEF_SIZE];
@@ -2655,11 +2655,10 @@ void CFirmwareDataMediator::GetMAFCurveMap(float* op_values, bool i_original /* 
  for (int i = 0; i < MAF_FLOW_CURVE_SIZE; i++ )
   op_values[i] = ((float)p_fd->extabs.maf_curve[i]) / MAF_FLOW_CURVE_MULT;
 
- op_values[i] = (float)p_fd->extabs.maf_curve[i]; //copy value of Y-axis maximum
- i++;
-
- for (; i < MAF_FLOW_CURVE_SIZE+3; i++ )
+ for (; i < MAF_FLOW_CURVE_SIZE+2; i++ )
   op_values[i] = ((float)p_fd->extabs.maf_curve[i]) * ADC_DISCRETE;
+
+ op_values[i] = (float)p_fd->extabs.maf_curve[i]; //copy value of Y-axis maximum
 }
 
 void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
@@ -2672,11 +2671,10 @@ void CFirmwareDataMediator::SetMAFCurveMap(const float* ip_values)
  for (int i = 0; i < MAF_FLOW_CURVE_SIZE; i++ )
   p_fd->extabs.maf_curve[i] = MathHelpers::Round((ip_values[i]*MAF_FLOW_CURVE_MULT));
 
- p_fd->extabs.maf_curve[i] = MathHelpers::Round(ip_values[i]); //copy value of Y-axis maximum
- i++;
-
- for (; i < MAF_FLOW_CURVE_SIZE+3; i++ )
+ for (; i < MAF_FLOW_CURVE_SIZE+2; i++ )
   p_fd->extabs.maf_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+
+ p_fd->extabs.maf_curve[i] = MathHelpers::Round(ip_values[i]); //copy value of Y-axis maximum
 }
 
 void CFirmwareDataMediator::GetFtlsCorMap(float* op_values, bool i_original /*= false*/)

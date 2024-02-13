@@ -44,8 +44,6 @@ namespace DLL
  Chart2DShow_Addr                Chart2DShow = NULL;
  Chart2DSetOnWndActivation_Addr  Chart2DSetOnWndActivation = NULL;
  Chart2DEnable_Addr              Chart2DEnable = NULL;
- Chart2DSetAxisEdits_Addr        Chart2DSetAxisEdits = NULL;  
- Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits = NULL;
  Chart2DSetPtValuesFormat_Addr   Chart2DSetPtValuesFormat = NULL;
  Chart2DSetPtMovingStep_Addr     Chart2DSetPtMovingStep = NULL;
  Chart2DGetPtMovingStep_Addr     Chart2DGetPtMovingStep = NULL;
@@ -120,8 +118,6 @@ namespace DLL
    Chart2DShow = NULL;
    Chart2DSetOnWndActivation = NULL;
    Chart2DEnable = NULL;
-   Chart2DSetAxisEdits = NULL;
-   Chart2DUpdateAxisEdits = NULL;
    Chart2DSetPtValuesFormat = NULL;
    Chart2DSetPtMovingStep = NULL;
    Chart2DUpdateYRange = NULL;
@@ -166,8 +162,6 @@ namespace DLL
    LoadFunction(hModule, Chart2DShow, "Chart2DShow", status);
    LoadFunction(hModule, Chart2DSetOnWndActivation, "Chart2DSetOnWndActivation", status);
    LoadFunction(hModule, Chart2DEnable, "Chart2DEnable", status);
-   LoadFunction(hModule, Chart2DSetAxisEdits, "Chart2DSetAxisEdits", status);
-   LoadFunction(hModule, Chart2DUpdateAxisEdits, "Chart2DUpdateAxisEdits", status);
    LoadFunction(hModule, Chart2DSetPtValuesFormat, "Chart2DSetPtValuesFormat", status);
    LoadFunction(hModule, Chart2DSetPtMovingStep, "Chart2DSetPtMovingStep", status);
    LoadFunction(hModule, Chart2DGetPtMovingStep, "Chart2DGetPtMovingStep", status);

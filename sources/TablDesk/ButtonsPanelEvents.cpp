@@ -790,29 +790,6 @@ void __cdecl CButtonsPanel::OnCloseEGOCrvMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CButtonsPanel::OnChangeEGOCrvXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_INJ_EGOCRV, false)[16 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_INJ_EGOCRV);
- if (_this->mp_gridModeEditorInjDlg.get())
-  _this->mp_gridModeEditorInjDlg->UpdateView();
-}
-
-//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeIACCMap(void* i_param)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -842,29 +819,6 @@ void __cdecl CButtonsPanel::OnCloseIACCMap(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_INJ_IACC].handle, ETMT_INJ_IACC);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CButtonsPanel::OnChangeIACCXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_INJ_IACC, false)[8 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_INJ_IACC);
- if (_this->mp_gridModeEditorInjDlg.get())
-  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -900,29 +854,6 @@ void __cdecl CButtonsPanel::OnCloseIACCWMap(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CButtonsPanel::OnChangeIACCWXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_INJ_IACCW, false)[16 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_INJ_IACCW);
- if (_this->mp_gridModeEditorInjDlg.get())
-  _this->mp_gridModeEditorInjDlg->UpdateView();
-}
-
-//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeIATCLTMap(void* i_param)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -952,29 +883,6 @@ void __cdecl CButtonsPanel::OnCloseIATCLTMap(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_INJ_IATCLT].handle, ETMT_INJ_IATCLT);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CButtonsPanel::OnChangeIATCLTXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_INJ_IATCLT, false)[8 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_INJ_IATCLT);
- if (_this->mp_gridModeEditorInjDlg.get())
-  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -1071,29 +979,6 @@ void __cdecl CButtonsPanel::OnCloseGpscMap(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_md[ETMT_INJ_GPSC].handle, ETMT_INJ_GPSC);
-}
-
-//------------------------------------------------------------------------
-void __cdecl CButtonsPanel::OnChangeGpscXAxisEdit(void* i_param, int i_type, float i_value)
-{
- CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
- if (!_this)
- {
-  ASSERT(0); //what the fuck?
-  return;
- }
-
- if (i_type > 1)
- {
-  ASSERT(0);
- }
- else
-  _this->GetMap(ETMT_INJ_GPSC, false)[17 + i_type] = i_value;
-
- if (_this->m_OnMapChanged)
-  _this->m_OnMapChanged(ETMT_INJ_GPSC);
- if (_this->mp_gridModeEditorInjDlg.get())
-  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------

@@ -199,12 +199,10 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeCTSCurveTable(void* i_param);
   static void __cdecl OnCloseCTSCurveTable(void* i_param);
-  static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
   static void __cdecl OnWndActivationCTSCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeATSCurveTable(void* i_param);
   static void __cdecl OnCloseATSCurveTable(void* i_param);
-  static void __cdecl OnChangeATSXAxisEdit(void* i_param, int type, float value);
   static void __cdecl OnWndActivationATSCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeATSAACTable(void* i_param);
@@ -217,7 +215,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeBarocorrTable(void* i_param);
   static void __cdecl OnCloseBarocorrTable(void* i_param);
-  static void __cdecl OnChangeBarocorrXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationBarocorrTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeManIgntimTable(void* i_param);
@@ -226,7 +223,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeTmp2CurveTable(void* i_param);
   static void __cdecl OnCloseTmp2CurveTable(void* i_param);
-  static void __cdecl OnChangeTmp2CurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationTmp2CurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeCrkTempTable(void* i_param);
@@ -259,7 +255,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeGrtsCurveTable(void* i_param);
   static void __cdecl OnCloseGrtsCurveTable(void* i_param);
-  static void __cdecl OnChangeGrtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationGrtsCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeGrHeatDutyTable(void* i_param);
@@ -284,17 +279,14 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeFtlsCurveTable(void* i_param);
   static void __cdecl OnCloseFtlsCurveTable(void* i_param);
-  static void __cdecl OnChangeFtlsCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationFtlsCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeEgtsCurveTable(void* i_param);
   static void __cdecl OnCloseEgtsCurveTable(void* i_param);
-  static void __cdecl OnChangeEgtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationEgtsCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeOpsCurveTable(void* i_param);
   static void __cdecl OnCloseOpsCurveTable(void* i_param);
-  static void __cdecl OnChangeOpsCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationOpsCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeManInjPwcTable(void* i_param);
@@ -303,7 +295,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeMAFCurveTable(void* i_param);
   static void __cdecl OnCloseMAFCurveTable(void* i_param);
-  static void __cdecl OnChangeMAFCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationMAFCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeFtlsCorTable(void* i_param);
@@ -312,7 +303,6 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
 
   static void __cdecl OnChangeFtsCurveTable(void* i_param);
   static void __cdecl OnCloseFtsCurveTable(void* i_param);
-  static void __cdecl OnChangeFtsCurveXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnWndActivationFtsCurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeFuelDensCorrTable(void* i_param);

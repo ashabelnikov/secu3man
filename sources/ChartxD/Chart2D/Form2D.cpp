@@ -37,6 +37,7 @@
 #include "../PtMovStep/PtMovStepDlg.h"
 #include "../ManageFrm.h"
 #include "../ui-core/Undo.h"
+#include "../common/Chartxdid.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "Form2D.dfm"
@@ -61,23 +62,22 @@ __fastcall TForm2D::TForm2D(HWND parent)
 , m_pOnGetYAxisLabel(NULL)
 , m_pOnGetXAxisLabel(NULL)
 , m_pOnWndActivation(NULL)
-, m_pOnChangeXEditValue(NULL)
 , m_param_on_change(NULL)
 , m_param_on_change_sett(NULL)
 , m_param_on_close(NULL)
 , m_param_on_get_y_axis_label(NULL)
 , m_param_on_get_x_axis_label(NULL)
 , m_param_on_wnd_activation(NULL)
-, m_param_on_change_xedit_value(NULL)
 , m_setval(0)
 , m_val_n(0)
-, m_horizontal_axis_grid_mode(0) //0 mode is default
+, m_horizontal_axis_grid_mode(CXD_BM_NO) //"no bins" mode is default
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
 , mp_undo(new UndoCntr())
 {
  m_errors.reserve(32);
  std::fill(m_horizontal_axis_grid_values, m_horizontal_axis_grid_values + 256, .0f);
+ std::fill(m_horizontal_axis_values, m_horizontal_axis_values + 256, .0f);
  m_selpts.push_back(0);
  memset(m_binsEdit, NULL, sizeof(NULL) * 8);
  memset(m_binsUpDown, NULL, sizeof(NULL) * 8);
@@ -107,19 +107,37 @@ void TForm2D::DataPrepare()
  Chart1->LeftAxis->Title->Caption = m_y_axis_title;
  Chart1->BottomAxis->Title->Caption = m_x_axis_title;
 
- for(int i = 0; i < m_count_x; i++)
+ if (m_horizontal_axis_grid_mode == CXD_BM_NO) //no bins
  {
-  if (m_horizontal_axis_grid_mode < 2) //0,1 modes
+  for(int i = 0; i < m_count_x; i++)
+  {
    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
-  else  //mode 2
-   as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i + m_count_x]);
-   
-  Series1->Add(mp_original_function[i], as, clAqua);
-  Series2->Add(mp_modified_function[i], as, clRed);
+   Series1->Add(mp_original_function[i], as, clAqua);
+   Series2->Add(mp_modified_function[i], as, clRed);
+  }
  }
-
- if (2==m_horizontal_axis_grid_mode)
+ else if (m_horizontal_axis_grid_mode == CXD_BM_BE) //begin & end
+ {
+  double step = (mp_modified_function[m_count_x + 1] - mp_modified_function[m_count_x]) / ((double)m_count_x - 1);
+  for(int i = 0; i < m_count_x; ++i)
+  {
+   m_horizontal_axis_values[i] = mp_modified_function[m_count_x] + (step * i); //update array with dynamically generated values
+   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_values[i]);
+   Series1->Add(mp_original_function[i], as, clAqua);
+   Series2->Add(mp_modified_function[i], as, clRed);
+  }
+  SetXEditVal();
+ }
+ else //CXD_BM_NM: number of bins = number of points
+ {
+  for(int i = 0; i < m_count_x; i++)
+  {
+   as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i + m_count_x]);
+   Series1->Add(mp_original_function[i], as, clAqua);
+   Series2->Add(mp_modified_function[i], as, clRed);
+  }
   UpdateBins();
+ }
 }
 
 //---------------------------------------------------------------------------
@@ -165,62 +183,44 @@ void TForm2D::SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_par
 }
 
 //---------------------------------------------------------------------------
-void TForm2D::ShowXEdits(bool i_show)
+void TForm2D::ShowXEdits(void)
 {
- m_horizontal_axis_grid_mode = i_show;
- EditXBegin->Visible = i_show;
- EditXEnd->Visible = i_show;
- SpinXBegin->Visible = i_show;
- SpinXEnd->Visible = i_show;
+ m_horizontal_axis_grid_mode = CXD_BM_BE; //Begin & end
+ EditXBegin->Visible = true;
+ EditXEnd->Visible = true;
+ SpinXBegin->Visible = true;
+ SpinXEnd->Visible = true;
 }
 
 //---------------------------------------------------------------------------
-void TForm2D::CfgXEdits(int i_type, float i_min, float i_max, float i_step, int limitText, int spinDecimalPlaces)
+void TForm2D::CfgXEdits(void)
 {
- switch(i_type)
- {
-  case 0:  //begin
-   SpinXBegin->FloatMin = i_min;
-   SpinXBegin->FloatMax = i_max;
-   SpinXBegin->FloatIncrement = i_step;
-   if (-1!=spinDecimalPlaces)
-    SpinXBegin->DecimalPlaces = spinDecimalPlaces;
-   if (-1!=limitText)
-    EditXBegin->MaxLength = limitText;
-   break;
-  case 1:  //end
-   SpinXEnd->FloatMin = i_min;
-   SpinXEnd->FloatMax = i_max;
-   SpinXEnd->FloatIncrement = i_step;
-   if (-1!=spinDecimalPlaces)
-    SpinXEnd->DecimalPlaces = spinDecimalPlaces;
-   if (-1!=limitText)
-    EditXEnd->MaxLength = limitText;
-   break;
- }
+ //begin
+ SpinXBegin->FloatMin = m_horizontal_axis_grid_values[0];
+ SpinXBegin->FloatMax = m_horizontal_axis_grid_values[1];
+ SpinXBegin->FloatIncrement = m_horizontal_axis_grid_values[4];
+ if (m_horizontal_axis_grid_values[6] > 0)
+  SpinXBegin->DecimalPlaces = m_horizontal_axis_grid_values[6];
+ if (m_horizontal_axis_grid_values[5] > 0)
+  EditXBegin->MaxLength = m_horizontal_axis_grid_values[5];
+ //end
+ SpinXEnd->FloatMin = m_horizontal_axis_grid_values[2];
+ SpinXEnd->FloatMax = m_horizontal_axis_grid_values[3];
+ SpinXEnd->FloatIncrement = m_horizontal_axis_grid_values[4];
+ if (m_horizontal_axis_grid_values[6] > 0)
+  SpinXEnd->DecimalPlaces = m_horizontal_axis_grid_values[6];
+ if (m_horizontal_axis_grid_values[5] > 0)
+  EditXEnd->MaxLength = m_horizontal_axis_grid_values[5];
 }
 
 //---------------------------------------------------------------------------
-void TForm2D::SetXEditsCB(OnChangeValue i_pOnChangeValue, void* i_param)
-{
- m_pOnChangeXEditValue = i_pOnChangeValue;
- m_param_on_change_xedit_value = i_param;
-}
-
-//---------------------------------------------------------------------------
-void TForm2D::SetXEditVal(int i_type, float i_value)
+void TForm2D::SetXEditVal(void)
 {
  AnsiString as;
- as.sprintf(m_horizontal_axis_values_format.c_str(), i_value);
- switch(i_type)
- {
-  case 0:  //begin
-   EditXBegin->Text = as;
-   break;
-  case 1:  //end
-   EditXEnd->Text = as;
-   break;
- }
+ as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[m_count_x]);
+ EditXBegin->Text = as;
+ as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[m_count_x + 1]);
+ EditXEnd->Text = as;
 }
 
 //---------------------------------------------------------------------------
@@ -233,7 +233,7 @@ void TForm2D::Enable(bool i_enable)
  ButtonAngleUp->Enabled = i_enable;
  ButtonAngleDown->Enabled = i_enable;
  Chart1->Enabled = i_enable;
- if (m_horizontal_axis_grid_mode == 2) //only in bins mode
+ if (m_horizontal_axis_grid_mode == CXD_BM_NM) //only in bins mode
  {
   for(int i = 0; i < 8; ++i)
   {
@@ -244,7 +244,7 @@ void TForm2D::Enable(bool i_enable)
   }
   ButtonShowBins->Enabled = i_enable;
  }
- else if (m_horizontal_axis_grid_mode == 1)
+ else if (m_horizontal_axis_grid_mode == CXD_BM_BE) //begin & end
  {
   EditXBegin->Enabled = i_enable;
   EditXEnd->Enabled = i_enable;
@@ -331,7 +331,7 @@ void TForm2D::SetPtValuesFormat(LPCTSTR ptValFormat)
 void TForm2D::InitBins(void)
 {
  ButtonShowBins->Visible = true;
- m_horizontal_axis_grid_mode = 2; //mode 2
+ m_horizontal_axis_grid_mode = CXD_BM_NM; //bins mode
 
  if (m_count_x > 8)
   ::MessageBox(NULL, "You can not use more than 8 function points in this mode", "Error", MB_OK);
@@ -548,7 +548,7 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
  }
  else if (Sender == Chart1->BottomAxis)
  { //X
-  if (0==m_horizontal_axis_grid_mode) //default slots or custom labels
+  if (CXD_BM_NO==m_horizontal_axis_grid_mode) //default slots or custom labels
   {
    if (m_pOnGetXAxisLabel)
    { //custom labels
@@ -559,14 +559,14 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
     LabelText = string;
    }
   }
-  else if (1==m_horizontal_axis_grid_mode)  //begin & end bins
+  else if (CXD_BM_BE==m_horizontal_axis_grid_mode)  //begin & end
   {
    AnsiString as;
    if (ValueIndex >= 0)
-    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[ValueIndex]);
+    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_values[ValueIndex]);
    LabelText = as;
   }
-  else if (2==m_horizontal_axis_grid_mode)  //separate bins mode
+  else if (CXD_BM_NM==m_horizontal_axis_grid_mode)  //separate bins mode
   {
    AnsiString as;
    if (ValueIndex >= 0)
@@ -655,6 +655,7 @@ void __fastcall TForm2D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
 {
+ if (!mp_modified_function) return;
  double bValue = 0, eValue = 0;
  if (1!=sscanf(EditXBegin->Text.c_str(), "%lf", &bValue))
   return;
@@ -663,16 +664,18 @@ void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
    
  double step = (eValue - bValue) / ((double)m_count_x - 1);
  for(int i = 0; i < m_count_x; ++i)
-  m_horizontal_axis_grid_values[i] = bValue + (step * i);
- Chart1->Invalidate();
+  m_horizontal_axis_values[i] = bValue + (step * i);
+ Chart1->Invalidate();  //X-axis values will be updated in Chart1GetAxisLabel() call
 
- if (m_pOnChangeXEditValue)
-  m_pOnChangeXEditValue(m_param_on_change_xedit_value, 0, bValue);
+ mp_modified_function[m_count_x] = bValue;
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 {
+ if (!mp_modified_function) return;
  double bValue = 0, eValue = 0;
  if (1!=sscanf(EditXBegin->Text.c_str(), "%lf", &bValue))
   return;
@@ -681,11 +684,12 @@ void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 
  double step = (eValue - bValue) / ((double)m_count_x - 1);
  for(int i = 0; i < m_count_x; ++i)
-  m_horizontal_axis_grid_values[i] = bValue + (step * i);
- Chart1->Invalidate();
+  m_horizontal_axis_values[i] = bValue + (step * i);
+ Chart1->Invalidate();  //X-axis values will be updated in Chart1GetAxisLabel() call
 
- if (m_pOnChangeXEditValue)
-  m_pOnChangeXEditValue(m_param_on_change_xedit_value, 1, eValue);
+ mp_modified_function[m_count_x + 1] = eValue;
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
@@ -1094,12 +1098,12 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
   for(int i = 0; i < m_count_x; ++i)
   {
    AnsiString as;
-   if (0==m_horizontal_axis_grid_mode) //array of labels
+   if (CXD_BM_NO==m_horizontal_axis_grid_mode) //array of labels
    {
     if (m_pOnGetXAxisLabel && m_param_on_get_x_axis_label)
     {
      TCHAR string[64];
-     _stprintf(string, m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
+     _stprintf(string, m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]); //use X-values supplied by user
      m_pOnGetXAxisLabel(string, i, m_param_on_get_x_axis_label);
      as = string;
     }
@@ -1108,13 +1112,13 @@ void __fastcall TForm2D::OnExportCSV(TObject *Sender)
      as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);     
     }
    }
-   else if (1==m_horizontal_axis_grid_mode) //begin, end bins
+   else if (CXD_BM_BE==m_horizontal_axis_grid_mode) //begin, end bins
    {
-    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
+    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_values[i]); //use dynamically generated X-values
    }
-   else  //mode 2 - separate editable bins
+   else  //CXD_BM_NM: separate editable bins
    {
-    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_x]);
+    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_x]); //use X-values from bins space
    }
 
    if (i == m_count_x-1)

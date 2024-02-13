@@ -52,8 +52,6 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DShow(HWND hWnd, int i_show);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DEnable(HWND hWnd, bool i_enable);
- void  __declspec(dllexport)  __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, int limitText, int spinDecimalPlaces, OnChangeValue i_pOnChangeValue, void* i_param);
- void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step);
  float __declspec(dllexport)  __cdecl Chart2DGetPtMovingStep(HWND hWnd);
@@ -95,17 +93,26 @@ HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float
  //save horizontal axis grid values
  if (ip_x_axis_grid_values)
  {
-  if (0==i_bins_mode) //0,1 modes
+  if (i_bins_mode == CXD_BM_NO) //no bins
+  {
    std::copy(ip_x_axis_grid_values, ip_x_axis_grid_values + i_count_of_points, pForm->m_horizontal_axis_grid_values);
-  else //mode 2
+  }
+  else if (i_bins_mode == CXD_BM_BE)
+  {
+   std::copy(ip_x_axis_grid_values, ip_x_axis_grid_values + 7, pForm->m_horizontal_axis_grid_values); //7 values: min,max, min,max, inc, text limit, dec places
+   pForm->ShowXEdits();
+   pForm->CfgXEdits();
+  }
+  else //CXD_BM_NM
+  {
    std::copy(ip_x_axis_grid_values, ip_x_axis_grid_values + 5, pForm->m_horizontal_axis_grid_values); //5 values: min,max,inc,dec places,min diff
+   pForm->InitBins();
+  }
  }
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->InitPopupMenu(hInst);
  pForm->InitHints(hInst); //Set hints' text
- if (i_bins_mode)
-  pForm->InitBins();
 
  AddInstanceByHWND(pForm->Handle, pForm);
  return pForm->Handle;
@@ -259,46 +266,6 @@ void __cdecl Chart2DEnable(HWND hWnd, bool i_enable)
  if (NULL==pForm)
   return;
  pForm->Enable(i_enable);
-}
-
-//---------------------------------------------------------------------------
-void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, int limitText, int spinDecimalPlaces, OnChangeValue i_pOnChangeValue, void* i_param)
-{
- TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
- if (NULL==pForm)
-  return;
-
- switch(i_axis)
- {
-  case CXD_X_AXIS: //X
-   pForm->ShowXEdits(i_show);
-   pForm->CfgXEdits(0, i_beginMin, i_beginMax, i_spinStep, limitText, spinDecimalPlaces); //begin
-   pForm->CfgXEdits(1, i_endMin, i_endMax, i_spinStep, limitText, spinDecimalPlaces);     //end
-   pForm->SetXEditsCB(i_pOnChangeValue, i_param); //important: set callbacks after configuration, in opposite case we may get fake OnChange() event from non-initialized edits
-   break;
-  default:
-   MessageBox(hWnd, _T("Chart2DSetAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
-   break;
- }
-}
-
-//---------------------------------------------------------------------------
-void __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end)
-{
- TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
- if (NULL==pForm)
-  return;
-
- switch(i_axis)
- {
-  case CXD_X_AXIS: //X
-   pForm->SetXEditVal(0, i_begin);
-   pForm->SetXEditVal(1, i_end);
-   break;
-  default:
-   MessageBox(hWnd, _T("Chart2DUpdateAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
-   break;
- }
 }
 
 //---------------------------------------------------------------------------
