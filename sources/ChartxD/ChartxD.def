@@ -19,6 +19,7 @@ EXPORTS
   Chart2DSetCSVSepSymbol     = _Chart2DSetCSVSepSymbol
   Chart2DSetAxisTitle        = _Chart2DSetAxisTitle
   Chart2DRefresh             = _Chart2DRefresh
+  Chart2DSetClassic2DKeys    = _Chart2DSetClassic2DKeys
 
   ; VC funcname              = BCB funcname
   Chart3DCreate              = _Chart3DCreate

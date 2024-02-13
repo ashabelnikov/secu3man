@@ -59,6 +59,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetCSVSepSymbol(char sepsymb);
  void  __declspec(dllexport)  __cdecl Chart2DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR i_axis_title);
  void  __declspec(dllexport)  __cdecl Chart2DRefresh(HWND hWnd);
+ void  __declspec(dllexport)  __cdecl Chart2DSetClassic2DKeys(bool classic);
 }
 
 extern HINSTANCE hInst;
@@ -330,6 +331,12 @@ void __cdecl Chart2DUpdateYRange(HWND hWnd, float i_fnc_min, float i_fnc_max)
 void __cdecl Chart2DSetCSVSepSymbol(char sepsymb)
 {
  TForm2D::m_csvsep_symb = sepsymb;
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetClassic2DKeys(bool classic)
+{
+ TForm2D::m_classic2DKeys = classic;
 }
 
 //---------------------------------------------------------------------------

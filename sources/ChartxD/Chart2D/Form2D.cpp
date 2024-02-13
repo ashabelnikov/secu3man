@@ -43,6 +43,7 @@
 #pragma resource "Form2D.dfm"
 
 char TForm2D::m_csvsep_symb = ',';
+bool TForm2D::m_classic2DKeys = false;
 
 //---------------------------------------------------------------------------
 __fastcall TForm2D::TForm2D(HWND parent)
@@ -828,14 +829,14 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  //Implement keyboard actions related to chart
  if (ActiveControl == Chart1)
  {
-  if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD)
+  if (Key == VK_OEM_6 || Key == VK_OEM_PERIOD || (m_classic2DKeys && Key == VK_UP))
   { //move points upward
    UndoAdd();
    ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
-  else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA)
+  else if (Key == VK_OEM_5 || Key == VK_OEM_COMMA || (m_classic2DKeys && Key == VK_DOWN))
   { //move points downward
    UndoAdd();
    ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);

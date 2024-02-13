@@ -190,6 +190,7 @@ void CTablesPanelBase::SetCSVSepSymbol(char sepsymb)
 
 void CTablesPanelBase::SetClassic2DKeys(bool classic)
 {
+ DLL::Chart2DSetClassic2DKeys(classic);
  DLL::Chart3DSetClassic2DKeys(classic);
 }
 

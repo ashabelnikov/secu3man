@@ -185,6 +185,7 @@ class TForm2D : public TForm
   float m_pt_moving_step;
   int m_horizontal_axis_grid_mode;             //3 modes are possible
   static char m_csvsep_symb;
+  static bool m_classic2DKeys;
 
  private:
   void UndoAdd(void);

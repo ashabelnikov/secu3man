@@ -51,6 +51,7 @@ namespace DLL
  Chart2DSetCSVSepSymbol_Addr     Chart2DSetCSVSepSymbol = NULL;
  Chart2DSetAxisTitle_Addr        Chart2DSetAxisTitle = NULL;
  Chart2DRefresh_Addr             Chart2DRefresh = NULL;
+ Chart2DSetClassic2DKeys_Addr    Chart2DSetClassic2DKeys = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
@@ -124,6 +125,7 @@ namespace DLL
    Chart2DSetCSVSepSymbol = NULL;
    Chart2DSetAxisTitle = NULL;
    Chart2DRefresh = NULL;
+   Chart2DSetClassic2DKeys = NULL;
 
    //3D
    Chart3DCreate = NULL;
@@ -169,6 +171,7 @@ namespace DLL
    LoadFunction(hModule, Chart2DSetCSVSepSymbol, "Chart2DSetCSVSepSymbol", status);
    LoadFunction(hModule, Chart2DSetAxisTitle, "Chart2DSetAxisTitle", status);
    LoadFunction(hModule, Chart2DRefresh, "Chart2DRefresh", status);
+   LoadFunction(hModule, Chart2DSetClassic2DKeys, "Chart2DSetClassic2DKeys", status);
 
    //3D
    LoadFunction(hModule, Chart3DCreate, "Chart3DCreate", status);
