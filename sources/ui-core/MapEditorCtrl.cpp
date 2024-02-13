@@ -280,6 +280,7 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INTERPOL, OnUpdateSetTo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_UNDO, OnUpdateUndo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_REDO, OnUpdateRedo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_PASTE, OnUpdateSetTo)
 END_MESSAGE_MAP()
 
 UINT CMapEditorCtrl::OnGetDlgCode()
@@ -2337,7 +2338,7 @@ void CMapEditorCtrl::_ClipboardCopy(void)
 
 void CMapEditorCtrl::_ClipboardPaste(void)
 {
- if (::IsClipboardFormatAvailable(CF_TEXT) && ::OpenClipboard(this->m_hWnd)) 
+ if (::IsClipboardFormatAvailable(CF_TEXT) && ::OpenClipboard(this->m_hWnd) && !m_readOnly) 
  {
   HGLOBAL hglb = GetClipboardData(CF_TEXT); 
   if (hglb != NULL) 
