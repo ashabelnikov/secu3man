@@ -33,6 +33,7 @@ class UndoCntr
   UndoCntr()
   : mp_map(NULL)
   , m_size(0)
+  , m_lock(false)
   {
    //empty
   }
@@ -53,6 +54,7 @@ class UndoCntr
 
   void Add()
   {
+   if (m_lock) return;
    //discard items in Redo list
    for(size_t i = 0; i < m_redo.size(); ++i)
     delete[] m_redo[i];
@@ -94,9 +96,13 @@ class UndoCntr
   bool CanUndo(void) {return m_undo.size();}
   bool CanRedo(void) {return m_redo.size();}
 
+  void Lock(bool state) { m_lock = state; }
+  bool IsLocked(void) { return m_lock; }
+
  private:
   std::vector<float*> m_undo;
   std::vector<float*> m_redo;
   float* mp_map;
   size_t m_size;
+  bool m_lock;
 };

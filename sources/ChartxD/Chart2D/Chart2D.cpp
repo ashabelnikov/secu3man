@@ -82,7 +82,7 @@ HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float
   return NULL;
 
  //Create a form
- TForm2D* pForm = new TForm2D(parent);
+ TForm2D* pForm = new TForm2D(parent, i_bins_mode);
  pForm->m_count_x = i_count_of_points;
  pForm->m_chart_title_text = i_chart_title;
  pForm->m_x_axis_title = i_x_axis_title;

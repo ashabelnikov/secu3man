@@ -45,8 +45,10 @@
 char TForm2D::m_csvsep_symb = ',';
 bool TForm2D::m_classic2DKeys = false;
 
+static const float EPSILON = 0.000001f;
+
 //---------------------------------------------------------------------------
-__fastcall TForm2D::TForm2D(HWND parent)
+__fastcall TForm2D::TForm2D(HWND parent, int i_bins_mode)
 : TForm(parent)
 , m_hInst(NULL)
 , m_count_x(0)
@@ -71,7 +73,7 @@ __fastcall TForm2D::TForm2D(HWND parent)
 , m_param_on_wnd_activation(NULL)
 , m_setval(0)
 , m_val_n(0)
-, m_horizontal_axis_grid_mode(CXD_BM_NO) //"no bins" mode is default
+, m_horizontal_axis_grid_mode(i_bins_mode)
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
 , mp_undo(new UndoCntr())
@@ -108,6 +110,7 @@ void TForm2D::DataPrepare()
  Chart1->LeftAxis->Title->Caption = m_y_axis_title;
  Chart1->BottomAxis->Title->Caption = m_x_axis_title;
 
+ mp_undo->Lock(true);
  if (m_horizontal_axis_grid_mode == CXD_BM_NO) //no bins
  {
   for(int i = 0; i < m_count_x; i++)
@@ -129,7 +132,7 @@ void TForm2D::DataPrepare()
   }
   SetXEditVal();
  }
- else //CXD_BM_NM: number of bins = number of points
+ else if (m_horizontal_axis_grid_mode == CXD_BM_NM) // number of bins = number of points
  {
   for(int i = 0; i < m_count_x; i++)
   {
@@ -139,6 +142,10 @@ void TForm2D::DataPrepare()
   }
   UpdateBins();
  }
+ else
+  ::MessageBox(NULL, "Wrong mode for X-axis bins!", "Error", MB_OK);
+
+ mp_undo->Lock(false);
 }
 
 //---------------------------------------------------------------------------
@@ -186,7 +193,6 @@ void TForm2D::SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_par
 //---------------------------------------------------------------------------
 void TForm2D::ShowXEdits(void)
 {
- m_horizontal_axis_grid_mode = CXD_BM_BE; //Begin & end
  EditXBegin->Visible = true;
  EditXEnd->Visible = true;
  SpinXBegin->Visible = true;
@@ -332,7 +338,6 @@ void TForm2D::SetPtValuesFormat(LPCTSTR ptValFormat)
 void TForm2D::InitBins(void)
 {
  ButtonShowBins->Visible = true;
- m_horizontal_axis_grid_mode = CXD_BM_NM; //bins mode
 
  if (m_count_x > 8)
   ::MessageBox(NULL, "You can not use more than 8 function points in this mode", "Error", MB_OK);
@@ -662,7 +667,10 @@ void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
   return;
  if (1!=sscanf(EditXEnd->Text.c_str(), "%lf", &eValue))
   return;
-   
+
+ if (!MathHelpers::IsEqualFlt(mp_modified_function[m_count_x], (float)bValue, EPSILON))
+  UndoAdd();
+
  double step = (eValue - bValue) / ((double)m_count_x - 1);
  for(int i = 0; i < m_count_x; ++i)
   m_horizontal_axis_values[i] = bValue + (step * i);
@@ -682,6 +690,9 @@ void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
   return;
  if (1!=sscanf(EditXEnd->Text.c_str(), "%lf", &eValue))
   return;
+
+ if (!MathHelpers::IsEqualFlt(mp_modified_function[m_count_x + 1], (float)eValue, EPSILON))
+  UndoAdd();
 
  double step = (eValue - bValue) / ((double)m_count_x - 1);
  for(int i = 0; i < m_count_x; ++i)
@@ -707,6 +718,8 @@ void __fastcall TForm2D::BinsEditOnChange(TObject *Sender)
    //Check changed item for errors
    if (true==CheckBinForErrors(i, Value))
     m_errors.push_back(i);
+   if (!MathHelpers::IsEqualFlt(mp_modified_function[i + m_count_x], (float)Value, EPSILON))
+    UndoAdd();
    mp_modified_function[i + m_count_x] = Value;
    break;
   }
@@ -1418,7 +1431,15 @@ void __fastcall TForm2D::AttachData(const float* p_orig, float* p_modi)
 {
  mp_original_function = p_orig;
  mp_modified_function = p_modi; 
- mp_undo->Attach(p_modi, m_count_x);
+
+ if (m_horizontal_axis_grid_mode == CXD_BM_NO)
+  mp_undo->Attach(p_modi, m_count_x);
+ else if (m_horizontal_axis_grid_mode == CXD_BM_BE)
+  mp_undo->Attach(p_modi, m_count_x + 2);
+ else if (m_horizontal_axis_grid_mode == CXD_BM_NM)
+  mp_undo->Attach(p_modi, m_count_x * 2);
+ else
+  ::MessageBox(NULL, "Wrong mode for X-axis bins!", "Error", MB_OK);
 }
 
 
@@ -1426,6 +1447,7 @@ void __fastcall TForm2D::AttachData(const float* p_orig, float* p_modi)
 void TForm2D::UndoAdd(void)
 {
  if (!mp_undo) return;
+ if (mp_undo->IsLocked()) return;
  mp_undo->Add();
  PM_Undo->Enabled = mp_undo->CanUndo();
  PM_Redo->Enabled = mp_undo->CanRedo();
@@ -1439,6 +1461,11 @@ void __fastcall TForm2D::OnUndo(TObject *Sender)
 
  for (int i = 0; i < m_count_x; i++ )
   Series2->YValue[i] = mp_modified_function[i];
+
+ if (m_horizontal_axis_grid_mode == CXD_BM_BE)
+  SetXEditVal();
+ else if (m_horizontal_axis_grid_mode == CXD_BM_NM)
+  UpdateBins();
 
  PM_Undo->Enabled = mp_undo->CanUndo();
  PM_Redo->Enabled = mp_undo->CanRedo();
@@ -1455,6 +1482,11 @@ void __fastcall TForm2D::OnRedo(TObject *Sender)
 
  for (int i = 0; i < m_count_x; i++ )
   Series2->YValue[i] = mp_modified_function[i];
+
+ if (m_horizontal_axis_grid_mode == CXD_BM_BE)
+  SetXEditVal();
+ else if (m_horizontal_axis_grid_mode == CXD_BM_NM)
+  UpdateBins();
 
  PM_Undo->Enabled = mp_undo->CanUndo();
  PM_Redo->Enabled = mp_undo->CanRedo();

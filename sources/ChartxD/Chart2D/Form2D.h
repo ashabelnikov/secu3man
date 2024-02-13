@@ -149,7 +149,7 @@ class TForm2D : public TForm
   void __fastcall OnRedo(TObject *Sender);
 
  public:  // User declarations
-  __fastcall TForm2D(HWND parent);
+  __fastcall TForm2D(HWND parent, int i_bins_mode);
   __fastcall ~TForm2D();
   void DataPrepare();
 
