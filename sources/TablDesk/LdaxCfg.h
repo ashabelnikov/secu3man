@@ -26,7 +26,7 @@
 #pragma once
 #include <vector>
 
-class LdaxCfg
+class AFX_EXT_CLASS LdaxCfg
 {
  protected:
   LdaxCfg();

@@ -30,6 +30,8 @@
 #include "common/fastdelegate.h"
 #include "ui-core/TabDialog.h"
 #include "ui-core/ListCtrlEx.h"
+#include "ui-core/MapEditorCtrl.h"
+#include "TablDesk/LdaxCfg.h"
 
 class CChart2D;
 class CKnockContextMenuManager;
@@ -38,7 +40,7 @@ class CKnockPageDlg;
 class COscillCtrl;
 class CToolTipCtrlEx;
 
-class CKnockChannelTabDlg : public CTabDialog
+class CKnockChannelTabDlg : public CTabDialog, public LdaxCfg
 {
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
@@ -46,6 +48,7 @@ class CKnockChannelTabDlg : public CTabDialog
 
  public:
   CKnockChannelTabDlg();
+ ~CKnockChannelTabDlg();
   virtual LPCTSTR GetDialogID(void) const;
 
   void setOnSaveParameters(EventHandler OnFunction);
@@ -87,6 +90,11 @@ class CKnockChannelTabDlg : public CTabDialog
 
   std::auto_ptr<CKnockPageDlg> mp_knock_parameters_dlg;
 
+  void SetKssArguments(int rpm, float load, float baro_press, bool show_marker, bool detonation);
+  virtual void SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate = false);
+  void BindRPMGrid(float* pGrid);
+  void BindLoadGrid(float* pGrid);
+
  protected:
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -110,6 +118,7 @@ class CKnockChannelTabDlg : public CTabDialog
   afx_msg void OnListSigmaFilter();
   afx_msg void OnListLoadPoints();
   afx_msg void OnListSavePoints();
+  afx_msg void OnSelendokOscillCombo();
   DECLARE_MESSAGE_MAP()
 
   void _InitializeOscilloscopeControl(void);
@@ -134,6 +143,14 @@ class CKnockChannelTabDlg : public CTabDialog
   CButton m_list_checkbox;
   CSliderCtrl m_level_slider;
   CStatic m_level_text;
+  CComboBox m_graph_combo;
+  CMapEditorCtrl m_kss_map;
+  float* mp_kss_map;
+  float* mp_rpmGrid;
+  float* mp_lodGrid;
+  CFont m_font;
+  bool m_detonation;
+  int m_kss_index;
 
   EventHandler  m_OnSaveParameters;
   EventHandler  m_OnCopyToAttenuatorTable;

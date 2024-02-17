@@ -266,8 +266,9 @@ BEGIN
     CONTROL         "",IDC_KC_DESIRED_LEVEL_SLIDER,"msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,201,18,19,100
     LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,255,7,181,10
-    CTEXT           "Сигнал с датчика детонации:",IDC_KC_SIGNAL_OSCILLOSCOPE_CAPTION,285,134,127,10
+    COMBOBOX        IDC_KC_SIGNAL_OSCILLOSCOPE_COMBO,284,131,120,40,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP | CBS_AUTOHSCROLL
     CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,13,67,161,115
+    CONTROL         "KSS map",IDC_KC_KSS_GRAPH,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,225,145,246,60,WS_EX_STATICEDGE
 END
 
 IDD_LOG_PLAYER DIALOGEX 0, 0, 428, 222
@@ -754,6 +755,9 @@ BEGIN
     IDS_KC_LIST_ERROR_LOAD_FILE        "Ошибка загрузки данных из файла!"
     IDS_KC_LIST_ERROR_SAVE_FILE        "Ошибка сохранения данных в файл!"
     IDS_KC_PLEASE_COLLECT_MORE_STAT    "Пожалуйста, соберите больше статистики!"
+    IDS_KC_SIGNAL_OSCILLOSCOPE         "Сигнал с датчика детонации:"
+    IDS_KC_SIGNAL_3DSTATISTICS         "Статистика детонации:"
+    IDS_KC_SIGNAL_OSCILLOSCOPE_TT      "Выбор отображаемой статистики"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1279,8 +1283,9 @@ BEGIN
     CONTROL         "",IDC_KC_DESIRED_LEVEL_SLIDER,"msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,201,18,19,100
     LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Noise distribution over RPM:",IDC_STATIC,255,7,181,10
-    CTEXT           "Signal from knock sensor:",IDC_KC_SIGNAL_OSCILLOSCOPE_CAPTION,285,134,127,10
+    COMBOBOX        IDC_KC_SIGNAL_OSCILLOSCOPE_COMBO,284,131,120,40,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP | CBS_AUTOHSCROLL
     CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static", SS_BLACKFRAME | NOT WS_VISIBLE,13,67,152,110
+    CONTROL         "KSS map",IDC_KC_KSS_GRAPH,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,225,145,246,60,WS_EX_STATICEDGE
 END
 
 IDD_LOG_PLAYER DIALOGEX 0, 0, 428, 222
@@ -1727,6 +1732,9 @@ BEGIN
     IDS_KC_LIST_ERROR_LOAD_FILE      "Error loading data from file!"
     IDS_KC_LIST_ERROR_SAVE_FILE      "Error saving data into a file!"
     IDS_KC_PLEASE_COLLECT_MORE_STAT  "Please, collect more statistics!"
+    IDS_KC_SIGNAL_OSCILLOSCOPE       "Signal from knock sensor:"
+    IDS_KC_SIGNAL_3DSTATISTICS       "Statistics of detonation:"
+    IDS_KC_SIGNAL_OSCILLOSCOPE_TT    "Selection of displayed statistics"
 END
 
 STRINGTABLE DISCARDABLE 

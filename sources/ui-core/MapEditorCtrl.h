@@ -65,6 +65,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void SetGradientList(const std::vector<COLORREF>& colors);
   void SetItemColor(int i, int j, COLORREF color); // i - row, j - column
   void Redraw(void); //does full redraw of control
+  void EnableReadonlyFeatures(bool setto, bool import);
 
   //Creates control dynamically
   BOOL Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id);
@@ -109,6 +110,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   afx_msg void OnRevert();
   afx_msg void OnClipboardCopy();
   afx_msg void OnClipboardPaste();
+  afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateSetTo(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUndo(CCmdUI* pCmdUI);
   afx_msg void OnUpdateRedo(CCmdUI* pCmdUI);
@@ -134,7 +136,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void _DeactivateEdit(void);
   bool _ValidateItem(CEditExCustomKeys* pItem, float* p_value = NULL);
   bool _RegisterWindowClass(HMODULE hMod = NULL);
-  void _DrawItem(CDC& dc, int i, int j);
+  void _DrawItem(CDC& dc, int i, int j, const CRect* p_rect = NULL);
   int _GetGradIndex(float value);
   float _GetItem(int i, int j); // i - row, j - column
   void _SetItem(int i, int j, float value); // i - row, j - column
@@ -247,6 +249,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   static float m_spotMarkersSize;
   static CMapEditorCtrl* mp_other;
   static char m_csvsep_symb;
+  bool m_rof_setto;
+  bool m_rof_import;
 
   CDC     m_dcGrid;
   CBitmap m_bmGrid;

@@ -41,6 +41,9 @@
 #include "Settings/ISettingsData.h"
 #include "ui-core/FileDialogEx.h"
 #include "ui-core/MsgBox.h"
+#include "io-core/FirmwareMapsDataHolder.h"
+#include "io-core/ce_errors.h"
+#include "io-core/BitMask.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -52,6 +55,9 @@ using namespace SECU3IO;
 const BYTE default_context = SENSOR_DAT;
 const BYTE kparams_context = KNOCK_PAR;
 const BYTE attnmap_context = ATTTAB_PAR;
+const BYTE funset_context =  FUNSET_PAR;
+const BYTE rpmgrd_context =  RPMGRD_PAR;
+const BYTE lodgrd_context =  LODGRD_PAR;
 
 namespace {
 void UpdateMap(size_t* map, int* flag, const SepTabPar* data)
@@ -111,6 +117,11 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* ip_v
  mp_view->setOnSavePoints(MakeDelegate(this,&CKnockChannelTabController::OnSavePoints));
 
  _InitializeRPMKnockFunctionBuffer();
+
+ std::fill(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, .0f);
+ std::fill(m_lodGrid, m_lodGrid + F_LOAD_SLOTS, .0f);
+ mp_view->BindRPMGrid(m_rpmGrid);
+ mp_view->BindLoadGrid(m_lodGrid);
 }
 
 CKnockChannelTabController::~CKnockChannelTabController()
@@ -208,6 +219,8 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
    if (ReadAttenuatorMapFromSECU(i_descriptor, ip_packet))
    {
     m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
+
+    mp_view->SetLoadAxisCfg(m_funset_par.map_lower_pressure, m_funset_par.map_upper_pressure, m_funset_par.load_src_cfg, m_funset_par.use_load_grid, true);
    
     //Вся конфигурация прочитана - можно разрешать панели
     bool state = mp_comm->m_pControlApp->GetOnlineStatus();
@@ -286,7 +299,20 @@ bool CKnockChannelTabController::ReadNecessaryParametersFromSECU(const BYTE i_de
    else
    {//тот что надо!
     mp_view->mp_knock_parameters_dlg->SetValues((SECU3IO::KnockPar*)i_packet_data);
-
+    mp_comm->m_pControlApp->ChangeContext(funset_context); //!!!
+    m_operation_state++;
+   }
+  }
+  break;
+  case 1:
+  {
+   if (i_descriptor!=funset_context)
+   {
+    mp_comm->m_pControlApp->ChangeContext(funset_context); //!!!
+   }
+   else
+   {//тот что надо!
+    m_funset_par = *((SECU3IO::FunSetPar*)i_packet_data);
     //процесс инициализации окончен
     m_operation_state = -1; //останов КА - операции выполнены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_READY));
@@ -336,11 +362,35 @@ bool CKnockChannelTabController::ReadAttenuatorMapFromSECU(const BYTE i_descript
     const SepTabPar* data = (const SepTabPar*)i_packet_data;
     UpdateMap(&m_rdAttenMap[0], &m_rdAttenMapFlags[0], data);
     if (std::find(m_rdAttenMapFlags.begin(), m_rdAttenMapFlags.end(), 0) == m_rdAttenMapFlags.end())
-    { //cache is already up to date (все фрагменты таблицы прочитаны)
-     m_operation_state = -1; //останов КА - операции выполнены
-     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
-     return true; //работа КА завершена
+    { //cache is already up to date
+     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_RPMGRD));
+     mp_comm->m_pControlApp->ChangeContext(rpmgrd_context);
+     m_operation_state++;
     }
+   }
+   break;
+  case 2: //Read out RPM grid
+   if (i_descriptor != rpmgrd_context)
+    mp_comm->m_pControlApp->ChangeContext(rpmgrd_context);
+   else
+   {//save RPM grid
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    memcpy(m_rpmGrid, data->table_data, F_RPM_SLOTS*sizeof(float)); //save RPM grid
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_LODGRD));
+    mp_comm->m_pControlApp->ChangeContext(lodgrd_context);
+    m_operation_state++;
+   }
+   break;
+  case 3: //Read out load grid
+   if (i_descriptor != lodgrd_context)
+    mp_comm->m_pControlApp->ChangeContext(lodgrd_context);
+   else
+   {//save load grid
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    memcpy(m_lodGrid, data->table_data, F_LOAD_SLOTS*sizeof(float)); //save load grid
+    m_operation_state = -1; //stop state machine - all operations completed
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
+    return true; //SM working is finished
    }
    break;
  } //switch
@@ -467,6 +517,8 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
 
  //сохраняем текущее значение оборотов
  m_currentRPM = p_packet->rpm;
+ 
+ mp_view->SetKssArguments(p_packet->rpm, p_packet->load, p_packet->baro_press, !p_packet->strt_use, CHECKBIT32(p_packet->ce_errors, ECUERROR_KNOCK_DETECTED));
 }
 
 void CKnockChannelTabController::_PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function)

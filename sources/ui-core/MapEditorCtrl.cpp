@@ -212,6 +212,8 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_lbuttondown(false)
 , mp_tooltip(NULL)
 , mp_undo(new UndoCntr())
+, m_rof_setto(false)
+, m_rof_import(false)
 {
  m_horizLabels.reserve(16);
  m_vertLabels.reserve(16);
@@ -267,20 +269,20 @@ BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
  ON_COMMAND(ID_MAPED_POPUP_INTERPOL, OnInterpolate)
  ON_COMMAND(ID_MAPED_POPUP_UNDO, OnUndo)
  ON_COMMAND(ID_MAPED_POPUP_REDO, OnRedo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INC, OnUpdateSetTo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_DEC, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INC, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_DEC, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SETTO, OnUpdateSetTo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SUB, OnUpdateSetTo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_ADD, OnUpdateSetTo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_MUL, OnUpdateSetTo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_REV, OnUpdateSetTo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH3X3, OnUpdateSetTo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH5X5, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SUB, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_ADD, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_MUL, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_REV, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH3X3, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_SMOOTH5X5, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_IMPORTCSV, OnUpdateImportCsv)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INTERPOL, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_INTERPOL, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_UNDO, OnUpdateUndo)
  ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_REDO, OnUpdateRedo)
- ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_PASTE, OnUpdateSetTo)
+ ON_UPDATE_COMMAND_UI(ID_MAPED_POPUP_PASTE, OnUpdateControls)
 END_MESSAGE_MAP()
 
 UINT CMapEditorCtrl::OnGetDlgCode()
@@ -349,9 +351,14 @@ void CMapEditorCtrl::OnDestroy()
  m_forceRedraw = true;
 }
 
-void CMapEditorCtrl::OnUpdateSetTo(CCmdUI* pCmdUI)
+void CMapEditorCtrl::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(!m_readOnly);
+}
+
+void CMapEditorCtrl::OnUpdateSetTo(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable((!m_readOnly || m_rof_setto));
 }
 
 void CMapEditorCtrl::OnUpdateUndo(CCmdUI* pCmdUI)
@@ -366,7 +373,7 @@ void CMapEditorCtrl::OnUpdateRedo(CCmdUI* pCmdUI)
 
 void CMapEditorCtrl::OnUpdateImportCsv(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(!m_readOnly);
+ pCmdUI->Enable((!m_readOnly || m_rof_import));
 }
 
 void CMapEditorCtrl::OnUpdateClipboardPaste(CCmdUI* pCmdUI)
@@ -1520,7 +1527,8 @@ void CMapEditorCtrl::OnSetTo()
   for(size_t i = 0; i < sel.size(); ++i)
    _SetItemTr(sel[i].first, sel[i].second, value);
 
-  m_OnChange();
+  if (m_OnChange)
+   m_OnChange();
   if (!m_absGrad)
   {
    _UpdateMinMaxElems();
@@ -1811,7 +1819,8 @@ void CMapEditorCtrl::OnImportCsv()
    for(int j = 0; j < m_cols; ++j)
     _SetItemTr((m_rows-1)-i, j, (float)atof(csv[i][j].c_str())); //save result
 
-  m_OnChange();
+  if (m_OnChange)
+   m_OnChange();
   if (!m_absGrad)
   {
    _UpdateMinMaxElems();
@@ -1932,10 +1941,15 @@ int CMapEditorCtrl::_GetLabelHeight(CDC* pDC)
  return m_label_height;
 }
 
-void CMapEditorCtrl::_DrawItem(CDC& dc, int i, int j)
+void CMapEditorCtrl::_DrawItem(CDC& dc, int i, int j, const CRect* p_rect /*=NULL*/)
 {
  float value = _GetItemTr(i, j);
- CRect rect = _GetItemRect(&dc, i, j);
+ CRect rect;
+ if (!p_rect)
+ {
+  rect = _GetItemRect(&dc, i, j);
+  p_rect = &rect;
+ }
  int index = _GetGradIndex(value);
  COLORREF customColor = _GetItem<COLORREF>(mp_itemColors, i, j);
  COLORREF gradColor = customColor ? customColor : m_gradColor[index];
@@ -1947,9 +1961,9 @@ void CMapEditorCtrl::_DrawItem(CDC& dc, int i, int j)
    gradColor = GDIHelpers::Brighten(gradColor, 80);
  }
  dc.SetBkColor(IsWindowEnabled() ? gradColor : GetSysColor(COLOR_3DFACE));
- dc.FillSolidRect(rect, IsWindowEnabled() ? gradColor : GetSysColor(COLOR_3DFACE));
- dc.Draw3dRect(&rect, RGB(0,0,0), RGB(0,0,0));
- dc.DrawText(_FloatToStr(value, m_decPlaces), (LPRECT)&rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE); 
+ dc.FillSolidRect(p_rect, IsWindowEnabled() ? gradColor : GetSysColor(COLOR_3DFACE));
+ dc.Draw3dRect(p_rect, RGB(0,0,0), RGB(0,0,0));
+ dc.DrawText(_FloatToStr(value, m_decPlaces), (LPRECT)p_rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE); 
 }
 
 void CMapEditorCtrl::_DrawGrid(const std::vector<std::pair<int, int> >* p_updList /*= NULL*/)
@@ -1975,14 +1989,16 @@ void CMapEditorCtrl::_DrawGrid(const std::vector<std::pair<int, int> >* p_updLis
  }
  else
  { //draw only certain cell(s)
-  CRect sel_rc;
-  _GetSelRect(sel_rc);
-  m_dcGrid.FillRect(sel_rc, &m_bgrdBrush); //fill cell rect with background
   m_dcGrid.SetBkMode(TRANSPARENT);
   m_dcGrid.SetTextColor(GetSysColor(IsWindowEnabled() ? COLOR_WINDOWTEXT : COLOR_GRAYTEXT));
   CFont* oldFont = m_dcGrid.SelectObject(&m_cFont);
   for(size_t s = 0; s < p_updList->size(); ++s)
-   _DrawItem(m_dcGrid, (*p_updList)[s].first, (*p_updList)[s].second);
+  {
+   int i = (*p_updList)[s].first, j = (*p_updList)[s].second;
+   CRect rc = _GetItemRect(&m_dcGrid, i, j);
+   m_dcGrid.FillRect(rc, &m_bgrdBrush); //erase (fill cell rect with background)
+   _DrawItem(m_dcGrid, i, j, &rc); //draw
+  }
   m_dcGrid.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
   m_dcGrid.SelectObject(oldFont);
  }
@@ -2428,4 +2444,10 @@ void CMapEditorCtrl::OnRedo()
  _DrawGrid();
  CClientDC dc(this);
  _ShowImage(&dc);
+}
+
+void CMapEditorCtrl::EnableReadonlyFeatures(bool setto, bool import)
+{
+ m_rof_setto = setto;
+ m_rof_import = import;
 }

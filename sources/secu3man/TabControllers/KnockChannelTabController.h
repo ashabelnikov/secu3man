@@ -120,4 +120,8 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   //Массив для хранения таблицы аттенюатора прочитанной из SECU-3 и массив с флагами
   std::vector<size_t> m_rdAttenMap;
   std::vector<int> m_rdAttenMapFlags;
+
+  SECU3IO::FunSetPar m_funset_par;
+  float m_rpmGrid[32];
+  float m_lodGrid[32];
 };

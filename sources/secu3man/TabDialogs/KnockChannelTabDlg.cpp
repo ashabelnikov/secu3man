@@ -40,6 +40,8 @@
 #include "ui-core/Chart2D.h"
 #include "ui-core/OScillCtrl.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/fnt_helpers.h"
+#include "ui-core/ddx_helpers.h"
 
 using namespace std;
 using namespace fastdelegate;
@@ -50,6 +52,7 @@ using namespace fastdelegate;
 #define K_SIG_MAX 5.0f
 #define LEVEL_SLIDER_POS_NUM 100
 #define RPM_AXIS_MAX  (RPM_AXIS_MIN + ((RPM_KNOCK_SIGNAL_POINTS-1) * RPM_AXIS_STEP))
+const float KSS_MAX = 999.0f;
 
 CKnockChannelTabDlg::CKnockChannelTabDlg()
 : mp_RTChart(new CChart2D())
@@ -62,7 +65,14 @@ CKnockChannelTabDlg::CKnockChannelTabDlg()
 , m_clear_function_button_state(true)
 , m_dlsm_checkbox_state(true)
 , m_initialized(false)
+, m_kss_map(16, 16, false, false, NULL, 3, true, false)
+, mp_kss_map(new float[256])
+, mp_rpmGrid(NULL)
+, mp_lodGrid(NULL)
+, m_detonation(false)
 {
+ std::fill(mp_kss_map, mp_kss_map + 256, .0f);
+
  mp_RTChart->AddSerie(RPM_KNOCK_SIGNAL_POINTS);    //signal serie
  mp_RTChart->AddSerie(2);      //level serie (horiz. line)
  mp_RTChart->AddSerie(2);      //RPM serie (vert. line)
@@ -85,6 +95,11 @@ CKnockChannelTabDlg::CKnockChannelTabDlg()
  //=================================================================
 }
 
+CKnockChannelTabDlg::~CKnockChannelTabDlg()
+{
+ delete[] mp_kss_map;
+}
+
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
@@ -96,6 +111,9 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_KC_DESIRED_LEVEL_TEXT, m_level_text);
  DDX_Control(pDX, IDC_KC_REALTIME_LIST, m_RTList);
  DDX_Control(pDX, IDC_KC_LIST_CHECKBOX, m_list_checkbox);
+ DDX_Control(pDX, IDC_KC_SIGNAL_OSCILLOSCOPE_COMBO, m_graph_combo);
+ DDX_Control(pDX, IDC_KC_KSS_GRAPH, m_kss_map);
+ DDX_CBIndex_int(pDX, IDC_KC_SIGNAL_OSCILLOSCOPE_COMBO, m_kss_index);
 }
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
@@ -122,6 +140,8 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_COMMAND(IDM_KC_LIST_SIGMA_FILTER, OnListSigmaFilter)
  ON_COMMAND(IDM_KC_LIST_LOAD_POINTS, OnListLoadPoints)
  ON_COMMAND(IDM_KC_LIST_SAVE_POINTS, OnListSavePoints)
+ ON_CBN_SELENDOK(IDC_KC_SIGNAL_OSCILLOSCOPE_COMBO, OnSelendokOscillCombo)
+ ON_UPDATE_COMMAND_UI(IDC_KC_KSS_GRAPH, OnUpdateControls)
  ON_WM_TIMER()
  ON_WM_VSCROLL()
 END_MESSAGE_MAP()
@@ -132,6 +152,10 @@ END_MESSAGE_MAP()
 BOOL CKnockChannelTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ m_graph_combo.AddString(MLL::LoadString(IDS_KC_SIGNAL_OSCILLOSCOPE));
+ m_graph_combo.AddString(MLL::LoadString(IDS_KC_SIGNAL_3DSTATISTICS));
+ m_graph_combo.SetCurSel(0);
 
  m_dlsm_checkbox.SetCheck(m_dlsm_checkbox_state ? BST_CHECKED : BST_UNCHECKED);
  m_level_slider.EnableWindow(!m_dlsm_checkbox_state);
@@ -164,6 +188,15 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
  mp_ContextMenuManager->Attach(this);
 
+ CloneWndFont(this, &m_font, -1, false);
+ m_kss_map.SetRange(0.0f, KSS_MAX);
+ m_kss_map.AttachMap(mp_kss_map);
+ m_kss_map.ShowLabels(true, true);
+ m_kss_map.SetDecimalPlaces(0, 0, 0);
+ m_kss_map.SetFont(&m_font);
+ m_kss_map.EnableAbroadMove(false, false);
+ m_kss_map.EnableReadonlyFeatures(true, true);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -173,6 +206,8 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_level_slider, MLL::GetString(IDS_KC_DESIRED_LEVEL_SLIDER_TT)));
  VERIFY(mp_ttc->AddWindow(&m_dlsm_checkbox, MLL::GetString(IDS_KC_DLSM_CHECKBOX_TT)));
  VERIFY(mp_ttc->AddWindow(&m_list_checkbox, MLL::GetString(IDS_KC_LIST_CHECKBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_graph_combo, MLL::GetString(IDS_KC_SIGNAL_OSCILLOSCOPE_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -579,6 +614,7 @@ void CKnockChannelTabDlg::OnSize( UINT nType, int cx, int cy )
   rc1 = GDIHelpers::GetChildWndRect(mp_OScopeCtrl.get());
   GetClientRect(&rc2);
   mp_OScopeCtrl->SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleX(3), rc2.bottom - rc1.top  - da.ScaleY(3), SWP_NOMOVE | SWP_NOZORDER);
+  m_kss_map.SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleX(3), rc2.bottom - rc1.top  - da.ScaleY(3), SWP_NOMOVE | SWP_NOZORDER);
 
   rc1 = GDIHelpers::GetChildWndRect(mp_RTChart.get());
   GetClientRect(&rc2);
@@ -618,4 +654,93 @@ void CKnockChannelTabDlg::OnShow(bool show)
   SetTimer(TIMER_ID, 200, NULL);
  else
   KillTimer(TIMER_ID);
+}
+
+void CKnockChannelTabDlg::OnSelendokOscillCombo()
+{
+ int sel = m_graph_combo.GetCurSel();
+
+ if (0==sel)
+ {
+  mp_OScopeCtrl->ShowWindow(SW_SHOW);
+  m_kss_map.ShowWindow(SW_HIDE);
+ }
+ else
+ {
+  mp_OScopeCtrl->ShowWindow(SW_HIDE);
+  m_kss_map.ShowWindow(SW_SHOW);
+ }
+}
+
+void CKnockChannelTabDlg::SetLoadAxisCfg(float minVal, float maxVal, int ldaxCfg, bool useTable, bool forceUpdate /*= false*/)
+{
+ LdaxCfg::SetLoadAxisCfg(minVal, maxVal, ldaxCfg, useTable, forceUpdate); //save values
+
+ //do not update if MAP(baro) is selected! Because if MAP(baro) is selected, upper pressure will be updated in SetDynamicValues() method
+ if ((m_ldaxNeedsUpdate && !ldaxIsUseBaroMax()) || forceUpdate)
+ {
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetBaroMax(), 16);
+  m_kss_map.AttachLabels(mp_rpmGrid, ldaxIsTable() ? mp_lodGrid : &m_work_map_load_slots[0]);
+  m_kss_map.UpdateDisplay(); 
+  m_ldaxNeedsUpdate = false;
+ }
+}
+
+void CKnockChannelTabDlg::BindRPMGrid(float* pGrid)
+{
+ mp_rpmGrid = pGrid;
+}
+
+void CKnockChannelTabDlg::BindLoadGrid(float* pGrid)
+{
+ mp_lodGrid = pGrid;
+}
+
+void CKnockChannelTabDlg::SetKssArguments(int rpm, float load, float baro_press, bool show_marker, bool detonation)
+{ 
+ int upd = 0, l, r;
+ if (detonation && m_detonation == false)
+ {
+  int p1, p2;
+  float rpmf = (float)rpm;
+  MathHelpers::AxisCellLookup(rpmf, mp_rpmGrid, 16, p1, p2);
+  r = fabs(rpmf - mp_rpmGrid[p1]) < fabs(rpmf - mp_rpmGrid[p2]) ? p1 : p2;
+
+  float *ploadGrid = ldaxIsTable() ? mp_lodGrid : &m_work_map_load_slots[0];
+  MathHelpers::AxisCellLookup(load, ploadGrid, 16, p1, p2);
+  l = fabs(load - ploadGrid[p1]) < fabs(load - ploadGrid[p2]) ? p1 : p2;
+
+  int idx = (l * 16) + r;
+  if (mp_kss_map[idx] <= KSS_MAX)
+  {
+   mp_kss_map[idx]+= 1;
+   upd = 1; //update single cell
+  }
+ }
+ m_detonation = detonation;
+
+ if (m_kss_index==0) return;
+
+ //Update vertical axis of work map
+ if (m_ldaxNeedsUpdate || ldaxWatchBaroPress(baro_press))
+ {
+  m_work_map_load_slots = MathHelpers::BuildGridFromRange(ldaxGetMin(), ldaxGetBaroMax(), 16);
+  m_kss_map.AttachLabels(mp_rpmGrid, ldaxIsTable() ? mp_lodGrid : &m_work_map_load_slots[0]);
+  m_ldaxNeedsUpdate = false;
+  upd = 2; //full update
+ }
+
+ m_kss_map.ShowMarkers(show_marker, true);
+ m_kss_map.SetArguments(load, (float)rpm); //update position of spot
+
+ if (1==upd)
+ {
+  std::vector<std::pair<int, int> > updList;
+  updList.push_back(std::make_pair(l, r));
+  m_kss_map.UpdateDisplay(&updList);
+ }
+ else if (2==upd)
+ {
+  m_kss_map.UpdateDisplay();
+ }
 }
