@@ -457,7 +457,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V37 = 0x37,           //v3.7  ADD_I3 --> FTLS_I
    IOV_V38 = 0x38,           //v3.8  FTS_I added
    IOV_V39 = 0x39,           //v3.9  LAMBDA2 added, ADD_I4, IGNTIM and MAP2 for SECU3T added
-   IOV_V40 = 0x40            //v4.0  GPA6_O and GPA4_I added, GPA5_I and GPA6_O reserved (hidden)
+   IOV_V40 = 0x40,           //v4.0  GPA6_O and GPA4_I added, GPA5_I and GPA6_O reserved (hidden)
+   IOV_V41 = 0x41,           //v4.1  Array with I/O information added
+   IOV_CUR = IOV_V41
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
@@ -466,6 +468,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   DWORD GetGStub(void) const;
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
   IORemVer GetIORemVersion(void) const;
+  void IORemUpdateInfo(void);
 
   size_t GetOnlyCodeSize(const BYTE* ip_bytes) const;
   void LoadCodeData(const BYTE* ip_source_bytes, size_t i_srcSize, BYTE* op_destin_bytes = NULL);

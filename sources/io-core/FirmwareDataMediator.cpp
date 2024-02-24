@@ -62,6 +62,7 @@ typedef struct iorem_slots_t
  _fnptr_t v_slotsi[IOREM_SLOTS]; // data slots           (inverted)
  _fnptr_t i_plugs[IOREM_PLUGS];  // initialization plugs
  _fnptr_t v_plugs[IOREM_PLUGS];  // data plugs
+ _uchar   io_info[IOREM_SLOTS];  // I/O slots' information (ID of plug and inversion flag)
  _fnptr_t s_stub;                // special pointer used as stub (for outputs)
  _fnptr_t g_stub;                // special pointer used as stub (for inputs)
  _uchar version;                 // A reserved byte
@@ -410,7 +411,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1948];
+ _uchar reserved[1899];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -573,6 +574,9 @@ void CFirmwareDataMediator::LoadBytes(const BYTE* ip_bytes)
 void CFirmwareDataMediator::StoreBytes(BYTE* op_bytes)
 {
  ASSERT(op_bytes);
+ if (!op_bytes)
+  return;
+ IORemUpdateInfo();
  memcpy(op_bytes,mp_bytes_active,m_firmware_size);
 }
 
@@ -612,8 +616,8 @@ void CFirmwareDataMediator::SetSignatureInfo(const _TSTRING& i_string)
 
 DWORD CFirmwareDataMediator::GetFWOptions(void)
 {
-  //if there is no such data in this firmware, then return zero
-  return (mp_cddata) ? mp_cddata->config : 0;
+ //if there is no such data in this firmware, then return zero
+ return (mp_cddata) ? mp_cddata->config : 0;
 }
 
 DWORD CFirmwareDataMediator::GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp)
@@ -786,6 +790,8 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
   _CompensateVRef(&p_fd->def_param, true);  //5v <-- 2.56v
  if (!CHECKBIT32(dst_fwopt, SECU3IO::COPT_VREF_5V) && CHECKBIT32(src_fwopt, SECU3IO::COPT_VREF_5V))
   _CompensateVRef(&p_fd->def_param, false); //5v --> 2.56v
+
+ IORemUpdateInfo();
 }
 
 void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_bytes, EventHandler onVrefUsrConfirm /*= NULL*/)
@@ -2934,7 +2940,7 @@ CFirmwareDataMediator::IORemVer CFirmwareDataMediator::GetIORemVersion(void) con
 {
  ASSERT(mp_cddata);
  if (!mp_cddata)
-  return IOV_V23; //error, return current version
+  return IOV_CUR; //error, return current version
  return (IORemVer)mp_cddata->iorem.version;
 }
 
@@ -3662,5 +3668,39 @@ void CFirmwareDataMediator::SetSetMap(int i_index, int id, const float* ip_value
   case ETMT_INJ_CYLMULT: SetInjCylMultMap(i_index, ip_values); break;
   case ETMT_INJ_CYLADD: SetInjCylAddMap(i_index, ip_values); break;
   default: ASSERT(0);
+ }
+}
+
+void CFirmwareDataMediator::IORemUpdateInfo(void)
+{
+ if (!mp_cddata)
+ {
+  ASSERT(0);
+  return;
+ }
+
+ //Update I/O information   
+ for(size_t s = 0; s < IOREM_SLOTS; ++s)
+ {
+  mp_cddata->iorem.io_info[s] = 127;
+  if (mp_cddata->iorem.i_slots[s] == 0)
+   continue; //skip not implemented slots
+
+  for(size_t p = 0; p < IOREM_PLUGS; ++p)
+  {
+   if (mp_cddata->iorem.i_plugs[p] == 0)
+    continue; //skip not implemented plugs
+
+   if (mp_cddata->iorem.i_plugs[p] == mp_cddata->iorem.i_slots[s])
+   {
+    mp_cddata->iorem.io_info[s] = p;        //non-inverted
+    break;
+   }
+   if (mp_cddata->iorem.i_plugs[p] == mp_cddata->iorem.i_slotsi[s])
+   {
+    mp_cddata->iorem.io_info[s] = p | 0x80; //inverted
+    break;
+   }
+  }
  }
 }
