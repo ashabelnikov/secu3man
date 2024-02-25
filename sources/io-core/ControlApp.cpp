@@ -588,7 +588,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &rigid_arg))
   return false;
  sensorDat.rigid_use = (rigid_arg != 255);
- sensorDat.rigid_arg = sensorDat.rigid_use ? (1.0f + (((float)rigid_arg) / (256.0f/7.0f))) : 0;
+ sensorDat.rigid_arg = sensorDat.rigid_use ? (((float)rigid_arg) / 256.0f) : 0;
 
  //Gas reducer's temperature
  int grts = 0;

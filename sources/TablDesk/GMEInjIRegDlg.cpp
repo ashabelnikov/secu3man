@@ -31,7 +31,7 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
 
-const float RigidGrid[8] = {1,2,3,4,5,6,7,8};
+const float RigidGrid[8] = {0.0000f, 0.1429f, 0.2857f, 0.4286f, 0.5714f, 0.7143f, 0.8571f, 1.0000f};
 
 static const UINT StaticCtrlBegin = IDC_GME_INJ_IDLC_TEXT;
 static const UINT StaticCtrlEnd = IDC_GME_INJ_IACMAT_TEXT;
@@ -80,7 +80,7 @@ CGMEInjIRegDlg::CGMEInjIRegDlg()
  m_idlc_map.SetDecimalPlaces(1, 0, 0);
  m_idlr_map.SetDecimalPlaces(1, 0, 0);
  m_itrpm_map.SetDecimalPlaces(0, 0, 0);
- m_rigid_map.SetDecimalPlaces(2, 0, 0);
+ m_rigid_map.SetDecimalPlaces(2, 4, 0);
  m_iacc_map.SetDecimalPlaces(2, 2, 0);
  m_iaccw_map.SetDecimalPlaces(2, 2, 0);
  m_iacmat_map.SetDecimalPlaces(2, 2, 0);
