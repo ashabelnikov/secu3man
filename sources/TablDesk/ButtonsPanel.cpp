@@ -1022,6 +1022,7 @@ void CButtonsPanel::OnViewRigidMap()
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_RIGID_MAP).c_str(), CXD_BM_NO);
   DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.00"));
+  DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.04f"));
   DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
   DLL::Chart2DSetOnWndActivation(md.handle,OnWndActivationRigidMap,this);
   DLL::Chart2DSetOnChange(md.handle,OnChangeRigidMap,this);

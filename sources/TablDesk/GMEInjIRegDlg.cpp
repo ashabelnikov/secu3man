@@ -27,11 +27,10 @@
 #include "resource.h"
 #include "GMEInjIRegDlg.h"
 #include "io-core/MapIds.h"
+#include "io-core/SECU3IO.h"
 #include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/CtrlScaler.h"
-
-const float RigidGrid[8] = {0.0000f, 0.1429f, 0.2857f, 0.4286f, 0.5714f, 0.7143f, 0.8571f, 1.0000f};
 
 static const UINT StaticCtrlBegin = IDC_GME_INJ_IDLC_TEXT;
 static const UINT StaticCtrlEnd = IDC_GME_INJ_IACMAT_TEXT;
@@ -150,7 +149,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_rigid_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveRigid));
  m_rigid_map.SetRange(.0f, 5.0f);
  m_rigid_map.AttachMap(mp_RigidMap[1], mp_RigidMap[0]);
- m_rigid_map.AttachLabels(RigidGrid, NULL);
+ m_rigid_map.AttachLabels(SECU3IO::rigid_map_slots, NULL);
  m_rigid_map.ShowLabels(true, false);
  m_rigid_map.SetFont(&m_font);
  m_rigid_map.EnableAbroadMove(true, true);

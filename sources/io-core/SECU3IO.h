@@ -923,7 +923,8 @@ const int INPAVNUM = 14;
  const float temp_map_tmp_slots[16]  = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};
  const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
- const float rigid_map_slots[8]  = {1,2,3,4,5,6,7,8};
+ const float rigid_map_slots[8]  = {0.0000f, 0.1429f, 0.2857f, 0.4286f, 0.5714f, 0.7143f, 0.8571f, 1.0000f};
+
  const float manigntim_map_slots[16]  = {.0f,0.33f,0.66f,1.00f,1.33f,1.66f,2.00f,2.33f,2.66f,3.00f,3.33f,3.66f,4.00f,4.33f,4.66f,5.0f};
 
  const float maninjpwc_map_slots[17]  = {.0f,0.312f,0.625f,0.937f,1.250f,1.562f,1.875f,2.187f,2.50f,2.812f,3.125f,3.437f,3.750f,4.062f,4.375f,4.687f,5.000f};
