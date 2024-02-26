@@ -27,6 +27,7 @@
 
 #include "MeasInstrBase.h"
 
+//MAP2
 class AFX_EXT_CLASS CMIMap2 : public MeasInstrBase
 {
  public:
@@ -49,3 +50,25 @@ class AFX_EXT_CLASS CMIMap2Graph : public MeasInstrBase
   //---------------------------------------
 };
 
+//GPS:
+class AFX_EXT_CLASS CMIGps : public MeasInstrBase
+{
+ public:
+  CMIGps();
+  virtual ~CMIGps();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};
+
+class AFX_EXT_CLASS CMIGpsGraph : public MeasInstrBase
+{
+ public:
+  CMIGpsGraph();
+  virtual ~CMIGpsGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

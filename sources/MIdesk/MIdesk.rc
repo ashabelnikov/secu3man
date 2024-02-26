@@ -265,6 +265,7 @@ BEGIN
     IDS_MI_OPS_TITLE         "Давление масла"
     IDS_MI_MAF_TITLE         "ДМРВ"
     IDS_MI_MAF_UNIT          "г/сек"
+    IDS_MI_GPS_TITLE         "ДДГ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -311,6 +312,7 @@ BEGIN
     IDS_MI_MAFGRAPH_V_UNIT    "ДМРВ,г/сек"
     IDS_MI_FTSGRAPH_V_UNIT    "ДТТ,°C"
     IDS_MI_CONSFUEL_UNIT      "Л"
+    IDS_MI_GPSGRAPH_V_UNIT    "ДДГ,кПа"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -623,6 +625,7 @@ BEGIN
     IDS_MI_MAF_TITLE         "MAF"
     IDS_MI_MAF_UNIT          "g/sec"
     IDS_MI_CONSFUEL_UNIT     "L"
+    IDS_MI_GPS_TITLE         "GPS"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -666,6 +669,7 @@ BEGIN
     IDS_MI_INJ_DUTY_V_UNIT    "Inj.duty,%"
     IDS_MI_MAFGRAPH_V_UNIT    "MAF,g/sec"
     IDS_MI_FTSGRAPH_V_UNIT    "FTS,°C"
+    IDS_MI_GPSGRAPH_V_UNIT    "GPS,kPa"
 END
 
 STRINGTABLE DISCARDABLE 

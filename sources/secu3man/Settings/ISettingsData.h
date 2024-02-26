@@ -423,6 +423,7 @@ struct MetersCfg
  int m_optMetTargAFR[2];
  int m_optMetDiffAFR[2];
  int m_optMetDiffAFR2[2];
+ int m_optMetGPS[2];
 };
 
 typedef enum EInterLang
@@ -518,6 +519,7 @@ struct LogFileFields
  _TSTRING m_fldAFR2;
  _TSTRING m_fldAFRMap;
  _TSTRING m_fldTchrg;
+ _TSTRING m_fldGPS;
 };
 
 //Functionality
@@ -593,6 +595,7 @@ class ISettingsData
   virtual int GetVehicleSpeedAverage(void) const = 0;
   virtual int GetTPSDotAverage(void) const = 0;
   virtual int GetMAP2Average(void) const = 0;
+  virtual int GetGPSAverage(void) const = 0;
   virtual int GetMAPDAverage(void) const = 0;
   virtual int GetTmp2Average(void) const = 0;
   virtual int GetFuelConsumAverage(void) const = 0;

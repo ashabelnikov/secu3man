@@ -320,10 +320,13 @@ typedef struct params_t
 
  _uint  inj_cranktorun_time1;          // Time in seconds for going from the crank position to the run position (1 tick = 10ms)
 
+ _int   gps_curve_offset;              // can be negative
+ _int   gps_curve_gradient;            // can be negative (in case of inverse characteristic curve)!
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[130];
+ _uchar reserved[126];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

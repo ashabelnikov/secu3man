@@ -205,7 +205,8 @@ CUniOutPageDlg::CUniOutPageDlg()
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_INPUT1, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_INPUT1), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_INPUT2, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_INPUT2), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_MAF,  CondFmt(6, 2, 0.02f, 650.0f, 0.1f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_MAF), false)));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TPSDOT,  CondFmt(4, 0, 0.0f, 1000.0f, 1.0f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_TPSDOT), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TPSDOT,  CondFmt(4, 0, -1000.0f, 1000.0f, 1.0f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_TPSDOT), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_GPS,  CondFmt(5, 2, 0.25f, 500.0f, 0.25f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_GPS), false)));
 }
 
 LPCTSTR CUniOutPageDlg::GetDialogID(void) const

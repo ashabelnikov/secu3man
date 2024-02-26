@@ -86,6 +86,7 @@ struct s3lRecord
  float afr2;
  float afrmap;
  float tchrg;
+ float gps;
  BYTE  log_marks;
  WORD  service_flags;
  DWORD ce_errors;

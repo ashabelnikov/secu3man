@@ -105,6 +105,7 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetOpsAverageNum(mp_settings->GetOpsAverage());
  mp_view->SetMAFAverageNum(mp_settings->GetMAFAverage());
  mp_view->SetFtsAverageNum(mp_settings->GetFtsAverage());
+ mp_view->SetGPSAverageNum(mp_settings->GetGPSAverage());
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -154,6 +155,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetMAFAverageNum(mp_settings->GetMAFAverage());
  mp_view->SetITMode(mp_settings->GetITEdMode());
  mp_view->SetFtsAverageNum(mp_settings->GetFtsAverage());
+ mp_view->SetGPSAverageNum(mp_settings->GetGPSAverage());
 }
 
 void CPMMonitorController::OnDeactivate(void)

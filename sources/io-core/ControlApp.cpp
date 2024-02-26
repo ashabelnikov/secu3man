@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 102)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 104)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -523,13 +523,11 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  sensorDat.tpsdot = tpsdot;
 
- //Давление газа
+ //ДАД2
  int map2 = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map2))
   return false;
  sensorDat.map2 = ((float)map2) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- //calculate here differential pressure
- sensorDat.mapd = (sensorDat.map2 - sensorDat.pressure);
 
  //Температура газа
  int tmp2 = 0;
@@ -695,6 +693,14 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  sensorDat.tchrg = ((float)tchrg) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  sensorDat.tchrg = MathHelpers::RestrictValue(sensorDat.tchrg, -99.9f, 999.0f);
+
+ //Gas pressure (LPG)
+ int gps = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &gps))
+  return false;
+ sensorDat.gps = ((float)gps) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ //calculate here differential pressure
+ sensorDat.mapd = (sensorDat.gps - sensorDat.pressure);
 
  return true;
 }
@@ -892,7 +898,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != 33)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 37)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -1012,6 +1018,18 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_raw, true))
   return false;
  funSetPar.tps_raw = tps_raw * m_adc_discrete;
+
+ //GPS curve offset
+ int gps_curve_offset = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &gps_curve_offset, true))
+  return false;
+ funSetPar.gps_curve_offset = ((float)gps_curve_offset) * m_adc_discrete;
+
+ //GPS curve gradient
+ int gps_curve_gradient = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &gps_curve_gradient, true))
+  return false;
+ funSetPar.gps_curve_gradient = ((float)gps_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
  return true;
 }
@@ -3900,6 +3918,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  int inj_cyl_disp = MathHelpers::Round(packet_data->inj_cyl_disp * 16384.0f);
  mp_pdp->Bin16ToHex(inj_cyl_disp, m_outgoing_packet);
  mp_pdp->Bin32ToHex((unsigned long)packet_data->mafload_const, m_outgoing_packet);
+ int gps_curve_offset = MathHelpers::Round(packet_data->gps_curve_offset / m_adc_discrete);
+ mp_pdp->Bin16ToHex(gps_curve_offset, m_outgoing_packet);
+ int gps_curve_gradient = MathHelpers::Round(128.0f * packet_data->gps_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete);
+ mp_pdp->Bin16ToHex(gps_curve_gradient, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -4980,6 +5002,7 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_INPUT2: return MathHelpers::Round(val);
   case UNIOUT_COND_MAF:  return MathHelpers::Round(val * MAFS_MULT);
   case UNIOUT_COND_TPSDOT: return MathHelpers::Round(val); //%/s
+  case UNIOUT_COND_GPS:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  }
  return 0;
 }
@@ -5028,6 +5051,7 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_INPUT2: return (float)val;
   case UNIOUT_COND_MAF:  return (((float)val) / MAFS_MULT);
   case UNIOUT_COND_TPSDOT: return (float)val;
+  case UNIOUT_COND_GPS:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  }
  return .0f;
 }
@@ -5039,6 +5063,9 @@ bool CondEncoder::isSigned(int cond) const
   case UNIOUT_COND_CTS:
   case UNIOUT_COND_ATS:
   case UNIOUT_COND_AANG:
+  case UNIOUT_COND_GRTS:
+  case UNIOUT_COND_TMP2:
+  case UNIOUT_COND_TPSDOT:
    return true;
   default:
    return false;

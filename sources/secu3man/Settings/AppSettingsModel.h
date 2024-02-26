@@ -156,6 +156,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetTPSDotAverage(void) const;
   virtual int GetMAPDotAverage(void) const;
   virtual int GetMAP2Average(void) const;
+  virtual int GetGPSAverage(void) const;
   virtual int GetMAPDAverage(void) const;
   virtual int GetTmp2Average(void) const;
   virtual int GetFuelConsumAverage(void) const;
@@ -352,6 +353,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optTPSDotAverage;
   OptField_t<int>  m_optMAPDotAverage;
   OptField_t<int>  m_optMAP2Average;
+  OptField_t<int>  m_optGPSAverage;
   OptField_t<int>  m_optMAPDAverage;
   OptField_t<int>  m_optTmp2Average;
   OptField_t<int>  m_optFuelConsumAverage;
@@ -742,6 +744,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetTPSDot[2][2];
   OptField_t<int> m_optMetMAPDot[2][2];
   OptField_t<int> m_optMetMAP2[2][2];
+  OptField_t<int> m_optMetGPS[2][2];
   OptField_t<int> m_optMetMAPD[2][2];
   OptField_t<int> m_optMetTmp2[2][2];
   OptField_t<int> m_optMetFuelConsum[2][2];
@@ -984,6 +987,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldAFR2;
   OptField_t<_TSTRING> m_optLogFieldAFRMap;
   OptField_t<_TSTRING> m_optLogFieldTchrg;
+  OptField_t<_TSTRING> m_optLogFieldGPS;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

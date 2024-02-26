@@ -234,6 +234,20 @@ BEGIN
 
     LTEXT           "Условие GAS_V",IDC_PD_FUNSET_GAS_V_UNI_CAPTION,2,325,110,8
     COMBOBOX        IDC_PD_FUNSET_GAS_V_UNI_COMBO,115,324,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Настройка ДДГ",IDC_PD_FUNSET_MAP_SENSOR3_GROUP,1,344,157,39,0,WS_EX_TRANSPARENT
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET3_EDIT,9,364,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_OFFSET3_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,363,11,16
+    LTEXT           "Смещение кривой",IDC_PD_FUNSET_CURVE_OFFSET3_CAPTION,6,353,63,8
+    LTEXT           "В",IDC_PD_FUNSET_CURVE_OFFSET3_UNIT,53,367,12,10
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT3_EDIT,76,364,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_GRADIENT3_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,363,11,16
+    LTEXT           "Наклон кривой",IDC_PD_FUNSET_CURVE_GRADIENT3_CAPTION,76,353,66,8
+    LTEXT           "кПа/В",IDC_PD_FUNSET_CURVE_GRADIENT3_UNIT,118,367,24,11
+
+    CONTROL         "",IDC_PD_MAP_CALC3_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,364,15,18
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -1746,6 +1760,7 @@ BEGIN
     IDS_UNIOUT_COND_INPUT2 "INPUT2 (логич.)"
     IDS_UNIOUT_COND_MAF    "ДМРВ (г/сек)"
     IDS_UNIOUT_COND_TPSDOT "Скорость ДЗ (%/сек)"
+    IDS_UNIOUT_COND_GPS    "ДДГ (кПа)"
 END
 
 STRINGTABLE
@@ -1914,9 +1929,9 @@ BEGIN
     IDS_PD_INJECTOR_ANGLESPEC_COMBO_TT "Определяет как импульс впрыска привязан к фазе впрыска. Расчетный момент впрыска может быть привызан к началу исмпульса, к середине или его концу. Например, можно настроить чтобы впрыск заканчивался до закрытия впускного клапана (выбрать 'Конец впр.' и настроить таблицу фазы впрыска)."
     IDS_PD_INJECTOR_MINPW_EDIT_TT "Ограничение минимальной длительности впрыска. Длительность импульсов впрыска не может быть ниже этого значения."
     IDS_PD_INJECTOR_FFFCONST_EDIT_TT "Используется прошивкой при вычислении мгновенного расхода топлива для получения значения в виде частоты импульсов (Гц) из расчета N импульсов на 1 литр сгоревшего топлива. SECU-3 Manager, используя аналогичный параметр (заданный в ini-файле) и значение скорости автомобиля, вычисляет расход топлива в Л/100км."
-    IDS_PD_INJECTOR_USEADDCORRS_CHECK_TT "Эта галочка разрешает использование коррекции впрыска по температуре (TMP2) и давлению газа (MAP2). Используйте когда SECU-3 управляет впрыском газа напрямую."
+    IDS_PD_INJECTOR_USEADDCORRS_CHECK_TT "Эта галочка разрешает использование коррекции впрыска по температуре (TMP2) и давлению газа (GPS). Используйте когда SECU-3 управляет впрыском газа напрямую."
     IDS_PD_INJECTOR_USEAIRDEN_CHECK_TT "Если галочка установлена, то для всех режимов расчета топливоподачи используется коррекция плотности воздуха только по таблице, при этом для режимов Speed-Density (ДАД, ДАД+ДПДЗ) вместо температуры воздуха в формулу подставляется константа равная 20°С. (нужно чтобы в таблице плотности воздуха при этой температуре стояли 1.0)."
-    IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT "Установите данную галочку если хотите использовать дифференциальное давление (MAP2-MAP) вместо абсолютного давления газа (MAP2) для коррекции впрыска по датчику давления газа."
+    IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT "Установите данную галочку если хотите использовать дифференциальное давление (GPS-MAP) вместо абсолютного давления газа (GPS) для коррекции впрыска по датчику давления газа."
     IDS_PD_LAMBDA_STEPSIZE_P_EDIT_TT "Значение, на которое увеличивается лямбда коррекция если напряжение с ДК меньше порога переключения (с учетом параметра 'Мертвая зона перекл. +/-'). Обновление значения коррекции происходит через установленное число тактов или мс (см. параметр 'Кол-во тактов на шаг')."
     IDS_PD_LAMBDA_STEPSIZE_M_EDIT_TT "Значение, на которое уменьшается лямбда коррекция если напряжение с ДК больше порога переключения (с учетом параметра 'Мертвая зона перекл. +/-'). Обновление значения коррекции происходит через установленное число тактов или мс (см. параметр 'Кол-во тактов на шаг')."
     IDS_PD_LAMBDA_CORRLIMIT_P_EDIT_TT "Ограничение положительного значения лямбда коррекции."
@@ -2052,7 +2067,8 @@ LAMBDA - Вход датчика кислорода 1.\r\n
 LAMBDA2 - Вход датчика кислорода 2.\r\n
 AIR_TEMP - Вход датчика температуры воздуха на впуске.\r\n
 SPD_SENS - Вход датчика скорости.\r\n
-MAP2 - Вход ДАД2 (датчик давления газа, барометр).\r\n
+MAP2 - Вход ДАД2 (датчик атмосферного давления).\r\n
+GPS - Вход ДДГ (датчик давления газа ГБО).\r\n
 TEMP2 - Вход датчика температуры газа.\r\n
 MAF - Вход ДМРВ.\r\n
 MAPSEL0 - Вход для реализации переключения между 4 наборами таблиц.\r\n
@@ -2311,6 +2327,20 @@ BEGIN
 
     LTEXT           "GAS_V condition",IDC_PD_FUNSET_GAS_V_UNI_CAPTION,2,325,110,8
     COMBOBOX        IDC_PD_FUNSET_GAS_V_UNI_COMBO,115,324,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "GP sensor tuning",IDC_PD_FUNSET_MAP_SENSOR3_GROUP,1,344,157,39,0,WS_EX_TRANSPARENT
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET3_EDIT,9,364,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_OFFSET3_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,363,11,16
+    LTEXT           "Curve offset",IDC_PD_FUNSET_CURVE_OFFSET3_CAPTION,6,353,63,8
+    LTEXT           "V",IDC_PD_FUNSET_CURVE_OFFSET3_UNIT,53,367,12,10
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT3_EDIT,76,364,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_GRADIENT3_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,363,11,16
+    LTEXT           "Curve gradient",IDC_PD_FUNSET_CURVE_GRADIENT3_CAPTION,76,353,66,8
+    LTEXT           "kPa/V",IDC_PD_FUNSET_CURVE_GRADIENT3_UNIT,118,367,24,11
+
+    CONTROL         "",IDC_PD_MAP_CALC3_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,364,15,18
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -3852,6 +3882,7 @@ BEGIN
     IDS_UNIOUT_COND_INPUT2 "INPUT2 (logic)"
     IDS_UNIOUT_COND_MAF    "MAF (g/sec)"
     IDS_UNIOUT_COND_TPSDOT "TPS dot (%/sec)"
+    IDS_UNIOUT_COND_GPS    "GPS (kPa)"
 END
 
 STRINGTABLE
@@ -4020,9 +4051,9 @@ BEGIN
     IDS_PD_INJECTOR_ANGLESPEC_COMBO_TT "Determines how the injection pulse is tied to the injection phase. The estimated moment of injection can be linked to the beginning of pulse, to the middle or its end. For example, you can configure the injection to end before the intake valve closes (select 'End' and tune the injection timing map)."
     IDS_PD_INJECTOR_MINPW_EDIT_TT "Limiting the minimum injection pulse width. The width of the injection pulses cannot be lower than this value."
     IDS_PD_INJECTOR_FFFCONST_EDIT_TT "Used by firmware in calculating the instantaneous fuel consumption to obtain values in the form of pulse frequency (Hz) from the computation of N pulses per 1 liter of burnt fuel. SECU-3 Manager, using same parameter value (specified in the ini-file) and the vehicle speed value, calculates the fuel consumption in L/100km."
-    IDS_PD_INJECTOR_USEADDCORRS_CHECK_TT "This checkmark allows the use of injection correction for gas temperature (TMP2) and gas pressure (MAP2). Use when SECU-3 controls injection of LPG directly."
+    IDS_PD_INJECTOR_USEADDCORRS_CHECK_TT "This checkmark allows the use of injection correction for gas temperature (TMP2) and gas pressure (GPS). Use when SECU-3 controls injection of LPG directly."
     IDS_PD_INJECTOR_USEAIRDEN_CHECK_TT "If checked, then for all modes of fuel supply calculation, air density correction is used only according to the table, while for Speed-Density modes (MAP, MAP+TPS), the air temperature in the formula is substituted by a constant equal to 20°C (it is necessary that in air density table at this temperature should be 1.0 value)."
-    IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT "Check this box if you want to use differential pressure (MAP2-MAP) instead of absolute gas pressure (MAP2) for correcting injection by the gas pressure sensor."
+    IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT "Check this box if you want to use differential pressure (GPS-MAP) instead of absolute gas pressure (GPS) for correcting injection by the gas pressure sensor."
     IDS_PD_LAMBDA_STEPSIZE_P_EDIT_TT "The value by which lambda correction increases if the voltage from the oxygen sensor is less than the switching threshold (taking into account parameter 'Switch point deadband +/-'). The correction value is updated after each set number of strokes or ms (see parameter 'Number of strokes per step')."
     IDS_PD_LAMBDA_STEPSIZE_M_EDIT_TT "The value by which lambda correction decreases if the voltage from the oxygen sensor is above than the switching threshold (taking into account parameter 'Switch point deadband +/-'). The correction value is updated after each set number of strokes or ms (see parameter 'Number of strokes per step')."
     IDS_PD_LAMBDA_CORRLIMIT_P_EDIT_TT "Limitting the positive value of lambda correction."
@@ -4156,7 +4187,8 @@ LAMBDA - Exhaust Gas Oxygen sensor input 1.\r\n
 LAMBDA2 - Exhaust Gas Oxygen sensor input 2.\r\n
 AIR_TEMP - Intake air temperature sensor input.\r\n
 SPD_SENS - Vehicle Speed sensor input.\r\n
-MAP2 - MAP input 2 (gas pressure sensor for LPG injection, barometer etc).\r\n
+MAP2 - MAP input 2 (barometer etc).\r\n
+GPS - GPS input (gas pressure sensor for LPG injection).\r\n
 TEMP2 - Gas temperature sensor input (for LPG injection).\r\n
 MAF - Input for MAF.\r\n
 MAPSEL0 - Input to implement switching between 4 sets of tables.\r\n

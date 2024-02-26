@@ -135,6 +135,7 @@ BOOL CLPControlPanelDlg::OnInitDialog()
 
 void CLPControlPanelDlg::FillTimeFactorCombo(std::vector<_TSTRING>& i_factor_strings)
 {
+ m_time_factor_combo.ResetContent();
  for(std::vector<_TSTRING>::iterator it = i_factor_strings.begin(); it != i_factor_strings.end(); ++it)
  {
   int index = m_time_factor_combo.AddString((*it).c_str());

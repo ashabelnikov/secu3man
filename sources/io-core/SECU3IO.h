@@ -96,7 +96,8 @@ namespace SECU3IO
   int tpsdot;                           //TPS dot (d%/dt)
   int mapdot;                           //MAP dot (dP%/dt)
 
-  float map2;                           // MAP2 (gas pressure)
+  float map2;                           // MAP2 (dynamic barocorrection)
+  float gps;                            // GPS (gas pressure)
   float tmp2;                           // TMP2 (gas temperature)
   float mapd;                           // Diffrerential pressure = (MAP2 - MAP)
   float grts;                           // Gas reducer's temperature sensor
@@ -206,6 +207,8 @@ namespace SECU3IO
   float mafload_const;                //precalculated constant for MAF (for calculation of MAF load)
   int uni_gas_v;
   float tps_raw;
+  float gps_curve_offset;
+  float gps_curve_gradient;
  };
 
  struct IdlRegPar
@@ -571,6 +574,7 @@ namespace SECU3IO
  const int UNIOUT_COND_INPUT2 = 32;   //INPUT2
  const int UNIOUT_COND_MAF = 33;      //MAF
  const int UNIOUT_COND_TPSDOT = 34;   //TPS dot
+ const int UNIOUT_COND_GPS = 35;      //GPS
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

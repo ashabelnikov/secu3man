@@ -217,8 +217,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_MAF        =  96,     // MAF       (input)
    IOP3I_FTS_I      =  97,     // FTS_I     (input)
    IOP3I_LAMBDA2    =  98,     // LAMBDA2   (input)
-// IOP3I_RESERVED46 =  99,     // Reserved  ()
-   IOP3I_COUNT      =  99,     //DON'T forget to update this value
+   IOP3I_GPS        =  99,     // GPS       (input)
+   IOP3I_COUNT      = 100,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -458,7 +458,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V38 = 0x38,           //v3.8  FTS_I added
    IOV_V39 = 0x39,           //v3.9  LAMBDA2 added, ADD_I4, IGNTIM and MAP2 for SECU3T added
    IOV_V40 = 0x40,           //v4.0  GPA6_O and GPA4_I added, GPA5_I and GPA6_O reserved (hidden)
-   IOV_V41 = 0x41,           //v4.1  Array with I/O information added
+   IOV_V41 = 0x41,           //v4.1  Array with I/O information added, GPS input
    IOV_CUR = IOV_V41
   };
 
