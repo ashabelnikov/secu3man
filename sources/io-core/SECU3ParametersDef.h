@@ -323,10 +323,12 @@ typedef struct params_t
  _int   gps_curve_offset;              // can be negative
  _int   gps_curve_gradient;            // can be negative (in case of inverse characteristic curve)!
 
+ _uchar bt_type;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[126];
+ _uchar reserved[125];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

@@ -2535,7 +2535,7 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SecurPar& securPar = m_recepted_packet.m_SecurPar;
- if (size != 15)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 16)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of characters in name (must be zero)
@@ -2564,7 +2564,6 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
  securPar.use_imm  = CHECKBIT8(flags, 2);
  securPar.use_respar = CHECKBIT8(flags, 3);
  securPar.chk_fwcrc = CHECKBIT8(flags, 4);
- securPar.bt_type = (flags >> 5) & 0x3;   //read 5,6 bits
 
  //Parse out iButton keys
  BYTE key[IBTN_KEY_SIZE]; int i, j;
@@ -2577,6 +2576,12 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
   }
   memcpy(securPar.ibtn_keys[j], key, IBTN_KEY_SIZE);
  }
+
+ //Bluetooth type
+ unsigned char bt_type = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &bt_type))
+  return false;
+ securPar.bt_type = bt_type;
 
  return true;
 }
@@ -4583,14 +4588,14 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
  WRITEBIT8(flags, 2, packet_data->use_imm);
  WRITEBIT8(flags, 3, packet_data->use_respar);
  WRITEBIT8(flags, 4, packet_data->chk_fwcrc); 
- flags|= (packet_data->bt_type << 5);        //write 5,6 bits
-
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
  //iButton keys
  for(int j = 0; j < IBTN_KEYS_NUM; ++j)
   for(int i = 0; i < IBTN_KEY_SIZE; ++i)
    mp_pdp->Bin8ToHex(packet_data->ibtn_keys[j][i], m_outgoing_packet);
+
+ mp_pdp->Bin8ToHex(packet_data->bt_type, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

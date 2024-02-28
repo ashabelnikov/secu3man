@@ -206,6 +206,7 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
   {
    m_record_count = (fsize - m_fileOffset) / (length);
   }
+  GetRecord(o_time, o_data, o_marks); //update decimal point's symbol
   m_record_size = length;
   o_error = FE_NA;
   fseek(m_file_handle, 0, SEEK_SET);
@@ -236,7 +237,8 @@ bool LogReader::IsOpened(void) const
 
 bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o_marks)
 {
- VERIFY(!fseek(m_file_handle, m_fileOffset + (m_record_size*m_current_record), SEEK_SET));
+ if (0!=fseek(m_file_handle, m_fileOffset + (m_record_size*m_current_record), SEEK_SET))
+  return false;
 
  unsigned int service_flags = 0;
  unsigned int uniout_flags = 0;
@@ -445,7 +447,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
      case 67: result = CNumericConv::secu3_atof_32<5>(b, size, afr2); break;
      case 68: result = CNumericConv::secu3_atof_32<5>(b, size, afrmap); break;
      case 69: result = CNumericConv::secu3_atof_32<5>(b, size, tchrg); break;
-     case 70: result = CNumericConv::secu3_atof_32<5>(b, size, gps); break;
+     case 70: result = CNumericConv::secu3_atof_32<6>(b, size, gps); break;
      case 71: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
      case 72: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
      case 73: result = ParseCE(b, size, ce_bits); break;
