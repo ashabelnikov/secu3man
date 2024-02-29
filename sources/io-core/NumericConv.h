@@ -183,7 +183,7 @@ class IOCORE_API CNumericConv
     ++str;
    }
 
-   if (intpart <= 0)
+   if (intpart < 0)
     fracpart = -fracpart; //copy sign
 
    result = intpart + (fracpart * scales[size]);
