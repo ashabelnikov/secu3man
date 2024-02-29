@@ -229,6 +229,7 @@ namespace SECU3IO
   int rpm_on_run_add;                   //Value added to target RPM when vehicle starts to run
   float idl_reg_p[2];                   //IAC closeed loop proportional coefficient, [0] - negative, [1] - positive
   float idl_reg_i[2];                   //IAC closed loop integral coefficient, [0] - negative, [1] - positive
+  float idl_reg_d;                      //IAC closeed loop differential coefficient
   float idl_coef_thrd1;                 //coefficient for calculating closed loop entering RPM threshold
   float idl_coef_thrd2;                 //coefficient for calculating closed loop leaving RPM threshold
   int  idl_intrpm_lim;                  //RPM error limit for integrator

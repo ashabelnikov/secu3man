@@ -360,6 +360,11 @@ BEGIN
     CONTROL         "Использовать closed-loop на газу",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,480,115,16
 
     CONTROL         "Не отключать УОЗ РХХ во время работы РДВ РХХ",IDC_PD_IDLREG_WITH_IACREG_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,500,115,20
+
+    EDITTEXT        IDC_PD_IDLREG_DIFFERENTIAL_EDIT,95,522,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_DIFFERENTIAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,522,13,17
+    LTEXT           "Дифференциальный",IDC_PD_IDLREG_DIFFERENTIAL_CAPTION,0,523,94,10
+    LTEXT           "коэф.",IDC_PD_IDLREG_DIFFERENTIAL_UNIT,140,523,30,10
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -1884,10 +1889,11 @@ BEGIN
     IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "Это значение будет добавлено к положению РДВ при нажатии на педаль газа когда произойдет переход из режима ХХ в режим нагрузок."
     IDS_PD_IDLREG_USETHRASSMAP_CHECK_TT "Использовать таблицу сопроводителя дросселя вместо константы 'Добавка после выхода'. В случае использования таблицы добавка зависит от оборотов двигателя."
     IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT "Значение, которое будет добавлено к целевым оборотам в случае поступления импульсов от датчика скорости при начале движения автомобиля (если датчик используется)"
-    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Коэффициент пропорциональной составляющей ПИ-регулятора (используется при ошибке >= 0)"
-    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Коэффициент интегральной составляющей ПИ-регулятора (используется при ошибке >= 0)"
-    IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT "Коэффициент пропорциональной составляющей ПИ-регулятора (используется при ошибке < 0)"
-    IDS_PD_IDLREG_INTEGRALM_EDIT_TT "Коэффициент интегральной составляющей ПИ-регулятора (используется при ошибке < 0)"
+    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Коэффициент пропорциональной составляющей ПИД-регулятора (используется при ошибке >= 0)"
+    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Коэффициент интегральной составляющей ПИД-регулятора (используется при ошибке >= 0)"
+    IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT "Коэффициент пропорциональной составляющей ПИД-регулятора (используется при ошибке < 0)"
+    IDS_PD_IDLREG_INTEGRALM_EDIT_TT "Коэффициент интегральной составляющей ПИД-регулятора (используется при ошибке < 0)"
+    IDS_PD_IDLREG_DIFFERENTIAL_EDIT_TT "Коэффициент дифференциальной составляющей ПИД-регулятора"
     IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT "Коэффициент, на который умножаются целевые обороты ХХ для получения порога входа в режим РХХ (например, целевые обороты ХХ = 850, коэфф = 1.41, значит обороты 1-го перех. режима = 850 * 1.41 = 1200 мин-1)."
     IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT "коэффициент, на который умножаются целевые обороты ХХ для получения порога выхода из режима РХХ (например, целевые обороты ХХ = 850, коэфф = 1.88, значит обороты 2-го перех. режима = 850 * 1.88 = 1600 мин-1)."
     IDS_PD_IDLREG_IACMINPOS_EDIT_TT "Ограничение минимального положения РДВ (РДВ не будет закрываться ниже этого значения). Ограничение необходимо для исключения попадания клапана в зону нелинейности, которая находится в крайнем положении. При включении кондиционера это значение увеличивается на значение 'Добавка к РДВ при вкл. кондиционера'"
@@ -2453,6 +2459,11 @@ BEGIN
     CONTROL         "Use closed loop on gas fuel",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,480,115,16
 
     CONTROL         "Ign.tim. idling regulator works together with IAC regulator",IDC_PD_IDLREG_WITH_IACREG_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,500,115,20
+
+    EDITTEXT        IDC_PD_IDLREG_DIFFERENTIAL_EDIT,95,522,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_DIFFERENTIAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,522,13,17
+    LTEXT           "Differential",IDC_PD_IDLREG_DIFFERENTIAL_CAPTION,0,523,94,10
+    LTEXT           "coef.",IDC_PD_IDLREG_DIFFERENTIAL_UNIT,140,523,30,10
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -4006,10 +4017,11 @@ BEGIN
     IDS_PD_IDLREG_IDLTORUNADD_EDIT_TT "This value will be added to the IAC position when you press the gas pedal and the transition from idling to load mode occurs."
     IDS_PD_IDLREG_USETHRASSMAP_CHECK_TT "Use throttle assist lookup table instead of a simple constant 'IAC add after exit'. When using table, IAC pos. addition depends on RPM."
     IDS_PD_IDLREG_RPMONRUNADD_EDIT_TT "RPM value to be added to the target RPM in the case of receipt of pulses from the speed sensor when the vehicle starts moving (applicable only when the sensor is used)"
-    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Coefficient of the proportional component of the PI-controller (used when error >= 0)"
-    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Coefficient of the integral component of the PI-controller (used when error >= 0)"
-    IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT "Coefficient of the proportional component of the PI-controller (used when error < 0)"
-    IDS_PD_IDLREG_INTEGRALM_EDIT_TT "Coefficient of the integral component of the PI-controller (used when error < 0)"
+    IDS_PD_IDLREG_PROPORTIONAL_EDIT_TT "Coefficient of the proportional component of the PID-controller (used when error >= 0)"
+    IDS_PD_IDLREG_INTEGRAL_EDIT_TT "Coefficient of the integral component of the PID-controller (used when error >= 0)"
+    IDS_PD_IDLREG_PROPORTIONALM_EDIT_TT "Coefficient of the proportional component of the PID-controller (used when error < 0)"
+    IDS_PD_IDLREG_INTEGRALM_EDIT_TT "Coefficient of the integral component of the PID-controller (used when error < 0)"
+    IDS_PD_IDLREG_DIFFERENTIAL_EDIT_TT "Coefficient of the differential component of the PID-controller"
     IDS_PD_IDLREG_COEFFTHRD1_EDIT_TT "Coefficient by which the target RPM is multiplied to obtain threshold for entering the idling mode (for example, target idling RPM = 850, coefficient = 1.41, thus, RPM of the 1-st transient threshold = 850 * 1.41 = 1200 min-1)."
     IDS_PD_IDLREG_COEFFTHRD2_EDIT_TT "Coefficient by which the target RPM is multiplied to obtain threshold for exiting the idling mode (for example, target idling RPM = 850, coefficient = 1.88, thus, RPM of the 2-st transient threshold = 850 * 1.88 = 1600 min-1)."
     IDS_PD_IDLREG_IACMINPOS_EDIT_TT "Limitation of minimum position of valve (IAC valve will not go below this value). Restriction is necessary to prevent valve from entering the nonlinearity zone, which is in the extreme position. When the air conditioner is turned on, this value increases by the value 'Add. to IAC pos on turn on of air cond.'"

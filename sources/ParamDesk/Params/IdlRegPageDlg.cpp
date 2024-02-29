@@ -47,6 +47,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_IDLREG_INTEGRAL_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_PROPORTIONALM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_INTEGRALM_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_IDLREG_DIFFERENTIAL_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_COEFFTHRD1_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_COEFFTHRD2_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_INTRPMLIM_EDIT, OnChangeData)
@@ -135,6 +136,11 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRALM_CAPTION,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_INTEGRALM_UNIT,OnUpdateFuelInjectionControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_DIFFERENTIAL_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_DIFFERENTIAL_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_DIFFERENTIAL_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_DIFFERENTIAL_UNIT,OnUpdateFuelInjectionControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_COEFFTHRD1_EDIT,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_COEFFTHRD1_SPIN,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_COEFFTHRD1_CAPTION,OnUpdateFuelInjectionControls)
@@ -191,6 +197,7 @@ CIdlRegPageDlg::CIdlRegPageDlg()
 , m_idlregi_edit(CEditEx::MODE_FLOAT, true)
 , m_idlregpm_edit(CEditEx::MODE_FLOAT, true)
 , m_idlregim_edit(CEditEx::MODE_FLOAT, true)
+, m_idlregd_edit(CEditEx::MODE_FLOAT, true)
 , m_coeffthrd1_edit(CEditEx::MODE_FLOAT, true)
 , m_coeffthrd2_edit(CEditEx::MODE_FLOAT, true)
 , m_intrpmlim_edit(CEditEx::MODE_INT, true)
@@ -228,6 +235,7 @@ CIdlRegPageDlg::CIdlRegPageDlg()
  m_params.iac_reg_db = 10;
  m_params.use_thrassmap = false;
  m_params.with_iacreg = false;
+ m_params.idl_reg_d = 0.1f;
 }
 
 LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
@@ -286,6 +294,8 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_USECLIACONGAS_CHECK, m_use_claicongas_check);
  DDX_Control(pDX, IDC_PD_IDLREG_IAC_DEADBAND_SPIN, m_iac_deadband_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_IAC_DEADBAND_EDIT, m_iac_deadband_edit);
+ DDX_Control(pDX, IDC_PD_IDLREG_DIFFERENTIAL_SPIN, m_idlregd_spin);
+ DDX_Control(pDX, IDC_PD_IDLREG_DIFFERENTIAL_EDIT, m_idlregd_edit);
 
  m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
  m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);
@@ -307,6 +317,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  m_idlregi_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRAL_EDIT, m_params.idl_reg_i[0]);
  m_idlregpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONALM_EDIT, m_params.idl_reg_p[1]);
  m_idlregim_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRALM_EDIT, m_params.idl_reg_i[1]);
+ m_idlregd_edit.DDX_Value(pDX, IDC_PD_IDLREG_DIFFERENTIAL_EDIT, m_params.idl_reg_d);
  m_coeffthrd1_edit.DDX_Value(pDX, IDC_PD_IDLREG_COEFFTHRD1_EDIT, m_params.idl_coef_thrd1);
  m_coeffthrd2_edit.DDX_Value(pDX, IDC_PD_IDLREG_COEFFTHRD2_EDIT, m_params.idl_coef_thrd2);
  m_intrpmlim_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTRPMLIM_EDIT, m_params.idl_intrpm_lim);
@@ -458,6 +469,12 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_iac_deadband_spin.SetRangeAndDelta(0,500,1);
  m_iac_deadband_edit.SetRange(0,500);
 
+ m_idlregd_spin.SetBuddy(&m_idlregd_edit);
+ m_idlregd_edit.SetLimitText(5);
+ m_idlregd_edit.SetDecimalPlaces(3);
+ m_idlregd_spin.SetRangeAndDelta(0.0f,5.0f,0.005f);
+ m_idlregd_edit.SetRange(0.0f,5.0f);
+
  UpdateData(FALSE);
 
  //initialize window scroller
@@ -538,6 +555,9 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_use_thrassmap_check, MLL::GetString(IDS_PD_IDLREG_USETHRASSMAP_CHECK_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_with_iacreg_check, MLL::GetString(IDS_PD_IDLREG_WITH_IACREG_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_idlregd_edit, MLL::GetString(IDS_PD_IDLREG_DIFFERENTIAL_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_idlregd_spin, MLL::GetString(IDS_PD_IDLREG_DIFFERENTIAL_EDIT_TT)));
       
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);
@@ -612,5 +632,5 @@ void CIdlRegPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(885));
+  mp_scr->SetViewSize(cx, da.ScaleY(910));
 }
