@@ -534,7 +534,7 @@ BEGIN
     COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Символ десятичной дроби",IDC_LOGCONV_DECPT_CAPTION,68,124,100,10
     LTEXT           "Символ разделения полей записи",IDC_LOGCONV_CSVSEP_CAPTION,68,144,100,10
-    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,191,113,40,10
+    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,210,102,40,10
     DEFPUSHBUTTON   "Старт",IDC_LOGCONV_START_BTN,79,168,50,16
     PUSHBUTTON      "Закрыть",IDCANCEL,162,168,50,16
 END
@@ -632,7 +632,7 @@ BEGIN
     IDS_LP_CLOSE_FILE                      "Закрыть"
     IDS_LP_FILE_INFO_FMT_STRING            "%s\n%d записей"
     IDS_LP_OPEN_FILE                       "Открыть файл"
-    IDS_LP_FILE_READ_ERROR                 "Произошла ошибка чтения данных.  Возможно что этот файл испорчен или был создан с использованием другой версии программного обеспечения. "
+    IDS_LP_FILE_READ_ERROR                 "Произошла ошибка чтения данных.\nВозможно, что этот файл испорчен или был создан с использованием другой версии программного обеспечения.\nТакже, причиной может быть параметр 'CSV символ-разделитель' в настройках программы."
     IDS_FW_WRONG_EE_FILE_SIZE              "Неправильный размер файла EEPROM. Размер должен быть %s байт.\nПроверьте тип платформы в настройках программы."
     IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE "Импорт резервных параметров из файла EEPROM"
     IDS_IMPORT_TABLES_FROM_EEPROM_FILE     "Импорт таблиц из файла EEPROM"
@@ -1548,7 +1548,7 @@ BEGIN
     COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Decimal point symbol",IDC_LOGCONV_DECPT_CAPTION,68,124,100,10
     LTEXT           "Field separator symbol",IDC_LOGCONV_CSVSEP_CAPTION,68,144,100,10
-    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,191,113,40,10
+    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,210,102,40,10
     DEFPUSHBUTTON   "Start",IDC_LOGCONV_START_BTN,79,168,50,16
     PUSHBUTTON      "Close",IDCANCEL,162,168,50,16
 END

@@ -529,6 +529,10 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
   _BuildMarksBitmap();
   _Play(true);
  }
+ else
+ {
+  mp_view->mp_LPPanelDlg->EnableSlider(false); 
+ }
  ////////////////////////////////////////////////////////////////
 }
 
@@ -699,7 +703,7 @@ void CLogPlayerTabController::_InitPlayer(void)
 {
  m_last_perionds.clear();
  mp_view->mp_LPPanelDlg->EnableSlider(mp_log_reader->GetCount() > 1);
- mp_view->mp_LPPanelDlg->SetSliderRange(0, mp_log_reader->GetCount());
+ mp_view->mp_LPPanelDlg->SetSliderRange(0, mp_log_reader->GetCount() > 0 ? mp_log_reader->GetCount()-1 : 0);
  mp_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos());
  mp_view->mp_LPPanelDlg->SetSliderPageSize(mp_log_reader->GetCount()/10); //10 pages
  _GetRecord();

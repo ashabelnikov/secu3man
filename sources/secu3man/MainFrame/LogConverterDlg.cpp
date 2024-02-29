@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CLogConverterDlg, Super)
  ON_BN_CLICKED(IDC_LOGCONV_INPUT_FILE_BTN, OnSelectInputFile)
  ON_BN_CLICKED(IDC_LOGCONV_OUTPUT_FILE_BTN, OnSelectOutputFile)
  ON_BN_CLICKED(IDC_LOGCONV_FORMAT_CHECK, OnLogFormatCheck)
+ ON_BN_CLICKED(IDC_LOGCONV_TITLE_CHECK, OnLogTitleCheck)
  ON_BN_CLICKED(IDC_LOGCONV_START_BTN, OnStartConversion)
  ON_CBN_SELENDOK(IDC_LOGCONV_DECPT_COMBO, OnSelendokDecPt)
  ON_CBN_SELENDOK(IDC_LOGCONV_CSVSEP_COMBO, OnSelendokCsvSep)
@@ -143,13 +144,14 @@ void CLogConverterDlg::OnSelectInputFile()
  HANDLE hFile = NULL;
  static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|S3L Files (*.s3l)|*.s3l|All Files (*.*)|*.*||");
  CFileDialogEx open(TRUE, NULL, NULL, NULL, szFilter, NULL);
- if (open.DoModal() != IDOK)
-  return; //user cancelled
+ if (open.DoModal() == IDOK)
+ {
+  CString fileName = open.GetPathName();
+  m_inp_edit.SetWindowText(fileName);
 
- CString fileName = open.GetPathName();
- m_inp_edit.SetWindowText(fileName);
-
- _EnableStartButton();
+  _EnableStartButton();
+ }
+ m_progress_text.SetWindowText(_T(""));
 }
 
 void CLogConverterDlg::OnSelectOutputFile()
@@ -157,28 +159,28 @@ void CLogConverterDlg::OnSelectOutputFile()
  static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|S3L Files (*.s3l)|*.s3l|All Files (*.*)|*.*||");
  CFileDialogEx save(FALSE,NULL,NULL,NULL,szFilter,NULL);
  save.m_ofn.lpstrDefExt = _T("CSV");
- if (save.DoModal()!=IDOK)
-  return; //user cancelled
+ if (save.DoModal()==IDOK)
+ {
+  CString fileName = save.GetPathName();
+  m_out_edit.SetWindowText(fileName);
 
- CString fileName = save.GetPathName();
- m_out_edit.SetWindowText(fileName);
+  _TSTRING name = fileName;
+  size_t pos = name.rfind(_T(".s3l"));
+  if (pos!=_TSTRING::npos && pos == name.size()-4) //check file extension
+  {//binary format (.s3l)
+   m_fmt_check.SetCheck(BST_CHECKED);
+   _EnableCsvControls(false);
+  }
 
- _TSTRING name = fileName;
- size_t pos = name.rfind(_T(".s3l"));
- if (pos!=_TSTRING::npos && pos == name.size()-4) //check file extension
- {//binary format (.s3l)
-  m_fmt_check.SetCheck(BST_CHECKED);
-  _EnableCsvControls(false);
+  pos = name.rfind(_T(".csv"));
+  if (pos!=_TSTRING::npos && pos == name.size()-4) //check file extension
+  {//text format (.csv)
+   m_fmt_check.SetCheck(BST_UNCHECKED);
+   _EnableCsvControls(true);
+  }
+  _EnableStartButton();
  }
-
- pos = name.rfind(_T(".csv"));
- if (pos!=_TSTRING::npos && pos == name.size()-4) //check file extension
- {//text format (.csv)
-  m_fmt_check.SetCheck(BST_UNCHECKED);
-  _EnableCsvControls(true);
- }
-
- _EnableStartButton();
+ m_progress_text.SetWindowText(_T(""));
 }
 
 void CLogConverterDlg::OnLogFormatCheck()
@@ -213,17 +215,24 @@ void CLogConverterDlg::OnLogFormatCheck()
  }
 
  _EnableStartButton();
+ m_progress_text.SetWindowText(_T(""));
 }
 
+void CLogConverterDlg::OnLogTitleCheck()
+{
+ m_progress_text.SetWindowText(_T(""));
+}
 
 void CLogConverterDlg::OnSelendokDecPt()
 {
  _EnableStartButton();
+ m_progress_text.SetWindowText(_T(""));
 }
 
 void CLogConverterDlg::OnSelendokCsvSep()
 {
  _EnableStartButton();
+ m_progress_text.SetWindowText(_T(""));
 }
 
 void CLogConverterDlg::OnStartConversion()

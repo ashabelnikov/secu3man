@@ -104,7 +104,6 @@ class IOCORE_API LogReader
   unsigned long m_record_size;
 
   char m_csv_separating_symbol;
-  char m_decimal_point;
   unsigned long m_fileOffset;
   char *mp_recBuff;
 

@@ -45,6 +45,7 @@ class CLogConverterDlg : public CDialog
   afx_msg void OnSelectInputFile();
   afx_msg void OnSelectOutputFile();
   afx_msg void OnLogFormatCheck();
+  afx_msg void OnLogTitleCheck();
   afx_msg void OnStartConversion();  
   afx_msg void OnSelendokDecPt();
   afx_msg void OnSelendokCsvSep();  

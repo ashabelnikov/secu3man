@@ -59,7 +59,6 @@ LogReader::LogReader(bool standalone /*= false*/)
 , m_csv_separating_symbol(';')
 , m_fileOffset(0)
 , m_logFmt(false) //csv format
-, m_decimal_point('.')
 , m_standalone(standalone)
 {
  mp_recBuff = new char[MAX_REC_BUF + 1];
@@ -76,7 +75,6 @@ LogReader::~LogReader()
 bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle, bool i_check /* = false*/)
 {
  m_csvTitle.clear();
- m_decimal_point = localeconv()->decimal_point[0]; //update decimal point's character, use ASCII version
 
  FILE* f_handle = _tfopen(i_file_name.c_str(), _T("rb"));
  if (NULL == f_handle)
@@ -190,23 +188,29 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
     break;
   }
 
-  //save record count
-  if (i_check)
-  {
-   m_record_count = (fsize - m_fileOffset) / (length);
-   if (count != m_record_count)
-   {
-    o_error = FE_FORMAT;
-    fclose(f_handle);
-    m_file_handle = NULL;
-    return false;
-   }
+  if (fsize == m_fileOffset)
+  { //empty file
+   m_record_count = 0;
   }
   else
   {
-   m_record_count = (fsize - m_fileOffset) / (length);
+   //save record count
+   if (i_check)
+   {
+    m_record_count = (fsize - m_fileOffset) / (length);
+    if (count != m_record_count)
+    {
+     o_error = FE_FORMAT;
+     fclose(f_handle);
+     m_file_handle = NULL;
+     return false;
+    }
+   }
+   else
+   {
+    m_record_count = (fsize - m_fileOffset) / (length);
+   }
   }
-  GetRecord(o_time, o_data, o_marks); //update decimal point's symbol
   m_record_size = length;
   o_error = FE_NA;
   fseek(m_file_handle, 0, SEEK_SET);
@@ -360,8 +364,6 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
   float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel, lambda_corr2, afr2, afrmap, tchrg, gps;
   DWORD ce_bits = 0;
-
-  CNumericConv::SetDecimalPoint(m_decimal_point); //set decimal point before using numeric functions
 
   char* p = mp_recBuff; 
   char* b = mp_recBuff;
@@ -700,7 +702,7 @@ bool LogReader::ParseTime(char* str, int size, unsigned int& wHour, unsigned int
  if (!CNumericConv::secu3_atoi_u32<2>(str, 2, wSecond))
   return false;
 
- m_decimal_point = str[2]; //save decimal point
+ CNumericConv::SetDecimalPoint(str[2]); //set decimal point before using numeric functions
  str+=3;
 
  if (!CNumericConv::secu3_atoi_u32<2>(str, 2, wMilliseconds))
