@@ -26,8 +26,7 @@
 #include "stdafx.h"
 #include <math.h>
 #include "LEDIndicator.h"
-
-#define ROUND(x) (int)((x) + 0.5 - (double)((x) < 0))
+#include "common/MathHelpers.h"
 
 namespace {
  const float minValue =  0.01f;
@@ -130,8 +129,8 @@ void CLEDIndicator::DrawLED(CDC& dc, const CRect& rect)
    double xR = (double)rc.Width() * 100.0;   //calculate x radius
    double yR = (double)rc.Height() * 100.0;  //calculate y radius
    double eAngle = (((2.0*m_dPI) / 100.0) * value), bAngle = 0;
-   CPoint end(ROUND(rc.CenterPoint().x - xR * sin(eAngle)), ROUND(rc.CenterPoint().y + yR * cos(eAngle)));
-   CPoint begin(ROUND(rc.CenterPoint().x - xR * sin(bAngle)), ROUND(rc.CenterPoint().y + yR * cos(bAngle)));
+   CPoint end(MathHelpers::Round(rc.CenterPoint().x - xR * sin(eAngle)), MathHelpers::Round(rc.CenterPoint().y + yR * cos(eAngle)));
+   CPoint begin(MathHelpers::Round(rc.CenterPoint().x - xR * sin(bAngle)), MathHelpers::Round(rc.CenterPoint().y + yR * cos(bAngle)));
    dc.Pie(rc, end, begin);
   }
 

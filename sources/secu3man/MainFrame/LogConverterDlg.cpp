@@ -39,6 +39,7 @@ CLogConverterDlg::CLogConverterDlg(CWnd* pParent, LogWriter *ip_logWriter, int f
 , m_csvsep_symb(';')
 , mp_logWriter(ip_logWriter)
 , m_fffConst(fffConst)
+, m_progbar(true)
 {
  //empty
 }
@@ -57,6 +58,7 @@ void CLogConverterDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOGCONV_CSVSEP_CAPTION, m_csvsep_caption);
  DDX_Control(pDX, IDC_LOGCONV_PROGRESS_TEXT, m_progress_text);
  DDX_Control(pDX, IDC_LOGCONV_START_BTN, m_start_btn);
+ DDX_Control(pDX, IDC_LOGCONV_PROGRESS_BAR, m_progbar);
 
  Super::DoDataExchange(pDX);
 }
@@ -152,6 +154,7 @@ void CLogConverterDlg::OnSelectInputFile()
   _EnableStartButton();
  }
  m_progress_text.SetWindowText(_T(""));
+ m_progbar.ShowWindow(SW_HIDE);
 }
 
 void CLogConverterDlg::OnSelectOutputFile()
@@ -181,6 +184,7 @@ void CLogConverterDlg::OnSelectOutputFile()
   _EnableStartButton();
  }
  m_progress_text.SetWindowText(_T(""));
+ m_progbar.ShowWindow(SW_HIDE);
 }
 
 void CLogConverterDlg::OnLogFormatCheck()
@@ -216,23 +220,27 @@ void CLogConverterDlg::OnLogFormatCheck()
 
  _EnableStartButton();
  m_progress_text.SetWindowText(_T(""));
+ m_progbar.ShowWindow(SW_HIDE);
 }
 
 void CLogConverterDlg::OnLogTitleCheck()
 {
  m_progress_text.SetWindowText(_T(""));
+ m_progbar.ShowWindow(SW_HIDE);
 }
 
 void CLogConverterDlg::OnSelendokDecPt()
 {
  _EnableStartButton();
  m_progress_text.SetWindowText(_T(""));
+ m_progbar.ShowWindow(SW_HIDE);
 }
 
 void CLogConverterDlg::OnSelendokCsvSep()
 {
  _EnableStartButton();
  m_progress_text.SetWindowText(_T(""));
+ m_progbar.ShowWindow(SW_HIDE);
 }
 
 void CLogConverterDlg::OnStartConversion()
@@ -283,6 +291,9 @@ void CLogConverterDlg::OnStartConversion()
  unsigned long recnum = rd.GetCount();
  unsigned int progress = 0;
  
+ m_progbar.SetState(true); 
+ m_progbar.ShowWindow(SW_SHOW);
+
  if (recnum != 0)
  {
   SYSTEMTIME time; SECU3IO::SensorDat data; int marks;
@@ -299,13 +310,16 @@ void CLogConverterDlg::OnStartConversion()
     progress = new_progress;
     CString s;
     s.Format("%d%%", progress);
-    m_progress_text.SetWindowText(s);
+    m_progress_text.SetWindowText(s);    
+    m_progbar.SetPosition((float)progress);
+    m_progbar.RedrawWindow();
    }
   }
   while(rd.Next());
  }
 
  m_progress_text.SetWindowText(_T("100%"));
+ m_progbar.SetPosition(100.0f);
  _EnableStartButton();
 
  rd.CloseFile();

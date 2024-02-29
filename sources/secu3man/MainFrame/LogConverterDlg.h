@@ -26,10 +26,10 @@
 #pragma once
 
 #include <memory>
+#include "ui-core/LEDIndicator.h"
 
 class CToolTipCtrlEx;
 class LogWriter;
-
 
 class CLogConverterDlg : public CDialog
 {
@@ -69,6 +69,7 @@ class CLogConverterDlg : public CDialog
   CStatic m_progress_text;
   CStatic m_decpt_caption;
   CStatic m_csvsep_caption;
+  CLEDIndicator m_progbar;
   
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   char m_csvsep_symb;

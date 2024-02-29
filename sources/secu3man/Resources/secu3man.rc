@@ -534,9 +534,10 @@ BEGIN
     COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Символ десятичной дроби",IDC_LOGCONV_DECPT_CAPTION,68,124,100,10
     LTEXT           "Символ разделения полей записи",IDC_LOGCONV_CSVSEP_CAPTION,68,144,100,10
-    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,210,102,40,10
+    CTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,210,102,40,10
     DEFPUSHBUTTON   "Старт",IDC_LOGCONV_START_BTN,79,168,50,16
     PUSHBUTTON      "Закрыть",IDCANCEL,162,168,50,16
+    CTEXT           "",IDC_LOGCONV_PROGRESS_BAR,213,120,33,30, NOT WS_VISIBLE
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1548,9 +1549,10 @@ BEGIN
     COMBOBOX        IDC_LOGCONV_CSVSEP_COMBO,30,142,30,12,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Decimal point symbol",IDC_LOGCONV_DECPT_CAPTION,68,124,100,10
     LTEXT           "Field separator symbol",IDC_LOGCONV_CSVSEP_CAPTION,68,144,100,10
-    LTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,210,102,40,10
+    CTEXT           "",IDC_LOGCONV_PROGRESS_TEXT,210,102,40,10
     DEFPUSHBUTTON   "Start",IDC_LOGCONV_START_BTN,79,168,50,16
     PUSHBUTTON      "Close",IDCANCEL,162,168,50,16
+    CTEXT           "",IDC_LOGCONV_PROGRESS_BAR,213,120,33,30, NOT WS_VISIBLE
 END
 
 /////////////////////////////////////////////////////////////////////////////
