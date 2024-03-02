@@ -221,10 +221,10 @@ CIdlRegPageDlg::CIdlRegPageDlg()
  m_params.closed_loop = false;
  m_params.idl_to_run_add = 30.0f;
  m_params.rpm_on_run_add = 200;
- m_params.idl_reg_p[0] = 0.1f;
- m_params.idl_reg_i[0] = 0.03f;
- m_params.idl_reg_p[1] = 0.1f;
- m_params.idl_reg_i[1] = 0.03f;
+ m_params.idl_reg_p[0] = 0.1f;   //-
+ m_params.idl_reg_i[0] = 0.03f;  //-
+ m_params.idl_reg_p[1] = 0.1f;   //+
+ m_params.idl_reg_i[1] = 0.03f;  //+
  m_params.idl_coef_thrd1 = 1.50f;
  m_params.idl_coef_thrd2 = 1.86f;
  m_params.idl_intrpm_lim = 200;
@@ -297,8 +297,8 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_DIFFERENTIAL_SPIN, m_idlregd_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_DIFFERENTIAL_EDIT, m_idlregd_edit);
 
- m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
- m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);
+ m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1); //+
+ m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2); //-
  m_restriction_min_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MIN_EDIT, m_params.min_angle);
  m_restriction_max_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, m_params.max_angle);
  m_goal_rpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idling_rpm);
@@ -313,10 +313,10 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, m_params.closed_loop);
  m_idltorunadd_edit.DDX_Value(pDX, IDC_PD_IDLREG_IDLTORUNADD_EDIT, m_params.idl_to_run_add);
  m_rpmonrunadd_edit.DDX_Value(pDX, IDC_PD_IDLREG_RPMONRUNADD_EDIT, m_params.rpm_on_run_add);
- m_idlregp_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONAL_EDIT, m_params.idl_reg_p[0]);
- m_idlregi_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRAL_EDIT, m_params.idl_reg_i[0]);
- m_idlregpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONALM_EDIT, m_params.idl_reg_p[1]);
- m_idlregim_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRALM_EDIT, m_params.idl_reg_i[1]);
+ m_idlregp_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONAL_EDIT, m_params.idl_reg_p[1]);   //+
+ m_idlregi_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRAL_EDIT, m_params.idl_reg_i[1]);       //+
+ m_idlregpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_PROPORTIONALM_EDIT, m_params.idl_reg_p[0]); //-
+ m_idlregim_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTEGRALM_EDIT, m_params.idl_reg_i[0]);     //-
  m_idlregd_edit.DDX_Value(pDX, IDC_PD_IDLREG_DIFFERENTIAL_EDIT, m_params.idl_reg_d);
  m_coeffthrd1_edit.DDX_Value(pDX, IDC_PD_IDLREG_COEFFTHRD1_EDIT, m_params.idl_coef_thrd1);
  m_coeffthrd2_edit.DDX_Value(pDX, IDC_PD_IDLREG_COEFFTHRD2_EDIT, m_params.idl_coef_thrd2);
@@ -487,8 +487,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_goal_rpm_edit, MLL::GetString(IDS_PD_IDLREG_GOAL_RPM_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_goal_rpm_spin, MLL::GetString(IDS_PD_IDLREG_GOAL_RPM_EDIT_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_factor_neg_edit, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_factor_neg_spin, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_factor_neg_edit, MLL::GetString(IDS_PD_IDLREG_FACTORM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_factor_neg_spin, MLL::GetString(IDS_PD_IDLREG_FACTORM_EDIT_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_factor_pos_edit, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_factor_pos_spin, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));

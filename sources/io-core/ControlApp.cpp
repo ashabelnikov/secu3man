@@ -3782,14 +3782,14 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  unsigned char rpm_on_run_add = MathHelpers::Round(packet_data->rpm_on_run_add / 10.0f);
  mp_pdp->Bin8ToHex(rpm_on_run_add, m_outgoing_packet);
 
- int idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p[0] * 256.0f);
+ int idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p[0] * 256.0f);  //-
  mp_pdp->Bin16ToHex(idl_reg_p, m_outgoing_packet);
- idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p[1] * 256.0f);
+ idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p[1] * 256.0f);      //+
  mp_pdp->Bin16ToHex(idl_reg_p, m_outgoing_packet);
 
- int idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i[0] * 256.0f);
+ int idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i[0] * 256.0f);  //-
  mp_pdp->Bin16ToHex(idl_reg_i, m_outgoing_packet);
- idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i[1] * 256.0f);
+ idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i[1] * 256.0f);      //+
  mp_pdp->Bin16ToHex(idl_reg_i, m_outgoing_packet);
 
  unsigned char idl_coef_thrd1 = MathHelpers::Round((packet_data->idl_coef_thrd1 - 1.0f) * 128.0f);
