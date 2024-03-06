@@ -881,11 +881,8 @@ CString CAppSettingsModel::GetAppDirectory(void) const
 
 bool CAppSettingsModel::ReadSettings(void)
 {
- CString IniFileName = GetINIFileFullName();
  bool status = true;
-
- TCHAR* curLocale = _tsetlocale(LC_ALL, NULL); //remember current locale
- _tsetlocale(LC_ALL, _T("English_USA.1252"));
+ CString IniFileName = GetINIFileFullName();
 
  //Options
  IniIO os(IniFileName, m_Name_Options_Section);
@@ -1621,25 +1618,21 @@ bool CAppSettingsModel::ReadSettings(void)
  fn.ReadInt(m_optFuncSM_CONTROL, _T("1"), 0, 1);
  fn.ReadInt(m_optFuncGD_CONTROL, _T("1"), 0, 1);
 
- _tsetlocale(LC_ALL, curLocale); //return previous locale
-
  return status;
 }
 
 bool CAppSettingsModel::WriteSettings(void)
 {
- CString IniFileName = GetINIFileFullName();
  bool status = true;
+ CString IniFileName = GetINIFileFullName();
+ IniIO writer(IniFileName); //set locale, open file and start
 
- TCHAR* curLocale = _tsetlocale(LC_ALL, NULL); //remember current locale
- _tsetlocale(LC_ALL, _T("English_USA.1252"));
-
- IniIO os(IniFileName, m_Name_Options_Section);
+ IniIO &os = writer; 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  VERIFY(os.WriteComment(_T("*** General settings ***"), true, true)); //<-- empty file
+  VERIFY(os.WriteComment(_T("*** General settings ***"), true));
  else
-  VERIFY(os.WriteComment(_T("*** Общие настройки ***"), true, true)); //<-- empty file
- os.CreateSection(); //create section
+  VERIFY(os.WriteComment(_T("*** Общие настройки ***"), true));
+ os.CreateSection(m_Name_Options_Section);
  
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Name of COM port or a device (e.g. /dev/ttyUSB0)"));
@@ -1852,12 +1845,12 @@ bool CAppSettingsModel::WriteSettings(void)
   os.WriteComment(_T("Использовать клавиши 'вверх' и 'вниз' для изменения значений в 2D режиме редактора таблиц"));
  os.WriteInt(m_optClassic2DKeys); 
 
- IniIO fs(IniFileName, m_Name_Fixtures_Section); 
+ IniIO &fs = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("*** General settings for virtual fixtures and indicators ***"), false, true);
+  fs.WriteComment(_T("*** General settings for virtual fixtures and indicators ***"), true);
  else
-  fs.WriteComment(_T("*** Общие настройки для виртуальных приборов и индикаторов ***"), false, true);
- fs.CreateSection();
+  fs.WriteComment(_T("*** Общие настройки для виртуальных приборов и индикаторов ***"), true);
+ fs.CreateSection(m_Name_Fixtures_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Switch between two separately configured profiles of virtual gauges and indicators (See Meters and MetersEx sections, see also Indicators and IndicatorsEx). Allowed values: 0 and 1"));
@@ -2185,12 +2178,13 @@ bool CAppSettingsModel::WriteSettings(void)
  fs.WriteInt(m_optFtsAverage); 
 
  //Positions of windows
- IniIO ws(IniFileName, m_Name_WndSettings_Section);
+ IniIO &ws = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Firmware data\" and \"EEPROM\" tabs), including position of the main window ***"), false, true);
+  ws.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Firmware data\" and \"EEPROM\" tabs), including position of the main window ***"), true);
  else
-  ws.WriteComment(_T("*** Запомненные положения плавающих окон на экране (открывающихся с вкладок \"Данные прошивки\" и \"EEPROM\"), включая положение главного окна ***"), false, true);
- ws.CreateSection();
+  ws.WriteComment(_T("*** Запомненные положения плавающих окон на экране (открывающихся с вкладок \"Данные прошивки\" и \"EEPROM\"), включая положение главного окна ***"), true);
+ ws.CreateSection(m_Name_WndSettings_Section);
+
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ws.WriteWndPos(m_optMainFrmWnd, _T("Main window"));
  else
@@ -2573,12 +2567,12 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optEGODelayMapWnd, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
  //Positions of windows
- IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
+ IniIO &ws1 = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Parameters and monitor\" tab) ***"), false, true);
+  ws1.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Parameters and monitor\" tab) ***"), true);
  else
-  ws1.WriteComment(_T("*** Запомненные положения плавающих окон на экране (открываются с вкладки \"Параметры и монитор\") ***"), false, true);
- ws1.CreateSection();
+  ws1.WriteComment(_T("*** Запомненные положения плавающих окон на экране (открываются с вкладки \"Параметры и монитор\") ***"), true);
+ ws1.CreateSection(m_Name_WndSettings_Section1);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ws1.WriteWndPos(m_optStrtMapWnd1, _T("Cranking ignition timing map"));
@@ -2957,12 +2951,12 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optEGODelayMapWnd1, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
  //Sizes of windows
- IniIO sz(IniFileName, m_Name_WndSize_Section);
+ IniIO &sz = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteComment(_T("*** Remembered sizes of windows ***"), false, true);
+  sz.WriteComment(_T("*** Remembered sizes of windows ***"), true);
  else
-  sz.WriteComment(_T("*** Запомненные размеры окон ***"), false, true);
- sz.CreateSection();
+  sz.WriteComment(_T("*** Запомненные размеры окон ***"), true);
+ sz.CreateSection(m_Name_WndSize_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz.WriteWndPos(m_optMainFrmWndSize, _T("Main window"));
@@ -3346,12 +3340,12 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optEGODelayMapWndSize, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
  //Sizes of windows (online)
- IniIO sz1(IniFileName, m_Name_WndSize_Section1);
+ IniIO &sz1 = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteComment(_T("*** Remembered sizes of windows (opened from the \"Parameters and monitor\" tab) ***"), false, true);
+  sz1.WriteComment(_T("*** Remembered sizes of windows (opened from the \"Parameters and monitor\" tab) ***"), true);
  else
-  sz1.WriteComment(_T("*** Запомненные размеры окон (открываются с вкладки \"Параметры и монитор\") ***"), false, true);
- sz1.CreateSection();
+  sz1.WriteComment(_T("*** Запомненные размеры окон (открываются с вкладки \"Параметры и монитор\") ***"), true);
+ sz1.CreateSection(m_Name_WndSize_Section1);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz1.WriteWndPos(m_optStrtMapWndSize1, _T("Cranking ignition timing map"));
@@ -3730,12 +3724,12 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optEGODelayMapWndSize1, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
  //States of windows
- IniIO sw(IniFileName, m_Name_WndState_Section);
+ IniIO &sw = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  sw.WriteComment(_T("*** Remembered states of windows ***"), false, true);
+  sw.WriteComment(_T("*** Remembered states of windows ***"), true);
  else
-  sw.WriteComment(_T("*** Запомненные состояние окон ***"), false, true);
- sw.CreateSection();
+  sw.WriteComment(_T("*** Запомненные состояние окон ***"), true);
+ sw.CreateSection(m_Name_WndState_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates, _T("State of the main window. Allowed values are: minimized, normal and maximized"));
@@ -3757,9 +3751,9 @@ bool CAppSettingsModel::WriteSettings(void)
  //Indicators
  for(int i = 0; i < 2; ++i)
  {
-  IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
-  ii.WriteComment(ii_comment[i], false, true);
-  ii.CreateSection();
+  IniIO &ii = writer;
+  ii.WriteComment(ii_comment[i], true);
+  ii.CreateSection(m_Name_Indicators_Section[i]);
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
    ii.WriteFlt(m_optIndHeightPercent[i], 2, _T("Percent of height which indicators' panel will occupy"));
@@ -3882,12 +3876,12 @@ bool CAppSettingsModel::WriteSettings(void)
    ii.WriteInt(m_optIndUniOut6[i], _T("Универсальный выход 6"));
  }
 
- IniIO ic(IniFileName, m_Name_IndColors_Section);
-
+ IniIO &ic = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  ic.WriteComment(_T("*** Colors for indicators (colors of the \"On\" state). Values are RGB in hex format ***\r\n; You can obtain any color by combining different values of R, G and B components. For example: FF0000 - red, 00FF00 - green, D3D350 - dim yellow. https://www.w3schools.com/colors/colors_picker.asp"), false, true);
+  ic.WriteComment(_T("*** Colors for indicators (colors of the \"On\" state). Values are RGB in hex format ***\r\n; You can obtain any color by combining different values of R, G and B components. For example: FF0000 - red, 00FF00 - green, D3D350 - dim yellow. https://www.w3schools.com/colors/colors_picker.asp"), true);
  else
-  ic.WriteComment(_T("*** Цвета индикаторов (цвет включенного состояния). RGB значения в hex формате ***\r\n; Вы можете получить любой цвет путем комбинирования значений R, G и B компонент. For example: FF0000 - красный, 00FF00 - зеленый, D3D350 - тусклый желтый. https://www.w3schools.com/colors/colors_picker.asp"), false, true);
+  ic.WriteComment(_T("*** Цвета индикаторов (цвет включенного состояния). RGB значения в hex формате ***\r\n; Вы можете получить любой цвет путем комбинирования значений R, G и B компонент. For example: FF0000 - красный, 00FF00 - зеленый, D3D350 - тусклый желтый. https://www.w3schools.com/colors/colors_picker.asp"), true);
+ ic.CreateSection(m_Name_IndColors_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ic.WriteColor(m_optColGas_v, _T("GAS_V input"));
@@ -4014,9 +4008,9 @@ bool CAppSettingsModel::WriteSettings(void)
  //Meters
  for(int i = 0; i < 2; ++i)
  {
-  IniIO mm(IniFileName, m_Name_Meters_Section[i]);
-  mm.WriteComment(mm_comment[i], false, true);
-  mm.CreateSection();
+  IniIO &mm = writer;
+  mm.WriteComment(mm_comment[i], true);
+  mm.CreateSection(m_Name_Meters_Section[i]);
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
    mm.WriteInt(m_optMetRows[i], _T("Number of rows in the virtual gauges panel"));
@@ -4237,13 +4231,13 @@ bool CAppSettingsModel::WriteSettings(void)
   }
  }
 
- IniIO at(IniFileName, m_Name_AutoTune_Section);
+ IniIO &at = writer;
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  at.WriteComment(_T("*** VE autotune settings ***"), false, true);
+  at.WriteComment(_T("*** VE autotune settings ***"), true);
  else
-  at.WriteComment(_T("*** Параметры автонастройки VE ***"), false, true);
- at.CreateSection();
+  at.WriteComment(_T("*** Параметры автонастройки VE ***"), true);
+ at.CreateSection(m_Name_AutoTune_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   at.WriteComment(_T("Lambda delay 3x3 map, packed in rows"));
@@ -4336,13 +4330,13 @@ bool CAppSettingsModel::WriteSettings(void)
  at.WriteFlt(m_optTunSoftness, 2);
 
  //Map editor
- IniIO me(IniFileName, m_Name_MapEditor_Section);
+ IniIO &me = writer;
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  me.WriteComment(_T("*** Grid map editors ***"), false, true);
+  me.WriteComment(_T("*** Grid map editors ***"), true);
  else
-  me.WriteComment(_T("*** Редактирование в виде таблиц ***"), false, true);
- me.CreateSection();
+  me.WriteComment(_T("*** Редактирование в виде таблиц ***"), true);
+ me.CreateSection(m_Name_MapEditor_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   me.WriteComment(_T("Color saturation of gradient"));
@@ -4387,12 +4381,12 @@ bool CAppSettingsModel::WriteSettings(void)
  me.WriteInt(m_optActiveVEMap);
 
  //Splitters
- IniIO sp(IniFileName, m_Name_Splitters_Section);
+ IniIO &sp = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  sp.WriteComment(_T("*** Remembered positions of splitters ***"), false, true);
+  sp.WriteComment(_T("*** Remembered positions of splitters ***"), true);
  else
-  sp.WriteComment(_T("*** Запомненные положения сплиттеров ***"), false, true);
- sp.CreateSection();
+  sp.WriteComment(_T("*** Запомненные положения сплиттеров ***"), true);
+ sp.CreateSection(m_Name_Splitters_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sp.WriteComment(_T("Vertical splitter on the \"Parameters and monitor\" tab"));
@@ -4407,12 +4401,12 @@ bool CAppSettingsModel::WriteSettings(void)
  sp.WriteInt(m_optLogPlayerVert);
 
  //Inj.driver
- IniIO dr(IniFileName, m_Name_InjDrv_Section);
+ IniIO &dr = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  dr.WriteComment(_T("*** Settings related to \"Injector Driver\" tab ***"), false, true);
+  dr.WriteComment(_T("*** Settings related to \"Injector Driver\" tab ***"), true);
  else
-  dr.WriteComment(_T("*** Настройки для вкладки \"Драйвер форсунок\" ***"), false, true);
- dr.CreateSection();
+  dr.WriteComment(_T("*** Настройки для вкладки \"Драйвер форсунок\" ***"), true);
+ dr.CreateSection(m_Name_InjDrv_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   dr.WriteInt(m_optInjDrvTabActive, _T("Enable \"Inj. driver\" tab. Set to 1 if you want to enable mentioned tab, 0 - disable."));
@@ -4465,13 +4459,12 @@ bool CAppSettingsModel::WriteSettings(void)
   dr.WriteFlt(m_optPWAddPtMovStep, 1, _T("Шаг смещения точек для графика \"Добавка\""));
 
  //Moving step of points in maps' editing windows
- IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
-
+ IniIO &ms = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteComment(_T("*** Step of points' moving in map editor windows ***"), false, true);
+  ms.WriteComment(_T("*** Step of points' moving in map editor windows ***"), true);
  else
-  ms.WriteComment(_T("*** Шаг смещения точек в окнах редактирования таблиц ***"), false, true);
- ms.CreateSection();
+  ms.WriteComment(_T("*** Шаг смещения точек в окнах редактирования таблиц ***"), true);
+ ms.CreateSection(m_Name_MapPtMovStep_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepWorkMap, 3, _T("Work ignition timing map"));
@@ -4835,17 +4828,18 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepEGODelayMap, 3, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
  //Log file's fileds
- IniIO lf(IniFileName, m_Name_LogFileFields_Section);
-
+ IniIO &lf = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  lf.WriteComment(_T("*** Titles of fileds of the log file, which are written into the first line ***"), false, true);
+  lf.WriteComment(_T("*** Titles of fileds of the log file, which are written into the first line ***"), true);
  else
-  lf.WriteComment(_T("*** Названия полей в лог файле, которые пишутся в первую строку ***"), false, true);
- lf.CreateSection();
+  lf.WriteComment(_T("*** Названия полей в лог файле, которые пишутся в первую строку ***"), true);
+ lf.CreateSection(m_Name_LogFileFields_Section);
+
  if (m_optInterfaceLang.value == IL_ENGLISH)
   lf.WriteInt(m_optWriteLogFields, _T("Write title into a first line of the log file. Set to 1 to enable this."));
  else
   lf.WriteInt(m_optWriteLogFields, _T("Записывать заголовок в первую строку лог файла. Установите в 1 для разрешения."));
+
  lf.WriteString(m_optLogFieldTime);
  lf.WriteString(m_optLogFieldRPM);
  lf.WriteString(m_optLogFieldIgnTim);
@@ -4921,12 +4915,12 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldCECodes);
  lf.WriteString(m_optLogFieldGPS);
  //Functionality
- IniIO fn(IniFileName, m_Name_Functionality_Section);
+ IniIO &fn = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fn.WriteComment(_T("*** Control of functionality (overlapping of firmware options) ***"), false, true);
+  fn.WriteComment(_T("*** Control of functionality (overlapping of firmware options) ***"), true);
  else
-  fn.WriteComment(_T("*** Управление функциональностью (дублируются опции прошивки) ***"), false, true);
- fn.CreateSection();
+  fn.WriteComment(_T("*** Управление функциональностью (дублируются опции прошивки) ***"), true);
+ fn.CreateSection(m_Name_Functionality_Section);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fn.WriteInt(m_optFuncSM_CONTROL, _T("Enable automatic choke functionality. Set to 1 to enable (0 - for disabling)"));
@@ -4938,56 +4932,7 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fn.WriteInt(m_optFuncGD_CONTROL, _T("Разрешение функциональности дозатора газа. Установите в 1 для разрешения (0 для запрещения)."));
 
- if (!_CheckAndCorrectLFCRs())
-  status = false;
-
- _tsetlocale(LC_ALL, curLocale); //restore previous locale
-
  return status;
-}
-
-bool CAppSettingsModel::_CheckAndCorrectLFCRs(void)
-{
- //correct CFCRs
- FILE* f = _tfopen((LPCTSTR)GetINIFileFullName(), _T("rb"));
- if (f == NULL)
-  return false;
-
- fseek(f, 0L, SEEK_END);
- long int fsize = ftell(f);
- fseek(f, 0L, SEEK_SET);
-
- std::vector<BYTE> srcbuf(fsize), dstbuf(fsize);
- if (fread(&srcbuf[0], 1, fsize, f) != fsize)
- {
-  fclose(f);
-  return false;
- }
- fclose(f);
-
- size_t dstsize = 0;
- BYTE prev = 0;
- for(int i = 0; i < fsize; ++i)
- { 
-  if (srcbuf[i] == 0x0D && prev == 0x0D)
-   continue; //skip redundant symbol
-  dstbuf[dstsize++] = srcbuf[i];
-  prev = srcbuf[i];  
- }
-
- f = _tfopen((LPCTSTR)GetINIFileFullName(), _T("wb"));
- if (f == NULL)
-  return false;
-
- if (fwrite(&dstbuf[0], 1, dstsize, f) != dstsize)
- {
-  fflush(f); //write file stream to disk
-  fclose(f);
-  return false;
- }
- fflush(f); //write file stream to disk
- fclose(f);
- return true;
 }
 
 const _TSTRING& CAppSettingsModel::GetPortName(void) const

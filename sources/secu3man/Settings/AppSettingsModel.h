@@ -268,8 +268,6 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetDbgVarsToFile(void) const;
 
  private:
-  bool _CheckAndCorrectLFCRs(void);
-
   //data which stored in the INI-file:
   //Section names
   const CString m_Name_Options_Section;

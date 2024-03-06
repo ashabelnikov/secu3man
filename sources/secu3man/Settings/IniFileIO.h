@@ -29,6 +29,7 @@
 #include <limits>
 #include "common/StrUtils.h"
 #include "common/GDIHelpers.h"
+#include "ui-core/MsgBox.h"
 
 #undef max //avoid conflicts with C++
 
@@ -60,16 +61,44 @@ static DWORD GetPrivateProfileStringCT(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPC
 class IniIO
 {
  public:
-  IniIO(const _TSTRING& fileName, const _TSTRING& sectionName)
-  : m_sectionName(sectionName)
-  , m_fileName(fileName)
-  , m_commentsIndent(30)
-  {}
   IniIO(const CString& fileName, const CString& sectionName)
   : m_sectionName(sectionName)
   , m_fileName(fileName)
   , m_commentsIndent(30)
-  {}
+  , m_fh(NULL)
+  , m_curLocale(NULL)
+  {
+   m_curLocale = _tsetlocale(LC_ALL, NULL); //remember current locale
+   _tsetlocale(LC_ALL, _T("English_USA.1252"));
+  }
+
+  IniIO(const CString& fileName)
+  : m_fileName(fileName)
+  , m_commentsIndent(30)
+  , m_fh(NULL)
+  , m_curLocale(NULL)
+  {
+   m_curLocale = _tsetlocale(LC_ALL, NULL); //remember current locale
+   _tsetlocale(LC_ALL, _T("English_USA.1252"));
+
+   m_fh = _tfopen(m_fileName.c_str(), _T("wb"));
+   if (NULL==m_fh)
+   {
+    _TSTRING str = _T("Can't open file: ");
+    str+=m_fileName;
+    SECUMessageBox(str.c_str());
+   }
+  }
+
+  ~IniIO()
+  {
+   if (m_fh)
+   {
+    fclose(m_fh);
+   }
+
+   _tsetlocale(LC_ALL, m_curLocale); //restore previous locale
+  }
 
   bool ReadString(OptField_t<_TSTRING>& field, const _TSTRING& defVal)
   {
@@ -97,7 +126,7 @@ class IniIO
    CString str;
    str.Format(_T("%d"), field.value);
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);   
    return true;
   }
 
@@ -121,7 +150,7 @@ class IniIO
    CString str;
    str.Format(_T("%06X"), (int)GDIHelpers::swapRB(field.value));
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;
   }
 
@@ -129,13 +158,15 @@ class IniIO
   {
    CString str = field.value.c_str();
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;
   }
 
-  bool CreateSection(void)
+  bool CreateSection(const CString& sectionName)
   {
-   WritePrivateProfileSection(m_sectionName.c_str(), _T(""), m_fileName.c_str());
+   if (NULL==m_fh)
+    return false;
+   _ftprintf(m_fh, _T("[%s]\r\n"), sectionName);
    return true;
   }
 
@@ -165,7 +196,7 @@ class IniIO
      write_str = patterns[i].first.second.c_str();
    }
    AddComment(write_str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), write_str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), write_str);
    return true;
   }
 
@@ -213,7 +244,7 @@ class IniIO
    if ((int)field.value != std::numeric_limits<int>::max())
     str.Format(_T("%d"), (int)field.value);
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;
   }
 
@@ -241,7 +272,7 @@ class IniIO
    if (field.value.x != std::numeric_limits<int>::max() && field.value.y != std::numeric_limits<int>::max())
     str.Format(_T("%d,%d"), (int)field.value.x, (int)field.value.y);
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;
   }
 
@@ -262,7 +293,7 @@ class IniIO
    CString str;
    str.Format(_T("%.*f"), decPlaces, field.value);
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;
   }
 
@@ -304,24 +335,17 @@ class IniIO
     str+=s;
    }
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;
   }
 
   //Add to file a full line comment
-  bool WriteComment(const _TSTRING& text, bool empty = false, bool precedEmptyLine = false)
+  bool WriteComment(const _TSTRING& text, bool precedEmptyLine = false)
   {
-   FILE* f = _tfopen(m_fileName.c_str(), empty ? _T("w") : _T("a+"));
-   if (f == NULL)
-    return false;
    if (precedEmptyLine)
-    _ftprintf(f, _T("\r\n"));
-   if (_ftprintf(f, _T("; %s\r\n"), text.c_str()) < 0)
-   {
-    fclose(f);
+    _ftprintf(m_fh, _T("\r\n"));
+   if (_ftprintf(m_fh, _T("; %s\r\n"), text.c_str()) < 0)
     return false;
-   }
-   fclose(f);
    return true;
   }
 
@@ -352,7 +376,7 @@ class IniIO
    str+= field.value;
    str+=_T('\'');
    AddComment(str, field.name, comment); //add optional comment
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;
   }
 
@@ -370,4 +394,6 @@ class IniIO
   const _TSTRING m_sectionName;
   const _TSTRING m_fileName;
   size_t m_commentsIndent;
+  FILE* m_fh;
+  TCHAR* m_curLocale;
 };
