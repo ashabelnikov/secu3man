@@ -55,10 +55,10 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_MAX_ANGLE_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_MAX_ANGLE_UNIT, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_SPIN, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_EDIT, OnUpdateControlsCorr)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_SPIN, OnUpdateControlsCorr)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_CAPTION, OnUpdateControlsCorr)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_UNIT, OnUpdateControlsCorr)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEED_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEED_SPIN, OnUpdateControls)
@@ -145,10 +145,14 @@ void CAnglesPageDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CAnglesPageDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CAnglesPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CAnglesPageDlg::OnUpdateControlsCorr(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_params.zero_adv_ang);
 }
 
 BOOL CAnglesPageDlg::OnInitDialog()
@@ -251,6 +255,7 @@ void CAnglesPageDlg::OnChangeDataZeroAA()
 
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+ UpdateDialogControls(this, TRUE);
 }
 
 void CAnglesPageDlg::OnChangeDataZeroAAOct()
@@ -260,6 +265,7 @@ void CAnglesPageDlg::OnChangeDataZeroAAOct()
 
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+ UpdateDialogControls(this, TRUE);
 }
 
 //Enable/disable all controls

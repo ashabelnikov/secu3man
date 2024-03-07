@@ -59,6 +59,7 @@ class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeDataZeroAA();
   afx_msg void OnChangeDataZeroAAOct();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsCorr(CCmdUI* pCmdUI);
   afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
