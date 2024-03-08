@@ -76,7 +76,7 @@ __fastcall TForm2D::TForm2D(HWND parent, int i_bins_mode)
 , m_horizontal_axis_grid_mode(i_bins_mode)
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
-, mp_undo(new UndoCntr())
+, mp_undo(new UndoCntr(true))  //locked by default
 {
  m_errors.reserve(32);
  std::fill(m_horizontal_axis_grid_values, m_horizontal_axis_grid_values + 256, .0f);
@@ -110,7 +110,7 @@ void TForm2D::DataPrepare()
  Chart1->LeftAxis->Title->Caption = m_y_axis_title;
  Chart1->BottomAxis->Title->Caption = m_x_axis_title;
 
- mp_undo->Lock(true);
+ mp_undo->Lock(true); //prevent fake change events
  if (m_horizontal_axis_grid_mode == CXD_BM_NO) //no bins
  {
   for(int i = 0; i < m_count_x; i++)
@@ -661,7 +661,7 @@ void __fastcall TForm2D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
 {
- if (!mp_modified_function) return;
+ if (!mp_modified_function || mp_undo->IsLocked()) return;
  double bValue = 0, eValue = 0;
  if (1!=sscanf(EditXBegin->Text.c_str(), "%lf", &bValue))
   return;
@@ -684,7 +684,7 @@ void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 {
- if (!mp_modified_function) return;
+ if (!mp_modified_function || mp_undo->IsLocked()) return;
  double bValue = 0, eValue = 0;
  if (1!=sscanf(EditXBegin->Text.c_str(), "%lf", &bValue))
   return;
@@ -707,6 +707,7 @@ void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::BinsEditOnChange(TObject *Sender)
 {
+ if (!mp_undo || mp_undo->IsLocked()) return; //skip fake change event(s)
  double Value = 0;
  if (1!=sscanf(((TEdit*)Sender)->Text.c_str(), "%lf", &Value))
   return;

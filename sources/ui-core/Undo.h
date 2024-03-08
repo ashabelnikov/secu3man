@@ -30,10 +30,10 @@
 class UndoCntr
 {
  public:
-  UndoCntr()
+  UndoCntr(bool locked = false)
   : mp_map(NULL)
   , m_size(0)
-  , m_lock(false)
+  , m_lock(locked)
   {
    //empty
   }
