@@ -287,7 +287,17 @@ typedef struct
 
  _uint inj_ego_delay[EGO_DELAY_SIZE];
 
- _uchar reserved[1035];
+ //Points of the idling RPM grid
+ _int irpm_grid_points[F_IRPM_SLOTS];
+ //Sizes of cells in idling RPM grid (so, we don't need to calculate them at the runtime)
+ _int irpm_grid_sizes[F_IRPM_SLOTS-1];
+
+ //Points of the idling load grid
+ _int iload_grid_points[F_ILOAD_SLOTS];
+ //Sizes of cells in idling load grid (so, we don't need to calculate them at the runtime)
+ _int iload_grid_sizes[F_ILOAD_SLOTS-1];
+
+ _uchar reserved[975];
 }fw_ex_tabs_t;
 
 
@@ -303,9 +313,8 @@ typedef struct
  _uchar iac_cond_add;
  _int  aircond_clt;
  _uchar aircond_tps;
- _int  idl_ve;
+ _int  idl_ve[2];
  _uint frap;
- _int  idl_ve_g;
  _int  reserv_0;        //reserved!
  _int  heating_t_off;
  _uchar heating_time;
@@ -408,10 +417,12 @@ typedef struct
 
  _uchar inj_prime_times;
 
+ _uchar use_idl_ve[2];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1899];
+ _uchar reserved[1513];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -949,6 +960,34 @@ void CFirmwareDataMediator::SetVE2Map(int i_index, const float* ip_values)
  for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
  {
   _uchar *p = &(p_fd->tables[i_index].inj_ve2[0][0]);
+  w12SetCell(p, i, MathHelpers::Round(ip_values[i]*VE_MAPS_M_FACTOR));
+ }
+}
+
+void CFirmwareDataMediator::GetIVEMap(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (INJ_IVE_POINTS_F * INJ_IVE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].inj_ive[0][0]);
+  op_values[i] = ((float)w12GetCell(p, i)) / VE_MAPS_M_FACTOR;
+ }
+}
+
+void CFirmwareDataMediator::SetIVEMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (INJ_IVE_POINTS_F * INJ_IVE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->tables[i_index].inj_ive[0][0]);
   w12SetCell(p, i, MathHelpers::Round(ip_values[i]*VE_MAPS_M_FACTOR));
  }
 }
@@ -1617,6 +1656,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   //fuel injection
   GetVEMap(i,op_fwd->maps[i].inj_ve);
   GetVE2Map(i,op_fwd->maps[i].inj_ve2);
+  GetIVEMap(i,op_fwd->maps[i].inj_ive);
   GetAFRMap(i,op_fwd->maps[i].inj_afr);
   GetCrnkMap(i,op_fwd->maps[i].inj_cranking);
   GetWrmpMap(i,op_fwd->maps[i].inj_warmup);
@@ -1700,6 +1740,16 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  float slots2[F_LOAD_SLOTS]; GetLoadGridMap(slots2);
  for(i = 0; i < F_LOAD_SLOTS; ++i)
   op_fwd->load_slots[i] = slots2[i];
+
+ //Copy table with idling RPM grid
+ float slots3[F_IRPM_SLOTS]; GetIRPMGridMap(slots3);
+ for(i = 0; i < F_IRPM_SLOTS; ++i)
+  op_fwd->irpm_slots[i] = slots3[i];
+
+ //Copy table with idling load grid
+ float slots4[F_ILOAD_SLOTS]; GetILoadGridMap(slots4);
+ for(i = 0; i < F_ILOAD_SLOTS; ++i)
+  op_fwd->iload_slots[i] = slots4[i];
 }
 
 void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
@@ -1717,6 +1767,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   //fuel injection
   SetVEMap(i,ip_fwd->maps[i].inj_ve);
   SetVE2Map(i,ip_fwd->maps[i].inj_ve2);
+  SetIVEMap(i,ip_fwd->maps[i].inj_ive);
   SetAFRMap(i,ip_fwd->maps[i].inj_afr);
   SetCrnkMap(i,ip_fwd->maps[i].inj_cranking);
   SetWrmpMap(i,ip_fwd->maps[i].inj_warmup);
@@ -1795,6 +1846,12 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  //Check load grids compatibility and set load grid
  if (CheckLoadGridsCompatibility(ip_fwd->load_slots))
   SetLoadGridMap(ip_fwd->load_slots);
+ //Check idling RPM grids compatibility and set idling RPM grid
+ if (CheckIRPMGridsCompatibility(ip_fwd->irpm_slots))
+  SetIRPMGridMap(ip_fwd->irpm_slots);
+ //Check idling load grids compatibility and set idling load grid
+ if (CheckILoadGridsCompatibility(ip_fwd->iload_slots))
+  SetILoadGridMap(ip_fwd->iload_slots);
 }
 
 bool CFirmwareDataMediator::CheckRPMGridsCompatibility(const float* rpmGrid)
@@ -1830,6 +1887,30 @@ bool CFirmwareDataMediator::CheckLoadGridsCompatibility(const float* lodGrid)
    match = false;
  if (!match)
   return (IDYES==SECUMessageBox(MLL::LoadString(IDS_LOAD_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
+ return true;
+}
+
+bool CFirmwareDataMediator::CheckIRPMGridsCompatibility(const float* rpmGrid)
+{
+ bool match = true;
+ float slots[F_IRPM_SLOTS]; GetIRPMGridMap(slots);
+ for(int i = 0; i < F_IRPM_SLOTS; ++i)
+  if (rpmGrid[i] != slots[i])
+   match = false;
+ if (!match)
+  return (IDYES==SECUMessageBox(MLL::LoadString(IDS_IRPM_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
+ return true;
+}
+
+bool CFirmwareDataMediator::CheckILoadGridsCompatibility(const float* lodGrid)
+{
+ bool match = true;
+ float slots[F_ILOAD_SLOTS]; GetILoadGridMap(slots);
+ for(int i = 0; i < F_ILOAD_SLOTS; ++i)
+  if (lodGrid[i] != slots[i])
+   match = false;
+ if (!match)
+  return (IDYES==SECUMessageBox(MLL::LoadString(IDS_ILOAD_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
  return true;
 }
 
@@ -2046,6 +2127,71 @@ void CFirmwareDataMediator::SetLoadGridMap(const float* ip_values)
  //calculate sizes
  for(size_t i = 0; i < F_LOAD_SLOTS-1; i++)
   p_fd->extabs.load_grid_sizes[i] = p_fd->extabs.load_grid_points[i+1] - p_fd->extabs.load_grid_points[i];
+}
+
+void CFirmwareDataMediator::GetIRPMGridMap(float* op_values)
+{
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < F_IRPM_SLOTS; i++)
+ {
+  op_values[i] = p_fd->extabs.irpm_grid_points[i];
+  float ggg = op_values[i];
+ }
+}
+
+void CFirmwareDataMediator::SetIRPMGridMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ if (!ip_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ //store grid points
+ for(size_t i = 0; i < F_IRPM_SLOTS; i++)
+  p_fd->extabs.irpm_grid_points[i] = MathHelpers::Round(ip_values[i]);
+
+ //calculate sizes
+ for(size_t i = 0; i < F_IRPM_SLOTS-1; i++)
+  p_fd->extabs.irpm_grid_sizes[i] = p_fd->extabs.irpm_grid_points[i+1] - p_fd->extabs.irpm_grid_points[i];
+}
+
+void CFirmwareDataMediator::GetILoadGridMap(float* op_values)
+{
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < F_ILOAD_SLOTS; i++)
+  op_values[i] = ((float)p_fd->extabs.iload_grid_points[i]) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
+}
+
+void CFirmwareDataMediator::SetILoadGridMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ if (!ip_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ //store grid points
+ for(size_t i = 0; i < F_ILOAD_SLOTS; i++)
+  p_fd->extabs.iload_grid_points[i] = MathHelpers::Round(ip_values[i] * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ //calculate sizes
+ for(size_t i = 0; i < F_ILOAD_SLOTS-1; i++)
+  p_fd->extabs.iload_grid_sizes[i] = p_fd->extabs.iload_grid_points[i+1] - p_fd->extabs.iload_grid_points[i];
 }
 
 void CFirmwareDataMediator::GetATSAACMap(float* op_values, bool i_original /* = false */)
@@ -3190,12 +3336,12 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.iac_cond_add = (exd.iac_cond_add / 2.0f);
  o_data.aircond_clt = ((float)exd.aircond_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.aircond_tps = ((float)exd.aircond_tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
- o_data.idl_ve = ((float)exd.idl_ve) / VE_MAPS_M_FACTOR;
+ o_data.idl_ve[0] = ((float)exd.idl_ve[0]) / VE_MAPS_M_FACTOR;
+ o_data.idl_ve[1] = ((float)exd.idl_ve[1]) / VE_MAPS_M_FACTOR;
  o_data.evap_clt = ((float)exd.evap_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.evap_tps_lo = ((float)exd.evap_tps_lo) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.evap_tps_hi = ((float)exd.evap_tps_hi) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.frap = ((float)exd.frap) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- o_data.idl_ve_g = ((float)exd.idl_ve_g) / VE_MAPS_M_FACTOR;
  o_data.heating_t_off = ((float)exd.heating_t_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.heating_time = ((float)exd.heating_time) / 10.0f; //convert from 6 sec units to minutes
  o_data.idltorun_stp_en = ((float)exd.idltorun_stp_en) / 32.0f; //convert to %
@@ -3317,6 +3463,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.aftstr_flat_strokes = exd.aftstr_flat_strokes;
  o_data.inj_prime_times = exd.inj_prime_times;
+ o_data.use_idl_ve[0] = exd.use_idl_ve[0];
+ o_data.use_idl_ve[1] = exd.use_idl_ve[1];
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3328,12 +3476,12 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.iac_cond_add = MathHelpers::Round(i_data.iac_cond_add * 2.0f);
  exd.aircond_clt = MathHelpers::Round(i_data.aircond_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.aircond_tps = MathHelpers::Round(i_data.aircond_tps * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
- exd.idl_ve = MathHelpers::Round(i_data.idl_ve * VE_MAPS_M_FACTOR);
+ exd.idl_ve[0] = MathHelpers::Round(i_data.idl_ve[0] * VE_MAPS_M_FACTOR);
+ exd.idl_ve[1] = MathHelpers::Round(i_data.idl_ve[1] * VE_MAPS_M_FACTOR);
  exd.evap_clt = MathHelpers::Round(i_data.evap_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.evap_tps_lo = MathHelpers::Round(i_data.evap_tps_lo * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.evap_tps_hi = MathHelpers::Round(i_data.evap_tps_hi * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.frap = MathHelpers::Round(i_data.frap * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
- exd.idl_ve_g = MathHelpers::Round(i_data.idl_ve_g * VE_MAPS_M_FACTOR);
  exd.heating_t_off = MathHelpers::Round(i_data.heating_t_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.heating_time = MathHelpers::Round(i_data.heating_time * 10.0f);
  exd.idltorun_stp_en = MathHelpers::Round(i_data.idltorun_stp_en * 32.0f);
@@ -3449,6 +3597,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.aftstr_flat_strokes = i_data.aftstr_flat_strokes;
  exd.inj_prime_times = i_data.inj_prime_times;
+ exd.use_idl_ve[0] = i_data.use_idl_ve[0];
+ exd.use_idl_ve[1] = i_data.use_idl_ve[1];
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
@@ -3596,6 +3746,7 @@ void CFirmwareDataMediator::GetSetMap(int i_index, int id, float* op_values, boo
   case ETMT_IGN_TEMPI: GetTempIdlMap(i_index, op_values, i_original); break;
   case ETMT_INJ_VE: GetVEMap(i_index, op_values, i_original); break;
   case ETMT_INJ_VE2: GetVE2Map(i_index, op_values, i_original); break;
+  case ETMT_INJ_IVE: GetIVEMap(i_index, op_values, i_original); break;
   case ETMT_INJ_AFR: GetAFRMap(i_index, op_values, i_original); break;
   case ETMT_INJ_CRNK: GetCrnkMap(i_index, op_values, i_original); break;
   case ETMT_INJ_WRMP: GetWrmpMap(i_index, op_values, i_original); break;
@@ -3639,6 +3790,7 @@ void CFirmwareDataMediator::SetSetMap(int i_index, int id, const float* ip_value
   case ETMT_IGN_TEMPI: SetTempIdlMap(i_index, ip_values); break;
   case ETMT_INJ_VE: SetVEMap(i_index, ip_values); break;
   case ETMT_INJ_VE2: SetVE2Map(i_index, ip_values); break;
+  case ETMT_INJ_IVE: SetIVEMap(i_index, ip_values); break;
   case ETMT_INJ_AFR: SetAFRMap(i_index, ip_values); break;
   case ETMT_INJ_CRNK: SetCrnkMap(i_index, ip_values); break;
   case ETMT_INJ_WRMP: SetWrmpMap(i_index, ip_values); break;

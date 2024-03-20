@@ -234,6 +234,10 @@ void S3FImportController::OnOkPressed(void)
  memcpy(mp_fwd->clt_slots, mp_s3f_io->GetData().clt_slots, sizeof(float) * F_TMP_SLOTS);
  //copy load grid
  memcpy(mp_fwd->load_slots, mp_s3f_io->GetData().load_slots, sizeof(float) * F_LOAD_SLOTS);
+ //copy idling VE RPM grid
+ memcpy(mp_fwd->irpm_slots, mp_s3f_io->GetData().irpm_slots, sizeof(float) * F_IRPM_SLOTS);
+ //copy idling VE load grid
+ memcpy(mp_fwd->iload_slots, mp_s3f_io->GetData().iload_slots, sizeof(float) * F_ILOAD_SLOTS);
 }
 
 void S3FImportController::OnCancelPressed(void)
@@ -281,6 +285,9 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ve2, mp_s3f_io->GetData().maps[other_sel].inj_ve2, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_VEI_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_ive, mp_s3f_io->GetData().maps[other_sel].inj_ive, sizeof(float) * INJ_IVE_POINTS_L * INJ_IVE_POINTS_F);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_afr, mp_s3f_io->GetData().maps[other_sel].inj_afr,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
@@ -417,6 +424,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0125 = (mp_s3f_io->GetVersion() > 0x0124);
  bool sv0126 = (mp_s3f_io->GetVersion() > 0x0125);
  bool sv0127 = (mp_s3f_io->GetVersion() > 0x0126);
+ bool sv0128 = (mp_s3f_io->GetVersion() > 0x0127);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -483,6 +491,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AEMAP_MAP, sv0125);     //since v01.25
  mp_view->SetFWDFlag(FLAG_THRASS_MAP, sv0126);       //since v01.26
  mp_view->EnableFWDFlag(FLAG_THRASS_MAP, sv0126);    //since v01.26
+ mp_view->SetFWDFlag(FLAG_VEI_MAP, sv0128);          //since v01.28
+ mp_view->EnableFWDFlag(FLAG_VEI_MAP, sv0128);       //since v01.28
 
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
@@ -770,6 +780,10 @@ void S3FExportController::OnOkPressed(void)
  memcpy(mp_s3f_io->GetDataLeft().clt_slots, mp_fwd->clt_slots, sizeof(float) * F_TMP_SLOTS);
  //copy load grid
  memcpy(mp_s3f_io->GetDataLeft().load_slots, mp_fwd->load_slots, sizeof(float) * F_LOAD_SLOTS);
+ //copy idling VE RPM grid
+ memcpy(mp_s3f_io->GetDataLeft().irpm_slots, mp_fwd->irpm_slots, sizeof(float) * F_IRPM_SLOTS);
+ //copy idling VE load grid
+ memcpy(mp_s3f_io->GetDataLeft().iload_slots, mp_fwd->iload_slots, sizeof(float) * F_ILOAD_SLOTS);
 }
 
 void S3FExportController::OnCancelPressed(void)
@@ -810,6 +824,9 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ve2, mp_fwd->maps[current_sel].inj_ve2, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_VEI_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ive, mp_fwd->maps[current_sel].inj_ive, sizeof(float) * INJ_IVE_POINTS_L * INJ_IVE_POINTS_F);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_afr, mp_fwd->maps[current_sel].inj_afr, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
@@ -920,6 +937,7 @@ void S3FExportController::OnViewActivate(void)
  //injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_VE2_MAP, true);
+ mp_view->SetFWDFlag(FLAG_VEI_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
  mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
  mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);

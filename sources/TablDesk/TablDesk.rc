@@ -59,6 +59,7 @@ BEGIN
     CONTROL         "ДАД/ДПДЗ по оси нагр.",IDC_TD_VIEW_TPSZON_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,633,96,18
     CONTROL         "Скважность ШИМ1",IDC_TD_VIEW_PWM1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,652,96,18
     CONTROL         "Скважность ШИМ2",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,671,96,18
+    CONTROL         "Коэфф. наполн. ХХ",IDC_TD_VIEW_IVE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,690,96,18
 END
 
 IDD_TD_SEPTABLES_PANEL DIALOG 0, 0, 140, 375
@@ -138,7 +139,7 @@ BEGIN
     LTEXT           "Сопротивление катушки (Ом)",IDC_STATIC,82,16,63,16
 END
 
-IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 172
+IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 275
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Редактирование сеток оборотов, нагрузки и температуры ОЖ"
 FONT 8, "MS Sans Serif"
@@ -203,8 +204,32 @@ BEGIN
     CTEXT           "",IDC_LGE_ERROR_MSG_TEXT,305,134,180,16
     CTEXT           "Сетка по оси нагрузки",IDC_STATIC,30,134,120,16
 
-    DEFPUSHBUTTON   "OK",IDOK,35,152,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,95,152,50,14
+    EDITTEXT        IDC_IRGE_EDIT_0,  5, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_1, 35, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_2, 65, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_3, 95, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_4, 125,164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_5, 155,164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_6, 185,164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_7, 215,164,27,15,ES_AUTOHSCROLL
+    PUSHBUTTON      "Вернуть стандартные значения",IDC_IRGE_LOAD_DEF_VAL,185,186,115,14
+    CTEXT           "",IDC_IRGE_ERROR_MSG_TEXT,305,186,180,16
+    CTEXT           "Сетка по оси оборотов VE ХХ",IDC_STATIC,30,186,120,16
+
+    EDITTEXT        IDC_ILGE_EDIT_0,  5, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_1, 35, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_2, 65, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_3, 95, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_4, 125,216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_5, 155,216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_6, 185,216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_7, 215,216,27,15,ES_AUTOHSCROLL
+    PUSHBUTTON      "Вернуть стандартные значения",IDC_ILGE_LOAD_DEF_VAL,185,238,115,14
+    CTEXT           "",IDC_ILGE_ERROR_MSG_TEXT,305,238,180,16
+    CTEXT           "Сетка по оси нагрузки VE ХХ",IDC_STATIC,30,238,120,16
+
+    DEFPUSHBUTTON   "OK",IDOK,35,256,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,95,256,50,14
 END
 
 IDD_GRID_MODE_EDITOR_IGN DIALOGEX 0, 0, 530, 344
@@ -274,10 +299,12 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "VE map",IDC_GME_INJ_VE,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
     CONTROL         "VE map2",IDC_GME_INJ_VE2,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
+    CONTROL         "VE mapI",IDC_GME_INJ_VEI,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
     CONTROL         "Lambda delay",IDC_GME_INJ_LAMDEL_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,150,100,WS_EX_STATICEDGE
     CONTROL         "Cell weighting",IDC_GME_INJ_CELWGT_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
-    CONTROL         "VE1",IDC_GME_INJ_VE1_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,300,260,50,10
+    CONTROL         "VE1",IDC_GME_INJ_VE1_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,300,260,50,10
     CONTROL         "VE2",IDC_GME_INJ_VE2_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,360,260,50,10
+    CONTROL         "VE ХХ",IDC_GME_INJ_VEI_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,420,260,50,10
     GROUPBOX        "Управление автонастройкой",IDC_GME_AUTOTUNE_GROUPBOX,10,267,490,50,0,WS_EX_TRANSPARENT
     CONTROL         "Задержка лямбды",IDC_GME_INJ_LAMDEL_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,281,70,20
     CONTROL         "Вес ячеек",IDC_GME_INJ_CELWGT_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,100,281,70,20
@@ -637,6 +664,7 @@ BEGIN
     IDS_IT_MAP              "Фаза впрыска"
     IDS_VE_MAP              "Коэффициент наполнения (Объёмный КПД двигателя)"
     IDS_VE2_MAP             "Коэффициент наполнения (Объёмный КПД двигателя) 2"
+    IDS_IVE_MAP             "Коэффициент наполнения на ХХ"
     IDS_AFR_MAP             "Соотношение воздух/топливо в зависимости от оборотов и нагрузки"
     IDS_CRNK_MAP            "Длительность впрыска на пуске"
     IDS_WRMP_MAP            "Обогащение при прогреве"
@@ -720,6 +748,8 @@ BEGIN
     IDS_RGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки оборотов, которые используются по умолчанию"
     IDS_CGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки температуры, которые используются по умолчанию"
     IDS_LGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки нагрузки, которые используются по умолчанию"
+    IDS_IRGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки оборотов VE ХХ, которые используются по умолчанию"
+    IDS_ILGE_LOAD_DEF_VAL_TT  "Вернуть стандартные значения сетки нагрузки VE ХХ, которые используются по умолчанию"
     IDS_TD_VIEW_START_MAP_TT "Таблица пускового УОЗ. Используется при запуске двигателя пока обороты не достигнут значения 'Обороты пер. с пуск. УОЗ'"
     IDS_TD_VIEW_IDLE_MAP_TT  "Таблица УОЗ на холостом ходу. Используется когда прошивка определяет, что дроссельная заслонка закрыта."
     IDS_TD_VIEW_WORK_MAP_TT  "Таблица УОЗ рабочего режима. Используется когда прошивка определяет, что дроссельная заслонка открыта."
@@ -730,6 +760,7 @@ BEGIN
     IDS_TD_VIEW_GDP_MAP_TT "Задает базовое положение газового дозатора. Все последующие коррекции накладываются на это значение."
     IDS_TD_VIEW_VE_MAP_TT  "Используется при вычислении длительности впрыска и для коррекции положения газового дозатора"
     IDS_TD_VIEW_VE2_MAP_TT  "2-я таблица наполнения. Используется при вычислении длительности впрыска"
+    IDS_TD_VIEW_IVE_MAP_TT "Таблица наполнения используемая при вычислении длительности впрыска на холостом ходу. "
     IDS_TD_VIEW_AFR_MAP_TT "Используется при вычисления длительности впрыска и для коррекции положения газового дозатора"
     IDS_TD_VIEW_WRMP_MAP_TT "Используется для коррекции длительности впрыска от температуры двигателя. Данная таблица также используется для коррекции положения газового дозатора. Длительность впрыска умножается на значение этой коррекции."
     IDS_TD_VIEW_ATSC_MAP_TT "Коррекция длительности впрыска по температуре воздуха (плотность воздуха меняется с изменением температуры). Данная таблица также используется для коррекции положения дозатора газа и воздушной заслонки карбюратора."
@@ -839,6 +870,7 @@ BEGIN
     IDS_CESETT_MAP_V_USEEM_CHECK_TT "Использовать резервное значение в случае ошибки."
     IDS_GME_INJ_VE1_RADIOBOX_TT "Выбрать таблицу наполнения 1 для редактирования/автонастройки"
     IDS_GME_INJ_VE2_RADIOBOX_TT "Выбрать таблицу наполнения 2 для редактирования/автонастройки. В данной таблице по оси нагрузки используется ДПДЗ."
+    IDS_GME_INJ_VEI_RADIOBOX_TT "Выбрать таблицу наполнения ХХ редактирования/автонастройки."
     IDS_TD_MANINJPWC_MAP_TT  "Таблица зависимости коэффициента ручной коррекции длительности впрыска от напряжения на входе INJPWC_I"
     IDS_MANINJPWC_MAP "Коэффициент ручной коррекции длительности впрыска"
     IDS_CESETT_OILPRESS_THRD_EDIT_TT "Установите значение минимально допустимого давления масла в двигателе. Если давление упадет ниже этого значения, то будет установлен соответствующий код ошибки."
@@ -935,6 +967,7 @@ BEGIN
     CONTROL         "MAP/TPS on load axis",IDC_TD_VIEW_TPSZON_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,633,96,18
     CONTROL         "PWM1 duty",IDC_TD_VIEW_PWM1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,652,96,18
     CONTROL         "PWM2 duty",IDC_TD_VIEW_PWM2_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,671,96,18
+    CONTROL         "Idling VE",IDC_TD_VIEW_IVE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,690,96,18
 END
 
 IDD_TD_SEPTABLES_PANEL DIALOGEX 0, 0, 140, 375
@@ -1014,7 +1047,7 @@ BEGIN
     LTEXT           "Coil resistance (Ohm)",IDC_STATIC,82,16,63,16
 END
 
-IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 172
+IDD_RPM_GRID_EDITOR DIALOGEX 0, 0, 490, 275
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Editing RPM, load and CLT grids"
 FONT 8, "MS Sans Serif"
@@ -1079,8 +1112,32 @@ BEGIN
     CTEXT           "",IDC_LGE_ERROR_MSG_TEXT,305,134,180,16
     CTEXT           "Load axis's grid",IDC_STATIC,30,134,120,16
 
-    PUSHBUTTON      "Cancel",IDCANCEL,95,152,50,14
-    DEFPUSHBUTTON   "OK",IDOK,35,152,50,14
+    EDITTEXT        IDC_IRGE_EDIT_0,  5, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_1, 35, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_2, 65, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_3, 95, 164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_4, 125,164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_5, 155,164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_6, 185,164,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IRGE_EDIT_7, 215,164,27,15,ES_AUTOHSCROLL
+    PUSHBUTTON      "Load standard values",IDC_IRGE_LOAD_DEF_VAL,185,186,115,14
+    CTEXT           "",IDC_IRGE_ERROR_MSG_TEXT,305,186,180,16
+    CTEXT           "RPM axis's grid for idling VE",IDC_STATIC,30,186,120,16
+
+    EDITTEXT        IDC_ILGE_EDIT_0,  5, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_1, 35, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_2, 65, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_3, 95, 216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_4, 125,216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_5, 155,216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_6, 185,216,27,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ILGE_EDIT_7, 215,216,27,15,ES_AUTOHSCROLL
+    PUSHBUTTON      "Load standard values",IDC_ILGE_LOAD_DEF_VAL,185,238,115,14
+    CTEXT           "",IDC_ILGE_ERROR_MSG_TEXT,305,238,180,16
+    CTEXT           "Load axis's grid for idling VE",IDC_STATIC,30,238,120,16
+
+    PUSHBUTTON      "Cancel",IDCANCEL,95,256,50,14
+    DEFPUSHBUTTON   "OK",IDOK,35,256,50,14
 END
 
 IDD_GRID_MODE_EDITOR_IGN DIALOGEX 0, 0, 530, 344
@@ -1149,10 +1206,12 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "VE map",IDC_GME_INJ_VE,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
     CONTROL         "VE map2",IDC_GME_INJ_VE2,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
+    CONTROL         "VE mapI",IDC_GME_INJ_VEI,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
     CONTROL         "Lambda delay",IDC_GME_INJ_LAMDEL_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,150,100,WS_EX_STATICEDGE
     CONTROL         "Cell weighting",IDC_GME_INJ_CELWGT_MAP,"MFCMapEditorCtrl",WS_TABSTOP | NOT WS_VISIBLE,5,10,510,250,WS_EX_STATICEDGE
     CONTROL         "VE1",IDC_GME_INJ_VE1_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,300,260,50,10
     CONTROL         "VE2",IDC_GME_INJ_VE2_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,360,260,50,10
+    CONTROL         "Idling VE",IDC_GME_INJ_VEI_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,420,260,50,10
     GROUPBOX        "Autotune control",IDC_GME_AUTOTUNE_GROUPBOX,10,267,490,50, 0, WS_EX_TRANSPARENT
     CONTROL         "Lambda delay",IDC_GME_INJ_LAMDEL_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,281,70,20
     CONTROL         "Cell weighting",IDC_GME_INJ_CELWGT_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,100,281,70,20
@@ -1512,6 +1571,7 @@ BEGIN
     IDS_IT_MAP              "Injection timing"
     IDS_VE_MAP              "Volumetric efficiency"
     IDS_VE2_MAP             "Volumetric efficiency 2"
+    IDS_IVE_MAP             "Volumetric efficiency on idling"
     IDS_AFR_MAP             "Air/fuel ratio vs RPM and Load"
     IDS_CRNK_MAP            "Injection pulse width on cranking"
     IDS_WRMP_MAP            "Warmup enrichment vs coolant temperature"
@@ -1595,6 +1655,8 @@ BEGIN
     IDS_RGE_LOAD_DEF_VAL_TT  "Return standard RPM grid values which are used by default"
     IDS_CGE_LOAD_DEF_VAL_TT  "Return standard temperature grid values which are used by default"
     IDS_LGE_LOAD_DEF_VAL_TT  "Return standard load grid values which are used by default"
+    IDS_IRGE_LOAD_DEF_VAL_TT "Return standard idling VE RPM grid values which are used by default"
+    IDS_ILGE_LOAD_DEF_VAL_TT "Return standard idling VE load grid values which are used by default"
     IDS_TD_VIEW_START_MAP_TT "Look up table of ignition timing for cranking mode. It is used when starting the engine until RPM reaches the value of 'Switch from cranking ignition map RPM'"
     IDS_TD_VIEW_IDLE_MAP_TT  "Look up table of ignition timing for idle mode. Used when firmware determines that the throttle is closed."
     IDS_TD_VIEW_WORK_MAP_TT  "Look up table of ignition timing for working mode. Used when firmware determines that the throttle is open."
@@ -1605,6 +1667,7 @@ BEGIN
     IDS_TD_VIEW_GDP_MAP_TT "Sets base position of the gas dispenser. All subsequent corrections are superimposed on this value."
     IDS_TD_VIEW_VE_MAP_TT  "Used to calculate injection PW and for correction of gas dispenser's position."
     IDS_TD_VIEW_VE2_MAP_TT  "Secondary VE map. Used for calculation of injection PW"
+    IDS_TD_VIEW_IVE_MAP_TT  "VE map for idling. Used for calculation of injection PW on idling."
     IDS_TD_VIEW_AFR_MAP_TT "Used to calculate injection PW and for correction of gas dispenser's position."
     IDS_TD_VIEW_WRMP_MAP_TT "Used to correct injection PW vs CLT. This table is also used to correct the position of gas dispenser. Injection PW is multiplied by this correction."
     IDS_TD_VIEW_ATSC_MAP_TT "Correction of injection PW vs intake air temperature (air density changes with temperature). This table is also used to correct the position of gas dispenser and carburetor's choke."
@@ -1712,6 +1775,7 @@ BEGIN
     IDS_CESETT_MAP_V_USEEM_CHECK_TT "Use reserve value in case of error."
     IDS_GME_INJ_VE1_RADIOBOX_TT "Select VE map 1 for editing/automatic tuning"
     IDS_GME_INJ_VE2_RADIOBOX_TT "Select VE map 2 for editing/automatic tuning. This table use TPS for load axis"
+    IDS_GME_INJ_VEI_RADIOBOX_TT "Select Idling VE map for editing/automatic tuning."
     IDS_TD_FTLS_CURVE_TT       "Setting level of fuel versus voltage dependance for the FTLS. This table is necessary for the correct conversion of the voltage (V) at the sensor to the level of fuel in fuel tank (L)."
     IDS_TD_EGTS_CURVE_TT       "Setting exhaust gas temperature versus voltage dependance for the EGTS. This table is necessary for the correct conversion of the voltage (V) at the sensor to exhaust gas temperature (°C)."
     IDS_TD_OPS_CURVE_TT        "Setting oil pressure versus voltage dependance for the OPS. This table is necessary for the correct conversion of the voltage (V) at the sensor to pressure of oil in the engine (kg/cm2)."

@@ -397,6 +397,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optGridMapInjWnd;
   OptField_t<POINT> m_optVEMapWnd;
   OptField_t<POINT> m_optVE2MapWnd;
+  OptField_t<POINT> m_optVEIMapWnd;
   OptField_t<POINT> m_optAFRMapWnd;
   OptField_t<POINT> m_optCrnkMapWnd;
   OptField_t<POINT> m_optWrmpMapWnd;
@@ -471,6 +472,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optGridMapInjWnd1;
   OptField_t<POINT> m_optVEMapWnd1;
   OptField_t<POINT> m_optVE2MapWnd1;
+  OptField_t<POINT> m_optVEIMapWnd1;
   OptField_t<POINT> m_optAFRMapWnd1;
   OptField_t<POINT> m_optCrnkMapWnd1;
   OptField_t<POINT> m_optWrmpMapWnd1;
@@ -553,6 +555,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optGridMapInjWndSize;
   OptField_t<POINT> m_optVEMapWndSize;
   OptField_t<POINT> m_optVE2MapWndSize;
+  OptField_t<POINT> m_optVEIMapWndSize;
   OptField_t<POINT> m_optAFRMapWndSize;
   OptField_t<POINT> m_optCrnkMapWndSize;
   OptField_t<POINT> m_optWrmpMapWndSize;
@@ -627,6 +630,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optGridMapInjWndSize1;
   OptField_t<POINT> m_optVEMapWndSize1;
   OptField_t<POINT> m_optVE2MapWndSize1;
+  OptField_t<POINT> m_optVEIMapWndSize1;
   OptField_t<POINT> m_optAFRMapWndSize1;
   OptField_t<POINT> m_optCrnkMapWndSize1;
   OptField_t<POINT> m_optWrmpMapWndSize1;
@@ -843,6 +847,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepIdleMap;
   OptField_t<float> m_optPtMovStepVeMap;
   OptField_t<float> m_optPtMovStepVe2Map;
+  OptField_t<float> m_optPtMovStepVeiMap;
   OptField_t<float> m_optPtMovStepAfrMap;
   OptField_t<float> m_optPtMovStepCrnkMap;
   OptField_t<float> m_optPtMovStepWrmpMap;

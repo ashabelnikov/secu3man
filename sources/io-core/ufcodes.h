@@ -81,4 +81,7 @@
 
 #define   LTFT_DAT     'K'
 
+#define   IRPMGRD_PAR  'L'
+#define   ILODGRD_PAR  'M'
+
 #endif //_UFCODES_H_

@@ -212,6 +212,9 @@ void CAutoTuneController::SetDynamicValues(const SECU3IO::SensorDat& dv)
  else
   mp_view->SetStatusText(_T(""));
 
+ if (dv.idlve_use)
+  return; //idling VE map is active now, which is not supported by autotuning
+
  float e_load = (0==m_active_ve) ? e.load : e.tps;
 
  //Add point to our map of scattered points

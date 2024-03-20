@@ -72,6 +72,7 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
   WRITEBIT16(service_flags, 6, i_data.idlreg_use);
   WRITEBIT16(service_flags, 7, i_data.octan_use);
   WRITEBIT16(service_flags, 8, i_data.rigid_use);
+  WRITEBIT16(service_flags, 9, i_data.idlve_use);
 
   int uniout_flags = 0;
   for(int i= 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)

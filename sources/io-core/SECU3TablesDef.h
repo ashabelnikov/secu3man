@@ -98,6 +98,8 @@ typedef struct
 
  _uchar inj_thrass[INJ_THRASS_SIZE];                   //!< throttle assistant map
 
+ _uchar inj_ive[INJ_IVE_POINTS_L][(INJ_IVE_POINTS_F*3)/2];// Idling VE (12 bit per cell, 8 rows, 12 bytes per row)
+
  _uchar reserved[21];                                 // reserved bytes - for compatibility
  _uint  checksum;
 }f_data_t;

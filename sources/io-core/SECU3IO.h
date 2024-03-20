@@ -136,6 +136,8 @@ namespace SECU3IO
   float lambda_mx;                      //mixed voltages from two EGO sensors
 
   float tchrg;                          //Corrected MAT value
+
+  bool idlve_use;                       //Idling VE use flag
  };
 
  struct DbgvarDat
@@ -821,12 +823,11 @@ const int INPAVNUM = 14;
   float iac_cond_add;
   float aircond_clt;
   float aircond_tps;
-  float idl_ve;
+  float idl_ve[2];
   float evap_clt;
   float evap_tps_lo;
   float evap_tps_hi;
   float frap;
-  float idl_ve_g;
   float heating_t_off;
   float heating_time;
   float idltorun_stp_en;
@@ -921,11 +922,17 @@ const int INPAVNUM = 14;
 
   int aftstr_flat_strokes;
   int inj_prime_times;
+  int use_idl_ve[2];
  };
 
- const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
  const float temp_map_tmp_slots[16]  = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};
+ const float work_map_lod_slots[16]  = {25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
+ const float vei_map_rpm_slots[16]  = {600,700,800,900,1000,1100,1200,1300};
+ const float vei_map_lod_slots[16]  = {24,26,28,30,32,34,36,38};
+
+ const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
+
  const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
  const float rigid_map_slots[8]  = {0.0000f, 0.1429f, 0.2857f, 0.4286f, 0.5714f, 0.7143f, 0.8571f, 1.0000f};
@@ -935,8 +942,6 @@ const int INPAVNUM = 14;
  const float maninjpwc_map_slots[17]  = {.0f,0.312f,0.625f,0.937f,1.250f,1.562f,1.875f,2.187f,2.50f,2.812f,3.125f,3.437f,3.750f,4.062f,4.375f,4.687f,5.000f};
 
  const float voltage_map_slots[16] = {5.4f,6.2f,7.0f,7.8f,8.6f,9.4f,10.2f,11.0f,11.8f,12.6f,13.4f,14.2f,15.0f,15.8f,16.6f,17.4f};
-
- const float work_map_lod_slots[16]  = {25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
 
  const float inj_cyladd_map_slots[8] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
 

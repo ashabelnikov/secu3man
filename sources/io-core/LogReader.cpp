@@ -565,6 +565,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.idlreg_use = CHECKBIT32(service_flags, 6);
  o_data.octan_use =  CHECKBIT32(service_flags, 7);
  o_data.rigid_use =  CHECKBIT32(service_flags, 8);
+ o_data.idlve_use =  CHECKBIT32(service_flags, 9);
 
  //all read without errors
  return true;

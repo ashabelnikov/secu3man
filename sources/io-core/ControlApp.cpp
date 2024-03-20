@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 104)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 105)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -701,6 +701,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  sensorDat.gps = ((float)gps) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  //calculate here differential pressure
  sensorDat.mapd = (sensorDat.gps - sensorDat.pressure);
+
+ //8 bit - additional flags
+ int addflg = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &addflg))
+  return false;
+ sensorDat.idlve_use = CHECKBIT8(addflg, 0);
 
  return true;
 }
@@ -1985,7 +1991,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   }
   else
   {
-   if (editTabPar.tab_id == ETMT_INJ_VE || editTabPar.tab_id == ETMT_INJ_VE2) //volumetric efficiency maps
+   if (editTabPar.tab_id == ETMT_INJ_VE || editTabPar.tab_id == ETMT_INJ_VE2 || editTabPar.tab_id == ETMT_INJ_IVE) //volumetric efficiency maps
    { //VE
     BYTE buff[32]; unsigned char value;
     for(size_t i = 0; i < size; ++i)
@@ -2226,6 +2232,44 @@ bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_IRPMGRD_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::SepTabPar& irpmGrdPar = m_recepted_packet.m_SepTabPar;
+ if (size != 17)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ //адрес фрагмента данных в таблице (смещение в таблице)
+ unsigned char address;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
+  return false;
+ irpmGrdPar.address = address;
+ if (0!=address)
+  return false;  //address must be always zero
+
+ size-=1;
+ size_t div = 2;
+ if (size % div)
+  return false;
+
+ //фрагмент с данными (сетка оборотов)
+ size_t data_size = 0;
+ for(size_t i = 0; i < size / div; ++i)
+ {
+  unsigned char lo_byte, hi_byte;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &lo_byte))
+   return false;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &hi_byte))
+   return false;
+
+  irpmGrdPar.table_data[i] = MAKEWORD(lo_byte, hi_byte);
+  ++data_size;
+ }
+ irpmGrdPar.data_size = data_size;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_CLTGRD_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& cltGrdPar = m_recepted_packet.m_SepTabPar;
@@ -2297,6 +2341,44 @@ bool CControlApp::Parse_LODGRD_PAR(const BYTE* raw_packet, size_t size)
   ++data_size;
  }
  lodGrdPar.data_size = data_size;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
+bool CControlApp::Parse_ILODGRD_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::SepTabPar& ilodGrdPar = m_recepted_packet.m_SepTabPar;
+ if (size != 17)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ //адрес фрагмента данных в таблице (смещение в таблице)
+ unsigned char address;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
+  return false;
+ ilodGrdPar.address = address;
+ if (0!=address)
+  return false;  //address must be always zero
+
+ size-=1;
+ size_t div = 2;
+ if (size % div)
+  return false;
+
+ //load grid data
+ size_t data_size = 0;
+ for(size_t i = 0; i < size / div; ++i)
+ {
+  unsigned char lo_byte, hi_byte;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &lo_byte))
+   return false;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &hi_byte))
+   return false;
+
+  ilodGrdPar.table_data[i] = ((float)MAKEWORD(lo_byte, hi_byte)) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  ++data_size;
+ }
+ ilodGrdPar.data_size = data_size;
 
  return true;
 }
@@ -3273,12 +3355,20 @@ bool CControlApp::ParsePackets()
     if (Parse_RPMGRD_PAR(p_start, p_size))
      break;
     continue;
+   case IRPMGRD_PAR:
+    if (Parse_IRPMGRD_PAR(p_start, p_size))
+     break;
+    continue;
    case CLTGRD_PAR:
     if (Parse_CLTGRD_PAR(p_start, p_size))
      break;
     continue;
    case LODGRD_PAR:
     if (Parse_LODGRD_PAR(p_start, p_size))
+     break;
+    continue;
+   case ILODGRD_PAR:
+    if (Parse_ILODGRD_PAR(p_start, p_size))
      break;
     continue;
    case DIAGINP_DAT:
@@ -3548,6 +3638,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case RPMGRD_PAR:
   case CLTGRD_PAR:
   case LODGRD_PAR:
+  case IRPMGRD_PAR: //idling VE
+  case ILODGRD_PAR: //idling VE
   case DIAGINP_DAT:
   case DIAGOUT_DAT:
   case CHOKE_PAR:
@@ -4139,7 +4231,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->tab_id, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->address, m_outgoing_packet);
 
- if (packet_data->tab_id == ETMT_INJ_VE || packet_data->tab_id == ETMT_INJ_VE2) //Volumetric efficiency map
+ if (packet_data->tab_id == ETMT_INJ_VE || packet_data->tab_id == ETMT_INJ_VE2 || packet_data->tab_id == ETMT_INJ_IVE) //Volumetric efficiency map
  {
   BYTE buff[64];  
   int byte_idx_start = packet_data->address & 0x1;

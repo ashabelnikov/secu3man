@@ -64,8 +64,10 @@ CLPTablesController::CLPTablesController(CLPControlPanelDlg* ip_view, ISettingsD
  m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16);
 
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
+ memset(m_irpm_grid_values, 0, 8 * sizeof(float)); //idling
  memset(m_clt_grid_values, 0, 16 * sizeof(float));
  memset(m_load_grid_values, 0, 16 * sizeof(float));
+ memset(m_iload_grid_values, 0, 8 * sizeof(float)); //idling
   
  mp_view->setOnSelectMapset(MakeDelegate(this,&CLPTablesController::_OnSelectMapSet));
  mp_view->setOnGmeIgnButton(MakeDelegate(this, &CLPTablesController::_OnGmeIgnButton));
@@ -134,6 +136,8 @@ void CLPTablesController::OnActivate(void)
   p_fwdm->GetRPMGridMap(m_rpm_grid_values);
   p_fwdm->GetCLTGridMap(m_clt_grid_values);
   p_fwdm->GetLoadGridMap(m_load_grid_values);  
+  p_fwdm->GetIRPMGridMap(m_irpm_grid_values);
+  p_fwdm->GetILoadGridMap(m_iload_grid_values);  
  }
 
  _MakeChartsChildren(mp_settings->GetChildCharts());
@@ -326,11 +330,11 @@ void CLPTablesController::_OnGmeInjButton(void)
   mp_gridModeEditorInjDlg->BindMaps(m_md.inj_ve, m_md.inj_afr, m_md.inj_timing, m_md.inj_iac_crank_pos, m_md.inj_iac_run_pos, m_md.inj_target_rpm, m_md.inj_idl_rigidity, m_md.inj_iac_corr,
                                     m_md.inj_iac_corr_w, m_md.inj_aftstr, m_md.inj_warmup, m_md.inj_ae_tps, m_md.inj_ae_rpm, m_md.inj_cranking, m_md.inj_dead_time, m_md.inj_ego_curve, 
                                     m_md.inj_iatclt_corr, m_md.inj_tpsswt, m_md.inj_ats_corr, m_md.inj_gts_corr, m_md.inj_gps_corr, m_md.pwm_duty1, m_md.pwm_duty2, m_md.iac_mat_corr,
-                                    m_md.inj_ve2, m_md.inj_tpszon, m_md.inj_cylmult, m_md.inj_cyladd, m_md.inj_ae_map, m_md.inj_thrass);
+                                    m_md.inj_ve2, m_md.inj_tpszon, m_md.inj_cylmult, m_md.inj_cyladd, m_md.inj_ae_map, m_md.inj_thrass, m_md.inj_ive);
 
-  mp_gridModeEditorInjDlg->BindRPMGrid(m_rpm_grid_values);
+  mp_gridModeEditorInjDlg->BindRPMGrid(m_rpm_grid_values, m_irpm_grid_values);
   mp_gridModeEditorInjDlg->BindCLTGrid(m_clt_grid_values);
-  mp_gridModeEditorInjDlg->BindLoadGrid(m_load_grid_values, &m_ve2_map_load_slots[0]);
+  mp_gridModeEditorInjDlg->BindLoadGrid(m_load_grid_values, &m_ve2_map_load_slots[0], m_iload_grid_values);
   mp_gridModeEditorInjDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CLPTablesController::_IsAllowed));
   mp_gridModeEditorInjDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CLPTablesController::_OnMapChanged));
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CLPTablesController::_OnCloseMapWnd));

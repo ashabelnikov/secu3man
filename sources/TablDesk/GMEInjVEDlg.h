@@ -44,17 +44,20 @@ class CGMEInjVEDlg : public CTabDialog
   CGMEInjVEDlg();
  ~CGMEInjVEDlg();
 
-  void BindMaps(float* pVE, float* pVE2);
-  void BindMapsOrig(float* pVE, float* pVE2);
+  void BindMaps(float* pVE, float* pVE2, float* pVEI);
+  void BindMapsOrig(float* pVE, float* pVE2, float* pVEI);
   void BindRPMGrid(float* pGrid);
+  void BindRPMGridI(float* pGrid);
   void BindLoadGrid(const float* pGrid, bool updateLabels = false);
   void BindLoadGrid2(const float* pGrid, bool updateLabels = false);
+  void BindLoadGridI(const float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
   void setOnChange2(EventHandler OnCB);
+  void setOnChangeI(EventHandler OnCB);
   void setOnChangeSettings(EventHandler OnCB);
   void UpdateView(bool axisLabels = false);
 
-  void SetArguments(int rpm, int air_flow, bool strt_use, float load, float tps);
+  void SetArguments(int rpm, int air_flow, bool strt_use, float load, float tps, bool idlve_use);
 
   //Used by CAutoTuneController:
   void BindLamDelMap(float* p_LamDelMap, float* p_rpmGridLD, float* p_loadGridLD);
@@ -87,7 +90,6 @@ class CGMEInjVEDlg : public CTabDialog
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateControlsAutoTune(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune1(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune2(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune3(CCmdUI* pCmdUI);
@@ -99,6 +101,7 @@ class CGMEInjVEDlg : public CTabDialog
   afx_msg void OnSmoothButton();
   afx_msg void OnVE1Button();
   afx_msg void OnVE2Button();
+  afx_msg void OnVEIButton();
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
@@ -120,6 +123,7 @@ class CGMEInjVEDlg : public CTabDialog
   CButton m_finish_check;
   CButton m_ve1_radio;
   CButton m_ve2_radio;
+  CButton m_vei_radio;
   CStatic m_atgroup;
 
   CStatic m_status_text;
@@ -127,15 +131,19 @@ class CGMEInjVEDlg : public CTabDialog
 
   CMapEditorCtrl m_ve_map;
   CMapEditorCtrl m_ve2_map;
+  CMapEditorCtrl m_vei_map;
   CMapEditorCtrl m_lamdel_map;
   CMapEditorCtrl m_celwgt_map;
   CFont m_font;
 
   float* mp_VEMap[2];
   float* mp_VEMap2[2];
+  float* mp_VEMapI[2];
   float* mp_rpmGrid;
+  float* mp_rpmGridI;
   const float* mp_loadGrid;
   const float* mp_loadGrid2;
+  const float* mp_loadGridI;
 
   float* mp_LamDelMap;
   float* mp_rpmGridLD;

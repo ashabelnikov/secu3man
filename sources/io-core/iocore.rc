@@ -52,6 +52,8 @@ BEGIN
   IDS_RPM_GRIDS_INCOMPAT    "Сетки оборотов из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицы УОЗ ХХ, рабочего УОЗ,\nнаполнение, вохдух/топливо, фаза впрыска, ШИМ1/сплитинг,\nШИМ2 и т.д. если вы собираетесь принять новую сетку оборотов.\nПринять новую сетку оборотов (Да) или оставить старую оборотов (Нет)?"
   IDS_CLT_GRIDS_INCOMPAT    "Сетки ДТОЖ из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте соответствующие таблицы если вы принимаете новую сетку ДТОЖ.\nПринять новую сетку ДТОЖ (Да) или оставить старую сетку ДТОЖ (Нет)?"
   IDS_LOAD_GRIDS_INCOMPAT   "Сетки нагрузки из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицы рабочего УОЗ,\nнаполнение, вохдух/топливо, фаза впрыска, ШИМ1/сплитинг,\nШИМ2 и т.д. если вы собираетесь принять новую сетку нагрузки.\nПринять новую сетку нагрузки (Да) или оставить старую сетку нагрузки (Нет)?"
+  IDS_IRPM_GRIDS_INCOMPAT   "Сетки оборотов VE ХХ из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицу VE ХХ, если вы собираетесь принять новую сетку оборотов.\nПринять новую сетку оборотов (Да) или оставить старую оборотов (Нет)?"
+  IDS_ILOAD_GRIDS_INCOMPAT  "Сетки нагрузки VE ХХ из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицу VE ХХ, если вы собираетесь принять новую сетку нагрузки.\nПринять новую сетку нагрузки (Да) или оставить старую сетку нагрузки (Нет)?"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -101,6 +103,8 @@ BEGIN
   IDS_RPM_GRIDS_INCOMPAT    "RPM grids from firmware and source are not equal!\nPlease edit/inspect idle, work, VE, AFR, inj.timing,\nPWM1/split angle and PWM2 maps if you accept new RPM grid.\nAccept new RPM grid (Yes) or keep old one (No)?"
   IDS_CLT_GRIDS_INCOMPAT    "CLT grids from firmware and source are not equal!\nPlease edit/inspect corresponding maps if you accept new CLT grid.\nAccept new CLT grid (Yes) or keep old one (No)?"
   IDS_LOAD_GRIDS_INCOMPAT   "Load grids from firmware and source are not equal!\nPlease edit/inspect work, VE, AFR, inj.timing,\nPWM1/split angle and PWM2 maps if you accept new load grid.\nAccept new load grid (Yes) or keep old one (No)?"
+  IDS_IRPM_GRIDS_INCOMPAT   "Idling VE RPM grids from firmware and source are not equal!\nPlease edit/inspect idling VE map if you accept new RPM grid.\nAccept new RPM grid (Yes) or keep old one (No)?"
+  IDS_ILOAD_GRIDS_INCOMPAT  "Idling VE load grids from firmware and source are not equal!\nPlease edit/inspect idling VE map if you accept new load grid.\nAccept new load grid (Yes) or keep old one (No)?"
 END
 
 /////////////////////////////////////////////////////////////////////////////

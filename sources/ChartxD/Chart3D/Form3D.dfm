@@ -227,6 +227,7 @@ object Form3D: TForm3D
     OnAfterDraw = OnAfterDrawChart
     Anchors = [akTop, akLeft, akBottom, akRight]
     object Series1: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -245,8 +246,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series2: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -265,8 +269,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series3: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -285,8 +292,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series4: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -305,8 +315,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series5: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -325,8 +338,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series6: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -345,8 +361,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series7: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -365,8 +384,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series8: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -385,8 +407,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series9: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -405,8 +430,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series10: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -425,8 +453,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series11: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -445,8 +476,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series12: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -465,8 +499,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series13: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -485,8 +522,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series14: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -505,8 +545,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series15: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -525,8 +568,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series16: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -545,8 +591,11 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
+      OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series17: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -569,6 +618,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series18: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -591,6 +641,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series19: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -613,6 +664,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series20: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -635,6 +687,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series21: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -657,6 +710,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series22: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -679,6 +733,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series23: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -701,6 +756,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series24: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -723,6 +779,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series25: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -745,6 +802,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series26: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -767,6 +825,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series27: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -789,6 +848,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series28: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -811,6 +871,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series29: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -833,6 +894,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series30: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -855,6 +917,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series31: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue
@@ -877,6 +940,7 @@ object Form3D: TForm3D
       OnGetPointerStyle = SeriesGetPointerStyle
     end
     object Series32: TLineSeries
+      Active = False
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
       Marks.Style = smsValue

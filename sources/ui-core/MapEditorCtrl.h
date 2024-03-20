@@ -157,7 +157,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 
   inline  CString _FloatToStr(float value, int decPlaces) //used for drawing of items
   {
-   TCHAR buff[16];
+   TCHAR buff[64];
    _stprintf(buff, "%.*f", decPlaces, value);
    return buff;
   }

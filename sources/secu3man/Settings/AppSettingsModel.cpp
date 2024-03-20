@@ -146,6 +146,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGridMapInjWnd(_T("GridMapInjWnd"))
 , m_optVEMapWnd(_T("VEMapWnd"))
 , m_optVE2MapWnd(_T("VE2MapWnd"))
+, m_optVEIMapWnd(_T("VEIMapWnd"))
 , m_optAFRMapWnd(_T("AFRMapWnd"))
 , m_optCrnkMapWnd(_T("CrnkMapWnd"))
 , m_optWrmpMapWnd(_T("WrmpMapWnd"))
@@ -224,6 +225,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGridMapInjWnd1(_T("GridMapInjWnd"))
 , m_optVEMapWnd1(_T("VEMapWnd"))
 , m_optVE2MapWnd1(_T("VE2MapWnd"))
+, m_optVEIMapWnd1(_T("VEIMapWnd"))
 , m_optAFRMapWnd1(_T("AFRMapWnd"))
 , m_optCrnkMapWnd1(_T("CrnkMapWnd"))
 , m_optWrmpMapWnd1(_T("WrmpMapWnd"))
@@ -303,6 +305,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGridMapInjWndSize(_T("GridMapInjWnd"))
 , m_optVEMapWndSize(_T("VEMapWnd"))
 , m_optVE2MapWndSize(_T("VE2MapWnd"))
+, m_optVEIMapWndSize(_T("VEIMapWnd"))
 , m_optAFRMapWndSize(_T("AFRMapWnd"))
 , m_optCrnkMapWndSize(_T("CrnkMapWnd"))
 , m_optWrmpMapWndSize(_T("WrmpMapWnd"))
@@ -381,6 +384,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGridMapInjWndSize1(_T("GridMapInjWnd"))
 , m_optVEMapWndSize1(_T("VEMapWnd"))
 , m_optVE2MapWndSize1(_T("VE2MapWnd"))
+, m_optVEIMapWndSize1(_T("VEIMapWnd"))
 , m_optAFRMapWndSize1(_T("AFRMapWnd"))
 , m_optCrnkMapWndSize1(_T("CrnkMapWnd"))
 , m_optWrmpMapWndSize1(_T("WrmpMapWnd"))
@@ -526,6 +530,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepIdleMap(_T("IdleMapWnd"))
 , m_optPtMovStepVeMap(_T("VEMapWnd"))
 , m_optPtMovStepVe2Map(_T("VE2MapWnd"))
+, m_optPtMovStepVeiMap(_T("VEIMapWnd"))
 , m_optPtMovStepAfrMap(_T("AFRMapWnd"))
 , m_optPtMovStepCrnkMap(_T("CrnkMapWnd"))
 , m_optPtMovStepWrmpMap(_T("WrmpMapWnd"))
@@ -995,6 +1000,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optGridMapInjWnd);
  ws.ReadWndPos(m_optVEMapWnd);
  ws.ReadWndPos(m_optVE2MapWnd);
+ ws.ReadWndPos(m_optVEIMapWnd);
  ws.ReadWndPos(m_optAFRMapWnd);
  ws.ReadWndPos(m_optCrnkMapWnd);
  ws.ReadWndPos(m_optWrmpMapWnd);
@@ -1074,6 +1080,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optGridMapInjWnd1);
  ws1.ReadWndPos(m_optVEMapWnd1);
  ws1.ReadWndPos(m_optVE2MapWnd1);
+ ws1.ReadWndPos(m_optVEIMapWnd1);
  ws1.ReadWndPos(m_optAFRMapWnd1);
  ws1.ReadWndPos(m_optCrnkMapWnd1);
  ws1.ReadWndPos(m_optWrmpMapWnd1);
@@ -1154,6 +1161,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optGridMapInjWndSize, 0, 10000);
  sz.ReadWndPos(m_optVEMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optVE2MapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optVEIMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optAFRMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optCrnkMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optWrmpMapWndSize, 0, 10000);
@@ -1233,6 +1241,7 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optGridMapInjWndSize1);
  sz1.ReadWndPos(m_optVEMapWndSize1);
  sz1.ReadWndPos(m_optVE2MapWndSize1);
+ sz1.ReadWndPos(m_optVEIMapWndSize1);
  sz1.ReadWndPos(m_optAFRMapWndSize1);
  sz1.ReadWndPos(m_optCrnkMapWndSize1);
  sz1.ReadWndPos(m_optWrmpMapWndSize1);
@@ -1439,7 +1448,7 @@ bool CAppSettingsModel::ReadSettings(void)
  me.ReadInt(m_optITEdMode, _T("0"), 0, 3);
  me.ReadInt(m_optSpotMarkers, _T("1"), 0, 1);
  me.ReadFlt(m_optSpotMarkersSize,_T("1.0"), 0.1f, 3.0f);
- me.ReadInt(m_optActiveVEMap, _T("0"), 0, 1);
+ me.ReadInt(m_optActiveVEMap, _T("0"), 0, 2);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
@@ -1468,6 +1477,7 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepIdleMap,  _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepVeMap,   _T("0.05"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepVe2Map,   _T("0.05"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepVeiMap,   _T("0.05"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepAfrMap, _T("0.1"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepCrnkMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepWrmpMap, _T("1.0"), 0.0f, 10.0f);
@@ -2236,6 +2246,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optVE2MapWnd, _T("Наполнение (объемный КПД) 2"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optVEIMapWnd, _T("VE map for idling"));
+ else
+  ws.WriteWndPos(m_optVEIMapWnd, _T("Наполнение (объемный КПД) для ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   ws.WriteWndPos(m_optAFRMapWnd, _T("AFR map"));
  else
   ws.WriteWndPos(m_optAFRMapWnd, _T("Соотношение Воздух/топливо"));
@@ -2618,6 +2633,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optVE2MapWnd1, _T("VE map 2"));
  else
   ws1.WriteWndPos(m_optVE2MapWnd1, _T("Наполнение (объемный КПД) 2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optVEIMapWnd1, _T("VE map for idling"));
+ else
+  ws1.WriteWndPos(m_optVEIMapWnd1, _T("Наполнение (объемный КПД) для ХХ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ws1.WriteWndPos(m_optAFRMapWnd1, _T("AFR map"));
@@ -3009,6 +3029,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optVE2MapWndSize, _T("Наполнение (объемный КПД) 2"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optVEIMapWndSize, _T("VE map for idling"));
+ else
+  sz.WriteWndPos(m_optVEIMapWndSize, _T("Наполнение (объемный КПД) для ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
   sz.WriteWndPos(m_optAFRMapWndSize, _T("AFR map"));
  else
   sz.WriteWndPos(m_optAFRMapWndSize, _T("Соотношение Воздух/топливо"));
@@ -3391,6 +3416,11 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optVE2MapWndSize1, _T("VE map 2"));
  else
   sz1.WriteWndPos(m_optVE2MapWndSize1, _T("Наполнение (объемный КПД) 2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optVEIMapWndSize1, _T("VE map for idling"));
+ else
+  sz1.WriteWndPos(m_optVEIMapWndSize1, _T("Наполнение (объемный КПД) для ХХ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   sz1.WriteWndPos(m_optAFRMapWndSize1, _T("AFR map"));
@@ -4375,9 +4405,9 @@ bool CAppSettingsModel::WriteSettings(void)
  me.WriteFlt(m_optSpotMarkersSize, 2);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  me.WriteComment(_T("Current VE map selected for editing in the grid mode map editor's window. 0 - VE1, 1 - VE2"));
+  me.WriteComment(_T("Current VE map selected for editing in the grid mode map editor's window. 0 - VE1, 1 - VE2, 2 - VE ХХ"));
  else
-  me.WriteComment(_T("Таблица наполнения, которая выбрана для редактирования в окне табличного редактирования карт. 0 - VE1, 1 - VE2"));
+  me.WriteComment(_T("Таблица наполнения, которая выбрана для редактирования в окне табличного редактирования карт. 0 - VE1, 1 - VE2, 2 - VE ХХ"));
  me.WriteInt(m_optActiveVEMap);
 
  //Splitters
@@ -4500,6 +4530,11 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepVe2Map, 3, _T("VE map 2"));
  else
   ms.WriteFlt(m_optPtMovStepVe2Map, 3, _T("Наполнение (объемный КПД) 2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepVeiMap, 3, _T("VE map for idling"));
+ else
+  ms.WriteFlt(m_optPtMovStepVeiMap, 3, _T("Наполнение (объемный КПД) для ХХ"));
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepAfrMap, 3, _T("AFR map"));
@@ -5007,6 +5042,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optVEMapWnd.value.y = i_wndSettings.m_VEMapWnd_Y;
  m_optVE2MapWnd.value.x = i_wndSettings.m_VE2MapWnd_X;
  m_optVE2MapWnd.value.y = i_wndSettings.m_VE2MapWnd_Y;
+ m_optVEIMapWnd.value.x = i_wndSettings.m_VEIMapWnd_X;
+ m_optVEIMapWnd.value.y = i_wndSettings.m_VEIMapWnd_Y;
  m_optAFRMapWnd.value.x = i_wndSettings.m_AFRMapWnd_X;
  m_optAFRMapWnd.value.y = i_wndSettings.m_AFRMapWnd_Y;
  m_optCrnkMapWnd.value.x = i_wndSettings.m_CrnkMapWnd_X;
@@ -5164,6 +5201,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_VEMapWnd_Y = m_optVEMapWnd.value.y;
  o_wndSettings.m_VE2MapWnd_X = m_optVE2MapWnd.value.x;
  o_wndSettings.m_VE2MapWnd_Y = m_optVE2MapWnd.value.y;
+ o_wndSettings.m_VEIMapWnd_X = m_optVEIMapWnd.value.x;
+ o_wndSettings.m_VEIMapWnd_Y = m_optVEIMapWnd.value.y;
  o_wndSettings.m_AFRMapWnd_X = m_optAFRMapWnd.value.x;
  o_wndSettings.m_AFRMapWnd_Y = m_optAFRMapWnd.value.y;
  o_wndSettings.m_CrnkMapWnd_X = m_optCrnkMapWnd.value.x;
@@ -5319,6 +5358,8 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optVEMapWnd1.value.y = i_wndSettings.m_VEMapWnd_Y;
  m_optVE2MapWnd1.value.x = i_wndSettings.m_VE2MapWnd_X;
  m_optVE2MapWnd1.value.y = i_wndSettings.m_VE2MapWnd_Y;
+ m_optVEIMapWnd1.value.x = i_wndSettings.m_VEIMapWnd_X;
+ m_optVEIMapWnd1.value.y = i_wndSettings.m_VEIMapWnd_Y;
  m_optAFRMapWnd1.value.x = i_wndSettings.m_AFRMapWnd_X;
  m_optAFRMapWnd1.value.y = i_wndSettings.m_AFRMapWnd_Y;
  m_optCrnkMapWnd1.value.x = i_wndSettings.m_CrnkMapWnd_X;
@@ -5474,6 +5515,8 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_VEMapWnd_Y = m_optVEMapWnd1.value.y;
  o_wndSettings.m_VE2MapWnd_X = m_optVE2MapWnd1.value.x;
  o_wndSettings.m_VE2MapWnd_Y = m_optVE2MapWnd1.value.y;
+ o_wndSettings.m_VEIMapWnd_X = m_optVEIMapWnd1.value.x;
+ o_wndSettings.m_VEIMapWnd_Y = m_optVEIMapWnd1.value.y;
  o_wndSettings.m_AFRMapWnd_X = m_optAFRMapWnd1.value.x;
  o_wndSettings.m_AFRMapWnd_Y = m_optAFRMapWnd1.value.y;
  o_wndSettings.m_CrnkMapWnd_X = m_optCrnkMapWnd1.value.x;
@@ -5631,6 +5674,8 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optVEMapWndSize.value.y = i_wndSize.m_VEMapWnd_H;
  m_optVE2MapWndSize.value.x = i_wndSize.m_VE2MapWnd_W;
  m_optVE2MapWndSize.value.y = i_wndSize.m_VE2MapWnd_H;
+ m_optVEIMapWndSize.value.x = i_wndSize.m_VEIMapWnd_W;
+ m_optVEIMapWndSize.value.y = i_wndSize.m_VEIMapWnd_H;
  m_optAFRMapWndSize.value.x = i_wndSize.m_AFRMapWnd_W;
  m_optAFRMapWndSize.value.y = i_wndSize.m_AFRMapWnd_H;
  m_optCrnkMapWndSize.value.x = i_wndSize.m_CrnkMapWnd_W;
@@ -5788,6 +5833,8 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_VEMapWnd_H = m_optVEMapWndSize.value.y;
  o_wndSize.m_VE2MapWnd_W = m_optVE2MapWndSize.value.x;
  o_wndSize.m_VE2MapWnd_H = m_optVE2MapWndSize.value.y;
+ o_wndSize.m_VEIMapWnd_W = m_optVEIMapWndSize.value.x;
+ o_wndSize.m_VEIMapWnd_H = m_optVEIMapWndSize.value.y;
  o_wndSize.m_AFRMapWnd_W = m_optAFRMapWndSize.value.x;
  o_wndSize.m_AFRMapWnd_H = m_optAFRMapWndSize.value.y;
  o_wndSize.m_CrnkMapWnd_W = m_optCrnkMapWndSize.value.x;
@@ -5943,6 +5990,8 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optVEMapWndSize1.value.y = i_wndSize.m_VEMapWnd_H;
  m_optVE2MapWndSize1.value.x = i_wndSize.m_VE2MapWnd_W;
  m_optVE2MapWndSize1.value.y = i_wndSize.m_VE2MapWnd_H;
+ m_optVEIMapWndSize1.value.x = i_wndSize.m_VEIMapWnd_W;
+ m_optVEIMapWndSize1.value.y = i_wndSize.m_VEIMapWnd_H;
  m_optAFRMapWndSize1.value.x = i_wndSize.m_AFRMapWnd_W;
  m_optAFRMapWndSize1.value.y = i_wndSize.m_AFRMapWnd_H;
  m_optCrnkMapWndSize1.value.x = i_wndSize.m_CrnkMapWnd_W;
@@ -6098,6 +6147,8 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_VEMapWnd_H = m_optVEMapWndSize1.value.y;
  o_wndSize.m_VE2MapWnd_W = m_optVE2MapWndSize1.value.x;
  o_wndSize.m_VE2MapWnd_H = m_optVE2MapWndSize1.value.y;
+ o_wndSize.m_VEIMapWnd_W = m_optVEIMapWndSize1.value.x;
+ o_wndSize.m_VEIMapWnd_H = m_optVEIMapWndSize1.value.y;
  o_wndSize.m_AFRMapWnd_W = m_optAFRMapWndSize1.value.x;
  o_wndSize.m_AFRMapWnd_H = m_optAFRMapWndSize1.value.y;
  o_wndSize.m_CrnkMapWnd_W = m_optCrnkMapWndSize1.value.x;
@@ -6981,6 +7032,7 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepIdleMap.value = i_ptMovStep.m_value[ETMT_IGN_IDLE];
  m_optPtMovStepVeMap.value = i_ptMovStep.m_value[ETMT_INJ_VE];
  m_optPtMovStepVe2Map.value = i_ptMovStep.m_value[ETMT_INJ_VE2];
+ m_optPtMovStepVeiMap.value = i_ptMovStep.m_value[ETMT_INJ_IVE];
  m_optPtMovStepAfrMap.value = i_ptMovStep.m_value[ETMT_INJ_AFR];
  m_optPtMovStepCrnkMap.value = i_ptMovStep.m_value[ETMT_INJ_CRNK];
  m_optPtMovStepWrmpMap.value = i_ptMovStep.m_value[ETMT_INJ_WRMP];
@@ -7058,6 +7110,7 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_value[ETMT_IGN_IDLE] = m_optPtMovStepIdleMap.value;
  o_ptMovStep.m_value[ETMT_INJ_VE] = m_optPtMovStepVeMap.value;
  o_ptMovStep.m_value[ETMT_INJ_VE2] = m_optPtMovStepVe2Map.value;
+ o_ptMovStep.m_value[ETMT_INJ_IVE] = m_optPtMovStepVeiMap.value;
  o_ptMovStep.m_value[ETMT_INJ_AFR] = m_optPtMovStepAfrMap.value;
  o_ptMovStep.m_value[ETMT_INJ_CRNK] = m_optPtMovStepCrnkMap.value;
  o_ptMovStep.m_value[ETMT_INJ_WRMP] = m_optPtMovStepWrmpMap.value;

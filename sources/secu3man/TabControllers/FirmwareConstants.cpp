@@ -221,15 +221,38 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("TPS threshold for immediate exit from fuel cut mode"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.sfc_tps_thrd, _T("Exiting from fuel cut mode will be immediate (not smooth) if TPS greater than this threshold"));
 
+ std::vector<_TSTRING> use_idl_ve;
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Наполнение на ХХ для бенз. (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для бензина (GAS_V = 0)."));
+ {
+  use_idl_ve.push_back(_T("Основная"));
+  use_idl_ve.push_back(_T("Константа"));
+  use_idl_ve.push_back(_T("Отдельная"));
+ }
  else
-  dfd.AppendItem(_T("VE on idling for petrol (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for petrol (GAS_V = 0)."));
+ {
+  use_idl_ve.push_back(_T("Main map"));
+  use_idl_ve.push_back(_T("Constant"));
+  use_idl_ve.push_back(_T("Sep. map"));
+ }
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Таблица VE на ХХ для бензина"), use_idl_ve, &d.use_idl_ve[0], _T("Выберите какую таблицу наполения нужно использовать для режима ХХ (бензин). Варианты: основная таблица, константа, отдельная таблица."));
+ else
+  dfd.AppendItem(_T("VE map for idling on petrol"), use_idl_ve, &d.use_idl_ve[0], _T("Select with VE map must be used on idling (petrol). Variants: main map, constant, separate map."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Наполнение на ХХ для газа (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g, _T("Установите значение больше 0, если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для газа (GAS_V = 1)."));
+  dfd.AppendItem(_T("Таблица VE на ХХ для газа"), use_idl_ve, &d.use_idl_ve[1], _T("Выберите какую таблицу наполения нужно использовать для режима ХХ (газ). Варианты: основная таблица, константа, отдельная таблица."));
  else
-  dfd.AppendItem(_T("VE on idling for gas (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g, _T("Set value reater than 0 if you want this constant to be used instead of the VE table on idling. This parameter is used for LPG (GAS_V = 1)."));
+  dfd.AppendItem(_T("VE map for idling on gas"), use_idl_ve, &d.use_idl_ve[1], _T("Select with VE map must be used on idling (gas). Variants: main map, constant, separate map."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Наполнение на ХХ для бензина"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve[0], _T("Наполнение на ХХ. Выберите в выпадающем списке пункт 'Константа', если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для бензина (GAS_V = 0)."));
+ else
+  dfd.AppendItem(_T("VE on idling for petrol"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve[0], _T("VE on idling. Select in the drop down list 'Constant' item if you want this constant to be used instead of the VE table on idling. This parameter is used for petrol (GAS_V = 0)."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Наполнение на ХХ для газа"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve[1], _T("Наполнение на ХХ. Выберите в выпадающем списке пункт 'Константа', если вам нужно чтобы вместо таблицы наполнения в режиме ХХ использовалась эта константа. Данный параметр используется для газа (GAS_V = 1)."));
+ else
+  dfd.AppendItem(_T("VE on idling for gas"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve[1], _T("VE on idling. Select in the drop down list 'Constant' item if you want this constant to be used instead of the VE table on idling. This parameter is used for LPG (GAS_V = 1)."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Alpha-N: умножать время впрыска на ДПДЗ"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("Выбор на что умножать базовое время впрыска при работе в режиме Alpha-N: на ДАД или ДПДЗ. Если установить 0, то прошивка производит умножение на ДАД, если установить 1, то прошивка производит умножение на ДПДЗ. Если установить 2, то прошивка производит умножение на 101.3"));

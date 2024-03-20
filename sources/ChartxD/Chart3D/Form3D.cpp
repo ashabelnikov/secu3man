@@ -709,8 +709,11 @@ void TForm3D::MakeAllVisible(void)
 //---------------------------------------------------------------------------
 void TForm3D::FillChart(void)
 {
+ Chart1->DepthAxis->Maximum = m_count_z;
+
  AnsiString as; 
- for(int z = 0; z < m_count_z; z++)
+ int z = 0;
+ for(; z < m_count_z; z++)
  {
   for(int x = 0; x < m_count_x; x++)
   { //Add series
@@ -718,7 +721,18 @@ void TForm3D::FillChart(void)
    Chart1->Series[z]->Add(GetItem_o(z, x), as, clAqua); //original
    Chart1->Series[z + m_count_z]->Add(GetItem_m(z, x), as, clRed); //modified
   }
+  mp_series[z] = Chart1->SeriesList->Items[z + m_count_z]; //save normal order of series
  }
+
+ //disable unnecessary items
+ if (m_count_z < 16) PM_CopyFromCurve15->Visible = false; PM_CopyToCurve15->Visible = false;
+ if (m_count_z < 15) PM_CopyFromCurve14->Visible = false; PM_CopyToCurve14->Visible = false;
+ if (m_count_z < 14) PM_CopyFromCurve13->Visible = false; PM_CopyToCurve13->Visible = false;
+ if (m_count_z < 13) PM_CopyFromCurve12->Visible = false; PM_CopyToCurve12->Visible = false;
+ if (m_count_z < 12) PM_CopyFromCurve11->Visible = false; PM_CopyToCurve11->Visible = false;
+ if (m_count_z < 11) PM_CopyFromCurve10->Visible = false; PM_CopyToCurve10->Visible = false;
+ if (m_count_z < 10) PM_CopyFromCurve9->Visible  = false; PM_CopyToCurve9->Visible  = false;
+ if (m_count_z < 9)  PM_CopyFromCurve8->Visible  = false; PM_CopyToCurve8->Visible  = false;
 }
 
 //---------------------------------------------------------------------------
@@ -2149,10 +2163,10 @@ void __fastcall TForm3D::OnAfterDrawChart(TObject *Sender)
 //---------------------------------------------------------------------------
 void TForm3D::SetDimentions(int z, int x)
 {
- TrackBarAf->Max = m_count_z - 1;
- m_sel.SetDimentions(z, x);
  m_count_z = z;
  m_count_x = x;
+ TrackBarAf->Max = z - 1;
+ m_sel.SetDimentions(z, x);
 }
 
 //---------------------------------------------------------------------------
@@ -2325,42 +2339,14 @@ void __fastcall TForm3D::OnClassic3d(TObject *Sender)
 void __fastcall TForm3D::SetSeriesOrder(bool reverse)
 {
  if (reverse)
- {
-  Chart1->SeriesList->Items[16]  = Series32;
-  Chart1->SeriesList->Items[17]  = Series31;
-  Chart1->SeriesList->Items[18]  = Series30;
-  Chart1->SeriesList->Items[19]  = Series29;
-  Chart1->SeriesList->Items[20]  = Series28;
-  Chart1->SeriesList->Items[21]  = Series27;
-  Chart1->SeriesList->Items[22]  = Series26;
-  Chart1->SeriesList->Items[23]  = Series25;
-  Chart1->SeriesList->Items[24]  = Series24;
-  Chart1->SeriesList->Items[25]  = Series23;
-  Chart1->SeriesList->Items[26] = Series22;
-  Chart1->SeriesList->Items[27] = Series21;
-  Chart1->SeriesList->Items[28] = Series20;
-  Chart1->SeriesList->Items[29] = Series19;
-  Chart1->SeriesList->Items[30] = Series18;
-  Chart1->SeriesList->Items[31] = Series17;
+ { //inverted order
+  for(int z = 0; z < m_count_z; ++z)
+   Chart1->SeriesList->Items[z + m_count_z] = mp_series[m_count_z - 1 - z];
  }
  else
- {
-  Chart1->SeriesList->Items[16]  = Series17;
-  Chart1->SeriesList->Items[17]  = Series18;
-  Chart1->SeriesList->Items[18]  = Series19;
-  Chart1->SeriesList->Items[19]  = Series20;
-  Chart1->SeriesList->Items[20]  = Series21;
-  Chart1->SeriesList->Items[21]  = Series22;
-  Chart1->SeriesList->Items[22]  = Series23;
-  Chart1->SeriesList->Items[23]  = Series24;
-  Chart1->SeriesList->Items[24]  = Series25;
-  Chart1->SeriesList->Items[25]  = Series26;
-  Chart1->SeriesList->Items[26] = Series27;
-  Chart1->SeriesList->Items[27] = Series28;
-  Chart1->SeriesList->Items[28] = Series29;
-  Chart1->SeriesList->Items[29] = Series30;
-  Chart1->SeriesList->Items[30] = Series31;
-  Chart1->SeriesList->Items[31] = Series32;
+ {  //normal order
+  for(int z = 0; z < m_count_z; ++z)
+   Chart1->SeriesList->Items[z + m_count_z] = mp_series[z];
  }
 }
 

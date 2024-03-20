@@ -42,6 +42,8 @@
 #define F_RPM_SLOTS            16
 #define F_TMP_SLOTS            16
 #define F_LOAD_SLOTS           16
+#define F_IRPM_SLOTS           8
+#define F_ILOAD_SLOTS          8
 #define ATS_CORR_LOOKUP_TABLE_SIZE 16
 #define GASDOSE_POS_RPM_SIZE   16
 #define GASDOSE_POS_TPS_SIZE   16
@@ -57,6 +59,8 @@
 
 #define INJ_VE_POINTS_L        16
 #define INJ_VE_POINTS_F        16
+#define INJ_IVE_POINTS_L       8
+#define INJ_IVE_POINTS_F       8
 #define INJ_CRANKING_LOOKUP_TABLE_SIZE 16
 #define INJ_WARMUP_LOOKUP_TABLE_SIZE 16
 #define INJ_DT_LOOKUP_TABLE_SIZE 32
@@ -231,6 +235,7 @@ struct SECU3FWMapsItem
  float inj_cyladd[INJ_CYLADD_SIZE];             // Inj. PW addition
  float inj_ae_map[INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2]; // bins and values of the AE's MAP lookup table
  float inj_thrass[INJ_THRASS_SIZE];             //IAC's throttle assistant map
+ float inj_ive[INJ_IVE_POINTS_L * INJ_IVE_POINTS_F];// Idling VE
 
  float* GetMap(int i_mapType)
  {
@@ -271,6 +276,7 @@ struct SECU3FWMapsItem
    case ETMT_INJ_TPSZON: return inj_tpszon;
    case ETMT_INJ_CYLMULT: return inj_cylmult;
    case ETMT_INJ_CYLADD: return inj_cyladd;
+   case ETMT_INJ_IVE: return inj_ive;      //fuel injection
   }
   return NULL; //undefined type of map
  }
@@ -314,6 +320,7 @@ struct SECU3FWMapsItem
    case ETMT_INJ_TPSZON: return INJ_TPSZON_SIZE;
    case ETMT_INJ_CYLMULT:
    case ETMT_INJ_CYLADD: return INJ_CYLADD_SIZE;
+   case ETMT_INJ_IVE: return INJ_IVE_POINTS_L * INJ_IVE_POINTS_F; //VE map for idling
   }
   ASSERT(0);
   return 0; //undefined type of map
@@ -327,6 +334,8 @@ struct FWMapsDataHolder
  float rpm_slots[F_RPM_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
  float clt_slots[F_TMP_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
  float load_slots[F_LOAD_SLOTS]; //сетка нагрузки исполузуемая вместе с этими кривыми
+ float irpm_slots[F_IRPM_SLOTS]; //RPM grid for idling VE
+ float iload_slots[F_ILOAD_SLOTS]; //Load grid for idling VE
  float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
  float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
  float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2]; //voltage limits are stored together with table

@@ -343,6 +343,7 @@ class TForm3D : public TForm
   bool m_mc_allow;
 
   UndoCntr* mp_undo;
+  TChartSeries *mp_series[16];
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_

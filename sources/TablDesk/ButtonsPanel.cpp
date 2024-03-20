@@ -102,6 +102,7 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_IDLE_MAP, *m_md[ETMT_IGN_IDLE].mp_button);
  DDX_Control(pDX, IDC_TD_VIEW_VE_MAP, *m_md[ETMT_INJ_VE].mp_button);
  DDX_Control(pDX, IDC_TD_VIEW_VE2_MAP, *m_md[ETMT_INJ_VE2].mp_button);
+ DDX_Control(pDX, IDC_TD_VIEW_IVE_MAP, *m_md[ETMT_INJ_IVE].mp_button);
  DDX_Control(pDX, IDC_TD_VIEW_AFR_MAP, *m_md[ETMT_INJ_AFR].mp_button);
  DDX_Control(pDX, IDC_TD_VIEW_CRNK_MAP, *m_md[ETMT_INJ_CRNK].mp_button);
  DDX_Control(pDX, IDC_TD_VIEW_WRMP_MAP, *m_md[ETMT_INJ_WRMP].mp_button);
@@ -147,6 +148,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_TEMPI_MAP, OnViewTempIdlMap)
  ON_BN_CLICKED(IDC_TD_VIEW_VE_MAP, OnViewVEMap)
  ON_BN_CLICKED(IDC_TD_VIEW_VE2_MAP, OnViewVE2Map)
+ ON_BN_CLICKED(IDC_TD_VIEW_IVE_MAP, OnViewIVEMap)
  ON_BN_CLICKED(IDC_TD_VIEW_AFR_MAP, OnViewAFRMap)
  ON_BN_CLICKED(IDC_TD_VIEW_CRNK_MAP, OnViewCrnkMap)
  ON_BN_CLICKED(IDC_TD_VIEW_WRMP_MAP, OnViewWrmpMap)
@@ -185,6 +187,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TEMPI_MAP, OnUpdateViewTempIdlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_VE_MAP, OnUpdateViewVEMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_VE2_MAP, OnUpdateViewVE2Map)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IVE_MAP, OnUpdateViewIVEMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_AFR_MAP, OnUpdateViewAFRMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CRNK_MAP, OnUpdateViewCrnkMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_WRMP_MAP, OnUpdateViewWrmpMap)
@@ -243,6 +246,7 @@ BOOL CButtonsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJ_CRNK].mp_button, MLL::GetString(IDS_TD_VIEW_CRNK_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJ_VE].mp_button, MLL::GetString(IDS_TD_VIEW_VE_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJ_VE2].mp_button, MLL::GetString(IDS_TD_VIEW_VE2_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJ_IVE].mp_button, MLL::GetString(IDS_TD_VIEW_IVE_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJ_AFR].mp_button, MLL::GetString(IDS_TD_VIEW_AFR_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJ_WRMP].mp_button, MLL::GetString(IDS_TD_VIEW_WRMP_MAP_TT))); 
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJ_ATSC].mp_button, MLL::GetString(IDS_TD_VIEW_ATSC_MAP_TT))); 
@@ -521,6 +525,42 @@ void CButtonsPanel::OnViewVE2Map()
 
   //let controller to know about opening of this window
   OnOpenMapWnd(md.handle, ETMT_INJ_VE2);
+
+  DLL::Chart3DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CButtonsPanel::OnViewIVEMap()
+{
+ MapData &md = m_md[ETMT_INJ_IVE];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart3DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart3DCreate(_ChartParentHwnd(), md.original, md.active,GetIRPMGrid(),8,8,0.0f,1.99f,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_VE_UNIT).c_str(),
+    MLL::GetString(IDS_IVE_MAP).c_str());
+  DLL::Chart3DSetPtValuesFormat(md.handle, _T("#0.000"));
+  DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationIVEMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelIRPM, static_cast<CTablesPanelBase*>(this));
+  DLL::Chart3DSetOnChange(md.handle,OnChangeIVEMap,this);
+  DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(md.handle,OnCloseIVEMap,this);
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_INJ_IVE);
 
   DLL::Chart3DShow(md.handle, true);
  }
@@ -1613,17 +1653,17 @@ void CButtonsPanel::OnGridModeEditingInj()
                                     GetMap(ETMT_INJ_IACC, false), GetMap(ETMT_INJ_IACCW, false), GetMap(ETMT_INJ_AFTSTR, false), GetMap(ETMT_INJ_WRMP, false), GetMap(ETMT_INJ_AETPS, false), GetMap(ETMT_INJ_AERPM, false),
                                     GetMap(ETMT_INJ_CRNK, false), GetMap(ETMT_INJ_DEAD, false), GetMap(ETMT_INJ_EGOCRV, false), GetMap(ETMT_INJ_IATCLT, false), GetMap(ETMT_INJ_TPSSWT, false), GetMap(ETMT_INJ_ATSC, false),
                                     GetMap(ETMT_INJ_GTSC, false), GetMap(ETMT_INJ_GPSC, false), GetMap(ETMT_PWM1, false), GetMap(ETMT_PWM2, false), GetMap(ETMT_INJ_IACMAT, false), GetMap(ETMT_INJ_VE2, false), GetMap(ETMT_INJ_TPSZON, false),
-                                    GetMap(ETMT_INJ_CYLMULT, false), GetMap(ETMT_INJ_CYLADD, false), GetMap(ETMT_INJ_AEMAP, false), GetMap(ETMT_INJ_THRASS, false));
+                                    GetMap(ETMT_INJ_CYLMULT, false), GetMap(ETMT_INJ_CYLADD, false), GetMap(ETMT_INJ_AEMAP, false), GetMap(ETMT_INJ_THRASS, false), GetMap(ETMT_INJ_IVE, false));
 
   mp_gridModeEditorInjDlg->BindMapsOrig(GetMap(ETMT_INJ_VE, true), GetMap(ETMT_INJ_AFR, true), GetMap(ETMT_INJ_IT, true), GetMap(ETMT_INJ_IDLC, true), GetMap(ETMT_INJ_IDLR, true), GetMap(ETMT_INJ_ITRPM, true), GetMap(ETMT_INJ_RIGID, true),
                                     GetMap(ETMT_INJ_IACC, true), GetMap(ETMT_INJ_IACCW, true), GetMap(ETMT_INJ_AFTSTR, true), GetMap(ETMT_INJ_WRMP, true), GetMap(ETMT_INJ_AETPS, true), GetMap(ETMT_INJ_AERPM, true),
                                     GetMap(ETMT_INJ_CRNK, true), GetMap(ETMT_INJ_DEAD, true), GetMap(ETMT_INJ_EGOCRV, true), GetMap(ETMT_INJ_IATCLT, true), GetMap(ETMT_INJ_TPSSWT, true), GetMap(ETMT_INJ_ATSC, true),
                                     GetMap(ETMT_INJ_GTSC, true), GetMap(ETMT_INJ_GPSC, true), GetMap(ETMT_PWM1, true), GetMap(ETMT_PWM2, true), GetMap(ETMT_INJ_IACMAT, true), GetMap(ETMT_INJ_VE2, true), GetMap(ETMT_INJ_TPSZON, true),
-                                    GetMap(ETMT_INJ_CYLMULT, true), GetMap(ETMT_INJ_CYLADD, true), GetMap(ETMT_INJ_AEMAP, true), GetMap(ETMT_INJ_THRASS, true));
+                                    GetMap(ETMT_INJ_CYLMULT, true), GetMap(ETMT_INJ_CYLADD, true), GetMap(ETMT_INJ_AEMAP, true), GetMap(ETMT_INJ_THRASS, true), GetMap(ETMT_INJ_IVE, true));
 
-  mp_gridModeEditorInjDlg->BindRPMGrid(GetRPMGrid());
+  mp_gridModeEditorInjDlg->BindRPMGrid(GetRPMGrid(), GetIRPMGrid());
   mp_gridModeEditorInjDlg->BindCLTGrid(GetCLTGrid());
-  mp_gridModeEditorInjDlg->BindLoadGrid(GetLoadGrid(), &m_ve2_map_load_slots[0]);
+  mp_gridModeEditorInjDlg->BindLoadGrid(GetLoadGrid(), &m_ve2_map_load_slots[0], GetILoadGrid());
   mp_gridModeEditorInjDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorInjDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));
@@ -1723,6 +1763,14 @@ void CButtonsPanel::OnUpdateViewVE2Map(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection));
  pCmdUI->SetCheck( (m_md[ETMT_INJ_VE2].state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewIVEMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable && (m_fuel_injection));
+ pCmdUI->SetCheck( (m_md[ETMT_INJ_IVE].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewAFRMap(CCmdUI* pCmdUI)
@@ -2011,6 +2059,8 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
   DLL::Chart3DEnable(m_md[ETMT_INJ_VE].handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_md[ETMT_INJ_VE2].state && ::IsWindow(m_md[ETMT_INJ_VE2].handle))
   DLL::Chart3DEnable(m_md[ETMT_INJ_VE2].handle, (i_enable) && IsAllowed());
+ if (m_md[ETMT_INJ_IVE].state && ::IsWindow(m_md[ETMT_INJ_IVE].handle))
+  DLL::Chart3DEnable(m_md[ETMT_INJ_IVE].handle, (i_enable) && IsAllowed());
  if (m_md[ETMT_INJ_AFR].state && ::IsWindow(m_md[ETMT_INJ_AFR].handle))
   DLL::Chart3DEnable(m_md[ETMT_INJ_AFR].handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_md[ETMT_INJ_CRNK].state && ::IsWindow(m_md[ETMT_INJ_CRNK].handle))

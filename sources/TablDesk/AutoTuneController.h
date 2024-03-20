@@ -123,7 +123,7 @@ class CAutoTuneController : public LdaxCfg
   void OnViewActivate(void);
   size_t _CalcFIFOSize(void);
   void OnTimer(void);
-  void OnSelectVEMap(int vemap); //0 - 1st, 1 - 2nd
+  void OnSelectVEMap(int vemap); //0 - 1st, 1 - 2nd, 2 - idling VE
   int _GetActiveVEMapId(void);
   const float* _GetLoadGrid(int grid = -1);
 
@@ -147,7 +147,7 @@ class CAutoTuneController : public LdaxCfg
   bool m_blocked[VEMAP_LOAD_SIZE][VEMAP_RPM_SIZE];
 
   bool m_active;
-  float* mp_rpmGrid;
+  float* mp_rpmGrid;        //rpm grid for VE1 and VE2
   const float* mp_lodGrid1; //load grid set for VE1
   const float* mp_lodGrid2; //load grid set for VE2
 

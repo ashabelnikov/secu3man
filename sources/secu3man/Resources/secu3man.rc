@@ -613,6 +613,8 @@ BEGIN
     IDS_PM_READING_RPMGRD          "Чтение сетки оборотов..."
     IDS_PM_READING_CLTGRD          "Чтение сетки температуры ОЖ..."
     IDS_PM_READING_LODGRD          "Чтение сетки нагрузки..."
+    IDS_PM_READING_IRPMGRD         "Чтение сетки оборотов VE ХХ..."
+    IDS_PM_READING_ILODGRD         "Чтение сетки нагрузки VE ХХ..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1609,6 +1611,8 @@ BEGIN
     IDS_LOADING_LOG_FILE           "Opening and checking a log file..."
     IDS_PM_READING_CLTGRD          "Reading CLT grid..."
     IDS_PM_READING_LODGRD          "Reading load grid..."
+    IDS_PM_READING_IRPMGRD         "Reading idling VE RPM grid..."
+    IDS_PM_READING_ILODGRD         "Reading idling VE load grid..."
 END
 
 STRINGTABLE DISCARDABLE 

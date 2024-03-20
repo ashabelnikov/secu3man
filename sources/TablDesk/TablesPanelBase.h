@@ -69,6 +69,8 @@ class AFX_EXT_CLASS CTablesPanelBase : public LdaxCfg
   float* GetRPMGrid(void);
   float* GetCLTGrid(void);
   float* GetLoadGrid(void);
+  float* GetIRPMGrid(void); //idling
+  float* GetILoadGrid(void);//idling
 
   void EnableToggleMapWnd(bool toggle);
 
@@ -96,6 +98,7 @@ class AFX_EXT_CLASS CTablesPanelBase : public LdaxCfg
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabelLoad(LPTSTR io_label_string, int index, void* i_param);
+  static void __cdecl OnGetXAxisLabelIRPM(LPTSTR io_label_string, int index, void* i_param);
 
   HWND _ChartParentHwnd(void);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
@@ -128,6 +131,8 @@ class AFX_EXT_CLASS CTablesPanelBase : public LdaxCfg
   float m_rpm_grid_values[16];
   float m_clt_grid_values[16];
   float m_load_grid_values[16];
+  float m_irpm_grid_values[8]; //idling VE
+  float m_iload_grid_values[8];//idling VE
 
   bool m_toggleMapWnd;
   HWND m_openedChart;

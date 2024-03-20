@@ -792,7 +792,7 @@ void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
 
 void CMapEditorCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
- if ((nChar >= 0x30 && nChar <= 0x39) || nChar==VK_OEM_MINUS)
+ if (!m_readOnly && ((nChar >= 0x30 && nChar <= 0x39) || nChar==VK_OEM_MINUS))
  { //activate edit when user start to type a number
   _ActivateEdit();
   CString cs;

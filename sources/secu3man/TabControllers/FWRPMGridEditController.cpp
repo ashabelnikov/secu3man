@@ -41,9 +41,11 @@ using namespace fastdelegate;
 static const size_t itemNumberRPM = 16;
 static const size_t itemNumberCLT = 16;
 static const size_t itemNumberLod = 16;
-static const float gridMinStep[3] = {100, 5, 1};
-static const float gridMinValue[3] = {300, -40, 0};
-static const float gridMaxValue[3] = {20000, 250, 500};
+static const size_t itemNumberIRPM = 8;
+static const size_t itemNumberILod = 8;
+static const float gridMinStep[5] = {100, 5, 1, 100, 1};
+static const float gridMinValue[5] = {300, -40, 0, 300, 0};
+static const float gridMaxValue[5] = {20000, 250, 500, 20000, 500};
 
 CFWRPMGridEditController::CFWRPMGridEditController()
 {
@@ -76,6 +78,12 @@ int CFWRPMGridEditController::Edit(void)
  float valuesLod[itemNumberLod] = {0};
  mp_fwdm->GetLoadGridMap(valuesLod);
  mp_view->SetValues(2, valuesLod, false);
+ float valuesIRPM[itemNumberIRPM] = {0};
+ mp_fwdm->GetIRPMGridMap(valuesIRPM);
+ mp_view->SetValues(3, valuesIRPM);
+ float valuesILod[itemNumberILod] = {0};
+ mp_fwdm->GetILoadGridMap(valuesILod);
+ mp_view->SetValues(4, valuesILod, false);
 
  int result = mp_view->DoModal();
  if (result==IDOK)
@@ -86,6 +94,11 @@ int CFWRPMGridEditController::Edit(void)
   mp_fwdm->SetCLTGridMap(valuesCLT);
   mp_view->GetValues(2, valuesLod, false);
   mp_fwdm->SetLoadGridMap(valuesLod);
+  mp_view->GetValues(3, valuesIRPM);
+  mp_fwdm->SetIRPMGridMap(valuesIRPM);
+  mp_view->GetValues(4, valuesILod, false);
+  mp_fwdm->SetILoadGridMap(valuesILod);
+
  }
  mp_view.reset();
  return result;
@@ -101,6 +114,10 @@ bool CFWRPMGridEditController::_CheckItemForErrors(int mode, size_t itemIndex, f
   itemNumber = itemNumberCLT;
  else if (2==mode)
   itemNumber = itemNumberLod;
+ else if (3==mode)
+  itemNumber = itemNumberIRPM;
+ else if (4==mode)
+  itemNumber = itemNumberILod;
  else
  {
   ASSERT(0); //unexpected value
@@ -189,6 +206,10 @@ void CFWRPMGridEditController::OnLoadDefVal(int mode)
   itemNumber = itemNumberCLT;
  else if (2==mode)
   itemNumber = itemNumberLod;
+ else if (3==mode)
+  itemNumber = itemNumberIRPM;
+ else if (4==mode)
+  itemNumber = itemNumberILod;
  else
  {
   ASSERT(0); //unexpected value
@@ -204,6 +225,10 @@ void CFWRPMGridEditController::OnLoadDefVal(int mode)
   mp_view->SetValues(mode, SECU3IO::temp_map_tmp_slots);
  else if (2==mode)
   mp_view->SetValues(mode, SECU3IO::work_map_lod_slots, false);
+ else if (3==mode)
+  mp_view->SetValues(mode, SECU3IO::vei_map_rpm_slots, false);
+ else if (4==mode)
+  mp_view->SetValues(mode, SECU3IO::vei_map_lod_slots, false);
 
  mp_view->SetErrMessage(mode, _T(""));
  for(size_t i = 0; i < itemNumber; i++)

@@ -47,6 +47,8 @@ struct WndSettings
  int m_VEMapWnd_Y;
  int m_VE2MapWnd_X;
  int m_VE2MapWnd_Y;
+ int m_VEIMapWnd_X;
+ int m_VEIMapWnd_Y;
  int m_AFRMapWnd_X;
  int m_AFRMapWnd_Y;
  int m_CrnkMapWnd_X;
@@ -206,6 +208,8 @@ struct WndSize
  int m_VEMapWnd_H;
  int m_VE2MapWnd_W;
  int m_VE2MapWnd_H;
+ int m_VEIMapWnd_W;
+ int m_VEIMapWnd_H;
  int m_AFRMapWnd_W;
  int m_AFRMapWnd_H;
  int m_CrnkMapWnd_W;

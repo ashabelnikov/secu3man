@@ -69,8 +69,10 @@ class CLPTablesController : public MapWndScrPos
   SECU3FWMapsItem m_md;
 
   float m_rpm_grid_values[16];
+  float m_irpm_grid_values[8]; //idling
   float m_clt_grid_values[16];
   float m_load_grid_values[16];
+  float m_iload_grid_values[8]; //idling
 
  private:
   CFirmwareTabController* mp_fwdcntr;

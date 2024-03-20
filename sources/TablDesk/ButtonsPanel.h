@@ -126,6 +126,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnViewTempIdlMap();
   afx_msg void OnViewVEMap();
   afx_msg void OnViewVE2Map();
+  afx_msg void OnViewIVEMap();
   afx_msg void OnViewAFRMap();
   afx_msg void OnViewCrnkMap();
   afx_msg void OnViewWrmpMap();
@@ -164,6 +165,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnUpdateViewTempIdlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewVEMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewVE2Map(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewIVEMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAFRMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCrnkMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewWrmpMap(CCmdUI* pCmdUI);
@@ -339,6 +341,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnChangeVE2Map(void* i_param);
   static void __cdecl OnCloseVE2Map(void* i_param);
   static void __cdecl OnWndActivationVE2Map(void* i_param, long cmd);
+
+  static void __cdecl OnChangeIVEMap(void* i_param);
+  static void __cdecl OnCloseIVEMap(void* i_param);
+  static void __cdecl OnWndActivationIVEMap(void* i_param, long cmd);
 
   static void __cdecl OnChangeTpszonMap(void* i_param);
   static void __cdecl OnCloseTpszonMap(void* i_param);

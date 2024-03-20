@@ -294,6 +294,18 @@ void CTablesDeskDlg::SetLoadGrid(const float* values)
   std::copy(values, values + 16, mp_ButtonsPanel->GetLoadGrid());
 }
 
+void CTablesDeskDlg::SetIRPMGrid(const float* values)
+{
+ if (mp_ButtonsPanel.get())
+  std::copy(values, values + 8, mp_ButtonsPanel->GetIRPMGrid());
+}
+
+void CTablesDeskDlg::SetILoadGrid(const float* values)
+{
+ if (mp_ButtonsPanel.get())
+  std::copy(values, values + 8, mp_ButtonsPanel->GetILoadGrid());
+}
+
 void CTablesDeskDlg::CloseAllCharts(void)
 {
  HWND hwnd;

@@ -308,6 +308,38 @@ void __cdecl CButtonsPanel::OnCloseVE2Map(void* i_param)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeIVEMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_INJ_IVE);
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseIVEMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_INJ_IVE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_INJ_IVE].handle, ETMT_INJ_IVE);
+}
+
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeAFRMap(void* i_param)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -1117,6 +1149,20 @@ void __cdecl CButtonsPanel::OnWndActivationVE2Map(void* i_param, long cmd)
 
  //allow controller to process event
  _this->OnWndActivation(_this->m_md[ETMT_INJ_VE2].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationIVEMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_INJ_IVE].handle, cmd);
 }
 
 //------------------------------------------------------------------------

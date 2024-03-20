@@ -86,6 +86,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   bool CheckRPMGridsCompatibility(const float* rpmGrid);
   bool CheckCLTGridsCompatibility(const float* rpmGrid);
   bool CheckLoadGridsCompatibility(const float* rpmGrid);
+  bool CheckIRPMGridsCompatibility(const float* rpmGrid);
+  bool CheckILoadGridsCompatibility(const float* rpmGrid);
 
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
@@ -99,6 +101,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetCLTGridMap(const float* i_values);
   void GetLoadGridMap(float* op_values);
   void SetLoadGridMap(const float* i_values);
+  void GetIRPMGridMap(float* op_values);
+  void SetIRPMGridMap(const float* i_values);
+  void GetILoadGridMap(float* op_values);
+  void SetILoadGridMap(const float* i_values);
   void GetCESettingsData(CESettingsData& o_data) const;
   void SetCESettingsData(const CESettingsData& i_data);
   void GetFwConstsData(SECU3IO::FwConstsData& o_data) const;
@@ -552,6 +558,8 @@ protected:
   void SetInjCylAddMap(int i_index, const float* i_values);
   void GetAEMAPMap(int i_index, float* op_values, bool i_original = false);
   void SetAEMAPMap(int i_index, const float* i_values);
+  void GetIVEMap(int i_index, float* op_values, bool i_original = false);
+  void SetIVEMap(int i_index, const float* i_values);
 
   void GetAttenuatorMap(float* op_values, bool i_original = false);
   void SetAttenuatorMap(const float* i_values);

@@ -74,7 +74,7 @@ namespace MLL
 }
 
 //---------------------------------------------------------------------------
-// y = F(x,z)
+// y = f(z,x)
 
 //original_function and modified_function - addresses of 2D arrays containing values of functions
 HWND __cdecl Chart3DCreate(HWND parent, float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
@@ -84,7 +84,7 @@ HWND __cdecl Chart3DCreate(HWND parent, float *original_function, float *modifie
 
  //Create a form
  TForm3D *pForm = new TForm3D(parent);
- pForm->SetDimentions(x_count_of_points, z_count_of_points);
+ pForm->SetDimentions(z_count_of_points, x_count_of_points);
  pForm->SetRange(fnc_min, fnc_max);
  pForm->SetChartTitle(chart_title);
  pForm->SetXAxisTitle(x_axis_title);

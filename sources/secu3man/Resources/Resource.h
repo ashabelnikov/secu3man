@@ -798,3 +798,5 @@
 #define IDS_KC_SIGNAL_OSCILLOSCOPE_TT   4925
 #define IDC_KC_KSS_GRAPH                4926
 #define IDC_LOGCONV_PROGRESS_BAR        4927
+#define IDS_PM_READING_IRPMGRD          4928
+#define IDS_PM_READING_ILODGRD          4929

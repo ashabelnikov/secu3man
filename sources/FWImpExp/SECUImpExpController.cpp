@@ -227,6 +227,12 @@ void SECU3ImportController::OnOkPressed(void)
 
  //копируем таблицу сетки нагрузки
  m_fwdm->GetLoadGridMap(mp_fwd->load_slots);
+
+ //copy idling VE rpm grid
+ m_fwdm->GetIRPMGridMap(mp_fwd->irpm_slots);
+
+ //copy idling VE load grid
+ m_fwdm->GetILoadGridMap(mp_fwd->iload_slots);
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -274,6 +280,9 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
   m_fwdm->GetSetMap(other_sel, ETMT_INJ_VE2, mp_fwd->maps[current_sel].inj_ve2);
+
+ if (mp_view->GetFWDFlag(FLAG_VEI_MAP))
+  m_fwdm->GetSetMap(other_sel, ETMT_INJ_IVE, mp_fwd->maps[current_sel].inj_ive);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
   m_fwdm->GetSetMap(other_sel, ETMT_INJ_AFR, mp_fwd->maps[current_sel].inj_afr);
@@ -387,6 +396,7 @@ void SECU3ImportController::OnViewActivate(void)
  //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_VE2_MAP, true);
+ mp_view->SetFWDFlag(FLAG_VEI_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
  mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
  mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);
@@ -663,6 +673,14 @@ void SECU3ExportController::OnOkPressed(void)
  if (m_fwdm->CheckLoadGridsCompatibility(mp_fwd->load_slots))
   m_fwdm->SetLoadGridMap(mp_fwd->load_slots);
 
+ //check compatibility and copy idling VE rpm grid
+ if (m_fwdm->CheckIRPMGridsCompatibility(mp_fwd->irpm_slots))
+  m_fwdm->SetIRPMGridMap(mp_fwd->irpm_slots);
+
+ //check compatibility and copy idling VE load grid
+ if (m_fwdm->CheckILoadGridsCompatibility(mp_fwd->iload_slots))
+  m_fwdm->SetILoadGridMap(mp_fwd->iload_slots);
+
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);
  m_fwdm->StoreBytes(&buffer[0]);
@@ -715,6 +733,9 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_VE2_MAP))
   m_fwdm->SetSetMap(other_sel, ETMT_INJ_VE2, mp_fwd->maps[current_sel].inj_ve2);
+
+ if (mp_view->GetFWDFlag(FLAG_VEI_MAP))
+  m_fwdm->SetSetMap(other_sel, ETMT_INJ_IVE, mp_fwd->maps[current_sel].inj_ive);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
   m_fwdm->SetSetMap(other_sel, ETMT_INJ_AFR, mp_fwd->maps[current_sel].inj_afr);
@@ -825,6 +846,7 @@ void SECU3ExportController::OnViewActivate(void)
  //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_VE2_MAP, true);
+ mp_view->SetFWDFlag(FLAG_VEI_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
  mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
  mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);

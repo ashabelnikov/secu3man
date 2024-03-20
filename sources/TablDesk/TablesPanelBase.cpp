@@ -50,6 +50,8 @@ CTablesPanelBase::CTablesPanelBase()
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
  memset(m_clt_grid_values, 0, 16 * sizeof(float));
  memset(m_load_grid_values, 0, 16 * sizeof(float));
+ memset(m_irpm_grid_values, 0, 8 * sizeof(float));
+ memset(m_iload_grid_values, 0, 8 * sizeof(float)); 
 }
 
 CTablesPanelBase::~CTablesPanelBase()
@@ -101,6 +103,16 @@ float* CTablesPanelBase::GetCLTGrid(void)
 float* CTablesPanelBase::GetLoadGrid(void)
 {
  return m_load_grid_values;
+}
+
+float* CTablesPanelBase::GetIRPMGrid(void)
+{
+ return m_irpm_grid_values;
+}
+
+float* CTablesPanelBase::GetILoadGrid(void)
+{
+ return m_iload_grid_values;
 }
 
 HWND CTablesPanelBase::_ChartParentHwnd(void)
@@ -160,7 +172,7 @@ void CTablesPanelBase::EnableEmbedMapWnd(bool embed, const CRect& rc, int begin,
 
 bool CTablesPanelBase::Is3DMap(int i)
 {
- return (i == ETMT_IGN_WORK || i == ETMT_INJ_VE || i == ETMT_INJ_VE2 || i == ETMT_INJ_AFR || i == ETMT_INJ_IT ||
+ return (i == ETMT_IGN_WORK || i == ETMT_INJ_VE || i == ETMT_INJ_VE2 || i == ETMT_INJ_IVE || i == ETMT_INJ_AFR || i == ETMT_INJ_IT ||
          i == ETMT_PWM1 || i == ETMT_PWM2 || i == ETMT_GASDOSE || i == ETMT_KNOCK_ZONE || i == ETMT_LAMBDA_ZONE);
 }
 
@@ -204,6 +216,18 @@ void __cdecl CTablesPanelBase::OnGetXAxisLabelRPM(LPTSTR io_label_string, int in
   return;
  }
  _stprintf(io_label_string, _T("%d"), MathHelpers::Round(_this->GetRPMGrid()[index]));
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesPanelBase::OnGetXAxisLabelIRPM(LPTSTR io_label_string, int index, void* i_param)
+{
+ CTablesPanelBase* _this = static_cast<CTablesPanelBase*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //WTF?
+  return;
+ }
+ _stprintf(io_label_string, _T("%d"), MathHelpers::Round(_this->GetIRPMGrid()[index]));
 }
 
 //------------------------------------------------------------------------

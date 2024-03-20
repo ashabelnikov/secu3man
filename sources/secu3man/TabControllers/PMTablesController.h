@@ -131,4 +131,6 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
   float m_rpmGrid[32];
   float m_cltGrid[32];
   float m_lodGrid[32];
+  float m_rpmGridI[32];
+  float m_lodGridI[32];
 };

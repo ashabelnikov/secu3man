@@ -56,8 +56,10 @@ BEGIN_MESSAGE_MAP(CGMEInjVEDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_RSTALL_CHECK,OnUpdateControlsAutoTune1)
  ON_BN_CLICKED(IDC_GME_INJ_VE1_RADIOBOX, OnVE1Button)
  ON_BN_CLICKED(IDC_GME_INJ_VE2_RADIOBOX, OnVE2Button)
+ ON_BN_CLICKED(IDC_GME_INJ_VEI_RADIOBOX, OnVEIButton)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_VE1_RADIOBOX, OnUpdateControlsAutoTune3)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_VE2_RADIOBOX, OnUpdateControlsAutoTune3)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_VEI_RADIOBOX, OnUpdateControlsAutoTune3)
  ON_WM_SIZE()
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -65,6 +67,7 @@ END_MESSAGE_MAP()
 CGMEInjVEDlg::CGMEInjVEDlg()
 : m_ve_map(16, 16, false, false, NULL, 3) 
 , m_ve2_map(16, 16, false, false, NULL, 3) 
+, m_vei_map(8, 8, false, false, NULL, 3) 
 , m_lamdel_map(3, 3, false, false, NULL, 3)
 , m_celwgt_map(16, 16, false, false, NULL, 3, true) //read-only
 , mp_rpmGrid(NULL)
@@ -97,6 +100,7 @@ void CGMEInjVEDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_GME_INJ_VE, m_ve_map);
  DDX_Control(pDX, IDC_GME_INJ_VE2, m_ve2_map);
+ DDX_Control(pDX, IDC_GME_INJ_VEI, m_vei_map);
  DDX_Control(pDX, IDC_GME_INJ_LAMDEL_MAP, m_lamdel_map);
  DDX_Control(pDX, IDC_GME_INJ_CELWGT_MAP, m_celwgt_map);
 
@@ -114,6 +118,7 @@ void CGMEInjVEDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_GME_INJ_VE1_RADIOBOX, m_ve1_radio);
  DDX_Control(pDX, IDC_GME_INJ_VE2_RADIOBOX, m_ve2_radio);
+ DDX_Control(pDX, IDC_GME_INJ_VEI_RADIOBOX, m_vei_radio);
 
  DDX_Control(pDX, IDC_GME_AUTOTUNE_GROUPBOX, m_atgroup);
 }
@@ -132,11 +137,19 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  { //VE1
   m_ve1_radio.SetCheck(BST_CHECKED);
   m_ve2_radio.SetCheck(BST_UNCHECKED);
+  m_vei_radio.SetCheck(BST_UNCHECKED);
  }
- else
+ else if (1==m_active_ve)
  { //VE2
   m_ve1_radio.SetCheck(BST_UNCHECKED);
   m_ve2_radio.SetCheck(BST_CHECKED);
+  m_vei_radio.SetCheck(BST_UNCHECKED);
+ }
+ else
+ {//Idling VE
+  m_ve1_radio.SetCheck(BST_UNCHECKED);
+  m_ve2_radio.SetCheck(BST_UNCHECKED);
+  m_vei_radio.SetCheck(BST_CHECKED);
  }
 
  m_ve_map.SetRange(.0f, 1.99f);
@@ -164,6 +177,19 @@ BOOL CGMEInjVEDlg::OnInitDialog()
 
  if (1==m_active_ve)
   m_ve2_map.ShowWindow(SW_SHOW); //show 2nd map
+
+ m_vei_map.SetRange(.0f, 1.99f);
+ m_vei_map.AttachMap(mp_VEMapI[1], mp_VEMapI[0]);
+ m_vei_map.AttachLabels(mp_rpmGridI, mp_loadGridI);
+ m_vei_map.ShowLabels(true, true);
+ m_vei_map.SetDecimalPlaces(3, 0, 0);
+ m_vei_map.SetFont(&m_font);
+ m_vei_map.EnableAbroadMove(false, false);
+ m_vei_map.SetValueIncrement(0.01f);
+ m_vei_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
+
+ if (2==m_active_ve)
+  m_vei_map.ShowWindow(SW_SHOW); //show 3nd map (idling)
 
  if (m_OnSelectVEMap)
   m_OnSelectVEMap(m_active_ve); //notify controller about selection of certain VE map
@@ -212,6 +238,8 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_finish_check, MLL::GetString(IDS_GME_INJ_FINISH_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ve1_radio, MLL::GetString(IDS_GME_INJ_VE1_RADIOBOX_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ve2_radio, MLL::GetString(IDS_GME_INJ_VE2_RADIOBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vei_radio, MLL::GetString(IDS_GME_INJ_VEI_RADIOBOX_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -219,6 +247,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  mp_cscl->Init(this);
  mp_cscl->Add(&m_ve_map);
  mp_cscl->Add(&m_ve2_map);
+ mp_cscl->Add(&m_vei_map);
  mp_cscl->Add(&m_lamdel_map);
  mp_cscl->Add(&m_celwgt_map);
  mp_cscl->Add(&m_lamdel_button);
@@ -233,6 +262,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  mp_cscl->Add(&m_status_text);
  mp_cscl->Add(&m_ve1_radio);
  mp_cscl->Add(&m_ve2_radio);
+ mp_cscl->Add(&m_vei_radio);
  mp_cscl->Add(&m_atgroup);
 
  m_initialized = true;
@@ -247,19 +277,14 @@ void CGMEInjVEDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(IsWindowEnabled());
 }
 
-void CGMEInjVEDlg::OnUpdateControlsAutoTune(CCmdUI* pCmdUI)
-{
- pCmdUI->Enable(m_IsReady && IsWindowEnabled() && (m_IsReady && m_IsReady()));
-}
-
 void CGMEInjVEDlg::OnUpdateControlsAutoTune1(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_IsReady && IsWindowEnabled());
+ pCmdUI->Enable(m_active_ve!=2 && m_IsReady && IsWindowEnabled());
 }
 
 void CGMEInjVEDlg::OnUpdateControlsAutoTune2(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_IsReady && IsWindowEnabled() && GetVECtrl().GetSelection().size());
+ pCmdUI->Enable(m_active_ve!=2 && m_IsReady && IsWindowEnabled() && GetVECtrl().GetSelection().size());
 }
 
 void CGMEInjVEDlg::OnUpdateControlsAutoTune3(CCmdUI* pCmdUI)
@@ -275,25 +300,35 @@ LPCTSTR CGMEInjVEDlg::GetDialogID(void) const
  return (LPCTSTR)IDD_GME_INJ_VE;
 }
 
-void CGMEInjVEDlg::BindMaps(float* pVE, float* pVE2)
+void CGMEInjVEDlg::BindMaps(float* pVE, float* pVE2, float* pVEI)
 {
  ASSERT(pVE);
  mp_VEMap[1] = pVE;
  ASSERT(pVE2);
  mp_VEMap2[1] = pVE2;
+ ASSERT(pVEI);
+ mp_VEMapI[1] = pVEI;
 }
 
-void CGMEInjVEDlg::BindMapsOrig(float* pVE, float* pVE2)
+void CGMEInjVEDlg::BindMapsOrig(float* pVE, float* pVE2, float* pVEI)
 {
  ASSERT(pVE);
  mp_VEMap[0] = pVE;
  ASSERT(pVE2);
  mp_VEMap2[0] = pVE2;
+ ASSERT(pVEI);
+ mp_VEMapI[0] = pVEI;
 }
 
 void CGMEInjVEDlg::BindRPMGrid(float* pGrid)
 {
  mp_rpmGrid = pGrid;
+ ASSERT(pGrid);
+}
+
+void CGMEInjVEDlg::BindRPMGridI(float* pGrid)
+{
+ mp_rpmGridI = pGrid;
  ASSERT(pGrid);
 }
 
@@ -327,6 +362,18 @@ void CGMEInjVEDlg::BindLoadGrid2(const float* pGrid, bool updateLabels /*= false
  }
 }
 
+void CGMEInjVEDlg::BindLoadGridI(const float* pGrid, bool updateLabels /*= false*/)
+{
+ mp_loadGridI = pGrid;
+ ASSERT(pGrid);
+ if (updateLabels /*&& m_vei_radio.GetCheck()==BST_CHECKED*/)
+ {
+  m_vei_map.AttachLabels(mp_rpmGridI, mp_loadGridI);
+  if (m_vei_map.GetSafeHwnd())
+   m_vei_map.UpdateDisplay(); 
+ }
+}
+
 void CGMEInjVEDlg::setOnChange(EventHandler OnCB)
 {
  m_ve_map.setOnChange(OnCB);
@@ -337,26 +384,46 @@ void CGMEInjVEDlg::setOnChange2(EventHandler OnCB)
  m_ve2_map.setOnChange(OnCB);
 }
 
+void CGMEInjVEDlg::setOnChangeI(EventHandler OnCB)
+{
+ m_vei_map.setOnChange(OnCB);
+}
+
 void CGMEInjVEDlg::UpdateView(bool axisLabels /*= false*/)
 {
  CMapEditorCtrl& ve_map = GetVECtrl();
  UpdateBlockColor(ve_map);
+
  if (axisLabels)
-  ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //update axis labels
+ { //update axis labels
+  int ve = GetActiveVEMap();
+  if (0==ve)
+   ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //1st VE
+  else if (1==ve)
+   ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid2); //2nd VE  
+  else 
+   ve_map.AttachLabels(mp_rpmGridI, mp_loadGridI); //idling VE
+ }
+
  ve_map.UpdateDisplay();
 }
 
-void CGMEInjVEDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load, float tps)
+void CGMEInjVEDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load, float tps, bool idlve_use)
 {
  if (m_ve_map.GetSafeHwnd() && m_ve_map.IsWindowVisible())
  {
-  m_ve_map.ShowMarkers(!strt_use, true);
+  m_ve_map.ShowMarkers(!strt_use && !idlve_use, true);
   m_ve_map.SetArguments(load, (float)rpm);
  }
  if (m_ve2_map.GetSafeHwnd() && m_ve2_map.IsWindowVisible())
  {
-  m_ve2_map.ShowMarkers(!strt_use, true);
+  m_ve2_map.ShowMarkers(!strt_use && !idlve_use, true);
   m_ve2_map.SetArguments(tps, (float)rpm);
+ }
+ if (m_vei_map.GetSafeHwnd() && m_vei_map.IsWindowVisible())
+ {
+  m_vei_map.ShowMarkers(idlve_use, true);
+  m_vei_map.SetArguments(load, (float)rpm);
  }
  if (m_lamdel_map.GetSafeHwnd() && m_lamdel_map.IsWindowVisible())
  {
@@ -458,7 +525,7 @@ void CGMEInjVEDlg::OnSmoothButton()
 
 void CGMEInjVEDlg::OnSelChangeVE(void)
 {
- if (!mp_CelBlkMap)
+ if (!mp_CelBlkMap || m_active_ve==2)
   return;
  CMapEditorCtrl& ve_map = GetVECtrl();
  const std::vector<std::pair<int, int> >& sel = ve_map.GetSelection();
@@ -568,8 +635,10 @@ const std::vector<std::pair<int, int> >& CGMEInjVEDlg::GetVESelection(void)
 
 void CGMEInjVEDlg::OnVE1Button()
 {
+ m_active_ve = 0;
  m_ve_map.ShowWindow(SW_SHOW); //show 1st map
  m_ve2_map.ShowWindow(SW_HIDE);
+ m_vei_map.ShowWindow(SW_HIDE);
  m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  UpdateBlockColor(m_ve_map);
@@ -580,18 +649,20 @@ void CGMEInjVEDlg::OnVE1Button()
   m_celwgt_map.UpdateDisplay();
 
  if (m_OnSelectVEMap)
-  m_OnSelectVEMap(0); //notify controller about selection of 1st VE map
-
- m_active_ve = 0;
+  m_OnSelectVEMap(m_active_ve); //notify controller about selection of 1st VE map
 
  if (m_on_change_sett)
   m_on_change_sett();
+
+ UpdateDialogControls(this, true);
 }
 
 void CGMEInjVEDlg::OnVE2Button()
 {
+ m_active_ve = 1;
  m_ve_map.ShowWindow(SW_HIDE);
  m_ve2_map.ShowWindow(SW_SHOW); //show 2nd map
+ m_vei_map.ShowWindow(SW_HIDE);
  m_ve2_map.AttachLabels(mp_rpmGrid, mp_loadGrid2);
  m_celwgt_map.AttachLabels(mp_rpmGrid, mp_loadGrid2);
  UpdateBlockColor(m_ve2_map);
@@ -602,12 +673,32 @@ void CGMEInjVEDlg::OnVE2Button()
   m_celwgt_map.UpdateDisplay(); 
 
  if (m_OnSelectVEMap)
-  m_OnSelectVEMap(1); //notify controller about selection of 2nd VE map
-
- m_active_ve = 1;
+  m_OnSelectVEMap(m_active_ve); //notify controller about selection of 2nd VE map
 
  if (m_on_change_sett)
   m_on_change_sett();
+
+ UpdateDialogControls(this, true);
+}
+
+void CGMEInjVEDlg::OnVEIButton()
+{
+ m_active_ve = 2;
+ m_ve_map.ShowWindow(SW_HIDE);
+ m_ve2_map.ShowWindow(SW_HIDE);
+ m_vei_map.ShowWindow(SW_SHOW); //show idling VE map
+ m_vei_map.AttachLabels(mp_rpmGridI, mp_loadGridI);
+ OnSelChangeVE(); //simulate event to update button
+ if (m_vei_map.GetSafeHwnd())
+  m_vei_map.UpdateDisplay(); 
+
+ if (m_OnSelectVEMap)
+  m_OnSelectVEMap(m_active_ve); //notify controller about selection of Idling VE map
+
+ if (m_on_change_sett)
+  m_on_change_sett();
+
+ UpdateDialogControls(this, true);
 }
 
 CMapEditorCtrl& CGMEInjVEDlg::GetVECtrl(void)
@@ -616,6 +707,8 @@ CMapEditorCtrl& CGMEInjVEDlg::GetVECtrl(void)
   return m_ve_map;
  else if (m_ve2_radio.GetCheck()==BST_CHECKED)
   return m_ve2_map;
+ else if (m_vei_radio.GetCheck()==BST_CHECKED)
+  return m_vei_map; //idling
  else
  {
   ASSERT(0);
@@ -625,7 +718,7 @@ CMapEditorCtrl& CGMEInjVEDlg::GetVECtrl(void)
 
 void CGMEInjVEDlg::UpdateBlockColor(CMapEditorCtrl& ve_map)
 {
- if (mp_CelBlkMap)
+ if (mp_CelBlkMap && m_active_ve!=2) //don't update CelBlkMap if idling VE is active
  {
   for (int l = 0; l < 16; ++l)
    for (int r = 0; r < 16; ++r)
@@ -648,13 +741,22 @@ void CGMEInjVEDlg::SetActiveVEMap(int vemapid)
  { //VE1
   m_ve1_radio.SetCheck(BST_CHECKED);
   m_ve2_radio.SetCheck(BST_UNCHECKED);
+  m_vei_radio.SetCheck(BST_UNCHECKED);
   OnVE1Button();
  }
- else
+ else if (1==m_active_ve)
  { //VE2
   m_ve1_radio.SetCheck(BST_UNCHECKED);
   m_ve2_radio.SetCheck(BST_CHECKED);
+  m_vei_radio.SetCheck(BST_UNCHECKED);
   OnVE2Button();
+ }
+ else
+ {// Idling VE
+  m_ve1_radio.SetCheck(BST_UNCHECKED);
+  m_ve2_radio.SetCheck(BST_UNCHECKED);
+  m_vei_radio.SetCheck(BST_CHECKED);
+  OnVEIButton();
  }
 }
 

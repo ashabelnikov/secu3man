@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0127 //01.27
+#define CURRENT_VERSION 0x0128 //01.28
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -95,6 +95,7 @@ typedef unsigned char s3f_uint8_t;
 //         Added Fuel density correction map (25.08.2022)
 // 01.27 - Added inj. non-linearity correction maps - petrol and gas (24.05.2023)
 //         Added X-tau maps, 4 pcs (27.05.2023)
+// 01.28 - Added idling VE map and grids for it (load and rpm) (20.03.2024)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -165,8 +166,11 @@ struct S3FMapSetItem
 
  //since v01.26
  s3f_int32_t inj_thrass[INJ_THRASS_SIZE];                  //throttle assist map
+
+ //since v01.28
+ s3f_int32_t inj_ive[INJ_IVE_POINTS_L * INJ_IVE_POINTS_F]; // idling VE
  
- s3f_int32_t reserved[1696]; //reserved bytes, = 0
+ s3f_int32_t reserved[1632]; //reserved bytes, = 0
 };
 
 
@@ -313,7 +317,11 @@ struct S3FSepMaps
  s3f_int32_t xtau_tfacc[XTAU_FACT_SIZE];                //X-tau
  s3f_int32_t xtau_tfdec[XTAU_FACT_SIZE];                //X-tau
 
- s3f_int32_t reserved[3536];       //reserved bytes, = 0
+ //since v01.28
+ s3f_int32_t irpm_slots[F_IRPM_SLOTS];                  //RPM grid for idling VE map
+ s3f_int32_t iload_slots[F_ILOAD_SLOTS];                //load grid for idling VE map
+
+ s3f_int32_t reserved[3520];       //reserved bytes, = 0
 };
 
 
@@ -696,6 +704,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].inj_ae_map[i] = MathHelpers::Round(m_data.maps[s].inj_ae_map[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_THRASS_SIZE; ++i)
    p_setItem[s].inj_thrass[i] = MathHelpers::Round(m_data.maps[s].inj_thrass[i] * INT_MULTIPLIER);
+  for(i = 0; i < (INJ_IVE_POINTS_L * INJ_IVE_POINTS_F); ++i)
+   p_setItem[s].inj_ive[i] = MathHelpers::Round(m_data.maps[s].inj_ive[i] * INT_MULTIPLIER); //normal order of rows
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -799,6 +809,12 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  //convert load grid
  for(i = 0; i < F_LOAD_SLOTS; ++i)
   p_sepMaps->load_slots[i] = MathHelpers::Round(_RIG(m_data.load_slots, i) * INT_MULTIPLIER);
+ //convert RPM grid of idling VE
+ for(i = 0; i < F_IRPM_SLOTS; ++i)
+  p_sepMaps->irpm_slots[i] = MathHelpers::Round(m_data.irpm_slots[i] * INT_MULTIPLIER);
+ //convert load grid of idling VE
+ for(i = 0; i < F_ILOAD_SLOTS; ++i)
+  p_sepMaps->iload_slots[i] = MathHelpers::Round(m_data.iload_slots[i] * INT_MULTIPLIER); //normal order of rows
 
  //CE settings
  p_sepMaps->cesd.map_v_min = MathHelpers::Round(m_data.cesd.map_v_min * INT_MULTIPLIER);
@@ -991,6 +1007,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_ae_map[i] = p_setItem[s].inj_ae_map[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_THRASS_SIZE; ++i)
    m_data.maps[s].inj_thrass[i] = p_setItem[s].inj_thrass[i] / INT_MULTIPLIER;
+  for(i = 0; i < (INJ_IVE_POINTS_L * INJ_IVE_POINTS_F); ++i)
+   m_data.maps[s].inj_ive[i] = p_setItem[s].inj_ive[i] / INT_MULTIPLIER; //normal order of rows
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];
@@ -1095,6 +1113,9 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.clt_slots[i] = p_sepMaps->clt_slots[i] / INT_MULTIPLIER;
  }
 
+ if (empty) //copy standard CLT grid if source is empty
+  std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
+
  //convert load grid
  empty = true;
  for(i = 0; i < F_LOAD_SLOTS; ++i)
@@ -1104,11 +1125,32 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.load_slots[i] = _RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER;
  }
 
- if (empty) //copy standard CLT grid if source is empty
-  std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
-
  if (empty) //copy standard load grid if source is empty
   std::copy(SECU3IO::work_map_lod_slots, SECU3IO::work_map_lod_slots + F_LOAD_SLOTS, m_data.load_slots);
+
+ //convert RPM grid of idling VE
+ empty = true;
+ for(i = 0; i < F_IRPM_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->irpm_slots[i])
+   empty = false;
+  m_data.irpm_slots[i] = p_sepMaps->irpm_slots[i] / INT_MULTIPLIER;
+ }
+
+ if (empty || (p_fileHdr->version < 0x0128)) //copy standard idling VE rpm grid if source is empty
+  std::copy(SECU3IO::vei_map_rpm_slots, SECU3IO::vei_map_rpm_slots + F_IRPM_SLOTS, m_data.irpm_slots);
+
+ //convert load grid of idling VE
+ empty = true;
+ for(i = 0; i < F_ILOAD_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->iload_slots[i])
+   empty = false;
+  m_data.iload_slots[i] = p_sepMaps->iload_slots[i] / INT_MULTIPLIER;
+ }
+
+ if (empty || (p_fileHdr->version < 0x0128)) //copy standard load grid if source is empty
+  std::copy(SECU3IO::vei_map_lod_slots, SECU3IO::vei_map_lod_slots + F_ILOAD_SLOTS, m_data.iload_slots);
 
   //CE settings
  m_data.cesd.map_v_min = p_sepMaps->cesd.map_v_min / INT_MULTIPLIER;
@@ -1364,6 +1406,9 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   m_data.clt_slots[i] = p_sepMaps->clt_slots[i] / INT_MULTIPLIER;
  }
 
+ if (empty || (p_fileHdr->version < 0x0111)) //copy standard CLT grid if old version of S3F is being loaded
+  std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
+
  //convert load grid
  empty = true;
  for(i = 0; i < F_LOAD_SLOTS; ++i)
@@ -1373,11 +1418,12 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   m_data.load_slots[i] = _RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER;
  }
 
- if (empty || (p_fileHdr->version < 0x0111)) //copy standard CLT grid if old version of S3F is being loaded
-  std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
-
  if (empty || (p_fileHdr->version < 0x0114)) //copy standard load grid if old version of S3F is being loaded
   std::copy(SECU3IO::work_map_lod_slots, SECU3IO::work_map_lod_slots + F_LOAD_SLOTS, m_data.load_slots);
+
+ //copy standard idling VE grids when loading old format
+ std::copy(SECU3IO::vei_map_rpm_slots, SECU3IO::vei_map_rpm_slots + F_IRPM_SLOTS, m_data.irpm_slots);
+ std::copy(SECU3IO::vei_map_lod_slots, SECU3IO::vei_map_lod_slots + F_ILOAD_SLOTS, m_data.iload_slots);
 
  if (p_fileHdr->version >= 0x0111) //CE settings appeared since v01.11
  {
@@ -1509,6 +1555,10 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
 
  //copy standard load grid when loading old format
  std::copy(SECU3IO::work_map_lod_slots, SECU3IO::work_map_lod_slots + F_LOAD_SLOTS, m_data.load_slots);
+
+ //copy standard idling VE grids when loading old format
+ std::copy(SECU3IO::vei_map_rpm_slots, SECU3IO::vei_map_rpm_slots + F_IRPM_SLOTS, m_data.irpm_slots);
+ std::copy(SECU3IO::vei_map_lod_slots, SECU3IO::vei_map_lod_slots + F_ILOAD_SLOTS, m_data.iload_slots);
 
  return true;
 }
