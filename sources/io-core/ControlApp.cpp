@@ -2384,6 +2384,44 @@ bool CControlApp::Parse_ILODGRD_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_TLODGRD_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::SepTabPar& tlodGrdPar = m_recepted_packet.m_SepTabPar;
+ if (size != 33)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ //адрес фрагмента данных в таблице (смещение в таблице)
+ unsigned char address;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
+  return false;
+ tlodGrdPar.address = address;
+ if (0!=address)
+  return false;  //address must be always zero
+
+ size-=1;
+ size_t div = 2;
+ if (size % div)
+  return false;
+
+ //load grid data
+ size_t data_size = 0;
+ for(size_t i = 0; i < size / div; ++i)
+ {
+  unsigned char lo_byte, hi_byte;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &lo_byte))
+   return false;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &hi_byte))
+   return false;
+
+  tlodGrdPar.table_data[i] = ((float)MAKEWORD(lo_byte, hi_byte)) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  ++data_size;
+ }
+ tlodGrdPar.data_size = data_size;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& diagInpDat = m_recepted_packet.m_DiagInpDat;
@@ -3371,6 +3409,10 @@ bool CControlApp::ParsePackets()
     if (Parse_ILODGRD_PAR(p_start, p_size))
      break;
     continue;
+   case TLODGRD_PAR:
+    if (Parse_TLODGRD_PAR(p_start, p_size))
+     break;
+    continue;
    case DIAGINP_DAT:
     if (Parse_DIAGINP_DAT(p_start, p_size))
      break;
@@ -3640,6 +3682,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case LODGRD_PAR:
   case IRPMGRD_PAR: //idling VE
   case ILODGRD_PAR: //idling VE
+  case TLODGRD_PAR:
   case DIAGINP_DAT:
   case DIAGOUT_DAT:
   case CHOKE_PAR:

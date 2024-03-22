@@ -52,6 +52,7 @@ CTablesPanelBase::CTablesPanelBase()
  memset(m_load_grid_values, 0, 16 * sizeof(float));
  memset(m_irpm_grid_values, 0, 8 * sizeof(float));
  memset(m_iload_grid_values, 0, 8 * sizeof(float)); 
+ memset(m_tload_grid_values, 0, 16 * sizeof(float));
 }
 
 CTablesPanelBase::~CTablesPanelBase()
@@ -103,6 +104,11 @@ float* CTablesPanelBase::GetCLTGrid(void)
 float* CTablesPanelBase::GetLoadGrid(void)
 {
  return m_load_grid_values;
+}
+
+float* CTablesPanelBase::GetTLoadGrid(void)
+{
+ return m_tload_grid_values;
 }
 
 float* CTablesPanelBase::GetIRPMGrid(void)

@@ -67,21 +67,23 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   afx_msg void OnChangeEdit2(UINT nID);
   afx_msg void OnChangeEdit3(UINT nID);
   afx_msg void OnChangeEdit4(UINT nID);
+  afx_msg void OnChangeEdit5(UINT nID);
   afx_msg void OnLoadDefValBtn();
   afx_msg void OnLoadDefValBtn1();
   afx_msg void OnLoadDefValBtn2();
   afx_msg void OnLoadDefValBtn3();
   afx_msg void OnLoadDefValBtn4();
+  afx_msg void OnLoadDefValBtn5();
   afx_msg void OnUpdateOkButton(CCmdUI* pCmdUI);
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
   DECLARE_MESSAGE_MAP()
 
  private:
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
-  CStatic m_errMsg[5];
-  std::vector<CEditEx*> m_edits[5];
-  std::vector<float> m_values[5];
-  std::vector<bool> m_errflags[5];
+  CStatic m_errMsg[6];
+  std::vector<CEditEx*> m_edits[6];
+  std::vector<float> m_values[6];
+  std::vector<bool> m_errflags[6];
 
   EventOnChange m_onChange;
   EventHandler m_onLoadDefVal;

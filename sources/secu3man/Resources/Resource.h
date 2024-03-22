@@ -800,3 +800,4 @@
 #define IDC_LOGCONV_PROGRESS_BAR        4927
 #define IDS_PM_READING_IRPMGRD          4928
 #define IDS_PM_READING_ILODGRD          4929
+#define IDS_PM_READING_TLODGRD          4930

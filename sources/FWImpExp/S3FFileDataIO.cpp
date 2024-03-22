@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0128 //01.28
+#define CURRENT_VERSION 0x0128 //01.29
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -96,6 +96,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.27 - Added inj. non-linearity correction maps - petrol and gas (24.05.2023)
 //         Added X-tau maps, 4 pcs (27.05.2023)
 // 01.28 - Added idling VE map and grids for it (load and rpm) (20.03.2024)
+// 01.29 - Added VE2 load grid (22.03.2024)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -321,7 +322,10 @@ struct S3FSepMaps
  s3f_int32_t irpm_slots[F_IRPM_SLOTS];                  //RPM grid for idling VE map
  s3f_int32_t iload_slots[F_ILOAD_SLOTS];                //load grid for idling VE map
 
- s3f_int32_t reserved[3520];       //reserved bytes, = 0
+ //since v01.29
+ s3f_int32_t tload_slots[F_TLOAD_SLOTS];                //TPS (VE2) load grid, normal order of values
+
+ s3f_int32_t reserved[3504];       //reserved bytes, = 0
 };
 
 
@@ -815,6 +819,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  //convert load grid of idling VE
  for(i = 0; i < F_ILOAD_SLOTS; ++i)
   p_sepMaps->iload_slots[i] = MathHelpers::Round(m_data.iload_slots[i] * INT_MULTIPLIER); //normal order of rows
+ //convert load grid of VE2
+ for(i = 0; i < F_TLOAD_SLOTS; ++i)
+  p_sepMaps->tload_slots[i] = MathHelpers::Round(m_data.tload_slots[i] * INT_MULTIPLIER); //normal order of rows
 
  //CE settings
  p_sepMaps->cesd.map_v_min = MathHelpers::Round(m_data.cesd.map_v_min * INT_MULTIPLIER);
@@ -1152,6 +1159,18 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  if (empty || (p_fileHdr->version < 0x0128)) //copy standard load grid if source is empty
   std::copy(SECU3IO::vei_map_lod_slots, SECU3IO::vei_map_lod_slots + F_ILOAD_SLOTS, m_data.iload_slots);
 
+ //convert load grid of VE2
+ empty = true;
+ for(i = 0; i < F_TLOAD_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->tload_slots[i])
+   empty = false;
+  m_data.tload_slots[i] = p_sepMaps->tload_slots[i] / INT_MULTIPLIER;
+ }
+
+ if (empty || (p_fileHdr->version < 0x0129)) //copy standard load grid if source is empty
+  std::copy(SECU3IO::ve2_map_lod_slots, SECU3IO::ve2_map_lod_slots + F_TLOAD_SLOTS, m_data.tload_slots);
+
   //CE settings
  m_data.cesd.map_v_min = p_sepMaps->cesd.map_v_min / INT_MULTIPLIER;
  m_data.cesd.map_v_max = p_sepMaps->cesd.map_v_max / INT_MULTIPLIER;
@@ -1425,6 +1444,9 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  std::copy(SECU3IO::vei_map_rpm_slots, SECU3IO::vei_map_rpm_slots + F_IRPM_SLOTS, m_data.irpm_slots);
  std::copy(SECU3IO::vei_map_lod_slots, SECU3IO::vei_map_lod_slots + F_ILOAD_SLOTS, m_data.iload_slots);
 
+ //copy standard VE2 grid when loading old format
+ std::copy(SECU3IO::ve2_map_lod_slots, SECU3IO::ve2_map_lod_slots + F_TLOAD_SLOTS, m_data.tload_slots);
+
  if (p_fileHdr->version >= 0x0111) //CE settings appeared since v01.11
  {
   //CE settings
@@ -1559,6 +1581,9 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
  //copy standard idling VE grids when loading old format
  std::copy(SECU3IO::vei_map_rpm_slots, SECU3IO::vei_map_rpm_slots + F_IRPM_SLOTS, m_data.irpm_slots);
  std::copy(SECU3IO::vei_map_lod_slots, SECU3IO::vei_map_lod_slots + F_ILOAD_SLOTS, m_data.iload_slots);
+
+ //copy standard VE2 grid when loading old format
+ std::copy(SECU3IO::ve2_map_lod_slots, SECU3IO::ve2_map_lod_slots + F_TLOAD_SLOTS, m_data.tload_slots);
 
  return true;
 }

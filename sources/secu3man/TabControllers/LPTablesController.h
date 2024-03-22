@@ -73,6 +73,7 @@ class CLPTablesController : public MapWndScrPos
   float m_clt_grid_values[16];
   float m_load_grid_values[16];
   float m_iload_grid_values[8]; //idling
+  float m_tload_grid_values[16]; //VE2 load
 
  private:
   CFirmwareTabController* mp_fwdcntr;

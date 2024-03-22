@@ -71,6 +71,7 @@ class AFX_EXT_CLASS CTablesPanelBase : public LdaxCfg
   float* GetLoadGrid(void);
   float* GetIRPMGrid(void); //idling
   float* GetILoadGrid(void);//idling
+  float* GetTLoadGrid(void); //VE2
 
   void EnableToggleMapWnd(bool toggle);
 
@@ -133,6 +134,7 @@ class AFX_EXT_CLASS CTablesPanelBase : public LdaxCfg
   float m_load_grid_values[16];
   float m_irpm_grid_values[8]; //idling VE
   float m_iload_grid_values[8];//idling VE
+  float m_tload_grid_values[16];//VE2
 
   bool m_toggleMapWnd;
   HWND m_openedChart;

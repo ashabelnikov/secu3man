@@ -376,7 +376,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   bool m_splitAng;
   bool m_onlineMode;
   int m_ve2_map_func;
-  std::vector<float> m_ve2_map_load_slots;
 
   bool m_initialized;
   bool m_disable_vscroll;

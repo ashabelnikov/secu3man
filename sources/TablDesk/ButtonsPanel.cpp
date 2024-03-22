@@ -74,9 +74,6 @@ CButtonsPanel::CButtonsPanel(bool enableAutoTune /*=false*/, bool onlineMode /*=
   md.mp_button = new CButton;
   m_md.insert(std::make_pair(i, md));
  }
-
- m_ve2_map_load_slots.reserve(32);
- m_ve2_map_load_slots = MathHelpers::BuildGridFromRange(0.0f, 100.0f, 16); 
 }
 
 CButtonsPanel::~CButtonsPanel()
@@ -1642,7 +1639,7 @@ void CButtonsPanel::OnGridModeEditingInj()
   {
    mp_autoTuneCntr->SetView(mp_gridModeEditorInjDlg.get());
    mp_autoTuneCntr->BindRPMGrid(GetRPMGrid());
-   mp_autoTuneCntr->BindLoadGrid(GetLoadGrid(), &m_ve2_map_load_slots[0]);
+   mp_autoTuneCntr->BindLoadGrid(GetLoadGrid(), GetTLoadGrid());
    mp_autoTuneCntr->BindMaps(GetMap(ETMT_INJ_VE, false), GetMap(ETMT_INJ_AFR, false), GetMap(ETMT_INJ_VE2, false));
    mp_autoTuneCntr->SetLoadAxisCfg(ldaxGetMin(), ldaxGetMax(), ldaxGetCfg(), ldaxIsTable());
    mp_autoTuneCntr->SetVE2MapFunc(m_ve2_map_func);
@@ -1663,7 +1660,7 @@ void CButtonsPanel::OnGridModeEditingInj()
 
   mp_gridModeEditorInjDlg->BindRPMGrid(GetRPMGrid(), GetIRPMGrid());
   mp_gridModeEditorInjDlg->BindCLTGrid(GetCLTGrid());
-  mp_gridModeEditorInjDlg->BindLoadGrid(GetLoadGrid(), &m_ve2_map_load_slots[0], GetILoadGrid());
+  mp_gridModeEditorInjDlg->BindLoadGrid(GetLoadGrid(), GetTLoadGrid(), GetILoadGrid());
   mp_gridModeEditorInjDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorInjDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));

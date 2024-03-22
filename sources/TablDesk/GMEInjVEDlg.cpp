@@ -86,6 +86,7 @@ CGMEInjVEDlg::CGMEInjVEDlg()
  {
   mp_VEMap[i] = NULL;
   mp_VEMap2[i] = NULL;
+  mp_VEMapI[i] = NULL;
  }
 }
 

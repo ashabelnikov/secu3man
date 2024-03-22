@@ -34,13 +34,13 @@
 
 const UINT CRPMGridEditDlg::IDD = IDD_RPM_GRID_EDITOR;
 
-static const int editStart[5] = {IDC_RGE_EDIT_0,  IDC_CGE_EDIT_0,  IDC_LGE_EDIT_0, IDC_IRGE_EDIT_0, IDC_ILGE_EDIT_0};
-static const int editEnd[5] =   {IDC_RGE_EDIT_15, IDC_CGE_EDIT_15, IDC_LGE_EDIT_15, IDC_IRGE_EDIT_7, IDC_ILGE_EDIT_7};
+static const int editStart[6] = {IDC_RGE_EDIT_0,  IDC_CGE_EDIT_0,  IDC_LGE_EDIT_0, IDC_IRGE_EDIT_0, IDC_ILGE_EDIT_0, IDC_TLGE_EDIT_0};
+static const int editEnd[6] =   {IDC_RGE_EDIT_15, IDC_CGE_EDIT_15, IDC_LGE_EDIT_15, IDC_IRGE_EDIT_7, IDC_ILGE_EDIT_7, IDC_TLGE_EDIT_15};
 
 static const COLORREF itemErrColor = RGB(255,120,120);
 static const COLORREF errorMsgColor = RGB(255, 0, 0);
 
-static const int numGrids = 5;
+static const int numGrids = 6;
 
 /////////////////////////////////////////////////////////////////////////////
 // CRPMGridEditDlg dialog
@@ -51,11 +51,13 @@ BEGIN_MESSAGE_MAP(CRPMGridEditDlg, Super)
  ON_CONTROL_RANGE(EN_CHANGE, editStart[2], editEnd[2], OnChangeEdit2)
  ON_CONTROL_RANGE(EN_CHANGE, editStart[3], editEnd[3], OnChangeEdit3)
  ON_CONTROL_RANGE(EN_CHANGE, editStart[4], editEnd[4], OnChangeEdit4)
+ ON_CONTROL_RANGE(EN_CHANGE, editStart[5], editEnd[5], OnChangeEdit5)
  ON_BN_CLICKED(IDC_RGE_LOAD_DEF_VAL, OnLoadDefValBtn)
  ON_BN_CLICKED(IDC_CGE_LOAD_DEF_VAL, OnLoadDefValBtn1)
  ON_BN_CLICKED(IDC_LGE_LOAD_DEF_VAL, OnLoadDefValBtn2)
  ON_BN_CLICKED(IDC_IRGE_LOAD_DEF_VAL, OnLoadDefValBtn3)
  ON_BN_CLICKED(IDC_ILGE_LOAD_DEF_VAL, OnLoadDefValBtn4)
+ ON_BN_CLICKED(IDC_TLGE_LOAD_DEF_VAL, OnLoadDefValBtn5)
  ON_UPDATE_COMMAND_UI(IDOK, OnUpdateOkButton)
  ON_WM_CTLCOLOR()
  ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
@@ -117,6 +119,17 @@ CRPMGridEditDlg::CRPMGridEditDlg(CWnd* pParent /*=NULL*/)
   m_values[4].push_back(0);
   m_errflags[4].push_back(false);
  }
+ //TPS load for VE2:
+ m_values[5].reserve(32);
+ m_edits[5].reserve(32);
+ m_errflags[5].reserve(32);
+ for(size_t i = 0; i < 16; ++i)
+ {
+  m_edits[5].push_back(new CEditEx(CEditEx::MODE_FLOAT));
+  m_edits[5].back()->SetDecimalPlaces(2);
+  m_values[5].push_back(0);
+  m_errflags[5].push_back(false);
+ }
 }
 
 CRPMGridEditDlg::~CRPMGridEditDlg()
@@ -134,6 +147,7 @@ void CRPMGridEditDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LGE_ERROR_MSG_TEXT,  m_errMsg[2]);
  DDX_Control(pDX, IDC_IRGE_ERROR_MSG_TEXT, m_errMsg[3]);
  DDX_Control(pDX, IDC_ILGE_ERROR_MSG_TEXT, m_errMsg[4]);
+ DDX_Control(pDX, IDC_TLGE_ERROR_MSG_TEXT, m_errMsg[5]);
 
  for (size_t j = 0; j < numGrids; ++j)
  {
@@ -182,6 +196,9 @@ BOOL CRPMGridEditDlg::OnInitDialog()
  for(size_t i = 0; i < m_edits[4].size(); ++i)
   m_edits[4][i]->SetLimitText(6);
 
+ for(size_t i = 0; i < m_edits[5].size(); ++i)
+  m_edits[5][i]->SetLimitText(6);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -190,6 +207,7 @@ BOOL CRPMGridEditDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_LGE_LOAD_DEF_VAL), MLL::GetString(IDS_LGE_LOAD_DEF_VAL_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_IRGE_LOAD_DEF_VAL), MLL::GetString(IDS_IRGE_LOAD_DEF_VAL_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_ILGE_LOAD_DEF_VAL), MLL::GetString(IDS_ILGE_LOAD_DEF_VAL_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_TLGE_LOAD_DEF_VAL), MLL::GetString(IDS_TLGE_LOAD_DEF_VAL_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -206,7 +224,7 @@ LRESULT CRPMGridEditDlg::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
 HBRUSH CRPMGridEditDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 {
  HBRUSH hbr = Super::OnCtlColor(pDC, pWnd, nCtlColor);
- if ((nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[0].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[1].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[2].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[3].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[4].m_hWnd))
+ if ((nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[0].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[1].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[2].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[3].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[4].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[5].m_hWnd))
  {
   pDC->SetTextColor(errorMsgColor);
   pDC->SetBkMode(TRANSPARENT);
@@ -274,6 +292,15 @@ void CRPMGridEditDlg::OnChangeEdit4(UINT nID)
   m_onChange(4, index, m_values[4][index]); //RPM
 }
 
+void CRPMGridEditDlg::OnChangeEdit5(UINT nID)
+{
+ UpdateData();
+ //notify event receiver about change of view content
+ size_t index = (nID - editStart[5]);
+ if (m_onChange && index < m_edits[5].size())
+  m_onChange(5, index, m_values[5][index]); //RPM
+}
+
 void CRPMGridEditDlg::OnLoadDefValBtn()
 {
  if (m_onLoadDefVal)
@@ -302,6 +329,12 @@ void CRPMGridEditDlg::OnLoadDefValBtn4()
 {
  if (m_onLoadDefVal)
   m_onLoadDefVal(4);
+}
+
+void CRPMGridEditDlg::OnLoadDefValBtn5()
+{
+ if (m_onLoadDefVal)
+  m_onLoadDefVal(5);
 }
 
 void CRPMGridEditDlg::SetValues(int mode, const float* ip_values, bool rev /*=false*/)

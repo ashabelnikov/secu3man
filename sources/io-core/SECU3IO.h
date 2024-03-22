@@ -930,6 +930,7 @@ const int INPAVNUM = 14;
  const float work_map_lod_slots[16]  = {25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
  const float vei_map_rpm_slots[16]  = {600,700,800,900,1000,1100,1200,1300};
  const float vei_map_lod_slots[16]  = {24,26,28,30,32,34,36,38};
+ const float ve2_map_lod_slots[16]  = {0.0f, 7.0f, 13.0f, 20.0f, 27.0f, 33.0f, 40.0f, 47.0f, 53.0f, 60.0f, 67.0f, 73.0f, 80.0f, 87.0f, 93.0f, 100.0f};
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
 

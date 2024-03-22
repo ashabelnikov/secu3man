@@ -882,6 +882,7 @@ void CEEPROMTabController::OnLoadGrids(void)
  p_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->GetLoadGrid());
  p_fwdm->GetIRPMGridMap(mp_view->mp_TablesPanel->GetIRPMGrid());
  p_fwdm->GetILoadGridMap(mp_view->mp_TablesPanel->GetILoadGrid());
+ p_fwdm->GetTLoadGridMap(mp_view->mp_TablesPanel->GetTLoadGrid());
 
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;

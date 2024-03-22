@@ -297,7 +297,12 @@ typedef struct
  //Sizes of cells in idling load grid (so, we don't need to calculate them at the runtime)
  _int iload_grid_sizes[F_ILOAD_SLOTS-1];
 
- _uchar reserved[975];
+ //Points of the TPS load grid
+ _int tload_grid_points[F_TLOAD_SLOTS];
+ //Sizes of cells in TPS load grid (so, we don't need to calculate them at the runtime)
+ _int tload_grid_sizes[F_TLOAD_SLOTS-1];
+
+ _uchar reserved[913];
 }fw_ex_tabs_t;
 
 
@@ -1750,6 +1755,11 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  float slots4[F_ILOAD_SLOTS]; GetILoadGridMap(slots4);
  for(i = 0; i < F_ILOAD_SLOTS; ++i)
   op_fwd->iload_slots[i] = slots4[i];
+
+ //Copy table with TPS load grid
+ float slots5[F_TLOAD_SLOTS]; GetTLoadGridMap(slots2);
+ for(i = 0; i < F_TLOAD_SLOTS; ++i)
+  op_fwd->tload_slots[i] = slots5[i];
 }
 
 void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
@@ -1852,6 +1862,9 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  //Check idling load grids compatibility and set idling load grid
  if (CheckILoadGridsCompatibility(ip_fwd->iload_slots))
   SetILoadGridMap(ip_fwd->iload_slots);
+ //Check TPS load grids compatibility and set load grid
+ if (CheckTLoadGridsCompatibility(ip_fwd->tload_slots))
+  SetTLoadGridMap(ip_fwd->tload_slots);
 }
 
 bool CFirmwareDataMediator::CheckRPMGridsCompatibility(const float* rpmGrid)
@@ -1911,6 +1924,18 @@ bool CFirmwareDataMediator::CheckILoadGridsCompatibility(const float* lodGrid)
    match = false;
  if (!match)
   return (IDYES==SECUMessageBox(MLL::LoadString(IDS_ILOAD_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
+ return true;
+}
+
+bool CFirmwareDataMediator::CheckTLoadGridsCompatibility(const float* lodGrid)
+{
+ bool match = true;
+ float slots[F_TLOAD_SLOTS]; GetTLoadGridMap(slots);
+ for(int i = 0; i < F_TLOAD_SLOTS; ++i)
+  if (lodGrid[i] != slots[i])
+   match = false;
+ if (!match)
+  return (IDYES==SECUMessageBox(MLL::LoadString(IDS_TLOAD_GRIDS_INCOMPAT), MB_YESNO|MB_ICONWARNING));
  return true;
 }
 
@@ -2192,6 +2217,37 @@ void CFirmwareDataMediator::SetILoadGridMap(const float* ip_values)
  //calculate sizes
  for(size_t i = 0; i < F_ILOAD_SLOTS-1; i++)
   p_fd->extabs.iload_grid_sizes[i] = p_fd->extabs.iload_grid_points[i+1] - p_fd->extabs.iload_grid_points[i];
+}
+
+void CFirmwareDataMediator::GetTLoadGridMap(float* op_values)
+{
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < F_TLOAD_SLOTS; i++)
+  op_values[i] = ((float)p_fd->extabs.tload_grid_points[i]) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
+}
+
+void CFirmwareDataMediator::SetTLoadGridMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ if (!ip_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ //store grid points
+ for(size_t i = 0; i < F_TLOAD_SLOTS; i++)
+  p_fd->extabs.tload_grid_points[i] = MathHelpers::Round(ip_values[i] * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ //calculate sizes
+ for(size_t i = 0; i < F_TLOAD_SLOTS-1; i++)
+  p_fd->extabs.tload_grid_sizes[i] = p_fd->extabs.tload_grid_points[i+1] - p_fd->extabs.tload_grid_points[i];
 }
 
 void CFirmwareDataMediator::GetATSAACMap(float* op_values, bool i_original /* = false */)

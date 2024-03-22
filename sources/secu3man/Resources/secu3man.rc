@@ -615,6 +615,7 @@ BEGIN
     IDS_PM_READING_LODGRD          "Чтение сетки нагрузки..."
     IDS_PM_READING_IRPMGRD         "Чтение сетки оборотов VE ХХ..."
     IDS_PM_READING_ILODGRD         "Чтение сетки нагрузки VE ХХ..."
+    IDS_PM_READING_TLODGRD         "Чтение сетки нагрузки VE2..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1613,6 +1614,7 @@ BEGIN
     IDS_PM_READING_LODGRD          "Reading load grid..."
     IDS_PM_READING_IRPMGRD         "Reading idling VE RPM grid..."
     IDS_PM_READING_ILODGRD         "Reading idling VE load grid..."
+    IDS_PM_READING_TLODGRD         "Reading VE2 load grid..."
 END
 
 STRINGTABLE DISCARDABLE 

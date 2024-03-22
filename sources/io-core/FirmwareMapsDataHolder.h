@@ -44,6 +44,7 @@
 #define F_LOAD_SLOTS           16
 #define F_IRPM_SLOTS           8
 #define F_ILOAD_SLOTS          8
+#define F_TLOAD_SLOTS          16
 #define ATS_CORR_LOOKUP_TABLE_SIZE 16
 #define GASDOSE_POS_RPM_SIZE   16
 #define GASDOSE_POS_TPS_SIZE   16
@@ -336,6 +337,7 @@ struct FWMapsDataHolder
  float load_slots[F_LOAD_SLOTS]; //сетка нагрузки исполузуемая вместе с этими кривыми
  float irpm_slots[F_IRPM_SLOTS]; //RPM grid for idling VE
  float iload_slots[F_ILOAD_SLOTS]; //Load grid for idling VE
+ float tload_slots[F_TLOAD_SLOTS]; //Load grid for TPS (VE2)
  float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
  float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
  float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE+2]; //voltage limits are stored together with table

@@ -54,6 +54,7 @@ BEGIN
   IDS_LOAD_GRIDS_INCOMPAT   "Сетки нагрузки из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицы рабочего УОЗ,\nнаполнение, вохдух/топливо, фаза впрыска, ШИМ1/сплитинг,\nШИМ2 и т.д. если вы собираетесь принять новую сетку нагрузки.\nПринять новую сетку нагрузки (Да) или оставить старую сетку нагрузки (Нет)?"
   IDS_IRPM_GRIDS_INCOMPAT   "Сетки оборотов VE ХХ из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицу VE ХХ, если вы собираетесь принять новую сетку оборотов.\nПринять новую сетку оборотов (Да) или оставить старую оборотов (Нет)?"
   IDS_ILOAD_GRIDS_INCOMPAT  "Сетки нагрузки VE ХХ из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицу VE ХХ, если вы собираетесь принять новую сетку нагрузки.\nПринять новую сетку нагрузки (Да) или оставить старую сетку нагрузки (Нет)?"
+  IDS_TLOAD_GRIDS_INCOMPAT  "Сетки нагрузки VE2 из прошивки и из источника отличаются!\nПожалуйста проверьте/отредактируйте таблицу VE2, если вы собираетесь принять новую сетку нагрузки VE2.\nПринять новую сетку нагрузки (Да) или оставить старую сетку нагрузки (Нет)?"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -105,6 +106,7 @@ BEGIN
   IDS_LOAD_GRIDS_INCOMPAT   "Load grids from firmware and source are not equal!\nPlease edit/inspect work, VE, AFR, inj.timing,\nPWM1/split angle and PWM2 maps if you accept new load grid.\nAccept new load grid (Yes) or keep old one (No)?"
   IDS_IRPM_GRIDS_INCOMPAT   "Idling VE RPM grids from firmware and source are not equal!\nPlease edit/inspect idling VE map if you accept new RPM grid.\nAccept new RPM grid (Yes) or keep old one (No)?"
   IDS_ILOAD_GRIDS_INCOMPAT  "Idling VE load grids from firmware and source are not equal!\nPlease edit/inspect idling VE map if you accept new load grid.\nAccept new load grid (Yes) or keep old one (No)?"
+  IDS_TLOAD_GRIDS_INCOMPAT  "VE2 Load grids from firmware and source are not equal!\nPlease edit/inspect VE2 map if you accept new load grid.\nAccept new load grid (Yes) or keep old one (No)?"
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -72,6 +72,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void SetLoadGrid(const float* values);
   virtual void SetIRPMGrid(const float* values);
   virtual void SetILoadGrid(const float* values);
+  virtual void SetTLoadGrid(const float* values);
   virtual void CloseAllCharts(void);
 
   //events

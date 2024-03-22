@@ -138,6 +138,7 @@ void CLPTablesController::OnActivate(void)
   p_fwdm->GetLoadGridMap(m_load_grid_values);  
   p_fwdm->GetIRPMGridMap(m_irpm_grid_values);
   p_fwdm->GetILoadGridMap(m_iload_grid_values);  
+  p_fwdm->GetTLoadGridMap(m_tload_grid_values);  
  }
 
  _MakeChartsChildren(mp_settings->GetChildCharts());

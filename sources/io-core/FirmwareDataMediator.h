@@ -83,11 +83,12 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);
-  bool CheckRPMGridsCompatibility(const float* rpmGrid);
-  bool CheckCLTGridsCompatibility(const float* rpmGrid);
-  bool CheckLoadGridsCompatibility(const float* rpmGrid);
-  bool CheckIRPMGridsCompatibility(const float* rpmGrid);
-  bool CheckILoadGridsCompatibility(const float* rpmGrid);
+  bool CheckRPMGridsCompatibility(const float* pGrid);
+  bool CheckCLTGridsCompatibility(const float* pGrid);
+  bool CheckLoadGridsCompatibility(const float* pGrid);
+  bool CheckIRPMGridsCompatibility(const float* pGrid);
+  bool CheckILoadGridsCompatibility(const float* pGrid);
+  bool CheckTLoadGridsCompatibility(const float* pGrid);
 
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
@@ -105,6 +106,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetIRPMGridMap(const float* i_values);
   void GetILoadGridMap(float* op_values);
   void SetILoadGridMap(const float* i_values);
+  void GetTLoadGridMap(float* op_values);
+  void SetTLoadGridMap(const float* i_values);
   void GetCESettingsData(CESettingsData& o_data) const;
   void SetCESettingsData(const CESettingsData& i_data);
   void GetFwConstsData(SECU3IO::FwConstsData& o_data) const;

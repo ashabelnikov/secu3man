@@ -271,7 +271,18 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     m_operation_state = 6;
    }
    break;
-  case 6:
+  case 6: //Read out load grid
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TLODGRD));
+   if (i_descriptor != TLODGRD_PAR)
+    mp_comm->m_pControlApp->ChangeContext(TLODGRD_PAR);
+   else
+   {//save load grid
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    memcpy(m_lodGridT, data->table_data, F_TLOAD_SLOTS*sizeof(float)); //save VE2 load grid
+    m_operation_state = 7;
+   }
+   break;
+  case 7:
    {
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
    const EditTabPar* data = (const EditTabPar*)i_packet_data;
@@ -282,16 +293,16 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     _ClearAcquisitionFlags();
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
-    m_operation_state = 7;
+    m_operation_state = 8;
    }
    }
    break;
 
-  case 7:
+  case 8:
    {
     if (i_descriptor != EDITAB_PAR)
     {
-     m_operation_state = 6;
+     m_operation_state = 7;
      break;
     }
 
@@ -556,6 +567,7 @@ void CPMTablesController::OnImportFromS3F(void)
  std::copy(m_lodGrid, m_lodGrid + F_LOAD_SLOTS, data.load_slots);
  std::copy(m_rpmGridI, m_rpmGridI + F_IRPM_SLOTS, data.irpm_slots);
  std::copy(m_lodGridI, m_lodGridI + F_ILOAD_SLOTS, data.iload_slots);
+ std::copy(m_lodGridT, m_lodGridT + F_TLOAD_SLOTS, data.tload_slots);
 
  S3FImportController import(&data, false); //without separate maps
 
@@ -570,6 +582,7 @@ void CPMTablesController::OnImportFromS3F(void)
    mp_view->SetLoadGrid(m_lodGrid);        //load grid
    mp_view->SetIRPMGrid(m_rpmGridI);       //RPM grid for idling VE
    mp_view->SetILoadGrid(m_lodGridI);      //load grid for idling VE
+   mp_view->SetTLoadGrid(m_lodGridT);      //VE2 load grid
   _SetTablesSetName(data.maps[0].name);    //name
   
   //Send updated set name to SECU-3
@@ -592,6 +605,7 @@ void CPMTablesController::OnImportFromS3F(void)
   std::copy(data.load_slots, data.load_slots + F_LOAD_SLOTS, m_lodGrid);
   std::copy(data.irpm_slots, data.irpm_slots + F_IRPM_SLOTS, m_rpmGridI);
   std::copy(data.iload_slots, data.iload_slots + F_ILOAD_SLOTS, m_lodGridI);
+  std::copy(data.tload_slots, data.tload_slots + F_TLOAD_SLOTS, m_lodGridT);
 
   //update view and update modification flag if any of maps changed
   mp_view->UpdateOpenedCharts();
@@ -628,6 +642,7 @@ void CPMTablesController::OnExportToS3F(void)
  std::copy(m_lodGrid, m_lodGrid + F_LOAD_SLOTS, s3f_io.GetDataLeft().load_slots);
  std::copy(m_rpmGridI, m_rpmGridI + F_IRPM_SLOTS, s3f_io.GetDataLeft().irpm_slots);
  std::copy(m_lodGridI, m_lodGridI + F_ILOAD_SLOTS, s3f_io.GetDataLeft().iload_slots);
+ std::copy(m_lodGridT, m_lodGridT + F_TLOAD_SLOTS, s3f_io.GetDataLeft().tload_slots);
 
  //saveto file
  if (save.DoModal()==IDOK)
@@ -654,6 +669,8 @@ void CPMTablesController::OnDataCollected(void)
  //grids for idling VE
  mp_view->SetIRPMGrid(m_rpmGridI);
  mp_view->SetILoadGrid(m_lodGridI);
+ //Set VE2 load grid read out from SECU-3
+ mp_view->SetTLoadGrid(m_lodGridT);
 
  mp_view->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->UpdateOpenedCharts();

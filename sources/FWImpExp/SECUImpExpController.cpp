@@ -233,6 +233,9 @@ void SECU3ImportController::OnOkPressed(void)
 
  //copy idling VE load grid
  m_fwdm->GetILoadGridMap(mp_fwd->iload_slots);
+
+ //copy VE2 load grid
+ m_fwdm->GetTLoadGridMap(mp_fwd->tload_slots);
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -680,6 +683,10 @@ void SECU3ExportController::OnOkPressed(void)
  //check compatibility and copy idling VE load grid
  if (m_fwdm->CheckILoadGridsCompatibility(mp_fwd->iload_slots))
   m_fwdm->SetILoadGridMap(mp_fwd->iload_slots);
+
+ //check compatibility and copy VE2 load grid
+ if (m_fwdm->CheckTLoadGridsCompatibility(mp_fwd->tload_slots))
+  m_fwdm->SetTLoadGridMap(mp_fwd->tload_slots);
 
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);

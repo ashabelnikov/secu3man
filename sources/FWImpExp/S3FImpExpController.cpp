@@ -238,6 +238,8 @@ void S3FImportController::OnOkPressed(void)
  memcpy(mp_fwd->irpm_slots, mp_s3f_io->GetData().irpm_slots, sizeof(float) * F_IRPM_SLOTS);
  //copy idling VE load grid
  memcpy(mp_fwd->iload_slots, mp_s3f_io->GetData().iload_slots, sizeof(float) * F_ILOAD_SLOTS);
+ //copy VE2 load grid
+ memcpy(mp_fwd->tload_slots, mp_s3f_io->GetData().tload_slots, sizeof(float) * F_TLOAD_SLOTS);
 }
 
 void S3FImportController::OnCancelPressed(void)
@@ -784,6 +786,8 @@ void S3FExportController::OnOkPressed(void)
  memcpy(mp_s3f_io->GetDataLeft().irpm_slots, mp_fwd->irpm_slots, sizeof(float) * F_IRPM_SLOTS);
  //copy idling VE load grid
  memcpy(mp_s3f_io->GetDataLeft().iload_slots, mp_fwd->iload_slots, sizeof(float) * F_ILOAD_SLOTS);
+ //copy VE2 load grid
+ memcpy(mp_s3f_io->GetDataLeft().tload_slots, mp_fwd->tload_slots, sizeof(float) * F_TLOAD_SLOTS);
 }
 
 void S3FExportController::OnCancelPressed(void)

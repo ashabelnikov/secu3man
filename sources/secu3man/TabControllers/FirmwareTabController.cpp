@@ -1094,14 +1094,15 @@ void CFirmwareTabController::SetViewChartsValues(void)
   mp_fwdm->GetSepMap(i, mp_view->mp_TablesPanel->mp_SeptabsPanel->GetMap(i, true), true);
  }
 
- mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetRPMGrid());
- mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCLTGrid());
- mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLoadGrid());
  mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetRPMGrid());
  mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetCLTGrid());
  mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetLoadGrid());
  mp_fwdm->GetIRPMGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIRPMGrid());
  mp_fwdm->GetILoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetILoadGrid());
+ mp_fwdm->GetTLoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTLoadGrid());
+ mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetRPMGrid());
+ mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCLTGrid());
+ mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLoadGrid());
 
  //apply load axis's grid settings for all related maps
  SECU3IO::FunSetPar params;
@@ -1386,6 +1387,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
   mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetLoadGrid());
   mp_fwdm->GetIRPMGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetIRPMGrid());
   mp_fwdm->GetILoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetILoadGrid());
+  mp_fwdm->GetTLoadGridMap(mp_view->mp_TablesPanel->mp_ButtonsPanel->GetTLoadGrid());
   mp_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetRPMGrid());
   mp_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetCLTGrid());
   mp_fwdm->GetLoadGridMap(mp_view->mp_TablesPanel->mp_SeptabsPanel->GetLoadGrid());
