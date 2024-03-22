@@ -66,7 +66,7 @@ class CLPTablesController : public MapWndScrPos
   void _OnChangeSettingsGME(void);
   bool _GetSplitAngMode(void);
 
-  SECU3FWMapsItem m_md;
+  SECU3FWMapsItem m_md[2];
 
   float m_rpm_grid_values[16];
   float m_irpm_grid_values[8]; //idling

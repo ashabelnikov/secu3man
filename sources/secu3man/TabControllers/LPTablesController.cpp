@@ -216,7 +216,8 @@ void CLPTablesController::_OnSelectMapSet(void)
    CFirmwareDataMediator *p_fwdm = mp_fwdcntr->GetFWDM();  
    for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
    {
-    p_fwdm->GetSetMap(index, i, m_md.GetMap(i), false);  
+    p_fwdm->GetSetMap(index, i, m_md[1].GetMap(i), false);  //modified 
+    p_fwdm->GetSetMap(index, i, m_md[0].GetMap(i), true);   //original
    }
   }
   else
@@ -225,7 +226,8 @@ void CLPTablesController::_OnSelectMapSet(void)
    EEPROMDataMediator *p_eedm = mp_eedcntr->GetEEDM();
    for(int i = ETMT_SET_START; i <= ETMT_SET_END; ++i)
    {
-    p_eedm->GetSetMap(index, i, m_md.GetMap(i), false);  
+    p_eedm->GetSetMap(index, i, m_md[1].GetMap(i), false);  //modified
+    p_eedm->GetSetMap(index, i, m_md[0].GetMap(i), true);   //original
    }
   }
  }
@@ -246,9 +248,9 @@ void CLPTablesController::_OnMapChanged(int i_mapType)
  int index = source ? m_current_funset_index : m_current_funset_index - TABLES_NUMBER;
 
  if (source)
-  p_fwdm->SetSetMap(index, i_mapType, m_md.GetMap(i_mapType));
+  p_fwdm->SetSetMap(index, i_mapType, m_md[1].GetMap(i_mapType));
  else
-  p_eedm->SetSetMap(index, i_mapType, m_md.GetMap(i_mapType));
+  p_eedm->SetSetMap(index, i_mapType, m_md[1].GetMap(i_mapType));
 }
 
 void CLPTablesController::_OnOpenMapWnd(HWND i_hwnd, int i_mapType)
@@ -282,7 +284,8 @@ void CLPTablesController::_OnGmeIgnButton(void)
  if (mp_view->GetGmeIgnCheck())
  {
   mp_gridModeEditorIgnDlg.reset(new CGridModeEditorIgnDlg());
-  mp_gridModeEditorIgnDlg->BindMaps(m_md.f_str, m_md.f_idl, m_md.f_wrk, m_md.f_tmp, m_md.f_tmp_idl);
+  mp_gridModeEditorIgnDlg->BindMaps(m_md[1].f_str, m_md[1].f_idl, m_md[1].f_wrk, m_md[1].f_tmp, m_md[1].f_tmp_idl);
+  mp_gridModeEditorIgnDlg->BindMapsOrig(m_md[0].f_str, m_md[0].f_idl, m_md[0].f_wrk, m_md[0].f_tmp, m_md[0].f_tmp_idl);
   mp_gridModeEditorIgnDlg->BindRPMGrid(m_rpm_grid_values);
   mp_gridModeEditorIgnDlg->BindCLTGrid(m_clt_grid_values);
   mp_gridModeEditorIgnDlg->BindLoadGrid(m_load_grid_values);
@@ -328,10 +331,15 @@ void CLPTablesController::_OnGmeInjButton(void)
  {
   mp_gridModeEditorInjDlg.reset(new CGridModeEditorInjDlg());
 
-  mp_gridModeEditorInjDlg->BindMaps(m_md.inj_ve, m_md.inj_afr, m_md.inj_timing, m_md.inj_iac_crank_pos, m_md.inj_iac_run_pos, m_md.inj_target_rpm, m_md.inj_idl_rigidity, m_md.inj_iac_corr,
-                                    m_md.inj_iac_corr_w, m_md.inj_aftstr, m_md.inj_warmup, m_md.inj_ae_tps, m_md.inj_ae_rpm, m_md.inj_cranking, m_md.inj_dead_time, m_md.inj_ego_curve, 
-                                    m_md.inj_iatclt_corr, m_md.inj_tpsswt, m_md.inj_ats_corr, m_md.inj_gts_corr, m_md.inj_gps_corr, m_md.pwm_duty1, m_md.pwm_duty2, m_md.iac_mat_corr,
-                                    m_md.inj_ve2, m_md.inj_tpszon, m_md.inj_cylmult, m_md.inj_cyladd, m_md.inj_ae_map, m_md.inj_thrass, m_md.inj_ive);
+  mp_gridModeEditorInjDlg->BindMaps(m_md[1].inj_ve, m_md[1].inj_afr, m_md[1].inj_timing, m_md[1].inj_iac_crank_pos, m_md[1].inj_iac_run_pos, m_md[1].inj_target_rpm, m_md[1].inj_idl_rigidity, m_md[1].inj_iac_corr,
+                                    m_md[1].inj_iac_corr_w, m_md[1].inj_aftstr, m_md[1].inj_warmup, m_md[1].inj_ae_tps, m_md[1].inj_ae_rpm, m_md[1].inj_cranking, m_md[1].inj_dead_time, m_md[1].inj_ego_curve, 
+                                    m_md[1].inj_iatclt_corr, m_md[1].inj_tpsswt, m_md[1].inj_ats_corr, m_md[1].inj_gts_corr, m_md[1].inj_gps_corr, m_md[1].pwm_duty1, m_md[1].pwm_duty2, m_md[1].iac_mat_corr,
+                                    m_md[1].inj_ve2, m_md[1].inj_tpszon, m_md[1].inj_cylmult, m_md[1].inj_cyladd, m_md[1].inj_ae_map, m_md[1].inj_thrass, m_md[1].inj_ive);
+
+  mp_gridModeEditorInjDlg->BindMapsOrig(m_md[0].inj_ve, m_md[0].inj_afr, m_md[0].inj_timing, m_md[0].inj_iac_crank_pos, m_md[0].inj_iac_run_pos, m_md[0].inj_target_rpm, m_md[0].inj_idl_rigidity, m_md[0].inj_iac_corr,
+                                    m_md[0].inj_iac_corr_w, m_md[0].inj_aftstr, m_md[0].inj_warmup, m_md[0].inj_ae_tps, m_md[0].inj_ae_rpm, m_md[0].inj_cranking, m_md[0].inj_dead_time, m_md[0].inj_ego_curve, 
+                                    m_md[0].inj_iatclt_corr, m_md[0].inj_tpsswt, m_md[0].inj_ats_corr, m_md[0].inj_gts_corr, m_md[0].inj_gps_corr, m_md[0].pwm_duty1, m_md[0].pwm_duty2, m_md[0].iac_mat_corr,
+                                    m_md[0].inj_ve2, m_md[0].inj_tpszon, m_md[0].inj_cylmult, m_md[0].inj_cyladd, m_md[0].inj_ae_map, m_md[0].inj_thrass, m_md[0].inj_ive);
 
   mp_gridModeEditorInjDlg->BindRPMGrid(m_rpm_grid_values, m_irpm_grid_values);
   mp_gridModeEditorInjDlg->BindCLTGrid(m_clt_grid_values);
