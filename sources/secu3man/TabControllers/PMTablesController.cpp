@@ -431,7 +431,7 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
  size_t mapSize = SECU3FWMapsItem::GetMapSize(i_mapType); //map size in items (not bytes)
 
  size_t pieceSize = 16; //for all maps exept cranking PW and inj. dead time and rigidity function
- if (i_mapType == ETMT_INJ_CRNK || i_mapType == ETMT_INJ_DEAD || i_mapType == ETMT_INJ_RIGID || i_mapType == ETMT_INJ_EGOCRV || i_mapType == ETMT_INJ_IACC || i_mapType == ETMT_INJ_IATCLT)
+ if (i_mapType == ETMT_INJ_CRNK || i_mapType == ETMT_INJ_DEAD || i_mapType == ETMT_INJ_RIGID || i_mapType == ETMT_INJ_EGOCRV || i_mapType == ETMT_INJ_IACC || i_mapType == ETMT_INJ_IATCLT || i_mapType == ETMT_INJ_IVE)
   pieceSize = 8;
 
  size_t index;
