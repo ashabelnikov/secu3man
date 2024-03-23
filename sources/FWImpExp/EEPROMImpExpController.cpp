@@ -360,6 +360,20 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_FTSCURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_FUELDENSC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_FUELDENSC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFACC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_XTAU_XFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_XFDEC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_XTAU_XFDEC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_XTAU_TFACC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLINP_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_INJNONLINP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_INJNONLING_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_INJNONLING_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EGO_DELAY_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_EGO_DELAY_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)

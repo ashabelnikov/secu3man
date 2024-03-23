@@ -136,6 +136,7 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_XTAU_XFDEC_MAP] = FALSE;
  m_fwd_flags[FLAG_XTAU_TFACC_MAP] = FALSE;
  m_fwd_flags[FLAG_XTAU_TFDEC_MAP] = FALSE;
+ m_fwd_flags[FLAG_EGO_DELAY_MAP] = FALSE;
 }
 
 void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
@@ -222,6 +223,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_XTAU_XFDEC_FLAG, m_fwd_flags[FLAG_XTAU_XFDEC_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_XTAU_TFACC_FLAG, m_fwd_flags[FLAG_XTAU_TFACC_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_XTAU_TFDEC_FLAG, m_fwd_flags[FLAG_XTAU_TFDEC_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_EGO_DELAY_FLAG, m_fwd_flags[FLAG_EGO_DELAY_MAP]);
 
  //ignition
  DDX_Control(pDX, IDC_MAP_IMPEXP_STARTMAP_FLAG,m_fwd_flags_buttons[FLAG_START_MAP]);
@@ -299,6 +301,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_XTAU_XFDEC_FLAG, m_fwd_flags_buttons[FLAG_XTAU_XFDEC_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_XTAU_TFACC_FLAG, m_fwd_flags_buttons[FLAG_XTAU_TFACC_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_XTAU_TFDEC_FLAG, m_fwd_flags_buttons[FLAG_XTAU_TFDEC_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_EGO_DELAY_FLAG, m_fwd_flags_buttons[FLAG_EGO_DELAY_MAP]);
 
  //set/clear all checks
  DDX_Control(pDX, IDC_MAP_IMPEXP_SET_SETALL, m_set_all);
@@ -497,7 +500,8 @@ void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
            (m_fwd_flags_buttons[FLAG_FTSCURVE_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_FUELDENSC_MAP].IsWindowEnabled()) ||
            (m_fwd_flags_buttons[FLAG_INJNONLINP_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_INJNONLING_MAP].IsWindowEnabled()) ||
            (m_fwd_flags_buttons[FLAG_XTAU_XFACC_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_XTAU_XFDEC_MAP].IsWindowEnabled()) ||
-           (m_fwd_flags_buttons[FLAG_XTAU_TFACC_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_XTAU_TFDEC_MAP].IsWindowEnabled()));
+           (m_fwd_flags_buttons[FLAG_XTAU_TFACC_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_XTAU_TFDEC_MAP].IsWindowEnabled()) ||
+           (m_fwd_flags_buttons[FLAG_EGO_DELAY_MAP].IsWindowEnabled()));
  GetDlgItem(IDC_MAP_IMPEXP_SEPTAB_GROUP)->EnableWindow(enable);
  m_sep_all.EnableWindow(enable);
 }
@@ -609,6 +613,8 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_XTAU_XFDEC_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_XTAU_TFACC_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_XTAU_TFDEC_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_EGO_DELAY_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
+
  VERIFY(mp_ttc->AddWindow(&m_exchange_button, MLL::GetString(IDS_MAP_IMPEXP_EXCHANGE_BUTTON_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping

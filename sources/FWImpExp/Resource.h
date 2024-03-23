@@ -162,3 +162,4 @@
 #define IDC_FWM_OPEN_BTN                6161
 #define IDS_FWM_OPEN_BTN_TT             6162
 #define IDC_MAP_IMPEXP_VEIMAP_FLAG      6163
+#define IDC_MAP_IMPEXP_EGO_DELAY_FLAG   6164

@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0128 //01.29
+#define CURRENT_VERSION 0x0129 //01.29
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -97,6 +97,7 @@ typedef unsigned char s3f_uint8_t;
 //         Added X-tau maps, 4 pcs (27.05.2023)
 // 01.28 - Added idling VE map and grids for it (load and rpm) (20.03.2024)
 // 01.29 - Added VE2 load grid (22.03.2024)
+//         Added EGO delay map (23.03.2024)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -324,8 +325,9 @@ struct S3FSepMaps
 
  //since v01.29
  s3f_int32_t tload_slots[F_TLOAD_SLOTS];                //TPS (VE2) load grid, normal order of values
+ s3f_int32_t ego_delay[EGO_DELAY_SIZE];                 //EGO delay map
 
- s3f_int32_t reserved[3504];       //reserved bytes, = 0
+ s3f_int32_t reserved[3488]; //reserved bytes, = 0
 };
 
 
@@ -803,6 +805,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->xtau_tfacc[i] = MathHelpers::Round(m_data.xtau_tfacc[i] * INT_MULTIPLIER);
  for(i = 0; i < XTAU_FACT_SIZE; ++i)
   p_sepMaps->xtau_tfdec[i] = MathHelpers::Round(m_data.xtau_tfdec[i] * INT_MULTIPLIER);
+ for(i = 0; i < EGO_DELAY_SIZE; ++i)
+  p_sepMaps->ego_delay[i] = MathHelpers::Round(m_data.inj_ego_delay[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -1106,6 +1110,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.xtau_tfacc[i] = p_sepMaps->xtau_tfacc[i] / INT_MULTIPLIER;
  for(i = 0; i < XTAU_FACT_SIZE; ++i)
   m_data.xtau_tfdec[i] = p_sepMaps->xtau_tfdec[i] / INT_MULTIPLIER;
+ for(i = 0; i < EGO_DELAY_SIZE; ++i)
+  m_data.inj_ego_delay[i] = p_sepMaps->ego_delay[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
