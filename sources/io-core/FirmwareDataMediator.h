@@ -638,6 +638,10 @@ protected:
   void SetInjNonLinGMap(const float* i_values);
   void GetEGODelayMap(float* op_values, bool i_original = false);
   void SetEGODelayMap(const float* i_values);
+  void GetWUAFR0Map(float* op_values, bool i_original = false);
+  void SetWUAFR0Map(const float* i_values);
+  void GetWUAFR1Map(float* op_values, bool i_original = false);
+  void SetWUAFR1Map(const float* i_values);
 
   virtual SECU3IO::params_t* GetParamsPtr(void);
   virtual EECUPlatform GetPlatformId(void);

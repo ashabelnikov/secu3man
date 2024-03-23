@@ -137,6 +137,8 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnViewInjNonLinPMap();
   afx_msg void OnViewInjNonLinGMap();
   afx_msg void OnViewEGODelayMap();
+  afx_msg void OnViewWUAFR0Map();
+  afx_msg void OnViewWUAFR1Map();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -175,6 +177,8 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnUpdateViewInjNonLinPMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewInjNonLinGMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewEGODelayMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewWUAFR0Map(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewWUAFR1Map(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsFWC(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsGRD(CCmdUI* pCmdUI);
@@ -336,6 +340,14 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnChangeEGODelayMap(void* i_param);
   static void __cdecl OnCloseEGODelayMap(void* i_param);
   static void __cdecl OnWndActivationEGODelayMap(void* i_param, long cmd);
+
+  static void __cdecl OnChangeWUAFR0Map(void* i_param);
+  static void __cdecl OnCloseWUAFR0Map(void* i_param);
+  static void __cdecl OnWndActivationWUAFR0Map(void* i_param, long cmd);
+
+  static void __cdecl OnChangeWUAFR1Map(void* i_param);
+  static void __cdecl OnCloseWUAFR1Map(void* i_param);
+  static void __cdecl OnWndActivationWUAFR1Map(void* i_param, long cmd);
 
  private:
   EventHandler m_OnRPMGridEditButton;

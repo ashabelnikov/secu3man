@@ -139,6 +139,12 @@
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362
+#define IDC_TD_WUAFR0_MAP               5363
+#define IDC_TD_WUAFR1_MAP               5364
+#define IDS_TD_WUAFR0_MAP_TT            5365
+#define IDS_TD_WUAFR1_MAP_TT            5366
+#define IDS_WUAFR0_MAP                  5367
+#define IDS_WUAFR1_MAP                  5368
 #define IDC_GME_IDL_TITLE               5426
 #define IDC_GME_TMP_TITLE               5427
 #define IDC_GME_STR_TITLE               5428

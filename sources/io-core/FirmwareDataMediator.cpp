@@ -302,7 +302,10 @@ typedef struct
  //Sizes of cells in TPS load grid (so, we don't need to calculate them at the runtime)
  _int tload_grid_sizes[F_TLOAD_SLOTS-1];
 
- _uchar reserved[913];
+ _uchar inj_wu_afr0[WU_AFR_SIZE]; //petrol
+ _uchar inj_wu_afr1[WU_AFR_SIZE]; //gas
+
+ _uchar reserved[881];
 }fw_ex_tabs_t;
 
 
@@ -424,10 +427,12 @@ typedef struct
 
  _uchar use_idl_ve[2];
 
+ _int wuafr_clt_thrd;
+
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1513];
+ _uchar reserved[1511];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1730,6 +1735,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetInjNonLinPMap(op_fwd->inj_nonlinp_corr);
  GetInjNonLinGMap(op_fwd->inj_nonling_corr);
  GetEGODelayMap(op_fwd->inj_ego_delay);
+ GetWUAFR0Map(op_fwd->inj_wu_afr0);
+ GetWUAFR1Map(op_fwd->inj_wu_afr1);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1846,6 +1853,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetInjNonLinPMap(ip_fwd->inj_nonlinp_corr);
  SetInjNonLinGMap(ip_fwd->inj_nonling_corr);
  SetEGODelayMap(ip_fwd->inj_ego_delay);
+ SetWUAFR0Map(ip_fwd->inj_wu_afr0);
+ SetWUAFR1Map(ip_fwd->inj_wu_afr1);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -3065,6 +3074,42 @@ void CFirmwareDataMediator::SetEGODelayMap(const float* ip_values)
   p_fd->extabs.inj_ego_delay[i] = MathHelpers::Round(ip_values[i]);
 }
 
+void CFirmwareDataMediator::GetWUAFR0Map(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < WU_AFR_SIZE; i++)
+  op_values[i] = MathHelpers::RoundP1((((float)p_fd->extabs.inj_wu_afr0[i]) / AFR_MAPS_M_FACTOR) + 8.0f); 
+}
+
+void CFirmwareDataMediator::SetWUAFR0Map(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < WU_AFR_SIZE; i++)
+  p_fd->extabs.inj_wu_afr0[i] = MathHelpers::Round((ip_values[i]-8.0) * AFR_MAPS_M_FACTOR);
+}
+
+void CFirmwareDataMediator::GetWUAFR1Map(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < WU_AFR_SIZE; i++)
+  op_values[i] = MathHelpers::RoundP1((((float)p_fd->extabs.inj_wu_afr1[i]) / AFR_MAPS_M_FACTOR) + 8.0f); 
+}
+
+void CFirmwareDataMediator::SetWUAFR1Map(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < WU_AFR_SIZE; i++)
+  p_fd->extabs.inj_wu_afr1[i] = MathHelpers::Round((ip_values[i]-8.0) * AFR_MAPS_M_FACTOR);
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -3521,6 +3566,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.inj_prime_times = exd.inj_prime_times;
  o_data.use_idl_ve[0] = exd.use_idl_ve[0];
  o_data.use_idl_ve[1] = exd.use_idl_ve[1];
+
+ o_data.wuafr_clt_thrd = ((float)exd.wuafr_clt_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3655,6 +3702,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.inj_prime_times = i_data.inj_prime_times;
  exd.use_idl_ve[0] = i_data.use_idl_ve[0];
  exd.use_idl_ve[1] = i_data.use_idl_ve[1];
+
+ exd.wuafr_clt_thrd = MathHelpers::Round(i_data.wuafr_clt_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
@@ -3742,6 +3791,8 @@ void CFirmwareDataMediator::GetSepMap(int id, float* op_values, bool i_original 
   case ETMT_INJNONLINP: GetInjNonLinPMap(op_values, i_original); break;
   case ETMT_INJNONLING: GetInjNonLinGMap(op_values, i_original); break;
   case ETMT_EGO_DELAY: GetEGODelayMap(op_values, i_original); break;
+  case ETMT_WU_AFR0: GetWUAFR0Map(op_values, i_original); break;
+  case ETMT_WU_AFR1: GetWUAFR1Map(op_values, i_original); break;
   default: ASSERT(0);
  }
 }
@@ -3787,6 +3838,8 @@ void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
   case ETMT_INJNONLINP: SetInjNonLinPMap(ip_values); break;
   case ETMT_INJNONLING: SetInjNonLinGMap(ip_values); break;
   case ETMT_EGO_DELAY: SetEGODelayMap(ip_values); break;
+  case ETMT_WU_AFR0: SetWUAFR0Map(ip_values); break;
+  case ETMT_WU_AFR1: SetWUAFR1Map(ip_values); break;
   default: ASSERT(0);
  }
 }

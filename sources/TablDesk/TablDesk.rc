@@ -108,6 +108,8 @@ BEGIN
     CONTROL         "Настр. крив. ДДМ",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,648,96,18
     CONTROL         "Кривая расхода ДМРВ",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,667,96,18
     CONTROL         "Задержка ДК",IDC_TD_EGO_DELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,686,96,18
+    CONTROL         "Смесь прогрев.(бенз.)",IDC_TD_WUAFR0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,705,96,18
+    CONTROL         "Смесь прогрев.(газ)",IDC_TD_WUAFR1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,724,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -118,7 +120,7 @@ BEGIN
     GROUPBOX        "Наборы таблиц",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,370
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,400
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -932,6 +934,10 @@ BEGIN
     IDS_EGO_DELAY_MAP          "Зависимость задержки ДК от нагрузки на двигатель"
     IDS_MAPS_LOADKPA_UNIT      "Нагрузка (кПа)"
     IDS_MAPS_LOADPRC_UNIT      "Нагрузка (%)"
+    IDS_TD_WUAFR0_MAP_TT       "Таблица Воздух/топливо используемая при прогреве двигателя для бензина (GAS_V=0)"
+    IDS_TD_WUAFR1_MAP_TT       "Таблица Воздух/топливо используемая при прогреве двигателя для газа (GAS_V=1)"
+    IDS_WUAFR0_MAP             "Соотношение воздух/топливо от температуры двигателя (бензин)"
+    IDS_WUAFR1_MAP             "Соотношение воздух/топливо от температуры двигателя (газ)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1037,6 +1043,8 @@ BEGIN
     CONTROL         "Tune OPS curve",IDC_TD_OPS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,648,96,18
     CONTROL         "MAF flow curve",IDC_TD_MAF_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,667,96,18
     CONTROL         "EGO delay",IDC_TD_EGO_DELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,686,96,18
+    CONTROL         "Warm up AFR (petrol)",IDC_TD_WUAFR0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,705,96,18
+    CONTROL         "Warm up AFR (gas)",IDC_TD_WUAFR1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,724,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -1863,6 +1871,10 @@ BEGIN
     IDS_EGO_DELAY_MAP          "EGO delay vs engine load"
     IDS_MAPS_LOADKPA_UNIT      "Load (kPa)"
     IDS_MAPS_LOADPRC_UNIT      "Load (%)"
+    IDS_TD_WUAFR0_MAP_TT       "AFR map used during warm up of engine for petrol (GAS_V=0)"
+    IDS_TD_WUAFR1_MAP_TT       "AFR map used during warm up of engine for gas (GAS_V=1)"
+    IDS_WUAFR0_MAP             "AFR vs coolant temperature (petrol)"
+    IDS_WUAFR1_MAP             "AFR vs coolant temperature (gas)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

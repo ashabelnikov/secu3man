@@ -923,6 +923,8 @@ const int INPAVNUM = 14;
   int aftstr_flat_strokes;
   int inj_prime_times;
   int use_idl_ve[2];
+
+  float wuafr_clt_thrd;
  };
 
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};

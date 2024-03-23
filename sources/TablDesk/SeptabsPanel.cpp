@@ -134,6 +134,8 @@ void CSeptabsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_INJNONLINP_MAP, *m_md[ETMT_INJNONLINP].mp_button);
  DDX_Control(pDX, IDC_TD_INJNONLING_MAP, *m_md[ETMT_INJNONLING].mp_button);
  DDX_Control(pDX, IDC_TD_EGO_DELAY_MAP, *m_md[ETMT_EGO_DELAY].mp_button);
+ DDX_Control(pDX, IDC_TD_WUAFR0_MAP, *m_md[ETMT_WU_AFR0].mp_button);
+ DDX_Control(pDX, IDC_TD_WUAFR1_MAP, *m_md[ETMT_WU_AFR1].mp_button);
 
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
@@ -183,6 +185,8 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_BN_CLICKED(IDC_TD_INJNONLINP_MAP, OnViewInjNonLinPMap)
  ON_BN_CLICKED(IDC_TD_INJNONLING_MAP, OnViewInjNonLinGMap)
  ON_BN_CLICKED(IDC_TD_EGO_DELAY_MAP, OnViewEGODelayMap)
+ ON_BN_CLICKED(IDC_TD_WUAFR0_MAP, OnViewWUAFR0Map)
+ ON_BN_CLICKED(IDC_TD_WUAFR1_MAP, OnViewWUAFR1Map)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -227,6 +231,8 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_INJNONLINP_MAP, OnUpdateViewInjNonLinPMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_INJNONLING_MAP, OnUpdateViewInjNonLinGMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_EGO_DELAY_MAP, OnUpdateViewEGODelayMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_WUAFR0_MAP, OnUpdateViewWUAFR0Map)
+ ON_UPDATE_COMMAND_UI(IDC_TD_WUAFR1_MAP, OnUpdateViewWUAFR1Map)
  ON_WM_DESTROY()
  ON_WM_SIZE()
  ON_WM_TIMER()
@@ -298,6 +304,8 @@ BOOL CSeptabsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJNONLINP].mp_button, MLL::GetString(IDS_TD_INJNONLINP_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_INJNONLING].mp_button, MLL::GetString(IDS_TD_INJNONLING_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_EGO_DELAY].mp_button, MLL::GetString(IDS_TD_EGO_DELAY_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_WU_AFR0].mp_button, MLL::GetString(IDS_TD_WUAFR0_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_WU_AFR1].mp_button, MLL::GetString(IDS_TD_WUAFR1_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -328,7 +336,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
 
  if (m_initialized)
  {
-  AlignButtons(this, cx, ETMT_DWELLCNTRL, ETMT_ATTENUATOR, ETMT_GASDOSE, ETMT_SEP_START, ETMT_SEP_END);
+  AlignButtons(this, cx, ETMT_DWELLCNTRL, ETMT_ATTENUATOR, ETMT_EH_PAUSE, ETMT_SEP_START, ETMT_SEP_END);
  }
 
  if (mp_scr.get())
@@ -337,7 +345,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
   if (m_disable_vscroll)
    mp_scr->SetViewSize(cx, da.ScaleY(1));
   else
-   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1220 : 670));
+   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1260 : 700));
  }
 
 }
@@ -644,6 +652,20 @@ void CSeptabsPanel::OnUpdateViewEGODelayMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[ETMT_EGO_DELAY].state) ? TRUE : FALSE );
 }
 
+void CSeptabsPanel::OnUpdateViewWUAFR0Map(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable && (m_fuel_injection));
+ pCmdUI->SetCheck( (m_md[ETMT_WU_AFR0].state) ? TRUE : FALSE );
+}
+
+void CSeptabsPanel::OnUpdateViewWUAFR1Map(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable && (m_fuel_injection));
+ pCmdUI->SetCheck( (m_md[ETMT_WU_AFR1].state) ? TRUE : FALSE );
+}
+
 void CSeptabsPanel::UpdateOpenedCharts(void)
 {
  for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
@@ -700,6 +722,10 @@ void CSeptabsPanel::EnableFuelInjection(bool i_enable)
   DLL::Chart2DEnable(m_md[ETMT_INJNONLING].handle, i_enable && IsAllowed());
  if (m_md[ETMT_EGO_DELAY].state && ::IsWindow(m_md[ETMT_EGO_DELAY].handle))
   DLL::Chart2DEnable(m_md[ETMT_EGO_DELAY].handle, i_enable && IsAllowed());
+ if (m_md[ETMT_WU_AFR0].state && ::IsWindow(m_md[ETMT_WU_AFR0].handle))
+  DLL::Chart2DEnable(m_md[ETMT_WU_AFR0].handle, i_enable && IsAllowed());
+ if (m_md[ETMT_WU_AFR1].state && ::IsWindow(m_md[ETMT_WU_AFR1].handle))
+  DLL::Chart2DEnable(m_md[ETMT_WU_AFR1].handle, i_enable && IsAllowed());
 }
 
 void CSeptabsPanel::EnableGasdose(bool enable)
@@ -2218,6 +2244,82 @@ void CSeptabsPanel::OnViewEGODelayMap()
  else
  {
   ::SetFocus(md.handle);
+ }
+}
+
+void CSeptabsPanel::OnViewWUAFR0Map()
+{
+ MapData &md = m_md[ETMT_WU_AFR0];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 8.0, 22.0, GetCLTGrid(), 16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(), //x unit
+    MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),         //y unit
+    MLL::GetString(IDS_WUAFR0_MAP).c_str(), CXD_BM_NO);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.0f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#00.0"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeWUAFR0Map,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseWUAFR0Map,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationWUAFR0Map, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_WU_AFR0);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[ETMT_WU_AFR0].handle);
+ }
+}
+
+void CSeptabsPanel::OnViewWUAFR1Map()
+{
+ MapData &md = m_md[ETMT_WU_AFR1];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 8.0, 22.0, GetCLTGrid(), 16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(), //x unit
+    MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),         //y unit
+    MLL::GetString(IDS_WUAFR1_MAP).c_str(), CXD_BM_NO);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.0f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#00.0"));
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelCLT, static_cast<CTablesPanelBase*>(this));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeWUAFR1Map,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseWUAFR1Map,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationWUAFR1Map, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_WU_AFR1);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[ETMT_WU_AFR1].handle);
  }
 }
 

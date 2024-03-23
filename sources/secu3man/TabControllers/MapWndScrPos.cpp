@@ -513,6 +513,18 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_EGODelayMapWnd_W = rc.right - rc.left;
    sz.m_EGODelayMapWnd_H = rc.bottom - rc.top;
    break;
+  case ETMT_WU_AFR0:
+   ws.m_WUAFR0MapWnd_X = rc.left;
+   ws.m_WUAFR0MapWnd_Y = rc.top;
+   sz.m_WUAFR0MapWnd_W = rc.right - rc.left;
+   sz.m_WUAFR0MapWnd_H = rc.bottom - rc.top;
+   break;
+  case ETMT_WU_AFR1:
+   ws.m_WUAFR1MapWnd_X = rc.left;
+   ws.m_WUAFR1MapWnd_Y = rc.top;
+   sz.m_WUAFR1MapWnd_W = rc.right - rc.left;
+   sz.m_WUAFR1MapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -848,6 +860,14 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case ETMT_EGO_DELAY:
    X = ws.m_EGODelayMapWnd_X, Y = ws.m_EGODelayMapWnd_Y;
    W = sz.m_EGODelayMapWnd_W, H = sz.m_EGODelayMapWnd_H;
+   break;
+  case ETMT_WU_AFR0:
+   X = ws.m_WUAFR0MapWnd_X, Y = ws.m_WUAFR0MapWnd_Y;
+   W = sz.m_WUAFR0MapWnd_W, H = sz.m_WUAFR0MapWnd_H;
+   break;
+  case ETMT_WU_AFR1:
+   X = ws.m_WUAFR1MapWnd_X, Y = ws.m_WUAFR1MapWnd_Y;
+   W = sz.m_WUAFR1MapWnd_W, H = sz.m_WUAFR1MapWnd_H;
    break;
 
   default:

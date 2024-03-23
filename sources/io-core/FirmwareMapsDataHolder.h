@@ -95,6 +95,7 @@
 #define XTAU_FACT_SIZE         16
 #define INJ_NONLIN_SIZE        8
 #define EGO_DELAY_SIZE         16
+#define WU_AFR_SIZE            16
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -375,6 +376,8 @@ struct FWMapsDataHolder
  float inj_nonlinp_corr[INJ_NONLIN_SIZE * 2];
  float inj_nonling_corr[INJ_NONLIN_SIZE * 2];
  float inj_ego_delay[EGO_DELAY_SIZE];
+ float inj_wu_afr0[WU_AFR_SIZE];
+ float inj_wu_afr1[WU_AFR_SIZE];
 
  CESettingsData cesd;
 
@@ -436,6 +439,8 @@ struct FWMapsDataHolder
    case ETMT_INJNONLINP: return inj_nonlinp_corr;
    case ETMT_INJNONLING: return inj_nonling_corr;
    case ETMT_EGO_DELAY: return inj_ego_delay;
+   case ETMT_WU_AFR0: return inj_wu_afr0;
+   case ETMT_WU_AFR1: return inj_wu_afr1;
   }
   return NULL; //undefined type of map
  }
@@ -481,6 +486,8 @@ struct FWMapsDataHolder
    case ETMT_INJNONLINP: return INJ_NONLIN_SIZE * 2;
    case ETMT_INJNONLING: return INJ_NONLIN_SIZE * 2;
    case ETMT_EGO_DELAY: return EGO_DELAY_SIZE;
+   case ETMT_WU_AFR0: return WU_AFR_SIZE;
+   case ETMT_WU_AFR1: return WU_AFR_SIZE;
   }
   ASSERT(0);
   return 0; //undefined type of map

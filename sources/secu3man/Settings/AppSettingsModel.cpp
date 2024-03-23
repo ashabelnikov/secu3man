@@ -214,6 +214,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optInjNonLinPMapWnd(_T("InjNonLinPMapWnd"))
 , m_optInjNonLinGMapWnd(_T("InjNonLinGMapWnd"))
 , m_optEGODelayMapWnd(_T("EGODelayMapWnd"))
+, m_optWUAFR0MapWnd(_T("WUAFR0MapWnd"))
+, m_optWUAFR1MapWnd(_T("WUAFR1MapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -293,6 +295,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optInjNonLinPMapWnd1(_T("InjNonLinPMapWnd"))
 , m_optInjNonLinGMapWnd1(_T("InjNonLinGMapWnd"))
 , m_optEGODelayMapWnd1(_T("EGODelayMapWnd"))
+, m_optWUAFR0MapWnd1(_T("WUAFR0MapWnd"))
+, m_optWUAFR1MapWnd1(_T("WUAFR1MapWnd"))
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
@@ -373,6 +377,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optInjNonLinPMapWndSize(_T("InjNonLinPMapWnd"))
 , m_optInjNonLinGMapWndSize(_T("InjNonLinGMapWnd"))
 , m_optEGODelayMapWndSize(_T("EGODelayMapWnd"))
+, m_optWUAFR0MapWndSize(_T("WUAFR0MapWnd"))
+, m_optWUAFR1MapWndSize(_T("WUAFR1MapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -452,6 +458,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optInjNonLinPMapWndSize1(_T("InjNonLinPMapWnd"))
 , m_optInjNonLinGMapWndSize1(_T("InjNonLinGMapWnd"))
 , m_optEGODelayMapWndSize1(_T("EGODelayMapWnd"))
+, m_optWUAFR0MapWndSize1(_T("WUAFR0MapWnd"))
+, m_optWUAFR1MapWndSize1(_T("WUAFR1MapWnd"))
 //state of windows (minimized, normal, maximized)
 , m_Name_WndState_Section(_T("WndState"))
 , m_optMainFrmWndState(_T("MainFrmWnd"))
@@ -597,6 +605,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepInjNonLinPMap(_T("InjNonLinPMapWnd"))
 , m_optPtMovStepInjNonLinGMap(_T("InjNonLinGMapWnd"))
 , m_optPtMovStepEGODelayMap(_T("EGODelayMapWnd"))
+, m_optPtMovStepWUAFR0Map(_T("WUAFR0MapWnd"))
+, m_optPtMovStepWUAFR1Map(_T("WUAFR1MapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -1068,6 +1078,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optInjNonLinPMapWnd);
  ws.ReadWndPos(m_optInjNonLinGMapWnd);
  ws.ReadWndPos(m_optEGODelayMapWnd);
+ ws.ReadWndPos(m_optWUAFR0MapWnd);
+ ws.ReadWndPos(m_optWUAFR1MapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -1148,6 +1160,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optInjNonLinPMapWnd1);
  ws1.ReadWndPos(m_optInjNonLinGMapWnd1);
  ws1.ReadWndPos(m_optEGODelayMapWnd1);
+ ws1.ReadWndPos(m_optWUAFR0MapWnd1);
+ ws1.ReadWndPos(m_optWUAFR1MapWnd1);
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -1229,6 +1243,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optInjNonLinPMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optInjNonLinGMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optEGODelayMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optWUAFR0MapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optWUAFR1MapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1309,6 +1325,8 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optInjNonLinPMapWndSize1, 0, 10000);
  sz1.ReadWndPos(m_optInjNonLinGMapWndSize1, 0, 10000);
  sz1.ReadWndPos(m_optEGODelayMapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optWUAFR0MapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optWUAFR1MapWndSize1, 0, 10000);
 
  //State of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -1544,6 +1562,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepInjNonLinPMap, _T("0.001"), 0.0001f, 0.1f);
  ms.ReadFlt(m_optPtMovStepInjNonLinGMap, _T("0.001"), 0.0001f, 0.1f);
  ms.ReadFlt(m_optPtMovStepEGODelayMap, _T("10"), 1.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepWUAFR0Map, _T("0.1"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepWUAFR1Map, _T("0.1"), 0.0f, 10.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -2581,6 +2601,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ws.WriteWndPos(m_optEGODelayMapWnd, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optWUAFR0MapWnd, _T("AFR vs coolant temperature (petrol)"));
+ else
+  ws.WriteWndPos(m_optWUAFR0MapWnd, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optWUAFR1MapWnd, _T("AFR vs coolant temperature (gas)"));
+ else
+  ws.WriteWndPos(m_optWUAFR1MapWnd, _T("Соотношение Воздух/топливо от температуры двигателя (gas)"));
+
  //Positions of windows
  IniIO &ws1 = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2969,6 +2999,16 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optEGODelayMapWnd1, _T("Number of strokes of EGO delay vs engine load"));
  else
   ws1.WriteWndPos(m_optEGODelayMapWnd1, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optWUAFR0MapWnd1, _T("AFR vs coolant temperature (petrol)"));
+ else
+  ws1.WriteWndPos(m_optWUAFR0MapWnd1, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optWUAFR1MapWnd1, _T("AFR vs coolant temperature (gas)"));
+ else
+  ws1.WriteWndPos(m_optWUAFR1MapWnd1, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
 
  //Sizes of windows
  IniIO &sz = writer;
@@ -3364,6 +3404,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   sz.WriteWndPos(m_optEGODelayMapWndSize, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optWUAFR0MapWndSize, _T("AFR vs coolant temperature (petrol)"));
+ else
+  sz.WriteWndPos(m_optWUAFR0MapWndSize, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optWUAFR1MapWndSize, _T("AFR vs coolant temperature (gas)"));
+ else
+  sz.WriteWndPos(m_optWUAFR1MapWndSize, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
+
  //Sizes of windows (online)
  IniIO &sz1 = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -3752,6 +3802,16 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optEGODelayMapWndSize1, _T("Number of strokes of EGO delay vs engine load"));
  else
   sz1.WriteWndPos(m_optEGODelayMapWndSize1, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optWUAFR0MapWndSize1, _T("AFR vs coolant temperature (petrol)"));
+ else
+  sz1.WriteWndPos(m_optWUAFR0MapWndSize1, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz1.WriteWndPos(m_optWUAFR1MapWndSize1, _T("AFR vs coolant temperature (gas)"));
+ else
+  sz1.WriteWndPos(m_optWUAFR1MapWndSize1, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
 
  //States of windows
  IniIO &sw = writer;
@@ -4862,6 +4922,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepEGODelayMap, 3, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepWUAFR0Map, 3, _T("AFR vs coolant temperature (petrol)"));
+ else
+  ms.WriteFlt(m_optPtMovStepWUAFR0Map, 3, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepWUAFR1Map, 3, _T("AFR vs coolant temperature (gas)"));
+ else
+  ms.WriteFlt(m_optPtMovStepWUAFR1Map, 3, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
+
  //Log file's fileds
  IniIO &lf = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -5177,6 +5247,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optInjNonLinGMapWnd.value.y = i_wndSettings.m_InjNonLinGMapWnd_Y; 
  m_optEGODelayMapWnd.value.x = i_wndSettings.m_EGODelayMapWnd_X;
  m_optEGODelayMapWnd.value.y = i_wndSettings.m_EGODelayMapWnd_Y;
+ m_optWUAFR0MapWnd.value.x = i_wndSettings.m_WUAFR0MapWnd_X;
+ m_optWUAFR0MapWnd.value.y = i_wndSettings.m_WUAFR0MapWnd_Y;
+ m_optWUAFR1MapWnd.value.x = i_wndSettings.m_WUAFR1MapWnd_X;
+ m_optWUAFR1MapWnd.value.y = i_wndSettings.m_WUAFR1MapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -5336,6 +5410,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_InjNonLinGMapWnd_Y = m_optInjNonLinGMapWnd.value.y;
  o_wndSettings.m_EGODelayMapWnd_X = m_optEGODelayMapWnd.value.x;
  o_wndSettings.m_EGODelayMapWnd_Y = m_optEGODelayMapWnd.value.y;
+ o_wndSettings.m_WUAFR0MapWnd_X = m_optWUAFR0MapWnd.value.x;
+ o_wndSettings.m_WUAFR0MapWnd_Y = m_optWUAFR0MapWnd.value.y;
+ o_wndSettings.m_WUAFR1MapWnd_X = m_optWUAFR1MapWnd.value.x;
+ o_wndSettings.m_WUAFR1MapWnd_Y = m_optWUAFR1MapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -5493,6 +5571,10 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optInjNonLinGMapWnd1.value.y = i_wndSettings.m_InjNonLinGMapWnd_Y; 
  m_optEGODelayMapWnd1.value.x = i_wndSettings.m_EGODelayMapWnd_X;
  m_optEGODelayMapWnd1.value.y = i_wndSettings.m_EGODelayMapWnd_Y;
+ m_optWUAFR0MapWnd1.value.x = i_wndSettings.m_WUAFR0MapWnd_X;
+ m_optWUAFR0MapWnd1.value.y = i_wndSettings.m_WUAFR0MapWnd_Y;
+ m_optWUAFR1MapWnd1.value.x = i_wndSettings.m_WUAFR1MapWnd_X;
+ m_optWUAFR1MapWnd1.value.y = i_wndSettings.m_WUAFR1MapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
@@ -5650,6 +5732,10 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_InjNonLinGMapWnd_Y = m_optInjNonLinGMapWnd1.value.y;
  o_wndSettings.m_EGODelayMapWnd_X = m_optEGODelayMapWnd1.value.x;
  o_wndSettings.m_EGODelayMapWnd_Y = m_optEGODelayMapWnd1.value.y;
+ o_wndSettings.m_WUAFR0MapWnd_X = m_optWUAFR0MapWnd1.value.x;
+ o_wndSettings.m_WUAFR0MapWnd_Y = m_optWUAFR0MapWnd1.value.y;
+ o_wndSettings.m_WUAFR1MapWnd_X = m_optWUAFR1MapWnd1.value.x;
+ o_wndSettings.m_WUAFR1MapWnd_Y = m_optWUAFR1MapWnd1.value.y;
 }
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
@@ -5809,6 +5895,10 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optInjNonLinGMapWndSize.value.y = i_wndSize.m_InjNonLinGMapWnd_H;
  m_optEGODelayMapWndSize.value.x = i_wndSize.m_EGODelayMapWnd_W;
  m_optEGODelayMapWndSize.value.y = i_wndSize.m_EGODelayMapWnd_H;
+ m_optWUAFR0MapWndSize.value.x = i_wndSize.m_WUAFR0MapWnd_W;
+ m_optWUAFR0MapWndSize.value.y = i_wndSize.m_WUAFR0MapWnd_H;
+ m_optWUAFR1MapWndSize.value.x = i_wndSize.m_WUAFR1MapWnd_W;
+ m_optWUAFR1MapWndSize.value.y = i_wndSize.m_WUAFR1MapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -5968,6 +6058,10 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_InjNonLinGMapWnd_H = m_optInjNonLinGMapWndSize.value.y;
  o_wndSize.m_EGODelayMapWnd_W = m_optEGODelayMapWndSize.value.x;
  o_wndSize.m_EGODelayMapWnd_H = m_optEGODelayMapWndSize.value.y;
+ o_wndSize.m_WUAFR0MapWnd_W = m_optWUAFR0MapWndSize.value.x;
+ o_wndSize.m_WUAFR0MapWnd_H = m_optWUAFR0MapWndSize.value.y;
+ o_wndSize.m_WUAFR1MapWnd_W = m_optWUAFR1MapWndSize.value.x;
+ o_wndSize.m_WUAFR1MapWnd_H = m_optWUAFR1MapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -6125,6 +6219,10 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optInjNonLinGMapWndSize1.value.y = i_wndSize.m_InjNonLinGMapWnd_H;
  m_optEGODelayMapWndSize1.value.x = i_wndSize.m_EGODelayMapWnd_W;
  m_optEGODelayMapWndSize1.value.y = i_wndSize.m_EGODelayMapWnd_H;
+ m_optWUAFR0MapWndSize1.value.x = i_wndSize.m_WUAFR0MapWnd_W;
+ m_optWUAFR0MapWndSize1.value.y = i_wndSize.m_WUAFR0MapWnd_H;
+ m_optWUAFR1MapWndSize1.value.x = i_wndSize.m_WUAFR1MapWnd_W;
+ m_optWUAFR1MapWndSize1.value.y = i_wndSize.m_WUAFR1MapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
@@ -6282,6 +6380,10 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_InjNonLinGMapWnd_H = m_optInjNonLinGMapWndSize1.value.y;
  o_wndSize.m_EGODelayMapWnd_W = m_optEGODelayMapWndSize1.value.x;
  o_wndSize.m_EGODelayMapWnd_H = m_optEGODelayMapWndSize1.value.y;
+ o_wndSize.m_WUAFR0MapWnd_W = m_optWUAFR0MapWndSize1.value.x;
+ o_wndSize.m_WUAFR0MapWnd_H = m_optWUAFR0MapWndSize1.value.y;
+ o_wndSize.m_WUAFR1MapWnd_W = m_optWUAFR1MapWndSize1.value.x;
+ o_wndSize.m_WUAFR1MapWnd_H = m_optWUAFR1MapWndSize1.value.y;
 }
 
 void CAppSettingsModel::SetWndState(const WndState& i_wndState)
@@ -7099,6 +7201,8 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepInjNonLinPMap.value = i_ptMovStep.m_value[ETMT_INJNONLINP];
  m_optPtMovStepInjNonLinGMap.value = i_ptMovStep.m_value[ETMT_INJNONLING];
  m_optPtMovStepEGODelayMap.value = i_ptMovStep.m_value[ETMT_EGO_DELAY];
+ m_optPtMovStepWUAFR0Map.value = i_ptMovStep.m_value[ETMT_WU_AFR0];
+ m_optPtMovStepWUAFR1Map.value = i_ptMovStep.m_value[ETMT_WU_AFR1];
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -7178,6 +7282,8 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_value[ETMT_INJNONLINP] = m_optPtMovStepInjNonLinPMap.value;
  o_ptMovStep.m_value[ETMT_INJNONLING] = m_optPtMovStepInjNonLinGMap.value;
  o_ptMovStep.m_value[ETMT_EGO_DELAY] = m_optPtMovStepEGODelayMap.value;
+ o_ptMovStep.m_value[ETMT_WU_AFR0] = m_optPtMovStepWUAFR0Map.value;
+ o_ptMovStep.m_value[ETMT_WU_AFR1] = m_optPtMovStepWUAFR1Map.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

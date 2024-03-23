@@ -294,6 +294,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Multiplier of the prime pulse duration"), _T("x"), 0, 10, 1, 1, &d.inj_prime_times, _T("Duration of the prime pulse will be increased by specified number of times"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог перехода на основную таблицу воздух/топливо"), _T("°C"), -60.0f, 180.0f, 0.25f, 2, &d.wuafr_clt_thrd, _T("Пока температура двигателя ниже этого порога (двигатель холодный), прошивка использует прогревочные таблицы 'воздух/топливо'. Когда температура превысит этот порог, то прошивка будет использовать основную таблицу 'воздух/топливо'."));
+ else
+  dfd.AppendItem(_T("Threshold for switching to the main AFR map"), _T("°C"), -60.0f, 180.0f, 0.25f, 2, &d.wuafr_clt_thrd, _T("While engine temperature is less this threshold (cold engine), firmware will use warm up AFR maps. Once temperature exceed this threshold firmware will switch to the main AFR map."));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));

@@ -1702,3 +1702,91 @@ void __cdecl CSeptabsPanel::OnWndActivationEGODelayMap(void* i_param, long cmd)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeWUAFR0Map(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_WU_AFR0);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseWUAFR0Map(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_WU_AFR0].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_WU_AFR0].handle, ETMT_WU_AFR0);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationWUAFR0Map(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_WU_AFR0].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeWUAFR1Map(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_WU_AFR1);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseWUAFR1Map(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_WU_AFR1].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_WU_AFR1].handle, ETMT_WU_AFR1);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationWUAFR1Map(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_WU_AFR1].handle, cmd);
+}
+
+//------------------------------------------------------------------------

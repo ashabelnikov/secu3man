@@ -2109,6 +2109,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.table_data[i] = ((float)value);
      else if (editTabPar.tab_id == ETMT_GRHEAT_DUTY)
       editTabPar.table_data[i] = ((float)value) / 2.0f;
+     else if (editTabPar.tab_id == ETMT_WU_AFR0 || editTabPar.tab_id == ETMT_WU_AFR1)
+      editTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
      else
       editTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -4609,6 +4611,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    {
     int value = MathHelpers::Round(packet_data->table_data[i] * 312.5f);
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_WU_AFR0 || packet_data->tab_id == ETMT_WU_AFR1)
+   {
+    unsigned char value = MathHelpers::Round((packet_data->table_data[i]-8) * AFR_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else
    {  //default case
