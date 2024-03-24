@@ -4467,7 +4467,7 @@ bool CAppSettingsModel::WriteSettings(void)
  me.WriteFlt(m_optSpotMarkersSize, 2);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  me.WriteComment(_T("Current VE map selected for editing in the grid mode map editor's window. 0 - VE1, 1 - VE2, 2 - VE ХХ"));
+  me.WriteComment(_T("Current VE map selected for editing in the grid mode map editor's window. 0 - VE1, 1 - VE2, 2 - Idling VE"));
  else
   me.WriteComment(_T("Таблица наполнения, которая выбрана для редактирования в окне табличного редактирования карт. 0 - VE1, 1 - VE2, 2 - VE ХХ"));
  me.WriteInt(m_optActiveVEMap);

@@ -27,6 +27,8 @@
 #define _SELECTION_H_
 #include  <vector>
 
+#define SELBUF_MAX 256
+
 //---------------------------------------------------------------------------
 class Selection
 {
@@ -46,16 +48,17 @@ class Selection
   void Clear(int z); //clear selection of a single row
   int Size(void);
   int Size(int z);
-  void Set(int z, int x, bool value) { m_selpts[z][x] = value; }
-  bool Get(int z, int x) { return m_selpts[z][x]; }
-  bool* Get(int z) { return &m_selpts[z][0]; }  
-  bool* Get() { return &m_selpts[0][0]; }
+  void Set(int z, int x, bool value) { _selpts(z, x) = value; }
+  bool Get(int z, int x) { return _selpts(z, x); }
+  bool* Get(int z) { return &_selpts(z, 0); }  
+  bool* Get() { return &_selpts(0, 0); }
   std::vector<int> GetSelIdxs(int z);
   void CopyRow(int zSrc, int zDst);
   void InvertZ(void);
 
  private:
-  bool m_selpts[16][16]; //[z][x]
+  bool m_selpts[SELBUF_MAX]; //[z][x]
+  bool& _selpts(int z, int x) { return m_selpts[(z * m_count_x) + x]; };
   int m_count_z;
   int m_count_x;
 };

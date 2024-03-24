@@ -29,8 +29,8 @@
 //---------------------------------------------------------------------------
 Selection::Selection()
 {
- std::fill(&m_selpts[0][0], &m_selpts[0][0] + 256, false);
- m_selpts[0][0] = true;
+ std::fill(&m_selpts[0], &m_selpts[0] + SELBUF_MAX, false);
+ _selpts(0,0) = true;
 }
 
 //---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ int Selection::Left(void) //get first from the left
  {
   for(int x = 0; x < m_count_x; ++x)
   {
-   if (true==m_selpts[z][x])
+   if (true==_selpts(z, x))
     return x;
   }
  }
@@ -67,7 +67,7 @@ int Selection::Right(void) //get first from the right
  {
   for(int x = m_count_x - 1; x >= 0; --x)
   {
-   if (true==m_selpts[z][x])
+   if (true==_selpts(z, x))
     return x;
   }
  }
@@ -79,7 +79,7 @@ int Selection::Up(void)
 {
  for(int z = m_count_z - 1; z >= 0; --z)
  {
-  if (std::find(&m_selpts[z][0], &m_selpts[z][0] + m_count_x, true) != &m_selpts[z][0] + m_count_x)
+  if (std::find(&_selpts(z, 0), &_selpts(z, 0) + m_count_x, true) != &_selpts(z, 0) + m_count_x)
    return z;
  }
  return 0;
@@ -90,7 +90,7 @@ int Selection::Down(void)
 {
  for(int z = 0; z < m_count_z; ++z)
  {
-  if (std::find(&m_selpts[z][0], &m_selpts[z][0] + m_count_x, true) != &m_selpts[z][0] + m_count_x)
+  if (std::find(&_selpts(z, 0), &_selpts(z, 0) + m_count_x, true) != &_selpts(z, 0) + m_count_x)
    return z;
  }
  return 0;
@@ -102,7 +102,7 @@ int Selection::Size(int z)
  int s = 0;
  for(int x = 0; x < m_count_x; ++x)
  {
-  s+=m_selpts[z][x];   
+  s+=_selpts(z, x);   
  }
  return s;
 }
@@ -113,7 +113,7 @@ int Selection::Size(void)
  int s = 0;
  for(int z = 0; z < m_count_z; ++z)
   for(int x = 0; x < m_count_x; ++x)
-   s+=m_selpts[z][x];   
+   s+=_selpts(z, x);   
  return s;
 }
 
@@ -122,9 +122,9 @@ void Selection::PopRight(int z) //pop first from the right
 {
  for(int x = m_count_x - 1; x >= 0; --x)
  {
-  if (true==m_selpts[z][x])
+  if (true==_selpts(z, x))
   {
-   m_selpts[z][x] = false;
+   _selpts(z, x) = false;
    return;
   }
  }
@@ -136,9 +136,9 @@ void Selection::PopLeft(int z) //pop first from the left
 {
  for(int x = 0; x < m_count_x; ++x)
  {
-  if (true==m_selpts[z][x])
+  if (true==_selpts(z, x))
   {
-   m_selpts[z][x] = false;
+   _selpts(z, x) = false;
    return;
   }
  }
@@ -150,30 +150,30 @@ void Selection::Clear(void)
 {
  for(int z = 0; z < m_count_z; ++z)
  {
-  std::fill(&m_selpts[z][0], &m_selpts[z][0] + m_count_x, false);
+  std::fill(&_selpts(z, 0), &_selpts(z, 0) + m_count_x, false);
  }
 }
 
 //---------------------------------------------------------------------------
 void Selection::Clear(int z) //clear specified row
 {
- std::fill(&m_selpts[z][0], &m_selpts[z][0] + m_count_x, false);
+ std::fill(&_selpts(z, 0), &_selpts(z, 0) + m_count_x, false);
 }
 
 //---------------------------------------------------------------------------
 void Selection::CopyRow(int zSrc, int zDst)
 {
- std::copy(&m_selpts[zSrc][0], &m_selpts[zSrc][0] + m_count_x, &m_selpts[zDst][0]);  
+ std::copy(&_selpts(zSrc, 0), &_selpts(zSrc, 0) + m_count_x, &_selpts(zDst, 0));  
 }
 
 //---------------------------------------------------------------------------
 void Selection::InvertZ(void)
 {
- bool sel[16][16];
+ bool sel[SELBUF_MAX];
  for(int z = 0; z < m_count_z; ++z)
-  std::copy(&m_selpts[z][0], &m_selpts[z][0] + m_count_x, &sel[z][0]);
+  std::copy(&_selpts(z, 0), &_selpts(z, 0) + m_count_x, &sel[z * m_count_x]);
  for(int z = 0; z < m_count_z; ++z)
-  std::copy(&sel[z][0], &sel[z][0] + m_count_x, &m_selpts[m_count_z-1-z][0]);  
+  std::copy(&sel[z * m_count_x], &sel[z * m_count_x] + m_count_x, &_selpts(m_count_z-1-z, 0));  
 }
 
 //---------------------------------------------------------------------------
@@ -182,7 +182,7 @@ std::vector<int> Selection::GetSelIdxs(int z)
  std::vector<int> idxs;
  for (int i = 0; i < m_count_x; ++i)
  {
-  if (m_selpts[z][i])
+  if (_selpts(z, i))
    idxs.push_back(i);
  }
  return idxs;
