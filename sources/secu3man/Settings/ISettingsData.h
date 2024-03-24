@@ -734,4 +734,6 @@ class ISettingsData
 
   virtual bool GetCreateWindows(void) const = 0;
   virtual bool GetDbgVarsToFile(void) const = 0;
+
+  virtual bool GetUseMarkers(void) const = 0;
 };

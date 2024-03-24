@@ -153,14 +153,16 @@ bool CMapEditorCtrl::m_spotMarkers = true;
 float CMapEditorCtrl::m_spotMarkersSize = 1.0f;
 CMapEditorCtrl* CMapEditorCtrl::mp_other = NULL;
 char CMapEditorCtrl::m_csvsep_symb = ';';
+bool CMapEditorCtrl::m_useMarkers = true;
  
-void CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize)
+void CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize, bool useMarkers)
 {
  CMapEditorCtrl::m_gradSaturation = gradSat;
  CMapEditorCtrl::m_gradBrightness = gradBrt;
  CMapEditorCtrl::m_boldFont = boldFont;
  CMapEditorCtrl::m_spotMarkers = spotMarkers;
  CMapEditorCtrl::m_spotMarkersSize = spotMarkersSize;
+ CMapEditorCtrl::m_useMarkers = useMarkers;
 }
 
 //if you create control via resource editor, you must specify this class name in the control's properties
@@ -1231,6 +1233,8 @@ void CMapEditorCtrl::SetValueIncrement(float inc)
 
 void CMapEditorCtrl::SetArguments(float i_arg, float j_arg)
 {
+ if (!m_showMarkers)
+  return;
  if (m_spotMarkers)
  { //spot style markers
   CPoint ball;  
@@ -1433,15 +1437,14 @@ void CMapEditorCtrl::OnEnable(BOOL bEnable)
 
 void CMapEditorCtrl::ShowMarkers(bool show, bool redraw /*=true*/)
 {
+ show = show && m_useMarkers;
  if (m_showMarkers == show)
   return;
  m_showMarkers = show;
 
- _DrawMarkers(); //draw marker(s)
-
  if (redraw)
  {
-  _DrawMarkers();
+  _DrawMarkers(); //draw marker(s)
   CClientDC dc(this);
   _ShowImage(&dc);
  }
@@ -2058,14 +2061,12 @@ void CMapEditorCtrl::_DrawMarker(CDC* pDC, int i, int j)
 
 void CMapEditorCtrl::_DrawMarkers(void)
 {
- if (m_dcMark.GetSafeHdc()==NULL)
-  return;
- CRect rc;
- GetClientRect(&rc);
- m_dcMark.FillRect(rc, &m_blackBrush);
-
- if (IsWindowEnabled() && m_showMarkers)
- { 
+ if (m_showMarkers && IsWindowEnabled() && m_dcMark.GetSafeHdc())
+ {
+  CRect rc;
+  GetClientRect(&rc);
+  m_dcMark.FillRect(rc, &m_blackBrush);
+ 
   if (mp_horizLabels || mp_vertLabels)
   {
    if (m_spotMarkers)
@@ -2087,46 +2088,70 @@ void CMapEditorCtrl::_DrawMarkers(void)
 
 void CMapEditorCtrl::_ShowImage(CDC* pDC, CRect* p_rect /*=NULL*/)
 {
- if (NULL==pDC || NULL==pDC->GetSafeHdc() || NULL==m_dcGrid.GetSafeHdc() || NULL==m_dcMark.GetSafeHdc())
+ if (NULL==pDC || NULL==pDC->GetSafeHdc() || NULL==m_dcGrid.GetSafeHdc())
   return;
- CDC memDC;
- CBitmap memBmp;
  CRect rc;
  GetClientRect(&rc);
-
- memDC.CreateCompatibleDC(pDC);
  
  if (p_rect)
  { //show specified rect only
-  memBmp.CreateCompatibleBitmap(pDC, p_rect->Width(), p_rect->Height());
-  CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
-  if (memDC.GetSafeHdc() != NULL)
-  {
-   memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcGrid, p_rect->left, p_rect->top, SRCCOPY);
-   memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcMark, p_rect->left, p_rect->top, SRCINVERT);
+  if (m_showMarkers && m_dcMark.GetSafeHdc())
+  { //with markers
+   CDC memDC;
+   CBitmap memBmp;
+   memDC.CreateCompatibleDC(pDC);
+   memBmp.CreateCompatibleBitmap(pDC, p_rect->Width(), p_rect->Height());
+   CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
+   if (memDC.GetSafeHdc() != NULL)
+   {
+    memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcGrid, p_rect->left, p_rect->top, SRCCOPY);
+    memDC.BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcMark, p_rect->left, p_rect->top, SRCINVERT);
+    if (NULL!=m_clipRgn.GetSafeHandle())
+     pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
+    pDC->BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &memDC, p_rect->left, p_rect->top, SRCCOPY);
+    if (NULL!=m_clipRgn.GetSafeHandle())
+     pDC->SelectClipRgn(NULL, RGN_COPY);
+   }
+   memDC.SelectObject(oldBmp);
+  }
+  else
+  { //without markers
    if (NULL!=m_clipRgn.GetSafeHandle())
     pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
-   pDC->BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &memDC, p_rect->left, p_rect->top, SRCCOPY);
+   pDC->BitBlt(p_rect->left, p_rect->top, rc.Width(), rc.Height(), &m_dcGrid, p_rect->left, p_rect->top, SRCCOPY);
    if (NULL!=m_clipRgn.GetSafeHandle())
     pDC->SelectClipRgn(NULL, RGN_COPY);
   }
-  memDC.SelectObject(oldBmp);
  }
  else
  { //show full size image
-  memBmp.CreateCompatibleBitmap(pDC, rc.Width(), rc.Height());
-  CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
-  if (memDC.GetSafeHdc() != NULL)
-  {
-   memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcGrid, 0, 0, SRCCOPY);
-   memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcMark, 0, 0, SRCINVERT);
+  if (m_showMarkers && m_dcMark.GetSafeHdc())
+  { //with markers
+   CDC memDC;
+   CBitmap memBmp;
+   memDC.CreateCompatibleDC(pDC);
+   memBmp.CreateCompatibleBitmap(pDC, rc.Width(), rc.Height());
+   CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
+   if (memDC.GetSafeHdc() != NULL)
+   {
+    memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcGrid, 0, 0, SRCCOPY);
+    memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcMark, 0, 0, SRCINVERT);
+    if (NULL!=m_clipRgn.GetSafeHandle())
+     pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
+    pDC->BitBlt(0, 0, rc.Width(), rc.Height(), &memDC, 0, 0, SRCCOPY);
+    if (NULL!=m_clipRgn.GetSafeHandle())
+     pDC->SelectClipRgn(NULL, RGN_COPY);
+   }
+   memDC.SelectObject(oldBmp);
+  }
+  else
+  { //without markers
    if (NULL!=m_clipRgn.GetSafeHandle())
     pDC->SelectClipRgn(&m_clipRgn, RGN_XOR);
-   pDC->BitBlt(0, 0, rc.Width(), rc.Height(), &memDC, 0, 0, SRCCOPY);
+   pDC->BitBlt(0, 0, rc.Width(), rc.Height(), &m_dcGrid, 0, 0, SRCCOPY);
    if (NULL!=m_clipRgn.GetSafeHandle())
     pDC->SelectClipRgn(NULL, RGN_COPY);
   }
-  memDC.SelectObject(oldBmp);
  }
 }
 

@@ -2351,9 +2351,9 @@ void CButtonsPanel::SetTunSoftness(float soft)
   mp_autoTuneCntr->SetTunSoftness(soft);
 }
 
-void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bool spotMarkers, float spotMarkersSize)
+void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bool spotMarkers, float spotMarkersSize, bool useMarkers)
 {
- CMapEditorCtrl::SetSettings(gradSat, gradBrt, bold, spotMarkers, spotMarkersSize);
+ CMapEditorCtrl::SetSettings(gradSat, gradBrt, bold, spotMarkers, spotMarkersSize, useMarkers);
 }
 
 void CButtonsPanel::MakeChartsChildren(bool children)

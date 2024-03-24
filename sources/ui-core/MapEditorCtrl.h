@@ -74,7 +74,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void setOnSelChange(EventHandler OnCB);
   void setOnValueTransform(EventHandler3 OnCB);
 
-  static void SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize);
+  static void SetSettings(int gradSat, int gradBrt, bool boldFont, bool spotMarkers, float spotMarkersSize, bool useMarkers);
   static bool GetSpotMarkers(void);
   static void SetCSVSepSymbol(char sepsymb);
 
@@ -249,6 +249,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   static float m_spotMarkersSize;
   static CMapEditorCtrl* mp_other;
   static char m_csvsep_symb;
+  static bool m_useMarkers;
   bool m_rof_setto;
   bool m_rof_import;
 

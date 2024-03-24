@@ -513,6 +513,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optSpotMarkers(_T("SpotMarkers"))
 , m_optSpotMarkersSize(_T("SpotMarkersSize"))
 , m_optActiveVEMap(_T("ActiveVEMap"))
+, m_optUseMarkers(_T("UseMarkers"))
 //Splitters
 , m_Name_Splitters_Section(_T("Splitters"))
 , m_optParamMonVert(_T("ParamMonVert"))
@@ -1467,6 +1468,7 @@ bool CAppSettingsModel::ReadSettings(void)
  me.ReadInt(m_optSpotMarkers, _T("1"), 0, 1);
  me.ReadFlt(m_optSpotMarkersSize,_T("1.0"), 0.1f, 3.0f);
  me.ReadInt(m_optActiveVEMap, _T("0"), 0, 2);
+ me.ReadInt(m_optUseMarkers, _T("1"), 0, 1);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
@@ -4469,6 +4471,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   me.WriteComment(_T("“аблица наполнени€, котора€ выбрана дл€ редактировани€ в окне табличного редактировани€ карт. 0 - VE1, 1 - VE2, 2 - VE ’’"));
  me.WriteInt(m_optActiveVEMap);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Use markers (spot or rectangle) to indicate current working point in grid mode map eitors. 0 - don't use, 1 - use."));
+ else
+  me.WriteComment(_T("»спользовать индикацию рабочей точки (п€тно или рамка) в окнах табличного редактировани€. 0 - не использовать, 1 - использовать."));
+ me.WriteInt(m_optUseMarkers);
 
  //Splitters
  IniIO &sp = writer;
@@ -7561,4 +7569,9 @@ bool CAppSettingsModel::GetDbgVarsToFile(void) const
 bool CAppSettingsModel::GetClassic2DKeys(void) const
 {
  return m_optClassic2DKeys.value;
+}
+
+bool CAppSettingsModel::GetUseMarkers(void) const
+{
+ return m_optUseMarkers.value;
 }

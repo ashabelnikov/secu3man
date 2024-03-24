@@ -96,7 +96,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
   void SetCLTThrd(float clt);
   void SetTunSoftness(float soft);
 
-  void SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bool spotMarkers, float spotMarkersSize);
+  void SetMapEditorSettings(int gradSat, int gradBrt, bool bold, bool spotMarkers, float spotMarkersSize, bool useMarkers);
 
   void SetITEdMode(int mode);
   int GetITEdMode(void) const;

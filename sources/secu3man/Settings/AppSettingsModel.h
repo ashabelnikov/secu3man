@@ -267,6 +267,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetCreateWindows(void) const;
   virtual bool GetDbgVarsToFile(void) const;
 
+  virtual bool GetUseMarkers(void) const;
+
  private:
   //data which stored in the INI-file:
   //Section names
@@ -830,6 +832,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optSpotMarkers;
   OptField_t<float> m_optSpotMarkersSize;
   OptField_t<int> m_optActiveVEMap;
+  OptField_t<int> m_optUseMarkers;
   
   //Splitters
   OptField_t<int> m_optParamMonVert;
