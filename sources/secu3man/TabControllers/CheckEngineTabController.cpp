@@ -153,6 +153,7 @@ void CCheckEngineTabController::OnActivate(void)
  m_baroPrev = std::numeric_limits<float>::max();
 
  //заполняем список кодами ошибок
+ m_view->ResetErrorsList();
  const CEErrorIdStr::ErrorsIDContainer errors_ids = mp_errors_ids->Get();
  CEErrorIdStr::ErrorsIDContainer::const_iterator it = errors_ids.begin();
  for(; it != errors_ids.end(); ++it)

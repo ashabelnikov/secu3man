@@ -53,6 +53,7 @@ CCheckEngineTabDlg::CCheckEngineTabDlg()
 , m_trimtab_fwexp_enabled(false)
 , m_trimtab_eeexp_enabled(false)
 , m_fuelinj_note(false) //don't show note
+, m_list_next_item_index(0)
 {
  m_image_list.Create(IDB_CE_LIST_ICONS, 16, 2, RGB(255,255,255));
  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT);
