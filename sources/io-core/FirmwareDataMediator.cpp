@@ -322,7 +322,7 @@ typedef struct
  _int  aircond_clt;
  _uchar aircond_tps;
  _int  idl_ve[2];
- _uint frap;
+ _uint frgp;            //gauge pressure in the fuel rail
  _int  reserv_0;        //reserved!
  _int  heating_t_off;
  _uchar heating_time;
@@ -429,10 +429,12 @@ typedef struct
 
  _int wuafr_clt_thrd;
 
+ _uint ifr_gp;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1511];
+ _uchar reserved[1509];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3442,7 +3444,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.evap_clt = ((float)exd.evap_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.evap_tps_lo = ((float)exd.evap_tps_lo) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.evap_tps_hi = ((float)exd.evap_tps_hi) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
- o_data.frap = ((float)exd.frap) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.frgp = ((float)exd.frgp) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.heating_t_off = ((float)exd.heating_t_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.heating_time = ((float)exd.heating_time) / 10.0f; //convert from 6 sec units to minutes
  o_data.idltorun_stp_en = ((float)exd.idltorun_stp_en) / 32.0f; //convert to %
@@ -3568,6 +3570,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.use_idl_ve[1] = exd.use_idl_ve[1];
 
  o_data.wuafr_clt_thrd = ((float)exd.wuafr_clt_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ o_data.ifr_gp = ((float)exd.ifr_gp) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3584,7 +3588,7 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.evap_clt = MathHelpers::Round(i_data.evap_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.evap_tps_lo = MathHelpers::Round(i_data.evap_tps_lo * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.evap_tps_hi = MathHelpers::Round(i_data.evap_tps_hi * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
- exd.frap = MathHelpers::Round(i_data.frap * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.frgp = MathHelpers::Round(i_data.frgp * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.heating_t_off = MathHelpers::Round(i_data.heating_t_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.heating_time = MathHelpers::Round(i_data.heating_time * 10.0f);
  exd.idltorun_stp_en = MathHelpers::Round(i_data.idltorun_stp_en * 32.0f);
@@ -3704,6 +3708,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.use_idl_ve[1] = i_data.use_idl_ve[1];
 
  exd.wuafr_clt_thrd = MathHelpers::Round(i_data.wuafr_clt_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ exd.ifr_gp = MathHelpers::Round(i_data.ifr_gp * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

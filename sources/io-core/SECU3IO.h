@@ -827,7 +827,7 @@ const int INPAVNUM = 14;
   float evap_clt;
   float evap_tps_lo;
   float evap_tps_hi;
-  float frap;
+  float frgp;
   float heating_t_off;
   float heating_time;
   float idltorun_stp_en;
@@ -925,6 +925,7 @@ const int INPAVNUM = 14;
   int use_idl_ve[2];
 
   float wuafr_clt_thrd;
+  float ifr_gp;
  };
 
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};

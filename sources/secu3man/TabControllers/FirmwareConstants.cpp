@@ -260,9 +260,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 2, 1, 0, &d.an_tps_mul, _T("The choice of what to multiply the base injection PW when working in Alpha-N mode: by MAP or TPS. If you set 0, then the firmware multiplies by MAP, if you set 1, then the firmware multiplies by TPS. If you set it to 2, then firmware multiplies by 101.3 constant"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Абсол. давление в топливной рампе"), _T("кПа"), 0.0f, 1000.0f, 0.1f, 1, &d.frap, _T("Абсолютное давление в топливной рампе. Установите значение больше 0, если хотите чтобы время впрыска корректировалось по разности давлений во впускном коллекторе и топливной рампе. Предполагается, что производительность форсунок указана для давления 3 бара."));
+  dfd.AppendItem(_T("Манометрическое давление в топливной рампе"), _T("кПа"), 0.0f, 900.0f, 0.1f, 1, &d.frgp, _T("Манометрическое давление в топливной рампе. Установите значение больше 0, если хотите чтобы время впрыска корректировалось по разности давлений во впускном коллекторе и топливной рампе. Смотрите также параметр 'Манометрическое давление производительности форсунок'."));
  else
-  dfd.AppendItem(_T("Absolute pressure in the fuel rail"), _T("kPa"), 0.0f, 1000.0f, 0.1f, 1, &d.frap, _T("Absolute pressure in the fuel rail. Set value greater than 0 if you want the injection PW to be corrected for the pressure difference in the intake manifold and the fuel rail. It is assumed that injectors' flow rate is indicated for a pressure of 3 bars."));
+  dfd.AppendItem(_T("Gauge pressure in the fuel rail"), _T("kPa"), 0.0f, 900.0f, 0.1f, 1, &d.frgp, _T("Gauge pressure in the fuel rail. Set value greater than 0 if you want the injection PW to be corrected for the pressure difference in the intake manifold and the fuel rail. See also parameter 'Gauge pressure of the injector flow rate'."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Манометрическое давление производительности форсунок"), _T("кПа"), 0.0f, 1000.0f, 0.1f, 1, &d.ifr_gp, _T("Относительное давление (манометрическое) при котором форсунки имеют номинальную производительность (например 300 кПа или 3 бара."));
+ else
+  dfd.AppendItem(_T("Gauge pressure of the injector flow rate"), _T("kPa"), 0.0f, 1000.0f, 0.1f, 1, &d.ifr_gp, _T("Gauge pressure at which injectors have its nominal performance (for example 300 kPa or 3 bars)"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Использовать ручную корр. впрыска на ХХ"), _T(""), 0, 1, 1, 1, &d.maninjpw_idl, _T("Установите в 0, если не хотите чтобы ручная коррекция длительности впрыска работала на ХХ. Установите в 1 и коррекция будет работать не только в режиме под нагрузкой, но и в режиме ХХ."));
