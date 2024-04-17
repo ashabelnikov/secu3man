@@ -60,6 +60,7 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_BN_CLICKED(IDC_CESETT_ADD_I6_V_USEEM_CHECK, OnEMCheck)
  ON_BN_CLICKED(IDC_CESETT_ADD_I7_V_USEEM_CHECK, OnEMCheck)
  ON_BN_CLICKED(IDC_CESETT_ADD_I8_V_USEEM_CHECK, OnEMCheck)
+ ON_BN_CLICKED(IDC_CESETT_STEPPERIC_FLG_CHECK, OnStepperICFlgCheck)
 
  ON_UPDATE_COMMAND_UI(IDC_CESETT_MAP_V_EM_EDIT, OnUpdateEmValue)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_MAP_V_EM_SPIN, OnUpdateEmValue)
@@ -162,6 +163,8 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_TIMER_EDIT, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_TIMER_SPIN, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_OILPRESS_TIMER_CAPTION, OnUpdateSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_STEPPERIC_FLG_CHECK, OnUpdateSECU3i)
 END_MESSAGE_MAP()
 
 CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
@@ -333,6 +336,8 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_OILPRESS_TIMER_EDIT, m_oilpress_timer_edit);
  DDX_Control(pDX, IDC_CESETT_OILPRESS_TIMER_SPIN, m_oilpress_timer_spin);
 
+ DDX_Control(pDX, IDC_CESETT_STEPPERIC_FLG_CHECK, m_stepperic_flg_check);
+
  //Do data exchange and validation
  m_map_v_min_edit.DDX_Value(pDX, IDC_CESETT_MAP_V_MIN_EDIT, mp_data->map_v_min);
  DDV_MinMaxFloat(pDX, mp_data->map_v_min, 0.0f, 5.5f);
@@ -442,6 +447,8 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->oilpress_thrd, 0.0f, 8.0f);
  m_oilpress_timer_edit.DDX_Value(pDX, IDC_CESETT_OILPRESS_TIMER_EDIT, mp_data->oilpress_timer);
  DDV_MinMaxInt(pDX, mp_data->oilpress_timer, 0, 4000);
+
+ DDX_Check_bool(pDX, IDC_CESETT_STEPPERIC_FLG_CHECK, mp_data->stepperic_flg);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -530,6 +537,11 @@ void CCESettingsDlg::OnUpdateEmValue(CCmdUI* pCmdUI)
 }
 
 void CCESettingsDlg::OnEMCheck()
+{
+ UpdateData(TRUE);
+}
+
+void CCESettingsDlg::OnStepperICFlgCheck()
 {
  UpdateData(TRUE);
 }
@@ -829,6 +841,8 @@ BOOL CCESettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_oilpress_timer_edit, MLL::GetString(IDS_CESETT_OILPRESS_TIMER_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_oilpress_timer_spin, MLL::GetString(IDS_CESETT_OILPRESS_TIMER_EDIT_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_stepperic_flg_check, MLL::GetString(IDS_CESETT_STEPPERIC_FLG_CHECK_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -872,7 +886,7 @@ void CCESettingsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(825));
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(870));
 }
 
 void CCESettingsDlg::OnSize(UINT nType, int cx, int cy)

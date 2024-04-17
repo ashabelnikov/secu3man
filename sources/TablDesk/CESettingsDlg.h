@@ -65,6 +65,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
   afx_msg void OnUpdateSECU3iEx(CCmdUI* pCmdUI);
   afx_msg void OnUpdateEmValue(CCmdUI* pCmdUI);
   afx_msg void OnEMCheck();
+  afx_msg void OnStepperICFlgCheck();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -182,6 +183,8 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
   CSpinButtonCtrlEx m_oilpress_thrd_spin;
   CEditEx m_oilpress_timer_edit;
   CSpinButtonCtrlEx m_oilpress_timer_spin;
+
+  CButton m_stepperic_flg_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

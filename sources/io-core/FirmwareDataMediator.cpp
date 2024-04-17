@@ -157,6 +157,9 @@ typedef struct
 
  _uint oilpress_thrd;
  _uint oilpress_timer;
+
+ _uchar stepperic_flg;
+ _uchar reserved[31];
 }ce_sett_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -305,7 +308,7 @@ typedef struct
  _uchar inj_wu_afr0[WU_AFR_SIZE]; //petrol
  _uchar inj_wu_afr1[WU_AFR_SIZE]; //gas
 
- _uchar reserved[881];
+ _uchar reserved[849];
 }fw_ex_tabs_t;
 
 
@@ -3355,6 +3358,8 @@ void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
 
  o_data.oilpress_thrd = ((float)p_fd->extabs.cesd.oilpress_thrd) / 256.0f;
  o_data.oilpress_timer = p_fd->extabs.cesd.oilpress_timer;
+
+ o_data.stepperic_flg = p_fd->extabs.cesd.stepperic_flg;
 }
 
 void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
@@ -3428,6 +3433,8 @@ void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
 
  p_fd->extabs.cesd.oilpress_thrd = MathHelpers::Round((i_data.oilpress_thrd * 256.0f));
  p_fd->extabs.cesd.oilpress_timer = i_data.oilpress_timer;
+
+ p_fd->extabs.cesd.stepperic_flg = i_data.stepperic_flg;
 }
 
 void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const

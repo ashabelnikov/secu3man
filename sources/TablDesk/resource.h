@@ -135,7 +135,10 @@
 #define IDC_TLGE_EDIT_15                5146
 #define IDC_TLGE_LOAD_DEF_VAL           5147
 #define IDC_TLGE_ERROR_MSG_TEXT         5148
-#define IDS_TLGE_LOAD_DEF_VAL_TT        5149   
+#define IDS_TLGE_LOAD_DEF_VAL_TT        5149
+#define IDC_CESETT_STEPPERIC_GROUP      5150
+#define IDC_CESETT_STEPPERIC_FLG_CHECK  5151
+#define IDS_CESETT_STEPPERIC_FLG_CHECK_TT 5152
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

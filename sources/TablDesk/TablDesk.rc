@@ -639,6 +639,9 @@ BEGIN
     LTEXT           "Время после пуска.(такты)",IDC_CESETT_OILPRESS_TIMER_CAPTION,149,472,97,15
     EDITTEXT        IDC_CESETT_OILPRESS_TIMER_EDIT,246,470,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_OILPRESS_TIMER_SPIN,"msctls_updown32",UDS_ARROWKEYS,278,470,12,16
+
+    GROUPBOX        "Шаговый двигатель",IDC_CESETT_STEPPERIC_GROUP,5,495,300,32
+    CONTROL         "Учитывать ошибку микросхемы ШД",IDC_CESETT_STEPPERIC_FLG_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,50,503,150,20
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -938,6 +941,7 @@ BEGIN
     IDS_TD_WUAFR1_MAP_TT       "Таблица Воздух/топливо используемая при прогреве двигателя для газа (GAS_V=1)"
     IDS_WUAFR0_MAP             "Соотношение воздух/топливо от температуры двигателя (бензин)"
     IDS_WUAFR1_MAP             "Соотношение воздух/топливо от температуры двигателя (газ)"
+    IDS_CESETT_STEPPERIC_FLG_CHECK_TT "Установите галочку чтобы ошибка шагового двигателя учитывалась или уберите ее чтобы ошибка игнорировалась."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1055,7 +1059,7 @@ BEGIN
     GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,370
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,400
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1573,6 +1577,9 @@ BEGIN
     LTEXT           "Time after start (strokes)",IDC_CESETT_OILPRESS_TIMER_CAPTION,149,472,97,15
     EDITTEXT        IDC_CESETT_OILPRESS_TIMER_EDIT,246,470,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_OILPRESS_TIMER_SPIN,"msctls_updown32",UDS_ARROWKEYS,278,470,12,16
+
+    GROUPBOX        "Stepper motor",IDC_CESETT_STEPPERIC_GROUP,5,495,300,32
+    CONTROL         "Take into account the stepper IC fault",IDC_CESETT_STEPPERIC_FLG_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,50,503,150,20
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -1875,6 +1882,7 @@ BEGIN
     IDS_TD_WUAFR1_MAP_TT       "AFR map used during warm up of engine for gas (GAS_V=1)"
     IDS_WUAFR0_MAP             "AFR vs coolant temperature (petrol)"
     IDS_WUAFR1_MAP             "AFR vs coolant temperature (gas)"
+    IDS_CESETT_STEPPERIC_FLG_CHECK_TT "Check the box for the stepper motor's error to be taken into account or uncheck it for the error to be ignored."
 END
 
 /////////////////////////////////////////////////////////////////////////////
