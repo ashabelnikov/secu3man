@@ -51,7 +51,7 @@ using namespace SECU3IO::SECU3Types;
 
 //--------------------------------------------------------------------------
 #define IOREM_SLOTS 49           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 100          // Number of plugs used in I/O remapping
+#define IOREM_PLUGS 108          // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
@@ -308,7 +308,7 @@ typedef struct
  _uchar inj_wu_afr0[WU_AFR_SIZE]; //petrol
  _uchar inj_wu_afr1[WU_AFR_SIZE]; //gas
 
- _uchar reserved[849];
+ _uchar reserved[817];
 }fw_ex_tabs_t;
 
 

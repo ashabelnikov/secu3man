@@ -227,6 +227,14 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_FTS_I      =  97,     // FTS_I     (input)
    IOP3I_LAMBDA2    =  98,     // LAMBDA2   (input)
    IOP3I_GPS        =  99,     // GPS       (input)
+// IOP3I_RESERVED53 =  100,    // reserved  ()
+// IOP3I_RESERVED54 =  101,    // reserved  ()
+// IOP3I_RESERVED55 =  102,    // reserved  ()
+// IOP3I_RESERVED56 =  103,    // reserved  ()
+// IOP3I_RESERVED57 =  104,    // reserved  ()
+// IOP3I_RESERVED58 =  105,    // reserved  ()
+// IOP3I_RESERVED59 =  106,    // reserved  ()
+// IOP3I_RESERVED60 =  107,    // reserved  ()
    IOP3I_COUNT      = 100,     //DON'T forget to update this value
 
    //SECU-3T:
@@ -331,6 +339,14 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP_RESERVED40 =  97,     // Reserved    ()
 // IOP_RESERVED41 =  98,     // Reserved    ()
 // IOP_RESERVED42 =  99,     // Reserved    ()
+// IOP_RESERVED53 =  100,    // reserved    ()
+// IOP_RESERVED54 =  101,    // reserved    ()
+// IOP_RESERVED55 =  102,    // reserved    ()
+// IOP_RESERVED56 =  103,    // reserved    ()
+// IOP_RESERVED57 =  104,    // reserved    ()
+// IOP_RESERVED58 =  105,    // reserved    ()
+// IOP_RESERVED59 =  106,    // reserved    ()
+// IOP_RESERVED60 =  107,    // reserved    ()
    IOP_COUNT      =  93,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
@@ -468,7 +484,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V39 = 0x39,           //v3.9  LAMBDA2 added, ADD_I4, IGNTIM and MAP2 for SECU3T added
    IOV_V40 = 0x40,           //v4.0  GPA6_O and GPA4_I added, GPA5_I and GPA6_O reserved (hidden)
    IOV_V41 = 0x41,           //v4.1  Array with I/O information added, GPS input
-   IOV_CUR = IOV_V41
+   IOV_V42 = 0x42,           //V4.2  New reserved plugs were added
+   IOV_CUR = IOV_V42
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
