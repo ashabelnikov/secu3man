@@ -718,6 +718,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Vehicle speed threshold for fuel cut"), _T("km/h"), 0.0f, 100.0f, 0.1f, 1, &d.fuelcut_vss_thrd, _T("Fuel cut off on run will not be applied if vehicle's speed is less than this threshold"));
 
+ std::vector<_TSTRING> dashboards;
+ dashboards.push_back(_T("Lada Priora"));
+ dashboards.push_back(_T("Nissan Almera Classic"));
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Выбор CAN приборной панели"), dashboards, &d.can_dashboard, _T("Выбор модели приборной панели подключаемой через CAN-шину."));
+ else
+  dfd.AppendItem(_T("Select CAN dashboard"), dashboards, &d.can_dashboard, _T("Select model of dashboard connected via CAN-bus"));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);

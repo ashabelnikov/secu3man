@@ -86,6 +86,11 @@ BOOL CDynFieldsDialog::OnInitDialog()
   m_fl.back().p_edit->GetWindowRect(&lr);
  else if (m_fl.back().p_check)
   m_fl.back().p_check->GetWindowRect(&lr);
+ else if (m_fl.back().p_combo)
+  m_fl.back().p_combo->GetWindowRect(&lr);
+ else 
+  ASSERT(0);
+
  ScreenToClient(&lr);
  DPIAware dpi;
  m_contentHeight = lr.bottom + dpi.ScaleY(8);
