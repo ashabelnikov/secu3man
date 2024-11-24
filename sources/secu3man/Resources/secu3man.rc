@@ -574,7 +574,75 @@ BEGIN
     IDS_DEV_DIAG_STOP_OUTAUTO_TST  "Остановить автоматическое тестировнаие выходов"
     IDS_DEV_DIAG_ENABLE_BLDE_TST   "Разрешить тестирование выходов BL, DE"
     IDS_DEV_DIAG_ENABLE_TACH_O_TST  "Разрешить тестирование выхода TACH_O"
-    IDS_LOG_FORMAT_DESC            "  чч:мм:сс.сотые\r\n 1 Обороты(мин-1)\r\n 2 УОЗ(°КВ)\r\n 3 ДАД(кПа)\r\n 4 Напр.борт.сети(В)\r\n 5 ДТОЖ(°C)\r\n 6 Уров.сигн.ДД(В)\r\n 7 Корр.УОЗ по ДД(°КВ)\r\n 8 Расход возд.(1-16)\r\n 9 Концев. ДЗ(0,1)\r\n10 Газ. клап.(0,1)\r\n11 ЭПХХ клап.(0,1)\r\n12 ЭМР клап.(0,1)\r\n13 Вентилятор(0,1)\r\n14 Блокир.стартера(0,1)\r\n15 Обогащ.при ускор.(0,1)\r\n16 Отсеч.топл.по обор.(0,1)\r\n17 Продувка двигателя (0,1)\r\n18 Блокировка системы (0,1)\r\n19 Лампа СЕ (0,1)\r\n20 Вход IGN_I (0,1)\r\n21 Вход COND_I (0,1)\r\n22 Вход EPAS_I (0,1)\r\n23 Обогащение после пуска (0,1)\r\n24 РХХ closed loop (0,1)\r\n25 ДПДЗ(%)\r\n26 Вход ADD_I1(В)\r\n27 Вход ADD_I2(В)\r\n28 Положение ВЗ(%)\r\n29 Положение ГД(%)\r\n30 Скорость(км/ч)\r\n31 Расстояние(км)\r\n32 Расход топл.(Л/100км)\r\n33 Расход топл.(Гц)\r\n34 ДТВ(°C)\r\n35 УОЗ из стартовой табл.(°КВ)\r\n36 УОЗ из ХХ табл.(°КВ)\r\n37 УОЗ из рабоч. табл.(°КВ)\r\n38 Корр.УОЗ по ДТОЖ(°КВ)\r\n39 Корр.УОЗ по ДТВ(°КВ)\r\n40 Корр.УОЗ от РХХ(°КВ)\r\n41 Корр.УОЗ октан.(°КВ)\r\n42 Корр.впрыска по ДК\r\n43 Время впрыска(мс)\r\n44 Скорость ДПДЗ (%/с)\r\n45 ДАД2, атмосф. давление (кПа)\r\n46 TMP2, температура газа (°С)\r\n47 Дифф.давление, ДДГ-ДАД (кПа)\r\n48 Воздух/топливо (6-24)\r\n49 Синтетическая нагрузка (кПа или %)\r\n50 Барометр. давление (кПа)\r\n51 Фаза нач. впрыска (°)\r\n52 Фаза конца впрыска (°)\r\n53 Температура газового редуктора (°С)\r\n54 Уровень топлива в баке (Л)\r\n55 Температура выхлопных газов (°С)\r\n56 Давление масла в двиг. (кг/см2)\r\n57 Загрузка форсунок. (%)\r\n58 Аргумент в табл.жесткости РХХ.\r\n59 Расход воздуха (RxL)\r\n60 Датчик ДМРВ (г/сек)\r\n61 Скважность ШИМ вентилятора (%)\r\n62 Биты состояний универ. выходов\r\n63 Скорость ДАД (кПа/с)\r\n64 Температура топлива (°С)\r\n65 Израсходованное топливо (Л)\r\n66 Корр.впрыска по ДК2\r\n67 Воздух/топливо2 (6-24)\r\n68 Воздух/топливо из таблицы (6-24)\r\n69 Температура заряда (°С)\r\n70 Давление газа (кПа)\r\n71 Метки лога\r\n72 Служебные флаги \r\n73 Ошибки СЕ"
+    IDS_LOG_FORMAT_DESC            "  чч:мм:сс.сотые\r\n 1 Обороты(мин-1)\r\n 2 УОЗ(°КВ)\r\n 3 ДАД(кПа)\r\n 4 Напр.борт.сети(В)\r\n 5 ДТОЖ(°C)\r\n 6 Уров.сигн.ДД(В)\r\n 7 Корр.УОЗ по ДД(°КВ)\r\n 8 Расход возд.(1-16)\r\n 9 Концев. ДЗ(0,1)
+10 Газ. клап.(0,1)
+11 ЭПХХ клап.(0,1)
+12 ЭМР клап.(0,1)
+13 Вентилятор(0,1)
+14 Блокир.стартера(0,1)
+15 Обогащ.при ускор.(0,1)
+16 Отсеч.топл.по обор.(0,1)
+17 Продувка двигателя (0,1)
+18 Блокировка системы (0,1)
+19 Лампа СЕ (0,1)
+20 Вход IGN_I (0,1)
+21 Вход COND_I (0,1)
+22 Вход EPAS_I (0,1)
+23 Вход GPA4_I (0,1)
+24 Вход INPUT1 (0,1)
+25 Вход INPUT2 (0,1)
+26 Вход AUTO_I (0,1)
+27 Обогащение после пуска (0,1)
+28 РХХ closed loop (0,1)
+29 ДПДЗ(%)
+30 Вход ADD_I1(В)
+31 Вход ADD_I2(В)
+32 Положение ВЗ(%)
+33 Положение ГД(%)
+34 Скорость(км/ч)
+35 Расстояние(км)
+36 Расход топл.(Л/100км)
+37 Расход топл.(Гц)
+38 ДТВ(°C)
+39 УОЗ из стартовой табл.(°КВ)
+40 УОЗ из ХХ табл.(°КВ)
+41 УОЗ из рабоч. табл.(°КВ)
+42 Корр.УОЗ по ДТОЖ(°КВ)
+43 Корр.УОЗ по ДТВ(°КВ)
+44 Корр.УОЗ от РХХ(°КВ)
+45 Корр.УОЗ октан.(°КВ)
+46 Корр.впрыска по ДК
+47 Время впрыска(мс)
+48 Скорость ДПДЗ (%/с)
+49 ДАД2, атмосф. давление (кПа)
+50 TMP2, температура газа (°С)
+51 Дифф.давление, ДДГ-ДАД (кПа)
+52 Воздух/топливо (6-24)
+53 Синтетическая нагрузка (кПа или %)
+54 Барометр. давление (кПа)
+55 Фаза нач. впрыска (°)
+56 Фаза конца впрыска (°)
+57 Температура газового редуктора (°С)
+58 Уровень топлива в баке (Л)
+59 Температура выхлопных газов (°С)
+60 Давление масла в двиг. (кг/см2)
+61 Загрузка форсунок. (%)
+62 Аргумент в табл.жесткости РХХ.
+63 Расход воздуха (RxL)
+64 Датчик ДМРВ (г/сек)
+65 Скважность ШИМ вентилятора (%)
+66 Биты состояний универ. выходов
+67 Скорость ДАД (кПа/с)
+68 Температура топлива (°С)
+69 Израсходованное топливо (Л)
+70 Корр.впрыска по ДК2
+71 Воздух/топливо2 (6-24)
+72 Воздух/топливо из таблицы (6-24)
+73 Температура заряда (°С)
+74 Давление газа (кПа)
+75 Метки лога
+76 Служебные флаги
+77 Ошибки СЕ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1658,7 +1726,75 @@ BEGIN
     IDS_DEV_DIAG_STOP_OUTAUTO_TST  "Stop automatic testing of outputs"
     IDS_DEV_DIAG_ENABLE_BLDE_TST   "Enable testing of BL, DE outputs"
     IDS_DEV_DIAG_ENABLE_TACH_O_TST  "Enable testing of the TACH_O output"
-    IDS_LOG_FORMAT_DESC            "  hh:mm:ss.hundreds\r\n 1 RPM(min-1)\r\n 2 Adv.angle(°CS)\r\n 3 MAP(kPa)\r\n 4 Board voltage(V)\r\n 5 CTS(°C)\r\n 6 Knock sig.level(V)\r\n 7 Knock retard(°CS)\r\n 8 Air flow(1-16)\r\n 9 Throttle lim.switch(0,1)\r\n10 Gas valve(0,1)\r\n11 Idle cutoff valve(0,1)\r\n12 Power valve(0,1)\r\n13 Cooling fan(0,1)\r\n14 Starter blocking(0,1)\r\n15 Acceleration enrichment(0,1)\r\n16 Rev.lim. fuel cut (0,1)\r\n17 Flood clear mode (0,1)\r\n18 System locked (0,1)\r\n19 CE lamp (0,1)\r\n20 IGN_I input (0,1)\r\n21 COND_I input (0,1)\r\n22 EPAS_I input (0,1)\r\n23 Afterstart enrichment (0,1)\r\n24 IAC closed loop (0,1)\r\n25 TPS(%)\r\n26 ADD_I1 Input(V)\r\n27 ADD_I2 Input(V)\r\n28 Choke position(%)\r\n29 Gas dosator position(%)\r\n30 Vehicle speed(km/h)\r\n31 Pass.Distance(km)\r\n32 Fuel consumption(L/100km)\r\n33 Fuel consumption(Hz)\r\n34 IAT sensor(°C)\r\n35 Adv.angle from start map(°CS)\r\n36 Adv.angle from idle map(°CS)\r\n37 Adv.angle from work map(°CS)\r\n38 Adv.angle corr.from CTS(°CS)\r\n39 Adv.angle corr.from IAT(°CS)\r\n40 Adv.angle corr.from idle reg.(°CS)\r\n41 Octane correction(°CS)\r\n42 EGO corr.\r\n43 Injector PW(ms)\r\n44 TPS dot (%/s)\r\n45 MAP2, atmos. pressure (kPa)\r\n46 TMP2, gas temperature (°C)\r\n47 Diff.pressure, GPS-MAP (kPa)\r\n48 AFR value (6-24)\r\n49 Synthetic load (kPa or %)\r\n50 Barometric pressure (kPa)\r\n51 Begin inj. phase (°)\r\n52 End inj. phase (°)\r\n53 Gas reducer temperature (°C)\r\n54 Fuel tank level (L)\r\n55 Exhaust gas temperature (°C)\r\n56 Oil pressure (kg/cm2)\r\n57 Injector's duty (%)\r\n58 Argument in the IAC reg. rigidity map\r\n59 Air flow (RxL)\r\n60 MAF value (g/sec)\r\n61 Cooling fan's PWM duty (%)\r\n62 Bits of univ. outputs' states\r\n63 MAP dot (kPa/s)\r\n64 Fuel temperature (°C)\r\n65 Fuel consumed (L)\r\n66 EGO corr.2\r\n67 AFR value2 (6-24)\r\n68 AFR value from map (6-24)\r\n69 Charge temperature (°С)\r\n70 Gas pressure (kPa)\r\n71 Log marks\r\n72 Service flags\r\n73 CE errors"
+    IDS_LOG_FORMAT_DESC            "  hh:mm:ss.hundreds\r\n 1 RPM(min-1)\r\n 2 Adv.angle(°CS)\r\n 3 MAP(kPa)\r\n 4 Board voltage(V)\r\n 5 CTS(°C)\r\n 6 Knock sig.level(V)\r\n 7 Knock retard(°CS)\r\n 8 Air flow(1-16)\r\n 9 Throttle lim.switch(0,1)
+10 Gas valve(0,1)
+11 Idle cutoff valve(0,1)
+12 Power valve(0,1)
+13 Cooling fan(0,1)
+14 Starter blocking(0,1)
+15 Acceleration enrichment(0,1)
+16 Rev.lim. fuel cut (0,1)
+17 Flood clear mode (0,1)
+18 System locked (0,1)
+19 CE lamp (0,1)
+20 IGN_I input (0,1)
+21 COND_I input (0,1)
+22 EPAS_I input (0,1)
+23 GPA4_I input (0,1)
+24 INPUT1 input (0,1)
+25 INPUT2 input (0,1)
+26 AUTO_I input (0,1)
+27 Afterstart enrichment (0,1)
+28 IAC closed loop (0,1)
+29 TPS(%)
+30 ADD_I1 Input(V)
+31 ADD_I2 Input(V)
+32 Choke position(%)
+33 Gas dosator position(%)
+34 Vehicle speed(km/h)
+35 Pass.Distance(km)
+36 Fuel consumption(L/100km)
+37 Fuel consumption(Hz)
+38 IAT sensor(°C)
+39 Adv.angle from start map(°CS)
+40 Adv.angle from idle map(°CS)
+41 Adv.angle from work map(°CS)
+42 Adv.angle corr.from CTS(°CS)
+43 Adv.angle corr.from IAT(°CS)
+44 Adv.angle corr.from idle reg.(°CS)
+45 Octane correction(°CS)
+46 EGO corr.
+47 Injector PW(ms)
+48 TPS dot (%/s)
+49 MAP2, atmos. pressure (kPa)
+50 TMP2, gas temperature (°C)
+51 Diff.pressure, GPS-MAP (kPa)
+52 AFR value (6-24)
+53 Synthetic load (kPa or %)
+54 Barometric pressure (kPa)
+55 Begin inj. phase (°)
+56 End inj. phase (°)
+57 Gas reducer temperature (°C)
+58 Fuel tank level (L)
+59 Exhaust gas temperature (°C)
+60 Oil pressure (kg/cm2)
+61 Injector's duty (%)
+62 Argument in the IAC reg. rigidity map
+63 Air flow (RxL)
+64 MAF value (g/sec)
+65 Cooling fan's PWM duty (%)
+66 Bits of univ. outputs' states
+67 MAP dot (kPa/s)
+68 Fuel temperature (°C)
+69 Fuel consumed (L)
+70 EGO corr.2
+71 AFR value2 (6-24)
+72 AFR value from map (6-24)
+73 Charge temperature (°С)
+74 Gas pressure (kPa)
+75 Log marks
+76 Service flags
+77 CE errors"
 END
 
 STRINGTABLE DISCARDABLE 

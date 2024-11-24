@@ -41,6 +41,7 @@ struct s3lRecord
  float knock_retard;
  BYTE  air_flow;
  WORD flags;             //bits of flags
+ WORD flags1;
  float tps;
  float add_i1;
  float add_i2;

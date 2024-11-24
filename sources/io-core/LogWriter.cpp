@@ -97,6 +97,12 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    WRITEBIT16(flags, 2,  i_data.epas_i);
    WRITEBIT16(flags, 1,  i_data.aftstr_enr);
    WRITEBIT16(flags, 0,  i_data.iac_cl_loop);
+
+   WORD flags1 = 0;
+   WRITEBIT16(flags1, 0, i_data.gpa4_i);
+   WRITEBIT16(flags1, 1, i_data.input1);
+   WRITEBIT16(flags1, 2, i_data.input2);
+   WRITEBIT16(flags1, 3, i_data.auto_i);
                                             
    s3l::s3lRecord s3l = {
    (BYTE)i_time.wHour,
@@ -112,6 +118,7 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    i_data.knock_retard,
    i_data.air_flow,
    flags,
+   flags1,
    i_data.tps,
    i_data.add_i1,
    i_data.add_i2,
@@ -209,6 +216,10 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    secu3_itoa_u1 (i_data.ign_i, 2);
    secu3_itoa_u1 (i_data.cond_i, 2);
    secu3_itoa_u1 (i_data.epas_i, 2);
+   secu3_itoa_u1 (i_data.gpa4_i, 2);
+   secu3_itoa_u1 (i_data.input1, 2);
+   secu3_itoa_u1 (i_data.input2, 2);
+   secu3_itoa_u1 (i_data.auto_i, 2);
    secu3_itoa_u1 (i_data.aftstr_enr, 2);
    secu3_itoa_u1 (i_data.iac_cl_loop, 2);
    secu3_ftoa_32 (i_data.tps, 6, 1);

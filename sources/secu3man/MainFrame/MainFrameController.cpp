@@ -362,7 +362,7 @@ void MainFrameController::OnCreate(void)
  if (sz.m_MainFrmWnd_W != std::numeric_limits<int>::max() && sz.m_MainFrmWnd_H != std::numeric_limits<int>::max())
   mp_view->SetWindowPos(NULL, 0, 0, sz.m_MainFrmWnd_W, sz.m_MainFrmWnd_H, SWP_NOZORDER | SWP_NOMOVE);
  else
-  mp_view->SetWindowPos(NULL, 0, 0, 750, 500, SWP_NOZORDER | SWP_NOMOVE); //fix issue with first launch
+  mp_view->SetWindowPos(NULL, 0, 0, 770, 577, SWP_NOZORDER | SWP_NOMOVE); //fix issue with first launch
 
  mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
  mp_view->CheckOnChildCharts(settings->GetChildCharts());
@@ -394,6 +394,10 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldIgn_i);
  m_pLogWriter->SetFieldName(i++, lff.m_fldCond_i);
  m_pLogWriter->SetFieldName(i++, lff.m_fldEpas_i);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldGpa4_i);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldInput1);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldInput2);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldAuto_i);
  m_pLogWriter->SetFieldName(i++, lff.m_fldAftStrEnr);
  m_pLogWriter->SetFieldName(i++, lff.m_fldIacClLoop);
  m_pLogWriter->SetFieldName(i++, lff.m_fldTPS);

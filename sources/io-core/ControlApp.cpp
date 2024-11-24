@@ -707,6 +707,10 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &addflg))
   return false;
  sensorDat.idlve_use = CHECKBIT8(addflg, 0);
+ sensorDat.gpa4_i = CHECKBIT8(addflg, 1);
+ sensorDat.input1 = CHECKBIT8(addflg, 2);
+ sensorDat.input2 = CHECKBIT8(addflg, 3);
+ sensorDat.auto_i = CHECKBIT8(addflg, 4);
 
  return true;
 }

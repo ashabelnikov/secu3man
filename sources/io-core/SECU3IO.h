@@ -56,6 +56,10 @@ namespace SECU3IO
   bool ign_i;                           //IGN_I
   bool cond_i;                          //COND_I
   bool epas_i;                          //EPAS_I
+  bool gpa4_i;
+  bool auto_i;
+  bool input1;
+  bool input2;
 
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации

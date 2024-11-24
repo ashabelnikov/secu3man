@@ -487,6 +487,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optColUniOut4(_T("IndUniOut4"))
 , m_optColUniOut5(_T("IndUniOut5"))
 , m_optColUniOut6(_T("IndUniOut6"))
+, m_optColGpa4_i(_T("IndGpa4_i"))
+, m_optColInput1(_T("IndInput1"))
+, m_optColInput2(_T("IndInput2"))
+, m_optColAuto_i(_T("IndAuto_i"))
 //Autotune
 , m_Name_AutoTune_Section(_T("AutoTune"))
 , m_optLambdaDelay(_T("LambdaDelay"))
@@ -634,6 +638,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldIgn_i(_T("Ign_i"))
 , m_optLogFieldCond_i(_T("Cond_i"))
 , m_optLogFieldEpas_i(_T("Epas_I"))
+, m_optLogFieldGpa4_i(_T("Gpa4_i"))
+, m_optLogFieldInput1(_T("Input1"))
+, m_optLogFieldInput2(_T("Input2"))
+, m_optLogFieldAuto_i(_T("Auto_i"))
 , m_optLogFieldTPS(_T("TPS"))
 , m_optLogFieldAdd_i1(_T("Add_i1"))
 , m_optLogFieldAdd_i2(_T("Add_i2"))
@@ -719,6 +727,10 @@ CAppSettingsModel::CAppSettingsModel()
   m_optIndUniOut4[i].name = _T("UnivOut4");
   m_optIndUniOut5[i].name = _T("UnivOut5");
   m_optIndUniOut6[i].name = _T("UnivOut6");
+  m_optIndGpa4_i[i].name = _T("IndGpa4_i");
+  m_optIndInput1[i].name = _T("IndInput1_i");
+  m_optIndInput2[i].name = _T("IndInput2_i");
+  m_optIndAuto_i[i].name = _T("IndAuto_i");
  }
 
  m_Name_Meters_Section[0] = _T("Meters");
@@ -1361,6 +1373,10 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optIndUniOut4[i],_T(""), 0, 32, true);
   ii.ReadInt(m_optIndUniOut5[i],_T(""), 0, 32, true);
   ii.ReadInt(m_optIndUniOut6[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndGpa4_i[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndInput1[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndInput2[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndAuto_i[i],_T(""), 0, 32, true);
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
@@ -1386,6 +1402,10 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColUniOut4,_T("00FF00"));
  ic.ReadColor(m_optColUniOut5,_T("00FF00"));
  ic.ReadColor(m_optColUniOut6,_T("00FF00"));
+ ic.ReadColor(m_optColGpa4_i,_T("00FF00"));
+ ic.ReadColor(m_optColInput1,_T("00FF00"));
+ ic.ReadColor(m_optColInput2,_T("00FF00"));
+ ic.ReadColor(m_optColAuto_i,_T("00FF00"));
 
  //Meters
  const TCHAR* metDef[2][42*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
@@ -1592,7 +1612,11 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldCE, _T("CE"));
  lf.ReadString(m_optLogFieldIgn_i, _T("Ign_i"));
  lf.ReadString(m_optLogFieldCond_i, _T("Cond_i"));
- lf.ReadString(m_optLogFieldEpas_i, _T("Epas_I"));
+ lf.ReadString(m_optLogFieldEpas_i, _T("Epas_i"));
+ lf.ReadString(m_optLogFieldGpa4_i, _T("Gpa4_i"));
+ lf.ReadString(m_optLogFieldInput1, _T("Input1"));
+ lf.ReadString(m_optLogFieldInput2, _T("Input2"));
+ lf.ReadString(m_optLogFieldAuto_i, _T("Auto_i"));
  lf.ReadString(m_optLogFieldTPS, _T("TPS"));
  lf.ReadString(m_optLogFieldAdd_i1, _T("Add_i1"));
  lf.ReadString(m_optLogFieldAdd_i2, _T("Add_i2"));
@@ -3966,6 +3990,26 @@ bool CAppSettingsModel::WriteSettings(void)
    ii.WriteInt(m_optIndUniOut6[i], _T("Universal output 6"));
   else
    ii.WriteInt(m_optIndUniOut6[i], _T("”ниверсальный выход 6"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndGpa4_i[i], _T("GPA4_I input"));
+  else
+   ii.WriteInt(m_optIndGpa4_i[i], _T("¬ход GPA4_I"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndInput1[i], _T("INPUT1 input"));
+  else
+   ii.WriteInt(m_optIndInput1[i], _T("¬ход INPUT1"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndInput2[i], _T("INPUT2 input"));
+  else
+   ii.WriteInt(m_optIndInput2[i], _T("¬ход INPUT2"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndAuto_i[i], _T("AUTO_I input"));
+  else
+   ii.WriteInt(m_optIndAuto_i[i], _T("¬ход AUTO_I"));
  }
 
  IniIO &ic = writer;
@@ -4084,6 +4128,26 @@ bool CAppSettingsModel::WriteSettings(void)
   ic.WriteColor(m_optColUniOut6, _T("Universal output 6"));
  else
   ic.WriteColor(m_optColUniOut6, _T("”ниверсальный выход 6"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColGpa4_i, _T("GPA4_I input"));
+ else
+  ic.WriteColor(m_optColGpa4_i, _T("¬ход GPA4_I"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColInput1, _T("INPUT1 input"));
+ else
+  ic.WriteColor(m_optColInput1, _T("¬ход INPUT1"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColInput2, _T("INPUT2 input"));
+ else
+  ic.WriteColor(m_optColInput2, _T("¬ход INPUT2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColAuto_i, _T("AUTO_I input"));
+ else
+  ic.WriteColor(m_optColAuto_i, _T("¬ход AUTO_I"));
 
  TCHAR* mm_comment[2];
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -4976,6 +5040,10 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldIgn_i);
  lf.WriteString(m_optLogFieldCond_i);
  lf.WriteString(m_optLogFieldEpas_i);
+ lf.WriteString(m_optLogFieldGpa4_i);
+ lf.WriteString(m_optLogFieldInput1); 
+ lf.WriteString(m_optLogFieldInput2);
+ lf.WriteString(m_optLogFieldAuto_i);
  lf.WriteString(m_optLogFieldAftStrEnr);
  lf.WriteString(m_optLogFieldIacClLoop);
  lf.WriteString(m_optLogFieldTPS);
@@ -6692,6 +6760,10 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
   o_cfg.m_optIndUniOut4[i] = std::make_pair(m_optIndUniOut4[i].value, m_optColUniOut4.value);
   o_cfg.m_optIndUniOut5[i] = std::make_pair(m_optIndUniOut5[i].value, m_optColUniOut5.value);
   o_cfg.m_optIndUniOut6[i] = std::make_pair(m_optIndUniOut6[i].value, m_optColUniOut6.value);
+  o_cfg.m_optIndGpa4_i[i] = std::make_pair(m_optIndGpa4_i[i].value, m_optColGpa4_i.value);
+  o_cfg.m_optIndInput1[i] = std::make_pair(m_optIndInput1[i].value, m_optColInput1.value);
+  o_cfg.m_optIndInput2[i] = std::make_pair(m_optIndInput2[i].value, m_optColInput2.value);
+  o_cfg.m_optIndAuto_i[i] = std::make_pair(m_optIndAuto_i[i].value, m_optColAuto_i.value);
  }
 }
 
@@ -6723,6 +6795,10 @@ void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
   m_optIndUniOut4[i].value = i_cfg.m_optIndUniOut4[i].first, m_optColUniOut4.value = i_cfg.m_optIndUniOut4[i].second;
   m_optIndUniOut5[i].value = i_cfg.m_optIndUniOut5[i].first, m_optColUniOut5.value = i_cfg.m_optIndUniOut5[i].second;
   m_optIndUniOut6[i].value = i_cfg.m_optIndUniOut6[i].first, m_optColUniOut6.value = i_cfg.m_optIndUniOut6[i].second;
+  m_optIndGpa4_i[i].value = i_cfg.m_optIndGpa4_i[i].first, m_optColGpa4_i.value = i_cfg.m_optIndGpa4_i[i].second;
+  m_optIndInput1[i].value = i_cfg.m_optIndInput1[i].first, m_optColInput1.value = i_cfg.m_optIndInput1[i].second;
+  m_optIndInput2[i].value = i_cfg.m_optIndInput2[i].first, m_optColInput2.value = i_cfg.m_optIndInput2[i].second;
+  m_optIndAuto_i[i].value = i_cfg.m_optIndAuto_i[i].first, m_optColAuto_i.value = i_cfg.m_optIndAuto_i[i].second;
  }
 }
 
@@ -7319,6 +7395,10 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldIgn_i.value = i_flds.m_fldIgn_i;
  m_optLogFieldCond_i.value = i_flds.m_fldCond_i;
  m_optLogFieldEpas_i.value = i_flds.m_fldEpas_i;
+ m_optLogFieldGpa4_i.value = i_flds.m_fldGpa4_i;
+ m_optLogFieldInput1.value = i_flds.m_fldInput1;
+ m_optLogFieldInput2.value = i_flds.m_fldInput2;
+ m_optLogFieldAuto_i.value = i_flds.m_fldAuto_i;
  m_optLogFieldTPS.value = i_flds.m_fldTPS;
  m_optLogFieldAdd_i1.value = i_flds.m_fldAdd_i1;
  m_optLogFieldAdd_i2.value = i_flds.m_fldAdd_i2;
@@ -7397,6 +7477,10 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldIgn_i = m_optLogFieldIgn_i.value;
  o_flds.m_fldCond_i = m_optLogFieldCond_i.value;
  o_flds.m_fldEpas_i = m_optLogFieldEpas_i.value;
+ o_flds.m_fldGpa4_i = m_optLogFieldGpa4_i.value;
+o_flds.m_fldInput1 = m_optLogFieldInput1.value;
+o_flds.m_fldInput2 = m_optLogFieldInput2.value;
+o_flds.m_fldAuto_i = m_optLogFieldAuto_i.value;
  o_flds.m_fldTPS = m_optLogFieldTPS.value;
  o_flds.m_fldAdd_i1 = m_optLogFieldAdd_i1.value;
  o_flds.m_fldAdd_i2 = m_optLogFieldAdd_i2.value;

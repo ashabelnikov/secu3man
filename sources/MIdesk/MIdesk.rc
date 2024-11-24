@@ -333,6 +333,10 @@ BEGIN
     IDS_MI_IND_EPAS_I       "¬ход EPAS_I"
     IDS_MI_IND_AFTSTRENR    "ќбог.после пуска"
     IDS_MI_IND_IACCLLOOP    "–’’ closed loop"
+    IDS_MI_IND_GPA4_I       "¬ход GPA4_I"
+    IDS_MI_IND_INPUT1       "¬ход INPUT1"
+    IDS_MI_IND_INPUT2       "¬ход INPUT2"
+    IDS_MI_IND_AUTO_I       "¬ход AUTO_I"
 END
 
 
@@ -690,6 +694,10 @@ BEGIN
     IDS_MI_IND_EPAS_I       "EPAS_I input"
     IDS_MI_IND_AFTSTRENR    "Afterstart enr."
     IDS_MI_IND_IACCLLOOP    "IAC closed loop"
+    IDS_MI_IND_GPA4_I       "GPA4_I input"
+    IDS_MI_IND_INPUT1       "INPUT1 input"
+    IDS_MI_IND_INPUT2       "INPUT2 input"
+    IDS_MI_IND_AUTO_I       "AUTO_I input"
 END
 
 STRINGTABLE DISCARDABLE 
