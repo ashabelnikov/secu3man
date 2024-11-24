@@ -1872,7 +1872,7 @@ BEGIN
     IDS_IO_REMAPPING3I_ADD_I7_TT  "Аналоговый вход 7. Доступен только в прошивках с поддержкой MCP3204"
     IDS_IO_REMAPPING3I_ADD_I8_TT  "Аналоговый вход 8. Доступен только в прошивках с поддержкой MCP3204"
     IDS_IO_REMAPPING3I_MAP_I_TT   "Вход ДАД. Может быть использован для подключения ДАД или ДМРВ."
-    IDS_IO_REMAPPING3I_GPA4_I_TT  "Вход состояния возбуждения генератора."
+    IDS_IO_REMAPPING3I_GPA4_I_TT  "Универсальный цифровой вход. Например может быть использован как вход состояния возбуждения генератора."
     IDS_IO_REMAPPING3I_GPA6_O_TT  "Универсальный выход."
 END
 
@@ -2089,6 +2089,7 @@ EGTS_I - Вход датчика температуры выхлопных газов.\r\n
 OPS_I - Вход датчика давления масла.\r\n
 FTS_I - Вход датчика температуры топлива.\r\n
 REFPRS_I - Вход датчика давления хладагента кондиционера.\r\n
+ALTRN_I - Вход состояния возбуждения генератора.\r\n
 "
 END
 
@@ -4001,7 +4002,7 @@ BEGIN
     IDS_IO_REMAPPING3I_ADD_I7_TT  "Analog input 7. Awailable only in firmware with MCP3204 support"
     IDS_IO_REMAPPING3I_ADD_I8_TT  "Analog input 8. Awailable only in firmware with MCP3204 support"
     IDS_IO_REMAPPING3I_MAP_I_TT   "MAP input. Can be used for connection of MAP or MAF sensors."
-    IDS_IO_REMAPPING3I_GPA4_I_TT  "Alternator's state input."
+    IDS_IO_REMAPPING3I_GPA4_I_TT  "Versatile digital input. For instance it can be used as alternator's state input."
     IDS_IO_REMAPPING3I_GPA6_O_TT  "Versatile output."
 END
 
@@ -4216,6 +4217,7 @@ EGTS_I - Exhaust gas temperature sensor input.\r\n
 OPS_I - Oil pressure sensor input.\r\n
 FTS_I - Fuel temperature sensor input.\r\n
 REFPRS_I - A/C refrigerant's pressure sensor input.\r\n
+ALTRN_I - State of the alternator.\r\n
 "
 END
 
