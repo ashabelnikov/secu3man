@@ -128,6 +128,7 @@ class TstMode1 : public ITstMode
     m_items.push_back(CDevDiagnostTabDlg::OID_BL);
     m_items.push_back(CDevDiagnostTabDlg::OID_DE);
     m_items.push_back(CDevDiagnostTabDlg::OID_TACH_O);
+    m_items.push_back(CDevDiagnostTabDlg::OID_GPA6_O);
     ASSERT(m_items.size()==CDevDiagnostTabDlg::OID_SECU3i_NUM);
    }
    else
@@ -604,7 +605,7 @@ void CDevDiagnostTabController::_SetOuptutMapItem(int id, bool state)
 void CDevDiagnostTabController::_FillOutputsMap(void)
 {
  int outNum = m_outputs.mode ? CDevDiagnostTabDlg::OID_SECU3i_NUM : CDevDiagnostTabDlg::OID_SECU3T_NUM;
- //Assosiate output state variables with IDs
+ //Associate output state variables with IDs
  m_outputs_map.clear();
  for(int i = 0; i < outNum; ++i)
   m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT1 + i, &m_outputs.out[i]));

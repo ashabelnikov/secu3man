@@ -562,6 +562,7 @@ void CDevDiagnostTabDlg::FillTestChanCombo(bool secu3t)
   m_testch_combo.AddString(_T("COND_O"));
   m_testch_combo.AddString(_T("ADD_O2"));
   m_testch_combo.AddString(_T("TACH_O"));
+  m_testch_combo.AddString(_T("GPA6_O"));
  }
 }
 

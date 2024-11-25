@@ -347,6 +347,7 @@ BEGIN
     CONTROL         "COND_O",IDC_DEV_DIAG_COND_O_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,304,52,10
     CONTROL         "ADD_O2",IDC_DEV_DIAG_ADD_O2_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,320,52,10
     CONTROL         "TACH_O",IDC_DEV_DIAG_TACH_O_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,336,52,10
+    CONTROL         "GPA6_O",IDC_DEV_DIAG_GPA6_O_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,352,52,10
 END
 
 
@@ -1076,6 +1077,7 @@ BEGIN
  IDS_DEV_DIAG_ADD_I8_TT          "Аналоговый вход ADD_I8 (расширитель MCP3204)"
  IDS_APP_SETTINGS_BINARYFMT_TT   "Выбор формата лог-файла. Запись лога может производиться в двух форматах: текстовый (.csv) и бинарный (.s3l). При чтении лога программа автоматически определяет фоормат."
  IDS_DEV_DIAG_GPA4_I_TT          "Вход GPA4_I"
+ IDS_DEV_DIAG_GPA6_O_CHECK_TT    "Выход GPA6_O"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1438,6 +1440,7 @@ BEGIN
     CONTROL         "COND_O",IDC_DEV_DIAG_COND_O_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,304,52,10
     CONTROL         "ADD_O2",IDC_DEV_DIAG_ADD_O2_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,320,52,10
     CONTROL         "TACH_O",IDC_DEV_DIAG_TACH_O_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,336,52,10
+    CONTROL         "GPA6_O",IDC_DEV_DIAG_GPA6_O_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,352,52,10
 END
 
 
@@ -2165,6 +2168,7 @@ BEGIN
  IDS_DEV_DIAG_ADD_I8_TT          "Analog input ADD_I8 (MCP3204 expander)"
  IDS_APP_SETTINGS_BINARYFMT_TT   "Select log-file format. Logging can be done in two formats: text (.csv) and binary (.s3l). When reading the log, the program automatically determines the format."
  IDS_DEV_DIAG_GPA4_I_TT          "GPA4_I input"
+ IDS_DEV_DIAG_GPA6_O_CHECK_TT    "GPA6_O output"
 END
 
 STRINGTABLE DISCARDABLE 

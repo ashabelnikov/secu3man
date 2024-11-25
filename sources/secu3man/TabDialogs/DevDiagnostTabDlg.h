@@ -147,8 +147,10 @@ class CDevDiagnostTabDlg : public CTabDialog
 
    OID_TACH_O = 21,   //special
 
+   OID_GPA6_O = 22,
+
    OID_SECU3T_NUM = 13,
-   OID_SECU3i_NUM = 22
+   OID_SECU3i_NUM = 23
   };
 
  protected:

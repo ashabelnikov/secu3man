@@ -4642,7 +4642,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
 void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
 {
  DWORD bits = 0;
- int bitNum = packet_data->mode ? 22 : 13;
+ int bitNum = packet_data->mode ? 23 : 13;
  int bitIdx = 0;
  for(int i = 0; i < bitNum; ++i)
  {

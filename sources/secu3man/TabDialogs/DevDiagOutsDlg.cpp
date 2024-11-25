@@ -38,7 +38,7 @@ using namespace fastdelegate;
 const UINT OutputsCheckStart = IDC_DEV_DIAG_IGN_OUT1_CHECK;
 const UINT OutputsCheckEnd = IDC_DEV_DIAG_DE_CHECK;
 const UINT OutputsCheckStart1 = IDC_DEV_DIAG_IGN_O1_CHECK;     //secu-3i
-const UINT OutputsCheckEnd1 = IDC_DEV_DIAG_TACH_O_CHECK;      //secu-3i
+const UINT OutputsCheckEnd1 = IDC_DEV_DIAG_GPA6_O_CHECK;       //secu-3i
 
 BEGIN_MESSAGE_MAP(CDevDiagOutsDlg, Super)
  ON_WM_DESTROY()
@@ -118,6 +118,7 @@ BOOL CDevDiagOutsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_TACH_O_CHECK), MLL::GetString(IDS_DEV_DIAG_TACH_O_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_BLO_CHECK), MLL::GetString(IDS_DEV_DIAG_BLO_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_DEO_CHECK), MLL::GetString(IDS_DEV_DIAG_DEO_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_GPA6_O_CHECK), MLL::GetString(IDS_DEV_DIAG_GPA6_O_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
