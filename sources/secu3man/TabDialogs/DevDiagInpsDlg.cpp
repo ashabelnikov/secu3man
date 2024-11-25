@@ -40,12 +40,12 @@ using namespace fastdelegate;
 const UINT InputsTextStart = IDC_DEV_DIAG_VOLTAGE;
 const UINT InputsTextEnd = IDC_DEV_DIAG_DE;
 const UINT InputsTextStart1 = IDC_DEV_DIAG_VOLTAGE;            //secu-3i
-const UINT InputsTextEnd1 = IDC_DEV_DIAG_ADD_I8;               //secu-3i
+const UINT InputsTextEnd1 = IDC_DEV_DIAG_GPA4_I;               //secu-3i
 
 const UINT InputsCaptionStart = IDC_DEV_DIAG_VOLTAGE_CAPTION;
 const UINT InputsCaptionEnd = IDC_DEV_DIAG_DE_CAPTION;
 const UINT InputsCaptionStart1 = IDC_DEV_DIAG_VOLTAGE_CAPTION; //secu-3i
-const UINT InputsCaptionEnd1 = IDC_DEV_DIAG_ADD_I8_CAPTION;    //secu-3i
+const UINT InputsCaptionEnd1 = IDC_DEV_DIAG_GPA4_I_CAPTION;    //secu-3i
 
 BEGIN_MESSAGE_MAP(CDevDiagInpsDlg, Super)
  ON_WM_DESTROY()
@@ -92,6 +92,7 @@ void CDevDiagInpsDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I6, m_inputValues.add_i6, _T("%.3f"));
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I7, m_inputValues.add_i7, _T("%.3f"));
   DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I8, m_inputValues.add_i8, _T("%.3f"));
+  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_GPA4_I, m_inputValues.gpa4_i, _T("%d"));
  }
 }
 
@@ -139,6 +140,7 @@ BOOL CDevDiagInpsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_ADD_I6), MLL::GetString(IDS_DEV_DIAG_ADD_I6_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_ADD_I7), MLL::GetString(IDS_DEV_DIAG_ADD_I7_TT)));
  VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_ADD_I8), MLL::GetString(IDS_DEV_DIAG_ADD_I8_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_DEV_DIAG_GPA4_I), MLL::GetString(IDS_DEV_DIAG_GPA4_I_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -167,10 +169,12 @@ void CDevDiagInpsDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
  case IDC_DEV_DIAG_IGN_I:
  case IDC_DEV_DIAG_COND_I:
  case IDC_DEV_DIAG_EPAS_I:
+ case IDC_DEV_DIAG_GPA4_I:
  case IDC_DEV_DIAG_ADD_I3_CAPTION:
  case IDC_DEV_DIAG_IGN_I_CAPTION:
  case IDC_DEV_DIAG_COND_I_CAPTION:
  case IDC_DEV_DIAG_EPAS_I_CAPTION:
+ case IDC_DEV_DIAG_GPA4_I_CAPTION:
   pCmdUI->Enable(m_enable_diag_controls && !m_enable_secu3t_features);
   break;
  case IDC_DEV_DIAG_ADD_I4_CAPTION:
@@ -224,10 +228,12 @@ void CDevDiagInpsDlg::EnableSECU3TFeatures(bool i_enable)
  GetDlgItem(IDC_DEV_DIAG_IGN_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_COND_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_EPAS_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_GPA4_I)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I3_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_IGN_I_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_COND_I_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_EPAS_I_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
+ GetDlgItem(IDC_DEV_DIAG_GPA4_I_CAPTION)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
 
  GetDlgItem(IDC_DEV_DIAG_CARB_CAPTION)->SetWindowText(MLL::LoadString(i_enable ? IDS_DEV_DIAG_CARB : IDS_DEV_DIAG_TPS));
  GetDlgItem(IDC_DEV_DIAG_MAP_S_CAPTION)->SetWindowText(MLL::LoadString(i_enable ? IDS_DEV_DIAG_MAP_S : IDS_DEV_DIAG_MAP_I));

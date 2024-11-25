@@ -398,6 +398,8 @@ BEGIN
     LTEXT           "ADD_I7",IDC_DEV_DIAG_ADD_I7_CAPTION,122,225,40,12
     LTEXT           "",IDC_DEV_DIAG_ADD_I8,6,250,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I8",IDC_DEV_DIAG_ADD_I8_CAPTION,42,250,40,12
+    LTEXT           "",IDC_DEV_DIAG_GPA4_I,85,250,30,12,SS_NOTIFY,WS_EX_STATICEDGE
+    LTEXT           "GPA4_I",IDC_DEV_DIAG_GPA4_I_CAPTION,122,250,40,12
 END
 
 
@@ -1073,6 +1075,7 @@ BEGIN
  IDS_DEV_DIAG_ADD_I7_TT          "Аналоговый вход ADD_I7 (расширитель MCP3204)"
  IDS_DEV_DIAG_ADD_I8_TT          "Аналоговый вход ADD_I8 (расширитель MCP3204)"
  IDS_APP_SETTINGS_BINARYFMT_TT   "Выбор формата лог-файла. Запись лога может производиться в двух форматах: текстовый (.csv) и бинарный (.s3l). При чтении лога программа автоматически определяет фоормат."
+ IDS_DEV_DIAG_GPA4_I_TT          "Вход GPA4_I"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1486,6 +1489,8 @@ BEGIN
     LTEXT           "ADD_I7",IDC_DEV_DIAG_ADD_I7_CAPTION,122,225,40,12
     LTEXT           "",IDC_DEV_DIAG_ADD_I8,6,250,30,12,SS_NOTIFY,WS_EX_STATICEDGE
     LTEXT           "ADD_I8",IDC_DEV_DIAG_ADD_I8_CAPTION,42,250,40,12
+    LTEXT           "",IDC_DEV_DIAG_GPA4_I,85,250,30,12,SS_NOTIFY,WS_EX_STATICEDGE
+    LTEXT           "GPA4_I",IDC_DEV_DIAG_GPA4_I_CAPTION,122,250,40,12
 END
 
 IDD_DEV_DIAGNOSTICS DIALOGEX 0, 0, 477, 226
@@ -2159,6 +2164,7 @@ BEGIN
  IDS_DEV_DIAG_ADD_I7_TT          "Analog input ADD_I7 (MCP3204 expander)"
  IDS_DEV_DIAG_ADD_I8_TT          "Analog input ADD_I8 (MCP3204 expander)"
  IDS_APP_SETTINGS_BINARYFMT_TT   "Select log-file format. Logging can be done in two formats: text (.csv) and binary (.s3l). When reading the log, the program automatically determines the format."
+ IDS_DEV_DIAG_GPA4_I_TT          "GPA4_I input"
 END
 
 STRINGTABLE DISCARDABLE 

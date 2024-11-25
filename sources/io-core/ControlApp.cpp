@@ -2530,7 +2530,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &word))
   return false;
 
- //газовый клапан, ДПКВ, ДНО(VR), ДФ, "Bootloader", "Default EEPROM"
+ //gas valve, CKPS, REF_S(VR), PS, "Bootloader", "Default EEPROM"
  diagInpDat.gas    = CHECKBIT16(word, 0);
  diagInpDat.ckps   = CHECKBIT16(word, 1);
  diagInpDat.ref_s  = CHECKBIT16(word, 2);
@@ -2540,6 +2540,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
  diagInpDat.ign_i  = CHECKBIT16(word, 6); //SECU-3i
  diagInpDat.cond_i = CHECKBIT16(word, 7); //SECU-3i
  diagInpDat.epas_i = CHECKBIT16(word, 8); //SECU-3i
+ diagInpDat.gpa4_i = CHECKBIT16(word, 9); //SECU-3i
 
  return true;
 }

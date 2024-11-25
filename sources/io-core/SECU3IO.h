@@ -456,6 +456,7 @@ namespace SECU3IO
   int ign_i;                            //IGN_I 
   int cond_i;                           //COND_I
   int epas_i;                           //EPAS_I
+  int gpa4_i;                           //GPA4_I
  };
 
  struct DiagOutDat
