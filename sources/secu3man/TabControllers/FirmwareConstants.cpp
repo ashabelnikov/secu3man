@@ -719,6 +719,7 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Vehicle speed threshold for fuel cut"), _T("km/h"), 0.0f, 100.0f, 0.1f, 1, &d.fuelcut_vss_thrd, _T("Fuel cut off on run will not be applied if vehicle's speed is less than this threshold"));
 
  std::vector<_TSTRING> dashboards;
+ dashboards.push_back(_T("OFF"));
  dashboards.push_back(_T("Lada Priora"));
  dashboards.push_back(_T("Nissan Almera Classic"));
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
