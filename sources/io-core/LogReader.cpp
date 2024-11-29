@@ -43,10 +43,10 @@ using namespace SECU3IO;
 #define MAX_REC_BUF 4096
 
 //number of variables in the data field
-#define CSV_COUNT_DATA_VAL 78
+#define CSV_COUNT_DATA_VAL 79
 
 //offset of the marks value in record
-#define CSV_MARKS_OFFSET 478
+#define CSV_MARKS_OFFSET 481
 
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
@@ -279,6 +279,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   o_data.input1 = CHECKBIT16(s3l.flags1, 1);
   o_data.input2 = CHECKBIT16(s3l.flags1, 2);
   o_data.auto_i = CHECKBIT16(s3l.flags1, 3);
+  o_data.mapsel0 = CHECKBIT16(s3l.flags1, 4);
 
   o_data.rpm = s3l.rpm;
   o_data.adv_angle = s3l.adv_angle;
@@ -361,7 +362,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   unsigned int wHour, wMinute, wSecond, wMilliseconds;
 
   unsigned int rpm, air_flow, rxlaf = 0;
-  unsigned int carb,gas,ephh_valve,epm_valve,cool_fan,st_block,acceleration,fc_revlim,floodclear,sys_locked,ce_state,ign_i,cond_i,epas_i,gpa4_i,input1, input2, auto_i, log_mark, aftstr_enr, iac_cl_loop = 0;
+  unsigned int carb,gas,ephh_valve,epm_valve,cool_fan,st_block,acceleration,fc_revlim,floodclear,sys_locked,ce_state,ign_i,cond_i,epas_i,gpa4_i,input1, input2, auto_i, mapsel0, log_mark, aftstr_enr, iac_cl_loop = 0;
   int tpsdot = 0, mapdot = 0;
   float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
   float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
@@ -410,57 +411,58 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
      case 24: result = CNumericConv::secu3_atoi_u1(b, size, input1); break;
      case 25: result = CNumericConv::secu3_atoi_u1(b, size, input2); break;
      case 26: result = CNumericConv::secu3_atoi_u1(b, size, auto_i); break;
-     case 27: result = CNumericConv::secu3_atoi_u1(b, size, aftstr_enr); break;
-     case 28: result = CNumericConv::secu3_atoi_u1(b, size, iac_cl_loop); break;
-     case 29: result = CNumericConv::secu3_atof_32<5>(b, size, tps); break;
-     case 30: result = CNumericConv::secu3_atof_32<5>(b, size, add_i1); break;
-     case 31: result = CNumericConv::secu3_atof_32<5>(b, size, add_i2); break;
-     case 32: result = CNumericConv::secu3_atof_32<5>(b, size, choke_pos); break;
-     case 33: result = CNumericConv::secu3_atof_32<5>(b, size, gasdose_pos); break;
-     case 34: result = CNumericConv::secu3_atof_32<5>(b, size, speed); break;
-     case 35: result = CNumericConv::secu3_atof_32<8>(b, size, distance); break;
-     case 36: result = CNumericConv::secu3_atof_32<7>(b, size, inj_ffd); break;
-     case 37: result = CNumericConv::secu3_atof_32<7>(b, size, inj_fff); break;
-     case 38: result = CNumericConv::secu3_atof_32<7>(b, size, air_temp); break;
-     case 39: result = CNumericConv::secu3_atof_32<5>(b, size, strt_aalt); break;
-     case 40: result = CNumericConv::secu3_atof_32<5>(b, size, idle_aalt); break;
-     case 41: result = CNumericConv::secu3_atof_32<5>(b, size, work_aalt); break;
-     case 42: result = CNumericConv::secu3_atof_32<5>(b, size, temp_aalt); break;
-     case 43: result = CNumericConv::secu3_atof_32<5>(b, size, airt_aalt); break;
-     case 44: result = CNumericConv::secu3_atof_32<5>(b, size, idlreg_aac); break;
-     case 45: result = CNumericConv::secu3_atof_32<5>(b, size, octan_aac); break;
-     case 46: result = CNumericConv::secu3_atof_32<5>(b, size, lambda_corr); break;
-     case 47: result = CNumericConv::secu3_atof_32<5>(b, size, inj_pw); break;
-     case 48: result = CNumericConv::secu3_atoi_32<5>(b, size, tpsdot); break;
-     case 49: result = CNumericConv::secu3_atof_32<6>(b, size, map2); break;
-     case 50: result = CNumericConv::secu3_atof_32<6>(b, size, tmp2); break;
-     case 51: result = CNumericConv::secu3_atof_32<6>(b, size, mapd); break;
-     case 52: result = CNumericConv::secu3_atof_32<5>(b, size, afr); break;
-     case 53: result = CNumericConv::secu3_atof_32<6>(b, size, load); break;
-     case 54: result = CNumericConv::secu3_atof_32<6>(b, size, baro_press); break;
-     case 55: result = CNumericConv::secu3_atof_32<5>(b, size, inj_tim_begin); break;
-     case 56: result = CNumericConv::secu3_atof_32<5>(b, size, inj_tim_end); break;
-     case 57: result = CNumericConv::secu3_atof_32<5>(b, size, grts); break;
-     case 58: result = CNumericConv::secu3_atof_32<5>(b, size, ftls); break;
-     case 59: result = CNumericConv::secu3_atof_32<6>(b, size, egts); break;
-     case 60: result = CNumericConv::secu3_atof_32<5>(b, size, ops); break;
-     case 61: result = CNumericConv::secu3_atof_32<5>(b, size, inj_duty); break;
-     case 62: result = CNumericConv::secu3_atof_32<4>(b, size, rigid_arg); break;
-     case 63: result = CNumericConv::secu3_atoi_u32<7>(b, size, rxlaf); break;
-     case 64: result = CNumericConv::secu3_atof_32<6>(b, size, maf); break;
-     case 65: result = CNumericConv::secu3_atof_32<5>(b, size, vent_duty); break;
-     case 66: result = CNumericConv::secu3_atoi_u32<2>(b, size, uniout_flags); break;
-     case 67: result = CNumericConv::secu3_atoi_32<5>(b, size, mapdot); break;
-     case 68: result = CNumericConv::secu3_atof_32<5>(b, size, fts); break;
-     case 69: result = CNumericConv::secu3_atof_32<8>(b, size, cons_fuel); break;
-     case 70: result = CNumericConv::secu3_atof_32<5>(b, size, lambda_corr2); break;
-     case 71: result = CNumericConv::secu3_atof_32<5>(b, size, afr2); break;
-     case 72: result = CNumericConv::secu3_atof_32<5>(b, size, afrmap); break;
-     case 73: result = CNumericConv::secu3_atof_32<5>(b, size, tchrg); break;
-     case 74: result = CNumericConv::secu3_atof_32<6>(b, size, gps); break;
-     case 75: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
-     case 76: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
-     case 77: result = ParseCE(b, size, ce_bits); break;
+     case 27: result = CNumericConv::secu3_atoi_u1(b, size, mapsel0); break;
+     case 28: result = CNumericConv::secu3_atoi_u1(b, size, aftstr_enr); break;
+     case 29: result = CNumericConv::secu3_atoi_u1(b, size, iac_cl_loop); break;
+     case 30: result = CNumericConv::secu3_atof_32<5>(b, size, tps); break;
+     case 31: result = CNumericConv::secu3_atof_32<5>(b, size, add_i1); break;
+     case 32: result = CNumericConv::secu3_atof_32<5>(b, size, add_i2); break;
+     case 33: result = CNumericConv::secu3_atof_32<5>(b, size, choke_pos); break;
+     case 34: result = CNumericConv::secu3_atof_32<5>(b, size, gasdose_pos); break;
+     case 35: result = CNumericConv::secu3_atof_32<5>(b, size, speed); break;
+     case 36: result = CNumericConv::secu3_atof_32<8>(b, size, distance); break;
+     case 37: result = CNumericConv::secu3_atof_32<7>(b, size, inj_ffd); break;
+     case 38: result = CNumericConv::secu3_atof_32<7>(b, size, inj_fff); break;
+     case 39: result = CNumericConv::secu3_atof_32<7>(b, size, air_temp); break;
+     case 40: result = CNumericConv::secu3_atof_32<5>(b, size, strt_aalt); break;
+     case 41: result = CNumericConv::secu3_atof_32<5>(b, size, idle_aalt); break;
+     case 42: result = CNumericConv::secu3_atof_32<5>(b, size, work_aalt); break;
+     case 43: result = CNumericConv::secu3_atof_32<5>(b, size, temp_aalt); break;
+     case 44: result = CNumericConv::secu3_atof_32<5>(b, size, airt_aalt); break;
+     case 45: result = CNumericConv::secu3_atof_32<5>(b, size, idlreg_aac); break;
+     case 46: result = CNumericConv::secu3_atof_32<5>(b, size, octan_aac); break;
+     case 47: result = CNumericConv::secu3_atof_32<5>(b, size, lambda_corr); break;
+     case 48: result = CNumericConv::secu3_atof_32<5>(b, size, inj_pw); break;
+     case 49: result = CNumericConv::secu3_atoi_32<5>(b, size, tpsdot); break;
+     case 50: result = CNumericConv::secu3_atof_32<6>(b, size, map2); break;
+     case 51: result = CNumericConv::secu3_atof_32<6>(b, size, tmp2); break;
+     case 52: result = CNumericConv::secu3_atof_32<6>(b, size, mapd); break;
+     case 53: result = CNumericConv::secu3_atof_32<5>(b, size, afr); break;
+     case 54: result = CNumericConv::secu3_atof_32<6>(b, size, load); break;
+     case 55: result = CNumericConv::secu3_atof_32<6>(b, size, baro_press); break;
+     case 56: result = CNumericConv::secu3_atof_32<5>(b, size, inj_tim_begin); break;
+     case 57: result = CNumericConv::secu3_atof_32<5>(b, size, inj_tim_end); break;
+     case 58: result = CNumericConv::secu3_atof_32<5>(b, size, grts); break;
+     case 59: result = CNumericConv::secu3_atof_32<5>(b, size, ftls); break;
+     case 60: result = CNumericConv::secu3_atof_32<6>(b, size, egts); break;
+     case 61: result = CNumericConv::secu3_atof_32<5>(b, size, ops); break;
+     case 62: result = CNumericConv::secu3_atof_32<5>(b, size, inj_duty); break;
+     case 63: result = CNumericConv::secu3_atof_32<4>(b, size, rigid_arg); break;
+     case 64: result = CNumericConv::secu3_atoi_u32<7>(b, size, rxlaf); break;
+     case 65: result = CNumericConv::secu3_atof_32<6>(b, size, maf); break;
+     case 66: result = CNumericConv::secu3_atof_32<5>(b, size, vent_duty); break;
+     case 67: result = CNumericConv::secu3_atoi_u32<2>(b, size, uniout_flags); break;
+     case 68: result = CNumericConv::secu3_atoi_32<5>(b, size, mapdot); break;
+     case 69: result = CNumericConv::secu3_atof_32<5>(b, size, fts); break;
+     case 70: result = CNumericConv::secu3_atof_32<8>(b, size, cons_fuel); break;
+     case 71: result = CNumericConv::secu3_atof_32<5>(b, size, lambda_corr2); break;
+     case 72: result = CNumericConv::secu3_atof_32<5>(b, size, afr2); break;
+     case 73: result = CNumericConv::secu3_atof_32<5>(b, size, afrmap); break;
+     case 74: result = CNumericConv::secu3_atof_32<5>(b, size, tchrg); break;
+     case 75: result = CNumericConv::secu3_atof_32<6>(b, size, gps); break;
+     case 76: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
+     case 77: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
+     case 78: result = ParseCE(b, size, ce_bits); break;
     }
 
     b+=size+1;

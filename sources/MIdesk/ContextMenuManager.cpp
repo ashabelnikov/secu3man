@@ -282,6 +282,7 @@ void CIndContextMenuManager::CreateContent(void)
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_IND_INPUT1, MLL::LoadString(IDS_MI_IND_INPUT1));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_IND_INPUT2, MLL::LoadString(IDS_MI_IND_INPUT2));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_IND_AUTO_I, MLL::LoadString(IDS_MI_IND_AUTO_I));
+ m_addMenu.AppendMenu(MF_STRING, IDM_MI_IND_MAPSEL0, MLL::LoadString(IDS_MI_IND_MAPSEL0));
 
  //"Number of rows" submenu
  m_rowsMenu.CreatePopupMenu();

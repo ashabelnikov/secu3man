@@ -711,6 +711,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  sensorDat.input1 = CHECKBIT8(addflg, 2);
  sensorDat.input2 = CHECKBIT8(addflg, 3);
  sensorDat.auto_i = CHECKBIT8(addflg, 4);
+ sensorDat.mapsel0 = CHECKBIT8(addflg, 5);
 
  return true;
 }

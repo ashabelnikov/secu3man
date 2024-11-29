@@ -113,8 +113,8 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_ENDRAGNDROP, OnUpdateIndEnDragNDrop)
  ON_COMMAND(IDM_MI_IND_DEL_INDICATOR, OnIndDelete)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_DEL_INDICATOR, OnUpdateIndDelete)
- ON_COMMAND_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_AUTO_I, OnIndAddIndicator)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_AUTO_I, OnUpdateIndAddIndicator)
+ ON_COMMAND_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_MAPSEL0, OnIndAddIndicator)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_MAPSEL0, OnUpdateIndAddIndicator)
  ON_COMMAND(IDM_MI_IND_SET_COLOR, OnIndSetColor)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_SET_COLOR, OnUpdateIndSetColor)
 END_MESSAGE_MAP()
@@ -931,7 +931,7 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
   _Resize();
 }
 
-void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked, IndCfg_t IndIgn_i, IndCfg_t IndCond_i, IndCfg_t IndEpas_i, IndCfg_t IndAftStrEnr, IndCfg_t IndIacClLoop, IndCfg_t UniOut1, IndCfg_t UniOut2, IndCfg_t UniOut3, IndCfg_t UniOut4, IndCfg_t UniOut5, IndCfg_t UniOut6, IndCfg_t IndGpa4_i, IndCfg_t IndInput1, IndCfg_t IndInput2, IndCfg_t IndAuto_i)
+void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked, IndCfg_t IndIgn_i, IndCfg_t IndCond_i, IndCfg_t IndEpas_i, IndCfg_t IndAftStrEnr, IndCfg_t IndIacClLoop, IndCfg_t UniOut1, IndCfg_t UniOut2, IndCfg_t UniOut3, IndCfg_t UniOut4, IndCfg_t UniOut5, IndCfg_t UniOut6, IndCfg_t IndGpa4_i, IndCfg_t IndInput1, IndCfg_t IndInput2, IndCfg_t IndAuto_i, IndCfg_t IndMapsel0)
 {
  m_indCfg.clear();
  m_indCfg.insert(std::make_pair(IDM_MI_IND_GAS_V, IndGas_v));
@@ -960,6 +960,7 @@ void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t 
  m_indCfg.insert(std::make_pair(IDM_MI_IND_INPUT1, IndInput1));
  m_indCfg.insert(std::make_pair(IDM_MI_IND_INPUT2, IndInput2));
  m_indCfg.insert(std::make_pair(IDM_MI_IND_AUTO_I, IndAuto_i));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_MAPSEL0, IndMapsel0));
 
  m_indRows = IndRows;
  m_IndHeightCoeff = IndHeingtPercent / 100.0f;
@@ -1397,7 +1398,7 @@ void CMIDeskDlg::GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVB
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
-                      IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i, IndCfg_t &IndAftStrEnr, IndCfg_t &IndIacClLoop, IndCfg_t &UniOut1, IndCfg_t &UniOut2, IndCfg_t &UniOut3, IndCfg_t &UniOut4, IndCfg_t &UniOut5, IndCfg_t &UniOut6, IndCfg_t &IndGpa4_i, IndCfg_t &IndInput1, IndCfg_t &IndInput2, IndCfg_t &IndAuto_i)
+                      IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i, IndCfg_t &IndAftStrEnr, IndCfg_t &IndIacClLoop, IndCfg_t &UniOut1, IndCfg_t &UniOut2, IndCfg_t &UniOut3, IndCfg_t &UniOut4, IndCfg_t &UniOut5, IndCfg_t &UniOut6, IndCfg_t &IndGpa4_i, IndCfg_t &IndInput1, IndCfg_t &IndInput2, IndCfg_t &IndAuto_i, IndCfg_t &IndMapsel0)
 {
  IndHeingtPercent = m_IndHeightCoeff * 100.0f;
  IndRows = m_indRows;
@@ -1428,6 +1429,7 @@ void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_
  IndInput1 = m_indCfg[IDM_MI_IND_INPUT1];
  IndInput2 = m_indCfg[IDM_MI_IND_INPUT2];
  IndAuto_i = m_indCfg[IDM_MI_IND_AUTO_I];
+ IndMapsel0 = m_indCfg[IDM_MI_IND_MAPSEL0];
 }
 
 void CMIDeskDlg::setOnMISettingsChanged(EventHandler i_Function)
@@ -3196,6 +3198,10 @@ void CMIDeskDlg::_IndFactory(UINT uiID)
   case IDM_MI_IND_AUTO_I:
    if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
     m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_AUTO_I), m_indCfg[uiID].second, &m_values.auto_i, IDM_MI_IND_AUTO_I)));
+   break;
+  case IDM_MI_IND_MAPSEL0:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_MAPSEL0), m_indCfg[uiID].second, &m_values.mapsel0, IDM_MI_IND_MAPSEL0)));
    break;
  }
 }

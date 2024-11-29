@@ -393,6 +393,7 @@ struct IndicatorsCfg
  std::pair<int, COLORREF> m_optIndInput1[2];
  std::pair<int, COLORREF> m_optIndInput2[2];
  std::pair<int, COLORREF> m_optIndAuto_i[2];
+ std::pair<int, COLORREF> m_optIndMapsel0[2];
 };
 
 struct MetersCfg
@@ -489,6 +490,7 @@ struct LogFileFields
  _TSTRING m_fldInput1;
  _TSTRING m_fldInput2;
  _TSTRING m_fldAuto_i;
+ _TSTRING m_fldMapsel0;
  _TSTRING m_fldTPS;
  _TSTRING m_fldAdd_i1;
  _TSTRING m_fldAdd_i2;

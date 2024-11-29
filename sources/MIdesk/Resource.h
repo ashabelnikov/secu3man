@@ -330,7 +330,7 @@
 #define IDM_MI_IND_INPUT1               2420
 #define IDM_MI_IND_INPUT2               2421
 #define IDM_MI_IND_AUTO_I               2422
-#define IDM_MI_IND_RESERV3              2423
+#define IDM_MI_IND_MAPSEL0              2423
 #define IDM_MI_IND_RESERV4              2424
 #define IDM_MI_IND_RESERV5              2425
 #define IDM_MI_IND_RESERV6              2426
@@ -556,4 +556,4 @@
 #define IDS_MI_IND_INPUT1               2655
 #define IDS_MI_IND_INPUT2               2656
 #define IDS_MI_IND_AUTO_I               2657
-
+#define IDS_MI_IND_MAPSEL0              2658
