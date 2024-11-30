@@ -61,6 +61,8 @@ namespace SECU3IO
   bool input1;
   bool input2;
   bool mapsel0;
+  bool refprs_i;
+  bool altrn_i;
 
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации

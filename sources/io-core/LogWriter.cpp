@@ -104,6 +104,8 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    WRITEBIT16(flags1, 2, i_data.input2);
    WRITEBIT16(flags1, 3, i_data.auto_i);
    WRITEBIT16(flags1, 4, i_data.mapsel0);
+   WRITEBIT16(flags1, 5, i_data.refprs_i);
+   WRITEBIT16(flags1, 6, i_data.altrn_i);
                                             
    s3l::s3lRecord s3l = {
    (BYTE)i_time.wHour,
@@ -222,6 +224,8 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    secu3_itoa_u1 (i_data.input2, 2);
    secu3_itoa_u1 (i_data.auto_i, 2);
    secu3_itoa_u1 (i_data.mapsel0, 2);
+   secu3_itoa_u1 (i_data.refprs_i, 2);
+   secu3_itoa_u1 (i_data.altrn_i, 2);
    secu3_itoa_u1 (i_data.aftstr_enr, 2);
    secu3_itoa_u1 (i_data.iac_cl_loop, 2);
    secu3_ftoa_32 (i_data.tps, 6, 1);

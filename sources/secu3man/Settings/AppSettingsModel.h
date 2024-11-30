@@ -742,6 +742,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optIndInput2[2];
   OptField_t<int> m_optIndAuto_i[2];
   OptField_t<int> m_optIndMapsel0[2];
+  OptField_t<int> m_optIndRefprs_i[2];
+  OptField_t<int> m_optIndAltrn_i[2];
 
   //meters
   OptField_t<int> m_optMetRows[2];
@@ -816,6 +818,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<COLORREF> m_optColInput2;
   OptField_t<COLORREF> m_optColAuto_i;
   OptField_t<COLORREF> m_optColMapsel0;
+  OptField_t<COLORREF> m_optColRefprs_i;
+  OptField_t<COLORREF> m_optColAltrn_i;
 
   //AutoTune
   OptField_t<std::vector<int> > m_optLambdaDelay;
@@ -968,6 +972,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldInput2;
   OptField_t<_TSTRING> m_optLogFieldAuto_i;
   OptField_t<_TSTRING> m_optLogFieldMapsel0;
+  OptField_t<_TSTRING> m_optLogFieldRefprs_i;
+  OptField_t<_TSTRING> m_optLogFieldAltrn_i;
   OptField_t<_TSTRING> m_optLogFieldTPS;
   OptField_t<_TSTRING> m_optLogFieldAdd_i1;
   OptField_t<_TSTRING> m_optLogFieldAdd_i2;

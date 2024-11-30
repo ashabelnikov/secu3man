@@ -338,6 +338,8 @@ BEGIN
     IDS_MI_IND_INPUT2       "¬ход INPUT2"
     IDS_MI_IND_AUTO_I       "¬ход AUTO_I"
     IDS_MI_IND_MAPSEL0      "¬ход MAPSEL0"
+    IDS_MI_IND_REFPRS_I     "¬ход REFPRS_I"
+    IDS_MI_IND_ALTRN_I      "¬ход ALTRN_I"
 END
 
 
@@ -700,6 +702,8 @@ BEGIN
     IDS_MI_IND_INPUT2       "INPUT2 input"
     IDS_MI_IND_AUTO_I       "AUTO_I input"
     IDS_MI_IND_MAPSEL0      "MAPSEL0 input"
+    IDS_MI_IND_REFPRS_I     "REFPRS_I input"
+    IDS_MI_IND_ALTRN_I      "ALTRN_I input"
 END
 
 STRINGTABLE DISCARDABLE 

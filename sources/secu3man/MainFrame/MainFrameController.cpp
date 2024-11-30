@@ -399,6 +399,8 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldInput2);
  m_pLogWriter->SetFieldName(i++, lff.m_fldAuto_i);
  m_pLogWriter->SetFieldName(i++, lff.m_fldMapsel0);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldRefprs_i);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldAltrn_i);
  m_pLogWriter->SetFieldName(i++, lff.m_fldAftStrEnr);
  m_pLogWriter->SetFieldName(i++, lff.m_fldIacClLoop);
  m_pLogWriter->SetFieldName(i++, lff.m_fldTPS);

@@ -1652,6 +1652,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V41) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_GPS, _T("GPS"));
   }
+  if (iov >= FWDM::IOV_V42) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_ALTRN_I, _T("ALTRN_I"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_ADD_I3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I3, true); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I3, true);
@@ -1685,6 +1688,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V41) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_GPS, _T("GPS"));
   }
+  if (iov >= FWDM::IOV_V42) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_ALTRN_I, _T("ALTRN_I"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_ADD_I4, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I4, m_enable_extraio); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I4, m_enable_extraio);
@@ -1715,6 +1721,9 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_INPUT2, _T("INPUT2"));
    mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_REFPRS_I, _T("REFPRS_I"));
   }
+  if (iov >= FWDM::IOV_V42) {
+   mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_ALTRN_I, _T("ALTRN_I"));
+  }
   mp_view->AddItem(FWDM::IOS3I_IGN_I, FWDM::IOP3I_IGN_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_IGN_I, true); 
   mp_view->EnableInversion(FWDM::IOS3I_IGN_I, true);
@@ -1728,6 +1737,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V35) { 
    mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_INPUT1, _T("INPUT1"));
    mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_INPUT2, _T("INPUT2"));
+  }
+  if (iov >= FWDM::IOV_V42) {
+   mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_ALTRN_I, _T("ALTRN_I"));
   }
   mp_view->AddItem(FWDM::IOS3I_COND_I, FWDM::IOP3I_COND_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_COND_I, true); 
@@ -1743,6 +1755,9 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_INPUT1, _T("INPUT1"));
    mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_INPUT2, _T("INPUT2"));
    mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_REFPRS_I, _T("REFPRS_I"));
+  }
+  if (iov >= FWDM::IOV_V42) {
+   mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_ALTRN_I, _T("ALTRN_I"));
   }
   mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_EPAS_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_EPAS_I, true); 
