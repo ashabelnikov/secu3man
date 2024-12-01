@@ -2948,7 +2948,7 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  lambdaPar.lam_swt_point = float(swtpoint) * ADC_DISCRETE;
 
  int tempthrd = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet, &tempthrd))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &tempthrd, true))
   return false;
  lambdaPar.lam_temp_thrd = float(tempthrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 

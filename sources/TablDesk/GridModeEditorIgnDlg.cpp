@@ -323,8 +323,6 @@ void CGridModeEditorIgnDlg::OnClose()
 {
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(this->m_hWnd, ETMT_GME_IGN_WND);
- Super::OnClose(); //close window
- DestroyWindow();
 }
 
 void CGridModeEditorIgnDlg::BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp, float* pTempIdl)

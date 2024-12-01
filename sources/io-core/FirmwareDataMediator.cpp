@@ -436,10 +436,13 @@ typedef struct
 
  _uchar can_dashboard;
 
+ _int lambda_egts_thrd;
+ _uchar lambda_use_egts;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1508];
+ _uchar reserved[1505];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3583,6 +3586,9 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.ifr_gp = ((float)exd.ifr_gp) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  o_data.can_dashboard = exd.can_dashboard;
+
+ o_data.lambda_egts_thrd = ((float)exd.lambda_egts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.lambda_use_egts = exd.lambda_use_egts;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3723,6 +3729,9 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.ifr_gp = MathHelpers::Round(i_data.ifr_gp * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  exd.can_dashboard = i_data.can_dashboard;
+
+ exd.lambda_egts_thrd = MathHelpers::Round(i_data.lambda_egts_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.lambda_use_egts = i_data.lambda_use_egts;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

@@ -1623,9 +1623,6 @@ void CButtonsPanel::OnGridModeEditingIgn()
  else
  {
   OnGridMapClosedIgn(mp_gridModeEditorIgnDlg->m_hWnd, ETMT_GME_IGN_WND);
-  mp_gridModeEditorIgnDlg->DestroyWindow();
-  mp_gridModeEditorIgnDlg.reset(NULL);
-  m_md[ETMT_GME_IGN_WND].handle = NULL;
  }
 }
 
@@ -1681,9 +1678,6 @@ void CButtonsPanel::OnGridModeEditingInj()
  else
  {
   OnGridMapClosedInj(mp_gridModeEditorInjDlg->m_hWnd, ETMT_GME_INJ_WND);
-  mp_gridModeEditorInjDlg->DestroyWindow();
-  mp_gridModeEditorInjDlg.reset(NULL);
-  m_md[ETMT_GME_INJ_WND].handle = NULL;
  }
 }
 

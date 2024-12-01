@@ -155,18 +155,10 @@ void CLPTablesController::OnActivate(void)
 void CLPTablesController::OnDeactivate(void)
 {
  if (mp_gridModeEditorIgnDlg.get())
- {
   _OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, ETMT_GME_IGN_WND);
-  mp_gridModeEditorIgnDlg->DestroyWindow();
-  mp_gridModeEditorIgnDlg.reset(NULL);
- }
 
  if (mp_gridModeEditorInjDlg.get())
- {
   _OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, ETMT_GME_INJ_WND);
-  mp_gridModeEditorInjDlg->DestroyWindow();
-  mp_gridModeEditorInjDlg.reset(NULL);
- }
 
  m_firmware_opened = false;
  m_eeprom_opened = false;
@@ -273,10 +265,18 @@ void CLPTablesController::_OnCloseMapWnd(HWND i_hwnd, int i_mapType)
  MapWndScrPos::OnCloseMapWnd(i_hwnd, i_mapType);
 
  if (i_mapType == ETMT_GME_IGN_WND)
+ {
   mp_view->SetGmeIgnCheck(false);
+  mp_gridModeEditorIgnDlg->DestroyWindow();
+  mp_gridModeEditorIgnDlg.reset(NULL);
+ }
 
  if (i_mapType == ETMT_GME_INJ_WND)
+ {
   mp_view->SetGmeInjCheck(false);
+  mp_gridModeEditorInjDlg->DestroyWindow();
+  mp_gridModeEditorInjDlg.reset(NULL);
+ }
 }
 
 void CLPTablesController::_OnGmeIgnButton(void)
@@ -320,8 +320,6 @@ void CLPTablesController::_OnGmeIgnButton(void)
  else
  {
   _OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, ETMT_GME_IGN_WND);
-  mp_gridModeEditorIgnDlg->DestroyWindow();
-  mp_gridModeEditorIgnDlg.reset(NULL);
  }
 }
 
@@ -377,9 +375,7 @@ void CLPTablesController::_OnGmeInjButton(void)
  }
  else
  {
-  OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, ETMT_GME_INJ_WND);
-  mp_gridModeEditorInjDlg->DestroyWindow();
-  mp_gridModeEditorInjDlg.reset(NULL);
+  _OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, ETMT_GME_INJ_WND);
  }
 }
 

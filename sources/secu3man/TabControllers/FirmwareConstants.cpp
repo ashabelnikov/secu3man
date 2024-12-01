@@ -727,6 +727,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Select CAN dashboard"), dashboards, &d.can_dashboard, _T("Select model of dashboard connected via CAN-bus"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог работы лямбда коррекции по ДТВГ"), _T("°C"), 0.0f, 1000.0f, 0.25f, 2, &d.lambda_egts_thrd, _T("Коррекция смеси по ДК начнет работу только если температура выхлопных газов превысит этот порог."));
+ else
+  dfd.AppendItem(_T("EGTS threshold for lambda correction"), _T("°C"), 0.0f, 1000.0f, 0.25f, 2, &d.lambda_egts_thrd, _T("EGO correction will start to work if exhaust gas temperature exceeds this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Использовать порог работы лямбда коррекции по ДТВГ"), &d.lambda_use_egts, _T("Если галочка установлена, то будет использоваться порог работы лямбда коррекции по ДТВГ."));
+ else
+  dfd.AppendItem(_T("Use EGTS threshold for lambda correction"), &d.lambda_use_egts, _T("If the check is set, then EGTS threshold for lambda correction will be used."));
+
  if (dfd.DoModal()==IDOK)
  {
   mp_fwdm->SetFwConstsData(d);

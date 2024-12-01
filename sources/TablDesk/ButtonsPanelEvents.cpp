@@ -1554,6 +1554,10 @@ void CButtonsPanel::OnGridMapClosedIgn(HWND hwnd, int mapType)
  m_md[ETMT_GME_IGN_WND].state = 0;
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, ETMT_GME_IGN_WND);
+
+ mp_gridModeEditorIgnDlg->DestroyWindow();
+ mp_gridModeEditorIgnDlg.reset(NULL);
+ m_md[ETMT_GME_IGN_WND].handle = NULL;
 }
 
 //------------------------------------------------------------------------
@@ -1580,6 +1584,10 @@ void CButtonsPanel::OnGridMapClosedInj(HWND hwnd, int mapType)
  m_md[ETMT_GME_INJ_WND].state = 0;
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, ETMT_GME_INJ_WND);
+
+ mp_gridModeEditorInjDlg->DestroyWindow();
+ mp_gridModeEditorInjDlg.reset(NULL);
+ m_md[ETMT_GME_INJ_WND].handle = NULL;
 }
 
 //------------------------------------------------------------------------

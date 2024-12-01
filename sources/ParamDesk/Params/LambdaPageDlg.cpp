@@ -357,10 +357,10 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_swtpoint_edit.SetRange(0.10f, 5.00f);
 
  m_tempthrd_spin.SetBuddy(&m_tempthrd_edit);
- m_tempthrd_edit.SetLimitText(5);
+ m_tempthrd_edit.SetLimitText(6);
  m_tempthrd_edit.SetDecimalPlaces(2);
- m_tempthrd_spin.SetRangeAndDelta(0.00f, 300.00f, 0.25f);
- m_tempthrd_edit.SetRange(0.00f, 300.00f);
+ m_tempthrd_spin.SetRangeAndDelta(-40.00f, 300.00f, 0.25f);
+ m_tempthrd_edit.SetRange(-40.00f, 300.00f);
 
  m_rpmthrd_spin.SetBuddy(&m_rpmthrd_edit);
  m_rpmthrd_edit.SetLimitText(5);
