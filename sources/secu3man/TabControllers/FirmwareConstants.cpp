@@ -679,14 +679,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Minimum value of dt used for calculation of the dP/dt for MAP"), _T("ms"), 5.0f, 200.0f, 1.0f, 1, &d.mapdot_mindt, _T("Specify value of the time differencial used by calculation of the MAP dot"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Длительность работы блока после выключения зажигания."), _T("сек"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Блок продолжит работу указанное время после выключения зажигания. Подразумевается использование управления питанием блока."));
+  dfd.AppendItem(_T("Длительность работы блока после выключения зажигания."), _T("сек"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Блок продолжит работу указанное время после выключения зажигания (завершения работы 'задержки реакции на пропадание уровня на входе IGN (IGN_I)'). Подразумевается использование управления питанием блока."));
  else
   dfd.AppendItem(_T("The duration of the unit's operation after the ignition is turned off. "), _T("sec"), 0.01f, 100.0f, 0.1f, 2, &d.pwron_time, _T("Unit will continue to operate specified time after switching ignition off."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Задержка реакции на пропадание уровня на входе IGN (IGN_I)."), _T("сек"), 0.01f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Блок продолжит работу указанное время после выключения зажигания, все функции (импульсы зажигания, впрыск и т.д.) в это время продолжают работать. Подразумевается использование управления питанием блока."));
+  dfd.AppendItem(_T("Задержка реакции на пропадание уровня на входе IGN (IGN_I)."), _T("сек"), 0.0f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Блок продолжит работу указанное время после выключения зажигания, все функции (импульсы зажигания, впрыск и т.д.) в это время продолжают работать. Подразумевается использование управления питанием блока."));
  else
-  dfd.AppendItem(_T("Delay in response to loss of level at the IGN input (IGN_I)"), _T("sec"), 0.01f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Unit will continue to operate specified time after switching ignition off, all functions (ignition pulses, injection etc) will continue to work during this time."));
+  dfd.AppendItem(_T("Delay in response to loss of level at the IGN input (IGN_I)"), _T("sec"), 0.0f, 10.0f, 0.1f, 2, &d.pwron_time1, _T("Unit will continue to operate specified time after switching ignition off, all functions (ignition pulses, injection etc) will continue to work during this time."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Номер универсального выхода для управления питанием"), _T(""), 0, 6, 1, 0, &d.pwrrelay_uni, _T("Выбор универсального выхода, условия которого будут использованы при управлении реле питания блока. Результат вычисления условий универ.выхода объединяется с результатом вычисления других условий через функцию 'И'. Установите значение 0 для отключения этой функции."));
