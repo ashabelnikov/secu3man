@@ -725,14 +725,14 @@ void TForm3D::FillChart(void)
  }
 
  //disable unnecessary items
- if (m_count_z < 16) PM_CopyFromCurve15->Visible = false; PM_CopyToCurve15->Visible = false;
- if (m_count_z < 15) PM_CopyFromCurve14->Visible = false; PM_CopyToCurve14->Visible = false;
- if (m_count_z < 14) PM_CopyFromCurve13->Visible = false; PM_CopyToCurve13->Visible = false;
- if (m_count_z < 13) PM_CopyFromCurve12->Visible = false; PM_CopyToCurve12->Visible = false;
- if (m_count_z < 12) PM_CopyFromCurve11->Visible = false; PM_CopyToCurve11->Visible = false;
- if (m_count_z < 11) PM_CopyFromCurve10->Visible = false; PM_CopyToCurve10->Visible = false;
- if (m_count_z < 10) PM_CopyFromCurve9->Visible  = false; PM_CopyToCurve9->Visible  = false;
- if (m_count_z < 9)  PM_CopyFromCurve8->Visible  = false; PM_CopyToCurve8->Visible  = false;
+ if (m_count_z < 16) {PM_CopyFromCurve15->Visible = false; PM_CopyToCurve15->Visible = false;}
+ if (m_count_z < 15) {PM_CopyFromCurve14->Visible = false; PM_CopyToCurve14->Visible = false;}
+ if (m_count_z < 14) {PM_CopyFromCurve13->Visible = false; PM_CopyToCurve13->Visible = false;}
+ if (m_count_z < 13) {PM_CopyFromCurve12->Visible = false; PM_CopyToCurve12->Visible = false;}
+ if (m_count_z < 12) {PM_CopyFromCurve11->Visible = false; PM_CopyToCurve11->Visible = false;}
+ if (m_count_z < 11) {PM_CopyFromCurve10->Visible = false; PM_CopyToCurve10->Visible = false;}
+ if (m_count_z < 10) {PM_CopyFromCurve9->Visible  = false; PM_CopyToCurve9->Visible  = false;}
+ if (m_count_z < 9)  {PM_CopyFromCurve8->Visible  = false; PM_CopyToCurve8->Visible  = false;}
 }
 
 //---------------------------------------------------------------------------
