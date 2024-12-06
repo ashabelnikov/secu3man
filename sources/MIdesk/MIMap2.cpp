@@ -58,6 +58,11 @@ void CMIMap2::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIMap2::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 CMIMap2Graph::CMIMap2Graph()
 {
  //empty
@@ -75,7 +80,8 @@ void CMIMap2Graph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_MAP2GRAPH));
 
  // customize the control
- m_scope.SetRange(0, 400, 0, 1);
+ m_scope.SetRange(0, 400);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_MAP2GRAPH_V_UNIT));
@@ -115,6 +121,11 @@ void CMIGps::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIGps::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 CMIGpsGraph::CMIGpsGraph()
 {
  //empty
@@ -132,7 +143,8 @@ void CMIGpsGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_GPSGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 400, 0, 1);
+ m_scope.SetRange(0, 400);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_GPSGRAPH_V_UNIT));

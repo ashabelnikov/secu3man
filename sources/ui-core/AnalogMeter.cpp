@@ -848,8 +848,22 @@ void CAnalogMeter::SetColor(enum MeterMemberEnum meter_member, COLORREF Color)
  ActuateColors();
 }
 
-void CAnalogMeter::SetRange(double dMin, double dMax)
+void CAnalogMeter::SetRange(double dMin, double dMax, bool updateAlertZones /*= false*/)
 {
+ if (updateAlertZones && m_AlertZones.size())
+ {
+  double oldRange = m_AlertZones.back()->end - m_AlertZones.front()->start;
+  double oldMin = m_AlertZones.front()->start;
+  for (size_t i = 0; i < m_AlertZones.size(); ++i)
+  {
+   AlertZone* z = m_AlertZones[i];
+   double sr = (z->start - oldMin)  / oldRange;   
+   double er = (z->end - oldMin)  / oldRange;
+   z->start = dMin + (dMax - dMin) * sr;
+   z->end = dMin + (dMax - dMin) * er;   
+  }
+ }
+
  m_dMinScale   = dMin;
  m_dMaxScale   = dMax;
  m_boolForceRedraw = true;

@@ -34,6 +34,7 @@
 #include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "common/DPIAware.h"
+#include "common/SettingsTypes.h"
 #include "ui-core/AnalogMeterCtrl.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/ColorDialogEx.h"
@@ -149,10 +150,6 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_graphShowValue(false)
 , m_graphValueHeight(100) //100%
 , m_graphShtPixels(2)
-, m_tachoMax(8000)
-, m_pressMax(110)
-, m_tempMax(120)
-, m_injpwMax(24)
 {
  mp_ctxMenuMgrMet->CreateContent();
  mp_ctxMenuMgrInd->CreateContent();
@@ -672,34 +669,14 @@ void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
  }
 }
 
-void CMIDeskDlg::SetTachometerMax(int i_max)
+void CMIDeskDlg::SetSpeedUnit(ESpeedUnit i_unit)
 {
- m_tachoMax = i_max;
+ m_speedUnit = (i_unit == SU_KMH) ? MLL::GetString(IDS_MI_KM_H) : MLL::GetString(IDS_MI_MP_H);
 }
 
-void CMIDeskDlg::SetPressureMax(int i_max)
+void CMIDeskDlg::SetDistanceUnit(ESpeedUnit i_unit)
 {
- m_pressMax = i_max;
-}
-
-void CMIDeskDlg::SetTemperatureMax(int i_max)
-{
- m_tempMax = i_max;
-}
-
-void CMIDeskDlg::SetInjPWMax(int i_max)
-{
- m_injpwMax = i_max;
-}
-
-void CMIDeskDlg::SetSpeedUnit(int i_unit)
-{
- m_speedUnit = (i_unit == 0) ? MLL::GetString(IDS_MI_KM_H) : MLL::GetString(IDS_MI_MP_H);
-}
-
-void CMIDeskDlg::SetDistanceUnit(int i_unit)
-{
- m_distanceUnit = (i_unit == 0) ? MLL::GetString(IDS_MI_KM) : MLL::GetString(IDS_MI_MI);
+ m_distanceUnit = (i_unit == SU_KMH) ? MLL::GetString(IDS_MI_KM) : MLL::GetString(IDS_MI_MI);
 }
 
 void CMIDeskDlg::_Resize(void)
@@ -976,103 +953,97 @@ void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t 
  _CreateLEDs();
 }
 
-void CMIDeskDlg::SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
-                    int *MetInjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
-                    int *MetMAPD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
-                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2,
-                    int *MetTargAFR, int *MetDiffAFR, int *MetDiffAFR2, int *MetGPS,
-                    int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize)
+void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize)
 {
  m_metCfg.clear();
- m_metCfg.insert(std::make_pair(IDM_MI_MET_RPM, MetRPM[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_MAP, MetMAP[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_VBAT, MetVBat[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_IGNTIM, MetIgnTim[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_CLT, MetCLT[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_ADDI1, MetAddI1[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_ADDI2, MetAddI2[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_INJPW, MetInjPW[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_IAT, MetIAT[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_EGOCORR, MetEGOCorr[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_TPS, MetTPS[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_AIRFLOW, MetAirFlow[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_VEHSPD, MetVehicleSpeed[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_TPSDOT, MetTPSDot[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_MAPDOT, MetMAPDot[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_MAP2, MetMAP2[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_GPS, MetGPS[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_MAPD, MetMAPD[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_TMP2, MetTmp2[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_FUELCONSUM, MetFuelConsum[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_KNOCKRETARD, MetKnockRetard[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_KNOCKGRAPH, MetKnockGraph[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_SENSAFR, MetSensAFR[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_CHOKEPOS, MetChokePos[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_GDPOS, MetGDPos[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_SYNLOAD, MetSynLoad[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIMB, MetInjTimB[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIME, MetInjTimE[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_FUELCONSUMF, MetFuelConsumF[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_GRTS, MetGrts[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_FTLS, MetFtls[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_EGTS, MetEgts[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_OPS, MetOps[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_INJDUTY, MetInjDuty[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_MAF, MetMAF[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_VENTDUTY, MetVentDuty[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_FTS, MetFts[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_EGOCORR2, MetEGOCorr2[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_SENSAFR2, MetSensAFR2[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_TARGAFR, MetTargAFR[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR, MetDiffAFR[0]));
- m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR2, MetDiffAFR2[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_RPM, cfg->m_optMetRPM[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_MAP, cfg->m_optMetMAP[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_VBAT, cfg->m_optMetVBat[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_IGNTIM, cfg->m_optMetIgnTim[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_CLT, cfg->m_optMetCLT[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_ADDI1, cfg->m_optMetAddI1[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_ADDI2, cfg->m_optMetAddI2[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_INJPW, cfg->m_optMetInjPW[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_IAT, cfg->m_optMetIAT[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_EGOCORR, cfg->m_optMetEGOCorr[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_TPS, cfg->m_optMetTPS[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_AIRFLOW, cfg->m_optMetAirFlow[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_VEHSPD, cfg->m_optMetVehicleSpeed[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_TPSDOT, cfg->m_optMetTPSDot[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_MAPDOT, cfg->m_optMetMAPDot[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_MAP2, cfg->m_optMetMAP2[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_GPS, cfg->m_optMetGPS[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_MAPD, cfg->m_optMetMAPD[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_TMP2, cfg->m_optMetTmp2[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_FUELCONSUM, cfg->m_optMetFuelConsum[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_KNOCKRETARD, cfg->m_optMetKnockRetard[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_KNOCKGRAPH, cfg->m_optMetKnockGraph[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_SENSAFR, cfg->m_optMetSensAFR[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_CHOKEPOS, cfg->m_optMetChokePos[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_GDPOS, cfg->m_optMetGDPos[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_SYNLOAD, cfg->m_optMetSynLoad[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIMB, cfg->m_optMetInjTimB[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIME, cfg->m_optMetInjTimE[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_FUELCONSUMF, cfg->m_optMetFuelConsumF[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_GRTS, cfg->m_optMetGrts[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_FTLS, cfg->m_optMetFtls[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_EGTS, cfg->m_optMetEgts[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_OPS, cfg->m_optMetOps[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_INJDUTY, cfg->m_optMetInjDuty[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_MAF, cfg->m_optMetMAF[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_VENTDUTY, cfg->m_optMetVentDuty[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_FTS, cfg->m_optMetFts[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_EGOCORR2, cfg->m_optMetEGOCorr2[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_SENSAFR2, cfg->m_optMetSensAFR2[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_TARGAFR, cfg->m_optMetTargAFR[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR, cfg->m_optMetDiffAFR[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR2, cfg->m_optMetDiffAFR2[0]));
 
  //graphs
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_RPM, MetRPM[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAP, MetMAP[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_VBAT, MetVBat[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_IGNTIM, MetIgnTim[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_CLT, MetCLT[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_ADDI1, MetAddI1[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_ADDI2, MetAddI2[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJPW, MetInjPW[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_IAT, MetIAT[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_EGOCORR, MetEGOCorr[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_TPS, MetTPS[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_AIRFLOW, MetAirFlow[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_VEHSPD, MetVehicleSpeed[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_TPSDOT, MetTPSDot[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAPDOT, MetMAPDot[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAP2, MetMAP2[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_GPS, MetGPS[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAPD, MetMAPD[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_TMP2, MetTmp2[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_FUELCONSUM, MetFuelConsum[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_KNOCKRETARD, MetKnockRetard[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_KNOCKGRAPH, MetKnockGraph[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_SENSAFR, MetSensAFR[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_CHOKEPOS, MetChokePos[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_GDPOS, MetGDPos[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_SYNLOAD, MetSynLoad[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJTIMB, MetInjTimB[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJTIME, MetInjTimE[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_FUELCONSUMF, MetFuelConsumF[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_GRTS, MetGrts[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_FTLS, MetFtls[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_EGTS, MetEgts[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_OPS, MetOps[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJDUTY, MetInjDuty[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAF, MetMAF[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_VENTDUTY, MetVentDuty[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_FTS, MetFts[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_EGOCORR2, MetEGOCorr2[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_SENSAFR2, MetSensAFR2[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_TARGAFR, MetTargAFR[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR, MetDiffAFR[1]));
- m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR2, MetDiffAFR2[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_RPM, cfg->m_optMetRPM[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAP, cfg->m_optMetMAP[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_VBAT, cfg->m_optMetVBat[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_IGNTIM, cfg->m_optMetIgnTim[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_CLT, cfg->m_optMetCLT[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_ADDI1, cfg->m_optMetAddI1[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_ADDI2, cfg->m_optMetAddI2[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJPW, cfg->m_optMetInjPW[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_IAT, cfg->m_optMetIAT[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_EGOCORR, cfg->m_optMetEGOCorr[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_TPS, cfg->m_optMetTPS[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_AIRFLOW, cfg->m_optMetAirFlow[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_VEHSPD, cfg->m_optMetVehicleSpeed[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_TPSDOT, cfg->m_optMetTPSDot[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAPDOT, cfg->m_optMetMAPDot[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAP2, cfg->m_optMetMAP2[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_GPS, cfg->m_optMetGPS[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAPD, cfg->m_optMetMAPD[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_TMP2, cfg->m_optMetTmp2[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_FUELCONSUM, cfg->m_optMetFuelConsum[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_KNOCKRETARD, cfg->m_optMetKnockRetard[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_KNOCKGRAPH, cfg->m_optMetKnockGraph[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_SENSAFR, cfg->m_optMetSensAFR[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_CHOKEPOS, cfg->m_optMetChokePos[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_GDPOS, cfg->m_optMetGDPos[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_SYNLOAD, cfg->m_optMetSynLoad[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJTIMB, cfg->m_optMetInjTimB[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJTIME, cfg->m_optMetInjTimE[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_FUELCONSUMF, cfg->m_optMetFuelConsumF[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_GRTS, cfg->m_optMetGrts[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_FTLS, cfg->m_optMetFtls[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_EGTS, cfg->m_optMetEgts[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_OPS, cfg->m_optMetOps[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJDUTY, cfg->m_optMetInjDuty[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_MAF, cfg->m_optMetMAF[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_VENTDUTY, cfg->m_optMetVentDuty[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_FTS, cfg->m_optMetFts[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_EGOCORR2, cfg->m_optMetEGOCorr2[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_SENSAFR2, cfg->m_optMetSensAFR2[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_TARGAFR, cfg->m_optMetTargAFR[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR, cfg->m_optMetDiffAFR[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR2, cfg->m_optMetDiffAFR2[1]));
 
- m_metRows = MetRows;
+ m_metRows = cfg->m_optMetRows;
  m_TitleFontSize = TitleFontSize;
  m_ValueFontSize = ValueFontSize;
  m_PaneFontSize = PaneFontSize;
@@ -1084,7 +1055,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBa
  //destroy current widgets and clear list
  _MetCleanUp();
 
- for (std::map<UINT, int>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
+ for (std::map<UINT, MetCfg>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
   _MetFactory(fi->first);
 
  _MetRearrangeKeys();
@@ -1127,7 +1098,7 @@ void CMIDeskDlg::_MetRearrangeKeys(void)
  for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
  {
   new_map.insert(std::make_pair(i, it->second));
-  m_metCfg[it->second->m_uiID] = i++;
+  m_metCfg[it->second->m_uiID].position = i++;
  }
  m_metFields = new_map;
 }
@@ -1207,8 +1178,8 @@ void CMIDeskDlg::OnLButtonUp(UINT nFlags, CPoint point)
      it->second = widget;
 
      //update order in settings
-     m_metCfg[m_dragItemMet->second->m_uiID] = m_dragItemMet->first;
-     m_metCfg[it->second->m_uiID] = it->first; 
+     m_metCfg[m_dragItemMet->second->m_uiID].position = m_dragItemMet->first;
+     m_metCfg[it->second->m_uiID].position = it->first; 
 
      //update positions of widgets
      _Resize();
@@ -1300,103 +1271,96 @@ LRESULT CMIDeskDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
  return TRUE;
 }
 
-void CMIDeskDlg::GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
-                    int *MetInjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
-                    int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
-                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2, 
-                    int *MetTargAFR, int *MetDiffAFR, int *MetDiffAFR2, int *MetGPS,
-                    int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize)
+void CMIDeskDlg::GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize)
 {
-
- MetRows = m_metRows;
+ cfg->m_optMetRows = m_metRows;
  TitleFontSize = m_TitleFontSize, ValueFontSize = m_ValueFontSize, PaneFontSize = m_PaneFontSize, LabelFontSize = m_LabelFontSize;
 
- MetRPM[0] = m_metCfg[IDM_MI_MET_RPM];
- MetMAP[0] = m_metCfg[IDM_MI_MET_MAP];
- MetVBat[0] = m_metCfg[IDM_MI_MET_VBAT];
- MetIgnTim[0] = m_metCfg[IDM_MI_MET_IGNTIM];
- MetCLT[0] = m_metCfg[IDM_MI_MET_CLT];
- MetAddI1[0] = m_metCfg[IDM_MI_MET_ADDI1];
- MetAddI2[0] = m_metCfg[IDM_MI_MET_ADDI2];
- MetInjPW[0] = m_metCfg[IDM_MI_MET_INJPW];
- MetIAT[0] = m_metCfg[IDM_MI_MET_IAT];
- MetEGOCorr[0] = m_metCfg[IDM_MI_MET_EGOCORR];
- MetTPS[0] = m_metCfg[IDM_MI_MET_TPS];
- MetAirFlow[0] = m_metCfg[IDM_MI_MET_AIRFLOW];
- MetVehicleSpeed[0] = m_metCfg[IDM_MI_MET_VEHSPD];
- MetTPSDot[0] = m_metCfg[IDM_MI_MET_TPSDOT];
- MetMAPDot[0] = m_metCfg[IDM_MI_MET_MAPDOT];
- MetMAP2[0] = m_metCfg[IDM_MI_MET_MAP2];
- MetGPS[0] = m_metCfg[IDM_MI_MET_GPS];
- MetMapD[0] = m_metCfg[IDM_MI_MET_MAPD];
- MetTmp2[0] = m_metCfg[IDM_MI_MET_TMP2];
- MetFuelConsum[0] = m_metCfg[IDM_MI_MET_FUELCONSUM];
- MetKnockRetard[0] = m_metCfg[IDM_MI_MET_KNOCKRETARD];
- MetKnockGraph[0] = m_metCfg[IDM_MI_MET_KNOCKGRAPH];
- MetSensAFR[0] = m_metCfg[IDM_MI_MET_SENSAFR];
- MetChokePos[0] = m_metCfg[IDM_MI_MET_CHOKEPOS];
- MetGDPos[0] = m_metCfg[IDM_MI_MET_GDPOS];
- MetSynLoad[0] = m_metCfg[IDM_MI_MET_SYNLOAD];
- MetInjTimB[0] = m_metCfg[IDM_MI_MET_INJTIMB];
- MetInjTimE[0] = m_metCfg[IDM_MI_MET_INJTIME];
- MetFuelConsumF[0] = m_metCfg[IDM_MI_MET_FUELCONSUMF];
- MetGrts[0] = m_metCfg[IDM_MI_MET_GRTS];
- MetFtls[0] = m_metCfg[IDM_MI_MET_FTLS];
- MetEgts[0] = m_metCfg[IDM_MI_MET_EGTS];
- MetOps[0] = m_metCfg[IDM_MI_MET_OPS];
- MetInjDuty[0] = m_metCfg[IDM_MI_MET_INJDUTY];
- MetMAF[0] = m_metCfg[IDM_MI_MET_MAF];
- MetVentDuty[0] = m_metCfg[IDM_MI_MET_VENTDUTY];
- MetFts[0] = m_metCfg[IDM_MI_MET_FTS];
- MetEGOCorr2[0] = m_metCfg[IDM_MI_MET_EGOCORR2];
- MetSensAFR2[0] = m_metCfg[IDM_MI_MET_SENSAFR2];
- MetTargAFR[0] = m_metCfg[IDM_MI_MET_TARGAFR];
- MetDiffAFR[0] = m_metCfg[IDM_MI_MET_DIFFAFR];
- MetDiffAFR2[0] = m_metCfg[IDM_MI_MET_DIFFAFR2];
+ cfg->m_optMetRPM[0] = m_metCfg[IDM_MI_MET_RPM];
+ cfg->m_optMetMAP[0] = m_metCfg[IDM_MI_MET_MAP];
+ cfg->m_optMetVBat[0] = m_metCfg[IDM_MI_MET_VBAT];
+ cfg->m_optMetIgnTim[0] = m_metCfg[IDM_MI_MET_IGNTIM];
+ cfg->m_optMetCLT[0] = m_metCfg[IDM_MI_MET_CLT];
+ cfg->m_optMetAddI1[0] = m_metCfg[IDM_MI_MET_ADDI1];
+ cfg->m_optMetAddI2[0] = m_metCfg[IDM_MI_MET_ADDI2];
+ cfg->m_optMetInjPW[0] = m_metCfg[IDM_MI_MET_INJPW];
+ cfg->m_optMetIAT[0] = m_metCfg[IDM_MI_MET_IAT];
+ cfg->m_optMetEGOCorr[0] = m_metCfg[IDM_MI_MET_EGOCORR];
+ cfg->m_optMetTPS[0] = m_metCfg[IDM_MI_MET_TPS];
+ cfg->m_optMetAirFlow[0] = m_metCfg[IDM_MI_MET_AIRFLOW];
+ cfg->m_optMetVehicleSpeed[0] = m_metCfg[IDM_MI_MET_VEHSPD];
+ cfg->m_optMetTPSDot[0] = m_metCfg[IDM_MI_MET_TPSDOT];
+ cfg->m_optMetMAPDot[0] = m_metCfg[IDM_MI_MET_MAPDOT];
+ cfg->m_optMetMAP2[0] = m_metCfg[IDM_MI_MET_MAP2];
+ cfg->m_optMetGPS[0] = m_metCfg[IDM_MI_MET_GPS];
+ cfg->m_optMetMAPD[0] = m_metCfg[IDM_MI_MET_MAPD];
+ cfg->m_optMetTmp2[0] = m_metCfg[IDM_MI_MET_TMP2];
+ cfg->m_optMetFuelConsum[0] = m_metCfg[IDM_MI_MET_FUELCONSUM];
+ cfg->m_optMetKnockRetard[0] = m_metCfg[IDM_MI_MET_KNOCKRETARD];
+ cfg->m_optMetKnockGraph[0] = m_metCfg[IDM_MI_MET_KNOCKGRAPH];
+ cfg->m_optMetSensAFR[0] = m_metCfg[IDM_MI_MET_SENSAFR];
+ cfg->m_optMetChokePos[0] = m_metCfg[IDM_MI_MET_CHOKEPOS];
+ cfg->m_optMetGDPos[0] = m_metCfg[IDM_MI_MET_GDPOS];
+ cfg->m_optMetSynLoad[0] = m_metCfg[IDM_MI_MET_SYNLOAD];
+ cfg->m_optMetInjTimB[0] = m_metCfg[IDM_MI_MET_INJTIMB];
+ cfg->m_optMetInjTimE[0] = m_metCfg[IDM_MI_MET_INJTIME];
+ cfg->m_optMetFuelConsumF[0] = m_metCfg[IDM_MI_MET_FUELCONSUMF];
+ cfg->m_optMetGrts[0] = m_metCfg[IDM_MI_MET_GRTS];
+ cfg->m_optMetFtls[0] = m_metCfg[IDM_MI_MET_FTLS];
+ cfg->m_optMetEgts[0] = m_metCfg[IDM_MI_MET_EGTS];
+ cfg->m_optMetOps[0] = m_metCfg[IDM_MI_MET_OPS];
+ cfg->m_optMetInjDuty[0] = m_metCfg[IDM_MI_MET_INJDUTY];
+ cfg->m_optMetMAF[0] = m_metCfg[IDM_MI_MET_MAF];
+ cfg->m_optMetVentDuty[0] = m_metCfg[IDM_MI_MET_VENTDUTY];
+ cfg->m_optMetFts[0] = m_metCfg[IDM_MI_MET_FTS];
+ cfg->m_optMetEGOCorr2[0] = m_metCfg[IDM_MI_MET_EGOCORR2];
+ cfg->m_optMetSensAFR2[0] = m_metCfg[IDM_MI_MET_SENSAFR2];
+ cfg->m_optMetTargAFR[0] = m_metCfg[IDM_MI_MET_TARGAFR];
+ cfg->m_optMetDiffAFR[0] = m_metCfg[IDM_MI_MET_DIFFAFR];
+ cfg->m_optMetDiffAFR2[0] = m_metCfg[IDM_MI_MET_DIFFAFR2];
 
- MetRPM[1] = m_metCfg[IDM_MI_GRH_RPM];
- MetMAP[1] = m_metCfg[IDM_MI_GRH_MAP];
- MetVBat[1] = m_metCfg[IDM_MI_GRH_VBAT];
- MetIgnTim[1] = m_metCfg[IDM_MI_GRH_IGNTIM];
- MetCLT[1] = m_metCfg[IDM_MI_GRH_CLT];
- MetAddI1[1] = m_metCfg[IDM_MI_GRH_ADDI1];
- MetAddI2[1] = m_metCfg[IDM_MI_GRH_ADDI2];
- MetInjPW[1] = m_metCfg[IDM_MI_GRH_INJPW];
- MetIAT[1] = m_metCfg[IDM_MI_GRH_IAT];
- MetEGOCorr[1] = m_metCfg[IDM_MI_GRH_EGOCORR];
- MetTPS[1] = m_metCfg[IDM_MI_GRH_TPS];
- MetAirFlow[1] = m_metCfg[IDM_MI_GRH_AIRFLOW];
- MetVehicleSpeed[1] = m_metCfg[IDM_MI_GRH_VEHSPD];
- MetTPSDot[1] = m_metCfg[IDM_MI_GRH_TPSDOT];
- MetMAPDot[1] = m_metCfg[IDM_MI_GRH_MAPDOT];
- MetMAP2[1] = m_metCfg[IDM_MI_GRH_MAP2];
- MetGPS[1] = m_metCfg[IDM_MI_GRH_GPS];
- MetMapD[1] = m_metCfg[IDM_MI_GRH_MAPD];
- MetTmp2[1] = m_metCfg[IDM_MI_GRH_TMP2];
- MetFuelConsum[1] = m_metCfg[IDM_MI_GRH_FUELCONSUM];
- MetKnockRetard[1] = m_metCfg[IDM_MI_GRH_KNOCKRETARD];
- MetKnockGraph[1] = m_metCfg[IDM_MI_GRH_KNOCKGRAPH];
- MetSensAFR[1] = m_metCfg[IDM_MI_GRH_SENSAFR];
- MetChokePos[1] = m_metCfg[IDM_MI_GRH_CHOKEPOS];
- MetGDPos[1] = m_metCfg[IDM_MI_GRH_GDPOS];
- MetSynLoad[1] = m_metCfg[IDM_MI_GRH_SYNLOAD];
- MetInjTimB[1] = m_metCfg[IDM_MI_GRH_INJTIMB];
- MetInjTimE[1] = m_metCfg[IDM_MI_GRH_INJTIME];
- MetFuelConsumF[1] = m_metCfg[IDM_MI_GRH_FUELCONSUMF];
- MetGrts[1] = m_metCfg[IDM_MI_GRH_GRTS];
- MetFtls[1] = m_metCfg[IDM_MI_GRH_FTLS];
- MetEgts[1] = m_metCfg[IDM_MI_GRH_EGTS];
- MetOps[1] = m_metCfg[IDM_MI_GRH_OPS];
- MetInjDuty[1] = m_metCfg[IDM_MI_GRH_INJDUTY];
- MetMAF[1] = m_metCfg[IDM_MI_GRH_MAF];
- MetVentDuty[1] = m_metCfg[IDM_MI_GRH_VENTDUTY];
- MetFts[1] = m_metCfg[IDM_MI_GRH_FTS];
- MetEGOCorr2[1] = m_metCfg[IDM_MI_GRH_EGOCORR2];
- MetSensAFR2[1] = m_metCfg[IDM_MI_GRH_SENSAFR2];
- MetTargAFR[1] = m_metCfg[IDM_MI_GRH_TARGAFR];
- MetDiffAFR[1] = m_metCfg[IDM_MI_GRH_DIFFAFR];
- MetDiffAFR2[1] = m_metCfg[IDM_MI_GRH_DIFFAFR2];
+ cfg->m_optMetRPM[1] = m_metCfg[IDM_MI_GRH_RPM];
+ cfg->m_optMetMAP[1] = m_metCfg[IDM_MI_GRH_MAP];
+ cfg->m_optMetVBat[1] = m_metCfg[IDM_MI_GRH_VBAT];
+ cfg->m_optMetIgnTim[1] = m_metCfg[IDM_MI_GRH_IGNTIM];
+ cfg->m_optMetCLT[1] = m_metCfg[IDM_MI_GRH_CLT];
+ cfg->m_optMetAddI1[1] = m_metCfg[IDM_MI_GRH_ADDI1];
+ cfg->m_optMetAddI2[1] = m_metCfg[IDM_MI_GRH_ADDI2];
+ cfg->m_optMetInjPW[1] = m_metCfg[IDM_MI_GRH_INJPW];
+ cfg->m_optMetIAT[1] = m_metCfg[IDM_MI_GRH_IAT];
+ cfg->m_optMetEGOCorr[1] = m_metCfg[IDM_MI_GRH_EGOCORR];
+ cfg->m_optMetTPS[1] = m_metCfg[IDM_MI_GRH_TPS];
+ cfg->m_optMetAirFlow[1] = m_metCfg[IDM_MI_GRH_AIRFLOW];
+ cfg->m_optMetVehicleSpeed[1] = m_metCfg[IDM_MI_GRH_VEHSPD];
+ cfg->m_optMetTPSDot[1] = m_metCfg[IDM_MI_GRH_TPSDOT];
+ cfg->m_optMetMAPDot[1] = m_metCfg[IDM_MI_GRH_MAPDOT];
+ cfg->m_optMetMAP2[1] = m_metCfg[IDM_MI_GRH_MAP2];
+ cfg->m_optMetGPS[1] = m_metCfg[IDM_MI_GRH_GPS];
+ cfg->m_optMetMAPD[1] = m_metCfg[IDM_MI_GRH_MAPD];
+ cfg->m_optMetTmp2[1] = m_metCfg[IDM_MI_GRH_TMP2];
+ cfg->m_optMetFuelConsum[1] = m_metCfg[IDM_MI_GRH_FUELCONSUM];
+ cfg->m_optMetKnockRetard[1] = m_metCfg[IDM_MI_GRH_KNOCKRETARD];
+ cfg->m_optMetKnockGraph[1] = m_metCfg[IDM_MI_GRH_KNOCKGRAPH];
+ cfg->m_optMetSensAFR[1] = m_metCfg[IDM_MI_GRH_SENSAFR];
+ cfg->m_optMetChokePos[1] = m_metCfg[IDM_MI_GRH_CHOKEPOS];
+ cfg->m_optMetGDPos[1] = m_metCfg[IDM_MI_GRH_GDPOS];
+ cfg->m_optMetSynLoad[1] = m_metCfg[IDM_MI_GRH_SYNLOAD];
+ cfg->m_optMetInjTimB[1] = m_metCfg[IDM_MI_GRH_INJTIMB];
+ cfg->m_optMetInjTimE[1] = m_metCfg[IDM_MI_GRH_INJTIME];
+ cfg->m_optMetFuelConsumF[1] = m_metCfg[IDM_MI_GRH_FUELCONSUMF];
+ cfg->m_optMetGrts[1] = m_metCfg[IDM_MI_GRH_GRTS];
+ cfg->m_optMetFtls[1] = m_metCfg[IDM_MI_GRH_FTLS];
+ cfg->m_optMetEgts[1] = m_metCfg[IDM_MI_GRH_EGTS];
+ cfg->m_optMetOps[1] = m_metCfg[IDM_MI_GRH_OPS];
+ cfg->m_optMetInjDuty[1] = m_metCfg[IDM_MI_GRH_INJDUTY];
+ cfg->m_optMetMAF[1] = m_metCfg[IDM_MI_GRH_MAF];
+ cfg->m_optMetVentDuty[1] = m_metCfg[IDM_MI_GRH_VENTDUTY];
+ cfg->m_optMetFts[1] = m_metCfg[IDM_MI_GRH_FTS];
+ cfg->m_optMetEGOCorr2[1] = m_metCfg[IDM_MI_GRH_EGOCORR2];
+ cfg->m_optMetSensAFR2[1] = m_metCfg[IDM_MI_GRH_SENSAFR2];
+ cfg->m_optMetTargAFR[1] = m_metCfg[IDM_MI_GRH_TARGAFR];
+ cfg->m_optMetDiffAFR[1] = m_metCfg[IDM_MI_GRH_DIFFAFR];
+ cfg->m_optMetDiffAFR2[1] = m_metCfg[IDM_MI_GRH_DIFFAFR2];
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
@@ -1494,7 +1458,7 @@ void CMIDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 
 void CMIDeskDlg::OnMetDeleteGauge()
 {
- m_metCfg[m_dragItemMet->second->m_uiID] = std::numeric_limits<int>::max(); 
+ m_metCfg[m_dragItemMet->second->m_uiID].position = std::numeric_limits<int>::max(); 
  delete m_dragItemMet->second;
  m_metFields.erase(m_dragItemMet);
 
@@ -1515,9 +1479,9 @@ void CMIDeskDlg::OnUpdateMetDelete(CCmdUI* pCmdUI)
 void CMIDeskDlg::OnMetAddGauge(UINT nID)
 {
  if (m_dragItemMet == m_metFields.end())
-  m_metCfg[nID] = m_metFields.size() ? m_metFields.rbegin()->first : 0;
+  m_metCfg[nID].position = m_metFields.size() ? m_metFields.rbegin()->first : 0;
  else
-  m_metCfg[nID] = m_dragItemMet->first;
+  m_metCfg[nID].position = m_dragItemMet->first;
 
  MeasInstrBase *widget = _MetFactory(nID);
  if (widget)
@@ -1534,7 +1498,7 @@ void CMIDeskDlg::OnMetAddGauge(UINT nID)
 
 void CMIDeskDlg::OnUpdateMetAddGauge(CCmdUI* pCmdUI)
 {
- bool already_add = m_metCfg[pCmdUI->m_nID] != std::numeric_limits<int>::max();
+ bool already_add = m_metCfg[pCmdUI->m_nID].position != std::numeric_limits<int>::max();
  pCmdUI->Enable(!already_add);
  pCmdUI->SetCheck(already_add);
 }
@@ -1552,7 +1516,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
  {
   case IDM_MI_MET_RPM:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITachometer* widget = new CMITachometer();
    widget->m_uiID = uiID;
@@ -1562,14 +1526,14 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowTLP(m_showSpeedAndDistance);
    widget->ShowTRP(m_showSpeedAndDistance);
    widget->SetPaneUnit(m_speedUnit, m_distanceUnit);
-   widget->SetLimits(0, (float)m_tachoMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_RPM:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITachometerGraph* widget = new CMITachometerGraph();
    widget->m_uiID = uiID;
@@ -1579,29 +1543,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_rpmQVal[1], NULL, NULL);
-   widget->SetLimits(0, (float)m_tachoMax);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAP:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIPressure* widget = new CMIPressure();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_mapQVal[0], NULL, NULL);
-   widget->SetLimits(10, (float)m_pressMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAP:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIPressureGraph* widget = new CMIPressureGraph();
    widget->m_uiID = uiID;
@@ -1611,28 +1575,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mapQVal[1], NULL, NULL);
-   widget->SetLimits(0, (float)m_pressMax);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_VBAT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIVoltmeter* widget = new CMIVoltmeter();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_vbatQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_VBAT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIVoltmeterGraph* widget = new CMIVoltmeterGraph();
    widget->m_uiID = uiID;
@@ -1642,27 +1607,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_vbatQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_IGNTIM:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIDwellAngle* widget = new CMIDwellAngle();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_igntimQVal[0], NULL, NULL);  
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_IGNTIM:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIDwellAngleGraph* widget = new CMIDwellAngleGraph();
    widget->m_uiID = uiID;
@@ -1672,14 +1639,15 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_igntimQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_CLT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
    {
     mp_miTemperat = NULL;
     break;
@@ -1691,15 +1659,15 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_cltQVal[0], &m_gdposQVal[0], &m_chposQVal[0]);  
    widget->ShowTLP(m_showGDPos);
    widget->ShowTRP(m_showChokePos);
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    mp_miTemperat = widget;
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_CLT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITemperatureGraph* widget = new CMITemperatureGraph();
    widget->m_uiID = uiID;
@@ -1710,27 +1678,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_cltQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_ADDI1:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIAddI1* widget = new CMIAddI1();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_ai1QVal[0], NULL, NULL);  
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_ADDI1:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIAddI1Graph* widget = new CMIAddI1Graph();
    widget->m_uiID = uiID;
@@ -1740,27 +1709,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_ai1QVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_ADDI2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIAddI2* widget = new CMIAddI2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_ai2QVal[0], NULL, NULL);  
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_ADDI2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIAddI2Graph* widget = new CMIAddI2Graph();
    widget->m_uiID = uiID;
@@ -1770,28 +1741,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_ai2QVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_INJPW:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjPW* widget = new CMIInjPW();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[0], NULL, NULL);  
-   widget->SetLimits(0, (float)m_injpwMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_INJPW:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjPWGraph* widget = new CMIInjPWGraph();
    widget->m_uiID = uiID;
@@ -1801,29 +1773,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[1], NULL, NULL);  
-   widget->SetLimits(0, (float)m_injpwMax);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_IAT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIIAT* widget = new CMIIAT();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_iatQVal[0], NULL, NULL);  
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_IAT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIIATGraph* widget = new CMIIATGraph();
    widget->m_uiID = uiID;
@@ -1834,27 +1806,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_iatQVal[1], NULL, NULL);  
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_EGOCORR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIEGOCorr* widget = new CMIEGOCorr();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_egocQVal[0], NULL, NULL);  
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_EGOCORR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIEGOCorrGraph* widget = new CMIEGOCorrGraph();
    widget->m_uiID = uiID;
@@ -1864,28 +1837,30 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_egocQVal[1], NULL, NULL);  
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_TPS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIThrottleGate* widget = new CMIThrottleGate();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_tpsQVal[0], &m_airflQVal[0], NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->ShowTLP(true);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_TPS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIThrottleGateGraph* widget = new CMIThrottleGateGraph();
    widget->m_uiID = uiID;
@@ -1895,27 +1870,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_tpsQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_AIRFLOW:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIAirFlow* widget = new CMIAirFlow();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_airflQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_AIRFLOW:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIAirFlowGraph* widget = new CMIAirFlowGraph();
    widget->m_uiID = uiID;
@@ -1925,28 +1902,30 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_airflQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_VEHSPD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIVehicleSpeed* widget = new CMIVehicleSpeed();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_vssQVal[0], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetMeterUnit(m_speedUnit);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_VEHSPD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIVehicleSpeedGraph* widget = new CMIVehicleSpeedGraph();
    widget->m_uiID = uiID;
@@ -1956,28 +1935,30 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_vssQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetMeterUnit(m_speedUnit);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_TPSDOT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITPSDot* widget = new CMITPSDot();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_tpsdotQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_TPSDOT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITPSDotGraph* widget = new CMITPSDotGraph();
    widget->m_uiID = uiID;
@@ -1987,27 +1968,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_tpsdotQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAPDOT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMAPDot* widget = new CMIMAPDot();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_mapdotQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAPDOT:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMAPDotGraph* widget = new CMIMAPDotGraph();
    widget->m_uiID = uiID;
@@ -2017,27 +2000,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mapdotQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAP2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMap2* widget = new CMIMap2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_map2QVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAP2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMap2Graph* widget = new CMIMap2Graph();
    widget->m_uiID = uiID;
@@ -2047,27 +2032,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_map2QVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_GPS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIGps* widget = new CMIGps();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_gpsQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_GPS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIGpsGraph* widget = new CMIGpsGraph();
    widget->m_uiID = uiID;
@@ -2077,27 +2064,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_gpsQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAPD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMapD* widget = new CMIMapD();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_mapdQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAPD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMapDGraph* widget = new CMIMapDGraph();
    widget->m_uiID = uiID;
@@ -2107,28 +2096,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mapdQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_TMP2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITemp2* widget = new CMITemp2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[0], NULL, NULL);
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_TMP2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITemp2Graph* widget = new CMITemp2Graph();
    widget->m_uiID = uiID;
@@ -2139,28 +2129,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_GRTS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIGrts* widget = new CMIGrts();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_grtsQVal[0], NULL, NULL);
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_GRTS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIGrtsGraph* widget = new CMIGrtsGraph();
    widget->m_uiID = uiID;
@@ -2171,14 +2161,14 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_grtsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(-40.0, (float)m_tempMax);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_FUELCONSUM:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFuelConsum* widget = new CMIFuelConsum();
    widget->m_uiID = uiID;
@@ -2188,13 +2178,14 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowTLP(true);
    widget->ShowTRP(true);
    widget->SetPaneUnit(MLL::GetString(IDS_MI_FUELCONSUMH_UNIT), MLL::GetString(IDS_MI_CONSFUEL_UNIT));
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_FUELCONSUM:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFuelConsumGraph* widget = new CMIFuelConsumGraph();
    widget->m_uiID = uiID;
@@ -2205,26 +2196,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_fuelcQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_KNOCKRETARD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIKnockRetard* widget = new CMIKnockRetard();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_knkretQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_KNOCKRETARD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIKnockRetardGraph* widget = new CMIKnockRetardGraph();
    widget->m_uiID = uiID;
@@ -2234,27 +2227,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_knkretQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_KNOCKGRAPH:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIKnock* widget = new CMIKnock();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_knockQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_KNOCKGRAPH:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIKnockGraph* widget = new CMIKnockGraph();
    widget->m_uiID = uiID;
@@ -2265,26 +2260,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_knockQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_SENSAFR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMISensAFR* widget = new CMISensAFR();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_senafrQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_SENSAFR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMISensAFRGraph* widget = new CMISensAFRGraph();
    widget->m_uiID = uiID;
@@ -2294,27 +2291,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_senafrQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_CHOKEPOS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIChokePos* widget = new CMIChokePos();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_chposQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_CHOKEPOS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIChokePosGraph* widget = new CMIChokePosGraph();
    widget->m_uiID = uiID;
@@ -2324,27 +2323,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_chposQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_GDPOS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIGDPos* widget = new CMIGDPos();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_gdposQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_GDPOS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIGDPosGraph* widget = new CMIGDPosGraph();
    widget->m_uiID = uiID;
@@ -2354,27 +2355,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_gdposQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_SYNLOAD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMISynLoad* widget = new CMISynLoad();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_synldQVal[0], NULL, NULL);  
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_SYNLOAD:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMISynLoadGraph* widget = new CMISynLoadGraph();
    widget->m_uiID = uiID;
@@ -2384,28 +2387,30 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_synldQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_INJTIMB:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjTimB* widget = new CMIInjTimB();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_itbQVal[0], NULL, NULL);  
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetITMode(m_it_mode);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_INJTIMB:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjTimBGraph* widget = new CMIInjTimBGraph();
    widget->m_uiID = uiID;
@@ -2417,13 +2422,14 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_itbQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_INJTIME:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjTimE* widget = new CMIInjTimE();
    widget->m_uiID = uiID;
@@ -2431,13 +2437,14 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_iteQVal[0], NULL, NULL);  
    widget->SetITMode(m_it_mode);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_INJTIME:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjTimEGraph* widget = new CMIInjTimEGraph();
    widget->m_uiID = uiID;
@@ -2449,26 +2456,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_iteQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_FUELCONSUMF:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFuelConsumF* widget = new CMIFuelConsumF();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_fuelcfQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_FUELCONSUMF:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFuelConsumFGraph* widget = new CMIFuelConsumFGraph();
    widget->m_uiID = uiID;
@@ -2478,28 +2487,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_fuelcfQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_FTLS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFtls* widget = new CMIFtls();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_ftlsQVal[0], NULL, NULL);
-   widget->SetLimits(0.0, 100.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_FTLS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFtlsGraph* widget = new CMIFtlsGraph();
    widget->m_uiID = uiID;
@@ -2510,28 +2520,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_ftlsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(0.0, 100.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_EGTS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIEgts* widget = new CMIEgts();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_egtsQVal[0], NULL, NULL);
-   widget->SetLimits(0.0, 1100.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_EGTS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIEgtsGraph* widget = new CMIEgtsGraph();
    widget->m_uiID = uiID;
@@ -2542,28 +2552,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_egtsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(0.0, 1100.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_OPS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIOps* widget = new CMIOps();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_opsQVal[0], NULL, NULL);
-   widget->SetLimits(0.0, 6.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_OPS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIOpsGraph* widget = new CMIOpsGraph();
    widget->m_uiID = uiID;
@@ -2574,27 +2584,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_opsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(0.0, 6.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_INJDUTY:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjDuty* widget = new CMIInjDuty();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_injdutyQVal, NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_INJDUTY:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIInjDutyGraph* widget = new CMIInjDutyGraph();
    widget->m_uiID = uiID;
@@ -2604,27 +2615,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_injdutyQVal, NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAF:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMaf* widget = new CMIMaf();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_mafQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAF:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIMafGraph* widget = new CMIMafGraph();
    widget->m_uiID = uiID;
@@ -2634,27 +2647,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_mafQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_VENTDUTY:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIVentDuty* widget = new CMIVentDuty();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_ventdutyQVal, NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_VENTDUTY:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIVentDutyGraph* widget = new CMIVentDutyGraph();
    widget->m_uiID = uiID;
@@ -2664,28 +2679,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_ventdutyQVal, NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_FTS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFts* widget = new CMIFts();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_ftsQVal[0], NULL, NULL);
-   widget->SetLimits(-40.0, 120.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_FTS:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIFtsGraph* widget = new CMIFtsGraph();
    widget->m_uiID = uiID;
@@ -2696,27 +2712,28 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_ftsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(-40.0, 120.0);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_EGOCORR2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIEGOCorr2* widget = new CMIEGOCorr2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_egoc2QVal[0], NULL, NULL);  
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_EGOCORR2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIEGOCorr2Graph* widget = new CMIEGOCorr2Graph();
    widget->m_uiID = uiID;
@@ -2726,27 +2743,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_egoc2QVal[1], NULL, NULL);  
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_SENSAFR2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMISensAFR2* widget = new CMISensAFR2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_senafr2QVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_SENSAFR2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMISensAFR2Graph* widget = new CMISensAFR2Graph();
    widget->m_uiID = uiID;
@@ -2756,27 +2775,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_senafr2QVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_TARGAFR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITargAFR* widget = new CMITargAFR();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_tarafrQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_TARGAFR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMITargAFRGraph* widget = new CMITargAFRGraph();
    widget->m_uiID = uiID;
@@ -2786,27 +2807,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_tarafrQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_DIFFAFR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIDiffAFR* widget = new CMIDiffAFR();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_diffAfrQVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_DIFFAFR:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIDiffAFRGraph* widget = new CMIDiffAFRGraph();
    widget->m_uiID = uiID;
@@ -2816,27 +2839,29 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_diffAfrQVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_MET_DIFFAFR2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIDiffAFR2* widget = new CMIDiffAFR2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_diffAfr2QVal[0], NULL, NULL);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
   case IDM_MI_GRH_DIFFAFR2:
   {
-   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIDiffAFR2Graph* widget = new CMIDiffAFR2Graph();
    widget->m_uiID = uiID;
@@ -2846,8 +2871,9 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->BindVars(&m_diffAfr2QVal[1], NULL, NULL);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
-   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
   }
@@ -2876,7 +2902,7 @@ void CMIDeskDlg::OnMetTitleFont(UINT nID)
  m_TitleFontSize = ((nID - IDM_MI_MET_TITLE_FONT050) * 10) + 50;
 
  _MetCleanUp();
- for (std::map<UINT, int>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
+ for (std::map<UINT, MetCfg>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
   _MetFactory(fi->first);
  _MetRearrangeKeys();
 
@@ -2898,7 +2924,7 @@ void CMIDeskDlg::OnMetValueFont(UINT nID)
  m_ValueFontSize = ((nID - IDM_MI_MET_VALUE_FONT050) * 10) + 50;
 
  _MetCleanUp();
- for (std::map<UINT, int>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
+ for (std::map<UINT, MetCfg>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
   _MetFactory(fi->first);
  _MetRearrangeKeys();
 
@@ -2920,7 +2946,7 @@ void CMIDeskDlg::OnMetPaneFont(UINT nID)
  m_PaneFontSize = ((nID - IDM_MI_MET_PANE_FONT050) * 10) + 50;
 
  _MetCleanUp();
- for (std::map<UINT, int>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
+ for (std::map<UINT, MetCfg>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
   _MetFactory(fi->first);
  _MetRearrangeKeys();
 
@@ -2942,7 +2968,7 @@ void CMIDeskDlg::OnMetLabelFont(UINT nID)
  m_LabelFontSize = ((nID - IDM_MI_MET_LABEL_FONT050) * 10) + 50;
 
  _MetCleanUp();
- for (std::map<UINT, int>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
+ for (std::map<UINT, MetCfg>::iterator fi = m_metCfg.begin(); fi != m_metCfg.end(); ++fi)
   _MetFactory(fi->first);
  _MetRearrangeKeys();
 

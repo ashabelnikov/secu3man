@@ -75,6 +75,11 @@ void CMIAirFlow::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIAirFlow::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -96,7 +101,8 @@ void CMIAirFlowGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_AIR_FLOWGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 16, 0, 0);
+ m_scope.SetRange(0, 16);
+ m_scope.SetDecPlaces(0, 0);
  m_scope.SetGridNumberY(16);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_AIR_FLOWGRAPH_V_UNIT));

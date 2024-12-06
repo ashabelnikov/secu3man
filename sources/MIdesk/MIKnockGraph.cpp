@@ -70,6 +70,11 @@ void CMIKnock::Create(CWnd* pParent)
  m_meter.SetMeterSize(130);
 }
 
+void CMIKnock::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -91,7 +96,8 @@ void CMIKnockGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_KNOCKGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 5.0, 1, 2);
+ m_scope.SetRange(0, 5.0);
+ m_scope.SetDecPlaces(1, 2);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_KNOCKGRAPH_V_UNIT));
  m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));

@@ -169,7 +169,10 @@ class MeasInstrBase
   //установка пределов измерения
   virtual void SetLimits(float loLimit, float upLimit)
   {
-   m_meter.SetRange(loLimit, upLimit);
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetRange(loLimit, upLimit);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.SetRange(loLimit, upLimit);
   }
 
   //установка количества делений

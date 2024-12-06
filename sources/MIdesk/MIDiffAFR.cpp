@@ -50,6 +50,11 @@ void CMIDiffAFRBase::Create(CWnd* pParent, UINT Id)
  m_meter.SetMeterSize(130);
 }
 
+void CMIDiffAFRBase::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 void CMIDiffAFR::Create(CWnd* pParent)
 {
  CMIDiffAFRBase::Create(pParent, IDC_MI_DIFFAFR);
@@ -69,7 +74,8 @@ void CMIDiffAFRGraphBase::Create(CWnd* pParent, UINT Id)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, Id));
 
  // customize the control
- m_scope.SetRange(-9, 9, 0, 1);
+ m_scope.SetRange(-9, 9);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(9);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));

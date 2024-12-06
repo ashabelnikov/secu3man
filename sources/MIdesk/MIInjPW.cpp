@@ -64,11 +64,7 @@ void CMIInjPW::Create(CWnd* pParent)
 
 void CMIInjPW::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * (1.0/24), RGB(255,100,100));
- m_meter.AddAlertZone(upLimit * (1.0/24), upLimit * (10.0/24), RGB(100,255,100));
- m_meter.AddAlertZone(upLimit * (10.0/24), upLimit, RGB(150,150,250));
- m_meter.SetRange(loLimit, upLimit);
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -92,7 +88,8 @@ void CMIInjPWGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_INJ_PWGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 24, 0, 2);
+ m_scope.SetRange(0, 24);
+ m_scope.SetDecPlaces(0, 2);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_INJ_PW_V_UNIT));
@@ -105,5 +102,5 @@ void CMIInjPWGraph::Create(CWnd* pParent)
 void CMIInjPWGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit, 0, 2);
+ m_scope.SetRange(loLimit, upLimit);
 }

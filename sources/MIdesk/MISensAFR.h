@@ -35,6 +35,7 @@ class AFX_EXT_CLASS CMISensAFR : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };
 
@@ -46,6 +47,7 @@ class AFX_EXT_CLASS CMISensAFR2 : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };
 

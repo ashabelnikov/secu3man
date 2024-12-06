@@ -36,6 +36,7 @@ class AFX_EXT_CLASS CMIDiffAFRBase : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent, UINT Id);
+  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };
 

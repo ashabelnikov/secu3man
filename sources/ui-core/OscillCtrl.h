@@ -46,7 +46,8 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void ReserveCharsY(int num);
   void SetGridNumberY(int ny); 
   void SetGridSizeX(int sx);
-  void SetRange(double low, double upp, int decimalPlaces = 1, int decimalPlacesV = 1);
+  void SetRange(double low, double upp);
+  void SetDecPlaces(int decimalPlaces = 1, int decimalPlacesV = 1);
   void SetPlotColor(COLORREF color);
   void SetGridColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);

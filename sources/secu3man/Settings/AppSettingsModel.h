@@ -133,10 +133,6 @@ class CAppSettingsModel : public ISettingsData
   virtual EECUPlatform GetECUPlatformType(void) const;
 
   //fixtures's customization
-  virtual int GetTachometerMax(void) const;
-  virtual int GetPressureMax(void) const;
-  virtual int GetTemperatureMax(void) const;
-  virtual int GetInjPWMax(void) const;
   virtual ESpeedUnit GetSpeedUnit(void) const;
 
   virtual int GetRPMAverage(void) const;
@@ -281,6 +277,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
   CString m_Name_Meters_Section[2];
+  CString m_Name_MetersSc_Section;
   const CString m_Name_IndColors_Section;
   const CString m_Name_AutoTune_Section;
   const CString m_Name_MapEditor_Section;
@@ -302,10 +299,6 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optUseAppFolder;
   OptField_t<bool>  m_optAlwaysWriteLog;
   OptField_t<int> m_optMIDeskUpdatePeriod;
-  OptField_t<int> m_optTachometerMax;
-  OptField_t<int> m_optPressureMax;
-  OptField_t<int> m_optTemperatureMax;
-  OptField_t<int> m_optInjPWMax;
   OptField_t<int> m_optSpeedUnit;
   OptField_t<bool> m_optCOMPortBother;
   OptField_t<bool> m_optUseHotKeys;
@@ -789,6 +782,50 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetTargAFR[2][2];
   OptField_t<int> m_optMetDiffAFR[2][2];
   OptField_t<int> m_optMetDiffAFR2[2][2];
+
+  //meters scales' min and max
+  OptField_t<std::vector<float> > m_optMetScRPM[2];
+  OptField_t<std::vector<float> > m_optMetScMAP[2];
+  OptField_t<std::vector<float> > m_optMetScVBat[2];
+  OptField_t<std::vector<float> > m_optMetScIgnTim[2];
+  OptField_t<std::vector<float> > m_optMetScCLT[2];
+  OptField_t<std::vector<float> > m_optMetScAddI1[2];
+  OptField_t<std::vector<float> > m_optMetScAddI2[2];
+  OptField_t<std::vector<float> > m_optMetScInjPW[2];
+  OptField_t<std::vector<float> > m_optMetScIAT[2];
+  OptField_t<std::vector<float> > m_optMetScEGOCorr[2];
+  OptField_t<std::vector<float> > m_optMetScTPS[2];
+  OptField_t<std::vector<float> > m_optMetScAirFlow[2];
+  OptField_t<std::vector<float> > m_optMetScVehicleSpeed[2];
+  OptField_t<std::vector<float> > m_optMetScTPSDot[2];
+  OptField_t<std::vector<float> > m_optMetScMAPDot[2];
+  OptField_t<std::vector<float> > m_optMetScMAP2[2];
+  OptField_t<std::vector<float> > m_optMetScGPS[2];
+  OptField_t<std::vector<float> > m_optMetScMAPD[2];
+  OptField_t<std::vector<float> > m_optMetScTmp2[2];
+  OptField_t<std::vector<float> > m_optMetScFuelConsum[2];
+  OptField_t<std::vector<float> > m_optMetScKnockRetard[2];
+  OptField_t<std::vector<float> > m_optMetScKnockGraph[2];
+  OptField_t<std::vector<float> > m_optMetScSensAFR[2];
+  OptField_t<std::vector<float> > m_optMetScChokePos[2];
+  OptField_t<std::vector<float> > m_optMetScGDPos[2];
+  OptField_t<std::vector<float> > m_optMetScSynLoad[2];
+  OptField_t<std::vector<float> > m_optMetScInjTimB[2];
+  OptField_t<std::vector<float> > m_optMetScInjTimE[2];
+  OptField_t<std::vector<float> > m_optMetScFuelConsumF[2];
+  OptField_t<std::vector<float> > m_optMetScGrts[2];
+  OptField_t<std::vector<float> > m_optMetScFtls[2];
+  OptField_t<std::vector<float> > m_optMetScEgts[2];
+  OptField_t<std::vector<float> > m_optMetScOps[2];
+  OptField_t<std::vector<float> > m_optMetScInjDuty[2];
+  OptField_t<std::vector<float> > m_optMetScMAF[2];
+  OptField_t<std::vector<float> > m_optMetScVentDuty[2];
+  OptField_t<std::vector<float> > m_optMetScFts[2];
+  OptField_t<std::vector<float> > m_optMetScEGOCorr2[2];
+  OptField_t<std::vector<float> > m_optMetScSensAFR2[2];
+  OptField_t<std::vector<float> > m_optMetScTargAFR[2];
+  OptField_t<std::vector<float> > m_optMetScDiffAFR[2];
+  OptField_t<std::vector<float> > m_optMetScDiffAFR2[2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;

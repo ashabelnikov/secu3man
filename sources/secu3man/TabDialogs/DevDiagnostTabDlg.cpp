@@ -410,7 +410,8 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
  mp_OScopeCtrl1->Create(WS_VISIBLE | WS_CHILD | WS_DISABLED, rect, this);
 
  // customize the control
- mp_OScopeCtrl1->SetRange(0.0, 5.0, 1);
+ mp_OScopeCtrl1->SetRange(0.0, 5.0);
+ mp_OScopeCtrl1->SetDecPlaces(1, 1);
  mp_OScopeCtrl1->SetUnitY(MLL::GetString(IDS_KC_OSCILLOSCOPE_V_UNIT));
  mp_OScopeCtrl1->SetUnitX(MLL::GetString(IDS_KC_OSCILLOSCOPE_H_UNIT));
  mp_OScopeCtrl1->SetBackgroundColor(RGB(0, 64, 0));
@@ -424,7 +425,8 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
  mp_OScopeCtrl2->Create(WS_VISIBLE | WS_CHILD | WS_DISABLED, rect, this);
 
  // customize the control
- mp_OScopeCtrl2->SetRange(0.0, 5.0, 1);
+ mp_OScopeCtrl2->SetRange(0.0, 5.0);
+ mp_OScopeCtrl2->SetDecPlaces(1, 1);
  mp_OScopeCtrl2->SetUnitY(MLL::GetString(IDS_KC_OSCILLOSCOPE_V_UNIT));
  mp_OScopeCtrl2->SetUnitX(MLL::GetString(IDS_KC_OSCILLOSCOPE_H_UNIT));
  mp_OScopeCtrl2->SetBackgroundColor(RGB(0, 64, 0));

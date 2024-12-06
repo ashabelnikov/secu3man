@@ -65,11 +65,7 @@ void CMITemp2::Create(CWnd* pParent)
 
 void CMITemp2::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.42, RGB(130,130,180));
- m_meter.AddAlertZone(upLimit * 0.42, upLimit * 0.83, RGB(120,120,120));
- m_meter.AddAlertZone(upLimit * 0.83, upLimit, RGB(230,130,130));
- m_meter.SetRange(loLimit, upLimit);
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -93,7 +89,8 @@ void CMITemp2Graph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TMP2GRAPH));
 
  // customize the control
- m_scope.SetRange(-40.0, 120, 0, 1);
+ m_scope.SetRange(-40.0, 120);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_TMP2GRAPH_V_UNIT));
@@ -106,5 +103,5 @@ void CMITemp2Graph::Create(CWnd* pParent)
 void CMITemp2Graph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit, 0, 1);
+ m_scope.SetRange(loLimit, upLimit);
 }

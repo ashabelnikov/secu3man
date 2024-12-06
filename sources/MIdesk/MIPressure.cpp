@@ -65,12 +65,7 @@ void CMIPressure::Create(CWnd* pParent)
 
 void CMIPressure::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.2727, RGB(180,130,130));
- m_meter.AddAlertZone(upLimit * 0.2727, upLimit * 0.8181, RGB(120,200,120));
- m_meter.AddAlertZone(upLimit * 0.8181, upLimit, RGB(180,130,130));
-
- m_meter.SetRange(loLimit, upLimit);
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -94,7 +89,8 @@ void CMIPressureGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_PRESSURE_GRAPH));
 
  // customize the control
- m_scope.SetRange(0, 110.0, 0, 1);
+ m_scope.SetRange(0, 110.0);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_PRESSURE_V_UNIT));
@@ -107,5 +103,5 @@ void CMIPressureGraph::Create(CWnd* pParent)
 void CMIPressureGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(10);
- m_scope.SetRange(loLimit, upLimit, 0, 1);
+ m_scope.SetRange(loLimit, upLimit);
 }

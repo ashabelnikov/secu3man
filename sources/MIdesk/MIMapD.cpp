@@ -61,6 +61,11 @@ void CMIMapD::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIMapD::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -82,7 +87,8 @@ void CMIMapDGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_MAPDGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 400, 0, 1);
+ m_scope.SetRange(0, 400);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_MAPDGRAPH_V_UNIT));

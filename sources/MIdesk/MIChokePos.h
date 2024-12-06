@@ -35,6 +35,7 @@ class AFX_EXT_CLASS CMIChokePosBase : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent, UINT id);
+  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };
 

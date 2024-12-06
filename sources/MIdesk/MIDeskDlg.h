@@ -34,6 +34,7 @@
 #include "ui-core/DialogWithAccelerators.h"
 #include "ui-core/MultiLEDCtrl.h"
 #include "common/fastdelegate.h"
+#include "common/SettingsTypes.h"
 #include <map>
 
 class CMetContextMenuManager;
@@ -64,21 +65,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //установка периода обновления в миллисекундах
   void SetUpdatePeriod(unsigned int i_period);
 
-  //Set maximum value of tachometer displayed on the fixture
-  void SetTachometerMax(int i_max);
+  void SetSpeedUnit(ESpeedUnit i_unit); //0 - km/h, 1 - mi/h
 
-  //Set maximum value of pressure meter displayed on the fixture
-  void SetPressureMax(int i_max);
-
-  //Set maximum value of temperature displayed on the fixture
-  void SetTemperatureMax(int i_max);
-
-  //Set maximum value of inj. PW displayed on the fixture
-  void SetInjPWMax(int i_max);
-
-  void SetSpeedUnit(int i_unit); //0 - km/h, 1 - mi/h
-
-  void SetDistanceUnit(int i_unit); //0 - km, 1 - mi
+  void SetDistanceUnit(ESpeedUnit i_unit); //0 - km, 1 - mi
 
   //Show/hide choke position indicator
   void ShowChokePos(bool i_show);
@@ -135,21 +124,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
                         IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i, IndCfg_t &IndAftStrEnr, IndCfg_t &IndIacClLoop, IndCfg_t &UniOut1, IndCfg_t &UniOut2, IndCfg_t &UniOut3, IndCfg_t &UniOut4, IndCfg_t &UniOut5, IndCfg_t &UniOut6, IndCfg_t &IndGpa4_i, IndCfg_t &IndInput1, IndCfg_t &IndInput2, IndCfg_t &IndAuto_i, IndCfg_t &IndMapsel0, IndCfg_t &IndRefprs_i, IndCfg_t &IndAltrn_i);
 
-  void SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
-                    int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
-                    int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
-                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2,
-                    int *MetTargAFR, int *MetDiffAFR, int *MetDiffAFR2, int *MetGPS,
-                    int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
+  void SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
 
-  void GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
-                    int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
-                    int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
-                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int *MetFuelConsumF, int *MetGrts, int *MetFtls, int *MetEgts,
-                    int *MetOps, int *MetInjDuty, int *MetMAF, int *MetVentDuty, int *MetMAPDot, int *MetFts, int *MetEGOCorr2, int *MetSensAFR2,
-                    int *MetTargAFR, int *MetDiffAFR, int *MetDiffAFR2, int *MetGPS,
-                    int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
+  void GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
 
   void SetMetersDragNDrop(bool enable);
   bool GetMetersDragNDrop(void) const;
@@ -244,7 +221,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_metRows;
   bool m_draggingMet;
   MetFields_t::iterator m_dragItemMet;
-  std::map<UINT, int> m_metCfg;
+  std::map<UINT, MetCfg> m_metCfg;
   bool m_metDragNDrop;
   std::auto_ptr<CMetContextMenuManager> mp_ctxMenuMgrMet;
   int m_TitleFontSize, m_ValueFontSize, m_PaneFontSize, m_LabelFontSize;
@@ -271,10 +248,6 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   bool m_showGDPos;
   _TSTRING m_speedUnit;
   _TSTRING m_distanceUnit;
-  int m_tachoMax;
-  int m_pressMax;
-  int m_tempMax;
-  int m_injpwMax;
   MeasInstrBase* mp_miTemperat;
 
   COLORREF m_COLOR_BTNFACE; //for detecting of system colors changing

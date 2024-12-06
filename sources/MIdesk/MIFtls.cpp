@@ -55,17 +55,16 @@ void CMIFtls::Create(CWnd* pParent)
  m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_FTLS_UNIT));
  m_meter.SetTickNumber(20);
+ m_meter.AddAlertZone(0, 10, RGB(250,100,100));
+ m_meter.AddAlertZone(10, 50, RGB(220,220,100));
+ m_meter.AddAlertZone(50, 100, RGB(100,220,100));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
 }
 
 void CMIFtls::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.1, RGB(250,100,100));
- m_meter.AddAlertZone(upLimit * 0.10, upLimit * 0.50, RGB(220,220,100));
- m_meter.AddAlertZone(upLimit * 0.50, upLimit, RGB(100,220,100));
- m_meter.SetRange(loLimit, upLimit);
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -89,7 +88,8 @@ void CMIFtlsGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_FTLSGRAPH));
 
  // customize the control
- m_scope.SetRange(0.0, 100.0, 0, 1);
+ m_scope.SetRange(0.0, 100.0);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_FTLSGRAPH_V_UNIT));
@@ -102,5 +102,5 @@ void CMIFtlsGraph::Create(CWnd* pParent)
 void CMIFtlsGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit, 0, 1);
+ m_scope.SetRange(loLimit, upLimit);
 }

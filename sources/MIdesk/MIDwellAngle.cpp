@@ -63,6 +63,11 @@ void CMIDwellAngle::Create(CWnd* pParent)
  m_meter.SetMeterSize(145);
 }
 
+void CMIDwellAngle::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -84,7 +89,8 @@ void CMIDwellAngleGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_DWELLANGLEGRAPH));
 
  // customize the control
- m_scope.SetRange(-15, 65, 0, 1);
+ m_scope.SetRange(-15, 65);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_DWELLANGLE_V_UNIT));

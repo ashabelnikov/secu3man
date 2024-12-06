@@ -46,7 +46,8 @@ void CMIEgts::Create(CWnd* pParent)
 {
  MeasInstrBase::Create(pParent, IDC_MI_EGTS); //create window
  
- m_meter.SetRange (0.0, 1100.0);
+ float loLimit = 0.0f; float upLimit = 1100.0f;
+ m_meter.SetRange (loLimit, upLimit);
  m_meter.SetLabelsDecimals(1);
  m_meter.SetValueDecimals(1);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_EGTS_TITLE));
@@ -55,17 +56,16 @@ void CMIEgts::Create(CWnd* pParent)
  m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TEMPERATURE_UNIT));
  m_meter.SetTickNumber(16);
+ m_meter.AddAlertZone(loLimit, upLimit * 0.38, RGB(100,100,255));
+ m_meter.AddAlertZone(upLimit * 0.38, upLimit * 0.85, RGB(200,200,120));
+ m_meter.AddAlertZone(upLimit * 0.85, upLimit, RGB(255,100,100));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
 }
 
 void CMIEgts::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.38, RGB(100,100,255));
- m_meter.AddAlertZone(upLimit * 0.38, upLimit * 0.85, RGB(200,200,120));
- m_meter.AddAlertZone(upLimit * 0.85, upLimit, RGB(255,100,100));
- m_meter.SetRange(loLimit, upLimit);
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -89,7 +89,8 @@ void CMIEgtsGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_EGTSGRAPH));
 
  // customize the control
- m_scope.SetRange(0.0, 1100.0, 0, 1);
+ m_scope.SetRange(0.0, 1100.0);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_EGTSGRAPH_V_UNIT));
@@ -102,5 +103,5 @@ void CMIEgtsGraph::Create(CWnd* pParent)
 void CMIEgtsGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit, 0, 1);
+ m_scope.SetRange(loLimit, upLimit);
 }

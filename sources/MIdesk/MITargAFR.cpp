@@ -67,6 +67,10 @@ void CMITargAFR::Create(CWnd* pParent)
  m_meter.SetMeterSize(130);
 }
 
+void CMITargAFR::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -89,7 +93,8 @@ void CMITargAFRGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TARGAFRGRAPH));
 
  // customize the control
- m_scope.SetRange(6, 24, 0, 1);
+ m_scope.SetRange(6, 24);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(9);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_TARGAFRGRAPH_V_UNIT));

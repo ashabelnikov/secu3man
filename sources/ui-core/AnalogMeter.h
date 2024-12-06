@@ -57,7 +57,7 @@ class AFX_EXT_CLASS CAnalogMeter
 
   void SetColor(enum MeterMemberEnum meter_member, COLORREF Color);
   void SetState(enum MeterMemberEnum meter_member, bool State);
-  void SetRange(double dMin, double dMax);
+  void SetRange(double dMin, double dMax, bool updateAlertZones = false);
   void SetNeedleValue(double value);
   void SetTLPane(CString strPane);
   void SetTRPane(CString strPane);

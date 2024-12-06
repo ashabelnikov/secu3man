@@ -494,15 +494,20 @@ void COscillCtrl::ReserveCharsY(int num)
  m_num_y_chars = num;
 }
 
-void COscillCtrl::SetRange(double low, double upp, int decimalPlaces /*= 1*/, int decimalPlacesV /*= 1*/)
+void COscillCtrl::SetRange(double low, double upp)
 {
  ASSERT(upp > low);
  m_lowLimit = low;
  m_uppLimit = upp;
- m_decimalPlaces = decimalPlaces;
- m_decimalPlacesV = decimalPlacesV;
  m_range = m_uppLimit - m_lowLimit;
  m_vertFactor = (double)m_rcPlot.Height() / m_range;
+ InvalidateCtrl();
+}
+
+void COscillCtrl::SetDecPlaces(int decimalPlaces /* = 1*/, int decimalPlacesV /* = 1*/)
+{
+ m_decimalPlaces = decimalPlaces;
+ m_decimalPlacesV = decimalPlacesV;
  InvalidateCtrl();
 }
 

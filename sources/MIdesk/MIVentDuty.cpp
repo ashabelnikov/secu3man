@@ -63,6 +63,11 @@ void CMIVentDuty::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIVentDuty::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -84,7 +89,8 @@ void CMIVentDutyGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_VENT_DUTYGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 100, 0, 2);
+ m_scope.SetRange(0, 100);
+ m_scope.SetDecPlaces(0, 2);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_VENT_DUTY_V_UNIT));

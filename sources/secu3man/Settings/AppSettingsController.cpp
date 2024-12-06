@@ -73,8 +73,8 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optInterfaceLang.value = m_pView->GetInterfaceLanguage();
  m_pModel->m_optECUPlatformType.value = m_pView->GetECUPlatformType();
 
- m_pModel->m_optTachometerMax.value = m_pView->GetTachometerMax();
- m_pModel->m_optPressureMax.value = m_pView->GetPressureMax();
+ m_pModel->m_optMetScRPM[0].value[1] = (float)m_pView->GetTachometerMax();
+ m_pModel->m_optMetScMAP[0].value[1] = (float)m_pView->GetPressureMax();
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -117,8 +117,8 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetInterfaceLanguage(m_pModel->m_optInterfaceLang.value);
  m_pView->SetECUPlatformType(m_pModel->m_optECUPlatformType.value);
 
- m_pView->SetTachometerMax(m_pModel->m_optTachometerMax.value);
- m_pView->SetPressureMax(m_pModel->m_optPressureMax.value);
+ m_pView->SetTachometerMax((int)m_pModel->m_optMetScRPM[0].value[1]);
+ m_pView->SetPressureMax((int)m_pModel->m_optMetScMAP[0].value[1]);
 }
 
 int CAppSettingsController::ShowDialog(void)

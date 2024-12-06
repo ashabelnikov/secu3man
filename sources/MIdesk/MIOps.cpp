@@ -46,7 +46,8 @@ void CMIOps::Create(CWnd* pParent)
 {
  MeasInstrBase::Create(pParent, IDC_MI_OPS); //create window
  
- m_meter.SetRange (0.0, 6.0);
+ float loLimit = 0.0f; float upLimit = 6.0f;
+ m_meter.SetRange (loLimit, upLimit);
  m_meter.SetLabelsDecimals(1);
  m_meter.SetValueDecimals(2);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_OPS_TITLE));
@@ -55,18 +56,17 @@ void CMIOps::Create(CWnd* pParent)
  m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_OPS_UNIT));
  m_meter.SetTickNumber(12);
+ m_meter.AddAlertZone(loLimit, upLimit * 0.17, RGB(130,130,190));
+ m_meter.AddAlertZone(upLimit * 0.17, upLimit * 0.59, RGB(120,240,120));
+ m_meter.AddAlertZone(upLimit * 0.59, upLimit * 0.83, RGB(240,240,120));
+ m_meter.AddAlertZone(upLimit * 0.83, upLimit, RGB(255,130,130));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
 }
 
 void CMIOps::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.17, RGB(130,130,190));
- m_meter.AddAlertZone(upLimit * 0.17, upLimit * 0.59, RGB(120,240,120));
- m_meter.AddAlertZone(upLimit * 0.59, upLimit * 0.83, RGB(240,240,120));
- m_meter.AddAlertZone(upLimit * 0.83, upLimit, RGB(255,130,130));
- m_meter.SetRange(loLimit, upLimit);
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -90,7 +90,8 @@ void CMIOpsGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_OPSGRAPH));
 
  // customize the control
- m_scope.SetRange(0.0, 6.0, 0, 1);
+ m_scope.SetRange(0.0, 6.0);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_OPSGRAPH_V_UNIT));
@@ -103,5 +104,5 @@ void CMIOpsGraph::Create(CWnd* pParent)
 void CMIOpsGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit, 0, 1);
+ m_scope.SetRange(loLimit, upLimit);
 }

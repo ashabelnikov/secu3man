@@ -63,6 +63,11 @@ void CMIEGOCorr::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIEGOCorr::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 CMIEGOCorr2::CMIEGOCorr2()
 {
  //empty
@@ -94,6 +99,11 @@ void CMIEGOCorr2::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIEGOCorr2::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -115,7 +125,8 @@ void CMIEGOCorrGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_EGO_CORRGRAPH));
 
  // customize the control
- m_scope.SetRange(-50, 50, 0, 2);
+ m_scope.SetRange(-50, 50);
+ m_scope.SetDecPlaces(0, 2);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_EGO_CORRGRAPH_V_UNIT));
@@ -142,7 +153,8 @@ void CMIEGOCorr2Graph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_EGO_CORR2GRAPH));
 
  // customize the control
- m_scope.SetRange(-50, 50, 0, 2);
+ m_scope.SetRange(-50, 50);
+ m_scope.SetDecPlaces(0, 2);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_EGO_CORR2GRAPH_V_UNIT));

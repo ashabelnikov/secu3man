@@ -66,6 +66,11 @@ void CMIInjTim::Create(CWnd* pParent, UINT id)
  m_meter.SetMeterSize(145);
 }
 
+void CMIInjTim::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 void CMIInjTim::SetITMode(int mode)
 {
  float y1, y2;
@@ -109,7 +114,8 @@ void CMIInjTimGraph::Create(CWnd* pParent, UINT id)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, id));
 
  // customize the control
- m_scope.SetRange(0, 720, 0, 1);
+ m_scope.SetRange(0, 720);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
@@ -122,7 +128,7 @@ void CMIInjTimGraph::SetITMode(int mode)
 {
  float y1, y2;
  _GetITModeRange(mode, y1, y2);
- m_scope.SetRange(y1, y2, 0, 1);
+ m_scope.SetRange(y1, y2);
 }
 
 void CMIInjTimBGraph::Create(CWnd* pParent)

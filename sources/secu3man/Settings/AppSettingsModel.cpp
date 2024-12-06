@@ -80,10 +80,6 @@ CAppSettingsModel::CAppSettingsModel()
 
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
-, m_optTachometerMax(_T("Tachometer_Max"))
-, m_optPressureMax(_T("Pressure_Max"))
-, m_optTemperatureMax(_T("Temperature_Max"))
-, m_optInjPWMax(_T("InjPW_Max"))
 , m_optSpeedUnit(_T("SpeedUnit"))
 , m_optRPMAverage(_T("RPMAverage"))
 , m_optVoltAverage(_T("VoltAverage"))
@@ -744,94 +740,95 @@ CAppSettingsModel::CAppSettingsModel()
 
  m_Name_Meters_Section[0] = _T("Meters");
  m_Name_Meters_Section[1] = _T("MetersEx");
+ m_Name_MetersSc_Section  = _T("MetersScale");
 
  for(int i = 0; i < 2; ++i)
  {
   m_optMetRows[i].name = _T("MetRows");
-  m_optMetRPM[i][0].name = _T("MetRPM");
-  m_optMetRPM[i][1].name = _T("GrhRPM");
-  m_optMetMAP[i][0].name = _T("MetMAP");
-  m_optMetMAP[i][1].name = _T("GrhMAP");
-  m_optMetVBat[i][0].name = _T("MetVBat");
-  m_optMetVBat[i][1].name = _T("GrhVBat");
-  m_optMetIgnTim[i][0].name = _T("MetIgnTim");
-  m_optMetIgnTim[i][1].name = _T("GrhIgnTim");
-  m_optMetCLT[i][0].name = _T("MetCLT");
-  m_optMetCLT[i][1].name = _T("GrhCLT");
-  m_optMetAddI1[i][0].name = _T("MetAddI1");
-  m_optMetAddI1[i][1].name = _T("GrhAddI1");
-  m_optMetAddI2[i][0].name = _T("MetAddI2");
-  m_optMetAddI2[i][1].name = _T("GrhAddI2");
-  m_optMetInjPW[i][0].name = _T("MetInjPW");
-  m_optMetInjPW[i][1].name = _T("GrhInjPW");
-  m_optMetIAT[i][0].name = _T("MetIAT");
-  m_optMetIAT[i][1].name = _T("GrhIAT");
-  m_optMetEGOCorr[i][0].name = _T("MetEGOCorr");
-  m_optMetEGOCorr[i][1].name = _T("GrhEGOCorr");
-  m_optMetTPS[i][0].name = _T("MetTPS");
-  m_optMetTPS[i][1].name = _T("GrhTPS");
-  m_optMetAirFlow[i][0].name = _T("MetAirFlow");
-  m_optMetAirFlow[i][1].name = _T("GrhAirFlow");
-  m_optMetVehicleSpeed[i][0].name = _T("MetVehicleSpeed");
-  m_optMetVehicleSpeed[i][1].name = _T("GrhVehicleSpeed");
-  m_optMetTPSDot[i][0].name = _T("MetTPSDot");
-  m_optMetTPSDot[i][1].name = _T("GrhTPSDot");
-  m_optMetMAPDot[i][0].name = _T("MetMAPDot");
-  m_optMetMAPDot[i][1].name = _T("GrhMAPDot");
-  m_optMetMAP2[i][0].name = _T("MetMAP2");
-  m_optMetMAP2[i][1].name = _T("GrhMAP2");
-  m_optMetMAPD[i][0].name = _T("MetMAPD");
-  m_optMetMAPD[i][1].name = _T("GrhMAPD");
-  m_optMetTmp2[i][0].name = _T("MetTmp2");
-  m_optMetTmp2[i][1].name = _T("GrhTmp2");
-  m_optMetFuelConsum[i][0].name = _T("MetFuelConsum");
-  m_optMetFuelConsum[i][1].name = _T("GrhFuelConsum");
-  m_optMetKnockRetard[i][0].name = _T("MetKnockRetard");
-  m_optMetKnockRetard[i][1].name = _T("GrhKnockRetard");
-  m_optMetKnockGraph[i][0].name = _T("MetKnockGraph");
-  m_optMetKnockGraph[i][1].name = _T("GrhKnockGraph");
-  m_optMetSensAFR[i][0].name = _T("MetSensAFR");
-  m_optMetSensAFR[i][1].name = _T("GrhSensAFR");
-  m_optMetChokePos[i][0].name = _T("MetIACPos");
-  m_optMetChokePos[i][1].name = _T("GrhIACPos");
-  m_optMetGDPos[i][0].name = _T("MetGDPos");
-  m_optMetGDPos[i][1].name = _T("GrhGDPos");
-  m_optMetSynLoad[i][0].name = _T("MetSynLoad");
-  m_optMetSynLoad[i][1].name = _T("GrhSynLoad");
-  m_optMetInjTimB[i][0].name = _T("MetInjTimB");
-  m_optMetInjTimB[i][1].name = _T("GrhInjTimB");
-  m_optMetInjTimE[i][0].name = _T("MetInjTimE");
-  m_optMetInjTimE[i][1].name = _T("GrhInjTimE");
-  m_optMetFuelConsumF[i][0].name = _T("MetFuelConsumF");
-  m_optMetFuelConsumF[i][1].name = _T("GrhFuelConsumF");
-  m_optMetGrts[i][0].name = _T("MetGrts");
-  m_optMetGrts[i][1].name = _T("GrhGrts");
-  m_optMetFtls[i][0].name = _T("MetFtls");
-  m_optMetFtls[i][1].name = _T("GrhFtls");
-  m_optMetEgts[i][0].name = _T("MetEgts");
-  m_optMetEgts[i][1].name = _T("GrhEgts");
-  m_optMetOps[i][0].name = _T("MetOps");
-  m_optMetOps[i][1].name = _T("GrhOps");
-  m_optMetInjDuty[i][0].name = _T("MetInjDuty");
-  m_optMetInjDuty[i][1].name = _T("GrhInjDuty");
-  m_optMetMAF[i][0].name = _T("MetMAF");
-  m_optMetMAF[i][1].name = _T("GrhMAF");
-  m_optMetVentDuty[i][0].name = _T("MetVentDuty");
-  m_optMetVentDuty[i][1].name = _T("GrhVentDuty");
-  m_optMetFts[i][0].name = _T("MetFts");
-  m_optMetFts[i][1].name = _T("GrhFts");
-  m_optMetEGOCorr2[i][0].name = _T("MetEGOCorr2");
-  m_optMetEGOCorr2[i][1].name = _T("GrhEGOCorr2");
-  m_optMetSensAFR2[i][0].name = _T("MetSensAFR2");
-  m_optMetSensAFR2[i][1].name = _T("GrhSensAFR2");
-  m_optMetTargAFR[i][0].name = _T("MetMapAFR");
-  m_optMetTargAFR[i][1].name = _T("GrhMapAFR");
-  m_optMetDiffAFR[i][0].name = _T("MetDiffAFR");
-  m_optMetDiffAFR[i][1].name = _T("GrhDiffAFR");
-  m_optMetDiffAFR2[i][0].name = _T("MetDiffAFR2");
-  m_optMetDiffAFR2[i][1].name = _T("GrhDiffAFR2");
-  m_optMetGPS[i][0].name = _T("MetGPS");
-  m_optMetGPS[i][1].name = _T("GrhGPS");
+  m_optMetScRPM[0].name = m_optMetRPM[i][0].name = _T("MetRPM");
+  m_optMetScRPM[1].name = m_optMetRPM[i][1].name = _T("GrhRPM");
+  m_optMetScMAP[0].name = m_optMetMAP[i][0].name = _T("MetMAP");
+  m_optMetScMAP[1].name = m_optMetMAP[i][1].name = _T("GrhMAP");
+  m_optMetScVBat[0].name = m_optMetVBat[i][0].name = _T("MetVBat");
+  m_optMetScVBat[1].name = m_optMetVBat[i][1].name = _T("GrhVBat");
+  m_optMetScIgnTim[0].name = m_optMetIgnTim[i][0].name = _T("MetIgnTim");
+  m_optMetScIgnTim[1].name = m_optMetIgnTim[i][1].name = _T("GrhIgnTim");
+  m_optMetScCLT[0].name = m_optMetCLT[i][0].name = _T("MetCLT");
+  m_optMetScCLT[1].name = m_optMetCLT[i][1].name = _T("GrhCLT");
+  m_optMetScAddI1[0].name = m_optMetAddI1[i][0].name = _T("MetAddI1");
+  m_optMetScAddI1[1].name = m_optMetAddI1[i][1].name = _T("GrhAddI1");
+  m_optMetScAddI2[0].name = m_optMetAddI2[i][0].name = _T("MetAddI2");
+  m_optMetScAddI2[1].name = m_optMetAddI2[i][1].name = _T("GrhAddI2");
+  m_optMetScInjPW[0].name = m_optMetInjPW[i][0].name = _T("MetInjPW");
+  m_optMetScInjPW[1].name = m_optMetInjPW[i][1].name = _T("GrhInjPW");
+  m_optMetScIAT[0].name = m_optMetIAT[i][0].name = _T("MetIAT");
+  m_optMetScIAT[1].name = m_optMetIAT[i][1].name = _T("GrhIAT");
+  m_optMetScEGOCorr[0].name = m_optMetEGOCorr[i][0].name = _T("MetEGOCorr");
+  m_optMetScEGOCorr[1].name = m_optMetEGOCorr[i][1].name = _T("GrhEGOCorr");
+  m_optMetScTPS[0].name = m_optMetTPS[i][0].name = _T("MetTPS");
+  m_optMetScTPS[1].name = m_optMetTPS[i][1].name = _T("GrhTPS");
+  m_optMetScAirFlow[0].name = m_optMetAirFlow[i][0].name = _T("MetAirFlow");
+  m_optMetScAirFlow[1].name = m_optMetAirFlow[i][1].name = _T("GrhAirFlow");
+  m_optMetScVehicleSpeed[0].name = m_optMetVehicleSpeed[i][0].name = _T("MetVehicleSpeed");
+  m_optMetScVehicleSpeed[1].name = m_optMetVehicleSpeed[i][1].name = _T("GrhVehicleSpeed");
+  m_optMetScTPSDot[0].name = m_optMetTPSDot[i][0].name = _T("MetTPSDot");
+  m_optMetScTPSDot[1].name = m_optMetTPSDot[i][1].name = _T("GrhTPSDot");
+  m_optMetScMAPDot[0].name = m_optMetMAPDot[i][0].name = _T("MetMAPDot");
+  m_optMetScMAPDot[1].name = m_optMetMAPDot[i][1].name = _T("GrhMAPDot");
+  m_optMetScMAP2[0].name = m_optMetMAP2[i][0].name = _T("MetMAP2");
+  m_optMetScMAP2[1].name = m_optMetMAP2[i][1].name = _T("GrhMAP2");
+  m_optMetScMAPD[0].name = m_optMetMAPD[i][0].name = _T("MetMAPD");
+  m_optMetScMAPD[1].name = m_optMetMAPD[i][1].name = _T("GrhMAPD");
+  m_optMetScTmp2[0].name = m_optMetTmp2[i][0].name = _T("MetTmp2");
+  m_optMetScTmp2[1].name = m_optMetTmp2[i][1].name = _T("GrhTmp2");
+  m_optMetScFuelConsum[0].name = m_optMetFuelConsum[i][0].name = _T("MetFuelConsum");
+  m_optMetScFuelConsum[1].name = m_optMetFuelConsum[i][1].name = _T("GrhFuelConsum");
+  m_optMetScKnockRetard[0].name = m_optMetKnockRetard[i][0].name = _T("MetKnockRetard");
+  m_optMetScKnockRetard[1].name = m_optMetKnockRetard[i][1].name = _T("GrhKnockRetard");
+  m_optMetScKnockGraph[0].name = m_optMetKnockGraph[i][0].name = _T("MetKnockGraph");
+  m_optMetScKnockGraph[1].name = m_optMetKnockGraph[i][1].name = _T("GrhKnockGraph");
+  m_optMetScSensAFR[0].name = m_optMetSensAFR[i][0].name = _T("MetSensAFR");
+  m_optMetScSensAFR[1].name = m_optMetSensAFR[i][1].name = _T("GrhSensAFR");
+  m_optMetScChokePos[0].name = m_optMetChokePos[i][0].name = _T("MetIACPos");
+  m_optMetScChokePos[1].name = m_optMetChokePos[i][1].name = _T("GrhIACPos");
+  m_optMetScGDPos[0].name = m_optMetGDPos[i][0].name = _T("MetGDPos");
+  m_optMetScGDPos[1].name = m_optMetGDPos[i][1].name = _T("GrhGDPos");
+  m_optMetScSynLoad[0].name = m_optMetSynLoad[i][0].name = _T("MetSynLoad");
+  m_optMetScSynLoad[1].name = m_optMetSynLoad[i][1].name = _T("GrhSynLoad");
+  m_optMetScInjTimB[0].name = m_optMetInjTimB[i][0].name = _T("MetInjTimB");
+  m_optMetScInjTimB[1].name = m_optMetInjTimB[i][1].name = _T("GrhInjTimB");
+  m_optMetScInjTimE[0].name = m_optMetInjTimE[i][0].name = _T("MetInjTimE");
+  m_optMetScInjTimE[1].name = m_optMetInjTimE[i][1].name = _T("GrhInjTimE");
+  m_optMetScFuelConsumF[0].name = m_optMetFuelConsumF[i][0].name = _T("MetFuelConsumF");
+  m_optMetScFuelConsumF[1].name = m_optMetFuelConsumF[i][1].name = _T("GrhFuelConsumF");
+  m_optMetScGrts[0].name = m_optMetGrts[i][0].name = _T("MetGrts");
+  m_optMetScGrts[1].name = m_optMetGrts[i][1].name = _T("GrhGrts");
+  m_optMetScFtls[0].name = m_optMetFtls[i][0].name = _T("MetFtls");
+  m_optMetScFtls[1].name = m_optMetFtls[i][1].name = _T("GrhFtls");
+  m_optMetScEgts[0].name = m_optMetEgts[i][0].name = _T("MetEgts");
+  m_optMetScEgts[1].name = m_optMetEgts[i][1].name = _T("GrhEgts");
+  m_optMetScOps[0].name = m_optMetOps[i][0].name = _T("MetOps");
+  m_optMetScOps[1].name = m_optMetOps[i][1].name = _T("GrhOps");
+  m_optMetScInjDuty[0].name = m_optMetInjDuty[i][0].name = _T("MetInjDuty");
+  m_optMetScInjDuty[1].name = m_optMetInjDuty[i][1].name = _T("GrhInjDuty");
+  m_optMetScMAF[0].name = m_optMetMAF[i][0].name = _T("MetMAF");
+  m_optMetScMAF[1].name = m_optMetMAF[i][1].name = _T("GrhMAF");
+  m_optMetScVentDuty[0].name = m_optMetVentDuty[i][0].name = _T("MetVentDuty");
+  m_optMetScVentDuty[1].name = m_optMetVentDuty[i][1].name = _T("GrhVentDuty");
+  m_optMetScFts[0].name = m_optMetFts[i][0].name = _T("MetFts");
+  m_optMetScFts[1].name = m_optMetFts[i][1].name = _T("GrhFts");
+  m_optMetScEGOCorr2[0].name = m_optMetEGOCorr2[i][0].name = _T("MetEGOCorr2");
+  m_optMetScEGOCorr2[1].name = m_optMetEGOCorr2[i][1].name = _T("GrhEGOCorr2");
+  m_optMetScSensAFR2[0].name = m_optMetSensAFR2[i][0].name = _T("MetSensAFR2");
+  m_optMetScSensAFR2[1].name = m_optMetSensAFR2[i][1].name = _T("GrhSensAFR2");
+  m_optMetScTargAFR[0].name = m_optMetTargAFR[i][0].name = _T("MetMapAFR");
+  m_optMetScTargAFR[1].name = m_optMetTargAFR[i][1].name = _T("GrhMapAFR");
+  m_optMetScDiffAFR[0].name = m_optMetDiffAFR[i][0].name = _T("MetDiffAFR");
+  m_optMetScDiffAFR[1].name = m_optMetDiffAFR[i][1].name = _T("GrhDiffAFR");
+  m_optMetScDiffAFR2[0].name = m_optMetDiffAFR2[i][0].name = _T("MetDiffAFR2");
+  m_optMetScDiffAFR2[1].name = m_optMetDiffAFR2[i][1].name = _T("GrhDiffAFR2");
+  m_optMetScGPS[0].name = m_optMetGPS[i][0].name = _T("MetGPS");
+  m_optMetScGPS[1].name = m_optMetGPS[i][1].name = _T("GrhGPS");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -1002,10 +999,6 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optFtsAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optTargAFRAverage, _T("4"), 0, 16);
 
- fs.ReadInt(m_optTachometerMax, _T("8000"), 0, 15000);
- fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
- fs.ReadInt(m_optTemperatureMax, _T("120"), 0, 300);
- fs.ReadInt(m_optInjPWMax, _T("24"), 5, 100);
  fs.ReadEnum(m_optSpeedUnit, 0, m_AllowableSpeedUnits);
  fs.ReadInt(m_optTitleFontSize, _T("100"), 10, 200);
  fs.ReadInt(m_optValueFontSize, _T("130"), 10, 200);
@@ -1477,6 +1470,60 @@ bool CAppSettingsModel::ReadSettings(void)
   }
  }
 
+ const TCHAR* metScDef[42] = {_T("0, 8000"),_T("0, 110"),_T("2, 18"),_T("-15, 65"),_T("0, 100"),_T("-40, 120"),_T("0, 5"),_T("0, 5"),_T("0, 24"),_T("-40, 120"),
+                              _T("-50, 50"),_T("0, 16"),_T("0, 220"),_T("-500, 500"),_T("-500, 500"),_T("0, 400"),_T("0, 400"),_T("-40, 120"),_T("0, 50"),_T("0, 30"),
+                              _T("0, 5"),_T("6, 24"),_T("0, 100"),_T("0, 100"),_T("0, 250"),_T("-360, 720"),_T("-360, 720"),_T("0, 250"),_T("-40, 120"),_T("0, 100"),
+                              _T("0, 1100"),_T("0, 6"),_T("0, 100"),_T("0, 600"),_T("0, 100"),_T("-40, 120"),_T("-50, 50"),_T("6, 24"),_T("6, 24"),_T("-10, 10"),
+                              _T("-10, 10"),_T("0, 400")};
+
+ IniIO sc(IniFileName, m_Name_MetersSc_Section);
+ for (int g = 0; g < 2; ++g)
+ {
+  int d = 0;
+  sc.ReadVector(m_optMetScRPM[g],     metScDef[d++],  0.0f,  30000.0f, 2);
+  sc.ReadVector(m_optMetScMAP[g],     metScDef[d++],  0.0f,  500.0f, 2);
+  sc.ReadVector(m_optMetScVBat[g],    metScDef[d++],  0.0f,  30.0f, 2);
+  sc.ReadVector(m_optMetScIgnTim[g],  metScDef[d++], -20.0f, 90.0f, 2);
+  sc.ReadVector(m_optMetScTPS[g],     metScDef[d++],  0.0f,  100.0f, 2);
+  sc.ReadVector(m_optMetScCLT[g],     metScDef[d++], -60.0f, 300.0f, 2);
+  sc.ReadVector(m_optMetScAddI1[g],   metScDef[d++],  0.0f,  5.5f, 2);
+  sc.ReadVector(m_optMetScAddI2[g],   metScDef[d++],  0.0f,  5.5f, 2);
+  sc.ReadVector(m_optMetScInjPW[g],   metScDef[d++],  0.0f,  100.0f, 2);
+  sc.ReadVector(m_optMetScIAT[g],     metScDef[d++], -60.0f, 300.0f, 2);
+  sc.ReadVector(m_optMetScEGOCorr[g], metScDef[d++],-75.0f, 75.0f, 2);
+  sc.ReadVector(m_optMetScAirFlow[g], metScDef[d++],  0.0f, 16.0f, 2);
+  sc.ReadVector(m_optMetScVehicleSpeed[g],metScDef[d++], 0.0f, 300.0f, 2);
+  sc.ReadVector(m_optMetScTPSDot[g],  metScDef[d++], -1000.0f, 1000.0f, 2);
+  sc.ReadVector(m_optMetScMAPDot[g],  metScDef[d++], -1000.0f, 1000.0f, 2);
+  sc.ReadVector(m_optMetScMAP2[g],    metScDef[d++], 0.0f, 500.0f, 2);
+  sc.ReadVector(m_optMetScMAPD[g],    metScDef[d++], 0.0f, 500.0f, 2);
+  sc.ReadVector(m_optMetScTmp2[g],    metScDef[d++], -60.0f, 300.0f, 2);
+  sc.ReadVector(m_optMetScFuelConsum[g],metScDef[d++], 0.0f, 500.0f, 2);
+  sc.ReadVector(m_optMetScKnockRetard[g],metScDef[d++], 0.0f, 50.0f, 2);
+  sc.ReadVector(m_optMetScKnockGraph[g],metScDef[d++], 0.0f, 5.5f, 2);
+  sc.ReadVector(m_optMetScSensAFR[g], metScDef[d++], 6.0f, 24.0f, 2);
+  sc.ReadVector(m_optMetScChokePos[g],metScDef[d++], 0.0f, 100.0f, 2);
+  sc.ReadVector(m_optMetScGDPos[g],   metScDef[d++], 0.0f, 100.0f, 2);
+  sc.ReadVector(m_optMetScSynLoad[g], metScDef[d++], 0.0f, 500.0f, 2);
+  sc.ReadVector(m_optMetScInjTimB[g], metScDef[d++],-360.0f, 720.0f, 2);
+  sc.ReadVector(m_optMetScInjTimE[g], metScDef[d++],-360.0f, 720.0f, 2);
+  sc.ReadVector(m_optMetScFuelConsumF[g],metScDef[d++], 0.0f, 500.0f, 2);
+  sc.ReadVector(m_optMetScGrts[g],    metScDef[d++],-60.0f,300.0f, 2);
+  sc.ReadVector(m_optMetScFtls[g],    metScDef[d++], 0.0f, 300.0f, 2);
+  sc.ReadVector(m_optMetScEgts[g],    metScDef[d++], 0.0f, 1500.0f, 2);
+  sc.ReadVector(m_optMetScOps[g],     metScDef[d++], 0.0f, 10.0f, 2);
+  sc.ReadVector(m_optMetScInjDuty[g], metScDef[d++], 0.0f, 100.0f, 2);
+  sc.ReadVector(m_optMetScMAF[g],     metScDef[d++], 0.0f, 1000.0f, 2);
+  sc.ReadVector(m_optMetScVentDuty[g], metScDef[d++], 0.0f, 100.0f, 2);
+  sc.ReadVector(m_optMetScFts[g],     metScDef[d++],-60.0f,200.0f, 2);
+  sc.ReadVector(m_optMetScEGOCorr2[g],metScDef[d++], -75.0f, 75.0f, 2);
+  sc.ReadVector(m_optMetScSensAFR2[g],metScDef[d++], 6.0f, 24.0f, 2);
+  sc.ReadVector(m_optMetScTargAFR[g], metScDef[d++], 6.0f, 24.0f, 2);
+  sc.ReadVector(m_optMetScDiffAFR[g], metScDef[d++], -10.0f, 10.0f, 2);
+  sc.ReadVector(m_optMetScDiffAFR2[g],metScDef[d++], -10.0f, 10.0f, 2);
+  sc.ReadVector(m_optMetScGPS[g],     metScDef[d++], 0.0f, 500.0f, 2);
+ }
+
  //Auto tune
  IniIO at(IniFileName, m_Name_AutoTune_Section);
  at.ReadVector(m_optLambdaDelay,_T("200,70,40,250,150,100,350,300,200"),10, 3000, 9);
@@ -1700,6 +1747,50 @@ bool CAppSettingsModel::WriteSettings(void)
  bool status = true;
  CString IniFileName = GetINIFileFullName();
  IniIO writer(IniFileName); //set locale, open file and start
+
+ bool en = (m_optInterfaceLang.value == IL_ENGLISH);
+ const TCHAR* strMetRPM = en ? _T("RPM, speed, distance") : _T("Обороты, скорость, расстояние");
+ const TCHAR* strMetMAP = en ? _T("MAP sensor") : _T("ДАД");
+ const TCHAR* strMetVBat = en ? _T("Board voltage") :_T("Напряжение бортовой сети");
+ const TCHAR* strMetIgnTim = en ? _T("Ignition timing") : _T("УОЗ");                                          
+ const TCHAR* strMetTPS = en ? _T("TPS sensor") : _T("ДПДЗ, расход воздуха");
+ const TCHAR* strMetCLT = en ? _T("CLT sensor") : _T("ДТОЖ");
+ const TCHAR* strMetAddI1 = en ? _T("ADD_I1 input") : _T("Вход ADD_I1");
+ const TCHAR* strMetAddI2 = en ? _T("ADD_I2 input") : _T("Вход ADD_I2");
+ const TCHAR* strMetInjPW = en ? _T("Injection pulse width") : _T("Длительность впрыска");
+ const TCHAR* strMetIAT = en ? _T("MAT sensor") : _T("ДТВ");
+ const TCHAR* strMetEGOCorr = en ? _T("Lambda correction") : _T("Лямбда коррекция");
+ const TCHAR* strMetAirFlow = en ? _T("Air flow") : _T("Расход воздуха");
+ const TCHAR* strMetVehicleSpeed = en ? _T("Vehicle spped") : _T("Скорость авто.");
+ const TCHAR* strMetTPSDot = en ? _T("TPS dot") : _T("Скорость ДПДЗ (d%/dt)");
+ const TCHAR* strMetMAPDot = en ? _T("MAP dot") : _T("Скорость ДАД (dP/dt)");
+ const TCHAR* strMetMAP2 = en ? _T("MAP2 sensor") : _T("Датчик MAP2");
+ const TCHAR* strMetGPS = en ? _T("GP sensor") : _T("Датчик ДГ");
+ const TCHAR* strMetMAPD = en ? _T("Diff. pressure") : _T("Дифф. давление");
+ const TCHAR* strMetTmp2 = en ? _T("TMP2 sensor") : _T("Датчик TMP2");
+ const TCHAR* strMetFuelConsum = en ? _T("Fuel consumption") : _T("Расход топлива");
+ const TCHAR* strMetKnockRetard = en ? _T("Knock retard") : _T("Коррекция УОЗ по ДД");
+ const TCHAR* strMetKnockGraph = en ? _T("Knock signal") : _T("Сигнал детонации");
+ const TCHAR* strMetSensAFR = en ? _T("AFR sensor") : _T("Воздух/топливо с ДК");
+ const TCHAR* strMetChokePos = en ? _T("Choke/IAC position") : _T("Положение ВЗ/РДВ");
+ const TCHAR* strMetGDPos = en ? _T("Gas valve position") : _T("Положение дозатора газа");
+ const TCHAR* strMetSynLoad = en ? _T("Synthetic load") : _T("Синтетическая нагрузка");
+ const TCHAR* strMetInjTimB = en ? _T("Begin phase of injection pulse") : _T("Фаза начала впрыска");
+ const TCHAR* strMetInjTimE = en ? _T("End phase of injection pulse") : _T("Фаза конца впрыска");
+ const TCHAR* strMetFuelConsumF = en ? _T("Fuel consumption (Hz)") : _T("Расход топлива (Гц)");
+ const TCHAR* strMetGrts = en ? _T("GRTEMP sensor") : _T("Датчик GRTEMP");
+ const TCHAR* strMetFtls = en ? _T("Fuel tank level") : _T("Датчик уровня топлива");
+ const TCHAR* strMetEgts = en ? _T("Exhaust gas temperature") : _T("Температура выхлопных газов");
+ const TCHAR* strMetOps = en ? _T("Oil pressure") : _T("Давление масла");
+ const TCHAR* strMetInjDuty = en ? _T("Injector's duty") : _T("Загрузка форсунок");
+ const TCHAR* strMetMAF = en ? _T("MAF sensor") : _T("Датчик ДМРВ");
+ const TCHAR* strMetVentDuty = en ? _T("Cooling fan's PWM duty") : _T("Скважность ШИМ вентилятора охлаждения");
+ const TCHAR* strMetFts = en ? _T("Temperature in the fuel ramp") : _T("Температура в топливной рампе");
+ const TCHAR* strMetEGOCorr2 = en ? _T("Lambda correction 2") : _T("Лямбда коррекция 2");
+ const TCHAR* strMetSensAFR2 = en ? _T("AFR sensor 2") : _T("Воздух/топливо с ДК 2");
+ const TCHAR* strMetTargAFR = en ? _T("Target AFR") : _T("Воздух/топливо целевое");
+ const TCHAR* strMetDiffAFR = en ? _T("AFR difference") : _T("Разность Воздух/топливо");
+ const TCHAR* strMetDiffAFR2 = en ? _T("AFR difference2") : _T("Разность Воздух/топливо2");
 
  IniIO &os = writer; 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2119,30 +2210,6 @@ bool CAppSettingsModel::WriteSettings(void)
  fs.WriteInt(m_optTargAFRAverage); 
 
  //---------------------------
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the RPM gauge (e.g. 6000 min-1)."));
- else
-  fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора оборотов (например 6000 мин-1)."));
- fs.WriteInt(m_optTachometerMax); 
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the MAP gauge (e.g. 100 kPa)."));
- else
-  fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора абс.давления (например 100 кПа)."));
- fs.WriteInt(m_optPressureMax); 
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the temperature gauge (e.g. 120°C)."));
- else
-  fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора температуры (например 120°C)."));
- fs.WriteInt(m_optTemperatureMax); 
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the inj. PW gauge (e.g. 24 ms)."));
- else
-  fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора длит. впрыска (например 24 мс)."));
- fs.WriteInt(m_optInjPWMax); 
-
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Defines which unit should be used for displaying of vehicle speed and distance. Supported values are: kmh and mph"));
  else
@@ -4223,216 +4290,104 @@ bool CAppSettingsModel::WriteSettings(void)
 
   for(int g = 0; g < 2; ++g)
   {
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetRPM[i][g], _T("RPM, speed, distance"));
-  else
-   mm.WriteInt(m_optMetRPM[i][g], _T("Обороты, скорость, расстояние"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAP[i][g], _T("MAP sensor"));
-  else
-   mm.WriteInt(m_optMetMAP[i][g], _T("ДАД"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetVBat[i][g], _T("Board voltage"));
-  else
-   mm.WriteInt(m_optMetVBat[i][g], _T("Напряжение бортовой сети"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetIgnTim[i][g], _T("Ignition timing"));
-  else
-   mm.WriteInt(m_optMetIgnTim[i][g], _T("УОЗ"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTPS[i][g], _T("TPS sensor"));
-  else
-   mm.WriteInt(m_optMetTPS[i][g], _T("ДПДЗ, расход воздуха"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetCLT[i][g], _T("CLT sensor"));
-  else
-   mm.WriteInt(m_optMetCLT[i][g], _T("ДТОЖ"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetAddI1[i][g], _T("ADD_I1 input"));
-  else
-   mm.WriteInt(m_optMetAddI1[i][g], _T("Вход ADD_I1"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetAddI2[i][g], _T("ADD_I2 input"));
-  else
-   mm.WriteInt(m_optMetAddI2[i][g], _T("Вход ADD_I2"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetInjPW[i][g], _T("Injection pulse width"));
-  else
-   mm.WriteInt(m_optMetInjPW[i][g], _T("Длительность впрыска"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetIAT[i][g], _T("MAT sensor"));
-  else
-   mm.WriteInt(m_optMetIAT[i][g], _T("ДТВ"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetEGOCorr[i][g], _T("Lambda correction"));
-  else
-   mm.WriteInt(m_optMetEGOCorr[i][g], _T("Лямбда коррекция"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetAirFlow[i][g], _T("Air flow"));
-  else
-   mm.WriteInt(m_optMetAirFlow[i][g], _T("Расход воздуха"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetVehicleSpeed[i][g], _T("Vehicle spped"));
-  else
-   mm.WriteInt(m_optMetVehicleSpeed[i][g], _T("Скорость авто."));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTPSDot[i][g], _T("TPS dot"));
-  else
-   mm.WriteInt(m_optMetTPSDot[i][g], _T("Скорость ДПДЗ (d%/dt)"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAPDot[i][g], _T("MAP dot"));
-  else
-   mm.WriteInt(m_optMetMAPDot[i][g], _T("Скорость ДАД (dP/dt)"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAP2[i][g], _T("MAP2 sensor"));
-  else
-   mm.WriteInt(m_optMetMAP2[i][g], _T("Датчик MAP2"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetGPS[i][g], _T("GP sensor"));
-  else
-   mm.WriteInt(m_optMetGPS[i][g], _T("Датчик ДГ"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAPD[i][g], _T("Diff. pressure"));
-  else
-   mm.WriteInt(m_optMetMAPD[i][g], _T("Дифф. давление"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTmp2[i][g], _T("TMP2 sensor"));
-  else
-   mm.WriteInt(m_optMetTmp2[i][g], _T("Датчик TMP2"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetFuelConsum[i][g], _T("Fuel consumption"));
-  else
-   mm.WriteInt(m_optMetFuelConsum[i][g], _T("Расход топлива"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetKnockRetard[i][g], _T("Knock retard"));
-  else
-   mm.WriteInt(m_optMetKnockRetard[i][g], _T("Коррекция УОЗ по ДД"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetKnockGraph[i][g], _T("Knock signal"));
-  else
-   mm.WriteInt(m_optMetKnockGraph[i][g], _T("Сигнал детонации"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetSensAFR[i][g], _T("AFR sensor"));
-  else
-   mm.WriteInt(m_optMetSensAFR[i][g], _T("Воздух/топливо с ДК"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetChokePos[i][g], _T("Choke/IAC position"));
-  else
-   mm.WriteInt(m_optMetChokePos[i][g], _T("Положение ВЗ/РДВ"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetGDPos[i][g], _T("Gas valve position"));
-  else
-   mm.WriteInt(m_optMetGDPos[i][g], _T("Положение дозатора газа"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetSynLoad[i][g], _T("Synthetic load"));
-  else
-   mm.WriteInt(m_optMetSynLoad[i][g], _T("Синтетическая нагрузка"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetInjTimB[i][g], _T("Begin phase of injection pulse"));
-  else
-   mm.WriteInt(m_optMetInjTimB[i][g], _T("Фаза начала впрыска"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetInjTimE[i][g], _T("End phase of injection pulse"));
-  else
-   mm.WriteInt(m_optMetInjTimE[i][g], _T("Фаза конца впрыска"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetFuelConsumF[i][g], _T("Fuel consumption (Hz)"));
-  else
-   mm.WriteInt(m_optMetFuelConsumF[i][g], _T("Расход топлива (Гц)"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetGrts[i][g], _T("GRTEMP sensor"));
-  else
-   mm.WriteInt(m_optMetGrts[i][g], _T("Датчик GRTEMP"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetFtls[i][g], _T("Fuel tank level"));
-  else
-   mm.WriteInt(m_optMetFtls[i][g], _T("Датчик уровня топлива"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetEgts[i][g], _T("Exhaust gas temperature"));
-  else
-   mm.WriteInt(m_optMetEgts[i][g], _T("Температура выхлопных газов"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetOps[i][g], _T("Oil pressure"));
-  else
-   mm.WriteInt(m_optMetOps[i][g], _T("Давление масла"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetInjDuty[i][g], _T("Injector's duty"));
-  else
-   mm.WriteInt(m_optMetInjDuty[i][g], _T("Загрузка форсунок"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAF[i][g], _T("MAF sensor"));
-  else
-   mm.WriteInt(m_optMetMAF[i][g], _T("Датчик ДМРВ"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetVentDuty[i][g], _T("Cooling fan's PWM duty"));
-  else
-   mm.WriteInt(m_optMetVentDuty[i][g], _T("Скважность ШИМ вентилятора охлаждения"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetFts[i][g], _T("Temperature in the fuel ramp"));
-  else
-   mm.WriteInt(m_optMetFts[i][g], _T("Температура в топливной рампе"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetEGOCorr2[i][g], _T("Lambda correction 2"));
-  else
-   mm.WriteInt(m_optMetEGOCorr2[i][g], _T("Лямбда коррекция 2"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetSensAFR2[i][g], _T("AFR sensor 2"));
-  else
-   mm.WriteInt(m_optMetSensAFR2[i][g], _T("Воздух/топливо с ДК 2"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTargAFR[i][g], _T("Target AFR"));
-  else
-   mm.WriteInt(m_optMetTargAFR[i][g], _T("Воздух/топливо целевое"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetDiffAFR[i][g], _T("AFR difference"));
-  else
-   mm.WriteInt(m_optMetDiffAFR[i][g], _T("Разность Воздух/топливо"));
-
-  if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetDiffAFR2[i][g], _T("AFR difference2"));
-  else
-   mm.WriteInt(m_optMetDiffAFR2[i][g], _T("Разность Воздух/топливо2"));
+   mm.WriteInt(m_optMetRPM[i][g], strMetRPM);
+   mm.WriteInt(m_optMetMAP[i][g], strMetMAP);
+   mm.WriteInt(m_optMetVBat[i][g], strMetVBat);
+   mm.WriteInt(m_optMetIgnTim[i][g], strMetIgnTim);
+   mm.WriteInt(m_optMetTPS[i][g], strMetTPS);
+   mm.WriteInt(m_optMetCLT[i][g], strMetCLT);
+   mm.WriteInt(m_optMetAddI1[i][g], strMetAddI1);
+   mm.WriteInt(m_optMetAddI2[i][g], strMetAddI2);
+   mm.WriteInt(m_optMetInjPW[i][g], strMetInjPW);
+   mm.WriteInt(m_optMetIAT[i][g], strMetIAT);
+   mm.WriteInt(m_optMetEGOCorr[i][g], strMetEGOCorr);
+   mm.WriteInt(m_optMetAirFlow[i][g], strMetAirFlow);
+   mm.WriteInt(m_optMetVehicleSpeed[i][g], strMetVehicleSpeed);
+   mm.WriteInt(m_optMetTPSDot[i][g], strMetTPSDot);
+   mm.WriteInt(m_optMetMAPDot[i][g], strMetMAPDot);
+   mm.WriteInt(m_optMetMAP2[i][g], strMetMAP2);
+   mm.WriteInt(m_optMetGPS[i][g], strMetGPS);
+   mm.WriteInt(m_optMetMAPD[i][g], strMetMAPD);
+   mm.WriteInt(m_optMetTmp2[i][g], strMetTmp2);
+   mm.WriteInt(m_optMetFuelConsum[i][g], strMetFuelConsum);
+   mm.WriteInt(m_optMetKnockRetard[i][g], strMetKnockRetard);
+   mm.WriteInt(m_optMetKnockGraph[i][g], strMetKnockGraph);
+   mm.WriteInt(m_optMetSensAFR[i][g], strMetSensAFR);
+   mm.WriteInt(m_optMetChokePos[i][g], strMetChokePos);
+   mm.WriteInt(m_optMetGDPos[i][g], strMetGDPos);
+   mm.WriteInt(m_optMetSynLoad[i][g], strMetSynLoad);
+   mm.WriteInt(m_optMetInjTimB[i][g], strMetInjTimB);
+   mm.WriteInt(m_optMetInjTimE[i][g], strMetInjTimE);
+   mm.WriteInt(m_optMetFuelConsumF[i][g], strMetFuelConsumF);
+   mm.WriteInt(m_optMetGrts[i][g], strMetGrts);
+   mm.WriteInt(m_optMetFtls[i][g], strMetFtls);
+   mm.WriteInt(m_optMetEgts[i][g], strMetEgts);
+   mm.WriteInt(m_optMetOps[i][g], strMetOps);
+   mm.WriteInt(m_optMetInjDuty[i][g], strMetInjDuty);
+   mm.WriteInt(m_optMetMAF[i][g], strMetMAF);
+   mm.WriteInt(m_optMetVentDuty[i][g], strMetVentDuty);
+   mm.WriteInt(m_optMetFts[i][g], strMetFts);
+   mm.WriteInt(m_optMetEGOCorr2[i][g], strMetEGOCorr2);
+   mm.WriteInt(m_optMetSensAFR2[i][g], strMetSensAFR2);
+   mm.WriteInt(m_optMetTargAFR[i][g], strMetTargAFR);
+   mm.WriteInt(m_optMetDiffAFR[i][g], strMetDiffAFR);
+   mm.WriteInt(m_optMetDiffAFR2[i][g], strMetDiffAFR2);
   }
+ }
+
+ //Meters' scales
+ IniIO &sc = writer;
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sc.WriteComment(_T("*** Ranges of scales of virtual gauges ***\r\n; Two values per line - first for minimum, second for maximum"), true);
+ else
+  sc.WriteComment(_T("*** Диапазоны шкал виртуальных приборов ***\r\n; По два значения в каждой строке - первое для минимума, второе для максимума"), true);
+
+ sc.CreateSection(m_Name_MetersSc_Section);
+
+ for(int g = 0; g < 2; ++g)
+ {
+  sc.WriteVector(m_optMetScRPM[g], 0, strMetRPM);
+  sc.WriteVector(m_optMetScMAP[g], 0, strMetMAP);
+  sc.WriteVector(m_optMetScVBat[g], 1, strMetVBat);
+  sc.WriteVector(m_optMetScIgnTim[g], 1, strMetIgnTim);
+  sc.WriteVector(m_optMetScTPS[g], 1, strMetTPS);
+  sc.WriteVector(m_optMetScCLT[g], 1, strMetCLT);
+  sc.WriteVector(m_optMetScAddI1[g], 1, strMetAddI1);
+  sc.WriteVector(m_optMetScAddI2[g], 1, strMetAddI2);
+  sc.WriteVector(m_optMetScInjPW[g], 1, strMetInjPW);
+  sc.WriteVector(m_optMetScIAT[g], 1, strMetIAT);
+  sc.WriteVector(m_optMetScEGOCorr[g], 1, strMetEGOCorr);
+  sc.WriteVector(m_optMetScAirFlow[g], 0, strMetAirFlow);
+  sc.WriteVector(m_optMetScVehicleSpeed[g], 1, strMetVehicleSpeed);
+  sc.WriteVector(m_optMetScTPSDot[g], 0, strMetTPSDot);
+  sc.WriteVector(m_optMetScMAPDot[g], 0, strMetMAPDot);
+  sc.WriteVector(m_optMetScMAP2[g], 1, strMetMAP2);
+  sc.WriteVector(m_optMetScGPS[g], 1, strMetGPS);
+  sc.WriteVector(m_optMetScMAPD[g], 1, strMetMAPD);
+  sc.WriteVector(m_optMetScTmp2[g], 1, strMetTmp2);
+  sc.WriteVector(m_optMetScFuelConsum[g], 1, strMetFuelConsum);
+  sc.WriteVector(m_optMetScKnockRetard[g], 1, strMetKnockRetard);
+  sc.WriteVector(m_optMetScKnockGraph[g], 1, strMetKnockGraph);
+  sc.WriteVector(m_optMetScSensAFR[g], 1, strMetSensAFR);
+  sc.WriteVector(m_optMetScChokePos[g], 1, strMetChokePos);
+  sc.WriteVector(m_optMetScGDPos[g], 1, strMetGDPos);
+  sc.WriteVector(m_optMetScSynLoad[g], 1, strMetSynLoad);
+  sc.WriteVector(m_optMetScInjTimB[g], 1, strMetInjTimB);
+  sc.WriteVector(m_optMetScInjTimE[g], 1, strMetInjTimE);
+  sc.WriteVector(m_optMetScFuelConsumF[g], 1, strMetFuelConsumF);
+  sc.WriteVector(m_optMetScGrts[g], 1, strMetGrts);
+  sc.WriteVector(m_optMetScFtls[g], 1, strMetFtls);
+  sc.WriteVector(m_optMetScEgts[g], 1, strMetEgts);
+  sc.WriteVector(m_optMetScOps[g], 1, strMetOps);
+  sc.WriteVector(m_optMetScInjDuty[g], 1, strMetInjDuty);
+  sc.WriteVector(m_optMetScMAF[g], 1, strMetMAF);
+  sc.WriteVector(m_optMetScVentDuty[g], 1, strMetVentDuty);
+  sc.WriteVector(m_optMetScFts[g], 1, strMetFts);
+  sc.WriteVector(m_optMetScEGOCorr2[g], 1, strMetEGOCorr2);
+  sc.WriteVector(m_optMetScSensAFR2[g], 1, strMetSensAFR2);
+  sc.WriteVector(m_optMetScTargAFR[g], 1, strMetTargAFR);
+  sc.WriteVector(m_optMetScDiffAFR[g], 1, strMetDiffAFR);
+  sc.WriteVector(m_optMetScDiffAFR2[g], 1, strMetDiffAFR2);
  }
 
  IniIO &at = writer;
@@ -6533,26 +6488,6 @@ EECUPlatform CAppSettingsModel::GetECUPlatformType(void) const
  return (EECUPlatform)m_optECUPlatformType.value;
 }
 
-int CAppSettingsModel::GetTachometerMax(void) const
-{
- return m_optTachometerMax.value;
-}
-
-int CAppSettingsModel::GetPressureMax(void) const
-{
- return m_optPressureMax.value;
-}
-
-int CAppSettingsModel::GetTemperatureMax(void) const
-{
- return m_optTemperatureMax.value;
-}
-
-int CAppSettingsModel::GetInjPWMax(void) const
-{
- return m_optInjPWMax.value;
-}
-
 ESpeedUnit CAppSettingsModel::GetSpeedUnit(void) const
 {
  return (ESpeedUnit)m_optSpeedUnit.value;
@@ -6859,13 +6794,13 @@ void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
  }
 }
 
-static void _cpyMetersConfig(int* opt, const OptField_t<int>* mbr)
+static void _cpyMetersConfig(MetCfg* opt, const OptField_t<int>* mbr, const OptField_t<std::vector<float> >* scale)
 {
- for(int g = 0; g < 2; ++g) opt[g] = mbr[g].value;
+ for(int g = 0; g < 2; ++g) { opt[g].position = mbr[g].value; opt[g].scaleMin = scale[g].value[0]; opt[g].scaleMax = scale[g].value[1]; }
 }
-static void _cpyMetersConfig(const int* opt, OptField_t<int>* mbr)
+static void _cpyMetersConfig(const MetCfg* opt, OptField_t<int>* mbr, OptField_t<std::vector<float> >* scale)
 {
- for(int g = 0; g < 2; ++g) mbr[g].value = opt[g];
+ for(int g = 0; g < 2; ++g) { mbr[g].value = opt[g].position; scale->value[0] = opt[g].scaleMin; scale->value[1] = opt[g].scaleMax;}
 }
 
 void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
@@ -6873,48 +6808,48 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
  for(int i = 0; i < 2; ++i)
  {
   o_cfg[i].m_optMetRows = m_optMetRows[i].value;
-  _cpyMetersConfig(o_cfg[i].m_optMetRPM, &m_optMetRPM[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetMAP, &m_optMetMAP[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetVBat, &m_optMetVBat[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetIgnTim, &m_optMetIgnTim[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetCLT, &m_optMetCLT[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetAddI1, &m_optMetAddI1[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetAddI2, &m_optMetAddI2[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetInjPW, &m_optMetInjPW[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetIAT, &m_optMetIAT[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetEGOCorr, &m_optMetEGOCorr[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetTPS, &m_optMetTPS[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetMAPDot, &m_optMetMAPDot[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetGPS, &m_optMetGPS[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetFuelConsum, &m_optMetFuelConsum[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetKnockRetard, &m_optMetKnockRetard[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetKnockGraph, &m_optMetKnockGraph[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetSensAFR, &m_optMetSensAFR[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetGrts, &m_optMetGrts[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetFtls, &m_optMetFtls[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetFts, &m_optMetFts[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetTargAFR, &m_optMetTargAFR[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetRPM, &m_optMetRPM[i][0], &m_optMetScRPM[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAP, &m_optMetMAP[i][0], &m_optMetScMAP[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetVBat, &m_optMetVBat[i][0], &m_optMetScVBat[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetIgnTim, &m_optMetIgnTim[i][0], &m_optMetScIgnTim[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetCLT, &m_optMetCLT[i][0], &m_optMetScCLT[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetAddI1, &m_optMetAddI1[i][0], &m_optMetScAddI1[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetAddI2, &m_optMetAddI2[i][0], &m_optMetScAddI2[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjPW, &m_optMetInjPW[i][0], &m_optMetScInjPW[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetIAT, &m_optMetIAT[i][0], &m_optMetScIAT[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetEGOCorr, &m_optMetEGOCorr[i][0], &m_optMetScEGOCorr[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTPS, &m_optMetTPS[i][0], &m_optMetScTPS[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0], &m_optMetScAirFlow[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0], &m_optMetScVehicleSpeed[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0], &m_optMetScTPSDot[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAPDot, &m_optMetMAPDot[i][0], &m_optMetScMAPDot[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0], &m_optMetScMAP2[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetGPS, &m_optMetGPS[i][0], &m_optMetScGPS[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0], &m_optMetScMAPD[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0], &m_optMetScTmp2[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetFuelConsum, &m_optMetFuelConsum[i][0], &m_optMetScFuelConsum[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetKnockRetard, &m_optMetKnockRetard[i][0], &m_optMetScKnockRetard[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetKnockGraph, &m_optMetKnockGraph[i][0], &m_optMetScKnockGraph[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetSensAFR, &m_optMetSensAFR[i][0], &m_optMetScSensAFR[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0], &m_optMetScChokePos[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0], &m_optMetScGDPos[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0], &m_optMetScSynLoad[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0], &m_optMetScInjTimB[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0], &m_optMetScInjTimE[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0], &m_optMetScFuelConsumF[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetGrts, &m_optMetGrts[i][0], &m_optMetScGrts[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetFtls, &m_optMetFtls[i][0], &m_optMetScFtls[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetEgts, &m_optMetEgts[i][0], &m_optMetScEgts[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetOps, &m_optMetOps[i][0], &m_optMetScOps[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0], &m_optMetScInjDuty[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAF, &m_optMetMAF[i][0], &m_optMetScMAF[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0], &m_optMetScVentDuty[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetFts, &m_optMetFts[i][0], &m_optMetScFts[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0], &m_optMetScEGOCorr2[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0], &m_optMetScSensAFR2[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTargAFR, &m_optMetTargAFR[i][0], &m_optMetScTargAFR[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0], &m_optMetScDiffAFR[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0], &m_optMetScDiffAFR2[0]);
  }
 }
 
@@ -6923,48 +6858,48 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
  for(int i = 0; i < 2; ++i)
  {
   m_optMetRows[i].value = i_cfg[i].m_optMetRows;
-  _cpyMetersConfig(i_cfg[i].m_optMetRPM, &m_optMetRPM[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetMAP, &m_optMetMAP[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetVBat, &m_optMetVBat[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetIgnTim, &m_optMetIgnTim[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetCLT, &m_optMetCLT[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetAddI1, &m_optMetAddI1[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetAddI2, &m_optMetAddI2[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetInjPW, &m_optMetInjPW[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetIAT, &m_optMetIAT[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetEGOCorr, &m_optMetEGOCorr[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetTPS, &m_optMetTPS[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetMAPDot, &m_optMetMAPDot[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetGPS, &m_optMetGPS[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetFuelConsum, &m_optMetFuelConsum[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetKnockRetard, &m_optMetKnockRetard[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetKnockGraph, &m_optMetKnockGraph[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetSensAFR, &m_optMetSensAFR[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetGrts, &m_optMetGrts[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetFtls, &m_optMetFtls[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetEgts, &m_optMetEgts[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetOps, &m_optMetOps[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetMAF, &m_optMetMAF[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetFts, &m_optMetFts[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetTargAFR, &m_optMetTargAFR[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetRPM, &m_optMetRPM[i][0], &m_optMetScRPM[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAP, &m_optMetMAP[i][0], &m_optMetScMAP[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetVBat, &m_optMetVBat[i][0], &m_optMetScVBat[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetIgnTim, &m_optMetIgnTim[i][0], &m_optMetScIgnTim[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetCLT, &m_optMetCLT[i][0], &m_optMetScCLT[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetAddI1, &m_optMetAddI1[i][0], &m_optMetScAddI1[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetAddI2, &m_optMetAddI2[i][0], &m_optMetScAddI2[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjPW, &m_optMetInjPW[i][0], &m_optMetScInjPW[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetIAT, &m_optMetIAT[i][0], &m_optMetScIAT[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetEGOCorr, &m_optMetEGOCorr[i][0], &m_optMetScEGOCorr[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTPS, &m_optMetTPS[i][0], &m_optMetScTPS[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0], &m_optMetScAirFlow[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0], &m_optMetScVehicleSpeed[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0], &m_optMetScTPSDot[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAPDot, &m_optMetMAPDot[i][0], &m_optMetScMAPDot[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0], &m_optMetScMAP2[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetGPS, &m_optMetGPS[i][0], &m_optMetScGPS[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0], &m_optMetScMAPD[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0], &m_optMetScTmp2[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetFuelConsum, &m_optMetFuelConsum[i][0], &m_optMetScFuelConsum[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetKnockRetard, &m_optMetKnockRetard[i][0], &m_optMetScKnockRetard[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetKnockGraph, &m_optMetKnockGraph[i][0], &m_optMetScKnockGraph[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetSensAFR, &m_optMetSensAFR[i][0], &m_optMetScSensAFR[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0], &m_optMetScChokePos[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0], &m_optMetScGDPos[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0], &m_optMetScSynLoad[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0], &m_optMetScInjTimB[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0], &m_optMetScInjTimE[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0], &m_optMetScFuelConsumF[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetGrts, &m_optMetGrts[i][0], &m_optMetScGrts[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetFtls, &m_optMetFtls[i][0], &m_optMetScFtls[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetEgts, &m_optMetEgts[i][0], &m_optMetScEgts[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetOps, &m_optMetOps[i][0], &m_optMetScOps[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjDuty, &m_optMetInjDuty[i][0], &m_optMetScInjDuty[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAF, &m_optMetMAF[i][0], &m_optMetScMAF[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetVentDuty, &m_optMetVentDuty[i][0], &m_optMetScVentDuty[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetFts, &m_optMetFts[i][0], &m_optMetScFts[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetEGOCorr2, &m_optMetEGOCorr2[i][0], &m_optMetScEGOCorr2[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetSensAFR2, &m_optMetSensAFR2[i][0], &m_optMetScSensAFR2[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTargAFR, &m_optMetTargAFR[i][0], &m_optMetScTargAFR[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0], &m_optMetScDiffAFR[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0], &m_optMetScDiffAFR2[0]);
  }
 }
 

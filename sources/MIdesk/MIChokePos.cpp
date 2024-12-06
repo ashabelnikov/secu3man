@@ -60,6 +60,11 @@ void CMIChokePosBase::Create(CWnd* pParent, UINT id)
  m_meter.SetMeterSize(130);
 }
 
+void CMIChokePosBase::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 void CMIChokePos::Create(CWnd* pParent)
 {
  CMIChokePosBase::Create(pParent, IDC_MI_CHOKEPOS);
@@ -94,7 +99,8 @@ void CMIChokePosBaseGraph::Create(CWnd* pParent, UINT id)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, id));
 
  // customize the control
- m_scope.SetRange(0, 100, 0, 1);
+ m_scope.SetRange(0, 100);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));

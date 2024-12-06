@@ -63,6 +63,11 @@ void CMIFuelConsumF::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMIFuelConsumF::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -84,7 +89,8 @@ void CMIFuelConsumFGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_FUELCONSUMFGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 250, 0, 1);
+ m_scope.SetRange(0, 250);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_FUELCONSUMFGRAPH_V_UNIT));

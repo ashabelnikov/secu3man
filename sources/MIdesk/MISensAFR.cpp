@@ -67,6 +67,12 @@ void CMISensAFR::Create(CWnd* pParent)
  m_meter.SetMeterSize(130);
 }
 
+void CMISensAFR::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
+
 CMISensAFR2::CMISensAFR2()
 {
  //empty
@@ -102,6 +108,11 @@ void CMISensAFR2::Create(CWnd* pParent)
  m_meter.SetMeterSize(130);
 }
 
+void CMISensAFR2::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -123,7 +134,8 @@ void CMISensAFRGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_SENSAFRGRAPH));
 
  // customize the control
- m_scope.SetRange(6, 24, 0, 1);
+ m_scope.SetRange(6, 24);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(9);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_SENSAFRGRAPH_V_UNIT));
@@ -150,7 +162,8 @@ void CMISensAFR2Graph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_SENSAFR2GRAPH));
 
  // customize the control
- m_scope.SetRange(6, 24, 0, 1);
+ m_scope.SetRange(6, 24);
+ m_scope.SetDecPlaces(0, 1);
  m_scope.SetGridNumberY(9);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_SENSAFR2GRAPH_V_UNIT));

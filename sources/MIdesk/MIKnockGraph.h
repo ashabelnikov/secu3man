@@ -37,6 +37,7 @@ class AFX_EXT_CLASS CMIKnock : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };
 

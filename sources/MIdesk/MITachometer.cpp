@@ -66,12 +66,7 @@ void CMITachometer::Create(CWnd* pParent)
 
 void CMITachometer::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.5, RGB(100,255,100));
- m_meter.AddAlertZone(upLimit * 0.5, upLimit * 0.75, RGB(255,255,100));
- m_meter.AddAlertZone(upLimit * 0.75, upLimit, RGB(255,100,100));
-
- m_meter.SetRange(loLimit, upLimit);
+ m_meter.SetRange(loLimit, upLimit, true);  //<-- also update alert zones
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -95,7 +90,8 @@ void CMITachometerGraph::Create(CWnd* pParent)
  VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TACHOMETERGRAPH));
 
  // customize the control
- m_scope.SetRange(0, 8000.0, 0, 0);
+ m_scope.SetRange(0, 8000.0);
+ m_scope.SetDecPlaces(0, 0);
  m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_TACHOMETER_V_UNIT));
@@ -108,5 +104,5 @@ void CMITachometerGraph::Create(CWnd* pParent)
 void CMITachometerGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(((int)(upLimit-loLimit)%1000) ? 10 : MathHelpers::Round((upLimit-loLimit)/1000.0));
- m_scope.SetRange(loLimit, upLimit, 0, 0);
+ m_scope.SetRange(loLimit, upLimit);
 }
