@@ -1068,5 +1068,5 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optFuncGD_CONTROL;
 
   //folder from which application has been started
-  TCHAR m_current_directory[MAX_PATH+1];
+  TCHAR m_app_directory[MAX_PATH+1];
 };

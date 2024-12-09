@@ -70,11 +70,9 @@ bool LoadFonts(void)
 
  bool status = false;
  if (pAddFontResourceEx) //Check for AddFontResourceEx() function is absent (Windows 98)
- {
+ { 
   //load MS Sans Serif font
-  TCHAR szDirectory[MAX_PATH] = "";
-  ::GetCurrentDirectory(sizeof(szDirectory) - 1, szDirectory);
-  _TSTRING fontPath = _TSTRING(szDirectory) + _T("\\") + _TSTRING(_T("sserifer.fon"));
+  _TSTRING fontPath = ModuleName::GetExecDirPath(_T("sserifer.fon"));
   if (0==pAddFontResourceEx(fontPath.c_str(), FR_PRIVATE, 0))
   {
    _TSSTREAM str; str << _T("Can't load ") << fontPath <<  _T(" file with 'MS Sans Serif' font!");
