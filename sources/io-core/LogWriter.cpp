@@ -28,6 +28,7 @@
 #include "ufcodes.h"
 #include "SECU3IO.h"
 #include "common/MathHelpers.h"
+#include "common/ModuleName.h"
 #include "BitMask.h"
 #include "s3lrecord.h"
 #include "NumericConv.h"
@@ -325,7 +326,7 @@ bool LogWriter::BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_nam
   else
    string.Format(_T("%04d.%02d.%02d_%02d.%02d.%02d.csv"),time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond); //text format
 
-  full_file_name += _T("\\");
+  ModuleName::AddSlashToPath(full_file_name); //add '\' if absent
   full_file_name += string;
   *o_full_file_name = full_file_name;
 

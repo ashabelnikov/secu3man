@@ -27,11 +27,11 @@
 #include "AppSettingsModel.h"
 #include "IniFileIO.h"
 #include "common/MathHelpers.h"
+#include "common/ModuleName.h"
 #include "io-core/MapIds.h"
 
 #include <limits>
 #include <algorithm>
-#include <shlwapi.h>
 
 #undef max //avoid conflicts with C++
 
@@ -854,13 +854,7 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowablePorts.push_back(_T("/dev/rfcomm0")); //bluetooth (sudo rfcomm bind 0 MAC 1) MAC - MAC address of paired bluetooth device
  m_AllowablePorts.push_back(_T("/dev/rfcomm1")); //bluetooth
 
-
- //get path where resides executable file of this proces
- HMODULE hModule = GetModuleHandle(NULL);
- ASSERT(hModule);
- _tcscpy(m_current_directory,_T(""));
- GetModuleFileName(hModule, m_current_directory, MAX_PATH);
- VERIFY(PathRemoveFileSpec(m_current_directory));
+ _tcscpy(m_app_directory, ModuleName::GetExecDirPath().c_str());
 
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\";\"  semicolon")), ';'));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"%\"  percent")),   '%'));
@@ -897,20 +891,17 @@ CAppSettingsModel::~CAppSettingsModel()
 
 CString CAppSettingsModel::GetINIFileFullName(void) const
 {
- CString directory(m_current_directory);
- if (directory.IsEmpty())
+ _TSTRING directory(m_app_directory);
+ if (0==directory.size())
   return _T("");
 
- CString last_char = directory.Right(1);
- if (last_char != _T("\\")) //если корневой каталог, то '\' уже есть
-  directory+=_T("\\");
-
- return directory + AfxGetApp()->m_pszExeName + _T(".ini");
+ ModuleName::AddSlashToPath(directory); //add '\' if absent
+ return CString(directory.c_str()) + AfxGetApp()->m_pszExeName + _T(".ini");
 }
 
 CString CAppSettingsModel::GetAppDirectory(void) const
 {
- return m_current_directory;
+ return m_app_directory;
 }
 
 bool CAppSettingsModel::ReadSettings(void)
@@ -924,7 +915,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadString(m_optPortName, _T("COM1"));
  os.ReadDword(m_optBaudRateApplication, _T("115200"), m_AllowableBaudRates);
  os.ReadDword(m_optBaudRateBootloader, _T("115200"), m_AllowableBaudRates);
- os.ReadString(m_optLogFilesFolder, m_current_directory);
+ os.ReadString(m_optLogFilesFolder, m_app_directory); //use app. dir. as default value
  os.ReadChar(m_optCSVSepSymbol, _T(";"), m_AllowaleCSVSepSymbols);
  os.ReadChar(m_optMapCSVSepSymbol, _T(";"), m_AllowaleCSVSepSymbols);
  os.ReadInt(m_optUseAppFolder, _T("1"), 0, 1);

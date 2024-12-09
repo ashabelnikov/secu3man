@@ -26,6 +26,9 @@
 
 #pragma once
 
+#include <shlwapi.h>
+#include "UnicodeSupport.h"
+
 namespace ModuleName {
 
  static LPCTSTR about     =  _T("about.dll");
@@ -38,5 +41,32 @@ namespace ModuleName {
  static LPCTSTR tabldesk  =  _T("tabldesk.dll");
  static LPCTSTR uicore    =  _T("ui-core.dll");
  static LPCTSTR secu3man  =  _T("secu3man.exe");
+
+ static _TSTRING GetExecDirPath(const _TSTRING& file = _T(""))
+ {
+  TCHAR szDirectory[MAX_PATH] = _T("");
+  //get path where resides executable file of this proces
+  HMODULE hModule = GetModuleHandle(NULL);
+  ASSERT(hModule);
+  GetModuleFileName(hModule, szDirectory, MAX_PATH-1);
+  VERIFY(PathRemoveFileSpec(szDirectory));
+  _TSTRING path = szDirectory;   
+  if (path.size() && file.size())
+  {
+   if (path[path.size()-1] != _T('\\')) //if root dir, then '\' already exist
+    path+=_T("\\");
+  }
+  return path + file;  
+ }
+
+ static void AddSlashToPath(_TSTRING& path)
+ {
+  if (path.size())
+  {
+   TCHAR last_char = path[path.size()-1];
+   if (last_char != _T('\\')) //if root dir, then '\' already exist
+    path+=_T("\\");
+  }
+ }
 
 } //ns
