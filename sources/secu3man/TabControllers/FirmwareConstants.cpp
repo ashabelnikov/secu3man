@@ -720,7 +720,7 @@ void CFirmwareTabController::OnEditFwConsts(void)
 
  std::vector<_TSTRING> dashboards;
  dashboards.push_back(_T("OFF"));
- dashboards.push_back(_T("Lada Priora"));
+ dashboards.push_back(_T("Lada Granta"));
  dashboards.push_back(_T("Nissan Almera Classic"));
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Выбор CAN приборной панели"), dashboards, &d.can_dashboard, _T("Выбор модели приборной панели подключаемой через CAN-шину."));
