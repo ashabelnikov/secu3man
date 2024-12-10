@@ -32,6 +32,25 @@
 #undef min
 #undef max
 
+#define R(rgb)      ((BYTE)((rgb)>>16))
+#define G(rgb)      ((BYTE)(((WORD)(rgb)) >> 8))
+#define B(rgb)      ((BYTE)(rgb))
+
+void AlphaBlend(UINT32* src, UINT32* dst, int w, int h, UINT a)
+{
+ UINT n = (256 - a); //added 1 to compensate division by 256 instead of 255
+ a++;  //added 1 to compensate division by 256 instead of 255
+ DWORD sz = w * h;
+ for (DWORD i = 0; i < sz; ++i)
+ {
+  if (src[i] & 0xFFFFFF) //skip pixels with black color - this is because we write our own AlphaBlend version
+  {
+   dst[i] = (((a * B(src[i])) >> 8) | ((a * G(src[i])) & 0xff00) | (((a * R(src[i])) << 8) & 0xff0000)) +
+            (((n * B(dst[i])) >> 8) | ((n * G(dst[i])) & 0xff00) | (((n * R(dst[i])) << 8) & 0xff0000));
+  }
+ }
+}
+
 BEGIN_MESSAGE_MAP(COscillCtrl, Super)
  ON_WM_ENABLE()
  ON_WM_PAINT()
@@ -69,6 +88,7 @@ COscillCtrl::COscillCtrl()
 , m_show_cursor(false)                  //don't show cursor
 , m_show_value(false)                   //don't show value
 , m_value_height(100)                   //100%
+, mp_valBits(NULL)
 {
  m_COLOR_3DFACE = GetSysColor(COLOR_3DFACE);
 }
@@ -113,7 +133,20 @@ void COscillCtrl::OnPaint()
 
  //Draw all data onto memory DC
  memDC.CreateCompatibleDC(&dc);
- memBmp.CreateCompatibleBitmap(&dc, m_rcClient.Width(), m_rcClient.Height());
+
+// memBmp.CreateCompatibleBitmap(&dc, m_rcClient.Width(), m_rcClient.Height());
+ BITMAPINFO bmi; 
+ bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+ bmi.bmiHeader.biWidth = m_rcClient.Width();
+ bmi.bmiHeader.biHeight = m_rcClient.Height();
+ bmi.bmiHeader.biPlanes = 1;
+ bmi.bmiHeader.biBitCount = 32;         // four 8-bit components 
+ bmi.bmiHeader.biCompression = BI_RGB;
+ bmi.bmiHeader.biSizeImage = m_rcClient.Width() * m_rcClient.Height() * 4;
+ VOID* p_memdcBits;
+ HBITMAP hbitmap = CreateDIBSection(m_dcValue.GetSafeHdc(), &bmi, DIB_RGB_COLORS, &p_memdcBits, NULL, 0x0);
+ memBmp.Attach(hbitmap);
+
  CBitmap* oldBmp = (CBitmap*)memDC.SelectObject(&memBmp);
 
  if (memDC.GetSafeHdc() != NULL)
@@ -122,8 +155,9 @@ void COscillCtrl::OnPaint()
   memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcPlot, 0, 0, SRCPAINT);
   if (m_show_value)
   { //blend value's bitmap to resulting one
-   BLENDFUNCTION bf = {AC_SRC_OVER, 0, 128, AC_SRC_ALPHA};
-   memDC.AlphaBlend(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcValue, 0, 0, m_rcClient.Width(), m_rcClient.Height(), bf);
+// BLENDFUNCTION bf = {AC_SRC_OVER, 0, 128, AC_SRC_ALPHA};
+// memDC.AlphaBlend(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcValue, 0, 0, m_rcClient.Width(), m_rcClient.Height(), bf);
+   AlphaBlend(((UINT32 *)mp_valBits), ((UINT32 *)p_memdcBits), m_rcClient.Width(), m_rcClient.Height(), 128);
   }
   dc.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &memDC, 0, 0, SRCCOPY);
  }
@@ -319,7 +353,17 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
 
   if (m_bmpValue.GetSafeHandle() == NULL)
   {
-   m_bmpValue.CreateCompatibleBitmap(&dc, m_rcClient.Width(), m_rcClient.Height());
+   //m_bmpValue.CreateCompatibleBitmap(&dc, m_rcClient.Width(), m_rcClient.Height());
+   BITMAPINFO bmi; 
+   bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+   bmi.bmiHeader.biWidth = m_rcClient.Width();
+   bmi.bmiHeader.biHeight = m_rcClient.Height();
+   bmi.bmiHeader.biPlanes = 1;
+   bmi.bmiHeader.biBitCount = 32;         // four 8-bit components 
+   bmi.bmiHeader.biCompression = BI_RGB;
+   bmi.bmiHeader.biSizeImage = m_rcClient.Width() * m_rcClient.Height() * 4;
+   HBITMAP hbitmap = CreateDIBSection(m_dcValue.GetSafeHdc(), &bmi, DIB_RGB_COLORS, &mp_valBits, NULL, 0x0);
+   m_bmpValue.Attach(hbitmap);
    m_pBmpOldValue = m_dcValue.SelectObject(&m_bmpValue);
   }
 

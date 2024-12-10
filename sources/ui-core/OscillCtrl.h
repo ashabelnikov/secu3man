@@ -125,4 +125,5 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   bool m_show_cursor;  
   bool m_show_value;
   int m_value_height;         //%
+  VOID* mp_valBits;
 };
