@@ -45,7 +45,7 @@ CMIVoltage::~CMIVoltage()
 
 void CMIVoltage::Create(CWnd* pParent, UINT id)
 {
- MeasInstrBase::Create(pParent, id); //create window
+ MeasInstrBase::Create(pParent, id, false, false); //create window
 
  m_meter.SetRange (0.0, 5.0);
  m_meter.SetLabelsDecimals(1);
@@ -79,11 +79,21 @@ void CMIAddI1::Create(CWnd* pParent)
  VERIFY(mp_ttc->AddWindow(&m_meter, MLL::GetString(IDS_MI_ADD_I1_TT)));
 }
 
+void CMIAddI1::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->add_i1, 0, 0, i_revdir);
+}
+
 void CMIAddI2::Create(CWnd* pParent)
 {
  CMIVoltage::Create(pParent, IDC_MI_ADD_I2);
  m_meter.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE).c_str());
  VERIFY(mp_ttc->AddWindow(&m_meter, MLL::GetString(IDS_MI_ADD_I2_TT)));
+}
+
+void CMIAddI2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->add_i2, 0, 0, i_revdir);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -103,8 +113,7 @@ CMIAddI1Graph::~CMIAddI1Graph()
 void CMIAddI1Graph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_ADD_I1GRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_ADD_I1GRAPH);
 
  // customize the control
  m_scope.SetRange(0, 5);
@@ -116,6 +125,11 @@ void CMIAddI1Graph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIAddI1Graph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->add_i1, i_revdir);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -135,8 +149,7 @@ CMIAddI2Graph::~CMIAddI2Graph()
 void CMIAddI2Graph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_ADD_I2GRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_ADD_I2GRAPH);
 
  // customize the control
  m_scope.SetRange(0, 5);
@@ -148,4 +161,9 @@ void CMIAddI2Graph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIAddI2Graph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->add_i2, i_revdir);
 }

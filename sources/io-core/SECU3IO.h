@@ -71,7 +71,7 @@ namespace SECU3IO
   float add_i1;                         //ADD_I1 voltage
   float add_i2;                         //ADD_I2 voltage
   float choke_pos;                      //choke position (%)
-  float gasdose_pos;                    //gas dosator position
+  float gasdose_pos;                    //gas dispenser position
   float speed;                          //vehicle speed (Km/h)
   float distance;                       //passed distance since last ignition turn on (meters)
   float inj_fff;                        //value of instant fuel consumption, Hz (16000 pulses per 1L of burnt fuel)

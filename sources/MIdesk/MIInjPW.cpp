@@ -44,7 +44,7 @@ CMIInjPW::~CMIInjPW()
 
 void CMIInjPW::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_INJ_PW); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_INJ_PW, false, false); //create window
 
  m_meter.SetRange (0, 24.00);
  m_meter.SetLabelsDecimals(0);
@@ -67,6 +67,11 @@ void CMIInjPW::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIInjPW::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_pw, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -84,8 +89,7 @@ CMIInjPWGraph::~CMIInjPWGraph()
 void CMIInjPWGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_INJ_PWGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_INJ_PWGRAPH);
 
  // customize the control
  m_scope.SetRange(0, 24);
@@ -103,4 +107,9 @@ void CMIInjPWGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
  m_scope.SetRange(loLimit, upLimit);
+}
+
+void CMIInjPWGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_pw, i_revdir);
 }

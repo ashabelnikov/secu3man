@@ -48,6 +48,7 @@ class AFX_EXT_CLASS CMIDiffAFR : public CMIDiffAFRBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };
 
@@ -59,6 +60,7 @@ class AFX_EXT_CLASS CMIDiffAFR2 : public CMIDiffAFRBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };
 
@@ -81,6 +83,7 @@ class AFX_EXT_CLASS CMIDiffAFRGraph : public CMIDiffAFRGraphBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };
 
@@ -92,5 +95,6 @@ class AFX_EXT_CLASS CMIDiffAFR2Graph : public CMIDiffAFRGraphBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };

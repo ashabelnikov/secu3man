@@ -44,7 +44,7 @@ CMISynLoad::~CMISynLoad()
 
 void CMISynLoad::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_LOAD); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_LOAD, false, false); //create window
 
  m_meter.SetRange (0.0, 250.0);
  m_meter.SetLabelsDecimals(0);
@@ -66,6 +66,11 @@ void CMISynLoad::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMISynLoad::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->load, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -83,8 +88,7 @@ CMISynLoadGraph::~CMISynLoadGraph()
 void CMISynLoadGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_LOADGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_LOADGRAPH);
 
  // customize the control
  m_scope.SetRange(0, 250);
@@ -96,4 +100,9 @@ void CMISynLoadGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMISynLoadGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->load, i_revdir);
 }

@@ -157,94 +157,6 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
  m_hMoveCursor = (HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND_MOVE), IMAGE_CURSOR, 0, 0, 0);
  VERIFY(m_hMoveCursor);
-
- int r = 64;
- m_rpmQVal[0].reserve(r);
- m_rpmQVal[1].reserve(r);
- m_knockQVal[0].reserve(r);
- m_knockQVal[1].reserve(r);
- m_vbatQVal[0].reserve(r);
- m_vbatQVal[1].reserve(r);
- m_mapQVal[0].reserve(r);
- m_mapQVal[1].reserve(r);
- m_ai1QVal[0].reserve(r);
- m_ai1QVal[1].reserve(r);
- m_tpsQVal[0].reserve(r);
- m_tpsQVal[1].reserve(r);
- m_igntimQVal[0].reserve(r);
- m_igntimQVal[1].reserve(r);
- m_cltQVal[0].reserve(r);
- m_cltQVal[1].reserve(r);
- m_ai2QVal[0].reserve(r);
- m_ai2QVal[1].reserve(r);
- m_injpwQVal[0].reserve(r);
- m_injpwQVal[1].reserve(r);
- m_iatQVal[0].reserve(r);
- m_iatQVal[1].reserve(r);
- m_egocQVal[0].reserve(r);
- m_egocQVal[1].reserve(r);
- m_egoc2QVal[0].reserve(r);
- m_egoc2QVal[1].reserve(r);
- m_airflQVal[0].reserve(r);
- m_airflQVal[1].reserve(r);
- m_vssQVal[0].reserve(r);
- m_vssQVal[1].reserve(r);
- m_tpsdotQVal[0].reserve(r);
- m_tpsdotQVal[1].reserve(r);
- m_mapdotQVal[0].reserve(r);
- m_mapdotQVal[1].reserve(r);
- m_map2QVal[0].reserve(r);
- m_map2QVal[1].reserve(r);
- m_mapdQVal[0].reserve(r);
- m_mapdQVal[1].reserve(r);
- m_tmp2QVal[0].reserve(r);
- m_tmp2QVal[1].reserve(r);
- m_fuelcQVal[0].reserve(r);
- m_fuelcQVal[1].reserve(r);
- m_fuelchQVal[0].reserve(r);
-// m_fuelchQVal[1].reserve(r);
- m_knkretQVal[0].reserve(r);
- m_knkretQVal[1].reserve(r);
- m_senafrQVal[0].reserve(r);
- m_senafrQVal[1].reserve(r);
- m_senafr2QVal[0].reserve(r);
- m_senafr2QVal[1].reserve(r);
- m_chposQVal[0].reserve(r);
- m_chposQVal[1].reserve(r);
- m_gdposQVal[0].reserve(r);
- m_gdposQVal[1].reserve(r);
- m_synldQVal[0].reserve(r);
- m_synldQVal[1].reserve(r);
- m_itbQVal[0].reserve(r);
- m_itbQVal[1].reserve(r);
- m_iteQVal[0].reserve(r);
- m_iteQVal[1].reserve(r);
- m_fuelcfQVal[0].reserve(r);
- m_fuelcfQVal[1].reserve(r);
- m_grtsQVal[0].reserve(r);
- m_grtsQVal[1].reserve(r);
- m_distQVal.push_back(std::make_pair(0.0f, false));
- m_ftlsQVal[0].reserve(r);
- m_ftlsQVal[1].reserve(r);
- m_egtsQVal[0].reserve(r);
- m_egtsQVal[1].reserve(r);
- m_opsQVal[0].reserve(r);
- m_opsQVal[1].reserve(r);
- m_injdutyQVal.reserve(r);
- m_mafQVal[0].reserve(r);
- m_mafQVal[1].reserve(r);
- m_ventdutyQVal.reserve(r);
- m_ftsQVal[0].reserve(r);
- m_ftsQVal[1].reserve(r);
- m_conflQVal.push_back(std::make_pair(0.0f, false));
- m_tarafrQVal[0].reserve(r);
- m_tarafrQVal[1].reserve(r);
- m_diffAfrQVal[0].reserve(r);
- m_diffAfrQVal[1].reserve(r);
- m_diffAfr2QVal[0].reserve(r);
- m_diffAfr2QVal[1].reserve(r);
- m_gpsQVal[0].reserve(r);
- m_gpsQVal[1].reserve(r);
 }
 
 CMIDeskDlg::~CMIDeskDlg()
@@ -340,221 +252,15 @@ using namespace SECU3IO;
 
 void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/)
 {
- m_values = *i_values;
+ m_values = *i_values; //save for further use in the _IndFactory() for indicstors
+
  //Transform inj. tim. values:
  m_values.inj_tim_begin = MathHelpers::InjTimValueTransform(m_it_mode, m_values.inj_tim_begin, 0);
  m_values.inj_tim_end = MathHelpers::InjTimValueTransform(m_it_mode, m_values.inj_tim_end, 0);
 
- m_ringRPM.Append((float)i_values->rpm);
- m_ringKnock.Append((float)i_values->knock_k);
- m_ringVBat.Append(i_values->voltage);
- m_ringMAP.Append(i_values->pressure);
- m_ringAddI1.Append(i_values->add_i1);
- m_ringTPS.Append(i_values->tps);
- m_ringIgnTim.Append(i_values->adv_angle);
- m_ringCLT.Append(i_values->temperat);
- m_ringAddI2.Append(i_values->add_i2);
- m_ringInjPW.Append(i_values->inj_pw);
- m_ringIAT.Append(i_values->air_temp);
- m_ringEGOCorr.Append(i_values->lambda_corr);
- m_ringEGOCorr2.Append(i_values->lambda_corr2);
- m_ringAirFlow.Append(i_values->air_flow);
- m_ringVehicleSpeed.Append(i_values->speed);
- m_ringTPSDot.Append((float)i_values->tpsdot);
- m_ringMAPDot.Append((float)i_values->mapdot);
- m_ringMAP2.Append(i_values->map2);
- m_ringMAPD.Append(i_values->mapd);
- m_ringTmp2.Append(i_values->tmp2);
- m_ringFuelConsum.Append(i_values->inj_ffd);
- m_ringFuelConsumH.Append(i_values->inj_ffh);
- m_ringKnockRetard.Append(i_values->knock_retard);
- m_ringSensAFR.Append(i_values->afr);
- m_ringSensAFR2.Append(i_values->afr2);
- m_ringChokePos.Append(i_values->choke_pos);
- m_ringGDPos.Append(i_values->gasdose_pos);
- m_ringSynLoad.Append(i_values->load);
- m_ringInjTimB.Append(m_values.inj_tim_begin); //use transformed value
- m_ringInjTimE.Append(m_values.inj_tim_end);   //use transformed value
- m_ringFuelConsumF.Append(i_values->inj_fff);
- m_ringGrts.Append(i_values->grts);
- m_ringFtls.Append(i_values->ftls);
- m_ringEgts.Append(i_values->egts);
- m_ringOps.Append(i_values->ops);
- m_ringMAF.Append(i_values->maf);
- m_ringFts.Append(i_values->fts);
- m_ringTargAFR.Append(i_values->afrmap);
- m_ringGPS.Append(i_values->gps);
-
- m_ringRPM.Calculate();
- m_ringKnock.Calculate();
- m_ringVBat.Calculate();
- m_ringMAP.Calculate();
- m_ringAddI1.Calculate();
- m_ringTPS.Calculate();
- m_ringIgnTim.Calculate();
- m_ringCLT.Calculate();
- m_ringAddI2.Calculate();
- m_ringInjPW.Calculate();
- m_ringIAT.Calculate();
- m_ringEGOCorr.Calculate();
- m_ringEGOCorr2.Calculate();
- m_ringAirFlow.Calculate();
- m_ringVehicleSpeed.Calculate();
- m_ringTPSDot.Calculate();
- m_ringMAPDot.Calculate();
- m_ringMAP2.Calculate();
- m_ringMAPD.Calculate();
- m_ringTmp2.Calculate();
- m_ringFuelConsum.Calculate();
- m_ringFuelConsumH.Calculate();
- m_ringKnockRetard.Calculate();
- m_ringSensAFR.Calculate();
- m_ringSensAFR2.Calculate();
- m_ringChokePos.Calculate();
- m_ringGDPos.Calculate();
- m_ringSynLoad.Calculate();
- m_ringInjTimB.Calculate();
- m_ringInjTimE.Calculate();
- m_ringFuelConsumF.Calculate();
- m_ringGrts.Calculate();
- m_ringFtls.Calculate();
- m_ringEgts.Calculate();
- m_ringOps.Calculate();
- m_ringMAF.Calculate();
- m_ringFts.Calculate();
- m_ringTargAFR.Calculate();
- m_ringGPS.Calculate();
-
- m_rpmQVal[0].push_back(std::make_pair(m_ringRPM.m_result, i_revdir));
- m_rpmQVal[1].push_back(std::make_pair((float)i_values->rpm, i_revdir));
-
- m_knockQVal[0].push_back(std::make_pair(m_ringKnock.m_result, i_revdir));
- m_knockQVal[1].push_back(std::make_pair(i_values->knock_k, i_revdir));
-
- m_vbatQVal[0].push_back(std::make_pair(m_ringVBat.m_result, i_revdir));
- m_vbatQVal[1].push_back(std::make_pair(i_values->voltage, i_revdir));
-
- m_mapQVal[0].push_back(std::make_pair(m_ringMAP.m_result, i_revdir));
- m_mapQVal[1].push_back(std::make_pair(i_values->pressure, i_revdir));
-
- m_ai1QVal[0].push_back(std::make_pair(m_ringAddI1.m_result, i_revdir));
- m_ai1QVal[1].push_back(std::make_pair(i_values->add_i1, i_revdir));
-
- m_tpsQVal[0].push_back(std::make_pair(m_ringTPS.m_result, i_revdir));
- m_tpsQVal[1].push_back(std::make_pair(i_values->tps, i_revdir));
-
- m_igntimQVal[0].push_back(std::make_pair(m_ringIgnTim.m_result, i_revdir));
- m_igntimQVal[1].push_back(std::make_pair(i_values->adv_angle, i_revdir));
-
- m_cltQVal[0].push_back(std::make_pair(m_ringCLT.m_result, i_revdir));
- m_cltQVal[1].push_back(std::make_pair(i_values->temperat, i_revdir));
-
- m_ai2QVal[0].push_back(std::make_pair(m_ringAddI2.m_result, i_revdir));
- m_ai2QVal[1].push_back(std::make_pair(i_values->add_i2, i_revdir));
-
- m_injpwQVal[0].push_back(std::make_pair(m_ringInjPW.m_result, i_revdir));
- m_injpwQVal[1].push_back(std::make_pair(i_values->inj_pw, i_revdir));
-
- m_iatQVal[0].push_back(std::make_pair(m_ringIAT.m_result, i_revdir));
- m_iatQVal[1].push_back(std::make_pair(i_values->air_temp, i_revdir));
-
- m_egocQVal[0].push_back(std::make_pair(m_ringEGOCorr.m_result, i_revdir));
- m_egocQVal[1].push_back(std::make_pair(i_values->lambda_corr, i_revdir));
-
- m_egoc2QVal[0].push_back(std::make_pair(m_ringEGOCorr2.m_result, i_revdir));
- m_egoc2QVal[1].push_back(std::make_pair(i_values->lambda_corr2, i_revdir));
-
- m_airflQVal[0].push_back(std::make_pair(m_ringAirFlow.m_result, i_revdir));
- m_airflQVal[1].push_back(std::make_pair(i_values->air_flow, i_revdir));
-
- m_vssQVal[0].push_back(std::make_pair(m_ringVehicleSpeed.m_result, i_revdir));
- m_vssQVal[1].push_back(std::make_pair(i_values->speed, i_revdir));
-
- m_tpsdotQVal[0].push_back(std::make_pair(m_ringTPSDot.m_result, i_revdir));
- m_tpsdotQVal[1].push_back(std::make_pair((float)i_values->tpsdot, i_revdir));
-
- m_mapdotQVal[0].push_back(std::make_pair(m_ringMAPDot.m_result, i_revdir));
- m_mapdotQVal[1].push_back(std::make_pair((float)i_values->mapdot, i_revdir));
-
- m_map2QVal[0].push_back(std::make_pair(m_ringMAP2.m_result, i_revdir));
- m_map2QVal[1].push_back(std::make_pair(i_values->map2, i_revdir));
-
- m_mapdQVal[0].push_back(std::make_pair(m_ringMAPD.m_result, i_revdir));
- m_mapdQVal[1].push_back(std::make_pair(i_values->mapd, i_revdir));
-
- m_tmp2QVal[0].push_back(std::make_pair(m_ringTmp2.m_result, i_revdir));
- m_tmp2QVal[1].push_back(std::make_pair(i_values->tmp2, i_revdir));
-
- m_grtsQVal[0].push_back(std::make_pair(m_ringGrts.m_result, i_revdir));
- m_grtsQVal[1].push_back(std::make_pair(i_values->grts, i_revdir));
-
- m_fuelcQVal[0].push_back(std::make_pair(m_ringFuelConsum.m_result, i_revdir));
- m_fuelcQVal[1].push_back(std::make_pair(i_values->inj_ffd, i_revdir));
-
- m_fuelchQVal[0].push_back(std::make_pair(m_ringFuelConsumH.m_result, i_revdir));
-// m_fuelchQVal[1].push_back(std::make_pair(i_values->inj_ffh, i_revdir));
-
- m_knkretQVal[0].push_back(std::make_pair(m_ringKnockRetard.m_result, i_revdir));
- m_knkretQVal[1].push_back(std::make_pair(i_values->knock_retard, i_revdir));
-
- m_senafrQVal[0].push_back(std::make_pair(m_ringSensAFR.m_result, i_revdir));
- m_senafrQVal[1].push_back(std::make_pair(i_values->afr, i_revdir));
-
- m_senafr2QVal[0].push_back(std::make_pair(m_ringSensAFR2.m_result, i_revdir));
- m_senafr2QVal[1].push_back(std::make_pair(i_values->afr2, i_revdir));
-
- m_chposQVal[0].push_back(std::make_pair(m_ringChokePos.m_result, i_revdir));
- m_chposQVal[1].push_back(std::make_pair(i_values->choke_pos, i_revdir));
-
- m_gdposQVal[0].push_back(std::make_pair(m_ringGDPos.m_result, i_revdir));
- m_gdposQVal[1].push_back(std::make_pair(i_values->gasdose_pos, i_revdir));
-
- m_synldQVal[0].push_back(std::make_pair(m_ringSynLoad.m_result, i_revdir));
- m_synldQVal[1].push_back(std::make_pair(i_values->load, i_revdir));
-
- m_itbQVal[0].push_back(std::make_pair(m_ringInjTimB.m_result, i_revdir));
- m_itbQVal[1].push_back(std::make_pair(m_values.inj_tim_begin, i_revdir)); //use transformed value
-
- m_iteQVal[0].push_back(std::make_pair(m_ringInjTimE.m_result, i_revdir));
- m_iteQVal[1].push_back(std::make_pair(m_values.inj_tim_end, i_revdir));   //use transformed value
-
- m_fuelcfQVal[0].push_back(std::make_pair(m_ringFuelConsumF.m_result, i_revdir));
- m_fuelcfQVal[1].push_back(std::make_pair(i_values->inj_fff, i_revdir));
-
- m_distQVal[0].first = i_values->distance; //passed distance
-
- m_ftlsQVal[0].push_back(std::make_pair(m_ringFtls.m_result, i_revdir));
- m_ftlsQVal[1].push_back(std::make_pair(i_values->ftls, i_revdir));
-
- m_egtsQVal[0].push_back(std::make_pair(m_ringEgts.m_result, i_revdir));
- m_egtsQVal[1].push_back(std::make_pair(i_values->egts, i_revdir));
-
- m_opsQVal[0].push_back(std::make_pair(m_ringOps.m_result, i_revdir));
- m_opsQVal[1].push_back(std::make_pair(i_values->ops, i_revdir));
-
- m_injdutyQVal.push_back(std::make_pair(i_values->inj_duty, i_revdir)); //injector's duty
-
- m_mafQVal[0].push_back(std::make_pair(m_ringMAF.m_result, i_revdir));
- m_mafQVal[1].push_back(std::make_pair(i_values->maf, i_revdir));
-
- m_ftsQVal[0].push_back(std::make_pair(m_ringFts.m_result, i_revdir));
- m_ftsQVal[1].push_back(std::make_pair(i_values->fts, i_revdir));
-
- m_ventdutyQVal.push_back(std::make_pair(i_values->vent_duty, i_revdir)); //cooling fan's duty
-
- m_conflQVal[0].first = i_values->cons_fuel; //fuel consumed
-
- m_tarafrQVal[0].push_back(std::make_pair(m_ringTargAFR.m_result, i_revdir));
- m_tarafrQVal[1].push_back(std::make_pair(i_values->afrmap, i_revdir));
-
- m_diffAfrQVal[0].push_back(std::make_pair(m_ringSensAFR.m_result - m_ringTargAFR.m_result, i_revdir));
- m_diffAfrQVal[1].push_back(std::make_pair(i_values->afr - i_values->afrmap, i_revdir));
-
- m_diffAfr2QVal[0].push_back(std::make_pair(m_ringSensAFR2.m_result - m_ringTargAFR.m_result, i_revdir));
- m_diffAfr2QVal[1].push_back(std::make_pair(i_values->afr2 - i_values->afrmap, i_revdir));
-
- m_gpsQVal[0].push_back(std::make_pair(m_ringGPS.m_result, i_revdir));
- m_gpsQVal[1].push_back(std::make_pair(i_values->gps, i_revdir));
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  it->second->Append(&m_values, i_revdir); //add values to buffers and queues
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -572,91 +278,6 @@ void CMIDeskDlg::OnUpdateTimer(void)
  int idx = 0;
  for(it = m_indFields.begin(); it != m_indFields.end(); ++it, ++idx)
   m_leds.SetItemState(idx, *it->second.p_value, true);
-
- m_rpmQVal[0].clear(); 
- m_rpmQVal[1].clear(); 
- m_knockQVal[0].clear();
- m_knockQVal[1].clear();
- m_vbatQVal[0].clear(); 
- m_vbatQVal[1].clear(); 
- m_mapQVal[0].clear(); 
- m_mapQVal[1].clear(); 
- m_ai1QVal[0].clear(); 
- m_ai1QVal[1].clear(); 
- m_tpsQVal[0].clear(); 
- m_tpsQVal[1].clear(); 
- m_igntimQVal[0].clear(); 
- m_igntimQVal[1].clear(); 
- m_cltQVal[0].clear();
- m_cltQVal[1].clear();
- m_ai2QVal[0].clear();
- m_ai2QVal[1].clear();
- m_injpwQVal[0].clear();
- m_injpwQVal[1].clear();
- m_iatQVal[0].clear();
- m_iatQVal[1].clear();
- m_egocQVal[0].clear();
- m_egocQVal[1].clear();
- m_egoc2QVal[0].clear();
- m_egoc2QVal[1].clear();
- m_airflQVal[0].clear();
- m_airflQVal[1].clear();
- m_vssQVal[0].clear();
- m_vssQVal[1].clear();
- m_tpsdotQVal[0].clear();
- m_tpsdotQVal[1].clear();
- m_mapdotQVal[0].clear();
- m_mapdotQVal[1].clear();
- m_map2QVal[0].clear();
- m_map2QVal[1].clear();
- m_mapdQVal[0].clear();
- m_mapdQVal[1].clear();
- m_tmp2QVal[0].clear();
- m_tmp2QVal[1].clear();
- m_fuelcQVal[0].clear();
- m_fuelcQVal[1].clear();
- m_fuelchQVal[0].clear();
- //m_fuelchQVal[1].clear();
- m_knkretQVal[0].clear();
- m_knkretQVal[1].clear();
- m_senafrQVal[0].clear();
- m_senafrQVal[1].clear();
- m_senafr2QVal[0].clear();
- m_senafr2QVal[1].clear();
- m_chposQVal[0].clear();
- m_chposQVal[1].clear();
- m_gdposQVal[0].clear();
- m_gdposQVal[1].clear();
- m_synldQVal[0].clear();
- m_synldQVal[1].clear();
- m_itbQVal[0].clear();
- m_itbQVal[1].clear();
- m_iteQVal[0].clear();
- m_iteQVal[1].clear();
- m_fuelcfQVal[0].clear();
- m_fuelcfQVal[1].clear();
- m_grtsQVal[0].clear();
- m_grtsQVal[1].clear();
- m_ftlsQVal[0].clear();
- m_ftlsQVal[1].clear();
- m_egtsQVal[0].clear();
- m_egtsQVal[1].clear();
- m_opsQVal[0].clear();
- m_opsQVal[1].clear();
- m_injdutyQVal.clear(); //injector's duty
- m_mafQVal[0].clear();
- m_mafQVal[1].clear();
- m_ventdutyQVal.clear(); //cooling fan's duty
- m_ftsQVal[0].clear();
- m_ftsQVal[1].clear();
- m_tarafrQVal[0].clear();
- m_tarafrQVal[1].clear();
- m_diffAfrQVal[0].clear();
- m_diffAfrQVal[1].clear();
- m_diffAfr2QVal[0].clear();
- m_diffAfr2QVal[1].clear();
- m_gpsQVal[0].clear();
- m_gpsQVal[1].clear();
 }
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
@@ -718,187 +339,9 @@ void CMIDeskDlg::ShowSpeedAndDistance(bool i_show)
  m_showSpeedAndDistance = i_show;
 }
 
-void CMIDeskDlg::SetRPMAverageNum(int avnum)
+void CMIDeskDlg::SetMetAverage(MetAverage& ma)
 {
- m_ringRPM.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetVoltAverageNum(int avnum)
-{
- m_ringVBat.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetMAPAverageNum(int avnum)
-{
- m_ringMAP.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetAI1AverageNum(int avnum)
-{
- m_ringAddI1.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetTPSAverageNum(int avnum)
-{
- m_ringTPS.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetKnockAverageNum(int avnum)
-{
- m_ringKnock.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetIgnTimAverageNum(int avnum)
-{
- m_ringIgnTim.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetCLTAverageNum(int avnum)
-{
- m_ringCLT.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetAddI2AverageNum(int avnum)
-{
- m_ringAddI2.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetInjPWAverageNum(int avnum)
-{
- m_ringInjPW.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetIATAverageNum(int avnum)
-{
- m_ringIAT.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetEGOCorrAverageNum(int avnum)
-{
- m_ringEGOCorr.m_avnum = avnum;
- m_ringEGOCorr2.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetAirFlowAverageNum(int avnum)
-{
- m_ringAirFlow.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetVehicleSpeedAverageNum(int avnum)
-{
- m_ringVehicleSpeed.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetTPSDotAverageNum(int avnum)
-{
- m_ringTPSDot.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetMAPDotAverageNum(int avnum)
-{
- m_ringMAPDot.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetMAP2AverageNum(int avnum)
-{
- m_ringMAP2.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetGPSAverageNum(int avnum)
-{
- m_ringGPS.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetMAPDAverageNum(int avnum)
-{
- m_ringMAPD.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetTmp2AverageNum(int avnum)
-{
- m_ringTmp2.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetGrtsAverageNum(int avnum)
-{
- m_ringGrts.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetFuelConsumAverageNum(int avnum)
-{
- m_ringFuelConsum.m_avnum = avnum;
- m_ringFuelConsumH.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetFuelConsumFAverageNum(int avnum)
-{
- m_ringFuelConsumF.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetKnockRetardAverageNum(int avnum)
-{
- m_ringKnockRetard.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetSensAFRAverageNum(int avnum)
-{
- m_ringSensAFR.m_avnum = avnum;
- m_ringSensAFR2.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetChokePosAverageNum(int avnum)
-{
- m_ringChokePos.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetGDPosAverageNum(int avnum)
-{
- m_ringGDPos.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetSynLoadAverageNum(int avnum)
-{
- m_ringSynLoad.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetInjTimBAverageNum(int avnum)
-{
- m_ringInjTimB.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetInjTimEAverageNum(int avnum)
-{
- m_ringInjTimE.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetFtlsAverageNum(int avnum)
-{
- m_ringFtls.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetEgtsAverageNum(int avnum)
-{
- m_ringEgts.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetOpsAverageNum(int avnum)
-{
- m_ringOps.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetMAFAverageNum(int avnum)
-{
- m_ringMAF.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetFtsAverageNum(int avnum)
-{
- m_ringFts.m_avnum = avnum;
-}
-
-void CMIDeskDlg::SetTargAFRAverageNum(int avnum)
-{
- m_ringTargAFR.m_avnum = avnum;
+ m_avrNum = ma;
 }
 
 void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
@@ -1192,7 +635,6 @@ void CMIDeskDlg::OnLButtonUp(UINT nFlags, CPoint point)
    }
   }
  }
-
 
  //indicators
  if (m_draggingInd && m_indDragNDrop)
@@ -1521,8 +963,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMITachometer* widget = new CMITachometer();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrRPM, &m_avrNum.avrVehicleSpeed, NULL); //<--don't average distance
    widget->Create(this);
-   widget->BindVars(&m_rpmQVal[0], &m_vssQVal[0], &m_distQVal);
    widget->ShowTLP(m_showSpeedAndDistance);
    widget->ShowTRP(m_showSpeedAndDistance);
    widget->SetPaneUnit(m_speedUnit, m_distanceUnit);
@@ -1542,7 +984,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_rpmQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1556,8 +997,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIPressure* widget = new CMIPressure();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrMAP, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_mapQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1574,7 +1015,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_mapQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1588,8 +1028,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIVoltmeter* widget = new CMIVoltmeter();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrVolt, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_vbatQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1606,7 +1046,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_vbatQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1620,8 +1059,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIDwellAngle* widget = new CMIDwellAngle();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrIgnTim, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_igntimQVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1638,7 +1077,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_igntimQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1655,8 +1093,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMITemperature* widget = new CMITemperature();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrCLT, &m_avrNum.avrGDPos, &m_avrNum.avrChokePos);
    widget->Create(this);
-   widget->BindVars(&m_cltQVal[0], &m_gdposQVal[0], &m_chposQVal[0]);  
    widget->ShowTLP(m_showGDPos);
    widget->ShowTRP(m_showChokePos);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
@@ -1676,7 +1114,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_cltQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1690,8 +1127,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIAddI1* widget = new CMIAddI1();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrAddI1, 0, 0);
    widget->Create(this);
-   widget->BindVars(&m_ai1QVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1708,7 +1145,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_ai1QVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1722,8 +1158,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIAddI2* widget = new CMIAddI2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrAddI2, 0, 0);
    widget->Create(this);
-   widget->BindVars(&m_ai2QVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1740,7 +1176,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_ai2QVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1754,8 +1189,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIInjPW* widget = new CMIInjPW();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrInjPW, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_injpwQVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1772,7 +1207,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_injpwQVal[1], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1786,8 +1220,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIIAT* widget = new CMIIAT();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrIAT, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_iatQVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1804,7 +1238,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_iatQVal[1], NULL, NULL);  
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1818,8 +1251,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIEGOCorr* widget = new CMIEGOCorr();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrEGOCorr, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_egocQVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1836,7 +1269,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_egocQVal[1], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1850,10 +1282,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIThrottleGate* widget = new CMIThrottleGate();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrMAP, &m_avrNum.avrAirFlow, NULL);
    widget->Create(this);
-   widget->BindVars(&m_tpsQVal[0], &m_airflQVal[0], NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
-   widget->ShowTLP(true);
+// widget->ShowTLP(true);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1869,7 +1301,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_tpsQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1883,8 +1314,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIAirFlow* widget = new CMIAirFlow();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrAirFlow, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_airflQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1901,7 +1332,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_airflQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1915,8 +1345,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIVehicleSpeed* widget = new CMIVehicleSpeed();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrVehicleSpeed, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_vssQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetMeterUnit(m_speedUnit);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1934,7 +1364,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_vssQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetMeterUnit(m_speedUnit);
    widget->SetShtPixels(m_graphShtPixels);
@@ -1949,8 +1378,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMITPSDot* widget = new CMITPSDot();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrTPSDot, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_tpsdotQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1967,7 +1396,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_tpsdotQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1981,8 +1409,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIMAPDot* widget = new CMIMAPDot();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrMAPDot, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_mapdotQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1999,7 +1427,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_mapdotQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2013,8 +1440,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIMap2* widget = new CMIMap2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrMAP2, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_map2QVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2031,7 +1458,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_map2QVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2045,8 +1471,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIGps* widget = new CMIGps();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrGPS, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_gpsQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2063,7 +1489,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_gpsQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2077,8 +1502,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIMapD* widget = new CMIMapD();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrMAPD, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_mapdQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2095,7 +1520,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_mapdQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2109,8 +1533,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMITemp2* widget = new CMITemp2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrTmp2, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_tmp2QVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2127,7 +1551,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_tmp2QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2141,8 +1564,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIGrts* widget = new CMIGrts();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrGrts, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_grtsQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2159,7 +1582,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_grtsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2173,10 +1595,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIFuelConsum* widget = new CMIFuelConsum();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrFuelConsum, &m_avrNum.avrFuelConsumF, NULL); //<--don't average consumed fuel
    widget->Create(this);
-   widget->BindVars(&m_fuelcQVal[0], &m_fuelchQVal[0], &m_conflQVal);
-   widget->ShowTLP(true);
-   widget->ShowTRP(true);
+// widget->ShowTLP(true);
+// widget->ShowTRP(true);
    widget->SetPaneUnit(MLL::GetString(IDS_MI_FUELCONSUMH_UNIT), MLL::GetString(IDS_MI_CONSFUEL_UNIT));
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2194,7 +1616,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_fuelcQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2208,8 +1629,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIKnockRetard* widget = new CMIKnockRetard();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrKnockRetard, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_knkretQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2226,7 +1647,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_knkretQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2240,8 +1660,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIKnock* widget = new CMIKnock();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrKnock, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_knockQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2258,7 +1678,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_knockQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2272,8 +1691,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMISensAFR* widget = new CMISensAFR();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_senafrQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2290,7 +1709,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_senafrQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2304,8 +1722,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIChokePos* widget = new CMIChokePos();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrChokePos, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_chposQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2322,7 +1740,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_chposQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2330,14 +1747,14 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    break;
   }
   case IDM_MI_MET_GDPOS:
-  {
+  {                                  	
    if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIGDPos* widget = new CMIGDPos();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrGDPos, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_gdposQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2354,7 +1771,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_gdposQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2368,8 +1784,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMISynLoad* widget = new CMISynLoad();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrSynLoad, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_synldQVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2386,7 +1802,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_synldQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2400,8 +1815,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIInjTimB* widget = new CMIInjTimB();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrInjTimB, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_itbQVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetITMode(m_it_mode);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2419,7 +1834,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_itbQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
@@ -2434,8 +1848,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIInjTimE* widget = new CMIInjTimE();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrInjTimE, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_iteQVal[0], NULL, NULL);  
    widget->SetITMode(m_it_mode);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2453,7 +1867,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_iteQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
@@ -2468,8 +1881,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIFuelConsumF* widget = new CMIFuelConsumF();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrFuelConsumF, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_fuelcfQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2486,7 +1899,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_fuelcfQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2500,8 +1912,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIFtls* widget = new CMIFtls();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrFtls, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_ftlsQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2518,7 +1930,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_ftlsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2532,8 +1943,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIEgts* widget = new CMIEgts();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrEgts, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_egtsQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2550,7 +1961,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_egtsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2564,8 +1974,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIOps* widget = new CMIOps();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrOps, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_opsQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2582,7 +1992,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_opsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2596,8 +2005,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIInjDuty* widget = new CMIInjDuty();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(NULL, NULL, NULL); //<--don't avarage inj. duty
    widget->Create(this);
-   widget->BindVars(&m_injdutyQVal, NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2614,7 +2023,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_injdutyQVal, NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2628,8 +2036,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIMaf* widget = new CMIMaf();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrMAF, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_mafQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2646,7 +2054,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_mafQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2660,8 +2067,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIVentDuty* widget = new CMIVentDuty();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(NULL, NULL, NULL);  //<-- don't avarage vent. duty
    widget->Create(this);
-   widget->BindVars(&m_ventdutyQVal, NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2678,7 +2085,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_ventdutyQVal, NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2692,8 +2098,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIFts* widget = new CMIFts();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrFts, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_ftsQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2710,7 +2116,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_ftsQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2724,8 +2129,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIEGOCorr2* widget = new CMIEGOCorr2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrEGOCorr, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_egoc2QVal[0], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2742,7 +2147,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_egoc2QVal[1], NULL, NULL);  
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2756,8 +2160,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMISensAFR2* widget = new CMISensAFR2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_senafr2QVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2774,7 +2178,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_senafr2QVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2788,8 +2191,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMITargAFR* widget = new CMITargAFR();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrTargAFR, NULL, NULL);
    widget->Create(this);
-   widget->BindVars(&m_tarafrQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2806,7 +2209,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_tarafrQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2820,8 +2222,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIDiffAFR* widget = new CMIDiffAFR();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);  //<-- don't use averaging
    widget->Create(this);
-   widget->BindVars(&m_diffAfrQVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2838,7 +2240,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_diffAfrQVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -2852,8 +2253,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIDiffAFR2* widget = new CMIDiffAFR2();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);  //<-- don't use averaging
    widget->Create(this);
-   widget->BindVars(&m_diffAfr2QVal[0], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2870,7 +2271,6 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->BindVars(&m_diffAfr2QVal[1], NULL, NULL);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));

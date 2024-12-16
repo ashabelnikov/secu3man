@@ -44,13 +44,7 @@ CMIFts::~CMIFts()
 
 void CMIFts::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_FTS); //create window
- 
- m_tlpFmt = _T("%0.1f ");
- m_trpFmt = _T("%0.1f ");
-
- m_tlpUnit = _T("%%");
- m_trpUnit = _T("%%");
+ MeasInstrBase::Create(pParent, IDC_MI_FTS, false, false); //create window
 
  m_meter.SetRange (-40.0, 120.0);
  m_meter.SetLabelsDecimals(1);
@@ -64,8 +58,6 @@ void CMIFts::Create(CWnd* pParent)
  m_meter.AddAlertZone(-40,50,RGB(130,130,180));
  m_meter.AddAlertZone(50,100,RGB(120,120,120));
  m_meter.AddAlertZone(100,120,RGB(230,130,130));
- m_meter.SetTRPane(_T("n/a"));
- m_meter.SetTLPane(_T("n/a"));
  m_meter.SetNeedleValue(-40.0);
  m_meter.Update();
 }
@@ -73,6 +65,11 @@ void CMIFts::Create(CWnd* pParent)
 void CMIFts::SetLimits(float loLimit, float upLimit)
 {
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
+void CMIFts::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->fts, 0, 0, i_revdir);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -92,8 +89,7 @@ CMIFtsGraph::~CMIFtsGraph()
 void CMIFtsGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_FTSGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_FTSGRAPH);
 
  // customize the control
  m_scope.SetRange(-40.0, 120);
@@ -111,4 +107,9 @@ void CMIFtsGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
  m_scope.SetRange(loLimit, upLimit);
+}
+
+void CMIFtsGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->fts, i_revdir);
 }

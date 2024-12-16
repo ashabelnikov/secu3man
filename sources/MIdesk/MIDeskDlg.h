@@ -29,7 +29,6 @@
 #include "IMIView.h"
 #include "io-core/SECU3IO.h"
 #include "MeasInstrBase.h"
-#include "RingBuffer.h"
 
 #include "ui-core/DialogWithAccelerators.h"
 #include "ui-core/MultiLEDCtrl.h"
@@ -78,43 +77,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //Show/hide speed and distance indicators
   void ShowSpeedAndDistance(bool i_show);
 
-  void SetRPMAverageNum(int avnum);
-  void SetVoltAverageNum(int avnum);
-  void SetMAPAverageNum(int avnum);
-  void SetAI1AverageNum(int avnum);
-  void SetTPSAverageNum(int avnum);
-  void SetKnockAverageNum(int avnum);
-  void SetIgnTimAverageNum(int avnum);
-
-  void SetCLTAverageNum(int avnum);
-  void SetAddI2AverageNum(int avnum);  
-  void SetInjPWAverageNum(int avnum);
-  void SetIATAverageNum(int avnum);
-  void SetEGOCorrAverageNum(int avnum);
-  void SetAirFlowAverageNum(int avnum);
-  void SetVehicleSpeedAverageNum(int avnum);
-  void SetTPSDotAverageNum(int avnum);
-  void SetMAPDotAverageNum(int avnum);
-  void SetMAP2AverageNum(int avnum);
-  void SetMAPDAverageNum(int avnum);
-  void SetTmp2AverageNum(int avnum);
-  void SetFuelConsumAverageNum(int avnum);
-  void SetFuelConsumFAverageNum(int avnum);
-  void SetKnockRetardAverageNum(int avnum);
-  void SetSensAFRAverageNum(int avnum);
-  void SetChokePosAverageNum(int avnum);
-  void SetGDPosAverageNum(int avnum);
-  void SetSynLoadAverageNum(int avnum);
-  void SetInjTimBAverageNum(int avnum);
-  void SetInjTimEAverageNum(int avnum);
-  void SetGrtsAverageNum(int avnum);
-  void SetFtlsAverageNum(int avnum);
-  void SetEgtsAverageNum(int avnum);
-  void SetOpsAverageNum(int avnum);
-  void SetMAFAverageNum(int avnum);
-  void SetFtsAverageNum(int avnum);
-  void SetTargAFRAverageNum(int avnum);
-  void SetGPSAverageNum(int avnum);
+  void SetMetAverage(MetAverage& ma);
 
   typedef std::pair<int, COLORREF> IndCfg_t;
 
@@ -262,91 +225,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   bool m_graphShowValue;
   int m_graphValueHeight;
 
-  RingBuffItem m_ringRPM;
-  RingBuffItem m_ringKnock;
-  RingBuffItem m_ringVBat;
-  RingBuffItem m_ringMAP;
-  RingBuffItem m_ringAddI1;
-  RingBuffItem m_ringTPS;
-  RingBuffItem m_ringIgnTim;
-  RingBuffItem m_ringCLT;
-  RingBuffItem m_ringAddI2;
-  RingBuffItem m_ringInjPW;
-  RingBuffItem m_ringIAT;
-  RingBuffItem m_ringEGOCorr;
-  RingBuffItem m_ringEGOCorr2;
-  RingBuffItem m_ringAirFlow;
-  RingBuffItem m_ringVehicleSpeed;
-  RingBuffItem m_ringTPSDot;
-  RingBuffItem m_ringMAPDot;
-  RingBuffItem m_ringMAP2;
-  RingBuffItem m_ringMAPD;
-  RingBuffItem m_ringTmp2;
-  RingBuffItem m_ringFuelConsum;
-  RingBuffItem m_ringFuelConsumH;
-  RingBuffItem m_ringKnockRetard;
-  RingBuffItem m_ringSensAFR;
-  RingBuffItem m_ringSensAFR2;
-  RingBuffItem m_ringChokePos;
-  RingBuffItem m_ringGDPos;
-  RingBuffItem m_ringSynLoad;
-  RingBuffItem m_ringInjTimB;
-  RingBuffItem m_ringInjTimE;
-  RingBuffItem m_ringFuelConsumF;
-  RingBuffItem m_ringGrts;
-  RingBuffItem m_ringFtls;
-  RingBuffItem m_ringEgts;
-  RingBuffItem m_ringOps;
-  RingBuffItem m_ringMAF;
-  RingBuffItem m_ringFts;
-  RingBuffItem m_ringTargAFR;
-  RingBuffItem m_ringGPS;
-
-  GraphVal_t m_rpmQVal[2];
-  GraphVal_t m_knockQVal[2];
-  GraphVal_t m_vbatQVal[2];
-  GraphVal_t m_mapQVal[2];
-  GraphVal_t m_ai1QVal[2];
-  GraphVal_t m_tpsQVal[2];
-  GraphVal_t m_igntimQVal[2];
-  GraphVal_t m_cltQVal[2];
-  GraphVal_t m_ai2QVal[2];
-  GraphVal_t m_injpwQVal[2];
-  GraphVal_t m_iatQVal[2];
-  GraphVal_t m_egocQVal[2];
-  GraphVal_t m_airflQVal[2];
-  GraphVal_t m_vssQVal[2];
-  GraphVal_t m_tpsdotQVal[2];
-  GraphVal_t m_mapdotQVal[2];
-  GraphVal_t m_map2QVal[2];
-  GraphVal_t m_mapdQVal[2];
-  GraphVal_t m_tmp2QVal[2];
-  GraphVal_t m_fuelcQVal[2];
-  GraphVal_t m_fuelchQVal[2];
-  GraphVal_t m_knkretQVal[2];
-  GraphVal_t m_senafrQVal[2];
-  GraphVal_t m_chposQVal[2];
-  GraphVal_t m_gdposQVal[2];
-  GraphVal_t m_synldQVal[2];
-  GraphVal_t m_itbQVal[2];
-  GraphVal_t m_iteQVal[2];
-  GraphVal_t m_distQVal;
-  GraphVal_t m_fuelcfQVal[2];
-  GraphVal_t m_grtsQVal[2];
-  GraphVal_t m_ftlsQVal[2];
-  GraphVal_t m_egtsQVal[2];
-  GraphVal_t m_opsQVal[2];
-  GraphVal_t m_injdutyQVal;
-  GraphVal_t m_mafQVal[2];
-  GraphVal_t m_ventdutyQVal;
-  GraphVal_t m_ftsQVal[2];
-  GraphVal_t m_conflQVal;
-  GraphVal_t m_egoc2QVal[2];
-  GraphVal_t m_senafr2QVal[2];
-  GraphVal_t m_tarafrQVal[2];
-  GraphVal_t m_diffAfrQVal[2];
-  GraphVal_t m_diffAfr2QVal[2];
-  GraphVal_t m_gpsQVal[2];
+  MetAverage m_avrNum;
 };
 
 /////////////////////////////////////////////////////////////////////////////

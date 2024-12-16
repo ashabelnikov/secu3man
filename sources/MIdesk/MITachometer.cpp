@@ -44,7 +44,7 @@ CMITachometer::~CMITachometer()
 
 void CMITachometer::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_TACHOMETER); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_TACHOMETER, true, true); //create window, use left pane and right pane
 
  m_tlpFmt = _T("%0.1f ");
  m_trpFmt = _T("%0.1f ");
@@ -69,6 +69,11 @@ void CMITachometer::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true);  //<-- also update alert zones
 }
 
+void CMITachometer::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append((float)i_values->rpm, i_values->speed, i_values->distance, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -86,8 +91,7 @@ CMITachometerGraph::~CMITachometerGraph()
 void CMITachometerGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TACHOMETERGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_TACHOMETERGRAPH);
 
  // customize the control
  m_scope.SetRange(0, 8000.0);
@@ -105,4 +109,9 @@ void CMITachometerGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(((int)(upLimit-loLimit)%1000) ? 10 : MathHelpers::Round((upLimit-loLimit)/1000.0));
  m_scope.SetRange(loLimit, upLimit);
+}
+
+void CMITachometerGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append((float)i_values->rpm, i_revdir);
 }

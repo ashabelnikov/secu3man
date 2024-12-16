@@ -135,42 +135,7 @@ class CAppSettingsModel : public ISettingsData
   //fixtures's customization
   virtual ESpeedUnit GetSpeedUnit(void) const;
 
-  virtual int GetRPMAverage(void) const;
-  virtual int GetVoltAverage(void) const;
-  virtual int GetMAPAverage(void) const;
-  virtual int GetAI1Average(void) const;
-  virtual int GetTPSAverage(void) const;
-  virtual int GetKnockAverage(void) const;
-  virtual int GetIgnTimAverage(void) const;
-  virtual int GetCLTAverage(void) const;
-  virtual int GetAddI2Average(void) const;
-  virtual int GetInjPWAverage(void) const;
-  virtual int GetIATAverage(void) const;
-  virtual int GetEGOCorrAverage(void) const;
-  virtual int GetAirFlowAverage(void) const;
-  virtual int GetVehicleSpeedAverage(void) const;
-  virtual int GetTPSDotAverage(void) const;
-  virtual int GetMAPDotAverage(void) const;
-  virtual int GetMAP2Average(void) const;
-  virtual int GetGPSAverage(void) const;
-  virtual int GetMAPDAverage(void) const;
-  virtual int GetTmp2Average(void) const;
-  virtual int GetFuelConsumAverage(void) const;
-  virtual int GetFuelConsumFAverage(void) const;
-  virtual int GetKnockRetardAverage(void) const;
-  virtual int GetSensAFRAverage(void) const;
-  virtual int GetChokePosAverage(void) const;
-  virtual int GetGDPosAverage(void) const;
-  virtual int GetSynLoadAverage(void) const;
-  virtual int GetInjTimBAverage(void) const;
-  virtual int GetInjTimEAverage(void) const;
-  virtual int GetGrtsAverage(void) const;
-  virtual int GetFtlsAverage(void) const;
-  virtual int GetEgtsAverage(void) const;
-  virtual int GetOpsAverage(void) const;
-  virtual int GetMAFAverage(void) const;
-  virtual int GetFtsAverage(void) const;
-  virtual int GetTargAFRAverage(void) const;
+  virtual void GetMetAverage(MetAverage& ma);
 
   virtual int GetTitleFontSize(void) const;
   virtual int GetValueFontSize(void) const;
@@ -332,7 +297,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optRPMAverage;
   OptField_t<int>  m_optVoltAverage;
   OptField_t<int>  m_optMAPAverage;
-  OptField_t<int>  m_optAI1Average;
+  OptField_t<int>  m_optAddI1Average;
   OptField_t<int>  m_optTPSAverage;
   OptField_t<int>  m_optKnockAverage;
   OptField_t<int>  m_optIgnTimAverage;

@@ -44,7 +44,7 @@ CMIFtls::~CMIFtls()
 
 void CMIFtls::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_FTLS); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_FTLS, false, false); //create window
  
  m_meter.SetRange(0.0, 100.0);
  m_meter.SetLabelsDecimals(1);
@@ -67,6 +67,11 @@ void CMIFtls::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIFtls::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->ftls, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -84,8 +89,7 @@ CMIFtlsGraph::~CMIFtlsGraph()
 void CMIFtlsGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_FTLSGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_FTLSGRAPH);
 
  // customize the control
  m_scope.SetRange(0.0, 100.0);
@@ -103,4 +107,9 @@ void CMIFtlsGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
  m_scope.SetRange(loLimit, upLimit);
+}
+
+void CMIFtlsGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->ftls, i_revdir);
 }

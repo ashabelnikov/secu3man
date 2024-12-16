@@ -45,7 +45,7 @@ CMIPressure::~CMIPressure()
 
 void CMIPressure::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_MAP); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_MAP, false, false); //create window
 
  m_meter.SetRange (10.0, 110.0);
  m_meter.SetLabelsDecimals(0);
@@ -68,6 +68,11 @@ void CMIPressure::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIPressure::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->pressure, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -85,8 +90,7 @@ CMIPressureGraph::~CMIPressureGraph()
 void CMIPressureGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_PRESSURE_GRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_PRESSURE_GRAPH);
 
  // customize the control
  m_scope.SetRange(0, 110.0);
@@ -104,4 +108,9 @@ void CMIPressureGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(10);
  m_scope.SetRange(loLimit, upLimit);
+}
+
+void CMIPressureGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->pressure, 0, 0, i_revdir);
 }

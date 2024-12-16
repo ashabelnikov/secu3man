@@ -40,9 +40,9 @@ CMITPSDot::~CMITPSDot()
 
 void CMITPSDot::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_TPSDOT); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_TPSDOT, false, false); //create window
 
- m_tlpFmt = _T("%0.0f ");
+// m_tlpFmt = _T("%0.0f ");
 
  m_meter.SetRange (-500.0, 500.0);
  m_meter.SetLabelsDecimals(0);
@@ -68,6 +68,11 @@ void CMITPSDot::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMITPSDot::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append((float)i_values->tpsdot, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -85,8 +90,7 @@ CMITPSDotGraph::~CMITPSDotGraph()
 void CMITPSDotGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TPSDOTGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_TPSDOTGRAPH);
 
  // customize the control
  m_scope.SetRange(-500, 500);
@@ -98,4 +102,9 @@ void CMITPSDotGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMITPSDotGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append((float)i_values->tpsdot, i_revdir);
 }

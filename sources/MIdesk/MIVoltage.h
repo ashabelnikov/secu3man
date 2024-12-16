@@ -52,6 +52,7 @@ class AFX_EXT_CLASS CMIAddI1 : public CMIVoltage
   virtual ~CMIAddI1() {}
 
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 class AFX_EXT_CLASS CMIAddI1Graph : public MeasInstrBase
@@ -62,6 +63,7 @@ class AFX_EXT_CLASS CMIAddI1Graph : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };
 
@@ -72,6 +74,7 @@ class AFX_EXT_CLASS CMIAddI2 : public CMIVoltage
   virtual ~CMIAddI2() {}
 
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 class AFX_EXT_CLASS CMIAddI2Graph : public MeasInstrBase
@@ -82,5 +85,6 @@ class AFX_EXT_CLASS CMIAddI2Graph : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };

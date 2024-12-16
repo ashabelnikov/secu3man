@@ -74,41 +74,7 @@ class ISettingsData
 
   //Fixtures's customization settings
   virtual ESpeedUnit GetSpeedUnit(void) const = 0;
-  virtual int GetRPMAverage(void) const = 0;
-  virtual int GetVoltAverage(void) const = 0;
-  virtual int GetMAPAverage(void) const = 0;
-  virtual int GetAI1Average(void) const = 0;
-  virtual int GetTPSAverage(void) const = 0;
-  virtual int GetKnockAverage(void) const = 0;
-  virtual int GetIgnTimAverage(void) const = 0;
-  virtual int GetCLTAverage(void) const = 0;
-  virtual int GetAddI2Average(void) const = 0;
-  virtual int GetInjPWAverage(void) const = 0;
-  virtual int GetIATAverage(void) const = 0;
-  virtual int GetEGOCorrAverage(void) const = 0;
-  virtual int GetAirFlowAverage(void) const = 0;
-  virtual int GetVehicleSpeedAverage(void) const = 0;
-  virtual int GetTPSDotAverage(void) const = 0;
-  virtual int GetMAP2Average(void) const = 0;
-  virtual int GetGPSAverage(void) const = 0;
-  virtual int GetMAPDAverage(void) const = 0;
-  virtual int GetTmp2Average(void) const = 0;
-  virtual int GetFuelConsumAverage(void) const = 0;
-  virtual int GetFuelConsumFAverage(void) const = 0;
-  virtual int GetKnockRetardAverage(void) const = 0;
-  virtual int GetSensAFRAverage(void) const = 0;
-  virtual int GetChokePosAverage(void) const = 0;
-  virtual int GetGDPosAverage(void) const = 0;
-  virtual int GetSynLoadAverage(void) const = 0;
-  virtual int GetInjTimBAverage(void) const = 0;
-  virtual int GetInjTimEAverage(void) const = 0;
-  virtual int GetGrtsAverage(void) const = 0;
-  virtual int GetFtlsAverage(void) const = 0;
-  virtual int GetEgtsAverage(void) const = 0;
-  virtual int GetOpsAverage(void) const = 0;
-  virtual int GetMAFAverage(void) const = 0;
-  virtual int GetFtsAverage(void) const = 0;
-  virtual int GetTargAFRAverage(void) const = 0;
+  virtual void GetMetAverage(MetAverage& ma) = 0;
 
   virtual int GetTitleFontSize(void) const = 0;
   virtual int GetValueFontSize(void) const = 0;

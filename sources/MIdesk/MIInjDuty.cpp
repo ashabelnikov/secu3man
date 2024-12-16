@@ -44,7 +44,7 @@ CMIInjDuty::~CMIInjDuty()
 
 void CMIInjDuty::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_INJ_DUTY); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_INJ_DUTY, false, false); //create window
 
  m_meter.SetRange (0, 100.00);
  m_meter.SetLabelsDecimals(0);
@@ -68,6 +68,11 @@ void CMIInjDuty::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIInjDuty::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_duty, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -85,8 +90,7 @@ CMIInjDutyGraph::~CMIInjDutyGraph()
 void CMIInjDutyGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_INJ_DUTYGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_INJ_DUTYGRAPH);
 
  // customize the control
  m_scope.SetRange(0, 100);
@@ -98,4 +102,9 @@ void CMIInjDutyGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIInjDutyGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_duty, i_revdir);
 }

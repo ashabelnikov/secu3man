@@ -44,7 +44,7 @@ CMISensAFR::~CMISensAFR()
 
 void CMISensAFR::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_SENSAFR); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_SENSAFR, false, false); //create window
 
  m_meter.SetRange (6.0, 24.0);
  m_meter.SetLabelsDecimals(1);
@@ -72,6 +72,10 @@ void CMISensAFR::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMISensAFR::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr, 0, 0, i_revdir);
+}
 
 CMISensAFR2::CMISensAFR2()
 {
@@ -85,7 +89,7 @@ CMISensAFR2::~CMISensAFR2()
 
 void CMISensAFR2::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_SENSAFR2); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_SENSAFR2, false, false); //create window
 
  m_meter.SetRange (6.0, 24.0);
  m_meter.SetLabelsDecimals(1);
@@ -113,6 +117,11 @@ void CMISensAFR2::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMISensAFR2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr2, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -130,8 +139,7 @@ CMISensAFRGraph::~CMISensAFRGraph()
 void CMISensAFRGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_SENSAFRGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_SENSAFRGRAPH);
 
  // customize the control
  m_scope.SetRange(6, 24);
@@ -143,6 +151,11 @@ void CMISensAFRGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMISensAFRGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr, i_revdir);
 }
 
 CMISensAFR2Graph::CMISensAFR2Graph()
@@ -158,8 +171,7 @@ CMISensAFR2Graph::~CMISensAFR2Graph()
 void CMISensAFR2Graph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_SENSAFR2GRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_SENSAFR2GRAPH);
 
  // customize the control
  m_scope.SetRange(6, 24);
@@ -171,4 +183,9 @@ void CMISensAFR2Graph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMISensAFR2Graph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr2, i_revdir);
 }

@@ -40,9 +40,7 @@ CMIAirFlow::~CMIAirFlow()
 
 void CMIAirFlow::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_AIR_FLOW); //create window
-
- m_tlpFmt = _T("%0.0f ");
+ MeasInstrBase::Create(pParent, IDC_MI_AIR_FLOW, false, false); //create window
 
  m_meter.SetRange (0.0, 16.0);
  m_meter.SetLabelsDecimals(0);
@@ -69,8 +67,6 @@ void CMIAirFlow::Create(CWnd* pParent)
  m_meter.AddAlertZone(13,14,RGB(150,150,255));
  m_meter.AddAlertZone(14,15,RGB(150,150,255));
  m_meter.AddAlertZone(15,16,RGB(150,150,255));
- m_meter.SetTRPane(_T("n/a"));
- m_meter.SetTLPane(_T("n/a"));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
 }
@@ -78,6 +74,11 @@ void CMIAirFlow::Create(CWnd* pParent)
 void CMIAirFlow::SetLimits(float loLimit, float upLimit)
 {
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+}
+
+void CMIAirFlow::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->air_flow, 0, 0, i_revdir);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -97,8 +98,7 @@ CMIAirFlowGraph::~CMIAirFlowGraph()
 void CMIAirFlowGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_AIR_FLOWGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_AIR_FLOWGRAPH);
 
  // customize the control
  m_scope.SetRange(0, 16);
@@ -110,4 +110,9 @@ void CMIAirFlowGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIAirFlowGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->air_flow, i_revdir);
 }

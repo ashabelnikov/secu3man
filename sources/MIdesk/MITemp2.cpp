@@ -44,7 +44,7 @@ CMITemp2::~CMITemp2()
 
 void CMITemp2::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_TMP2); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_TMP2, false, false); //create window
 
  m_meter.SetRange (-40.0, 120.0);
  m_meter.SetLabelsDecimals(1);
@@ -68,6 +68,11 @@ void CMITemp2::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMITemp2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->tmp2, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -85,8 +90,7 @@ CMITemp2Graph::~CMITemp2Graph()
 void CMITemp2Graph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TMP2GRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_TMP2GRAPH);
 
  // customize the control
  m_scope.SetRange(-40.0, 120);
@@ -104,4 +108,9 @@ void CMITemp2Graph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
  m_scope.SetRange(loLimit, upLimit);
+}
+
+void CMITemp2Graph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->tmp2, i_revdir);
 }

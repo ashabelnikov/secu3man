@@ -44,7 +44,7 @@ CMIThrottleGate::~CMIThrottleGate()
 
 void CMIThrottleGate::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_TPS); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_TPS, true, false); //create window
 
  m_tlpFmt = _T("%0.0f ");
 
@@ -71,6 +71,11 @@ void CMIThrottleGate::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIThrottleGate::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->tps, i_values->air_flow, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -88,8 +93,7 @@ CMIThrottleGateGraph::~CMIThrottleGateGraph()
 void CMIThrottleGateGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_THROTTLEGATEGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_THROTTLEGATEGRAPH);
 
  // customize the control
  m_scope.SetRange(0.0, 100.0);
@@ -101,4 +105,9 @@ void CMIThrottleGateGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIThrottleGateGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->tps, i_revdir);
 }

@@ -84,7 +84,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optRPMAverage(_T("RPMAverage"))
 , m_optVoltAverage(_T("VoltAverage"))
 , m_optMAPAverage(_T("MAPAverage"))
-, m_optAI1Average(_T("AI1Average"))
+, m_optAddI1Average(_T("AddI1Average"))
 , m_optTPSAverage(_T("TPSAverage"))
 , m_optKnockAverage(_T("KnockAverage"))
 , m_optIgnTimAverage(_T("IgnTimAverage"))
@@ -956,7 +956,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optRPMAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optVoltAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optMAPAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optAI1Average, _T("4"), 0, 16);
+ fs.ReadInt(m_optAddI1Average, _T("4"), 0, 16);
  fs.ReadInt(m_optTPSAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optKnockAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optIgnTimAverage, _T("4"), 0, 16);
@@ -2042,7 +2042,7 @@ bool CAppSettingsModel::WriteSettings(void)
   fs.WriteComment(_T("Size of the moving average filter used for ADD_I1 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ADD_I1. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
- fs.WriteInt(m_optAI1Average); 
+ fs.WriteInt(m_optAddI1Average); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Size of the moving average filter used for TPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
@@ -6524,161 +6524,6 @@ bool CAppSettingsModel::GetShowWelcome(void) const
  return m_optShowWelcome.value;
 }
 
-int CAppSettingsModel::GetRPMAverage(void) const
-{
- return m_optRPMAverage.value;
-}
-
-int CAppSettingsModel::GetVoltAverage(void) const
-{
- return m_optVoltAverage.value;
-}
-
-int CAppSettingsModel::GetMAPAverage(void) const
-{
- return m_optMAPAverage.value;
-}
-
-int CAppSettingsModel::GetAI1Average(void) const
-{
- return m_optAI1Average.value;
-}
-
-int CAppSettingsModel::GetTPSAverage(void) const
-{
- return m_optTPSAverage.value;
-}
-
-int CAppSettingsModel::GetKnockAverage(void) const
-{
- return m_optKnockAverage.value;
-}
-
-int CAppSettingsModel::GetIgnTimAverage(void) const
-{
- return m_optIgnTimAverage.value;
-}
-
-int CAppSettingsModel::GetCLTAverage(void) const
-{
- return m_optCLTAverage.value;
-}
-
-int CAppSettingsModel::GetAddI2Average(void) const
-{
- return m_optAddI2Average.value;
-}
-
-int CAppSettingsModel::GetInjPWAverage(void) const
-{
- return m_optInjPWAverage.value;
-}
-
-int CAppSettingsModel::GetIATAverage(void) const
-{
- return m_optIATAverage.value;
-}
-
-int CAppSettingsModel::GetEGOCorrAverage(void) const
-{
- return m_optEGOCorrAverage.value;
-}
-
-int CAppSettingsModel::GetAirFlowAverage(void) const
-{
- return m_optAirFlowAverage.value;
-}
-
-int CAppSettingsModel::GetVehicleSpeedAverage(void) const
-{
- return m_optVehicleSpeedAverage.value;
-}
-
-int CAppSettingsModel::GetTPSDotAverage(void) const
-{
- return m_optTPSDotAverage.value;
-}
-
-int CAppSettingsModel::GetMAPDotAverage(void) const
-{
- return m_optMAPDotAverage.value;
-}
-
-int CAppSettingsModel::GetMAP2Average(void) const
-{
- return m_optMAP2Average.value;
-}
-
-int CAppSettingsModel::GetGPSAverage(void) const
-{
- return m_optGPSAverage.value;
-}
-
-int CAppSettingsModel::GetMAPDAverage(void) const
-{
- return m_optMAPDAverage.value;
-}
-
-int CAppSettingsModel::GetTmp2Average(void) const
-{
- return m_optTmp2Average.value;
-}
-
-int CAppSettingsModel::GetFuelConsumAverage(void) const
-{
- return m_optFuelConsumAverage.value;
-}
-
-int CAppSettingsModel::GetFuelConsumFAverage(void) const
-{
- return m_optFuelConsumFAverage.value;
-}
-
-int CAppSettingsModel::GetKnockRetardAverage(void) const
-{
- return m_optKnockRetardAverage.value;
-}
-
-int CAppSettingsModel::GetSensAFRAverage(void) const
-{
- return m_optSensAFRAverage.value;
-}
-
-int CAppSettingsModel::GetChokePosAverage(void) const
-{
- return m_optChokePosAverage.value;
-}
-
-int CAppSettingsModel::GetGDPosAverage(void) const
-{
- return m_optGDPosAverage.value;
-}
-
-int CAppSettingsModel::GetSynLoadAverage(void) const
-{
- return m_optSynLoadAverage.value;
-}
-
-int CAppSettingsModel::GetInjTimBAverage(void) const
-{
- return m_optInjTimBAverage.value;
-}
-
-int CAppSettingsModel::GetInjTimEAverage(void) const
-{
- return m_optInjTimEAverage.value;
-}
-
-int CAppSettingsModel::GetMAFAverage(void) const
-{
- return m_optMAFAverage.value;
-}
-
-int CAppSettingsModel::GetTargAFRAverage(void) const
-{
- return m_optTargAFRAverage.value;
-}
-
 bool CAppSettingsModel::GetAllowVisualTheme(void) const
 {
  return m_optAllowVisualTheme.value;
@@ -7574,29 +7419,44 @@ int CAppSettingsModel::GetIniEditorSyntax(void) const
  return m_optIniEdSyntax.value;
 }
 
-int CAppSettingsModel::GetGrtsAverage(void) const
+void CAppSettingsModel::GetMetAverage(MetAverage& ma)
 {
- return m_optGrtsAverage.value;
-}
-
-int CAppSettingsModel::GetFtlsAverage(void) const
-{
- return m_optFtlsAverage.value;
-}
-
-int CAppSettingsModel::GetEgtsAverage(void) const
-{
- return m_optEgtsAverage.value;
-}
-
-int CAppSettingsModel::GetOpsAverage(void) const
-{
- return m_optOpsAverage.value;
-}
-
-int CAppSettingsModel::GetFtsAverage(void) const
-{
- return m_optFtsAverage.value;
+ ma.avrRPM = m_optRPMAverage.value;
+ ma.avrVolt = m_optVoltAverage.value;
+ ma.avrMAP = m_optMAPAverage.value;
+ ma.avrAddI1 = m_optAddI1Average.value;
+ ma.avrTPS = m_optTPSAverage.value;
+ ma.avrKnock = m_optKnockAverage.value;
+ ma.avrIgnTim = m_optIgnTimAverage.value;
+ ma.avrCLT = m_optCLTAverage.value;
+ ma.avrAddI2 = m_optAddI2Average.value;
+ ma.avrInjPW = m_optInjPWAverage.value;
+ ma.avrIAT = m_optIATAverage.value;
+ ma.avrEGOCorr = m_optEGOCorrAverage.value;
+ ma.avrAirFlow = m_optAirFlowAverage.value;
+ ma.avrVehicleSpeed = m_optVehicleSpeedAverage.value;
+ ma.avrTPSDot = m_optTPSDotAverage.value;
+ ma.avrMAPDot = m_optMAPDotAverage.value;
+ ma.avrMAP2 = m_optMAP2Average.value;
+ ma.avrGPS = m_optGPSAverage.value;
+ ma.avrMAPD = m_optMAPDAverage.value;
+ ma.avrTmp2 = m_optTmp2Average.value;
+ ma.avrFuelConsum = m_optFuelConsumAverage.value;
+ ma.avrFuelConsumF = m_optFuelConsumFAverage.value;
+ ma.avrKnockRetard = m_optKnockRetardAverage.value;
+ ma.avrSensAFR = m_optSensAFRAverage.value;
+ ma.avrChokePos = m_optChokePosAverage.value;
+ ma.avrGDPos = m_optGDPosAverage.value;
+ ma.avrSynLoad = m_optSynLoadAverage.value;
+ ma.avrInjTimB = m_optInjTimBAverage.value;
+ ma.avrInjTimE = m_optInjTimEAverage.value;
+ ma.avrMAF = m_optMAFAverage.value;
+ ma.avrTargAFR = m_optTargAFRAverage.value;
+ ma.avrGrts = m_optGrtsAverage.value;
+ ma.avrFtls = m_optFtlsAverage.value;
+ ma.avrEgts = m_optEgtsAverage.value;
+ ma.avrOps = m_optOpsAverage.value;
+ ma.avrFts = m_optFtsAverage.value;
 }
 
 bool CAppSettingsModel::GetSpotMarkers(void) const

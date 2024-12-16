@@ -44,7 +44,7 @@ CMITemperature::~CMITemperature()
 
 void CMITemperature::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_TEMPERATURE); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_TEMPERATURE, true, true); //create window
  
  m_tlpFmt = _T("%0.1f ");
  m_trpFmt = _T("%0.1f ");
@@ -75,6 +75,11 @@ void CMITemperature::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMITemperature::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->temperat, i_values->gasdose_pos, i_values->choke_pos, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -92,8 +97,7 @@ CMITemperatureGraph::~CMITemperatureGraph()
 void CMITemperatureGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_TEMPERATUREGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_TEMPERATUREGRAPH);
 
  // customize the control
  m_scope.SetRange(-40.0, 120);
@@ -111,4 +115,9 @@ void CMITemperatureGraph::SetLimits(float loLimit, float upLimit)
 {
  m_scope.SetGridNumberY(8);
  m_scope.SetRange(loLimit, upLimit);
+}
+
+void CMITemperatureGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->temperat, i_revdir);
 }

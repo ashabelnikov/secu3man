@@ -28,11 +28,14 @@
 #include <vector>
 #include <utility>
 #include "common/GDIHelpers.h"
+#include "io-core/SECU3IO.h"
 #include "ui-core/AnalogMeterCtrl.h"
 #include "ui-core/OscillCtrl.h"
-
+#include "RingBuffer.h"
 
 typedef std::vector<std::pair<float, bool> > GraphVal_t;
+
+#define MIB_VQR 64
 
 class MeasInstrBase
 {
@@ -40,13 +43,18 @@ class MeasInstrBase
  {
   ASSERT(values);
   float sum = 0;
-  for (size_t i = 0; i < values->size(); ++i)    
+  size_t size = values->size();
+  for (size_t i = 0; i < size; ++i)    
    sum+=(*values)[i].first;
   return sum / values->size();
  }
 
  public:
-  MeasInstrBase() : m_metVal(NULL), m_tlpVal(NULL), m_trpVal(NULL), m_showTLP(false), m_showTRP(false), m_uiID(0) {};
+  MeasInstrBase() : m_showTLP(false), m_showTRP(false), m_uiID(0),
+                    mp_avnumVal(NULL), mp_avnumTlp(NULL), mp_avnumTrp(NULL)
+  {
+   m_metVal.reserve(MIB_VQR);
+  };
   virtual ~MeasInstrBase()
   {
    m_meter.DestroyWindow();
@@ -59,12 +67,43 @@ class MeasInstrBase
    m_meter.SetFontScale(meter_trpane, pane);
    m_meter.SetFontScale(meter_labels, label);
   }
+  
+  void BindAverageNum(int *avnumVal, int *avnumTlp, int *avnumTrp)
+  {
+   mp_avnumVal = avnumVal;
+   mp_avnumTlp = avnumTlp;
+   mp_avnumTrp = avnumTrp;
+  }
 
   //interface for measurement instrument
-  virtual void Create(CWnd* pParent, UINT id)
+  virtual void Create(CWnd* pParent, UINT id, bool showTLP, bool showTRP)
   {
+   m_showTLP = showTLP;
+   m_showTRP = showTRP;
+
+   if (showTLP)
+    m_tlpVal.reserve(MIB_VQR);
+   if (showTRP)
+    m_trpVal.reserve(MIB_VQR);
+
+   if (mp_avnumVal)
+    m_ringMetVal.m_avnum = *mp_avnumVal;   
+   if (mp_avnumTlp)
+    m_ringTlpVal.m_avnum = *mp_avnumTlp;
+   if (mp_avnumTrp)
+    m_ringTrpVal.m_avnum = *mp_avnumTrp;
+
    CRect rect(0,0,10,10);
    VERIFY(m_meter.CreateEx(0, _T("Static"), _T(""), WS_CHILD | WS_VISIBLE | SS_NOTIFY | WS_CLIPSIBLINGS, rect, pParent, id));
+  }
+
+  virtual void Create(CWnd* pParent, UINT id)
+  {
+   m_showTLP = false;
+   m_showTRP = false; //not applicable in oscilloscope ctrl.
+
+   CRect rect(0,0, 100,100);
+   VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, id));
   }
 
   virtual void Resize(const CRect& rect, bool redraw = true)
@@ -81,43 +120,68 @@ class MeasInstrBase
    }
   }
 
-  virtual void SetValues(void)
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false) = 0;
+
+  void Append(float metVal, float tlpVal, float trpVal, bool i_revdir = false)
   {
-   if (m_metVal)
-   {    
-    if (m_meter.GetSafeHwnd())
-    { //meter mode
-     if (m_metVal->size())
-     {
-      m_meter.SetNeedleValue((double)_averageVector(m_metVal));    
-     }
-     if (m_tlpVal && m_tlpVal->size())
-     {
-      CString str;
-      _TSTRING template_str = m_tlpFmt + m_tlpUnit;
-      str.Format(template_str.c_str(), _averageVector(m_tlpVal));
-      m_meter.SetTLPane(str);
-     }
-     if (m_trpVal && m_trpVal->size())
-     {
-      CString str;
-      _TSTRING template_str = m_trpFmt + m_trpUnit;
-      str.Format(template_str.c_str(), _averageVector(m_trpVal));
-      m_meter.SetTRPane(str);
-     }
-     m_meter.Update();
-    }
-    else if (m_scope.GetSafeHwnd())
-    { //oscilloscope mode
-     for (size_t i = 0; i < m_metVal->size(); ++i) 
-      m_scope.AppendPoint((*m_metVal)[i].first, (*m_metVal)[i].second);
-    }
+   m_ringMetVal.Append(metVal);
+   m_ringMetVal.Calculate();
+   m_metVal.push_back(std::make_pair(m_ringMetVal.m_result, i_revdir));
+
+   if (m_showTLP)
+   {
+    m_ringTlpVal.Append(tlpVal);
+    m_ringTlpVal.Calculate();
+    m_tlpVal.push_back(std::make_pair(m_ringTlpVal.m_result, i_revdir));
+   }
+
+   if (m_showTRP)
+   {
+    m_ringTrpVal.Append(trpVal);
+    m_ringTrpVal.Calculate();
+    m_trpVal.push_back(std::make_pair(m_ringTrpVal.m_result, i_revdir));
    }
   }
 
-  virtual void BindVars(GraphVal_t* meter, GraphVal_t* tlpane, GraphVal_t* trpane)
+  void Append(float metVal, bool i_revdir = false)
   {
-   m_metVal = meter, m_tlpVal = tlpane, m_trpVal = trpane;
+   m_metVal.push_back(std::make_pair(metVal, i_revdir));
+  }
+
+  virtual void SetValues(void)
+  {
+   if (m_meter.GetSafeHwnd())
+   { //meter mode
+    if (m_metVal.size())
+    {
+     m_meter.SetNeedleValue((double)_averageVector(&m_metVal));    
+     m_metVal.clear();
+    }
+    if (m_showTLP && m_tlpVal.size())
+    {
+     CString str;
+     _TSTRING template_str = m_tlpFmt + m_tlpUnit;
+     str.Format(template_str.c_str(), _averageVector(&m_tlpVal));
+     m_meter.SetTLPane(str);
+     m_tlpVal.clear();
+    }
+    if (m_showTRP && m_trpVal.size())
+    {
+     CString str;
+     _TSTRING template_str = m_trpFmt + m_trpUnit;
+     str.Format(template_str.c_str(), _averageVector(&m_trpVal));
+     m_meter.SetTRPane(str);
+     m_trpVal.clear();
+    }
+    m_meter.Update();
+   }
+   else if (m_scope.GetSafeHwnd())
+   { //oscilloscope mode
+    size_t size = m_metVal.size();
+    for (size_t i = 0; i < size; ++i) 
+     m_scope.AppendPoint(m_metVal[i].first, m_metVal[i].second);
+    m_metVal.clear();
+   }
   }
 
   //скрытие/отображение прибора
@@ -152,13 +216,13 @@ class MeasInstrBase
     m_scope.EnableWindow(enable);
   }
 
-  //прибор видим или скрыт ?
+  //is gauge visible?
   virtual bool IsVisible(void)
   {
    return (m_meter.IsWindowVisible()) ? true : false;
   }
 
-  //прибор разрешен или запрещен ?
+  //is gauge enabled?
   virtual bool IsEnabled(void)
   {
    bool State = false;
@@ -166,7 +230,7 @@ class MeasInstrBase
    return State;
   }
 
-  //установка пределов измерения
+  //Set scale range
   virtual void SetLimits(float loLimit, float upLimit)
   {
    if (m_meter.GetSafeHwnd())
@@ -175,7 +239,7 @@ class MeasInstrBase
     m_scope.SetRange(loLimit, upLimit);
   }
 
-  //установка количества делений
+  //Set number of tics on the scale
   virtual void SetTicks(int number)
   {
    m_meter.SetTickNumber(number);
@@ -183,6 +247,8 @@ class MeasInstrBase
 
   virtual void ShowTLP(bool i_show, bool redraw = false)
   {
+   if (i_show)
+    m_tlpVal.reserve(MIB_VQR);
    m_showTLP = i_show;
    m_meter.SetState(meter_tlpane, IsEnabled() && i_show);
    if (redraw)
@@ -191,6 +257,8 @@ class MeasInstrBase
 
   virtual void ShowTRP(bool i_show, bool redraw = false)
   {
+   if (i_show)
+    m_trpVal.reserve(MIB_VQR);
    m_showTRP = i_show;
    m_meter.SetState(meter_trpane, IsEnabled() && i_show);
    if (redraw)
@@ -290,9 +358,17 @@ protected:
   _TSTRING m_tlpUnit;
   _TSTRING m_trpUnit;
 
-  GraphVal_t* m_metVal;
-  GraphVal_t* m_tlpVal;
-  GraphVal_t* m_trpVal;
+  GraphVal_t m_metVal; //queues with values
+  GraphVal_t m_tlpVal;
+  GraphVal_t m_trpVal;
+
+  RingBuffItem m_ringMetVal; //ring buffers for arrow gauges
+  RingBuffItem m_ringTlpVal;
+  RingBuffItem m_ringTrpVal;
+
+  int *mp_avnumVal; //pointer to a number of averages for gauge
+  int *mp_avnumTlp; //... number of averages for left pane
+  int *mp_avnumTrp; //... number of averages for right pane
 
   bool m_showTLP;
   bool m_showTRP;

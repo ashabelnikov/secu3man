@@ -30,7 +30,7 @@
 
 void CMIDiffAFRBase::Create(CWnd* pParent, UINT Id)
 {
- MeasInstrBase::Create(pParent, Id); //create window
+ MeasInstrBase::Create(pParent, Id, false, false); //create window
 
  m_meter.SetRange (-9.0, 9.0);
  m_meter.SetLabelsDecimals(1);
@@ -61,17 +61,26 @@ void CMIDiffAFR::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::LoadString(IDS_MI_DIFFAFR_TITLE));
 }
 
+void CMIDiffAFR::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr - i_values->afrmap, 0, 0, i_revdir);
+}
+
 void CMIDiffAFR2::Create(CWnd* pParent)
 {
  CMIDiffAFRBase::Create(pParent, IDC_MI_DIFFAFR2);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_DIFFAFR2_TITLE));
 }
 
+void CMIDiffAFR2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr2 - i_values->afrmap, 0, 0, i_revdir);
+}
+
 void CMIDiffAFRGraphBase::Create(CWnd* pParent, UINT Id)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, Id));
+ MeasInstrBase::Create(pParent, Id);
 
  // customize the control
  m_scope.SetRange(-9, 9);
@@ -90,8 +99,18 @@ void CMIDiffAFRGraph::Create(CWnd* pParent)
  m_scope.SetUnitY(MLL::GetString(IDS_MI_DIFFAFRGRAPH_V_UNIT));
 }
 
+void CMIDiffAFRGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr - i_values->afrmap, i_revdir);
+}
+
 void CMIDiffAFR2Graph::Create(CWnd* pParent)
 {
  CMIDiffAFRGraphBase::Create(pParent, IDC_MI_DIFFAFR2GRAPH);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_DIFFAFR2GRAPH_V_UNIT));
+}
+
+void CMIDiffAFR2Graph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->afr2 - i_values->afrmap, i_revdir);
 }

@@ -68,40 +68,10 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->SetDistanceUnit(mp_settings->GetSpeedUnit()); //same option for distance
  mp_view->ShowSpeedAndDistance(mp_settings->GetShowSpeedAndDist());
- mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
- mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
- mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
- mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
- mp_view->SetTPSAverageNum(mp_settings->GetTPSAverage());
- mp_view->SetKnockAverageNum(mp_settings->GetKnockAverage());
- mp_view->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
- mp_view->SetCLTAverageNum(mp_settings->GetCLTAverage());
- mp_view->SetAddI2AverageNum(mp_settings->GetAddI2Average());
- mp_view->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
- mp_view->SetIATAverageNum(mp_settings->GetIATAverage());
- mp_view->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
- mp_view->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
- mp_view->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
- mp_view->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
- mp_view->SetMAP2AverageNum(mp_settings->GetMAP2Average());
- mp_view->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
- mp_view->SetTmp2AverageNum(mp_settings->GetTmp2Average());
- mp_view->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
- mp_view->SetFuelConsumFAverageNum(mp_settings->GetFuelConsumFAverage());
- mp_view->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
- mp_view->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
- mp_view->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
- mp_view->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
- mp_view->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
- mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
- mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
- mp_view->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
- mp_view->SetFtlsAverageNum(mp_settings->GetFtlsAverage());
- mp_view->SetEgtsAverageNum(mp_settings->GetEgtsAverage());
- mp_view->SetOpsAverageNum(mp_settings->GetOpsAverage());
- mp_view->SetMAFAverageNum(mp_settings->GetMAFAverage());
- mp_view->SetFtsAverageNum(mp_settings->GetFtsAverage());
- mp_view->SetGPSAverageNum(mp_settings->GetGPSAverage());
+
+ MetAverage ma;
+ mp_settings->GetMetAverage(ma);
+ mp_view->SetMetAverage(ma);
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -113,41 +83,10 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetDistanceUnit(mp_settings->GetSpeedUnit()); //same option for distance
  mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
  mp_view->ShowSpeedAndDistance(mp_settings->GetShowSpeedAndDist());
- mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
- mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
- mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
- mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
- mp_view->SetTPSAverageNum(mp_settings->GetTPSAverage());
- mp_view->SetKnockAverageNum(mp_settings->GetKnockAverage());
- mp_view->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
- mp_view->SetCLTAverageNum(mp_settings->GetCLTAverage());
- mp_view->SetAddI2AverageNum(mp_settings->GetAddI2Average());
- mp_view->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
- mp_view->SetIATAverageNum(mp_settings->GetIATAverage());
- mp_view->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
- mp_view->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
- mp_view->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
- mp_view->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
- mp_view->SetMAP2AverageNum(mp_settings->GetMAP2Average());
- mp_view->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
- mp_view->SetTmp2AverageNum(mp_settings->GetTmp2Average());
- mp_view->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
- mp_view->SetFuelConsumFAverageNum(mp_settings->GetFuelConsumFAverage());
- mp_view->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
- mp_view->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
- mp_view->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
- mp_view->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
- mp_view->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
- mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
- mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
- mp_view->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
- mp_view->SetFtlsAverageNum(mp_settings->GetFtlsAverage());
- mp_view->SetEgtsAverageNum(mp_settings->GetEgtsAverage());
- mp_view->SetOpsAverageNum(mp_settings->GetOpsAverage());
- mp_view->SetMAFAverageNum(mp_settings->GetMAFAverage());
- mp_view->SetITMode(mp_settings->GetITEdMode());
- mp_view->SetFtsAverageNum(mp_settings->GetFtsAverage());
- mp_view->SetGPSAverageNum(mp_settings->GetGPSAverage());
+
+ MetAverage ma;
+ mp_settings->GetMetAverage(ma);
+ mp_view->SetMetAverage(ma);
 }
 
 void CPMMonitorController::OnDeactivate(void)

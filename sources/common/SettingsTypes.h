@@ -39,7 +39,6 @@ typedef enum ESpeedUnit
  SU_MPH
 };
 
-
 //Holds windows's position data
 struct WndSettings
 {
@@ -554,6 +553,46 @@ struct LogFileFields
  _TSTRING m_fldAFRMap;
  _TSTRING m_fldTchrg;
  _TSTRING m_fldGPS;
+};
+
+struct MetAverage
+{
+ int avrRPM;
+ int avrVolt;
+ int avrMAP;
+ int avrAddI1;
+ int avrTPS;
+ int avrKnock;
+ int avrIgnTim;
+ int avrCLT;
+ int avrAddI2;
+ int avrInjPW;
+ int avrIAT;
+ int avrEGOCorr;
+ int avrAirFlow;
+ int avrVehicleSpeed;
+ int avrTPSDot;
+ int avrMAPDot;
+ int avrMAP2;
+ int avrGPS;
+ int avrMAPD;
+ int avrTmp2;
+ int avrFuelConsum;
+ int avrKnockRetard;
+ int avrSensAFR;
+ int avrChokePos;
+ int avrGDPos;
+ int avrSynLoad;
+ int avrInjTimB;
+ int avrInjTimE;
+ int avrFuelConsumF;
+ int avrGrts;
+ int avrFtls;
+ int avrEgts;
+ int avrOps;
+ int avrMAF;
+ int avrFts;
+ int avrTargAFR;
 };
 
 //Functionality

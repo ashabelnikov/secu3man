@@ -44,7 +44,7 @@ CMIChokePosBase::~CMIChokePosBase()
 
 void CMIChokePosBase::Create(CWnd* pParent, UINT id)
 {
- MeasInstrBase::Create(pParent, id); //create window
+ MeasInstrBase::Create(pParent, id, false, false); //create window
 
  m_meter.SetRange (0.0, 100.0);
  m_meter.SetLabelsDecimals(0);
@@ -71,10 +71,20 @@ void CMIChokePos::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::GetString(IDS_MI_CHOKEPOS_TITLE).c_str());
 }
 
+void CMIChokePos::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->choke_pos, 0, 0, i_revdir);
+}
+
 void CMIGDPos::Create(CWnd* pParent)
 {
  CMIChokePosBase::Create(pParent, IDC_MI_GDPOS);
  m_meter.SetTitle(MLL::GetString(IDS_MI_GDPOS_TITLE).c_str());
+}
+
+void CMIGDPos::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->gasdose_pos, 0, 0, i_revdir);
 }
 
 
@@ -95,8 +105,7 @@ CMIChokePosBaseGraph::~CMIChokePosBaseGraph()
 void CMIChokePosBaseGraph::Create(CWnd* pParent, UINT id)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, id));
+ MeasInstrBase::Create(pParent, id);
 
  // customize the control
  m_scope.SetRange(0, 100);
@@ -115,8 +124,18 @@ void CMIChokePosGraph::Create(CWnd* pParent)
  m_scope.SetUnitY(MLL::GetString(IDS_MI_CHOKEPOSGRAPH_V_UNIT));
 }
 
+void CMIChokePosGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->choke_pos, i_revdir);
+}
+
 void CMIGDPosGraph::Create(CWnd* pParent)
 {
  CMIChokePosBaseGraph::Create(pParent, IDC_MI_GDPOSGRAPH);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_GDPOSGRAPH_V_UNIT));
+}
+
+void CMIGDPosGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->gasdose_pos, i_revdir);
 }

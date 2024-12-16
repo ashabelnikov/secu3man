@@ -145,40 +145,9 @@ void CLogPlayerTabController::OnSettingsChanged(int action)
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
 
- mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
- mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
- mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
- mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
- mp_view->mp_MIDeskDlg->SetTPSAverageNum(mp_settings->GetTPSAverage());
- mp_view->mp_MIDeskDlg->SetKnockAverageNum(mp_settings->GetKnockAverage());
- mp_view->mp_MIDeskDlg->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
- mp_view->mp_MIDeskDlg->SetCLTAverageNum(mp_settings->GetCLTAverage());
- mp_view->mp_MIDeskDlg->SetAddI2AverageNum(mp_settings->GetAddI2Average());
- mp_view->mp_MIDeskDlg->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
- mp_view->mp_MIDeskDlg->SetIATAverageNum(mp_settings->GetIATAverage());
- mp_view->mp_MIDeskDlg->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
- mp_view->mp_MIDeskDlg->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
- mp_view->mp_MIDeskDlg->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
- mp_view->mp_MIDeskDlg->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
- mp_view->mp_MIDeskDlg->SetMAP2AverageNum(mp_settings->GetMAP2Average());
- mp_view->mp_MIDeskDlg->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
- mp_view->mp_MIDeskDlg->SetTmp2AverageNum(mp_settings->GetTmp2Average());
- mp_view->mp_MIDeskDlg->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
- mp_view->mp_MIDeskDlg->SetFuelConsumFAverageNum(mp_settings->GetFuelConsumFAverage());
- mp_view->mp_MIDeskDlg->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
- mp_view->mp_MIDeskDlg->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
- mp_view->mp_MIDeskDlg->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
- mp_view->mp_MIDeskDlg->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
- mp_view->mp_MIDeskDlg->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
- mp_view->mp_MIDeskDlg->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
- mp_view->mp_MIDeskDlg->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
- mp_view->mp_MIDeskDlg->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
- mp_view->mp_MIDeskDlg->SetFtlsAverageNum(mp_settings->GetFtlsAverage());
- mp_view->mp_MIDeskDlg->SetEgtsAverageNum(mp_settings->GetEgtsAverage());
- mp_view->mp_MIDeskDlg->SetOpsAverageNum(mp_settings->GetOpsAverage());
- mp_view->mp_MIDeskDlg->SetMAFAverageNum(mp_settings->GetMAFAverage());
- mp_view->mp_MIDeskDlg->SetFtsAverageNum(mp_settings->GetFtsAverage());
- mp_view->mp_MIDeskDlg->SetGPSAverageNum(mp_settings->GetGPSAverage());
+ MetAverage ma;
+ mp_settings->GetMetAverage(ma);
+ mp_view->mp_MIDeskDlg->SetMetAverage(ma);
 
  ConfigureIndicators();
  mp_view->Invalidate();
@@ -194,41 +163,10 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->SetGraphValueHeight(mp_settings->GetGraphValueHeight());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
- mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
- mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
- mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
- mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
- mp_view->mp_MIDeskDlg->SetTPSAverageNum(mp_settings->GetTPSAverage());
- mp_view->mp_MIDeskDlg->SetKnockAverageNum(mp_settings->GetKnockAverage());
- mp_view->mp_MIDeskDlg->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
- mp_view->mp_MIDeskDlg->SetCLTAverageNum(mp_settings->GetCLTAverage());
- mp_view->mp_MIDeskDlg->SetAddI2AverageNum(mp_settings->GetAddI2Average());
- mp_view->mp_MIDeskDlg->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
- mp_view->mp_MIDeskDlg->SetIATAverageNum(mp_settings->GetIATAverage());
- mp_view->mp_MIDeskDlg->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
- mp_view->mp_MIDeskDlg->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
- mp_view->mp_MIDeskDlg->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
- mp_view->mp_MIDeskDlg->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
- mp_view->mp_MIDeskDlg->SetMAP2AverageNum(mp_settings->GetMAP2Average());
- mp_view->mp_MIDeskDlg->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
- mp_view->mp_MIDeskDlg->SetTmp2AverageNum(mp_settings->GetTmp2Average());
- mp_view->mp_MIDeskDlg->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
- mp_view->mp_MIDeskDlg->SetFuelConsumFAverageNum(mp_settings->GetFuelConsumFAverage());
- mp_view->mp_MIDeskDlg->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
- mp_view->mp_MIDeskDlg->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
- mp_view->mp_MIDeskDlg->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
- mp_view->mp_MIDeskDlg->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
- mp_view->mp_MIDeskDlg->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
- mp_view->mp_MIDeskDlg->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
- mp_view->mp_MIDeskDlg->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
- mp_view->mp_MIDeskDlg->SetFtlsAverageNum(mp_settings->GetFtlsAverage());
- mp_view->mp_MIDeskDlg->SetEgtsAverageNum(mp_settings->GetEgtsAverage());
- mp_view->mp_MIDeskDlg->SetOpsAverageNum(mp_settings->GetOpsAverage());
- mp_view->mp_MIDeskDlg->SetMAFAverageNum(mp_settings->GetMAFAverage());
- mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
- mp_view->mp_MIDeskDlg->SetGrtsAverageNum(mp_settings->GetGrtsAverage());
- mp_view->mp_MIDeskDlg->SetFtsAverageNum(mp_settings->GetFtsAverage());
- mp_view->mp_MIDeskDlg->SetGPSAverageNum(mp_settings->GetGPSAverage());
+
+ MetAverage ma;
+ mp_settings->GetMetAverage(ma);
+ mp_view->mp_MIDeskDlg->SetMetAverage(ma);
 
  //////////////////////////////////////////////////////////////////
  //Подключаем контроллер к потоку данных от SECU-3

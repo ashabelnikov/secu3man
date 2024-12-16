@@ -44,7 +44,7 @@ CMIMaf::~CMIMaf()
 
 void CMIMaf::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_MAF); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_MAF, false, false); //create window
 
  m_meter.SetRange(0.0, 600.0);
  m_meter.SetLabelsDecimals(0);
@@ -68,6 +68,11 @@ void CMIMaf::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIMaf::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->maf, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -85,8 +90,7 @@ CMIMafGraph::~CMIMafGraph()
 void CMIMafGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100, 100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_MAFGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_MAFGRAPH);
 
  // customize the control
  m_scope.SetRange(0, 600);
@@ -98,4 +102,9 @@ void CMIMafGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIMafGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->maf, i_revdir);
 }

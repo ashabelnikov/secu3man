@@ -44,7 +44,7 @@ CMIFuelConsum::~CMIFuelConsum()
 
 void CMIFuelConsum::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_FUELCONSUM); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_FUELCONSUM, true, true); //create window
 
  m_tlpFmt = _T("%0.2f ");
  m_trpFmt = _T("%0.3f ");
@@ -72,6 +72,11 @@ void CMIFuelConsum::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIFuelConsum::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_ffd, i_values->inj_ffh, i_values->cons_fuel, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -89,8 +94,7 @@ CMIFuelConsumGraph::~CMIFuelConsumGraph()
 void CMIFuelConsumGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_FUELCONSUMGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_FUELCONSUMGRAPH);
 
  // customize the control
  m_scope.SetRange(0, 50);
@@ -102,4 +106,9 @@ void CMIFuelConsumGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIFuelConsumGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_ffd, i_revdir);
 }

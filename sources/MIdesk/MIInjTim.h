@@ -49,6 +49,7 @@ class AFX_EXT_CLASS CMIInjTimB : public CMIInjTim
   virtual ~CMIInjTimB() {}
 
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 class AFX_EXT_CLASS CMIInjTimE : public CMIInjTim
@@ -58,6 +59,7 @@ class AFX_EXT_CLASS CMIInjTimE : public CMIInjTim
   virtual ~CMIInjTimE() {}
 
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 //-------------------------------------------------------------
@@ -82,6 +84,7 @@ class AFX_EXT_CLASS CMIInjTimBGraph : public CMIInjTimGraph
   virtual ~CMIInjTimBGraph() {}
 
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 class AFX_EXT_CLASS CMIInjTimEGraph : public CMIInjTimGraph
@@ -91,4 +94,5 @@ class AFX_EXT_CLASS CMIInjTimEGraph : public CMIInjTimGraph
   virtual ~CMIInjTimEGraph() {}
 
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };

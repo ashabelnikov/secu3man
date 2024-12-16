@@ -44,7 +44,7 @@ CMIEGOCorr::~CMIEGOCorr()
 
 void CMIEGOCorr::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_EGO_CORR); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_EGO_CORR, false, false); //create window
 
  m_meter.SetRange (-50.0, 50.0);
  m_meter.SetLabelsDecimals(1);
@@ -68,6 +68,11 @@ void CMIEGOCorr::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIEGOCorr::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->lambda_corr, 0, 0, i_revdir);
+}
+
 CMIEGOCorr2::CMIEGOCorr2()
 {
  //empty
@@ -80,7 +85,7 @@ CMIEGOCorr2::~CMIEGOCorr2()
 
 void CMIEGOCorr2::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_EGO_CORR2); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_EGO_CORR2, false, false); //create window
 
  m_meter.SetRange (-50.0, 50.0);
  m_meter.SetLabelsDecimals(1);
@@ -104,6 +109,11 @@ void CMIEGOCorr2::SetLimits(float loLimit, float upLimit)
  m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
+void CMIEGOCorr2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->lambda_corr2, 0, 0, i_revdir);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -121,8 +131,7 @@ CMIEGOCorrGraph::~CMIEGOCorrGraph()
 void CMIEGOCorrGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_EGO_CORRGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_EGO_CORRGRAPH);
 
  // customize the control
  m_scope.SetRange(-50, 50);
@@ -134,6 +143,11 @@ void CMIEGOCorrGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIEGOCorrGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->lambda_corr, i_revdir);
 }
 
 CMIEGOCorr2Graph::CMIEGOCorr2Graph()
@@ -149,8 +163,7 @@ CMIEGOCorr2Graph::~CMIEGOCorr2Graph()
 void CMIEGOCorr2Graph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_EGO_CORR2GRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_EGO_CORR2GRAPH);
 
  // customize the control
  m_scope.SetRange(-50, 50);
@@ -162,4 +175,9 @@ void CMIEGOCorr2Graph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIEGOCorr2Graph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->lambda_corr2, i_revdir);
 }

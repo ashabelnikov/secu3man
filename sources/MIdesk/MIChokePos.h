@@ -43,6 +43,7 @@ class AFX_EXT_CLASS CMIChokePos : public CMIChokePosBase
 {
  public:
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 
@@ -50,6 +51,7 @@ class AFX_EXT_CLASS CMIGDPos : public CMIChokePosBase
 {
  public:
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 //-------------------------------------------------------------
@@ -69,10 +71,12 @@ class AFX_EXT_CLASS CMIChokePosGraph : public CMIChokePosBaseGraph
 {
  public:
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };
 
 class AFX_EXT_CLASS CMIGDPosGraph : public CMIChokePosBaseGraph
 {
  public:
   virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
 };

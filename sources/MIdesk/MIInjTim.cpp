@@ -50,7 +50,7 @@ CMIInjTim::~CMIInjTim()
 
 void CMIInjTim::Create(CWnd* pParent, UINT id)
 {
- MeasInstrBase::Create(pParent, id); //create window
+ MeasInstrBase::Create(pParent, id, false, false); //create window
 
  m_meter.SetRange (.0, 720.0);
  m_meter.SetLabelsDecimals(1);
@@ -87,10 +87,20 @@ void CMIInjTimB::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::GetString(IDS_MI_INJTIMB_TITLE).c_str());
 }
 
+void CMIInjTimB::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_tim_begin, 0, 0, i_revdir);
+}
+
 void CMIInjTimE::Create(CWnd* pParent)
 {
  CMIInjTim::Create(pParent, IDC_MI_INJTIME);
  m_meter.SetTitle(MLL::GetString(IDS_MI_INJTIME_TITLE).c_str());
+}
+
+void CMIInjTimE::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_tim_end, 0, 0, i_revdir);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -110,8 +120,7 @@ CMIInjTimGraph::~CMIInjTimGraph()
 void CMIInjTimGraph::Create(CWnd* pParent, UINT id)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, id));
+ MeasInstrBase::Create(pParent, id);
 
  // customize the control
  m_scope.SetRange(0, 720);
@@ -137,8 +146,18 @@ void CMIInjTimBGraph::Create(CWnd* pParent)
  m_scope.SetUnitY(MLL::GetString(IDS_MI_INJTIMBGRAPH_V_UNIT));
 }
 
+void CMIInjTimBGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_tim_begin, i_revdir);
+}
+
 void CMIInjTimEGraph::Create(CWnd* pParent)
 {
  CMIInjTimGraph::Create(pParent, IDC_MI_INJTIMEGRAPH);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_INJTIMEGRAPH_V_UNIT));
+}
+
+void CMIInjTimEGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
+{
+ MeasInstrBase::Append(i_values->inj_tim_end, i_revdir);
 }
