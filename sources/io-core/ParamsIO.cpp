@@ -280,6 +280,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->hall_flags, 4, p_in->ckps_merge_ign_outs);
     p_params->hall_wnd_width = MathHelpers::Round(p_in->hall_wnd_width * ANGLE_MULTIPLIER);
     p_params->hall_degrees_btdc = MathHelpers::Round(p_in->hall_degrees_btdc * ANGLE_MULTIPLIER);
+    p_params->ckps_mttf = MathHelpers::Round(p_in->ckps_mttf * 256.0f);
    }
    break;
   case KNOCK_PAR:
@@ -780,6 +781,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->ckps_merge_ign_outs = CHECKBIT8(p_params->hall_flags, 4);
      p_out->hall_wnd_width = ((float)p_params->hall_wnd_width) / ANGLE_MULTIPLIER;
      p_out->hall_degrees_btdc = ((float)p_params->hall_degrees_btdc) / ANGLE_MULTIPLIER;
+     p_out->ckps_mttf = ((float)p_params->ckps_mttf) / 256.0f;
     }
     break;
    case KNOCK_PAR:

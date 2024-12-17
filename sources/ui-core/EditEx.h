@@ -75,7 +75,7 @@ class AFX_EXT_CLASS CEditEx : public CEdit
 
   inline void SetMode(DWORD i_mode)
   {
-   //нельзя использовать SIGNED для HEX
+   //not allowed to use SIGNED for HEX
    ASSERT(!((i_mode & MODE_HEX) && (i_mode & MODE_SIGNED)));
    m_mode = i_mode;
   }

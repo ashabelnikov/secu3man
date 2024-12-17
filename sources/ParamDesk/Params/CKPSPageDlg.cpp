@@ -44,8 +44,9 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CKPS_COGS_NUM_EDIT, OnChangeDataCogsNum)
- ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataCogsNum)
+ ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataMissNum)
  ON_EN_CHANGE(IDC_PD_CKPS_DEGREES_BTDC_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CKPS_MTTF_EDIT, OnChangeData)
 
  ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeMergeOutputs)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
@@ -90,6 +91,10 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateMergeOutputs)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_RISING_SPARK, OnUpdateRisingSpark)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_USE_CAM_REF, OnUpdateUseCamRef)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MTTF_SPIN, OnUpdateControlsMTTF)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MTTF_EDIT, OnUpdateControlsMTTF)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MTTF_CAPTION, OnUpdateControlsMTTF)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg()
@@ -98,6 +103,7 @@ CCKPSPageDlg::CCKPSPageDlg()
 , m_hall_degrees_btdc_edit(CEditEx::MODE_FLOAT, true)
 , m_wheel_cogs_num_edit(CEditEx::MODE_INT, true)
 , m_wheel_miss_num_edit(CEditEx::MODE_INT, true)
+, m_mttf_edit(CEditEx::MODE_FLOAT, true)
 , m_enabled(false)
 , m_igncogs_enabled(false)
 , m_odd_cylnum_enabled(false)
@@ -121,6 +127,7 @@ CCKPSPageDlg::CCKPSPageDlg()
  m_params.hall_wnd_width = 60.0f;
  m_params.ckps_rising_spark = false;
  m_params.hall_degrees_btdc = 60.0f;
+ m_params.ckps_mttf = 2.5f;
 }
 
 LPCTSTR CCKPSPageDlg::GetDialogID(void) const
@@ -167,6 +174,9 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CKPS_RISING_SPARK, m_rising_spark_check);
  DDX_Control(pDX, IDC_PD_CKPS_USE_CAM_REF, m_use_cam_ref_check);
 
+ DDX_Control(pDX,IDC_PD_CKPS_MTTF_SPIN, m_mttf_spin);
+ DDX_Control(pDX,IDC_PD_CKPS_MTTF_EDIT, m_mttf_edit);
+
  DDX_Text(pDX, IDC_PD_CKPS_IGNITION_COGS_EDIT, m_params.ckps_ignit_cogs);
  m_hall_wnd_width_edit.DDX_Value(pDX, IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, m_params.hall_wnd_width);
  m_hall_degrees_btdc_edit.DDX_Value(pDX, IDC_PD_CKPS_DEGREES_BTDC_EDIT, m_params.hall_degrees_btdc);
@@ -177,6 +187,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
  DDX_Check_bool(pDX, IDC_PD_CKPS_RISING_SPARK, m_params.ckps_rising_spark);
  DDX_Check_bool(pDX, IDC_PD_CKPS_USE_CAM_REF, m_params.ckps_use_cam_ref);
+ m_mttf_edit.DDX_Value(pDX, IDC_PD_CKPS_MTTF_EDIT, m_params.ckps_mttf);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -232,6 +243,11 @@ void CCKPSPageDlg::OnUpdateCogsBTDC(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_ckps_enabled && m_cogs_btdc_enabled);
 }
 
+void CCKPSPageDlg::OnUpdateControlsMTTF(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_ckps_enabled && m_params.ckps_miss_num != 0);
+}
+
 BOOL CCKPSPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
@@ -263,8 +279,14 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_wheel_miss_num_edit.SetLimitText(1);
  m_wheel_miss_num_edit.SetDecimalPlaces(1);
  m_wheel_miss_num_spin.SetBuddy(&m_wheel_miss_num_edit);
- m_wheel_miss_num_spin.SetRangeAndDelta(0, 3, 1);
- m_wheel_miss_num_edit.SetRange(0, 3);
+ m_wheel_miss_num_spin.SetRangeAndDelta(0, 6, 1);
+ m_wheel_miss_num_edit.SetRange(0, 6);
+
+ m_mttf_spin.SetBuddy(&m_mttf_edit);
+ m_mttf_edit.SetLimitText(5);
+ m_mttf_edit.SetDecimalPlaces(2);
+ m_mttf_spin.SetRangeAndDelta(1.0f, 8.0f, 0.01f);
+ m_mttf_edit.SetRange(1.0f, 8.0f);
 
  _FillCKPSTeethBTDCComboBox(); //initialize number of teeth BTDC combobox
  _FillCKPSEngineCylComboBox(); //initialize number of cylinders combobox
@@ -302,6 +324,9 @@ BOOL CCKPSPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_use_cam_ref_check, MLL::GetString(IDS_PD_CKPS_USE_CAM_REF_TT)));
  VERIFY(mp_ttc->AddWindow(&m_engine_cyl_combo, MLL::GetString(IDS_PD_CKPS_ENGINE_CYL_COMBO_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_mttf_edit, MLL::GetString(IDS_PD_CKPS_MTTF_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_mttf_spin, MLL::GetString(IDS_PD_CKPS_MTTF_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -334,6 +359,34 @@ void CCKPSPageDlg::OnChangeDataCogsNum()
  int sel = _GetCKPSTeethBTDCComboBoxSelection();
  _FillCKPSTeethBTDCComboBox();
  _SetCKPSTeethBTDCComboBoxSelection(sel);
+
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CCKPSPageDlg::OnChangeDataMissNum()
+{
+ UpdateData();
+
+ //BTDC combobox depends on cogs number and cylinder number,
+ //Also we have to preserve selection
+/* int sel = _GetCKPSTeethBTDCComboBoxSelection();
+ _FillCKPSTeethBTDCComboBox();
+ _SetCKPSTeethBTDCComboBoxSelection(sel);*/
+
+ //set default value of MTTF when user change value of missing teeth
+ if (m_params.ckps_miss_num==1)
+  m_params.ckps_mttf = 1.5f;
+ else if (m_params.ckps_miss_num==2)
+  m_params.ckps_mttf = 2.5f;
+ else if (m_params.ckps_miss_num==3)
+  m_params.ckps_mttf = 3.0f;
+ else if (m_params.ckps_miss_num==4)
+  m_params.ckps_mttf = 4.0f;
+ else if (m_params.ckps_miss_num==5)
+  m_params.ckps_mttf = 5.0f;
+ else if (m_params.ckps_miss_num==6)
+  m_params.ckps_mttf = 6.0f;
+ m_mttf_edit.SetValue(m_params.ckps_mttf);
 
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }

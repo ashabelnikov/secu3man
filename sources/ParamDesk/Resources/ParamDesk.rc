@@ -618,6 +618,9 @@ BEGIN
     LTEXT           "Кол-во градусов до ВМТ",IDC_PD_CKPS_DEGREES_BTDC_UNIT,61,170,92,24,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_DEGREES_BTDC_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,171,11,16
     CONTROL         "Использовать ДФ как ДНО",IDC_PD_CKPS_USE_CAM_REF,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,191,148,12
+    EDITTEXT        IDC_PD_CKPS_MTTF_EDIT,95,211,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CKPS_MTTF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,211,11,16
+    LTEXT           "Коэфф. детекции отсутствующих зубьев",IDC_PD_CKPS_MTTF_CAPTION,0,212,94,18
 END
 
 IDD_PD_KNOCK_PAGE DIALOGEX 0, 0, 170, 148
@@ -1714,6 +1717,7 @@ BEGIN
     IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Установите галочку для использования иммобилайзера (iButton). При установленной галочке блок заработает только при подсоединенном ключе iButton!"
     IDS_PD_IDLREG_PMODE_CHECK_TT                    "УОЗ РХХ будет работать в режиме пропорционального регулятора. Данная опция актуальна только при совместном использовании с closed-loop РДВ."
     IDS_PD_IDLREG_USECLIACONGAS_CHECK_TT            "Использовать closed loop для РДВ если на GAS_V высокий уровень. Снимите галочку, если не хотите чтобы на газу РДВ двигался"
+    IDS_PD_CKPS_MTTF_EDIT_TT                        "Этот коэффициент используется при определении отсутствующих зубьев. Если период текущего зуба > (период предыдущего зуба * коэффициент), значит напротив датчика прошли отсутствующие зубья."
 END
 
 STRINGTABLE
@@ -2719,6 +2723,9 @@ BEGIN
     LTEXT           "Degrees before TDC",IDC_PD_CKPS_DEGREES_BTDC_UNIT,61,170,92,24,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_DEGREES_BTDC_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,171,11,16
     CONTROL         "Use cam sensor as reference",IDC_PD_CKPS_USE_CAM_REF,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,191,148,12
+    EDITTEXT        IDC_PD_CKPS_MTTF_EDIT,95,211,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CKPS_MTTF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,211,11,16
+    LTEXT           "Missing teeth detection factor",IDC_PD_CKPS_MTTF_CAPTION,0,212,94,10
 END
 
 IDD_PD_KNOCK_PAGE DIALOGEX 0, 0, 174, 148
@@ -3844,6 +3851,7 @@ BEGIN
     IDS_PD_IDLREG_PMODE_CHECK_TT                    "Ignition timing based idling regulator will work in the proportional mode. This option is applicable only when using it in conjunction with IAC closed-loop regulator."
     IDS_PD_IDLREG_USECLIACONGAS_CHECK_TT            "Use closed loop for IAC when GAS_V input is high."
     IDS_PD_ANGLES_ZEROAAOCT_CHECK_TT                "Zero advance angle mode with octane correction. All ign.timing tables and corrections are ignored except for the 'Octane correction' parameter. Also, in this mode the restrictions imposed by the 'Min. advance angle' and 'Max. advance angle' parameters do not apply."
+    IDS_PD_CKPS_MTTF_EDIT_TT                        "This factor is used to detect missing teeth. If period of the current tooth > (period of the previous tooth * factor), then missing teeth passed the sensor."
 END
 
 STRINGTABLE

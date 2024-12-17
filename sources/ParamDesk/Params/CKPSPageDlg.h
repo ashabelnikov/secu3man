@@ -70,6 +70,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeMergeOutputs();
   afx_msg void OnChangeRisingSpark();
   afx_msg void OnChangeDataCogsNum();
+  afx_msg void OnChangeDataMissNum();
   afx_msg void OnChangeDataCylNum();
   afx_msg void OnClickedPdPosFrontRadio();
   afx_msg void OnClickedPdNegFrontRadio();
@@ -86,6 +87,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateCKPSFront(CCmdUI* pCmdUI);
   afx_msg void OnUpdateRisingSpark(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseCamRef(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsMTTF(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void _FillCKPSTeethBTDCComboBox(void);
@@ -150,5 +152,8 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   CSpinButtonCtrlEx m_hall_degrees_btdc_spin;
   CEditEx m_hall_degrees_btdc_edit;
+
+  CSpinButtonCtrlEx m_mttf_spin;
+  CEditEx m_mttf_edit;
 };
 

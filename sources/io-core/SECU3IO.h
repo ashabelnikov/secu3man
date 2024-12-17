@@ -343,6 +343,7 @@ namespace SECU3IO
   bool ckps_rising_spark;
   float hall_degrees_btdc;
   bool ckps_use_cam_ref;
+  float ckps_mttf;
  };
 
  struct OPCompNc                        //используется если надо просто принять или послать определенный код действия

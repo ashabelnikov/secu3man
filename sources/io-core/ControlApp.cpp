@@ -1590,7 +1590,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& ckpsPar = m_recepted_packet.m_CKPSPar;
- if (size != 10)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 12)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Количество зубьев до в.м.т.
@@ -1634,6 +1634,12 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&degrees_btdc,true))
   return false;
  ckpsPar.hall_degrees_btdc = ((float)degrees_btdc) / m_angle_multiplier;
+
+ //Missing teeth treshold factor
+ int mttf;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &mttf, false))
+  return false;
+ ckpsPar.ckps_mttf = ((float)mttf) / 256.0f;
 
  return true;
 }
@@ -4182,6 +4188,9 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  mp_pdp->Bin16ToHex(wnd_width, m_outgoing_packet);
  int degrees_btdc = MathHelpers::Round(packet_data->hall_degrees_btdc * m_angle_multiplier);
  mp_pdp->Bin16ToHex(degrees_btdc, m_outgoing_packet);
+ int mttf = MathHelpers::Round(packet_data->ckps_mttf * 256.0f);
+ mp_pdp->Bin16ToHex(mttf, m_outgoing_packet);
+
 }
 
 //-----------------------------------------------------------------------
