@@ -2108,6 +2108,7 @@ OPS_I - Вход датчика давления масла.\r\n
 FTS_I - Вход датчика температуры топлива.\r\n
 REFPRS_I - Вход датчика давления хладагента кондиционера.\r\n
 ALTRN_I - Вход состояния возбуждения генератора.\r\n
+FPS - Вход датчика давления топлива.\r\n
 "
 END
 
@@ -4254,6 +4255,7 @@ OPS_I - Oil pressure sensor input.\r\n
 FTS_I - Fuel temperature sensor input.\r\n
 REFPRS_I - A/C refrigerant's pressure sensor input.\r\n
 ALTRN_I - State of the alternator.\r\n
+FPS - Fuel pressure sensor input.\r\n
 "
 END
 
