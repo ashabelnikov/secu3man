@@ -326,12 +326,14 @@ void CDevDiagnostTabDlg::EnableExtraIO(bool i_enable)
 void CDevDiagnostTabDlg::EnableBLDETesting(bool i_enable)
 {
  m_enable_blde_testing = i_enable;
+ mp_outsDlg->EnableBLDETesting(m_enable_blde_testing);
  UpdateDialogControls(this,TRUE);
 }
 
 void CDevDiagnostTabDlg::EnableTACHOTesting(bool i_enable)
 {
  m_enable_tacho_testing = i_enable;
+ mp_outsDlg->EnableTACHOTesting(m_enable_tacho_testing);
  UpdateDialogControls(this,TRUE);
 }
 
