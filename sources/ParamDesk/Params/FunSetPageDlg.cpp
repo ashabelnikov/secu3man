@@ -57,9 +57,12 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET3_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT3_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET4_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT4_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MAP_CALC_BUTTON, OnMapCalcButton)
  ON_BN_CLICKED(IDC_PD_MAP_CALC2_BUTTON, OnMap2CalcButton)
  ON_BN_CLICKED(IDC_PD_MAP_CALC3_BUTTON, OnGpsCalcButton)
+ ON_BN_CLICKED(IDC_PD_MAP_CALC4_BUTTON, OnFpsCalcButton)
  ON_BN_CLICKED(IDC_PD_FUNSET_USE_LDAX_GRID, OnChangeDataLdaxGrid)
  ON_BN_CLICKED(IDC_PD_TPS_CALC_BUTTON, OnTpsCalcButton)
 
@@ -104,6 +107,11 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET3_CAPTION,OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET3_UNIT,OnUpdateControlsSECU3i)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET4_EDIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET4_SPIN,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET4_CAPTION,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET4_UNIT,OnUpdateControlsSECU3i)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_CAPTION,OnUpdateControls)
@@ -124,8 +132,14 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT3_CAPTION,OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT3_UNIT,OnUpdateControlsSECU3i)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT4_EDIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT4_SPIN,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT4_CAPTION,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT4_UNIT,OnUpdateControlsSECU3i)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_SENSOR2_GROUP,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_SENSOR3_GROUP,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_SENSOR4_GROUP,OnUpdateControlsSECU3i)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN,OnUpdateControls)
@@ -139,6 +153,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC2_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC3_BUTTON, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC4_BUTTON, OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_TPS_CALC_BUTTON, OnUpdateControlsTPSLearning)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_VE2MF_CAPTION, OnUpdateControlsFuelInject)
@@ -168,6 +183,8 @@ CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/)
 , m_tpsl_release_value(.0f)
 , m_gps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
 , m_gps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
+, m_fps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
+, m_fps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.map_lower_pressure = 4.5f;
  m_params.map_upper_pressure = 10.0f;
@@ -189,6 +206,8 @@ CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/)
  m_params.tps_raw = .0f;
  m_params.gps_curve_offset = 0.547f;
  m_params.gps_curve_gradient = 20.9f;
+ m_params.fps_curve_offset = 0.5f;
+ m_params.fps_curve_gradient = 172.25f;
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -216,12 +235,16 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET2_SPIN, m_map2_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET3_EDIT, m_gps_curve_offset_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET3_SPIN, m_gps_curve_offset_spin);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET4_EDIT, m_fps_curve_offset_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET4_SPIN, m_fps_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_map_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_SPIN, m_map_curve_gradient_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT, m_map2_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT2_SPIN, m_map2_curve_gradient_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT3_EDIT, m_gps_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT3_SPIN, m_gps_curve_gradient_spin);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT4_EDIT, m_fps_curve_gradient_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT4_SPIN, m_fps_curve_gradient_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, m_tps_curve_offset_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN, m_tps_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_tps_curve_gradient_edit);
@@ -229,6 +252,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_MAP_CALC_BUTTON, m_calc_map_btn);
  DDX_Control(pDX, IDC_PD_MAP_CALC2_BUTTON, m_calc_map2_btn);
  DDX_Control(pDX, IDC_PD_MAP_CALC3_BUTTON, m_calc_gps_btn);
+ DDX_Control(pDX, IDC_PD_MAP_CALC4_BUTTON, m_calc_fps_btn);
  DDX_Control(pDX, IDC_PD_TPS_CALC_BUTTON, m_calc_tps_btn);
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_UNIT, m_lolo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_UNIT, m_hilo_unit);
@@ -243,6 +267,8 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  m_map2_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT, m_params.map2_curve_gradient);
  m_gps_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET3_EDIT, m_params.gps_curve_offset);
  m_gps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT3_EDIT, m_params.gps_curve_gradient);
+ m_fps_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET4_EDIT, m_params.fps_curve_offset);
+ m_fps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT4_EDIT, m_params.fps_curve_gradient);
  m_tps_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, m_params.tps_curve_offset);
  m_tps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_params.tps_curve_gradient);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_params.fn_benzin);
@@ -303,6 +329,9 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_calc_gps_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
+ m_calc_fps_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                            MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
+
  m_calc_tps_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
@@ -353,6 +382,18 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_gps_curve_gradient_edit.SetDecimalPlaces(3);
  m_gps_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
  m_gps_curve_gradient_edit.SetRange(-150.0f,150.0f);
+
+ m_fps_curve_offset_spin.SetBuddy(&m_fps_curve_offset_edit);
+ m_fps_curve_offset_edit.SetLimitText(5);
+ m_fps_curve_offset_edit.SetDecimalPlaces(3);
+ m_fps_curve_offset_spin.SetRangeAndDelta(-5.0f,5.0f,0.0025f);
+ m_fps_curve_offset_edit.SetRange(-5.0f,5.0f);
+
+ m_fps_curve_gradient_spin.SetBuddy(&m_fps_curve_gradient_edit);
+ m_fps_curve_gradient_edit.SetLimitText(6);
+ m_fps_curve_gradient_edit.SetDecimalPlaces(3);
+ m_fps_curve_gradient_spin.SetRangeAndDelta(-500.0f,500.0f,0.01f);
+ m_fps_curve_gradient_edit.SetRange(-500.0f,500.0f);
 
  m_tps_curve_offset_spin.SetBuddy(&m_tps_curve_offset_edit);
  m_tps_curve_offset_edit.SetLimitText(6);
@@ -419,6 +460,11 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_gps_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gps_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_fps_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fps_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fps_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_press_swing_edit, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_press_swing_spin, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
@@ -544,6 +590,19 @@ void CFunSetPageDlg::OnGpsCalcButton()
  {
   m_params.gps_curve_offset = offset;
   m_params.gps_curve_gradient = gradient;
+  UpdateData(false);
+  OnChangeNotify(); //notify event receiver about change
+ }
+}
+
+void CFunSetPageDlg::OnFpsCalcButton()
+{
+ float offset = m_params.fps_curve_offset, gradient = m_params.fps_curve_gradient; 
+ float pressMax = 1000000.0f; //Pa
+ if (CMAPCalcController::Calculate(offset, gradient, &pressMax))
+ {
+  m_params.fps_curve_offset = offset;
+  m_params.fps_curve_gradient = gradient;
   UpdateData(false);
   OnChangeNotify(); //notify event receiver about change
  }
@@ -706,5 +765,5 @@ void CFunSetPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(655));
+  mp_scr->SetViewSize(cx, da.ScaleY(710));
 }

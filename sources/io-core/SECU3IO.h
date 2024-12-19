@@ -138,6 +138,7 @@ namespace SECU3IO
   bool uniout[UNI_OUTPUT_NUM];          //States of universal outputs
 
   float fts;                            //Fuel temperature sensor
+  float fps;                            //Fuel pressure sensor
   float cons_fuel;                      //Consumed fuel (L)
 
   float lambda_mx;                      //mixed voltages from two EGO sensors
@@ -218,6 +219,8 @@ namespace SECU3IO
   float tps_raw;
   float gps_curve_offset;
   float gps_curve_gradient;
+  float fps_curve_offset;
+  float fps_curve_gradient;
  };
 
  struct IdlRegPar
@@ -940,6 +943,7 @@ const int INPAVNUM = 14;
 
   float lambda_egts_thrd;
   bool lambda_use_egts;
+  bool ifrvmc_use_fps;
  };
 
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};

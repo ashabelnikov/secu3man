@@ -646,9 +646,10 @@ BEGIN
 75 Воздух/топливо из таблицы (6-24)
 76 Температура заряда (°С)
 77 Давление газа (кПа)
-78 Метки лога
-79 Служебные флаги
-80 Ошибки СЕ"
+78 Давление топлива (кПа)
+79 Метки лога
+80 Служебные флаги
+81 Ошибки СЕ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1806,9 +1807,10 @@ BEGIN
 75 AFR value from map (6-24)
 76 Charge temperature (°С)
 77 Gas pressure (kPa)
-78 Log marks
-79 Service flags
-80 CE errors"
+78 Fuel pressure (kPa)
+79 Log marks
+80 Service flags
+81 CE errors"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -228,6 +228,7 @@
 #define IDM_MI_MET_DIFFAFR              2309
 #define IDM_MI_MET_DIFFAFR2             2310
 #define IDM_MI_MET_GPS                  2311
+#define IDM_MI_MET_FPS                  2312
 #define IDM_MI_MET_ROWS1                2321
 #define IDM_MI_MET_ROWS2                2322
 #define IDM_MI_MET_ROWS3                2323
@@ -395,6 +396,7 @@
 #define IDM_MI_GRH_DIFFAFR              2485
 #define IDM_MI_GRH_DIFFAFR2             2486
 #define IDM_MI_GRH_GPS                  2487
+#define IDM_MI_GRH_FPS                  2488
 #define IDS_MI_GRH_ADD_GAUGE            2497
 #define IDC_MI_KNOCK                    2498
 #define IDS_MI_TACHOMETER_V_UNIT        2499
@@ -559,3 +561,7 @@
 #define IDS_MI_IND_MAPSEL0              2658
 #define IDS_MI_IND_REFPRS_I             2659
 #define IDS_MI_IND_ALTRN_I              2660
+#define IDC_MI_FPS                      2661
+#define IDC_MI_FPSGRAPH                 2662
+#define IDS_MI_FPS_TITLE                2663
+#define IDS_MI_FPSGRAPH_V_UNIT          2664

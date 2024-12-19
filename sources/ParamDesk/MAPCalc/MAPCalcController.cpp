@@ -36,7 +36,6 @@ using namespace fastdelegate;
 
 //Define maximum and minimum allowed values (in the SI form)
 static const float pressMin = 0.0f;       //Pa
-static const float pressMax = 500000.0f;  //Pa
 static const float voltMin  = 0.0f;       //V
 static const float voltMax  = 5.5f;       //V
 static const float gradMin  = 1000.0f;    //Pa/V
@@ -55,6 +54,7 @@ CMAPCalcController::CMAPCalcController(VIEW* ip_view, float i_offset, float i_gr
 , m_gradUnitD(VU_V)
 , m_iniOffset(i_offset)
 , m_iniGradient(i_gradient)
+, m_pressMax(500000.0f) //Pa
 {
  //fill pressure units
  m_p.insert(std::make_pair(PU_PA,  MLL::GetString(IDS_PA_UNIT)));
@@ -68,10 +68,12 @@ CMAPCalcController::CMAPCalcController(VIEW* ip_view, float i_offset, float i_gr
  m_v.insert(std::make_pair(VU_V,  MLL::GetString(IDS_V_UNIT)));
 }
 
-/*static*/bool CMAPCalcController::Calculate(float& o_offset, float& o_gradient)
+/*static*/bool CMAPCalcController::Calculate(float& o_offset, float& o_gradient, float* ip_pressMax /*= NULL*/)
 {
  CMAPCalcDlg dlg;
  CMAPCalcController cntr(&dlg, o_offset, o_gradient);
+ if (ip_pressMax)
+  cntr.m_pressMax = *ip_pressMax;
  dlg.setOnKnowGradientCheck(MakeDelegate(&cntr, &CMAPCalcController::OnKnowGradientCheck));
  dlg.setOnActivate(MakeDelegate(&cntr, &CMAPCalcController::OnActivate));
  dlg.setOn1stptPressUnit(MakeDelegate(&cntr, &CMAPCalcController::On1stptPressUnit));
@@ -253,7 +255,7 @@ void CMAPCalcController::_GetLimitAndDP(UnitId i_unit, float& o_min, float& o_ma
  if (_IsPressureUnit(i_unit))
  {
   o_min = _ConvertUnit(pressMin, i_unit);
-  o_max = _ConvertUnit(pressMax, i_unit);
+  o_max = _ConvertUnit(m_pressMax, i_unit);
  }
  else //voltage
  {

@@ -78,3 +78,29 @@ class AFX_EXT_CLASS CMIGpsGraph : public MeasInstrBase
   virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };
+
+//FPS:
+class AFX_EXT_CLASS CMIFps : public MeasInstrBase
+{
+ public:
+  CMIFps();
+  virtual ~CMIFps();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
+  //---------------------------------------
+};
+
+class AFX_EXT_CLASS CMIFpsGraph : public MeasInstrBase
+{
+ public:
+  CMIFpsGraph();
+  virtual ~CMIFpsGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
+  //---------------------------------------
+};

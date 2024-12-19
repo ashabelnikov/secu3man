@@ -75,6 +75,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnMapCalcButton();
   afx_msg void OnMap2CalcButton();
   afx_msg void OnGpsCalcButton();
+  afx_msg void OnFpsCalcButton();
   afx_msg void OnTpsCalcButton();
   afx_msg void OnChangeVE2MF();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -119,6 +120,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CBitmapButton m_calc_map_btn;
   CBitmapButton m_calc_map2_btn;
   CBitmapButton m_calc_gps_btn;
+  CBitmapButton m_calc_fps_btn;
   CBitmapButton m_calc_tps_btn;
   CStatic m_lolo_unit;
   CStatic m_hilo_unit;
@@ -133,6 +135,11 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_gps_curve_offset_edit;
   CSpinButtonCtrlEx m_gps_curve_gradient_spin;
   CEditEx m_gps_curve_gradient_edit;
+
+  CSpinButtonCtrlEx m_fps_curve_offset_spin;
+  CEditEx m_fps_curve_offset_edit;
+  CSpinButtonCtrlEx m_fps_curve_gradient_spin;
+  CEditEx m_fps_curve_gradient_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;  

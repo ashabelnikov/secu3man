@@ -266,6 +266,7 @@ BEGIN
     IDS_MI_MAF_TITLE         "ÄÌÐÂ"
     IDS_MI_MAF_UNIT          "ã/ñåê"
     IDS_MI_GPS_TITLE         "ÄÄÃ"
+    IDS_MI_FPS_TITLE         "ÄÄÒ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -313,6 +314,7 @@ BEGIN
     IDS_MI_FTSGRAPH_V_UNIT    "ÄÒÒ,°C"
     IDS_MI_CONSFUEL_UNIT      "Ë"
     IDS_MI_GPSGRAPH_V_UNIT    "ÄÄÃ,êÏà"
+    IDS_MI_FPSGRAPH_V_UNIT    "ÄÄÒ,êÏà"
 END                                        
 
 STRINGTABLE DISCARDABLE 
@@ -633,6 +635,7 @@ BEGIN
     IDS_MI_MAF_UNIT          "g/sec"
     IDS_MI_CONSFUEL_UNIT     "L"
     IDS_MI_GPS_TITLE         "GPS"
+    IDS_MI_FPS_TITLE         "FPS"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -677,6 +680,7 @@ BEGIN
     IDS_MI_MAFGRAPH_V_UNIT    "MAF,g/sec"
     IDS_MI_FTSGRAPH_V_UNIT    "FTS,°C"
     IDS_MI_GPSGRAPH_V_UNIT    "GPS,kPa"
+    IDS_MI_FPSGRAPH_V_UNIT    "FPS,kPa"
 END
 
 STRINGTABLE DISCARDABLE 

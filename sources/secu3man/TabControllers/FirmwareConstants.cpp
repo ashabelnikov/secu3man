@@ -304,6 +304,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Threshold for switching to the main AFR map"), _T("°C"), -60.0f, 180.0f, 0.25f, 2, &d.wuafr_clt_thrd, _T("While engine temperature is less this threshold (cold engine), firmware will use warm up AFR maps. Once temperature exceed this threshold firmware will switch to the main AFR map."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Использовать ДДГ для коррекции впрыска"), &d.ifrvmc_use_fps, _T("Если галочка установлена, то датчик давления топлива будет использоваться для коррекции впрыска вместо константы 'Манометрическое давление в топливной рампе'."));
+ else
+  dfd.AppendItem(_T("Use FPS for correction of injection PW"), &d.ifrvmc_use_fps, _T("If the check is set, then fuel pressure sensor will be used for correction of injection PW. instead of the 'Gauge pressure in the fuel rail' constant"));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));

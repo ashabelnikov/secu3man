@@ -53,7 +53,7 @@ class CMAPCalcController
 
   //This function will always return offset - in Volts, gradient - in kPa/V
   //Return values: true - user accepted calculation, false - user canceled calculation
-  static bool Calculate(float& o_offset, float& o_gradient);
+  static bool Calculate(float& o_offset, float& o_gradient, float* ip_pressMax = NULL);
 
  private:
   void OnKnowGradientCheck();
@@ -84,4 +84,5 @@ class CMAPCalcController
   bool m_know_gradient;
   const float m_iniOffset;   //initial offset (V)
   const float m_iniGradient; //initial gradient (kPa/V)
+  float m_pressMax;
 };

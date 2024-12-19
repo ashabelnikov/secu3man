@@ -90,10 +90,10 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
  ON_COMMAND(IDM_MI_MET_DEL_GAUGE, OnMetDeleteGauge)
  ON_UPDATE_COMMAND_UI(IDM_MI_MET_DEL_GAUGE, OnUpdateMetDelete)
- ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_GPS, OnMetAddGauge)
- ON_COMMAND_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_GPS, OnMetAddGauge)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_GPS, OnUpdateMetAddGauge)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_GPS, OnUpdateMetAddGauge)
+ ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_FPS, OnMetAddGauge)
+ ON_COMMAND_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_FPS, OnMetAddGauge)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_FPS, OnUpdateMetAddGauge)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_FPS, OnUpdateMetAddGauge)
  ON_COMMAND_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnMetNumOfRows)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnUpdateMetNumOfRows)
  ON_COMMAND_RANGE(IDM_MI_MET_TITLE_FONT050, IDM_MI_MET_TITLE_FONT150, OnMetTitleFont)
@@ -441,6 +441,7 @@ void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int Value
  m_metCfg.insert(std::make_pair(IDM_MI_MET_TARGAFR, cfg->m_optMetTargAFR[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR, cfg->m_optMetDiffAFR[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR2, cfg->m_optMetDiffAFR2[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_FPS, cfg->m_optMetFPS[0]));
 
  //graphs
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_RPM, cfg->m_optMetRPM[1]));
@@ -485,6 +486,7 @@ void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int Value
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_TARGAFR, cfg->m_optMetTargAFR[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR, cfg->m_optMetDiffAFR[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR2, cfg->m_optMetDiffAFR2[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_FPS, cfg->m_optMetFPS[1]));
 
  m_metRows = cfg->m_optMetRows;
  m_TitleFontSize = TitleFontSize;
@@ -760,6 +762,7 @@ void CMIDeskDlg::GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFont
  cfg->m_optMetTargAFR[0] = m_metCfg[IDM_MI_MET_TARGAFR];
  cfg->m_optMetDiffAFR[0] = m_metCfg[IDM_MI_MET_DIFFAFR];
  cfg->m_optMetDiffAFR2[0] = m_metCfg[IDM_MI_MET_DIFFAFR2];
+ cfg->m_optMetFPS[0] = m_metCfg[IDM_MI_MET_FPS];
 
  cfg->m_optMetRPM[1] = m_metCfg[IDM_MI_GRH_RPM];
  cfg->m_optMetMAP[1] = m_metCfg[IDM_MI_GRH_MAP];
@@ -803,6 +806,7 @@ void CMIDeskDlg::GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFont
  cfg->m_optMetTargAFR[1] = m_metCfg[IDM_MI_GRH_TARGAFR];
  cfg->m_optMetDiffAFR[1] = m_metCfg[IDM_MI_GRH_DIFFAFR];
  cfg->m_optMetDiffAFR2[1] = m_metCfg[IDM_MI_GRH_DIFFAFR2];
+ cfg->m_optMetFPS[1] = m_metCfg[IDM_MI_GRH_FPS];
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
@@ -2265,6 +2269,37 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
     break;
    CMIDiffAFR2Graph* widget = new CMIDiffAFR2Graph();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->ShowCursor(m_show_graph_cursor);
+   widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
+   widget->Create(this);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetShtPixels(m_graphShtPixels);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
+   new_widget = widget;
+   break;
+  }
+  case IDM_MI_MET_FPS:
+  {
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
+    break;
+   CMIFps* widget = new CMIFps();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrFPS, NULL, NULL);
+   widget->Create(this);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
+   new_widget = widget;
+   break;
+  }
+  case IDM_MI_GRH_FPS:
+  {
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
+    break;
+   CMIFpsGraph* widget = new CMIFpsGraph();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->ShowCursor(m_show_graph_cursor);

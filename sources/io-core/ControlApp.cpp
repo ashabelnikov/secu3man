@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 105)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 107)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -715,6 +715,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  sensorDat.refprs_i = CHECKBIT8(addflg, 6);
  sensorDat.altrn_i = CHECKBIT8(addflg, 7);
 
+ //Fuel pressure sensor
+ int fps = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &fps))
+  return false;
+ sensorDat.fps = ((float)fps) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
  return true;
 }
 
@@ -911,7 +917,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != 37)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 41)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -1043,6 +1049,18 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &gps_curve_gradient, true))
   return false;
  funSetPar.gps_curve_gradient = ((float)gps_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
+
+ //FPS curve offset
+ int fps_curve_offset = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &fps_curve_offset, true))
+  return false;
+ funSetPar.fps_curve_offset = ((float)fps_curve_offset) * m_adc_discrete;
+
+ //FPS curve gradient
+ int fps_curve_gradient = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &fps_curve_gradient, true))
+  return false;
+ funSetPar.fps_curve_gradient = ((float)fps_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
  return true;
 }
@@ -4087,6 +4105,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin16ToHex(gps_curve_offset, m_outgoing_packet);
  int gps_curve_gradient = MathHelpers::Round(128.0f * packet_data->gps_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete);
  mp_pdp->Bin16ToHex(gps_curve_gradient, m_outgoing_packet);
+ int fps_curve_offset = MathHelpers::Round(packet_data->fps_curve_offset / m_adc_discrete);
+ mp_pdp->Bin16ToHex(fps_curve_offset, m_outgoing_packet);
+ int fps_curve_gradient = MathHelpers::Round(128.0f * packet_data->fps_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete);
+ mp_pdp->Bin16ToHex(fps_curve_gradient, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -4190,7 +4212,6 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  mp_pdp->Bin16ToHex(degrees_btdc, m_outgoing_packet);
  int mttf = MathHelpers::Round(packet_data->ckps_mttf * 256.0f);
  mp_pdp->Bin16ToHex(mttf, m_outgoing_packet);
-
 }
 
 //-----------------------------------------------------------------------

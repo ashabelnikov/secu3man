@@ -330,6 +330,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optMAFAverage;
   OptField_t<int>  m_optFtsAverage;
   OptField_t<int>  m_optTargAFRAverage;
+  OptField_t<int>  m_optFPSAverage;
 
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
@@ -747,6 +748,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetTargAFR[2][2];
   OptField_t<int> m_optMetDiffAFR[2][2];
   OptField_t<int> m_optMetDiffAFR2[2][2];
+  OptField_t<int> m_optMetFPS[2][2];
 
   //meters scales' min and max
   OptField_t<std::vector<float> > m_optMetScRPM[2];
@@ -791,6 +793,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<std::vector<float> > m_optMetScTargAFR[2];
   OptField_t<std::vector<float> > m_optMetScDiffAFR[2];
   OptField_t<std::vector<float> > m_optMetScDiffAFR2[2];
+  OptField_t<std::vector<float> > m_optMetScFPS[2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
@@ -1027,6 +1030,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldAFRMap;
   OptField_t<_TSTRING> m_optLogFieldTchrg;
   OptField_t<_TSTRING> m_optLogFieldGPS;
+  OptField_t<_TSTRING> m_optLogFieldFPS;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

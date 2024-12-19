@@ -329,10 +329,13 @@ typedef struct params_t
 
  _uint  ckps_mttf;
 
+ _int   fps_curve_offset;             // offset of curve in volts, can be negative
+ _int   fps_curve_gradient;           // gradient of curve in kPa/V, can be negative (inverse characteristic curve)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[121];
+ _uchar reserved[117];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

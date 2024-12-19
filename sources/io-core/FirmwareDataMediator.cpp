@@ -439,10 +439,12 @@ typedef struct
  _int lambda_egts_thrd;
  _uchar lambda_use_egts;
 
+ _uchar ifrvmc_use_fps;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1505];
+ _uchar reserved[1504];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3589,6 +3591,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.lambda_egts_thrd = ((float)exd.lambda_egts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.lambda_use_egts = exd.lambda_use_egts;
+
+ o_data.ifrvmc_use_fps = exd.ifrvmc_use_fps;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3732,6 +3736,9 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.lambda_egts_thrd = MathHelpers::Round(i_data.lambda_egts_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.lambda_use_egts = i_data.lambda_use_egts;
+
+ exd.ifrvmc_use_fps = i_data.ifrvmc_use_fps;
+
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

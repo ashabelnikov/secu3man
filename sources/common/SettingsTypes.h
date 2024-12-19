@@ -462,6 +462,7 @@ struct MetersCfg
  MetCfg m_optMetDiffAFR[2];
  MetCfg m_optMetDiffAFR2[2];
  MetCfg m_optMetGPS[2];
+ MetCfg m_optMetFPS[2];
 };
 
 struct MapPtMovStep
@@ -553,6 +554,7 @@ struct LogFileFields
  _TSTRING m_fldAFRMap;
  _TSTRING m_fldTchrg;
  _TSTRING m_fldGPS;
+ _TSTRING m_fldFPS;
 };
 
 struct MetAverage
@@ -593,6 +595,7 @@ struct MetAverage
  int avrMAF;
  int avrFts;
  int avrTargAFR;
+ int avrFPS;
 };
 
 //Functionality
