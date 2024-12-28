@@ -317,13 +317,13 @@ typedef struct
 {
  //firmware constants:
  _int evap_clt;
- _uchar evap_tps_lo;
- _uchar evap_tps_hi;
+ _uint evap_tps_lo;
+ _uint evap_tps_hi;
  _uchar fi_enter_strokes;
  _uchar fi_leave_strokes;
  _uchar iac_cond_add;
  _int  aircond_clt;
- _uchar aircond_tps;
+ _uint aircond_tps;
  _int  idl_ve[2];
  _uint frgp;            //gauge pressure in the fuel rail
  _int  reserv_0;        //reserved!
@@ -349,7 +349,7 @@ typedef struct
  _uint  tdc_angle[8];
  _uint  smp_angle;
  _uint  dwl_dead_time;
- _uchar sfc_tps_thrd;
+ _uint  sfc_tps_thrd;
  _uint evap_map_thrd;
  _uint ckps_skip_trig;
  _uchar maninjpw_idl;
@@ -444,7 +444,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1504];
+ _uchar reserved[1500];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware

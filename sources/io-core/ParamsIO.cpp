@@ -153,7 +153,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->map2_curve_offset = MathHelpers::Round(p_in->map2_curve_offset / ADC_DISCRETE);
     p_params->map2_curve_gradient = MathHelpers::Round(128.0f * p_in->map2_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE);
     p_params->tps_curve_offset = MathHelpers::Round(p_in->tps_curve_offset / ADC_DISCRETE);
-    p_params->tps_curve_gradient = MathHelpers::Round(128.0f * p_in->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE);
+    p_params->tps_curve_gradient = MathHelpers::Round(128.0f * p_in->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*2) * ADC_DISCRETE);
     p_params->load_src_cfg = (p_params->load_src_cfg & 0xF0) | p_in->load_src_cfg;
     int uni_gas = (p_in->uni_gas==UNI_OUTPUT_NUM) ? 0xF : p_in->uni_gas;
     int uni_benzin = (p_in->uni_benzin==UNI_OUTPUT_NUM) ? 0xF : p_in->uni_benzin;
@@ -181,7 +181,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_prime_cold = MathHelpers::Round((p_in->inj_prime_cold * 1000.0f) / discrete);
     p_params->inj_prime_hot = MathHelpers::Round((p_in->inj_prime_hot * 1000.0f) / discrete);
     p_params->inj_prime_delay = MathHelpers::Round(p_in->inj_prime_delay * 10.0f);
-    p_params->inj_floodclear_tps = MathHelpers::Round(p_in->inj_floodclear_tps * 2.0f);
+    p_params->inj_floodclear_tps = MathHelpers::Round(p_in->inj_floodclear_tps * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->inj_aftstr_strokes1 = MathHelpers::Round(p_in->inj_aftstr_strokes[1] / 4.0f);
     p_params->stbl_str_cnt = p_in->stbl_str_cnt;
     WRITEBIT8(p_params->strt_flags, 0, p_in->fldclr_start);
@@ -604,7 +604,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->map2_curve_offset = ((float)p_params->map2_curve_offset) * ADC_DISCRETE;
      p_out->map2_curve_gradient = ((float)p_params->map2_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE * 128.0f);
      p_out->tps_curve_offset = ((float)p_params->tps_curve_offset) * ADC_DISCRETE;
-     p_out->tps_curve_gradient = ((float)p_params->tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE * 128.0f);
+     p_out->tps_curve_gradient = ((float)p_params->tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*2) * ADC_DISCRETE * 128.0f);
      p_out->load_src_cfg = p_params->load_src_cfg & 0x0F;
      p_out->uni_gas = p_params->mapsel_uni >> 4;
      p_out->uni_benzin = p_params->mapsel_uni & 0xF;
@@ -638,7 +638,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->inj_prime_cold = (float(p_params->inj_prime_cold) * discrete) / 1000.0f;  //convert to ms
      p_out->inj_prime_hot = (float(p_params->inj_prime_hot) * discrete) / 1000.0f;  //convert to ms
      p_out->inj_prime_delay = float(p_params->inj_prime_delay) / 10.0f; //convert to seconds
-     p_out->inj_floodclear_tps = float(p_params->inj_floodclear_tps) / 2.0f;
+     p_out->inj_floodclear_tps = float(p_params->inj_floodclear_tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->inj_aftstr_strokes[1] = p_params->inj_aftstr_strokes1 * 4;
      p_out->stbl_str_cnt = p_params->stbl_str_cnt;
      p_out->fldclr_start = CHECKBIT8(p_params->strt_flags, 0);

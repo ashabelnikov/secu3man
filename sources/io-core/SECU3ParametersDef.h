@@ -63,7 +63,7 @@ typedef struct params_t
  _uchar carb_invers;                    // инверсия концевика на карбюраторе
  _int   tps_curve_offset;               // offset of curve in volts
  _int   tps_curve_gradient;             // gradient of curve in Percentage/V
- _uchar tps_threshold;                  // TPS threshold used to switch work and idle modes
+ _uint  tps_threshold;                  // TPS threshold used to switch work and idle modes
 
  _uint  ephh_lot;                       // нижний порог ЭПХХ (мин-1)
  _uint  ephh_hit;                       // верхний порог ЭПХХ (мин-1)
@@ -252,7 +252,7 @@ typedef struct params_t
 
  _uchar  barocorr_type;
 
- _uchar  inj_floodclear_tps;
+ _uint   inj_floodclear_tps;
 
  _uint   vent_tmr;
 
@@ -335,7 +335,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[117];
+ _uchar reserved[115];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

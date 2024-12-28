@@ -295,7 +295,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 107)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 108)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -368,8 +368,8 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  sensorDat.iac_cl_loop  = CHECKBIT16(flags, 15);
 
  //TPS sensor
- unsigned char tps = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet,&tps))
+ int tps = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&tps))
   return false;
  sensorDat.tps = ((float)tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
@@ -781,7 +781,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& startrPar = m_recepted_packet.m_StartrPar;
- if (size != 18)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 19)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -822,10 +822,10 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  startrPar.inj_prime_delay = float(prime_delay) / 10.0f;            //convert to seconds
 
  //flood clear mode entering threshold (% of TPS)
- unsigned char inj_floodclear_tps = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_floodclear_tps))
+ int inj_floodclear_tps = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_floodclear_tps))
   return false;
- startrPar.inj_floodclear_tps = float(inj_floodclear_tps) / 2.0f;
+ startrPar.inj_floodclear_tps = float(inj_floodclear_tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Time of afterstart enrichment in strokes (gas)
  unsigned char aftstr_strokes1 = 0;
@@ -974,7 +974,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  int tps_curve_gradient = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_gradient, true))
   return false;
- funSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete * 128.0f);
+ funSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*2) * m_adc_discrete * 128.0f);
 
  //Engine load measurement source
  if (false == mp_pdp->Hex8ToBin(raw_packet,&funSetPar.load_src_cfg))
@@ -1215,7 +1215,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CarburPar& carburPar = m_recepted_packet.m_CarburPar;
- if (size != 23)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 24)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
@@ -1251,8 +1251,8 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
  carburPar.shutoff_delay = ((float)shutoff_delay) / 100.0f; //переводим в секунды
 
  //Порог переключения в режим ХХ по ДПДЗ
- unsigned char tps_threshold;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &tps_threshold))
+ int tps_threshold;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_threshold))
   return false;
  carburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
@@ -3899,8 +3899,8 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->ephh_hit_g,m_outgoing_packet);
  unsigned char shutoff_delay = MathHelpers::Round(packet_data->shutoff_delay * 100.0f);
  mp_pdp->Bin8ToHex(shutoff_delay,m_outgoing_packet);
- unsigned char tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
- mp_pdp->Bin8ToHex(tps_threshold, m_outgoing_packet);
+ int tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(tps_threshold, m_outgoing_packet);
  int fuelcut_map_thrd = MathHelpers::Round((packet_data->fuelcut_map_thrd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER));
  mp_pdp->Bin16ToHex(fuelcut_map_thrd, m_outgoing_packet);
  int fuelcut_cts_thrd = MathHelpers::Round((packet_data->fuelcut_cts_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER));
@@ -4001,8 +4001,8 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin16ToHex(prime_hot, m_outgoing_packet);
  int prime_delay = MathHelpers::Round(packet_data->inj_prime_delay * 10.0f);
  mp_pdp->Bin8ToHex(prime_delay, m_outgoing_packet);
- int inj_floodclear_tps = MathHelpers::Round(packet_data->inj_floodclear_tps * 2.0f);
- mp_pdp->Bin8ToHex(inj_floodclear_tps, m_outgoing_packet);
+ int inj_floodclear_tps = MathHelpers::Round(packet_data->inj_floodclear_tps * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(inj_floodclear_tps, m_outgoing_packet);
  int inj_aftstr_strokes1 = MathHelpers::Round(packet_data->inj_aftstr_strokes[1] / 4.0f);
  mp_pdp->Bin8ToHex(inj_aftstr_strokes1, m_outgoing_packet);
  int stbl_str_cnt = MathHelpers::Round(packet_data->stbl_str_cnt);
@@ -4081,7 +4081,7 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin16ToHex(map2_curve_gradient, m_outgoing_packet);
  int tps_curve_offset = MathHelpers::Round(packet_data->tps_curve_offset / m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_offset, m_outgoing_packet);
- int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete);
+ int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*2) * m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->load_src_cfg, m_outgoing_packet);
  int uni_gas = (packet_data->uni_gas==UNI_OUTPUT_NUM) ? 0xF : packet_data->uni_gas;
