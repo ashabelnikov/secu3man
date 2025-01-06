@@ -114,6 +114,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("size of averaging buffer for VSS"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[7], _T("Size of averaging buffer for vehicle speed. The more averaging value, the greater smoothing, but at the same time the delay increases."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Опрашивать ДАД синхронно с положением коленвала"), &d.map_samp_mode, _T("Если галочка установлена, то опрос ДАД будет привязан к определенным углам коленвала (1 раз за такт). Если галочка не установлена, то опрос ДАД будет осуществляться через равные промежутки времени (каждые 3.28мс)."));
+ else
+  dfd.AppendItem(_T("Sample MAP synchronously with crankshaft"), &d.map_samp_mode, _T("If the check is set, then MAP will be sampled at certain crankshaft degrees (in each stroke). If the check is not set, then MAP will be sampled regularly (each 3.28ms)."));
+
  //idling regulator
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Регулятор холостого хода:"));
@@ -460,9 +465,9 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("TDC of the 8 cylinder"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.tdc_angle[7], _T("TDC position of 8 cylinder relatively to the first tooth of trigger wheel"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Угол опроса датчиков (до ВМТ)"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.smp_angle, _T("Угол начала опроса датчиков (запуск АЦП) относительно ВМТ (угол до ВМТ)"));
+  dfd.AppendItem(_T("Угол опроса ДАД (до ВМТ)"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.smp_angle, _T("Угол начала опроса ДАД (запуск АЦП) относительно ВМТ (угол до ВМТ). Смотрите также параметр 'Опрашивать ДАД синхронно с положением коленвала'"));
  else
-  dfd.AppendItem(_T("Angle of sensors' polling (BTDC)"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.smp_angle, _T("Angle of sensors' polling (start of ADC) relatively to TDC (angle before TDC)"));
+  dfd.AppendItem(_T("Angle of MAP's sampling (BTDC)"), _T("°"), 0.0f, 720.0f, 0.1f, 2, &d.smp_angle, _T("Angle of MAP's sampling (start of ADC) relatively to TDC (angle before TDC). See also parameter 'Sample MAP synchronously with crankshaft'."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Время между искрой и началом накопления"), _T("мс"), 0.10f, 5.00f, 0.01f, 2, &d.dwl_dead_time, _T("Данный параметр ограничивает длительность импульса нокопления чтобы последнее не начиналось пока горит искра."));

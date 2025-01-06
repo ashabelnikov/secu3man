@@ -40,7 +40,7 @@ CMIMAPDot::~CMIMAPDot()
 
 void CMIMAPDot::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_MAPDOT); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_MAPDOT, false, false); //create window
 
  m_tlpFmt = _T("%0.0f ");
 
@@ -90,8 +90,7 @@ CMIMAPDotGraph::~CMIMAPDotGraph()
 void CMIMAPDotGraph::Create(CWnd* pParent)
 {
  // create the window of control
- CRect rect(0,0, 100,100);
- VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, rect, pParent, IDC_MI_MAPDOTGRAPH));
+ MeasInstrBase::Create(pParent, IDC_MI_MAPDOTGRAPH);
 
  // customize the control
  m_scope.SetRange(-500, 500);
