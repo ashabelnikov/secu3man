@@ -109,6 +109,13 @@ int FletcherChecksum(std::vector<BYTE>& i_data, size_t offset, size_t size)
  }
  return *((unsigned short*)(&chksum[0]));
 }
+
+int UpdateFletcherChecksum(int checksum, BYTE i_data)
+{
+ ((BYTE*)&checksum)[0]+=i_data;
+ ((BYTE*)&checksum)[1]+=((BYTE*)&checksum)[0];
+ return checksum;
+}
 }
 
 //-----------------------------------------------------------------------
@@ -3326,6 +3333,7 @@ bool CControlApp::ParsePackets()
   if (use_checksum)
   {
    int checksum1 = FletcherChecksum(*it, 2, it->size() - 5);
+   checksum1 = UpdateFletcherChecksum(checksum1, it->size() - 5); //update checksum with size
    int checksum2 = MAKEWORD((*it)[it->size()-2], (*it)[it->size()-3]);
    if (checksum1 != checksum2)
     continue; //packet is corrupted, don't accept it
@@ -3859,6 +3867,7 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
  {
   //calculate and put checksum value
   int checksum = FletcherChecksum(m_outgoing_packet, 2, m_outgoing_packet.size() - 2);
+  checksum = UpdateFletcherChecksum(checksum, m_outgoing_packet.size() - 2);
   mp_pdp->Bin16ToHex(checksum, m_outgoing_packet); //append packet with two bytes of checksum
  }
 
