@@ -486,6 +486,26 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->wallwet_model = MathHelpers::Round(p_in->wallwet_model);
    }
    break;
+  case LTFT_PAR:
+   {
+    LtftPar* p_in = (LtftPar*)ip_values;
+    p_params->ltft_mode = MathHelpers::Round(p_in->ltft_mode);
+    p_params->ltft_learn_clt = MathHelpers::Round(p_in->ltft_learn_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->ltft_learn_clt_up = MathHelpers::Round(p_in->ltft_learn_clt_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->ltft_learn_iat_up = MathHelpers::Round(p_in->ltft_learn_iat_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->ltft_learn_grad = MathHelpers::Round(p_in->ltft_learn_grad * 256.0f);
+    p_params->ltft_learn_gpa = MathHelpers::Round(p_in->ltft_learn_gpa * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->ltft_learn_gpd = MathHelpers::Round(p_in->ltft_learn_gpd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->ltft_min = MathHelpers::Round(p_in->ltft_min / (100.0f / 512.0f));
+    p_params->ltft_max = MathHelpers::Round(p_in->ltft_max / (100.0f / 512.0f));
+    p_params->ltft_learn_rpm[0] = p_in->ltft_learn_rpm[0];
+    p_params->ltft_learn_rpm[1] = p_in->ltft_learn_rpm[1];
+    p_params->ltft_learn_load[0] = MathHelpers::Round(p_in->ltft_learn_load[0] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->ltft_learn_load[1] = MathHelpers::Round(p_in->ltft_learn_load[1] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->ltft_dead_band[0] = MathHelpers::Round((p_in->ltft_dead_band[0] / 100.f) * 512.0f);
+    p_params->ltft_dead_band[1] = MathHelpers::Round((p_in->ltft_dead_band[1] / 100.f) * 512.0f);
+   }
+   break;
 
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
@@ -996,6 +1016,26 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->xtau_s_thrd = -(float)p_params->inj_xtau_s_thrd;
     p_out->xtau_f_thrd = -(float)p_params->inj_xtau_f_thrd;
     p_out->wallwet_model = p_params->wallwet_model;
+   }
+   break;
+  case LTFT_PAR:
+   {
+    LtftPar* p_out = (LtftPar*)op_values;
+    p_out->ltft_mode = p_params->ltft_mode;
+    p_out->ltft_learn_clt = float(p_params->ltft_learn_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->ltft_learn_clt_up = float(p_params->ltft_learn_clt_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->ltft_learn_iat_up = float(p_params->ltft_learn_iat_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->ltft_learn_grad = ((float)p_params->ltft_learn_grad) / 256.0f;
+    p_out->ltft_learn_gpa = ((float)p_params->ltft_learn_gpa) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->ltft_learn_gpd = ((float)p_params->ltft_learn_gpd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->ltft_min = ((float)p_params->ltft_min) / (512.0f / 100.0f);
+    p_out->ltft_max = ((float)p_params->ltft_max) / (512.0f / 100.0f);
+    p_out->ltft_learn_rpm[0] = p_params->ltft_learn_rpm[0];
+    p_out->ltft_learn_rpm[1] = p_params->ltft_learn_rpm[1];
+    p_out->ltft_learn_load[0] = ((float)p_params->ltft_learn_load[0]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->ltft_learn_load[1] = ((float)p_params->ltft_learn_load[1]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->ltft_dead_band[0] = (((float)p_params->ltft_dead_band[0]) / 512.0f) * 100.f; //%
+    p_out->ltft_dead_band[1] = (((float)p_params->ltft_dead_band[1]) / 512.0f) * 100.f; //%
    }
    break;
 

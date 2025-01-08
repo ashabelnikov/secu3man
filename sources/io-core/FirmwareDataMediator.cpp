@@ -364,16 +364,11 @@ typedef struct
  _uint pwron_time;
  _uint pwron_time1; 
 
- _uchar  ltft_mode;       //!< 0 - LTFT is turned off, 1 - use only for petrol, 2 - use only for gas, 3 - use for both petrol and gas
- _int    ltft_learn_clt;  //!< Temperature threshold for learning, value in 0.25C units
  _uchar  ltft_cell_band;  //!< cell band in %, Value 256 corresponds to 100%, e.g. 1 discrete correspons to 0,390625%
  _uchar  ltft_stab_time;  //!< Learn stability time, value in 0.01 second units
- _uchar  ltft_learn_grad; //!< Learning gradient, 256 corresponds to 1.0, range 0...0.99
 
  _uchar  pwrrelay_uni; 
 
- _uint   ltft_learn_gpa;
- _uint   ltft_learn_gpd;
  _uchar  ltft_neigh_rad;
  _uchar  ltft_sigswt_num;
 
@@ -407,22 +402,12 @@ typedef struct
 
  _uchar ltft_on_idling;
 
- _char ltft_min;
- _char ltft_max;
-
  _uchar use_injnonlin_corr;
 
  _uchar ego_fc_delay;
  _uchar ego_ac_delay;
 
  _uchar ltft_algo;
- _int   ltft_learn_clt_up;  //!< upper temperature threshold for learning, value in 0.25C units
- _int   ltft_learn_iat_up;  //!< upper IAT threshold for learning, value in 0.25C units
-
- _uint ltft_learn_rpm[2];
- _uint ltft_learn_load[2];
-
- _uchar ltft_dead_band[2];
 
  _uint aftstr_flat_strokes;
 
@@ -446,7 +431,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1499];
+ _uchar reserved[1523];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3514,11 +3499,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.pwron_time = ((float)exd.pwron_time) / 100.0f; //convert to seconds
  o_data.pwron_time1 = ((float)exd.pwron_time1) / 100.0f; //convert to seconds
 
- o_data.ltft_mode = exd.ltft_mode;
- o_data.ltft_learn_clt = ((float)exd.ltft_learn_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.ltft_cell_band = ((float)exd.ltft_cell_band * 100.0f) / 256.0f;
  o_data.ltft_stab_time = ((float)exd.ltft_stab_time) / 100.0f;
- o_data.ltft_learn_grad = ((float)exd.ltft_learn_grad) / 256.0f;
 
  o_data.pwrrelay_uni = exd.pwrrelay_uni;
  if (o_data.pwrrelay_uni == 0xF)
@@ -3526,8 +3508,6 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  else
   o_data.pwrrelay_uni++;
 
- o_data.ltft_learn_gpa = ((float)exd.ltft_learn_gpa) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- o_data.ltft_learn_gpd = ((float)exd.ltft_learn_gpd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.ltft_neigh_rad = exd.ltft_neigh_rad;
  o_data.ltft_sigswt_num = exd.ltft_sigswt_num;
 
@@ -3558,27 +3538,12 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.ltft_on_idling = exd.ltft_on_idling;
 
- o_data.ltft_min = ((float)exd.ltft_min) / (512.0f / 100.0f);
- o_data.ltft_max = ((float)exd.ltft_max) / (512.0f / 100.0f);
-
  o_data.use_injnonlin_corr = exd.use_injnonlin_corr;
 
  o_data.ego_fc_delay = exd.ego_fc_delay;
  o_data.ego_ac_delay = exd.ego_ac_delay;
 
  o_data.ltft_algo = exd.ltft_algo;
-
- o_data.ltft_learn_clt_up = ((float)exd.ltft_learn_clt_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- o_data.ltft_learn_iat_up = ((float)exd.ltft_learn_iat_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
-
- o_data.ltft_learn_rpm[0] = exd.ltft_learn_rpm[0];
- o_data.ltft_learn_rpm[1] = exd.ltft_learn_rpm[1];
-
- o_data.ltft_learn_load[0] = ((float)exd.ltft_learn_load[0]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- o_data.ltft_learn_load[1] = ((float)exd.ltft_learn_load[1]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
-
- o_data.ltft_dead_band[0] = (((float)exd.ltft_dead_band[0]) / 512.0f) * 100.f; //%
- o_data.ltft_dead_band[1] = (((float)exd.ltft_dead_band[1]) / 512.0f) * 100.f; //%
 
  o_data.aftstr_flat_strokes = exd.aftstr_flat_strokes;
  o_data.inj_prime_times = exd.inj_prime_times;
@@ -3663,19 +3628,14 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.pwron_time = MathHelpers::Round(i_data.pwron_time * 100.0f);
  exd.pwron_time1 = MathHelpers::Round(i_data.pwron_time1 * 100.0f);
 
- exd.ltft_mode = i_data.ltft_mode;
- exd.ltft_learn_clt = MathHelpers::Round(i_data.ltft_learn_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.ltft_cell_band = MathHelpers::Round((i_data.ltft_cell_band * 256.0f) / 100.0f);
  exd.ltft_stab_time = MathHelpers::Round(i_data.ltft_stab_time * 100.0f);
- exd.ltft_learn_grad = MathHelpers::Round(i_data.ltft_learn_grad * 256.0f);
 
  if (i_data.pwrrelay_uni==0)
   exd.pwrrelay_uni = 0xF;   //zero means disabled
  else
  exd.pwrrelay_uni = i_data.pwrrelay_uni-1;
 
- exd.ltft_learn_gpa = MathHelpers::Round(i_data.ltft_learn_gpa * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
- exd.ltft_learn_gpd = MathHelpers::Round(i_data.ltft_learn_gpd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.ltft_neigh_rad = i_data.ltft_neigh_rad;
  exd.ltft_sigswt_num = i_data.ltft_sigswt_num;
 
@@ -3705,27 +3665,12 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.ltft_on_idling = i_data.ltft_on_idling;
 
- exd.ltft_min = MathHelpers::Round(i_data.ltft_min / (100.0f / 512.0f));
- exd.ltft_max = MathHelpers::Round(i_data.ltft_max / (100.0f / 512.0f));
-
  exd.use_injnonlin_corr = i_data.use_injnonlin_corr;
 
  exd.ego_fc_delay = i_data.ego_fc_delay;
  exd.ego_ac_delay = i_data.ego_ac_delay;
 
  exd.ltft_algo = i_data.ltft_algo;
-
- exd.ltft_learn_clt_up = MathHelpers::Round(i_data.ltft_learn_clt_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
- exd.ltft_learn_iat_up = MathHelpers::Round(i_data.ltft_learn_iat_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
-
- exd.ltft_learn_rpm[0] = i_data.ltft_learn_rpm[0];
- exd.ltft_learn_rpm[1] = i_data.ltft_learn_rpm[1];
-
- exd.ltft_learn_load[0] = MathHelpers::Round(i_data.ltft_learn_load[0] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
- exd.ltft_learn_load[1] = MathHelpers::Round(i_data.ltft_learn_load[1] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
-
- exd.ltft_dead_band[0] = MathHelpers::Round((i_data.ltft_dead_band[0] / 100.f) * 512.0f);
- exd.ltft_dead_band[1] = MathHelpers::Round((i_data.ltft_dead_band[1] / 100.f) * 512.0f);
 
  exd.aftstr_flat_strokes = i_data.aftstr_flat_strokes;
  exd.inj_prime_times = i_data.inj_prime_times;

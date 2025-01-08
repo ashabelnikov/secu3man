@@ -42,6 +42,7 @@ set(HEADERS
   Params/IParamDeskView.h
   Params/KnockPageDlg.h
   Params/LambdaPageDlg.h
+  Params/LTFTPageDlg.h
   Params/MiscPageDlg.h
   Params/ParamDeskDlg.h
   Params/SecurPageDlg.h
@@ -75,6 +76,7 @@ set(SOURCES
   Params/InjectorPageDlg.cpp
   Params/KnockPageDlg.cpp
   Params/LambdaPageDlg.cpp
+  Params/LTFTPageDlg.cpp
   Params/MiscPageDlg.cpp
   Params/ParamDeskDlg.cpp
   Params/SecurPageDlg.cpp

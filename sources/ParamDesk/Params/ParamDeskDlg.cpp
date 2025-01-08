@@ -47,6 +47,7 @@
 #include "UniOutPageDlg.h"
 #include "InjectorPageDlg.h"
 #include "LambdaPageDlg.h"
+#include "LTFTPageDlg.h"
 
 #include "common/Dll.h"
 #include "common/FastDelegate.h"
@@ -141,6 +142,9 @@ CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learn
 
  m_pGasdosePageDlg = new CGasdosePageDlg();
  m_pGasdosePageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+
+ m_pLTFTPageDlg = new CLTFTPageDlg();
+ m_pLTFTPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
 }
 
 CParamDeskDlg::~CParamDeskDlg()
@@ -165,6 +169,7 @@ CParamDeskDlg::~CParamDeskDlg()
  delete m_pLambdaPageDlg;
  delete m_pAccelEnrPageDlg;
  delete m_pGasdosePageDlg;
+ delete m_pLTFTPageDlg;
 }
 
 BOOL CParamDeskDlg::Create(CWnd* pParentWnd /*= NULL*/)
@@ -255,6 +260,9 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_GASDOSE_PAR),m_pGasdosePageDlg,16), GASDOSE_PAR));
  m_gasdose_tab_idx = idx;
 
+ m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LTFT_PAR),m_pLTFTPageDlg,17), LTFT_PAR));
+ m_ltft_tab_idx = idx;
+
  //Warning! SetEventListener must be called before SetCurSel, because SetCurSel
  //already uses event handlers
 
@@ -268,6 +276,7 @@ BOOL CParamDeskDlg::OnInitDialog()
  if (false==m_fuel_injection)
  {
   m_tab_control.EnableItem(m_fuel_inject_idx, false);
+  m_tab_control.EnableItem(m_ltft_tab_idx, false);
  }
 
  //disable acceleration enrichment tab if fuel injection and gas doser are not supported
@@ -383,6 +392,7 @@ void CParamDeskDlg::Enable(bool enable)
  m_pInjectorPageDlg->Enable(enable && m_fuel_injection);
  m_pLambdaPageDlg->Enable(enable && m_lambda);
  m_pAccelEnrPageDlg->Enable(enable && (m_fuel_injection || m_gasdose));
+ m_pLTFTPageDlg->Enable(enable && m_fuel_injection);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -393,6 +403,7 @@ void CParamDeskDlg::Enable(bool enable)
  if (false==m_fuel_injection)
  {
   m_tab_control.EnableItem(m_fuel_inject_idx, false);
+  m_tab_control.EnableItem(m_ltft_tab_idx, false);
  }
 
  if (false==m_fuel_injection && false==m_gasdose)
@@ -487,6 +498,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case ACCEL_PAR:
    m_pAccelEnrPageDlg->SetValues((AccelPar*)i_values);
    break;
+  case LTFT_PAR:
+   m_pLTFTPageDlg->SetValues((LtftPar*)i_values);
+   break;
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
@@ -554,6 +568,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
    break;
   case ACCEL_PAR:
    m_pAccelEnrPageDlg->GetValues((AccelPar*)o_values);
+   break;
+  case LTFT_PAR:
+   m_pLTFTPageDlg->GetValues((LtftPar*)o_values);
    break;
   case FNNAME_DAT:
   case SENSOR_DAT:
@@ -715,6 +732,7 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
 
  m_tab_control.EnableItem(m_fuel_inject_idx, i_enable && m_enabled);
  m_tab_control.EnableItem(m_accenr_tab_idx, (i_enable || m_gasdose) && m_enabled);
+ m_tab_control.EnableItem(m_ltft_tab_idx, i_enable && m_enabled);
  m_pInjectorPageDlg->Enable(i_enable && m_enabled);
  m_pAccelEnrPageDlg->Enable((i_enable || m_gasdose) && m_enabled);
  m_pAccelEnrPageDlg->EnableFuelInjection(i_enable);
@@ -726,6 +744,7 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  m_pLambdaPageDlg->EnableFuelInjection(i_enable || m_gasdose);
  m_pTemperPageDlg->EnableFuelInjection(i_enable);
  m_pFunSetPageDlg->EnableFuelInjection(i_enable);
+ m_pLTFTPageDlg->Enable(i_enable && m_enabled);
 }
 
 void CParamDeskDlg::EnableGasdose(bool i_enable)

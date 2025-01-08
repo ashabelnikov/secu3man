@@ -1266,6 +1266,85 @@ BEGIN
     LTEXT           "кПа/ сек",IDC_PD_ACCELENR_XTAUFTHRD_UNIT,146,216,30,18
 END
 
+IDD_PD_LTFT_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Использование коррекции",IDC_PD_LTFT_MODE_CAPTION,0,11,94,10
+    COMBOBOX        IDC_PD_LTFT_MODE_COMBO,95,10,44,30,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_CLT_DW_EDIT,95,30,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_CLT_DW_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,30,13,17
+    LTEXT           "Нижний порог ДТОЖ разрешения адаптации",IDC_PD_LTFT_LEARN_CLT_DW_CAPTION,0,31,94,18
+    LTEXT           "°C",IDC_PD_LTFT_LEARN_CLT_DW_UNIT,141,31,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_CLT_UP_EDIT,95,50,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_CLT_UP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,50,13,17
+    LTEXT           "Верхний порог ДТОЖ разрешения адаптации",IDC_PD_LTFT_LEARN_CLT_UP_CAPTION,1,51,94,18
+    LTEXT           "°C",IDC_PD_LTFT_LEARN_CLT_UP_UNIT,144,51,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_IAT_UP_EDIT,95,70,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_IAT_UP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,70,13,17
+    LTEXT           "Верхний порог ДТВ разрешения адаптации",IDC_PD_LTFT_LEARN_IAT_UP_CAPTION,0,71,94,18
+    LTEXT           "°C",IDC_PD_LTFT_LEARN_IAT_UP_UNIT,144,71,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_GRAD_EDIT,95,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_GRAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,90,13,17
+    LTEXT           "Градиент таблицы адаптации/коэфф.выравн.",IDC_PD_LTFT_LEARN_GRAD_CAPTION,0,91,94,18
+    LTEXT           "",IDC_PD_LTFT_LEARN_GRAD_UNIT,144,91,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_GPA_EDIT,95,110,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_GPA_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,110,13,17
+    LTEXT           "Абс. давление газа разрешения адаптации",IDC_PD_LTFT_LEARN_GPA_CAPTION,0,111,94,18
+    LTEXT           "кПа",IDC_PD_LTFT_LEARN_GPA_UNIT,144,111,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_GPD_EDIT,95,130,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_GPD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,130,13,17
+    LTEXT           "Дифф. давление газа разрешения адаптации",IDC_PD_LTFT_LEARN_GPD_CAPTION,0,131,94,18
+    LTEXT           "кПа",IDC_PD_LTFT_LEARN_GPD_UNIT,144,131,20,10
+
+    EDITTEXT        IDC_PD_LTFT_MIN_EDIT,95,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_MIN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
+    LTEXT           "Ограничение LTFT коррекции снизу",IDC_PD_LTFT_MIN_CAPTION,0,151,94,18
+    LTEXT           "%",IDC_PD_LTFT_MIN_UNIT,144,151,20,10
+
+    EDITTEXT        IDC_PD_LTFT_MAX_EDIT,95,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_MAX_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
+    LTEXT           "Ограничение LTFT коррекции сверху",IDC_PD_LTFT_MAX_CAPTION,0,171,94,18
+    LTEXT           "%",IDC_PD_LTFT_MAX_UNIT,144,171,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_RPM0_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_RPM0_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Нижний порог оборотов адаптации",IDC_PD_LTFT_LEARN_RPM0_CAPTION,0,191,94,18
+    LTEXT           "мин-1",IDC_PD_LTFT_LEARN_RPM0_UNIT,140,191,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_RPM1_EDIT,95,210,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_RPM1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,210,13,17
+    LTEXT           "Верхний порог оборотов адаптации",IDC_PD_LTFT_LEARN_RPM1_CAPTION,0,211,94,18
+    LTEXT           "мин-1",IDC_PD_LTFT_LEARN_RPM1_UNIT,141,211,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_LOAD0_EDIT,95,230,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_LOAD0_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,230,13,17
+    LTEXT           "Нижний порог нагрузки адаптации",IDC_PD_LTFT_LEARN_LOAD0_CAPTION,0,231,94,18
+    LTEXT           "кПа",IDC_PD_LTFT_LEARN_LOAD0_UNIT,141,231,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_LOAD1_EDIT,95,250,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_LOAD1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,250,13,17
+    LTEXT           "Верхний порог нагрузки адаптации",IDC_PD_LTFT_LEARN_LOAD1_CAPTION,0,251,94,18
+    LTEXT           "кПа",IDC_PD_LTFT_LEARN_LOAD1_UNIT,141,251,20,10
+
+    EDITTEXT        IDC_PD_LTFT_DEAD_BAND0_EDIT,95,270,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_DEAD_BAND0_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,270,13,17
+    LTEXT           "Отрицательный порог нечувствит. LTFT (Kosh)",IDC_PD_LTFT_DEAD_BAND0_CAPTION,0,271,94,18
+    LTEXT           "%",IDC_PD_LTFT_DEAD_BAND0_UNIT,141,271,20,10
+
+    EDITTEXT        IDC_PD_LTFT_DEAD_BAND1_EDIT,95,290,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_DEAD_BAND1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,290,13,17
+    LTEXT           "Положительный порог нечувствит. LTFT (Kosh)",IDC_PD_LTFT_DEAD_BAND1_CAPTION,0,291,94,18
+    LTEXT           "%",IDC_PD_LTFT_DEAD_BAND1_UNIT,141,291,20,10
+END
+
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_VSCROLL | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
@@ -2122,6 +2201,30 @@ BEGIN
   IDS_MAF_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДМРВ!\nИзмените значения параметров чтобы исключить эту ошибку."
   IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Ограничивать максимальное значение длительности впрыска при пуске двигателя."
   IDS_PD_IDLREG_WITH_IACREG_CHECK_TT "Не отключать УОЗ РХХ во время работы РДВ РХХ. Если галочка не установлена, то УОЗ РХХ будет работать только если обороты находятся в мертвой зоне РДВ РХХ."
+END
+
+STRINGTABLE
+BEGIN
+  IDS_PD_TABNAME_LTFT_PAR  "LTFT"
+  IDS_PD_LTFT_MODE_COMBO_TT "Выкл - адаптация по лямбде выключена; Бензин - включена только для бензина (GAS_V=0); Газ - включена только для газа (GAS_V=1); Бенз+Газ - включена и для газа и для бензина."
+  IDS_PD_LTFT_MODE_OFF     "Выкл"
+  IDS_PD_LTFT_MODE_PETROL  "Бензин"
+  IDS_PD_LTFT_MODE_GAS     "Газ"
+  IDS_PD_LTFT_MODE_PETGAS  "Бенз+Газ"
+  IDS_PD_LTFT_LEARN_CLT_DW_EDIT_TT "Процесс адаптации включится только когда температура двигателя превысит этот порог."
+  IDS_PD_LTFT_LEARN_CLT_UP_EDIT_TT "Процесс адаптации выключится когда температура двигателя превысит этот порог."
+  IDS_PD_LTFT_LEARN_IAT_UP_EDIT_TT "Процесс адаптации выключится когда температура воздуха на впуске превысит этот порог."
+  IDS_PD_LTFT_LEARN_GRAD_EDIT_TT "Определает скорость изменения соседних ячеек. Чем выше значение, тем больше меняются соседние ячейки при адаптации текущей ячейки. В алгоритме 'Kosh' это коэффициент выравнивания."
+  IDS_PD_LTFT_LEARN_GPA_EDIT_TT  "Процесс адаптации включится только когда абсолютное давление газа превысит этот порог."
+  IDS_PD_LTFT_LEARN_GPD_EDIT_TT  "Процесс адаптации включится только когда дифференциальное давление газа (ДДГ - ДАД) превысит этот порог. Для запрещения этого порога установите значение = 0."
+  IDS_PD_LTFT_MIN_EDIT_TT        "Значения долговременной коррекции в таблице LTFT не могут быть меньше этого значения."
+  IDS_PD_LTFT_MAX_EDIT_TT        "Значения долговременной коррекции в таблице LTFT не могут быть больше этого значения."
+  IDS_PD_LTFT_LEARN_RPM0_EDIT_TT "Процесс адаптации прекратится когда обороты двигателя будут ниже этого порога."
+  IDS_PD_LTFT_LEARN_RPM1_EDIT_TT "Процесс адаптации прекратится когда обороты двигателя будут выше этого порога."
+  IDS_PD_LTFT_LEARN_LOAD0_EDIT_TT "Процесс адаптации прекратится когда нагрузка двигателя (кПа/%) будет ниже этого порога."
+  IDS_PD_LTFT_LEARN_LOAD1_EDIT_TT "Процесс адаптации прекратится когда нагрузка двигателя (кПа/%) будет выше этого порога."
+  IDS_PD_LTFT_DEAD_BAND0_EDIT_TT  "Процесс адаптации не начнется пока лямбда коррекция выше этого порога. Данный параметр используется только алгоритмом 'Kosh'."
+  IDS_PD_LTFT_DEAD_BAND1_EDIT_TT  "Процесс адаптации не начнется пока лямбда коррекция ниже этого порога. Данный параметр используется только алгоритмом 'Kosh'"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3389,6 +3492,85 @@ BEGIN
     LTEXT           "kPa/ sec",IDC_PD_ACCELENR_XTAUFTHRD_UNIT,146,216,30,18
 END
 
+IDD_PD_LTFT_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Use of LTFT",IDC_PD_LTFT_MODE_CAPTION,0,11,94,10
+    COMBOBOX        IDC_PD_LTFT_MODE_COMBO,95,10,44,30,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_CLT_DW_EDIT,95,30,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_CLT_DW_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,30,13,17
+    LTEXT           "Lower CLT threshold for LTFT",IDC_PD_LTFT_LEARN_CLT_DW_CAPTION,0,31,94,18
+    LTEXT           "°C",IDC_PD_LTFT_LEARN_CLT_DW_UNIT,141,31,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_CLT_UP_EDIT,95,50,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_CLT_UP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,50,13,17
+    LTEXT           "Upper CLT threshold for LTFT",IDC_PD_LTFT_LEARN_CLT_UP_CAPTION,1,51,94,18
+    LTEXT           "°C",IDC_PD_LTFT_LEARN_CLT_UP_UNIT,144,51,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_IAT_UP_EDIT,95,70,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_IAT_UP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,70,13,17
+    LTEXT           "Upper IAT threshold for LTFT",IDC_PD_LTFT_LEARN_IAT_UP_CAPTION,0,71,94,18
+    LTEXT           "°C",IDC_PD_LTFT_LEARN_IAT_UP_UNIT,144,71,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_GRAD_EDIT,95,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_GRAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,90,13,17
+    LTEXT           "Learning gradient/allignment factor",IDC_PD_LTFT_LEARN_GRAD_CAPTION,0,91,94,18
+    LTEXT           "",IDC_PD_LTFT_LEARN_GRAD_UNIT,144,91,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_GPA_EDIT,95,110,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_GPA_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,110,13,17
+    LTEXT           "Abs. gas pressure threshold for LTFT",IDC_PD_LTFT_LEARN_GPA_CAPTION,0,111,94,18
+    LTEXT           "kPa",IDC_PD_LTFT_LEARN_GPA_UNIT,144,111,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_GPD_EDIT,95,130,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_GPD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,130,13,17
+    LTEXT           "Diff. gas pressure threshold for LTFT",IDC_PD_LTFT_LEARN_GPD_CAPTION,0,131,94,18
+    LTEXT           "kPa",IDC_PD_LTFT_LEARN_GPD_UNIT,144,131,20,10
+
+    EDITTEXT        IDC_PD_LTFT_MIN_EDIT,95,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_MIN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
+    LTEXT           "Bottom limit of LTFT correction",IDC_PD_LTFT_MIN_CAPTION,0,151,94,18
+    LTEXT           "%",IDC_PD_LTFT_MIN_UNIT,144,151,20,10
+
+    EDITTEXT        IDC_PD_LTFT_MAX_EDIT,95,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_MAX_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
+    LTEXT           "Top limit of LTFT correction",IDC_PD_LTFT_MAX_CAPTION,0,171,94,18
+    LTEXT           "%",IDC_PD_LTFT_MAX_UNIT,144,171,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_RPM0_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_RPM0_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Lower RPM threshold for LTFT",IDC_PD_LTFT_LEARN_RPM0_CAPTION,0,191,94,18
+    LTEXT           "min-1",IDC_PD_LTFT_LEARN_RPM0_UNIT,140,191,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_RPM1_EDIT,95,210,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_RPM1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,210,13,17
+    LTEXT           "Upper RPM threshold for LTFT",IDC_PD_LTFT_LEARN_RPM1_CAPTION,0,211,94,18
+    LTEXT           "min-1",IDC_PD_LTFT_LEARN_RPM1_UNIT,141,211,30,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_LOAD0_EDIT,95,230,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_LOAD0_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,230,13,17
+    LTEXT           "Lower load threshold for LTFT",IDC_PD_LTFT_LEARN_LOAD0_CAPTION,0,231,94,18
+    LTEXT           "kPa",IDC_PD_LTFT_LEARN_LOAD0_UNIT,141,231,20,10
+
+    EDITTEXT        IDC_PD_LTFT_LEARN_LOAD1_EDIT,95,250,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_LEARN_LOAD1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,250,13,17
+    LTEXT           "Upper load threshold for LTFT",IDC_PD_LTFT_LEARN_LOAD1_CAPTION,0,251,94,18
+    LTEXT           "kPa",IDC_PD_LTFT_LEARN_LOAD1_UNIT,141,251,20,10
+
+    EDITTEXT        IDC_PD_LTFT_DEAD_BAND0_EDIT,95,270,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_DEAD_BAND0_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,270,13,17
+    LTEXT           "Negative insensitivity LTFT threshold (Kosh)",IDC_PD_LTFT_DEAD_BAND0_CAPTION,0,271,94,18
+    LTEXT           "%",IDC_PD_LTFT_DEAD_BAND0_UNIT,141,271,20,10
+
+    EDITTEXT        IDC_PD_LTFT_DEAD_BAND1_EDIT,95,290,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_LTFT_DEAD_BAND1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,290,13,17
+    LTEXT           "Positive insensitivity LTFT threshold (Kosh)",IDC_PD_LTFT_DEAD_BAND1_CAPTION,0,291,94,18
+    LTEXT           "%",IDC_PD_LTFT_DEAD_BAND1_UNIT,141,291,20,10
+END
+
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_VSCROLL | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
@@ -4268,6 +4450,30 @@ BEGIN
   IDS_MAF_IGL_OVERFLOW "Overflow detected when calculating constant for MAF inj. PW equation!\nChange configuration to eliminate this error."
   IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Limit maximum injection PW during cranking."
   IDS_PD_IDLREG_WITH_IACREG_CHECK_TT "Do not turn off the Ign.tim. idling regulator while the IAC idling regulator is operating. If checkbox is not checked, then the Ign.tim. regulator will work only if RPM is in the dead zone of the IAC regulator."
+END
+
+STRINGTABLE
+BEGIN
+  IDS_PD_TABNAME_LTFT_PAR  "LTFT"
+  IDS_PD_LTFT_MODE_COMBO_TT "OFF - LTFT is turned off; Petrol - LTFT is working only for petrol (GAS_V=0); Gas - LTFT is working only for gas (GAS_V=1); Petrol+Gas - LTFT is working for both petrol and gas"
+  IDS_PD_LTFT_MODE_OFF     "OFF"
+  IDS_PD_LTFT_MODE_PETROL  "Petrol"
+  IDS_PD_LTFT_MODE_GAS     "Gas"
+  IDS_PD_LTFT_MODE_PETGAS  "Petrol+Gas"
+  IDS_PD_LTFT_LEARN_CLT_DW_EDIT_TT "LTFT learning will work only when coolant temperature is above this threshold."
+  IDS_PD_LTFT_LEARN_CLT_UP_EDIT_TT "LTFT learning will stop to work when coolant temperature is above this threshold."
+  IDS_PD_LTFT_LEARN_IAT_UP_EDIT_TT "LTFT learning will stop to work when intake manifold temperature is above this threshold."
+  IDS_PD_LTFT_LEARN_GRAD_EDIT_TT "Determines the rate of change of adjacent cells. The higher the value, the more neighboring cells change when learning the current cell. In the 'Kosh' algorithm this is allignment factor."
+  IDS_PD_LTFT_LEARN_GPA_EDIT_TT  "LTFT learning will work only when absolute gas pressure is above this threshold."
+  IDS_PD_LTFT_LEARN_GPD_EDIT_TT  "LTFT learning will work only when differential gas pressure (GPS - MAP) is above this threshold. To disable this threshold set value to zero."
+  IDS_PD_LTFT_MIN_EDIT_TT        "Values in the LTFT map can not be less than this value."
+  IDS_PD_LTFT_MAX_EDIT_TT        "Values in the LTFT map can not be greater than this value."
+  IDS_PD_LTFT_LEARN_RPM0_EDIT_TT "LTFT learning will stop to work when RPM is below this threshold."
+  IDS_PD_LTFT_LEARN_RPM1_EDIT_TT "LTFT learning will stop to work when RPM is above this threshold."
+  IDS_PD_LTFT_LEARN_LOAD0_EDIT_TT "LTFT learning will stop to work when engine load (kPa/%) is below this threshold."
+  IDS_PD_LTFT_LEARN_LOAD1_EDIT_TT "LTFT learning will stop to work when engine load (kPa/%) is above this threshold."
+  IDS_PD_LTFT_DEAD_BAND0_EDIT_TT  "LTFT learning will not start while EGO correction is above this threshold. This parameter is used by 'Kosh' algorithm only."
+  IDS_PD_LTFT_DEAD_BAND1_EDIT_TT  "LTFT learning will not start while EGO correction is below this threshold. This parameter is used by 'Kosh' algorithm only."
 END
 
 /////////////////////////////////////////////////////////////////////////////

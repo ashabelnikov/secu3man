@@ -332,10 +332,23 @@ typedef struct params_t
  _int   fps_curve_offset;             // offset of curve in volts, can be negative
  _int   fps_curve_gradient;           // gradient of curve in kPa/V, can be negative (inverse characteristic curve)
 
+ _uchar  ltft_mode;                   //!< 0 - LTFT is turned off, 1 - use only for petrol, 2 - use only for gas, 3 - use for both petrol and gas
+ _int ltft_learn_clt;                 //!< Temperature threshold for learning, value in 0.25°C units
+ _int ltft_learn_clt_up;              //!< Upper temperature threshold for learning, value in 0.25°C units
+ _int ltft_learn_iat_up;              //!< Upper IAT threshold for learning, value in 0.25°C units
+ _uchar ltft_learn_grad;              //!< Learning gradient, 256 corresponds to 1.0, range 0...0.99
+ _uint ltft_learn_gpa;                //!< Absolute gas pressure threshold for learning, value in kPa * 64
+ _uint ltft_learn_gpd;                //!< Differential (gps - map) gas pressure threshold for learning, value in kPa * 64
+ _char ltft_min;                      //!< limits for LTFT correction
+ _char ltft_max;                      //!< 
+ _uint ltft_learn_rpm[2];             //!< lower and upper thresholds of RPM for learning, min-1
+ _uint ltft_learn_load[2];            //!< lower and upper thresholds of load for learning, value * 64
+ _uchar ltft_dead_band[2];            //!< EGO correction thresholds (- and +) below which LTFT will not work, value * 512
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[115];
+ _uchar reserved[91];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

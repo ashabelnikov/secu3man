@@ -85,4 +85,6 @@
 #define   ILODGRD_PAR  'M'
 #define   TLODGRD_PAR  'N'
 
+#define   LTFT_PAR     'O'
+
 #endif //_UFCODES_H_

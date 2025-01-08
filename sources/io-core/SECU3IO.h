@@ -667,6 +667,21 @@ namespace SECU3IO
   int wallwet_model;
  };
 
+ struct LtftPar
+ {
+  int ltft_mode;                      //!< 0 - LTFT is turned off, 1 - use only for petrol, 2 - use only for gas, 3 - use for both petrol and gas
+  float ltft_learn_clt;               //!< Temperature threshold for learning (lower)
+  float ltft_learn_clt_up;            //!< Temperature threshold for learning (upper)
+  float ltft_learn_iat_up;            //!< IAT threshold for learning (upper)
+  float ltft_learn_grad;              //!< gradient of learning
+  float ltft_learn_gpa;
+  float ltft_learn_gpd;
+  float ltft_min;
+  float ltft_max;
+  int   ltft_learn_rpm[2];
+  float ltft_learn_load[2];
+  float ltft_dead_band[2];
+ };
 
  //Size of all look up tables
  static const int LUTABSIZE = 16;
@@ -824,6 +839,7 @@ namespace SECU3IO
   SECU3IO::AccelPar     m_AccelPar;
   SECU3IO::InjDrvPar    m_InjDrvPar;  //SECU-LZID
   SECU3IO::LzidBLHS     m_LzidBLHS;   //SECU-LZID  
+  SECU3IO::LtftPar      m_LtftPar;
  };
 
 const int INPAVNUM = 14;
@@ -877,15 +893,8 @@ const int INPAVNUM = 14;
   float pwron_time;
   float pwron_time1;
 
-  int    ltft_mode;       //!< 0 - LTFT is turned off, 1 - use only for petrol, 2 - use only for gas, 3 - use for both petrol and gas
-  float  ltft_learn_clt;  //!< Temperature threshold for learning (lower)
-  float  ltft_learn_clt_up;  //!< Temperature threshold for learning (upper)
-  float  ltft_learn_iat_up;  //!< IAT threshold for learning (upper)
   float  ltft_cell_band;  //!< cell band in %
   float  ltft_stab_time;  //!< Learn stability time
-  float  ltft_learn_grad; //!< Learning gradient
-  float  ltft_learn_gpa;
-  float  ltft_learn_gpd;
   int    ltft_neigh_rad;
   int    ltft_sigswt_num;
   int    ltft_stab_str;
@@ -917,20 +926,12 @@ const int INPAVNUM = 14;
 
   bool ltft_on_idling;
 
-  float ltft_min;
-  float ltft_max;
-
   bool use_injnonlin_corr;
 
   int ego_fc_delay;
   int ego_ac_delay;
 
   int ltft_algo;
-
-  int ltft_learn_rpm[2];
-  float ltft_learn_load[2];
-
-  float ltft_dead_band[2];
 
   int aftstr_flat_strokes;
   int inj_prime_times;

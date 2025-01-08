@@ -168,6 +168,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   class CInjectorPageDlg*  m_pInjectorPageDlg; //<--fuel injection
   class CLambdaPageDlg*    m_pLambdaPageDlg;   //<--lambda
   class CAccelEnrPageDlg*  m_pAccelEnrPageDlg; //<--fuel injection
+  class CLTFTPageDlg*      m_pLTFTPageDlg;     //<--fuel injection
 
   CStatic m_pd_title;
   CButton m_save_button;
@@ -192,6 +193,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   int m_accenr_tab_idx;
   int m_gasdose_tab_idx;
   int m_choke_tab_idx;
+  int m_ltft_tab_idx;
 
   //Event handlers (delegates)
   EventHandler m_OnTabActivate;

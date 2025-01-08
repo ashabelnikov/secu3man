@@ -3118,6 +3118,88 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_LTFT_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::LtftPar& ltftPar = m_recepted_packet.m_LtftPar;
+ if (size != 24)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ unsigned char ltft_mode = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ltft_mode))
+  return false;
+ ltftPar.ltft_mode = ltft_mode;
+
+ int ltft_learn_clt = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_clt, true))
+  return false;
+ ltftPar.ltft_learn_clt = float(ltft_learn_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int ltft_learn_clt_up = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_clt_up, true))
+  return false;
+ ltftPar.ltft_learn_clt_up = float(ltft_learn_clt_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int ltft_learn_iat_up = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_iat_up, true))
+  return false;
+ ltftPar.ltft_learn_iat_up = float(ltft_learn_iat_up) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ unsigned char ltft_learn_grad = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ltft_learn_grad))
+  return false;
+ ltftPar.ltft_learn_grad = ((float)ltft_learn_grad) / 256.0f;
+
+ int ltft_learn_gpa = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_gpa))
+  return false;
+ ltftPar.ltft_learn_gpa = ((float)ltft_learn_gpa) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int ltft_learn_gpd = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_gpd))
+  return false;
+ ltftPar.ltft_learn_gpd = ((float)ltft_learn_gpd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int ltft_min = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ltft_min)) //signed
+  return false;
+ ltftPar.ltft_min = ((float)ltft_min) / (512.0f / 100.0f);
+
+ BYTE ltft_max = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ltft_max))
+  return false;
+ ltftPar.ltft_max = ((float)ltft_max) / (512.0f / 100.0f);
+
+ int ltft_learn_rpm[2] = {0,0};
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_rpm[0]))
+  return false;
+ ltftPar.ltft_learn_rpm[0] = ltft_learn_rpm[0];
+
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_rpm[1]))
+  return false;
+ ltftPar.ltft_learn_rpm[1] = ltft_learn_rpm[1];
+
+ int ltft_learn_load[2] = {0,0};
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_load[0]))
+  return false;
+ ltftPar.ltft_learn_load[0] = ((float)ltft_learn_load[0]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ltft_learn_load[1]))
+  return false;
+ ltftPar.ltft_learn_load[1] = ((float)ltft_learn_load[1]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ BYTE ltft_dead_band[2] = {0, 0};
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ltft_dead_band[0]))
+  return false;
+ ltftPar.ltft_dead_band[0] = (((float)ltft_dead_band[0]) / 512.0f) * 100.f; //%
+
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ltft_dead_band[1]))
+  return false;
+ ltftPar.ltft_dead_band[1] = (((float)ltft_dead_band[1]) / 512.0f) * 100.f; //%
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjDrvPar& recv = m_recepted_packet.m_InjDrvPar;
@@ -3487,6 +3569,10 @@ bool CControlApp::ParsePackets()
     if (Parse_ACCEL_PAR(p_start, p_size))
      break;
     continue;
+   case LTFT_PAR:
+    if (Parse_LTFT_PAR(p_start, p_size))
+     break;
+    continue;
    case INJDRV_PAR:
     {
     mp_pdp->EnableCRC(true);
@@ -3734,6 +3820,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case INJCTR_PAR:
   case LAMBDA_PAR:
   case ACCEL_PAR:
+  case LTFT_PAR:
   case INJDRV_PAR:
   case SILENT:
   case LZIDBL_HS:
@@ -3846,6 +3933,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
   case INJDRV_PAR:
    mp_pdp->EnableCRC(true);
    Build_INJDRV_PAR((InjDrvPar*)i_packet_data);
+   break;
+  case LTFT_PAR:
+   Build_LTFT_PAR((LtftPar*)i_packet_data);
    break;
   case INJDRV_ADR:
    mp_pdp->EnableCRC(true);
@@ -4956,6 +5046,50 @@ void CControlApp::Build_ACCEL_PAR(AccelPar* packet_data)
 
  unsigned char wallwet_model = MathHelpers::Round(packet_data->wallwet_model);
  mp_pdp->Bin8ToHex(wallwet_model, m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_LTFT_PAR(LtftPar* packet_data)
+{
+ mp_pdp->Bin8ToHex(packet_data->ltft_mode, m_outgoing_packet);
+
+ int ltft_learn_clt = MathHelpers::Round(packet_data->ltft_learn_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(ltft_learn_clt, m_outgoing_packet);
+
+ int ltft_learn_clt_up = MathHelpers::Round(packet_data->ltft_learn_clt_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(ltft_learn_clt_up, m_outgoing_packet);
+
+ int ltft_learn_iat_up = MathHelpers::Round(packet_data->ltft_learn_iat_up * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(ltft_learn_iat_up, m_outgoing_packet);
+
+ BYTE ltft_learn_grad = MathHelpers::Round(packet_data->ltft_learn_grad * 256.0f);
+ mp_pdp->Bin8ToHex(ltft_learn_grad, m_outgoing_packet);
+
+ int ltft_learn_gpa = MathHelpers::Round(packet_data->ltft_learn_gpa * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(ltft_learn_gpa, m_outgoing_packet);
+
+ int ltft_learn_gpd = MathHelpers::Round(packet_data->ltft_learn_gpd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(ltft_learn_gpd, m_outgoing_packet);
+
+ int ltft_min = MathHelpers::Round(packet_data->ltft_min / (100.0f / 512.0f));
+ mp_pdp->Bin8ToHex(ltft_min, m_outgoing_packet);
+
+ int ltft_max = MathHelpers::Round(packet_data->ltft_max / (100.0f / 512.0f));
+ mp_pdp->Bin8ToHex(ltft_max, m_outgoing_packet);
+
+ int ltft_learn_rpm[2] = {packet_data->ltft_learn_rpm[0], packet_data->ltft_learn_rpm[1]};
+ mp_pdp->Bin16ToHex(ltft_learn_rpm[0], m_outgoing_packet);
+ mp_pdp->Bin16ToHex(ltft_learn_rpm[1], m_outgoing_packet);
+
+ int ltft_learn_load[2] = {MathHelpers::Round(packet_data->ltft_learn_load[0] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER),
+                           MathHelpers::Round(packet_data->ltft_learn_load[1] * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER)};
+ mp_pdp->Bin16ToHex(ltft_learn_load[0], m_outgoing_packet);
+ mp_pdp->Bin16ToHex(ltft_learn_load[1], m_outgoing_packet);
+
+ BYTE ltft_dead_band[2] = {MathHelpers::Round((packet_data->ltft_dead_band[0] / 100.f) * 512.0f),
+                           MathHelpers::Round((packet_data->ltft_dead_band[1] / 100.f) * 512.0f)};
+ mp_pdp->Bin8ToHex(ltft_dead_band[0], m_outgoing_packet);
+ mp_pdp->Bin8ToHex(ltft_dead_band[1], m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

@@ -197,6 +197,7 @@ class IOCORE_API CControlApp
   bool Parse_IRPMGRD_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_ILODGRD_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_TLODGRD_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_LTFT_PAR(const BYTE* raw_packet, size_t size);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
@@ -223,6 +224,7 @@ class IOCORE_API CControlApp
   void Build_INJDRV_PAR(SECU3IO::InjDrvPar* packet_data);
   void Build_LZIDBL_HS(SECU3IO::LzidBLHS* packet_data);
   void Build_INJDRV_ADR(SECU3IO::InjDrvAdr* packet_data);
+  void Build_LTFT_PAR(SECU3IO::LtftPar* packet_data);
 };
 
 class CondEncoder
