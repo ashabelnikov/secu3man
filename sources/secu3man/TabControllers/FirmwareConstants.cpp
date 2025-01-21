@@ -335,6 +335,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("TPS threshold for turning off air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("The compressor of air conditioner will not turn on (or it will turn off) if throttle position exceeds specified value."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Задержка сброса оборотов до оборотов ХХ"), _T("сек"), 0.0f, 200.0f, 0.01f, 2, &d.aircond_idlrpm_delay, _T("Задержка начала перехода с оборотов кондиционирования до оборотов ХХ."));
+ else
+  dfd.AppendItem(_T("Delay of RPM decreasing to idling RPM"), _T("sec"), 0.0f, 200.0f, 0.01f, 2, &d.aircond_idlrpm_delay, _T("Delay of the start of transition from air conditioning RPM to idling RPM."));
+
  //canister purge valve
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Управление адсорбером:"));
