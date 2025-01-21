@@ -205,6 +205,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Minimum RPM on running"), _T("min-1"), 0, 3000, 1, 0, &d.iac_min_rpm_on_run, _T("If the speed of vehicle is exceed this threshold, then IAC regulator will keep RPM not less that this value."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Отключать УОЗ РХХ при начале движения "), &d.use_vss_thrd_for_igntim_reg, _T("Если галочка установлена, УОЗ РХХ будет отключен если скорость автомобиля выше значения 'Порог начала движения для РХХ'."));
+ else
+  dfd.AppendItem(_T("Turn off Ign.tim.idling regul. on running"), &d.use_vss_thrd_for_igntim_reg, _T("If the checkbox is checked, Ign.timing idling regulator will be turned off when vehicle speed is above 'Start of running threshold for IAC' value."));
+
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));
