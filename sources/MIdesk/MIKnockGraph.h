@@ -37,7 +37,6 @@ class AFX_EXT_CLASS CMIKnock : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
-  virtual void SetLimits(float loLimit, float upLimit);
   virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
   //---------------------------------------
 };

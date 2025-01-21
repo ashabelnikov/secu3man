@@ -163,6 +163,7 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->SetGraphValueHeight(mp_settings->GetGraphValueHeight());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
+ mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
 
  MetAverage ma;
  mp_settings->GetMetAverage(ma);
@@ -765,6 +766,7 @@ void CLogPlayerTabController::OnMIDeskSettingsChanged(void)
  int  TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize;
 
  mp_view->mp_MIDeskDlg->GetMetersCfg(&cfg1[idx], TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+ cfg1[idx].copyScale(cfg1[idx ? 0 : 1]); //copy scale settings to all other panels of fixtures
 
  mp_settings->SetMetersConfig(cfg1);
  mp_settings->SetTitleFontSize(TitleFontSize);

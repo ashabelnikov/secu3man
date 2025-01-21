@@ -67,11 +67,6 @@ void CMIFuelConsum::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIFuelConsum::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIFuelConsum::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->inj_ffd, i_values->inj_ffh, i_values->cons_fuel, i_revdir);

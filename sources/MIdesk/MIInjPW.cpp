@@ -62,11 +62,6 @@ void CMIInjPW::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIInjPW::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIInjPW::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->inj_pw, 0, 0, i_revdir);
@@ -101,12 +96,6 @@ void CMIInjPWGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
-}
-
-void CMIInjPWGraph::SetLimits(float loLimit, float upLimit)
-{
- m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit);
 }
 
 void CMIInjPWGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

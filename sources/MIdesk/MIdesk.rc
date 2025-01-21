@@ -157,6 +157,40 @@ BEGIN
     CTEXT           "",IDC_LOG_MARKS_K3,107,11,35,9,SS_SUNKEN
 END
 
+IDD_MI_SCALE_EDITOR DIALOGEX 0, 0, 250, 170
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Редактирование шкалы"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_MI_SED_SCALE_BEGIN_EDIT,5,5,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_BEGIN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,38,5,13,17
+    LTEXT           "Начало шкалы",IDC_MI_SED_SCALE_BEGIN_CAPTION,52,5,30,18
+
+    EDITTEXT        IDC_MI_SED_SCALE_END_EDIT,90,5,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_END_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,5,13,17
+    LTEXT           "Конец шкалы",IDC_MI_SED_SCALE_END_CAPTION,137,5,30,18
+
+    EDITTEXT        IDC_MI_SED_SCALE_TICS_EDIT,170,5,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_TICS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,5,13,17
+    LTEXT           "Число делений",IDC_MI_SED_SCALE_TICS_CAPTION,217,5,30,18
+
+    CONTROL         "",IDC_MI_SED_AZ_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,5,25,154,85
+
+    PUSHBUTTON      "Добавить",IDC_MI_SED_AZ_ADD,168,45,45,20
+    PUSHBUTTON      "Удалить",IDC_MI_SED_AZ_DEL,168,72,45,20
+
+    EDITTEXT        IDC_MI_SED_AZ_BEGIN_EDIT,10,120,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_AZ_BEGIN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,48,120,13,17
+
+    EDITTEXT        IDC_MI_SED_AZ_END_EDIT,65,120,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_AZ_END_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,103,120,13,17
+
+    CONTROL         "",IDC_MI_SED_AZ_COLOR,"MultiLEDCtrl",WS_VISIBLE,120,120,30,18, WS_CHILD
+
+    DEFPUSHBUTTON   "OK",IDOK,59,145,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,125,145,50,14
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -368,8 +402,20 @@ BEGIN
     IDS_MI_IND_UNIOUT4  "Универ.4"
     IDS_MI_IND_UNIOUT5  "Универ.5"
     IDS_MI_IND_UNIOUT6  "Универ.6"
+    IDS_MI_MET_EDITSCALE "Редактирование шкалы..."
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MI_SED_AZ_ADD_TT  "Добавить цветовой сегмент"
+    IDS_MI_SED_AZ_DEL_TT  "Удалить цветовой сегмент"
+    IDS_MI_SED_SCALE_BEGIN_EDIT_TT "Значение с которого начинается шкала"
+    IDS_MI_SED_SCALE_END_EDIT_TT  "Значение в конце шкалы"
+    IDS_MI_SED_AZLH_START  "Начало"
+    IDS_MI_SED_AZLH_END    "Конец"
+    IDS_MI_SED_AZLH_COLOR  "Цвет"
+    IDS_MI_SED_SCALE_TICS_EDIT_TT "Число делений на шкале"
+END
 
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
@@ -521,6 +567,40 @@ BEGIN
     CTEXT           "",IDC_LOG_MARKS_K1,7,11,35,9,SS_SUNKEN
     CTEXT           "",IDC_LOG_MARKS_K2,57,11,35,9,SS_SUNKEN
     CTEXT           "",IDC_LOG_MARKS_K3,107,11,35,9,SS_SUNKEN
+END
+
+IDD_MI_SCALE_EDITOR DIALOGEX 0, 0, 250, 170
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit scale"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_MI_SED_SCALE_BEGIN_EDIT,5,5,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_BEGIN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,38,5,13,17
+    LTEXT           "Scale begin",IDC_MI_SED_SCALE_BEGIN_CAPTION,52,5,30,18
+
+    EDITTEXT        IDC_MI_SED_SCALE_END_EDIT,90,5,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_END_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,5,13,17
+    LTEXT           "Scale end",IDC_MI_SED_SCALE_END_CAPTION,137,5,30,18
+
+    EDITTEXT        IDC_MI_SED_SCALE_TICS_EDIT,170,5,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_TICS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,5,13,17
+    LTEXT           "Tick number",IDC_MI_SED_SCALE_TICS_CAPTION,217,5,30,18
+
+    CONTROL         "",IDC_MI_SED_AZ_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,5,25,154,85
+
+    PUSHBUTTON      "Add",IDC_MI_SED_AZ_ADD,168,45,45,20
+    PUSHBUTTON      "Delete",IDC_MI_SED_AZ_DEL,168,72,45,20
+
+    EDITTEXT        IDC_MI_SED_AZ_BEGIN_EDIT,10,120,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_AZ_BEGIN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,48,120,13,17
+
+    EDITTEXT        IDC_MI_SED_AZ_END_EDIT,65,120,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_AZ_END_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,103,120,13,17
+
+    CONTROL         "",IDC_MI_SED_AZ_COLOR,"MultiLEDCtrl",WS_VISIBLE,120,120,30,18, WS_CHILD
+
+    DEFPUSHBUTTON   "OK",IDOK,59,145,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,125,145,50,14
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -733,6 +813,19 @@ BEGIN
     IDS_MI_IND_UNIOUT4       "UnivOut4"
     IDS_MI_IND_UNIOUT5       "UnivOut5"
     IDS_MI_IND_UNIOUT6       "UnivOut6"
+    IDS_MI_MET_EDITSCALE     "Edit scale..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MI_SED_AZ_ADD_TT  "Add color segment"
+    IDS_MI_SED_AZ_DEL_TT  "Delete color segment"
+    IDS_MI_SED_SCALE_BEGIN_EDIT_TT "Value at the beginning of the scale"
+    IDS_MI_SED_SCALE_END_EDIT_TT  "Value at the end of the scale"
+    IDS_MI_SED_AZLH_START  "Start"
+    IDS_MI_SED_AZLH_END    "End"
+    IDS_MI_SED_AZLH_COLOR  "Color"
+    IDS_MI_SED_SCALE_TICS_EDIT_TT "Number of tics on the scale"
 END
 
 /////////////////////////////////////////////////////////////////////////////

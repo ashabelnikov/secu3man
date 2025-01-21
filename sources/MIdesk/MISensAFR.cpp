@@ -67,11 +67,6 @@ void CMISensAFR::Create(CWnd* pParent)
  m_meter.SetMeterSize(130);
 }
 
-void CMISensAFR::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMISensAFR::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->afr, 0, 0, i_revdir);
@@ -110,11 +105,6 @@ void CMISensAFR2::Create(CWnd* pParent)
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
  m_meter.SetMeterSize(130);
-}
-
-void CMISensAFR2::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 void CMISensAFR2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

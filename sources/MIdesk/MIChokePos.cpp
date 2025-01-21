@@ -60,11 +60,6 @@ void CMIChokePosBase::Create(CWnd* pParent, UINT id)
  m_meter.SetMeterSize(130);
 }
 
-void CMIChokePosBase::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIChokePos::Create(CWnd* pParent)
 {
  CMIChokePosBase::Create(pParent, IDC_MI_CHOKEPOS);

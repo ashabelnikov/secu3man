@@ -195,12 +195,7 @@ BEGIN
     LTEXT           "Период обновления отладочной панели (мс)",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,87,17
 
     GROUPBOX        "Приборы",IDC_STATIC,194,115,162,94
-    LTEXT           "Тах. макс:",IDC_STATIC,204,125,61,9
-    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,134,43,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,134,11,15
-    LTEXT           "Давл. макс:",IDC_STATIC,291,125,61,9
-    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,134,43,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,"msctls_updown32",UDS_ARROWKEYS,336,134,10,15
+
     LTEXT           "Период обновления панели приборов (мс)",IDC_STATIC,266,153,87,17
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,153,43,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,153,11,15
@@ -996,8 +991,6 @@ BEGIN
     IDS_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT_TT "Период обновления данных в отладочной панели. Отладочная панель должна быть разрешена галочкой 'Использовать средства отладки'"
     IDS_APP_SETTINGS_SHOW_TOOLTIPS_TT "Отображать всплывающие подсказки при наведении курсора на элементы управления (кнопки, галочки, поля ввода и т.д.). Включено по умолчанию, так как помогает новичкам быстрее освоить программу."
     IDS_APP_SETTINGS_INJDRV_TAB_TT "Разрешить вкладку 'Драйвер форсунок'. Установите галочку если вы используете блок SECU-3i TBZ или отдельный драйвер форсунок SECU-LZIDx"
-    IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT "Максимальное значение на шкале виртуального прибора 'Обороты' и по вертикальной оси на соответствующем графике"
-    IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT "Максимальное значение на шкале виртуального прибора 'Абсолютное давление' и по вертикальной оси на соответствующем графике"
     IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT "Период обновления панели приборов. Чем меньше значение, тем чаще прорисовываются приборы, но тем больше процессорного времени компьютера для этого необходимо"
     IDS_APP_SETTINGS_EXFIXTURES_TT "Установите для выбора 2-го профиля настроек панели приборов и индикаторов. Продублировано галочкой 'Переключить панели приборов' в разделе 'Вид' главного меню программы."    
     IDS_APP_SETTINGS_SHOWVSS_CHECK_TT "В верхних углах прибора 'Обороты' будут отображаться скорость и пройденное расстояние"    
@@ -1293,12 +1286,6 @@ BEGIN
     CONTROL         "'Injectors' driver' tab",IDC_APP_SETTINGS_INJDRV_TAB,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,95,140,9
 
     GROUPBOX        "Fixtures",IDC_STATIC,194,115,162,94
-    LTEXT           "Tach. max:",IDC_STATIC,204,125,61,9
-    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,135,43,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,134,11,15
-    LTEXT           "Press. max:",IDC_STATIC,291,125,61,9
-    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,134,43,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,"msctls_updown32",UDS_ARROWKEYS,336,134,10,15
     LTEXT           "Update period of fixtures's panel (ms)",IDC_STATIC,266,153,87,17
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,153,43,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,153,11,15
@@ -2091,8 +2078,6 @@ BEGIN
     IDS_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT_TT "Data refresh period of the debug panel. The debug panel must be enabled by the checkbox 'Use debug features'"
     IDS_APP_SETTINGS_SHOW_TOOLTIPS_TT "Display tooltips when hovering over controls (buttons, checkmarks, input fields etc.). It is enabled by default, as it helps beginners to learn the program faster."
     IDS_APP_SETTINGS_INJDRV_TAB_TT "Enable the 'Injector's Driver' tab. Check the box if you are using the SECU-3i TBZ unit or a separate SECU-LZIDx injector driver"
-    IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT "Maximum value on the scale of the virtual gauge 'Speed' and along the vertical axis in the corresponding graph"
-    IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT "Maximum value on the scale of the virtual gauge 'Absolute pressure' and along the vertical axis in the corresponding graph"
     IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT "Update period of dashboard. The smaller the value, more often gauges are redrawn, but more computer processor's time is needed for this"
     IDS_APP_SETTINGS_EXFIXTURES_TT "Set checkbox to select the 2nd profile of settings of the panel of gauges and indicators. Duplicated by a check mark 'Switch dash boards' in the 'View' section of the main menu of the program."
     IDS_APP_SETTINGS_SHOWVSS_CHECK_TT "In upper corners of the 'Speed' gauge vehicle spped and passed distance will be displayed."    

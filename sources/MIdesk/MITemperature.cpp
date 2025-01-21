@@ -70,11 +70,6 @@ void CMITemperature::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMITemperature::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMITemperature::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->temperat, i_values->gasdose_pos, i_values->choke_pos, i_revdir);
@@ -109,12 +104,6 @@ void CMITemperatureGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
-}
-
-void CMITemperatureGraph::SetLimits(float loLimit, float upLimit)
-{
- m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit);
 }
 
 void CMITemperatureGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

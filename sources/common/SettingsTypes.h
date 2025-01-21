@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <vector>
 #include "UnicodeSupport.h"
 
 typedef enum EInterLang
@@ -410,15 +411,77 @@ struct IndicatorsCfg
  std::pair<int, COLORREF> m_optIndAltrn_i[2];
 };
 
+struct AlertZone
+{
+ float start;
+ float end;
+ COLORREF color;
+};
+
 struct MetCfg
 {
  int position;
+ int ticksNum; //number of ticks
  float scaleMin;
  float scaleMax;
+ std::vector<AlertZone> alezn; //colored zones
+ void copyScale(MetCfg& dest) {dest.scaleMin = scaleMin; dest.scaleMax = scaleMax; dest.ticksNum = ticksNum; dest.alezn = alezn;}
 };
 
 struct MetersCfg
 {
+ void copyScale(MetersCfg& dest)
+ {
+  for(size_t i = 0; i < 2; ++i)
+  {
+   m_optMetRPM[i].copyScale(dest.m_optMetRPM[i]);
+   m_optMetMAP[i].copyScale(dest.m_optMetMAP[i]);
+   m_optMetVBat[i].copyScale(dest.m_optMetVBat[i]);
+   m_optMetIgnTim[i].copyScale(dest.m_optMetIgnTim[i]);
+   m_optMetCLT[i].copyScale(dest.m_optMetCLT[i]);
+   m_optMetAddI1[i].copyScale(dest.m_optMetAddI1[i]);
+   m_optMetAddI2[i].copyScale(dest.m_optMetAddI2[i]);
+   m_optMetInjPW[i].copyScale(dest.m_optMetInjPW[i]);
+   m_optMetIAT[i].copyScale(dest.m_optMetIAT[i]);
+   m_optMetEGOCorr[i].copyScale(dest.m_optMetEGOCorr[i]);
+   m_optMetTPS[i].copyScale(dest.m_optMetTPS[i]);
+   m_optMetAirFlow[i].copyScale(dest.m_optMetAirFlow[i]);
+   m_optMetVehicleSpeed[i].copyScale(dest.m_optMetVehicleSpeed[i]);
+   m_optMetTPSDot[i].copyScale(dest.m_optMetTPSDot[i]);
+   m_optMetMAP2[i].copyScale(dest.m_optMetMAP2[i]);
+   m_optMetMAPD[i].copyScale(dest.m_optMetMAPD[i]);
+   m_optMetTmp2[i].copyScale(dest.m_optMetTmp2[i]);
+   m_optMetFuelConsum[i].copyScale(dest.m_optMetFuelConsum[i]);
+   m_optMetKnockRetard[i].copyScale(dest.m_optMetKnockRetard[i]);
+   m_optMetKnockGraph[i].copyScale(dest.m_optMetKnockGraph[i]);
+   m_optMetSensAFR[i].copyScale(dest.m_optMetSensAFR[i]);
+   m_optMetChokePos[i].copyScale(dest.m_optMetChokePos[i]);
+   m_optMetGDPos[i].copyScale(dest.m_optMetGDPos[i]);
+   m_optMetSynLoad[i].copyScale(dest.m_optMetSynLoad[i]);
+   m_optMetInjTimB[i].copyScale(dest.m_optMetInjTimB[i]);   //0...720
+   m_optMetInjTimE[i].copyScale(dest.m_optMetInjTimE[i]);   //0...720
+   m_optMetInjTimB1[i].copyScale(dest.m_optMetInjTimB1[i]); //-360...360
+   m_optMetInjTimE1[i].copyScale(dest.m_optMetInjTimE1[i]); //-360...360
+   m_optMetFuelConsumF[i].copyScale(dest.m_optMetFuelConsumF[i]);
+   m_optMetGrts[i].copyScale(dest.m_optMetGrts[i]);
+   m_optMetFtls[i].copyScale(dest.m_optMetFtls[i]);
+   m_optMetEgts[i].copyScale(dest.m_optMetEgts[i]);
+   m_optMetOps[i].copyScale(dest.m_optMetOps[i]);
+   m_optMetInjDuty[i].copyScale(dest.m_optMetInjDuty[i]);
+   m_optMetMAF[i].copyScale(dest.m_optMetMAF[i]);
+   m_optMetVentDuty[i].copyScale(dest.m_optMetVentDuty[i]);
+   m_optMetMAPDot[i].copyScale(dest.m_optMetMAPDot[i]);
+   m_optMetFts[i].copyScale(dest.m_optMetFts[i]);
+   m_optMetEGOCorr2[i].copyScale(dest.m_optMetEGOCorr2[i]);
+   m_optMetSensAFR2[i].copyScale(dest.m_optMetSensAFR2[i]);
+   m_optMetTargAFR[i].copyScale(dest.m_optMetTargAFR[i]);
+   m_optMetDiffAFR[i].copyScale(dest.m_optMetDiffAFR[i]);
+   m_optMetDiffAFR2[i].copyScale(dest.m_optMetDiffAFR2[i]);
+   m_optMetGPS[i].copyScale(dest.m_optMetGPS[i]);
+   m_optMetFPS[i].copyScale(dest.m_optMetFPS[i]);
+  }
+ }
+
  int m_optMetRows;
  MetCfg m_optMetRPM[2];
  MetCfg m_optMetMAP[2];
@@ -444,8 +507,10 @@ struct MetersCfg
  MetCfg m_optMetChokePos[2];
  MetCfg m_optMetGDPos[2];
  MetCfg m_optMetSynLoad[2];
- MetCfg m_optMetInjTimB[2];
- MetCfg m_optMetInjTimE[2];
+ MetCfg m_optMetInjTimB[2];  //for 0...720
+ MetCfg m_optMetInjTimE[2];  //for 0...720
+ MetCfg m_optMetInjTimB1[2]; //for -360...360
+ MetCfg m_optMetInjTimE1[2]; //for -360...360
  MetCfg m_optMetFuelConsumF[2];
  MetCfg m_optMetGrts[2];
  MetCfg m_optMetFtls[2];

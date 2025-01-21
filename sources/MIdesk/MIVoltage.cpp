@@ -67,11 +67,6 @@ void CMIVoltage::Create(CWnd* pParent, UINT id)
  mp_ttc->ActivateToolTips(true);
 }
 
-void CMIVoltage::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIAddI1::Create(CWnd* pParent)
 {
  CMIVoltage::Create(pParent, IDC_MI_ADD_I1);

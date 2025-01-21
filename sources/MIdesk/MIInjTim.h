@@ -35,10 +35,22 @@ class AFX_EXT_CLASS CMIInjTim : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent, UINT id);
-  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 
   void SetITMode(int mode);
+  void SetLimits(float loLimit0, float upLimit0, float loLimit1, float upLimit1);
+  void SetAlertZones(const std::vector<AlertZone>& az0, const std::vector<AlertZone>& az1);
+  void SetTickNumber(int tn0, int tn1);
+                         
+private:
+  float m_loLimit0;
+  float m_upLimit0;
+  float m_loLimit1;
+  float m_upLimit1;
+  int m_tn0;
+  int m_tn1;
+  std::vector<AlertZone> m_az0; //0...720
+  std::vector<AlertZone> m_az1; //-360...360
 };
 
 
@@ -75,6 +87,15 @@ class AFX_EXT_CLASS CMIInjTimGraph : public MeasInstrBase
   //---------------------------------------
 
   void SetITMode(int mode);
+  void SetLimits(float loLimit0, float upLimit0, float loLimit1, float upLimit1);
+  void SetTickNumber(int tn0, int tn1);
+private:
+  float m_loLimit0;
+  float m_upLimit0;
+  float m_loLimit1;
+  float m_upLimit1;
+  int m_tn0;
+  int m_tn1;
 };
 
 class AFX_EXT_CLASS CMIInjTimBGraph : public CMIInjTimGraph

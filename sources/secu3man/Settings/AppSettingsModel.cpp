@@ -797,10 +797,14 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetScGDPos[1].name = m_optMetGDPos[i][1].name = _T("GrhGDPos");
   m_optMetScSynLoad[0].name = m_optMetSynLoad[i][0].name = _T("MetSynLoad");
   m_optMetScSynLoad[1].name = m_optMetSynLoad[i][1].name = _T("GrhSynLoad");
-  m_optMetScInjTimB[0].name = m_optMetInjTimB[i][0].name = _T("MetInjTimB");
-  m_optMetScInjTimB[1].name = m_optMetInjTimB[i][1].name = _T("GrhInjTimB");
-  m_optMetScInjTimE[0].name = m_optMetInjTimE[i][0].name = _T("MetInjTimE");
-  m_optMetScInjTimE[1].name = m_optMetInjTimE[i][1].name = _T("GrhInjTimE");
+  m_optMetScInjTimB[0].name = m_optMetInjTimB[i][0].name = _T("MetInjTimB"); //0...720
+  m_optMetScInjTimB[1].name = m_optMetInjTimB[i][1].name = _T("GrhInjTimB"); //0...720
+  m_optMetScInjTimE[0].name = m_optMetInjTimE[i][0].name = _T("MetInjTimE"); //0...720
+  m_optMetScInjTimE[1].name = m_optMetInjTimE[i][1].name = _T("GrhInjTimE"); //0...720
+  m_optMetScInjTimB1[0].name = _T("MetInjTimB1"); //-360...360
+  m_optMetScInjTimB1[1].name = _T("GrhInjTimB1"); //-360...360
+  m_optMetScInjTimE1[0].name = _T("MetInjTimE1"); //-360...360
+  m_optMetScInjTimE1[1].name = _T("GrhInjTimE1"); //-360...360
   m_optMetScFuelConsumF[0].name = m_optMetFuelConsumF[i][0].name = _T("MetFuelConsumF");
   m_optMetScFuelConsumF[1].name = m_optMetFuelConsumF[i][1].name = _T("GrhFuelConsumF");
   m_optMetScGrts[0].name = m_optMetGrts[i][0].name = _T("MetGrts");
@@ -1467,59 +1471,149 @@ bool CAppSettingsModel::ReadSettings(void)
   }
  }
 
- const TCHAR* metScDef[43] = {_T("0, 8000"),_T("0, 110"),_T("2, 18"),_T("-15, 65"),_T("0, 100"),_T("-40, 120"),_T("0, 5"),_T("0, 5"),_T("0, 24"),_T("-40, 120"),
-                              _T("-50, 50"),_T("0, 16"),_T("0, 220"),_T("-500, 500"),_T("-500, 500"),_T("0, 400"),_T("0, 400"),_T("-40, 120"),_T("0, 50"),_T("0, 30"),
-                              _T("0, 5"),_T("6, 24"),_T("0, 100"),_T("0, 100"),_T("0, 250"),_T("0, 720"),_T("0, 720"),_T("0, 250"),_T("-40, 120"),_T("0, 100"),
-                              _T("0, 1100"),_T("0, 6"),_T("0, 100"),_T("0, 600"),_T("0, 100"),_T("-40, 120"),_T("-50, 50"),_T("6, 24"),_T("6, 24"),_T("-10, 10"),
-                              _T("-10, 10"),_T("0, 400"),_T("0, 700")};
+ const TCHAR* metScDef[2][45] = {
+                             {_T("16, 0, 8000, 0,4000,64FF64, 4000,6000,FFFF64, 6000,8000,FF6464"),  //RPM
+                              _T("20, 10, 110, 10,30,B48282, 30,90,78C878, 90,110,B48282"),          //MAP
+                              _T("16, 2,  18, 2.0,10.0,FF8080, 10.0,15.0,80FF80, 15.0,18.0,FF0000"), //Vbat
+                              _T("16,-15, 65, -15.0,0.0,B48282, 0.0,45.0,DCDC78, 45.0,65.0,FF6464"), //Ign.tim.
+                              _T("16, 0,  100, 0,5,8282B4, 5,75,78B496, 75,100,E68282"),             //TPS
+                              _T("16,-40, 120, -40,50,8282B4, 50,100,787878, 100,120,E68282"),       //CLT
+                              _T("20, 0,  5, 0,5,B4B4E6"), //ADD_I1
+                              _T("20, 0,  5, 0,5,B4B4E6"), //ADD_I2
+                              _T("24, 0,  24, 0,1,FF6464, 1,10,64FF64, 10,24,9696FA"), //Inj.PW
+                              _T("16,-40, 120, -40,50,8282B4, 50,100,787878, 100,120,E68282"), //IAT
+                              _T("16,-50, 50, -50,-20,E68282, -20,20,78BE78, 20,50,E68282"),  //EGO corr.
+                              _T("16, 0,  16, 0,1,BE9696, 1,2,B496A0, 2,3,AA96AA, 3,4,A096B4, 4,5,9696BE, 5,6,9696C8, 6,7,9696D2, 7,8,9696DC, 8,9,9696E6, 9,10,9696F0, 10,11,9696FA, 11,12,9696FF, 12,13,9696FF, 13,14,9696FF, 14,15,9696FF, 15,16,9696FF"),  //AirFlow
+                              _T("22, 0,  220, 0,60,64FF64, 60,120,FAE664, 120,180,E68264, 180,220,FF7878"), //Vehicle seed
+                              _T("10,-500,500,-500,-200,FA6464, -200,-50,64FA64, -50,0,6464FA, 0,50,6464FA, 50,200,64FA64, 200,500,FA6464"), //TPSdot
+                              _T("10,-500,500,-500,-200,FA6464, -200,-50,64FA64, -50,0,6464FA, 0,50,6464FA, 50,200,64FA64, 200,500,FA6464 "), //MAPdot
+                              _T("20, 0,  400, 0,100,B48282, 100,400,78C878"), //MAP2
+                              _T("20, 0,  400, 0,100,B48282, 100,400,78C878"), //MAPD
+                              _T("16,-40, 120, -40,50,8282B4, 50,100,787878, 100,120,E68282"), //TEMP2
+                              _T("25, 0,  50, 0,10,64DC64, 10,20,B4B464, 20,50,DC6464"),  //FuelConsum
+                              _T("15, 0,  30, 0,10,DCDC78, 10,30,DC7878"),  //KnockRetard
+                              _T("21, 0,  5, 0,0.5,2850DC, 0.5,1.0,3C64B4, 1.0,1.5,5078A0, 1.5,2.0,648C8C, 2.0,2.5,78A078, 2.5,3.0,8CB464, 3.0,3.5,A0A064, 3.5,4.0,B48C64, 4.0,4.5,C87864, 4.5,5.0,E66464"),   //Knock signal
+                              _T("18, 6,  24, 6,10,FF8282, 10,14.55,F0F082, 14.55,14.85,82FF82, 14.85,15.45,F0F078, 15.45,15.75,82FF82, 15.75,20,F0F082, 20,24,FF8282"),  //Sens AFR
+                              _T("20, 0,  100, 0,100,00E6FA"), //Choke pos.
+                              _T("20, 0,  100, 0,100,00E6FA"), //GD pos.
+                              _T("20, 0,  250, 0,100,82FA82, 100,250,FA8282"), //SynLoad
+                              _T("16, 0,  720,  0,720,FAFAFA"), //InjTimB
+                              _T("16, 0,  720,  0,720,FAFAFA"), //InjTimE
+                              _T("16,-360,360, -360,360,FAFAFA"), //InjTimB1
+                              _T("16,-360,360, -360,360,FAFAFA"), //InjTimE1
+                              _T("20, 0,  250, 0,10,828296, 10,70,64F064, 70,150,E6E664, 150,250,F06464"), //FuelConsumF
+                              _T("16,-40, 120, -40,50,8282B4, 50,100,787878, 100,120,E68282"), //GRTS
+                              _T("20, 0,  100, 0,10,FA6464, 10,50,DCDC64, 50,100,64DC64"), //FTLS
+                              _T("16, 0, 1100, 0,400,6464FF, 400,950,C8C878, 950,1100,FF6464"), //EGTS
+                              _T("12, 0,  6, 0,1,8282BE, 1,3.5,78F078, 3.5,5.0,F0F078, 5.0,6.0,FF8282"),   //OPS
+                              _T("21, 0,  100, 0,10,6464FF, 10,70,64FF64, 70,90,F0FF64, 90,100,FF6464"), //InjDuty
+                              _T("20, 0,  600, 0,100,8282B4, 100,300,78C878, 300,500,C8C878, 500,600,C87878"), //MAF
+                              _T("21, 0,  100, 0,10,6464FF, 10,70,64FF64, 70,90,F0FF64, 90,100,FF6464"), //VentDuty
+                              _T("16,-40, 120, -40,50,8282B4, 50,100,787878, 100,120,E68282"), //FTS
+                              _T("16,-50, 50, -50,-20,E68282, -20,20,78BE78, 20,50,E68282"),  //EGO Corr.2
+                              _T("18, 6,  24, 6,10,FF8282, 10,14.55,F0F082, 14.55,14.85,82FF82, 14.85,15.45,F0F078, 15.45,15.75,82FF82, 15.75,20,F0F082, 20,24,FF8282"),  //Sens AFR2
+                              _T("18, 6,  24, 6,10,FF8282, 10,14.55,F0F082, 14.55,14.85,82FF82, 14.85,15.45,F0F078, 15.45,15.75,82FF82, 15.75,20,F0F082, 20,24,FF8282"),  //TargAFR
+                              _T("18,-10, 10, -9,-2,8282FF, -2,-1,F0F082, -1,1,82FF82, 1,2,F0F082, 2,9,FF8282"),  //DiffAFR
+                              _T("18,-10, 10, -9,-2,8282FF, -2,-1,F0F082, -1,1,82FF82, 1,2,F0F082, 2,9,FF8282"),  //DiffAFR2
+                              _T("20, 0,  400, 0,100,B48282, 100,400,78C878"), //GPS
+                              _T("20, 0,  700, 0,300,B48282, 300,700,78C878")},//FPS
+                             //graphs
+                             {_T("8, 0,  8000"), //RPM
+                              _T("10, 10, 110"), //MAP
+                              _T("8, 2,  18"),   //VBat
+                              _T("10,-15, 65"),  //Ign.tim.
+                              _T("10, 0,  100"), //TPS
+                              _T("8,-40, 120"),  //CLT
+                              _T("10, 0,  5"),   //ADD_I1
+                              _T("10, 0,  5"),   //ADD_i2
+                              _T("8, 0,  24"),   //InjPW
+                              _T("8,-40, 120"),  //IAT
+                              _T("10,-50, 50"),  //EGO corr.
+                              _T("16, 0,  16"),  //Air flow
+                              _T("11, 0,  220"), //vehicle speed
+                              _T("10,-500,500"), //TPSdot
+                              _T("10,-500,500"), //MAPdot
+                              _T("10, 0,  400"), //MAP2
+                              _T("10, 0,  400"), //MAPD
+                              _T("8,-40, 120"),  //Tmp2
+                              _T("10, 0,  50"),  //FuelConsum
+                              _T("10, 0,  30"),  //knockRetard
+                              _T("10, 0,  5"),   //Knock signal
+                              _T("9,  6,  24"),  //SensAFR
+                              _T("10, 0,  100"), //Choke pos.
+                              _T("10, 0,  100"), //GD pos.
+                              _T("10, 0,  250"), //SynLoad
+                              _T("16, 0,  720"), //InjTimB
+                              _T("16, 0,  720"), //InjTimE
+                              _T("16,-360,360"), //InjTimB1
+                              _T("16,-360,360"), //InjTimE1
+                              _T("20, 0,  250"), //FuelConsumF
+                              _T("8,-40, 120"),  //GRTS
+                              _T("8, 0,  100"),  //FTLS
+                              _T("8, 0, 1100"),  //EGTS
+                              _T("12, 0,  6"),   //OPS
+                              _T("10, 0,  100"), //InjDuty
+                              _T("10, 0,  600"), //MAF
+                              _T("10, 0,  100"), //VentDuty
+                              _T("8,-40, 120"),  //FTS
+                              _T("10,-50, 50"),  //EGO corr. 2
+                              _T("9,  6,  24"),  //SensAFR2
+                              _T("9, 6,  24"),   //TargAFR
+                              _T("10,-10, 10"),  //DiffAFR
+                              _T("18,-10, 10"),  //DiffAFR2
+                              _T("10, 0, 400"),  //GPS
+                              _T("10, 0, 700")}  //FPS
+                             };
 
  IniIO sc(IniFileName, m_Name_MetersSc_Section);
  for (int g = 0; g < 2; ++g)
  {
   int d = 0;
-  sc.ReadVector(m_optMetScRPM[g],     metScDef[d++],  0.0f,  30000.0f, 2);
-  sc.ReadVector(m_optMetScMAP[g],     metScDef[d++],  0.0f,  500.0f, 2);
-  sc.ReadVector(m_optMetScVBat[g],    metScDef[d++],  0.0f,  30.0f, 2);
-  sc.ReadVector(m_optMetScIgnTim[g],  metScDef[d++], -20.0f, 90.0f, 2);
-  sc.ReadVector(m_optMetScTPS[g],     metScDef[d++],  0.0f,  100.0f, 2);
-  sc.ReadVector(m_optMetScCLT[g],     metScDef[d++], -60.0f, 300.0f, 2);
-  sc.ReadVector(m_optMetScAddI1[g],   metScDef[d++],  0.0f,  5.5f, 2);
-  sc.ReadVector(m_optMetScAddI2[g],   metScDef[d++],  0.0f,  5.5f, 2);
-  sc.ReadVector(m_optMetScInjPW[g],   metScDef[d++],  0.0f,  100.0f, 2);
-  sc.ReadVector(m_optMetScIAT[g],     metScDef[d++], -60.0f, 300.0f, 2);
-  sc.ReadVector(m_optMetScEGOCorr[g], metScDef[d++],-75.0f, 75.0f, 2);
-  sc.ReadVector(m_optMetScAirFlow[g], metScDef[d++],  0.0f, 16.0f, 2);
-  sc.ReadVector(m_optMetScVehicleSpeed[g],metScDef[d++], 0.0f, 300.0f, 2);
-  sc.ReadVector(m_optMetScTPSDot[g],  metScDef[d++], -1000.0f, 1000.0f, 2);
-  sc.ReadVector(m_optMetScMAPDot[g],  metScDef[d++], -1000.0f, 1000.0f, 2);
-  sc.ReadVector(m_optMetScMAP2[g],    metScDef[d++], 0.0f, 500.0f, 2);
-  sc.ReadVector(m_optMetScMAPD[g],    metScDef[d++], 0.0f, 500.0f, 2);
-  sc.ReadVector(m_optMetScTmp2[g],    metScDef[d++], -60.0f, 300.0f, 2);
-  sc.ReadVector(m_optMetScFuelConsum[g],metScDef[d++], 0.0f, 500.0f, 2);
-  sc.ReadVector(m_optMetScKnockRetard[g],metScDef[d++], 0.0f, 50.0f, 2);
-  sc.ReadVector(m_optMetScKnockGraph[g],metScDef[d++], 0.0f, 5.5f, 2);
-  sc.ReadVector(m_optMetScSensAFR[g], metScDef[d++], 6.0f, 24.0f, 2);
-  sc.ReadVector(m_optMetScChokePos[g],metScDef[d++], 0.0f, 100.0f, 2);
-  sc.ReadVector(m_optMetScGDPos[g],   metScDef[d++], 0.0f, 100.0f, 2);
-  sc.ReadVector(m_optMetScSynLoad[g], metScDef[d++], 0.0f, 500.0f, 2);
-  sc.ReadVector(m_optMetScInjTimB[g], metScDef[d++],-360.0f, 720.0f, 2);
-  sc.ReadVector(m_optMetScInjTimE[g], metScDef[d++],-360.0f, 720.0f, 2);
-  sc.ReadVector(m_optMetScFuelConsumF[g],metScDef[d++], 0.0f, 500.0f, 2);
-  sc.ReadVector(m_optMetScGrts[g],    metScDef[d++],-60.0f,300.0f, 2);
-  sc.ReadVector(m_optMetScFtls[g],    metScDef[d++], 0.0f, 300.0f, 2);
-  sc.ReadVector(m_optMetScEgts[g],    metScDef[d++], 0.0f, 1500.0f, 2);
-  sc.ReadVector(m_optMetScOps[g],     metScDef[d++], 0.0f, 10.0f, 2);
-  sc.ReadVector(m_optMetScInjDuty[g], metScDef[d++], 0.0f, 100.0f, 2);
-  sc.ReadVector(m_optMetScMAF[g],     metScDef[d++], 0.0f, 1000.0f, 2);
-  sc.ReadVector(m_optMetScVentDuty[g], metScDef[d++], 0.0f, 100.0f, 2);
-  sc.ReadVector(m_optMetScFts[g],     metScDef[d++],-60.0f,200.0f, 2);
-  sc.ReadVector(m_optMetScEGOCorr2[g],metScDef[d++], -75.0f, 75.0f, 2);
-  sc.ReadVector(m_optMetScSensAFR2[g],metScDef[d++], 6.0f, 24.0f, 2);
-  sc.ReadVector(m_optMetScTargAFR[g], metScDef[d++], 6.0f, 24.0f, 2);
-  sc.ReadVector(m_optMetScDiffAFR[g], metScDef[d++], -10.0f, 10.0f, 2);
-  sc.ReadVector(m_optMetScDiffAFR2[g],metScDef[d++], -10.0f, 10.0f, 2);
-  sc.ReadVector(m_optMetScGPS[g],     metScDef[d++], 0.0f, 500.0f, 2);
-  sc.ReadVector(m_optMetScFPS[g],     metScDef[d++], 0.0f, 1000.0f, 2);
+  sc.ReadScale(m_optMetScRPM[g],     metScDef[g][d++],  0.0f,  30000.0f, 100);
+  sc.ReadScale(m_optMetScMAP[g],     metScDef[g][d++],  0.0f,  500.0f, 100);
+  sc.ReadScale(m_optMetScVBat[g],    metScDef[g][d++],  0.0f,  30.0f, 100);
+  sc.ReadScale(m_optMetScIgnTim[g],  metScDef[g][d++], -20.0f, 90.0f, 100);
+  sc.ReadScale(m_optMetScTPS[g],     metScDef[g][d++],  0.0f,  100.0f, 100);
+  sc.ReadScale(m_optMetScCLT[g],     metScDef[g][d++], -60.0f, 300.0f, 100);
+  sc.ReadScale(m_optMetScAddI1[g],   metScDef[g][d++],  0.0f,  5.5f, 100);
+  sc.ReadScale(m_optMetScAddI2[g],   metScDef[g][d++],  0.0f,  5.5f, 100);
+  sc.ReadScale(m_optMetScInjPW[g],   metScDef[g][d++],  0.0f,  100.0f, 100);
+  sc.ReadScale(m_optMetScIAT[g],     metScDef[g][d++], -60.0f, 300.0f, 100);
+  sc.ReadScale(m_optMetScEGOCorr[g], metScDef[g][d++],-75.0f, 75.0f, 100);
+  sc.ReadScale(m_optMetScAirFlow[g], metScDef[g][d++],  0.0f, 16.0f, 100);
+  sc.ReadScale(m_optMetScVehicleSpeed[g],metScDef[g][d++], 0.0f, 300.0f, 100);
+  sc.ReadScale(m_optMetScTPSDot[g],  metScDef[g][d++], -1000.0f, 1000.0f, 100);
+  sc.ReadScale(m_optMetScMAPDot[g],  metScDef[g][d++], -1000.0f, 1000.0f, 100);
+  sc.ReadScale(m_optMetScMAP2[g],    metScDef[g][d++], 0.0f, 500.0f, 100);
+  sc.ReadScale(m_optMetScMAPD[g],    metScDef[g][d++], 0.0f, 500.0f, 100);
+  sc.ReadScale(m_optMetScTmp2[g],    metScDef[g][d++], -60.0f, 300.0f, 100);
+  sc.ReadScale(m_optMetScFuelConsum[g],metScDef[g][d++], 0.0f, 500.0f, 100);
+  sc.ReadScale(m_optMetScKnockRetard[g],metScDef[g][d++], 0.0f, 50.0f, 100);
+  sc.ReadScale(m_optMetScKnockGraph[g],metScDef[g][d++], 0.0f, 5.5f, 100);
+  sc.ReadScale(m_optMetScSensAFR[g], metScDef[g][d++], 6.0f, 24.0f, 100);
+  sc.ReadScale(m_optMetScChokePos[g],metScDef[g][d++], 0.0f, 100.0f, 100);
+  sc.ReadScale(m_optMetScGDPos[g],   metScDef[g][d++], 0.0f, 100.0f, 100);
+  sc.ReadScale(m_optMetScSynLoad[g], metScDef[g][d++], 0.0f, 500.0f, 100);
+  sc.ReadScale(m_optMetScInjTimB[g], metScDef[g][d++],0.0f, 720.0f, 100);  //0...720
+  sc.ReadScale(m_optMetScInjTimE[g], metScDef[g][d++],0.0f, 720.0f, 100);  //0...720
+  sc.ReadScale(m_optMetScInjTimB1[g], metScDef[g][d++],-360.0f, 360.0f, 100); //-360...360
+  sc.ReadScale(m_optMetScInjTimE1[g], metScDef[g][d++],-360.0f, 360.0f, 100); //-360...360
+  sc.ReadScale(m_optMetScFuelConsumF[g],metScDef[g][d++], 0.0f, 500.0f, 100);
+  sc.ReadScale(m_optMetScGrts[g],    metScDef[g][d++],-60.0f,300.0f, 100);
+  sc.ReadScale(m_optMetScFtls[g],    metScDef[g][d++], 0.0f, 300.0f, 100);
+  sc.ReadScale(m_optMetScEgts[g],    metScDef[g][d++], 0.0f, 1500.0f, 100);
+  sc.ReadScale(m_optMetScOps[g],     metScDef[g][d++], 0.0f, 10.0f, 100);
+  sc.ReadScale(m_optMetScInjDuty[g], metScDef[g][d++], 0.0f, 100.0f, 100);
+  sc.ReadScale(m_optMetScMAF[g],     metScDef[g][d++], 0.0f, 1000.0f, 100);
+  sc.ReadScale(m_optMetScVentDuty[g], metScDef[g][d++], 0.0f, 100.0f, 100);
+  sc.ReadScale(m_optMetScFts[g],     metScDef[g][d++],-60.0f,200.0f, 100);
+  sc.ReadScale(m_optMetScEGOCorr2[g],metScDef[g][d++], -75.0f, 75.0f, 100);
+  sc.ReadScale(m_optMetScSensAFR2[g],metScDef[g][d++], 6.0f, 24.0f, 100);
+  sc.ReadScale(m_optMetScTargAFR[g], metScDef[g][d++], 6.0f, 24.0f, 100);
+  sc.ReadScale(m_optMetScDiffAFR[g], metScDef[g][d++], -10.0f, 10.0f, 100);
+  sc.ReadScale(m_optMetScDiffAFR2[g],metScDef[g][d++], -10.0f, 10.0f, 100);
+  sc.ReadScale(m_optMetScGPS[g],     metScDef[g][d++], 0.0f, 500.0f, 100);
+  sc.ReadScale(m_optMetScFPS[g],     metScDef[g][d++], 0.0f, 1000.0f, 100);
  }
 
  //Auto tune
@@ -4353,49 +4447,51 @@ bool CAppSettingsModel::WriteSettings(void)
 
  for(int g = 0; g < 2; ++g)
  {
-  sc.WriteVector(m_optMetScRPM[g], 0, strMetRPM);
-  sc.WriteVector(m_optMetScMAP[g], 0, strMetMAP);
-  sc.WriteVector(m_optMetScVBat[g], 1, strMetVBat);
-  sc.WriteVector(m_optMetScIgnTim[g], 1, strMetIgnTim);
-  sc.WriteVector(m_optMetScTPS[g], 1, strMetTPS);
-  sc.WriteVector(m_optMetScCLT[g], 1, strMetCLT);
-  sc.WriteVector(m_optMetScAddI1[g], 1, strMetAddI1);
-  sc.WriteVector(m_optMetScAddI2[g], 1, strMetAddI2);
-  sc.WriteVector(m_optMetScInjPW[g], 1, strMetInjPW);
-  sc.WriteVector(m_optMetScIAT[g], 1, strMetIAT);
-  sc.WriteVector(m_optMetScEGOCorr[g], 1, strMetEGOCorr);
-  sc.WriteVector(m_optMetScAirFlow[g], 0, strMetAirFlow);
-  sc.WriteVector(m_optMetScVehicleSpeed[g], 1, strMetVehicleSpeed);
-  sc.WriteVector(m_optMetScTPSDot[g], 0, strMetTPSDot);
-  sc.WriteVector(m_optMetScMAPDot[g], 0, strMetMAPDot);
-  sc.WriteVector(m_optMetScMAP2[g], 1, strMetMAP2);
-  sc.WriteVector(m_optMetScGPS[g], 1, strMetGPS);
-  sc.WriteVector(m_optMetScMAPD[g], 1, strMetMAPD);
-  sc.WriteVector(m_optMetScTmp2[g], 1, strMetTmp2);
-  sc.WriteVector(m_optMetScFuelConsum[g], 1, strMetFuelConsum);
-  sc.WriteVector(m_optMetScKnockRetard[g], 1, strMetKnockRetard);
-  sc.WriteVector(m_optMetScKnockGraph[g], 1, strMetKnockGraph);
-  sc.WriteVector(m_optMetScSensAFR[g], 1, strMetSensAFR);
-  sc.WriteVector(m_optMetScChokePos[g], 1, strMetChokePos);
-  sc.WriteVector(m_optMetScGDPos[g], 1, strMetGDPos);
-  sc.WriteVector(m_optMetScSynLoad[g], 1, strMetSynLoad);
-  sc.WriteVector(m_optMetScInjTimB[g], 1, strMetInjTimB);
-  sc.WriteVector(m_optMetScInjTimE[g], 1, strMetInjTimE);
-  sc.WriteVector(m_optMetScFuelConsumF[g], 1, strMetFuelConsumF);
-  sc.WriteVector(m_optMetScGrts[g], 1, strMetGrts);
-  sc.WriteVector(m_optMetScFtls[g], 1, strMetFtls);
-  sc.WriteVector(m_optMetScEgts[g], 1, strMetEgts);
-  sc.WriteVector(m_optMetScOps[g], 1, strMetOps);
-  sc.WriteVector(m_optMetScInjDuty[g], 1, strMetInjDuty);
-  sc.WriteVector(m_optMetScMAF[g], 1, strMetMAF);
-  sc.WriteVector(m_optMetScVentDuty[g], 1, strMetVentDuty);
-  sc.WriteVector(m_optMetScFts[g], 1, strMetFts);
-  sc.WriteVector(m_optMetScEGOCorr2[g], 1, strMetEGOCorr2);
-  sc.WriteVector(m_optMetScSensAFR2[g], 1, strMetSensAFR2);
-  sc.WriteVector(m_optMetScTargAFR[g], 1, strMetTargAFR);
-  sc.WriteVector(m_optMetScDiffAFR[g], 1, strMetDiffAFR);
-  sc.WriteVector(m_optMetScDiffAFR2[g], 1, strMetDiffAFR2);
-  sc.WriteVector(m_optMetScFPS[g], 1, strMetFPS);
+  sc.WriteScale(m_optMetScRPM[g], 0, strMetRPM);
+  sc.WriteScale(m_optMetScMAP[g], 0, strMetMAP);
+  sc.WriteScale(m_optMetScVBat[g], 1, strMetVBat);
+  sc.WriteScale(m_optMetScIgnTim[g], 1, strMetIgnTim);
+  sc.WriteScale(m_optMetScTPS[g], 1, strMetTPS);
+  sc.WriteScale(m_optMetScCLT[g], 1, strMetCLT);
+  sc.WriteScale(m_optMetScAddI1[g], 1, strMetAddI1);
+  sc.WriteScale(m_optMetScAddI2[g], 1, strMetAddI2);
+  sc.WriteScale(m_optMetScInjPW[g], 1, strMetInjPW);
+  sc.WriteScale(m_optMetScIAT[g], 1, strMetIAT);
+  sc.WriteScale(m_optMetScEGOCorr[g], 1, strMetEGOCorr);
+  sc.WriteScale(m_optMetScAirFlow[g], 0, strMetAirFlow);
+  sc.WriteScale(m_optMetScVehicleSpeed[g], 1, strMetVehicleSpeed);
+  sc.WriteScale(m_optMetScTPSDot[g], 0, strMetTPSDot);
+  sc.WriteScale(m_optMetScMAPDot[g], 0, strMetMAPDot);
+  sc.WriteScale(m_optMetScMAP2[g], 1, strMetMAP2);
+  sc.WriteScale(m_optMetScGPS[g], 1, strMetGPS);
+  sc.WriteScale(m_optMetScMAPD[g], 1, strMetMAPD);
+  sc.WriteScale(m_optMetScTmp2[g], 1, strMetTmp2);
+  sc.WriteScale(m_optMetScFuelConsum[g], 1, strMetFuelConsum);
+  sc.WriteScale(m_optMetScKnockRetard[g], 1, strMetKnockRetard);
+  sc.WriteScale(m_optMetScKnockGraph[g], 1, strMetKnockGraph);
+  sc.WriteScale(m_optMetScSensAFR[g], 1, strMetSensAFR);
+  sc.WriteScale(m_optMetScChokePos[g], 1, strMetChokePos);
+  sc.WriteScale(m_optMetScGDPos[g], 1, strMetGDPos);
+  sc.WriteScale(m_optMetScSynLoad[g], 1, strMetSynLoad);
+  sc.WriteScale(m_optMetScInjTimB[g], 1, strMetInjTimB);  //0...720
+  sc.WriteScale(m_optMetScInjTimE[g], 1, strMetInjTimE);  //0...720
+  sc.WriteScale(m_optMetScInjTimB1[g], 1, strMetInjTimB); //-360...360
+  sc.WriteScale(m_optMetScInjTimE1[g], 1, strMetInjTimE); //-360...360
+  sc.WriteScale(m_optMetScFuelConsumF[g], 1, strMetFuelConsumF);
+  sc.WriteScale(m_optMetScGrts[g], 1, strMetGrts);
+  sc.WriteScale(m_optMetScFtls[g], 1, strMetFtls);
+  sc.WriteScale(m_optMetScEgts[g], 1, strMetEgts);
+  sc.WriteScale(m_optMetScOps[g], 1, strMetOps);
+  sc.WriteScale(m_optMetScInjDuty[g], 1, strMetInjDuty);
+  sc.WriteScale(m_optMetScMAF[g], 1, strMetMAF);
+  sc.WriteScale(m_optMetScVentDuty[g], 1, strMetVentDuty);
+  sc.WriteScale(m_optMetScFts[g], 1, strMetFts);
+  sc.WriteScale(m_optMetScEGOCorr2[g], 1, strMetEGOCorr2);
+  sc.WriteScale(m_optMetScSensAFR2[g], 1, strMetSensAFR2);
+  sc.WriteScale(m_optMetScTargAFR[g], 1, strMetTargAFR);
+  sc.WriteScale(m_optMetScDiffAFR[g], 1, strMetDiffAFR);
+  sc.WriteScale(m_optMetScDiffAFR2[g], 1, strMetDiffAFR2);
+  sc.WriteScale(m_optMetScFPS[g], 1, strMetFPS);
  }
 
  IniIO &at = writer;
@@ -6648,13 +6744,28 @@ void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
  }
 }
 
-static void _cpyMetersConfig(MetCfg* opt, const OptField_t<int>* mbr, const OptField_t<std::vector<float> >* scale)
+static void _cpyMetersConfig(MetCfg* opt, const OptField_t<int>* mbr, const OptField_t<SclCfg>* scale)
 {
- for(int g = 0; g < 2; ++g) { opt[g].position = mbr[g].value; opt[g].scaleMin = scale[g].value[0]; opt[g].scaleMax = scale[g].value[1]; }
+ for(int g = 0; g < 2; ++g)
+ {
+  opt[g].position = mbr[g].value;
+  opt[g].ticksNum = scale[g].value.ticksNum;
+  opt[g].scaleMin = scale[g].value.scaleMin;
+  opt[g].scaleMax = scale[g].value.scaleMax;
+  opt[g].alezn = scale[g].value.alezn;
+ }
 }
-static void _cpyMetersConfig(const MetCfg* opt, OptField_t<int>* mbr, OptField_t<std::vector<float> >* scale)
+static void _cpyMetersConfig(const MetCfg* opt, OptField_t<int>* mbr, OptField_t<SclCfg>* scale)
 {
- for(int g = 0; g < 2; ++g) { mbr[g].value = opt[g].position; scale->value[0] = opt[g].scaleMin; scale->value[1] = opt[g].scaleMax;}
+ for(int g = 0; g < 2; ++g)
+ {
+  if (mbr)
+   mbr[g].value = opt[g].position;
+  scale[g].value.ticksNum = opt[g].ticksNum;
+  scale[g].value.scaleMin = opt[g].scaleMin;
+  scale[g].value.scaleMax = opt[g].scaleMax;
+  scale[g].value.alezn = opt[g].alezn;
+ }
 }
 
 void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
@@ -6688,8 +6799,10 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0], &m_optMetScChokePos[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0], &m_optMetScGDPos[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0], &m_optMetScSynLoad[0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0], &m_optMetScInjTimB[0]);
-  _cpyMetersConfig(o_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0], &m_optMetScInjTimE[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0], &m_optMetScInjTimB[0]); //0...720
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0], &m_optMetScInjTimE[0]); //0...720
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimB1, &m_optMetInjTimB[i][0], &m_optMetScInjTimB1[0]); //-360...360
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimE1, &m_optMetInjTimE[i][0], &m_optMetScInjTimE1[0]); //-360...360
   _cpyMetersConfig(o_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0], &m_optMetScFuelConsumF[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetGrts, &m_optMetGrts[i][0], &m_optMetScGrts[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetFtls, &m_optMetFtls[i][0], &m_optMetScFtls[0]);
@@ -6739,8 +6852,10 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0], &m_optMetScChokePos[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0], &m_optMetScGDPos[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0], &m_optMetScSynLoad[0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0], &m_optMetScInjTimB[0]);
-  _cpyMetersConfig(i_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0], &m_optMetScInjTimE[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0], &m_optMetScInjTimB[0]); //0...720
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0], &m_optMetScInjTimE[0]); //0...720
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimB1, NULL, &m_optMetScInjTimB1[0]); //-360...360
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimE1, NULL, &m_optMetScInjTimE1[0]); //-360...360
   _cpyMetersConfig(i_cfg[i].m_optMetFuelConsumF, &m_optMetFuelConsumF[i][0], &m_optMetScFuelConsumF[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetGrts, &m_optMetGrts[i][0], &m_optMetScGrts[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetFtls, &m_optMetFtls[i][0], &m_optMetScFtls[0]);

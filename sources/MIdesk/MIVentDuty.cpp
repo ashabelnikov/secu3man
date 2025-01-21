@@ -63,11 +63,6 @@ void CMIVentDuty::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIVentDuty::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIVentDuty::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->vent_duty, 0, 0, i_revdir);
@@ -95,7 +90,7 @@ void CMIVentDutyGraph::Create(CWnd* pParent)
  // customize the control
  m_scope.SetRange(0, 100);
  m_scope.SetDecPlaces(0, 2);
- m_scope.SetGridNumberY(8);
+ m_scope.SetGridNumberY(10);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitY(MLL::GetString(IDS_MI_VENT_DUTY_V_UNIT));
  m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));

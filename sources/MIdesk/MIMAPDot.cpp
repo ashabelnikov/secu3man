@@ -63,11 +63,6 @@ void CMIMAPDot::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIMAPDot::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIMAPDot::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append((float)i_values->mapdot, 0, 0, i_revdir);

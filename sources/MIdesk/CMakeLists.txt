@@ -71,7 +71,7 @@ set(HEADERS
   Resource.h
   RSDeskDlg.h
   RingBuffer.h
-  StdAfx.h
+  ScaleEditorDlg.h
   )
 
 set (SOURCES
@@ -118,6 +118,7 @@ set (SOURCES
   MIDiffAFR.cpp
   RSDeskDlg.cpp
   StdAfx.cpp
+  ScaleEditorDlg.cpp
   MIDesk.rc
   )
 

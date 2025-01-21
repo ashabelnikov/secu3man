@@ -50,11 +50,6 @@ void CMIDiffAFRBase::Create(CWnd* pParent, UINT Id)
  m_meter.SetMeterSize(130);
 }
 
-void CMIDiffAFRBase::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIDiffAFR::Create(CWnd* pParent)
 {
  CMIDiffAFRBase::Create(pParent, IDC_MI_DIFFAFR);

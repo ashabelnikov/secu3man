@@ -33,6 +33,14 @@
 
 #undef max //avoid conflicts with C++
 
+struct SclCfg
+{
+ int ticksNum; //number of ticks
+ float scaleMin; //scale minimum
+ float scaleMax; //scale maximum
+ std::vector<AlertZone> alezn; //colored zones
+};
+
 template <class T> struct OptField_t
 {
  OptField_t() {}
@@ -417,6 +425,96 @@ class IniIO
    str+=_T('\'');
    str+= field.value;
    str+=_T('\'');
+   AddComment(str, field.name, comment); //add optional comment
+   _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
+   return true;
+  }
+
+  bool ReadScale(OptField_t<SclCfg>& field, const _TSTRING& defVal, float minVal, float maxVal, int MaxTicks)
+  {
+   TCHAR read_str[2048];
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 2047, m_fileName.c_str());
+   std::vector<AlertZone> vect;      
+   std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(read_str, _T(','));
+   if (tokens.size() < 3)
+    goto usedef; //number of ticks, scale min and scale max must be present   
+   int ticksNum = 0;
+   int result = _stscanf(tokens[0].c_str(), _T("%d"), &ticksNum);
+   if (result != 1 || (ticksNum < 0) || (ticksNum > MaxTicks))
+    goto usedef;
+   float scaleMin = 0;
+   result = _stscanf(tokens[1].c_str(), _T("%f"), &scaleMin);
+   if (result != 1 || (scaleMin < minVal) || (scaleMin > maxVal))
+    goto usedef;
+   float scaleMax = 0;
+   result = _stscanf(tokens[2].c_str(), _T("%f"), &scaleMax);
+   if (result != 1 || (scaleMax < minVal) || (scaleMax > maxVal) || (scaleMax <= scaleMin))
+    goto usedef;
+   
+   for (size_t i = 3; i < tokens.size(); ++i)
+   {
+    float start, end;
+    COLORREF color;    
+    int result = _stscanf(tokens[i++].c_str(), _T("%f"), &start);
+    if (result != 1 || (start < minVal) || (start > maxVal) || (i >= tokens.size()))
+     goto usedef;    
+    result = _stscanf(tokens[i++].c_str(), _T("%f"), &end);
+    if (result != 1 || (end < minVal) || (end > maxVal) || (i >= tokens.size()))
+     goto usedef;    
+    result = _stscanf(tokens[i].c_str(), _T("%x"), &color);
+    if (result != 1 || (color > 0xFFFFFF))
+     goto usedef;    
+    AlertZone az = {start, end, GDIHelpers::swapRB(color)};
+    vect.push_back(az);
+   }
+ 
+   field.value.ticksNum = ticksNum;
+   field.value.scaleMin = scaleMin;
+   field.value.scaleMax = scaleMax;
+   field.value.alezn = vect;
+   return true;  //OK
+
+  usedef:
+   std::vector<_TSTRING> tokensdef = StrUtils::TokenizeStr(defVal.c_str(), _T(','));
+   _stscanf(tokensdef[0].c_str(), _T("%d"), &field.value.ticksNum);
+   _stscanf(tokensdef[1].c_str(), _T("%f"), &field.value.scaleMin);
+   _stscanf(tokensdef[2].c_str(), _T("%f"), &field.value.scaleMax);
+   field.value.alezn.clear(); 
+   for (size_t i = 3; i < tokensdef.size(); ++i)
+   {
+    float start, end;
+    COLORREF color;
+    _stscanf(tokensdef[i++].c_str(), _T("%f"), &start);
+    if (i >= tokensdef.size()) break;    
+    _stscanf(tokensdef[i++].c_str(), _T("%f"), &end);
+    if (i >= tokensdef.size()) break;    
+    _stscanf(tokensdef[i].c_str(), _T("%x"), &color);
+    AlertZone az = {start, end, GDIHelpers::swapRB(color)};
+    field.value.alezn.push_back(az);
+   }   
+   return false;
+  }
+
+  bool WriteScale(const OptField_t<SclCfg>& field, int decPlaces, const _TSTRING& comment = _T(""))
+  {
+   CString str, s;
+   str.Format(_T("%d"), field.value.ticksNum);
+   s.Format(_T(",%.*f"), decPlaces, field.value.scaleMin);
+   str+=s;
+   s.Format(_T(",%.*f"), decPlaces, field.value.scaleMax);
+   str+=s;
+
+   for(size_t i = 0; i < field.value.alezn.size(); ++i)
+   {
+    str+=_T(",");
+    s.Format(_T("%.*f,"), decPlaces, field.value.alezn[i].start);
+    str+=s;
+    s.Format(_T("%.*f,"), decPlaces, field.value.alezn[i].end);
+    str+=s;
+    s.Format(_T("%06X"), GDIHelpers::swapRB(field.value.alezn[i].color));
+    str+=s;
+   }
+
    AddComment(str, field.name, comment); //add optional comment
    _ftprintf(m_fh, _T("%s=%s\r\n"), field.name.c_str(), str);
    return true;

@@ -76,6 +76,8 @@
 #include "MITargAFR.h"
 #include "MIDiffAFR.h"
 
+#include "ScaleEditorDlg.h"
+
 #undef max
 
 BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
@@ -118,6 +120,7 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_ALTRN_I, OnUpdateIndAddIndicator)
  ON_COMMAND(IDM_MI_IND_SET_COLOR, OnIndSetColor)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_SET_COLOR, OnUpdateIndSetColor)
+ ON_COMMAND(IDM_MI_MET_EDITSCALE, OnMetEditScale)
 END_MESSAGE_MAP()
 
 const UINT CMIDeskDlg::IDD = IDD_MEAS_INSTRUMENT_DESK;
@@ -427,6 +430,8 @@ void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int Value
  m_metCfg.insert(std::make_pair(IDM_MI_MET_SYNLOAD, cfg->m_optMetSynLoad[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIMB, cfg->m_optMetInjTimB[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIME, cfg->m_optMetInjTimE[0]));
+ m_optMetInjTimB1[0] = cfg->m_optMetInjTimB1[0];
+ m_optMetInjTimE1[0] = cfg->m_optMetInjTimE1[0];
  m_metCfg.insert(std::make_pair(IDM_MI_MET_FUELCONSUMF, cfg->m_optMetFuelConsumF[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_GRTS, cfg->m_optMetGrts[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_FTLS, cfg->m_optMetFtls[0]));
@@ -472,6 +477,8 @@ void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int Value
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_SYNLOAD, cfg->m_optMetSynLoad[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJTIMB, cfg->m_optMetInjTimB[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_INJTIME, cfg->m_optMetInjTimE[1]));
+ m_optMetInjTimB1[1] = cfg->m_optMetInjTimB1[1];
+ m_optMetInjTimE1[1] = cfg->m_optMetInjTimE1[1];
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_FUELCONSUMF, cfg->m_optMetFuelConsumF[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_GRTS, cfg->m_optMetGrts[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_FTLS, cfg->m_optMetFtls[1]));
@@ -748,6 +755,8 @@ void CMIDeskDlg::GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFont
  cfg->m_optMetSynLoad[0] = m_metCfg[IDM_MI_MET_SYNLOAD];
  cfg->m_optMetInjTimB[0] = m_metCfg[IDM_MI_MET_INJTIMB];
  cfg->m_optMetInjTimE[0] = m_metCfg[IDM_MI_MET_INJTIME];
+ cfg->m_optMetInjTimB1[0] = m_optMetInjTimB1[0];
+ cfg->m_optMetInjTimE1[0] = m_optMetInjTimE1[0];
  cfg->m_optMetFuelConsumF[0] = m_metCfg[IDM_MI_MET_FUELCONSUMF];
  cfg->m_optMetGrts[0] = m_metCfg[IDM_MI_MET_GRTS];
  cfg->m_optMetFtls[0] = m_metCfg[IDM_MI_MET_FTLS];
@@ -792,6 +801,8 @@ void CMIDeskDlg::GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFont
  cfg->m_optMetSynLoad[1] = m_metCfg[IDM_MI_GRH_SYNLOAD];
  cfg->m_optMetInjTimB[1] = m_metCfg[IDM_MI_GRH_INJTIMB];
  cfg->m_optMetInjTimE[1] = m_metCfg[IDM_MI_GRH_INJTIME];
+ cfg->m_optMetInjTimB1[1] = m_optMetInjTimB1[1];
+ cfg->m_optMetInjTimE1[1] = m_optMetInjTimE1[1];
  cfg->m_optMetFuelConsumF[1] = m_metCfg[IDM_MI_GRH_FUELCONSUMF];
  cfg->m_optMetGrts[1] = m_metCfg[IDM_MI_GRH_GRTS];
  cfg->m_optMetFtls[1] = m_metCfg[IDM_MI_GRH_FTLS];
@@ -922,6 +933,83 @@ void CMIDeskDlg::OnUpdateMetDelete(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_metFields.size() && m_dragItemMet != m_metFields.end());
 }
 
+void CMIDeskDlg::OnMetEditScale()
+{
+ ScaleEditorDlg dlg;
+
+ MetCfg* p_mcfg = NULL;
+ UINT uiId = m_dragItemMet->second->m_uiID;
+
+ if (m_it_mode < 2)
+ { //0...720
+  p_mcfg = &m_metCfg[uiId];
+ }
+ else
+ { //-360...360
+  if (uiId == IDM_MI_MET_INJTIMB)
+   p_mcfg = &m_optMetInjTimB1[0];
+  else if (uiId == IDM_MI_MET_INJTIME)
+   p_mcfg = &m_optMetInjTimE1[0];
+  else if (uiId == IDM_MI_GRH_INJTIMB)
+   p_mcfg = &m_optMetInjTimB1[1];
+  else if (uiId == IDM_MI_GRH_INJTIME)
+   p_mcfg = &m_optMetInjTimE1[1];
+  else
+   p_mcfg = &m_metCfg[uiId]; //other gauges
+ }
+
+ dlg.SetData(*p_mcfg, !m_dragItemMet->second->isGraph());
+ if (dlg.DoModal()==IDOK)
+ {
+  dlg.GetData(*p_mcfg); //update settings
+  if (uiId == IDM_MI_MET_INJTIMB)
+  {
+   CMIInjTimB* widget = static_cast<CMIInjTimB*>(m_dragItemMet->second);
+   widget->SetLimits(m_metCfg[uiId].scaleMin, m_metCfg[uiId].scaleMax, m_optMetInjTimB1[0].scaleMin, m_optMetInjTimB1[0].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiId].alezn, m_optMetInjTimB1[0].alezn);
+   widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimB1[0].ticksNum);
+   widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
+  }
+  else if (uiId == IDM_MI_MET_INJTIME)
+  {
+   CMIInjTimE* widget = static_cast<CMIInjTimE*>(m_dragItemMet->second);
+   widget->SetLimits(m_metCfg[uiId].scaleMin, m_metCfg[uiId].scaleMax, m_optMetInjTimE1[0].scaleMin, m_optMetInjTimE1[0].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiId].alezn, m_optMetInjTimE1[0].alezn);
+   widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimE1[0].ticksNum);
+   widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
+  }
+  else if (uiId == IDM_MI_GRH_INJTIMB)
+  {
+   CMIInjTimBGraph* widget = static_cast<CMIInjTimBGraph*>(m_dragItemMet->second);
+   widget->SetLimits(m_metCfg[uiId].scaleMin, m_metCfg[uiId].scaleMax, m_optMetInjTimB1[1].scaleMin, m_optMetInjTimB1[1].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimB1[1].ticksNum);
+   widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
+  }
+  else if (uiId == IDM_MI_GRH_INJTIME)
+  {
+   CMIInjTimEGraph* widget = static_cast<CMIInjTimEGraph*>(m_dragItemMet->second);
+   widget->SetLimits(m_metCfg[uiId].scaleMin, m_metCfg[uiId].scaleMax, m_optMetInjTimE1[1].scaleMin, m_optMetInjTimE1[1].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimE1[1].ticksNum);
+   widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
+  }
+  else
+  {
+   //update widget
+   MeasInstrBase* widget = m_dragItemMet->second;
+   widget->SetLimits(p_mcfg->scaleMin, p_mcfg->scaleMax);
+   if (!widget->isGraph())
+   {
+    widget->SetAlertZones(p_mcfg->alezn);
+   }
+   widget->SetTickNumber(p_mcfg->ticksNum);
+  }
+  m_dragItemMet->second->Redraw();
+
+  if (m_OnMISettingsChanged)
+   m_OnMISettingsChanged();
+ }
+}
+
 void CMIDeskDlg::OnMetAddGauge(UINT nID)
 {
  if (m_dragItemMet == m_metFields.end())
@@ -973,6 +1061,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowTRP(m_showSpeedAndDistance);
    widget->SetPaneUnit(m_speedUnit, m_distanceUnit);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -989,6 +1079,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1004,6 +1095,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrMAP, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1020,6 +1113,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1035,6 +1129,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrVolt, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1051,6 +1147,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1066,6 +1163,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrIgnTim, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1082,6 +1181,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1102,6 +1202,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowTLP(m_showGDPos);
    widget->ShowTRP(m_showChokePos);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    mp_miTemperat = widget;
    new_widget = widget;
@@ -1120,6 +1222,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1134,6 +1237,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrAddI1, 0, 0);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1150,6 +1255,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1165,6 +1271,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrAddI2, 0, 0);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1181,6 +1289,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1196,6 +1305,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrInjPW, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1212,6 +1323,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1227,6 +1339,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrIAT, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1244,6 +1358,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1258,6 +1373,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrEGOCorr, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1274,6 +1391,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1289,6 +1407,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrMAP, &m_avrNum.avrAirFlow, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
 // widget->ShowTLP(true);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1306,6 +1426,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1321,6 +1442,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrAirFlow, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1337,6 +1460,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1352,6 +1476,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrVehicleSpeed, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetMeterUnit(m_speedUnit);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1369,6 +1495,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetMeterUnit(m_speedUnit);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1385,6 +1512,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrTPSDot, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1401,6 +1530,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1416,6 +1546,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrMAPDot, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1432,6 +1564,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1447,6 +1580,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrMAP2, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1463,6 +1598,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1478,6 +1614,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrGPS, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1494,6 +1632,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1509,6 +1648,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrMAPD, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1525,6 +1666,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1540,6 +1682,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrTmp2, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1557,6 +1701,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1571,6 +1716,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrGrts, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1588,6 +1735,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1605,6 +1753,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
 // widget->ShowTRP(true);
    widget->SetPaneUnit(MLL::GetString(IDS_MI_FUELCONSUMH_UNIT), MLL::GetString(IDS_MI_CONSFUEL_UNIT));
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1622,6 +1772,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1636,6 +1787,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrKnockRetard, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1652,6 +1805,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1667,6 +1821,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrKnock, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1684,6 +1840,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1698,6 +1855,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1714,6 +1873,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1729,6 +1889,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrChokePos, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1745,6 +1907,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1760,6 +1923,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrGDPos, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1776,6 +1941,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1791,6 +1957,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrSynLoad, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1807,6 +1975,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1821,8 +1990,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->BindAverageNum(&m_avrNum.avrInjTimB, NULL, NULL);
    widget->Create(this);
-   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
-   widget->SetITMode(m_it_mode);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax, m_optMetInjTimB1[0].scaleMin, m_optMetInjTimB1[0].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn, m_optMetInjTimB1[0].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimB1[0].ticksNum);
+   widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1838,9 +2009,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->SetITMode(m_it_mode);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax, m_optMetInjTimB1[1].scaleMin, m_optMetInjTimB1[1].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimB1[1].ticksNum); 
+   widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1854,8 +2026,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->BindAverageNum(&m_avrNum.avrInjTimE, NULL, NULL);
    widget->Create(this);
-   widget->SetITMode(m_it_mode);
-   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax, m_optMetInjTimE1[0].scaleMin, m_optMetInjTimE1[0].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn, m_optMetInjTimE1[0].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimE1[0].ticksNum);
+   widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1871,9 +2045,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowValue(m_graphShowValue);
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
-   widget->SetITMode(m_it_mode);
    widget->SetShtPixels(m_graphShtPixels);
-   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax, m_optMetInjTimE1[1].scaleMin, m_optMetInjTimE1[1].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimE1[1].ticksNum);
+   widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1888,6 +2063,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrFuelConsumF, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1904,6 +2081,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1919,6 +2097,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrFtls, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1936,6 +2116,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1950,6 +2131,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrEgts, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1967,6 +2150,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1981,6 +2165,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrOps, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1998,6 +2184,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2012,6 +2199,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(NULL, NULL, NULL); //<--don't avarage inj. duty
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2028,6 +2217,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2043,6 +2233,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrMAF, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2059,6 +2251,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2074,6 +2267,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(NULL, NULL, NULL);  //<-- don't avarage vent. duty
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2090,6 +2285,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2105,6 +2301,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrFts, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2122,6 +2320,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->SetShtPixels(m_graphShtPixels);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2136,6 +2335,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrEGOCorr, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2152,6 +2353,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2167,6 +2369,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2183,6 +2387,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2198,6 +2403,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrTargAFR, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2214,6 +2421,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2229,6 +2437,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);  //<-- don't use averaging
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2245,6 +2455,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2260,6 +2471,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrSensAFR, NULL, NULL);  //<-- don't use averaging
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2276,6 +2489,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2291,6 +2505,8 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindAverageNum(&m_avrNum.avrFPS, NULL, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2307,6 +2523,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetValueHeight(m_graphValueHeight);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;

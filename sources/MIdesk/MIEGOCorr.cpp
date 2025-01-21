@@ -63,11 +63,6 @@ void CMIEGOCorr::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIEGOCorr::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIEGOCorr::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->lambda_corr, 0, 0, i_revdir);
@@ -102,11 +97,6 @@ void CMIEGOCorr2::Create(CWnd* pParent)
  m_meter.SetTRPane(_T("n/a"));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
-}
-
-void CMIEGOCorr2::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 void CMIEGOCorr2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

@@ -63,11 +63,6 @@ void CMIPressure::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIPressure::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIPressure::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->pressure, 0, 0, i_revdir);
@@ -102,12 +97,6 @@ void CMIPressureGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
-}
-
-void CMIPressureGraph::SetLimits(float loLimit, float upLimit)
-{
- m_scope.SetGridNumberY(10);
- m_scope.SetRange(loLimit, upLimit);
 }
 
 void CMIPressureGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

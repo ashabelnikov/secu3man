@@ -63,11 +63,6 @@ void CMIMaf::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIMaf::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIMaf::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->maf, 0, 0, i_revdir);

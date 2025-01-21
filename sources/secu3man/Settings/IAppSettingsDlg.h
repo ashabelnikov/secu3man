@@ -52,8 +52,6 @@ class IAppSettingsDlg
   virtual void SetMIDeskUpdatePeriod(int i_period) = 0;
   virtual void SetInterfaceLanguage(int i_iface_lang) = 0;
   virtual void SetECUPlatformType(int i_platform_type) = 0;
-  virtual void SetTachometerMax(int i_max) = 0;
-  virtual void SetPressureMax(int i_max) = 0;
   virtual void SetUseDVFeatures(bool i_use) = 0;
   virtual void SetDVDeskUpdatePeriod(int i_period) = 0;
   virtual void SetShowToolTips(bool i_show) = 0;
@@ -73,8 +71,6 @@ class IAppSettingsDlg
   virtual int GetMIDeskUpdatePeriod(void) = 0;
   virtual int GetInterfaceLanguage(void) const = 0;
   virtual int GetECUPlatformType(void) const = 0;
-  virtual int GetTachometerMax(void) const = 0;
-  virtual int GetPressureMax(void) const = 0;
   virtual bool GetUseDVFeatures(void) = 0;
   virtual int GetDVDeskUpdatePeriod(void) = 0;
   virtual bool GetShowToolTips(void) const = 0;

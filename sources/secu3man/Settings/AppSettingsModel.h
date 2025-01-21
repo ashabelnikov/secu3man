@@ -704,7 +704,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optIndRefprs_i[2];
   OptField_t<int> m_optIndAltrn_i[2];
 
-  //meters
+  //meters' positions
   OptField_t<int> m_optMetRows[2];
   OptField_t<int> m_optMetRPM[2][2];
   OptField_t<int> m_optMetMAP[2][2];
@@ -750,50 +750,52 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetDiffAFR2[2][2];
   OptField_t<int> m_optMetFPS[2][2];
 
-  //meters scales' min and max
-  OptField_t<std::vector<float> > m_optMetScRPM[2];
-  OptField_t<std::vector<float> > m_optMetScMAP[2];
-  OptField_t<std::vector<float> > m_optMetScVBat[2];
-  OptField_t<std::vector<float> > m_optMetScIgnTim[2];
-  OptField_t<std::vector<float> > m_optMetScCLT[2];
-  OptField_t<std::vector<float> > m_optMetScAddI1[2];
-  OptField_t<std::vector<float> > m_optMetScAddI2[2];
-  OptField_t<std::vector<float> > m_optMetScInjPW[2];
-  OptField_t<std::vector<float> > m_optMetScIAT[2];
-  OptField_t<std::vector<float> > m_optMetScEGOCorr[2];
-  OptField_t<std::vector<float> > m_optMetScTPS[2];
-  OptField_t<std::vector<float> > m_optMetScAirFlow[2];
-  OptField_t<std::vector<float> > m_optMetScVehicleSpeed[2];
-  OptField_t<std::vector<float> > m_optMetScTPSDot[2];
-  OptField_t<std::vector<float> > m_optMetScMAPDot[2];
-  OptField_t<std::vector<float> > m_optMetScMAP2[2];
-  OptField_t<std::vector<float> > m_optMetScGPS[2];
-  OptField_t<std::vector<float> > m_optMetScMAPD[2];
-  OptField_t<std::vector<float> > m_optMetScTmp2[2];
-  OptField_t<std::vector<float> > m_optMetScFuelConsum[2];
-  OptField_t<std::vector<float> > m_optMetScKnockRetard[2];
-  OptField_t<std::vector<float> > m_optMetScKnockGraph[2];
-  OptField_t<std::vector<float> > m_optMetScSensAFR[2];
-  OptField_t<std::vector<float> > m_optMetScChokePos[2];
-  OptField_t<std::vector<float> > m_optMetScGDPos[2];
-  OptField_t<std::vector<float> > m_optMetScSynLoad[2];
-  OptField_t<std::vector<float> > m_optMetScInjTimB[2];
-  OptField_t<std::vector<float> > m_optMetScInjTimE[2];
-  OptField_t<std::vector<float> > m_optMetScFuelConsumF[2];
-  OptField_t<std::vector<float> > m_optMetScGrts[2];
-  OptField_t<std::vector<float> > m_optMetScFtls[2];
-  OptField_t<std::vector<float> > m_optMetScEgts[2];
-  OptField_t<std::vector<float> > m_optMetScOps[2];
-  OptField_t<std::vector<float> > m_optMetScInjDuty[2];
-  OptField_t<std::vector<float> > m_optMetScMAF[2];
-  OptField_t<std::vector<float> > m_optMetScVentDuty[2];
-  OptField_t<std::vector<float> > m_optMetScFts[2];
-  OptField_t<std::vector<float> > m_optMetScEGOCorr2[2];
-  OptField_t<std::vector<float> > m_optMetScSensAFR2[2];
-  OptField_t<std::vector<float> > m_optMetScTargAFR[2];
-  OptField_t<std::vector<float> > m_optMetScDiffAFR[2];
-  OptField_t<std::vector<float> > m_optMetScDiffAFR2[2];
-  OptField_t<std::vector<float> > m_optMetScFPS[2];
+  //meters scales' options
+  OptField_t<SclCfg> m_optMetScRPM[2];
+  OptField_t<SclCfg> m_optMetScMAP[2];
+  OptField_t<SclCfg> m_optMetScVBat[2];
+  OptField_t<SclCfg> m_optMetScIgnTim[2];
+  OptField_t<SclCfg> m_optMetScCLT[2];
+  OptField_t<SclCfg> m_optMetScAddI1[2];
+  OptField_t<SclCfg> m_optMetScAddI2[2];
+  OptField_t<SclCfg> m_optMetScInjPW[2];
+  OptField_t<SclCfg> m_optMetScIAT[2];
+  OptField_t<SclCfg> m_optMetScEGOCorr[2];
+  OptField_t<SclCfg> m_optMetScTPS[2];
+  OptField_t<SclCfg> m_optMetScAirFlow[2];
+  OptField_t<SclCfg> m_optMetScVehicleSpeed[2];
+  OptField_t<SclCfg> m_optMetScTPSDot[2];
+  OptField_t<SclCfg> m_optMetScMAPDot[2];
+  OptField_t<SclCfg> m_optMetScMAP2[2];
+  OptField_t<SclCfg> m_optMetScGPS[2];
+  OptField_t<SclCfg> m_optMetScMAPD[2];
+  OptField_t<SclCfg> m_optMetScTmp2[2];
+  OptField_t<SclCfg> m_optMetScFuelConsum[2];
+  OptField_t<SclCfg> m_optMetScKnockRetard[2];
+  OptField_t<SclCfg> m_optMetScKnockGraph[2];
+  OptField_t<SclCfg> m_optMetScSensAFR[2];
+  OptField_t<SclCfg> m_optMetScChokePos[2];
+  OptField_t<SclCfg> m_optMetScGDPos[2];
+  OptField_t<SclCfg> m_optMetScSynLoad[2];
+  OptField_t<SclCfg> m_optMetScInjTimB[2]; //0...720
+  OptField_t<SclCfg> m_optMetScInjTimE[2]; //0...720
+  OptField_t<SclCfg> m_optMetScInjTimB1[2];//-360...360
+  OptField_t<SclCfg> m_optMetScInjTimE1[2];//-360...360
+  OptField_t<SclCfg> m_optMetScFuelConsumF[2];
+  OptField_t<SclCfg> m_optMetScGrts[2];
+  OptField_t<SclCfg> m_optMetScFtls[2];
+  OptField_t<SclCfg> m_optMetScEgts[2];
+  OptField_t<SclCfg> m_optMetScOps[2];
+  OptField_t<SclCfg> m_optMetScInjDuty[2];
+  OptField_t<SclCfg> m_optMetScMAF[2];
+  OptField_t<SclCfg> m_optMetScVentDuty[2];
+  OptField_t<SclCfg> m_optMetScFts[2];
+  OptField_t<SclCfg> m_optMetScEGOCorr2[2];
+  OptField_t<SclCfg> m_optMetScSensAFR2[2];
+  OptField_t<SclCfg> m_optMetScTargAFR[2];
+  OptField_t<SclCfg> m_optMetScDiffAFR[2];
+  OptField_t<SclCfg> m_optMetScDiffAFR2[2];
+  OptField_t<SclCfg> m_optMetScFPS[2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;

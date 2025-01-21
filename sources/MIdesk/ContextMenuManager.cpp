@@ -217,6 +217,7 @@ void CMetContextMenuManager::CreateContent(void)
  m_parentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_paneFontMenu.m_hMenu, MLL::LoadString(IDS_MI_MET_PANE_FONT));
  m_parentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_labelFontMenu.m_hMenu, MLL::LoadString(IDS_MI_MET_LABEL_FONT));
  m_parentMenu.AppendMenu(MF_STRING, IDM_MI_MET_ENDRAGNDROP, MLL::LoadString(IDS_MI_MET_ENDRAGNDROP));
+ m_parentMenu.AppendMenu(MF_STRING, IDM_MI_MET_EDITSCALE, MLL::LoadString(IDS_MI_MET_EDITSCALE));
 }
 
 //Shows context menu

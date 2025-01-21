@@ -455,6 +455,7 @@ void CParamMonTabController::OnMIDeskSettingsChanged(void)
  int  TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize;
 
  mp_view->mp_MIDeskDlg->GetMetersCfg(&cfg1[idx], TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+ cfg1[idx].copyScale(cfg1[idx ? 0 : 1]); //copy scale settings to all other panels of fixtures
 
  mp_settings->SetMetersConfig(cfg1);
  mp_settings->SetTitleFontSize(TitleFontSize);

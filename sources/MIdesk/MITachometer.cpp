@@ -64,11 +64,6 @@ void CMITachometer::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMITachometer::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true);  //<-- also update alert zones
-}
-
 void CMITachometer::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append((float)i_values->rpm, i_values->speed, i_values->distance, i_revdir);
@@ -103,12 +98,6 @@ void CMITachometerGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
-}
-
-void CMITachometerGraph::SetLimits(float loLimit, float upLimit)
-{
- m_scope.SetGridNumberY(((int)(upLimit-loLimit)%1000) ? 10 : MathHelpers::Round((upLimit-loLimit)/1000.0));
- m_scope.SetRange(loLimit, upLimit);
 }
 
 void CMITachometerGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

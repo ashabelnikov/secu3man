@@ -37,7 +37,6 @@ class AFX_EXT_CLASS CMIVoltage : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent, UINT id);
-  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 
 protected:

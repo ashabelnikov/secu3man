@@ -58,11 +58,6 @@ void CMIMap2::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIMap2::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIMap2::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->map2, 0, 0, i_revdir);
@@ -130,11 +125,6 @@ void CMIGps::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIGps::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIGps::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->gps, 0, 0, i_revdir);
@@ -200,11 +190,6 @@ void CMIFps::Create(CWnd* pParent)
  m_meter.AddAlertZone(300,700,RGB(120,200,120));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
-}
-
-void CMIFps::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 void CMIFps::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

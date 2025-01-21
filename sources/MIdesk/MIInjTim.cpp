@@ -28,17 +28,17 @@
 #include "MIInjTim.h"
 #include "common/GDIHelpers.h"
 
-static void _GetITModeRange(int mode, float& y1, float& y2)
-{
- y1 = (mode < 2) ? .0f : -360.0f;
- y2 = (mode < 2) ? 720.0f : 360.0f;
-}
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMIInjTim::CMIInjTim()
+: m_loLimit0(.0f)
+, m_upLimit0(720.0f)
+, m_loLimit1(-360.0f)
+, m_upLimit1(360.0f)
+, m_tn0(16)
+, m_tn1(16)
 {
  //empty
 }
@@ -66,19 +66,37 @@ void CMIInjTim::Create(CWnd* pParent, UINT id)
  m_meter.SetMeterSize(145);
 }
 
-void CMIInjTim::SetLimits(float loLimit, float upLimit)
+void CMIInjTim::SetLimits(float loLimit0, float upLimit0, float loLimit1, float upLimit1)
 {
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
+ m_loLimit0 = loLimit0; m_loLimit1 = loLimit1;
+ m_upLimit0 = upLimit0; m_upLimit1 = upLimit1;
+}
+
+void CMIInjTim::SetAlertZones(const std::vector<AlertZone>& az0, const std::vector<AlertZone>& az1)
+{
+ m_az0 = az0; m_az1 = az1;
+}
+
+void CMIInjTim::SetTickNumber(int tn0, int tn1)
+{
+ m_tn0 = tn0; m_tn1 = tn1;
 }
 
 void CMIInjTim::SetITMode(int mode)
 {
- float y1, y2;
- _GetITModeRange(mode, y1, y2);
- SetLimits(y1, y2);
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(y1, y2, RGB(250,250,250));
- m_meter.Update();
+ if (mode < 2)
+ { //0...720
+  MeasInstrBase::SetLimits(m_loLimit0, m_upLimit0);
+  MeasInstrBase::SetAlertZones(m_az0);
+  MeasInstrBase::SetTickNumber(m_tn0);
+ }
+ else
+ {//-360...360
+  MeasInstrBase::SetLimits(m_loLimit1, m_upLimit1);
+  MeasInstrBase::SetAlertZones(m_az1);
+  MeasInstrBase::SetTickNumber(m_tn1);
+ }
+ MeasInstrBase::Redraw();
 }
 
 void CMIInjTimB::Create(CWnd* pParent)
@@ -108,6 +126,12 @@ void CMIInjTimE::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= fa
 //////////////////////////////////////////////////////////////////////
 
 CMIInjTimGraph::CMIInjTimGraph()
+: m_loLimit0(.0f)
+, m_upLimit0(720.0f)
+, m_loLimit1(-360.0f)
+, m_upLimit1(360.0f)
+, m_tn0(8)
+, m_tn1(8)
 {
  //empty
 }
@@ -125,7 +149,7 @@ void CMIInjTimGraph::Create(CWnd* pParent, UINT id)
  // customize the control
  m_scope.SetRange(0, 720);
  m_scope.SetDecPlaces(0, 1);
- m_scope.SetGridNumberY(10);
+ m_scope.SetGridNumberY(8);
  m_scope.ReserveCharsY(5);
  m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
@@ -133,11 +157,30 @@ void CMIInjTimGraph::Create(CWnd* pParent, UINT id)
  m_scope.SetPlotColor(RGB(255, 255, 255));
 }
 
+void CMIInjTimGraph::SetLimits(float loLimit0, float upLimit0, float loLimit1, float upLimit1)
+{
+ m_loLimit0 = loLimit0; m_loLimit1 = loLimit1;
+ m_upLimit0 = upLimit0; m_upLimit1 = upLimit1;
+}
+
+void CMIInjTimGraph::SetTickNumber(int tn0, int tn1)
+{
+ m_tn0 = tn0; m_tn1 = tn1;
+}
+
 void CMIInjTimGraph::SetITMode(int mode)
 {
- float y1, y2;
- _GetITModeRange(mode, y1, y2);
- m_scope.SetRange(y1, y2);
+ if (mode < 2)
+ { //0...720
+  MeasInstrBase::SetLimits(m_loLimit0, m_upLimit0);
+  MeasInstrBase::SetTickNumber(m_tn0);
+ }
+ else
+ {//-360...360
+  MeasInstrBase::SetLimits(m_loLimit1, m_upLimit1);
+  MeasInstrBase::SetTickNumber(m_tn1);
+ }
+ MeasInstrBase::Redraw();
 }
 
 void CMIInjTimBGraph::Create(CWnd* pParent)

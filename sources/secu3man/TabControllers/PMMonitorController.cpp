@@ -83,6 +83,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetDistanceUnit(mp_settings->GetSpeedUnit()); //same option for distance
  mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
  mp_view->ShowSpeedAndDistance(mp_settings->GetShowSpeedAndDist());
+ mp_view->SetITMode(mp_settings->GetITEdMode());
 
  MetAverage ma;
  mp_settings->GetMetAverage(ma);

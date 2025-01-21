@@ -44,7 +44,7 @@ CMIKnock::~CMIKnock()
 
 void CMIKnock::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_KNOCK); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_KNOCK, false, false); //create window
 
  m_meter.SetRange (0.0, 5.0);
  m_meter.SetLabelsDecimals(1);
@@ -68,11 +68,6 @@ void CMIKnock::Create(CWnd* pParent)
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
  m_meter.SetMeterSize(130);
-}
-
-void CMIKnock::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
 }
 
 void CMIKnock::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

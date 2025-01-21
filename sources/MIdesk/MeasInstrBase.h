@@ -28,6 +28,7 @@
 #include <vector>
 #include <utility>
 #include "common/GDIHelpers.h"
+#include "common/SettingsTypes.h"
 #include "io-core/SECU3IO.h"
 #include "ui-core/AnalogMeterCtrl.h"
 #include "ui-core/OscillCtrl.h"
@@ -230,6 +231,14 @@ class MeasInstrBase
    return State;
   }
 
+  void Redraw(void)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.Redraw();
+   else if (m_scope.GetSafeHwnd())
+    m_scope.InvalidateCtrl(false, false, true);
+  }
+
   //Set scale range
   virtual void SetLimits(float loLimit, float upLimit)
   {
@@ -346,6 +355,24 @@ class MeasInstrBase
   {
    if (m_scope.GetSafeHwnd())
     m_scope.SetShtPixels(n);
+  }
+
+  void SetAlertZones(const std::vector<AlertZone>& az)
+  {
+   if (az.size() && m_meter.GetSafeHwnd())
+   {
+    m_meter.ResetAlertZones();
+    for(size_t i = 0; i < az.size(); ++i)
+     m_meter.AddAlertZone(az[i].start, az[i].end, az[i].color);
+   }
+  }
+
+  void SetTickNumber(int tn)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetTickNumber(tn);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.SetGridNumberY(tn);     
   }
 
   UINT m_uiID;

@@ -56,8 +56,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetMIDeskUpdatePeriod(int i_period);
   virtual void SetInterfaceLanguage(int i_iface_lang);
   virtual void SetECUPlatformType(int i_platform_type);
-  virtual void SetTachometerMax(int i_max);
-  virtual void SetPressureMax(int i_max);
   virtual void SetUseDVFeatures(bool i_use);
   virtual void SetDVDeskUpdatePeriod(int i_period);
   virtual void SetShowToolTips(bool i_show);
@@ -72,8 +70,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual int GetMIDeskUpdatePeriod(void);
   virtual int GetInterfaceLanguage(void) const;
   virtual int GetECUPlatformType(void) const;
-  virtual int GetTachometerMax(void) const;
-  virtual int GetPressureMax(void) const;
   virtual bool GetUseDVFeatures(void);
   virtual int GetDVDeskUpdatePeriod(void);
   virtual bool GetShowToolTips(void) const;
@@ -158,12 +154,8 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CEdit     m_log_files_folder_edit;
   CEditEx   m_midesk_update_period_edit;
   CEditEx   m_dv_update_period_edit;
-  CEditEx   m_tachometer_max_edit;
-  CEditEx   m_pressure_max_edit;
   CSpinButtonCtrlEx m_midesk_update_period_spin;
   CSpinButtonCtrlEx m_dv_update_period_spin;
-  CSpinButtonCtrlEx m_tachometer_max_spin;
-  CSpinButtonCtrlEx m_pressure_max_spin;
   CStatic m_dv_update_period_caption;
   CStatic m_info_text;
   int m_app_baudrate;
@@ -185,8 +177,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_iface_lang_selection_orig;
   int m_ecu_platform_selection;
   int m_ecu_platform_selection_orig;
-  int m_tachometer_max;
-  int m_pressure_max;
   int m_injdrvtab_active;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;

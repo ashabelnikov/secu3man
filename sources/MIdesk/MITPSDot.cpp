@@ -63,11 +63,6 @@ void CMITPSDot::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMITPSDot::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMITPSDot::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append((float)i_values->tpsdot, 0, 0, i_revdir);

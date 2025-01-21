@@ -63,11 +63,6 @@ void CMIGrts::Create(CWnd* pParent)
  m_meter.Update();
 }
 
-void CMIGrts::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit, true); //<-- also update alert zones
-}
-
 void CMIGrts::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)
 {
  MeasInstrBase::Append(i_values->grts, 0, 0, i_revdir);
@@ -102,12 +97,6 @@ void CMIGrtsGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
-}
-
-void CMIGrtsGraph::SetLimits(float loLimit, float upLimit)
-{
- m_scope.SetGridNumberY(8);
- m_scope.SetRange(loLimit, upLimit);
 }
 
 void CMIGrtsGraph::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

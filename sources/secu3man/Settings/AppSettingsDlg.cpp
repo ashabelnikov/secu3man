@@ -97,8 +97,6 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_OnActivate(NULL)
 , m_midesk_update_period_edit(CEditEx::MODE_INT)
 , m_dv_update_period_edit(CEditEx::MODE_INT)
-, m_tachometer_max_edit(CEditEx::MODE_INT)
-, m_pressure_max_edit(CEditEx::MODE_INT)
 , mp_port_selection_combo(&m_port_selection1_combo)
 , m_always_write_log(BST_UNCHECKED)
 , m_write_log_fields(BST_UNCHECKED)
@@ -110,8 +108,6 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_log_files_folder = _T("");
  m_use_app_folder = BST_UNCHECKED;
  m_midesk_update_period = 40;
- m_tachometer_max = 0;
- m_pressure_max = 0;
  m_use_dv_features = BST_UNCHECKED;
  m_dv_update_period = 40;
  m_show_tooltips = BST_CHECKED;
@@ -168,14 +164,6 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN, m_dv_update_period_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT, m_dv_update_period_edit);
  m_dv_update_period_edit.DDX_Value(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT, m_dv_update_period);
-
- DDX_Control(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN, m_tachometer_max_spin);
- DDX_Control(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT, m_tachometer_max_edit);
- m_tachometer_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT, m_tachometer_max);
-
- DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_SPIN, m_pressure_max_spin);
- DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max_edit);
- m_pressure_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION, m_dv_update_period_caption);
  DDX_Control(pDX, IDC_APP_SETTINGS_INFO_TEXT, m_info_text);
@@ -259,14 +247,6 @@ BOOL CAppSettingsDlg::OnInitDialog()
  m_dv_update_period_spin.SetBuddy(&m_dv_update_period_edit);
  m_dv_update_period_spin.SetRangeAndDelta(10,1000,10);
 
- m_tachometer_max_edit.SetLimitText(5);
- m_tachometer_max_spin.SetBuddy(&m_tachometer_max_edit);
- m_tachometer_max_spin.SetRangeAndDelta(1000, 15000, 10);
-
- m_pressure_max_edit.SetLimitText(5);
- m_pressure_max_spin.SetBuddy(&m_pressure_max_edit);
- m_pressure_max_spin.SetRangeAndDelta(50, 500, 10);
-
  if (m_OnActivate)
   m_OnActivate(); //информируем слушателя о том, что мы готовы к приему данных
 
@@ -295,10 +275,6 @@ BOOL CAppSettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_dv_update_period_spin, MLL::GetString(IDS_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_show_tooltips_button, MLL::GetString(IDS_APP_SETTINGS_SHOW_TOOLTIPS_TT)));
  VERIFY(mp_ttc->AddWindow(&m_injdrvtab_button, MLL::GetString(IDS_APP_SETTINGS_INJDRV_TAB_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tachometer_max_edit, MLL::GetString(IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tachometer_max_spin, MLL::GetString(IDS_APP_SETTINGS_TACHOMETER_MAX_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_pressure_max_edit, MLL::GetString(IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_pressure_max_spin, MLL::GetString(IDS_APP_SETTINGS_PRESSURE_MAX_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_midesk_update_period_edit, MLL::GetString(IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_midesk_update_period_spin, MLL::GetString(IDS_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_exfixtures_button, MLL::GetString(IDS_APP_SETTINGS_EXFIXTURES_TT)));
@@ -595,26 +571,6 @@ int CAppSettingsDlg::GetInterfaceLanguage(void) const
 int CAppSettingsDlg::GetECUPlatformType(void) const
 {
  return m_ecu_platform_selection_combo.GetItemData(m_ecu_platform_selection);
-}
-
-void CAppSettingsDlg::SetTachometerMax(int i_max)
-{
- m_tachometer_max = i_max;
-}
-
-void CAppSettingsDlg::SetPressureMax(int i_max)
-{
- m_pressure_max = i_max;
-}
-
-int CAppSettingsDlg::GetTachometerMax(void) const
-{
- return m_tachometer_max;
-}
-
-int CAppSettingsDlg::GetPressureMax(void) const
-{
- return m_pressure_max;
 }
 
 void CAppSettingsDlg::SetUseDVFeatures(bool i_use)

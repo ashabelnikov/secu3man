@@ -151,6 +151,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   afx_msg void OnUpdateIndAddIndicator(CCmdUI* pCmdUI);
   afx_msg void OnIndSetColor();
   afx_msg void OnUpdateIndSetColor(CCmdUI* pCmdUI);
+  afx_msg void OnMetEditScale();
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
@@ -185,6 +186,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   bool m_draggingMet;
   MetFields_t::iterator m_dragItemMet;
   std::map<UINT, MetCfg> m_metCfg;
+  MetCfg m_optMetInjTimB1[2];  //second set of configuration for InjTimB gauge and graph, used when m_it_mode >= 2
+  MetCfg m_optMetInjTimE1[2];  //second set of configuration for InjTimE gauge and graph, used when m_it_mode >= 2
   bool m_metDragNDrop;
   std::auto_ptr<CMetContextMenuManager> mp_ctxMenuMgrMet;
   int m_TitleFontSize, m_ValueFontSize, m_PaneFontSize, m_LabelFontSize;
