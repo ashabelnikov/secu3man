@@ -624,9 +624,17 @@ void CMainFrame::OnAppNightMode()
  hc.cbSize = sizeof(HIGHCONTRAST);
  if (SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0))
  {
-  hc.dwFlags |= ((DWORD)HCF_HIGHCONTRASTON);
-  hc.lpszDefaultScheme = _T("High Contrast #1");
-  VERIFY(SystemParametersInfo(SPI_SETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0));
+  if (hc.dwFlags & ((DWORD)HCF_HIGHCONTRASTON))
+  {
+   hc.dwFlags &= ~((DWORD)HCF_HIGHCONTRASTON);
+   VERIFY(SystemParametersInfo(SPI_SETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0));
+  }
+  else
+  {
+   hc.dwFlags |= ((DWORD)HCF_HIGHCONTRASTON);
+ //hc.lpszDefaultScheme = _T("High Contrast #1");
+   VERIFY(SystemParametersInfo(SPI_SETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0));
+  }
  }
  else
  {
