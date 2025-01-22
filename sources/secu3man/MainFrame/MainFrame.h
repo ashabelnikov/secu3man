@@ -125,6 +125,7 @@ protected:
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI);
   afx_msg void OnUpdateEmbedMapWnd(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateNightMode(CCmdUI* pCmdUI);
   afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
   afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
   afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
@@ -173,6 +174,7 @@ private:
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;
   CSize m_createSize;
+  bool m_highContrast;
 };
 
 /////////////////////////////////////////////////////////////////////////////

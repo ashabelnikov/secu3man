@@ -83,6 +83,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK3,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_SWITCH_DASHBOARD,OnUpdateOnAppSwitchDashboards)
  ON_UPDATE_COMMAND_UI(ID_APP_EMBED_MAPWND,OnUpdateEmbedMapWnd)
+ ON_UPDATE_COMMAND_UI(ID_APP_NIGHT_MODE,OnUpdateNightMode)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -91,6 +92,7 @@ END_MESSAGE_MAP()
 CMainFrame::CMainFrame()
 : m_pwndView(NULL)
 , m_bDoIdle(TRUE)
+, m_highContrast(false)
 {
  //empty
 }
@@ -110,6 +112,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
  if (m_OnCreate)
   m_OnCreate();  //notify controller about creation of this window
+
+ HIGHCONTRAST hc;
+ ZeroMemory(&hc, sizeof(HIGHCONTRAST));
+ hc.cbSize = sizeof(HIGHCONTRAST);
+ if (SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0) && (hc.dwFlags & ((DWORD)HCF_HIGHCONTRASTON)))
+  m_highContrast = true;
+ else
+  m_highContrast = false;
+
  return 0;
 }
 
@@ -517,6 +528,11 @@ void CMainFrame::OnUpdateEmbedMapWnd(CCmdUI* pCmdUI)
  pCmdUI->Enable(enable);
 }
 
+void CMainFrame::OnUpdateNightMode(CCmdUI* pCmdUI)
+{
+ pCmdUI->SetCheck(m_highContrast);
+}
+
 void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
 {
  ASSERT(m_OnActivate);
@@ -694,6 +710,14 @@ BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam)
 
 LRESULT CMainFrame::OnSysColorChange(WPARAM wParam, LPARAM lParam)
 {
+ HIGHCONTRAST hc;
+ ZeroMemory(&hc, sizeof(HIGHCONTRAST));
+ hc.cbSize = sizeof(HIGHCONTRAST);
+ if (SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0) && (hc.dwFlags & ((DWORD)HCF_HIGHCONTRASTON)))
+  m_highContrast = true;
+ else
+  m_highContrast = false;
+
  EnumChildWindows(GetSafeHwnd(), EnumChildProc, (LPARAM)GetSafeHwnd());
  return 0;
 }
