@@ -148,6 +148,11 @@
 #define IDS_TD_WUAFR1_MAP_TT            5366
 #define IDS_WUAFR0_MAP                  5367
 #define IDS_WUAFR1_MAP                  5368
+#define IDC_CESETT_DBW_GROUP            5369
+#define IDC_CESETT_TPSDIFF_THRD_CAPTION 5370
+#define IDC_CESETT_TPSDIFF_THRD_EDIT    5371
+#define IDC_CESETT_TPSDIFF_THRD_SPIN    5372
+#define IDS_CESETT_TPSDIFF_THRD_EDIT_TT 5373
 #define IDC_GME_IDL_TITLE               5426
 #define IDC_GME_TMP_TITLE               5427
 #define IDC_GME_STR_TITLE               5428

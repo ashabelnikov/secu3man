@@ -118,7 +118,7 @@ struct CESettingsData
  , add_i6_v_min(.0f), add_i6_v_max(.0f), add_i6_v_em(.0f), add_i6_v_useem(false)
  , add_i7_v_min(.0f), add_i7_v_max(.0f), add_i7_v_em(.0f), add_i7_v_useem(false)
  , add_i8_v_min(.0f), add_i8_v_max(.0f), add_i8_v_em(.0f), add_i8_v_useem(false)
- , oilpress_thrd(.0f), oilpress_timer(0), stepperic_flg(false)
+ , oilpress_thrd(.0f), oilpress_timer(0), stepperic_flg(false), tpsdiff_thrd(.0f)
  {}
 
  float map_v_min;
@@ -190,6 +190,8 @@ struct CESettingsData
  int  oilpress_timer;
 
  bool stepperic_flg;
+
+ float tpsdiff_thrd;
 };
 
 struct SECU3FWMapsItem

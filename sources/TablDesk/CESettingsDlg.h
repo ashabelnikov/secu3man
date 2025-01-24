@@ -186,6 +186,9 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
 
   CButton m_stepperic_flg_check;
 
+  CEditEx m_tpsdiff_thrd_edit;
+  CSpinButtonCtrlEx m_tpsdiff_thrd_spin;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
 

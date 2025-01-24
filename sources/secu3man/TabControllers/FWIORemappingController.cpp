@@ -1658,6 +1658,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V43) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_FPS, _T("FPS"));
   }
+  if (iov >= FWDM::IOV_V44) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_TPS2, _T("TPS2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I3, FWDM::IOP3I_ADD_I3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I3, true); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I3, true);
@@ -1696,6 +1699,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   }
   if (iov >= FWDM::IOV_V43) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_FPS, _T("FPS"));
+  }
+  if (iov >= FWDM::IOV_V44) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_TPS2, _T("TPS2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I4, FWDM::IOP3I_ADD_I4, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I4, m_enable_extraio); 
@@ -1859,6 +1865,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V43) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_FPS, _T("FPS"));
   }
+  if (iov >= FWDM::IOV_V44) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_TPS2, _T("TPS2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_ADD_I5, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I5, m_enable_spiadc); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I5, m_enable_spiadc);
@@ -1902,6 +1911,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V43) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_FPS, _T("FPS"));
   }
+  if (iov >= FWDM::IOV_V44) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_TPS2, _T("TPS2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_ADD_I6, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I6, m_enable_spiadc); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I6, m_enable_spiadc);
@@ -1943,6 +1955,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V43) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_FPS, _T("FPS"));
   }
+  if (iov >= FWDM::IOV_V44) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_TPS2, _T("TPS2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_ADD_I7, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I7, m_enable_spiadc); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I7, m_enable_spiadc);
@@ -1983,6 +1998,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   }
   if (iov >= FWDM::IOV_V43) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_FPS, _T("FPS"));
+  }
+  if (iov >= FWDM::IOV_V44) {
+   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_TPS2, _T("TPS2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_ADD_I8, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I8, m_enable_spiadc); 
