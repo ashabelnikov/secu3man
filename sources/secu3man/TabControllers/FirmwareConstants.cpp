@@ -43,7 +43,7 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Sizes of inputs' averaging buffers:"));
 
- int avnmax = 24;
+ int avnmax = 32;
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Размер буфера усреднения оборотов"), _T(""), 1, avnmax, 1, 0, &d.inpavnum[0], _T("Размер буфера усреднения оборотов. Чем больше значение усреднения, тем больше сглаживание, но при этом увеличивается запаздывание."));
  else

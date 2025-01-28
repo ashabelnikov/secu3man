@@ -345,10 +345,13 @@ typedef struct params_t
  _uint ltft_learn_load[2];            //!< lower and upper thresholds of load for learning, value * 64
  _uchar ltft_dead_band[2];            //!< EGO correction thresholds (- and +) below which LTFT will not work, value * 512
 
+ _int  apps1_curve_offset;            //!< offset of curve in volts
+ _int  apps1_curve_gradient;          //!< gradient of curve in Percentage/V
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[91];
+ _uchar reserved[87];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

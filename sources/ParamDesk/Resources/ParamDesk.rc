@@ -262,6 +262,20 @@ BEGIN
     LTEXT           "кПа/В",IDC_PD_FUNSET_CURVE_GRADIENT4_UNIT,118,407,24,11
 
     CONTROL         "",IDC_PD_MAP_CALC4_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,404,15,18
+
+    GROUPBOX        "Настройка ДППА",IDC_PD_FUNSET_APPS_SENSOR_GROUP,1,424,157,39,0,WS_EX_TRANSPARENT
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET5_EDIT,9,444,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_OFFSET5_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,443,11,16
+    LTEXT           "Смещение кривой",IDC_PD_FUNSET_CURVE_OFFSET5_CAPTION,6,433,63,8
+    LTEXT           "В",IDC_PD_FUNSET_CURVE_OFFSET5_UNIT,53,447,12,10
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT,76,444,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_GRADIENT5_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,443,11,16
+    LTEXT           "Наклон кривой",IDC_PD_FUNSET_CURVE_GRADIENT5_CAPTION,76,433,66,8
+    LTEXT           "%/В",IDC_PD_FUNSET_CURVE_GRADIENT5_UNIT,118,447,24,11
+
+    CONTROL         "",IDC_PD_APPS1_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,444,15,18
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -1688,7 +1702,7 @@ BEGIN
     IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Максимальное положительное значение лямбда коррекции на прогреве, используемое для газового дозатора"
     IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Максимальное отрицательное значение лямбда коррекции на прогреве, используемое для газового дозатора"
     IDS_PD_GASDOSE_SM_STEPS_NUM_EDIT_TT "Кол-во шагов ШД между полностью закрытым и открытым положениями дозатора. Обычно дозаторы газа имеют 256 шагов."
-    IDC_PD_MAP_CALC2_BUTTON_TT "Позволяет рассчитать 'смещение' и 'наклон' по двум известным показаниям датчика"
+    IDS_PD_MAP_CALC2_BUTTON_TT "Позволяет рассчитать 'смещение' и 'наклон' по двум известным показаниям датчика"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -2101,17 +2115,21 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_FUNSET_TPSLEARN_PUSH    "Нажмите педаль акселератора до упора и держите."
-    IDS_PD_FUNSET_TPSLEARN_RELEASE "Отпустите педаль акселератора и уберите с нее ногу."
+    IDS_PD_FUNSET_TPSLEARN_PUSH    "Нажмите педаль акселератора до упора и держите.\nЕсли у вас электронная дроссельная заслонка,\nто откройте заслонку рукой до 100% (но не более),\nчтобы она стояла параллельно потоку."
+    IDS_PD_FUNSET_TPSLEARN_RELEASE "Отпустите педаль акселератора и уберите с нее ногу.\nЕсли у вас электронная дроссельная заслонка, то закройте ее рукой до упора."
     IDS_PD_FUNSET_TPSLEARN_FINISH  "Калибровка ДПДЗ окончена!"
-    IDS_PD_FUNSET_TPSLEARN_ERROR   "ОШИБКА!\nРазница напряжений при нажатой и отпущеной педали слишком маленькая!\nПроверьте подключение ДПДЗ."
-    IDS_PD_TPS_CALC_BUTTON_TT      "Автоматический расчет параметров смещения и наклона ДПДЗ. Следуйте указаниям из появляющихся сообщений (всего 2 шага). Программа попросит вас нажать педаль акселератора и затем отпустить ее."
+    IDS_PD_FUNSET_TPSLEARN_ERROR   "ОШИБКА!\nРазница напряжений при нажатой и отпущеной педали\n(открытой и закрытой заслонке) слишком маленькая!\nПроверьте подключение ДПДЗ."
+    IDS_PD_TPS_CALC_BUTTON_TT      "Автоматический расчет параметров смещения и наклона ДПДЗ. Следуйте указаниям из появляющихся сообщений (всего 2 шага). Программа попросит вас нажать педаль акселератора (открыть заслонку) и затем отпустить ее (закрыть заслонку)."
+    IDS_PD_FUNSET_APPSLEARN_PUSH    "Нажмите педаль акселератора до упора и держите."
+    IDS_PD_FUNSET_APPSLEARN_RELEASE "Отпустите педаль акселератора и уберите с нее ногу."
+    IDS_PD_FUNSET_APPSLEARN_FINISH  "Калибровка электронной педали газа окончена!"
+    IDS_PD_FUNSET_APPSLEARN_ERROR   "ОШИБКА!\nРазница напряжений при нажатой и отпущеной педали слишком маленькая!\nПроверьте подключение датчиков педали газа."
+    IDS_PD_APPS_CALC_BUTTON_TT      "Автоматический расчет параметров смещения и наклона датчика электронной педали газа. Следуйте указаниям из появляющихся сообщений (всего 2 шага). Программа попросит вас нажать педаль акселератора и затем отпустить ее."
     IDS_WALLWET_MODEL_OFF          "Выключено"
     IDS_WALLWET_MODEL_PET          "X-tau бензин"
     IDS_WALLWET_MODEL_GAS          "X-tau газ"
     IDS_WALLWET_MODEL_BOTH         "X-tau бенз. и газ"
 END
-
 
 STRINGTABLE
 BEGIN
@@ -2188,6 +2206,9 @@ FTS_I - Вход датчика температуры топлива.\r\n
 REFPRS_I - Вход датчика давления хладагента кондиционера.\r\n
 ALTRN_I - Вход состояния возбуждения генератора.\r\n
 FPS - Вход датчика давления топлива.\r\n
+TPS2 - Вход датчика положения дроссельной заслонки 2 (электронный дроссель).\r\n
+APPS1 - Вход датчика положения педали акселератора 1 (электронная педаль газа).\r\n
+APPS2 - Вход датчика положения педали акселератора 2 (электронная педаль газа).\r\n
 "
 END
 
@@ -2201,6 +2222,8 @@ BEGIN
   IDS_MAF_IGL_OVERFLOW "Произошло переполнение при вычислении константы уравнения длительности впрыска по ДМРВ!\nИзмените значения параметров чтобы исключить эту ошибку."
   IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Ограничивать максимальное значение длительности впрыска при пуске двигателя."
   IDS_PD_IDLREG_WITH_IACREG_CHECK_TT "Не отключать УОЗ РХХ во время работы РДВ РХХ. Если галочка не установлена, то УОЗ РХХ будет работать только если обороты находятся в мертвой зоне РДВ РХХ."
+  IDS_PD_FUNSET_APPS_CURVE_OFFSET_EDIT_TT "Задает насколько сместить кривую чтобы она проходила через 0"
+  IDS_PD_FUNSET_APPS_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В."
 END
 
 STRINGTABLE
@@ -2477,14 +2500,28 @@ BEGIN
     EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET4_EDIT,9,404,30,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_FUNSET_CURVE_OFFSET4_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,403,11,16
     LTEXT           "Curve offset",IDC_PD_FUNSET_CURVE_OFFSET4_CAPTION,6,393,63,8
-    LTEXT           "В",IDC_PD_FUNSET_CURVE_OFFSET4_UNIT,53,407,12,10
+    LTEXT           "V",IDC_PD_FUNSET_CURVE_OFFSET4_UNIT,53,407,12,10
 
     EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT4_EDIT,76,404,30,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_FUNSET_CURVE_GRADIENT4_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,403,11,16
     LTEXT           "Curve gradient",IDC_PD_FUNSET_CURVE_GRADIENT4_CAPTION,76,393,66,8
-    LTEXT           "кПа/В",IDC_PD_FUNSET_CURVE_GRADIENT4_UNIT,118,407,24,11
+    LTEXT           "kPa/V",IDC_PD_FUNSET_CURVE_GRADIENT4_UNIT,118,407,24,11
 
     CONTROL         "",IDC_PD_MAP_CALC4_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,404,15,18
+
+    GROUPBOX        "APP sensor tuning",IDC_PD_FUNSET_APPS_SENSOR_GROUP,1,424,157,39,0,WS_EX_TRANSPARENT
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET5_EDIT,9,444,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_OFFSET5_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,443,11,16
+    LTEXT           "Curve offset",IDC_PD_FUNSET_CURVE_OFFSET5_CAPTION,6,433,63,8
+    LTEXT           "V",IDC_PD_FUNSET_CURVE_OFFSET5_UNIT,53,447,12,10
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT,76,444,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_GRADIENT5_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,443,11,16
+    LTEXT           "Curve gradient",IDC_PD_FUNSET_CURVE_GRADIENT5_CAPTION,76,433,66,8
+    LTEXT           "%/V",IDC_PD_FUNSET_CURVE_GRADIENT5_UNIT,118,447,24,11
+
+    CONTROL         "",IDC_PD_APPS1_CALC_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,444,15,18
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -3940,7 +3977,7 @@ BEGIN
     IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Maximum positive value of the EGO correction at warmup, which used by gas doser"
     IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Maximum negative value of the EGO correction at warmup, which used by gas doser"
     IDS_PD_GASDOSE_SM_STEPS_NUM_EDIT_TT "Number of SM steps between fully closed and fully opend positions of the stepper gas valve. Usually, such valves are 256 steps"
-    IDC_PD_MAP_CALC2_BUTTON_TT "Calculate 'offset' and 'gradient' parameters using two known sensor readings"
+    IDS_PD_MAP_CALC2_BUTTON_TT "Calculate 'offset' and 'gradient' parameters using two known sensor readings"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4352,11 +4389,16 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_FUNSET_TPSLEARN_PUSH    "Press the accelerator pedal all the way and hold."
-    IDS_PD_FUNSET_TPSLEARN_RELEASE "Release the gas pedal and take your foot off it."
+    IDS_PD_FUNSET_TPSLEARN_PUSH    "Press the accelerator pedal all the way and hold.\nIf your vehicle with electronic throttle,\nthen open throttle by hand to 100% (not above),\nso that throttle stay in parallel with air flow."
+    IDS_PD_FUNSET_TPSLEARN_RELEASE "Release the gas pedal and take your foot off it.\nIf your vehicle with electronic throttle,\nthen fully close throttle by hand."
     IDS_PD_FUNSET_TPSLEARN_FINISH  "TPS calibration is over!"
-    IDS_PD_FUNSET_TPSLEARN_ERROR   "ERROR!\nVoltage difference between pressed and released pedal is too small!\nCheck TPS connection."
-    IDS_PD_TPS_CALC_BUTTON_TT      "Automatic calculation of the offset and gradient parameters of the TPS. Follow the directions from the messages that appear (only 2 steps). The program will ask you to press the accelerator pedal and then to release it."
+    IDS_PD_FUNSET_TPSLEARN_ERROR   "ERROR!\nVoltage difference between pressed (throttle is opened) and\n released pedal (throttle is closed) is too small!\nCheck TPS connection."
+    IDS_PD_TPS_CALC_BUTTON_TT      "Automatic calculation of the offset and gradient parameters of the TPS. Follow the directions from the messages that appear (only 2 steps). The program will ask you to press the accelerator pedal (open throttle) and then to release it (close throttle)."
+    IDS_PD_FUNSET_APPSLEARN_PUSH    "Press the accelerator pedal all the way and hold."
+    IDS_PD_FUNSET_APPSLEARN_RELEASE "Release the gas pedal and take your foot off it."
+    IDS_PD_FUNSET_APPSLEARN_FINISH  "APPS calibration is over!"
+    IDS_PD_FUNSET_APPSLEARN_ERROR   "ERROR!\nVoltage difference between pressed and released pedal is too small!\nCheck connection of gas pedal sensors."
+    IDS_PD_APPS_CALC_BUTTON_TT      "Automatic calculation of the offset and gradient parameters of the APPS. Follow the directions from the messages that appear (only 2 steps). The program will ask you to press the accelerator pedal and then to release it."
     IDS_WALLWET_MODEL_OFF          "OFF"
     IDS_WALLWET_MODEL_PET          "X-tau petrol"
     IDS_WALLWET_MODEL_GAS          "X-tau gas"
@@ -4438,6 +4480,9 @@ FTS_I - Fuel temperature sensor input.\r\n
 REFPRS_I - A/C refrigerant's pressure sensor input.\r\n
 ALTRN_I - State of the alternator.\r\n
 FPS - Fuel pressure sensor input.\r\n
+TPS2 - Throttle position sensor 2 input (electronic throttle).\r\n
+APPS1 - Accelerator pedal position sensor 1 input (electronic gas pedal).\r\n
+APPS2 - Accelerator pedal position sensor 2 input  (electronic gas pedal).\r\n
 "
 END
 
@@ -4450,6 +4495,8 @@ BEGIN
   IDS_MAF_IGL_OVERFLOW "Overflow detected when calculating constant for MAF inj. PW equation!\nChange configuration to eliminate this error."
   IDS_PD_STARTER_LIMCRANPW_CHECK_TT "Limit maximum injection PW during cranking."
   IDS_PD_IDLREG_WITH_IACREG_CHECK_TT "Do not turn off the Ign.tim. idling regulator while the IAC idling regulator is operating. If checkbox is not checked, then the Ign.tim. regulator will work only if RPM is in the dead zone of the IAC regulator."
+  IDS_PD_FUNSET_APPS_CURVE_OFFSET_EDIT_TT "Specifies how to move the curve that it crosses zero"
+  IDS_PD_FUNSET_APPS_CURVE_GRADIENT_EDIT_TT "Sets how output should change when input voltage changes by 1V."
 END
 
 STRINGTABLE

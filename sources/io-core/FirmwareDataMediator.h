@@ -230,12 +230,12 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_ALTRN_I    =  100,    // ALTRN_I   (input)
    IOP3I_FPS        =  101,    // FPS       (input)
    IOP3I_TPS2       =  102,    // TPS2      (input)
-// IOP3I_RESERVED56 =  103,    // reserved  ()
-// IOP3I_RESERVED57 =  104,    // reserved  ()
+   IOP3I_APPS1      =  103,    // APPS1     (input)
+   IOP3I_APPS2      =  104,    // APPS2     (input)
 // IOP3I_RESERVED58 =  105,    // reserved  ()
 // IOP3I_RESERVED59 =  106,    // reserved  ()
 // IOP3I_RESERVED60 =  107,    // reserved  ()
-   IOP3I_COUNT      =  103,    //DON'T forget to update this value
+   IOP3I_COUNT      =  105,    //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -486,7 +486,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V41 = 0x41,           //v4.1  Array with I/O information added, GPS input
    IOV_V42 = 0x42,           //V4.2  New reserved plugs were added, ALTRN_I input added
    IOV_V43 = 0x43,           //V4.3  FPS input has been added
-   IOV_V44 = 0x44,           //V4.4  TPS2 input has been added
+   IOV_V44 = 0x44,           //V4.4  TPS2, APPS1, APPS2 inputs have been added (DBW)
    IOV_CUR = IOV_V44
   };
 

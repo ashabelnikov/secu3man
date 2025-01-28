@@ -168,6 +168,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->gps_curve_gradient = MathHelpers::Round(128.0f * p_in->gps_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE);
     p_params->fps_curve_offset = MathHelpers::Round(p_in->fps_curve_offset / ADC_DISCRETE);
     p_params->fps_curve_gradient = MathHelpers::Round(128.0f * p_in->fps_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE);
+    p_params->apps1_curve_offset = MathHelpers::Round(p_in->apps1_curve_offset / ADC_DISCRETE);
+    p_params->apps1_curve_gradient = MathHelpers::Round(128.0f * p_in->apps1_curve_gradient * (APPS_MULT*2) * ADC_DISCRETE);
    }
    break;
   case STARTR_PAR:
@@ -645,6 +647,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->gps_curve_gradient = ((float)p_params->gps_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE * 128.0f);
      p_out->fps_curve_offset = ((float)p_params->fps_curve_offset) * ADC_DISCRETE;
      p_out->fps_curve_gradient = ((float)p_params->fps_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE * 128.0f);
+     p_out->apps1_curve_offset = ((float)p_params->apps1_curve_offset) * ADC_DISCRETE;
+     p_out->apps1_curve_gradient = ((float)p_params->apps1_curve_gradient) / ((APPS_MULT*2) * ADC_DISCRETE * 128.0f);
     }
     break;
    case STARTR_PAR:

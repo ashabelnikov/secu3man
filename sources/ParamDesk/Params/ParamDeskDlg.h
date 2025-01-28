@@ -45,7 +45,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
  typedef CModelessUpdatableDialog Super;
 
  public:
-  CParamDeskDlg(bool i_show_knock_page = false, bool tps_learning = true);
+  CParamDeskDlg(bool i_show_knock_page = false, bool tps_learning = true, bool apps1_learning = true);
   virtual ~CParamDeskDlg();
   virtual BOOL Create(CWnd* pParentWnd = NULL);
 
@@ -185,7 +185,6 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   bool m_choke_ctrls;
 
   const bool m_show_knock_page;
-  const bool m_tps_learning;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;
   int m_fuel_inject_idx;

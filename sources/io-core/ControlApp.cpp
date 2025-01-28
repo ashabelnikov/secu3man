@@ -302,7 +302,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 108)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 110)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -728,6 +728,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  sensorDat.fps = ((float)fps) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
+ //APP sensor 1
+ int apps1 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &apps1))
+  return false;
+ sensorDat.apps1 = ((float)apps1) / APPS_MULT;
+
  return true;
 }
 
@@ -924,7 +930,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& funSetPar = m_recepted_packet.m_FunSetPar;
- if (size != 41)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 47)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -1069,9 +1075,26 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
   return false;
  funSetPar.fps_curve_gradient = ((float)fps_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
+ //APPS1 curve offset
+ int apps1_curve_offset = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &apps1_curve_offset, true))
+  return false;
+ funSetPar.apps1_curve_offset = ((float)apps1_curve_offset) * m_adc_discrete;
+
+ //APPS1 curve gradient
+ int apps1_curve_gradient = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &apps1_curve_gradient, true))
+  return false;
+ funSetPar.apps1_curve_gradient = ((float)apps1_curve_gradient) / ((APPS_MULT*2) * m_adc_discrete * 128.0f);
+
+ //accelerator pedal position sensor
+ int apps1_raw = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &apps1_raw))
+  return false;
+ funSetPar.apps1_raw = apps1_raw * m_adc_discrete;
+
  return true;
 }
-
 
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
@@ -4208,6 +4231,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin16ToHex(fps_curve_offset, m_outgoing_packet);
  int fps_curve_gradient = MathHelpers::Round(128.0f * packet_data->fps_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete);
  mp_pdp->Bin16ToHex(fps_curve_gradient, m_outgoing_packet);
+ int apps1_curve_offset = MathHelpers::Round(packet_data->apps1_curve_offset / m_adc_discrete);
+ mp_pdp->Bin16ToHex(apps1_curve_offset, m_outgoing_packet);
+ int apps1_curve_gradient = MathHelpers::Round(128.0f * packet_data->apps1_curve_gradient * (APPS_MULT*2) * m_adc_discrete);
+ mp_pdp->Bin16ToHex(apps1_curve_gradient, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

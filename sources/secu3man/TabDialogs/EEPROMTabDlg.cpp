@@ -40,7 +40,7 @@
 #define TIMER_ID 0
 
 CEEPROMTabDlg::CEEPROMTabDlg()
-: mp_ParamDeskDlg(new CParamDeskDlg(true, false)) //<-- use knock parameters tab, don't use TPS learning
+: mp_ParamDeskDlg(new CParamDeskDlg(true, false, false)) //<-- use knock parameters tab, don't use TPS and APPS1 learning
 , mp_ContextMenuManager(new CEEPROMContextMenuManager())
 , mp_TablesPanel(new CButtonsPanel())
 , m_is_bl_items_available(false)

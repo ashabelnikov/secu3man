@@ -44,7 +44,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CFunSetPageDlg(bool m_tps_learning = true);
+  CFunSetPageDlg(bool m_tps_learning = true, bool apps1_learning = true);
   virtual LPCTSTR GetDialogID(void) const;
 
   void Enable(bool enable);
@@ -61,7 +61,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void FillCBByLoadOpts(void);
 
-  void setOnTPSLearning(EventWithCode OnCB) {m_OnTPSLearning = OnCB;}
+  void setOnTPSLearning(EventWithCode OnCB) {m_OnTPSLearning = OnCB; m_OnAPPS1Learning = OnCB;}
 
  // Implementation
  protected:
@@ -77,6 +77,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnGpsCalcButton();
   afx_msg void OnFpsCalcButton();
   afx_msg void OnTpsCalcButton();
+  afx_msg void OnApps1CalcButton();
   afx_msg void OnChangeVE2MF();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsLower(CCmdUI* pCmdUI);
@@ -84,18 +85,22 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsFuelInject(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsTPSLearning(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsAPPS1Learning(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   void UpdateLoadAxisUnits(void);
   void OnTPsLearningPushTimer(void);
   void OnTPsLearningReleaseTimer(void);
+  void OnAPPS1LearningPushTimer(void);
+  void OnAPPS1LearningReleaseTimer(void);
   SECU3IO::FunSetPar m_params;
   std::vector<_TSTRING> m_fun_names;
   bool m_enabled;
   bool m_enable_secu3t_features;
   bool m_fuel_injection;
   bool m_tps_learning;
+  bool m_apps1_learning;
 
   CComboBox m_gas_maps_combo;
   CComboBox m_benzin_maps_combo;
@@ -122,6 +127,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CBitmapButton m_calc_gps_btn;
   CBitmapButton m_calc_fps_btn;
   CBitmapButton m_calc_tps_btn;
+  CBitmapButton m_calc_apps1_btn;
   CStatic m_lolo_unit;
   CStatic m_hilo_unit;
   CButton m_use_ldax_grid_check;
@@ -141,11 +147,20 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_fps_curve_gradient_spin;
   CEditEx m_fps_curve_gradient_edit;
 
+  CSpinButtonCtrlEx m_apps1_curve_offset_spin;
+  CEditEx m_apps1_curve_offset_edit;
+  CSpinButtonCtrlEx m_apps1_curve_gradient_spin;
+  CEditEx m_apps1_curve_gradient_edit;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;  
 
   EventWithCode m_OnTPSLearning;
+  EventWithCode m_OnAPPS1Learning;
   CObjectTimer<CFunSetPageDlg> m_tpsl_tmr;  
+  CObjectTimer<CFunSetPageDlg> m_apps1l_tmr;  
   float m_tpsl_push_value;
   float m_tpsl_release_value;
+  float m_apps1l_push_value;
+  float m_apps1l_release_value;
 };

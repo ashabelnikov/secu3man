@@ -52,8 +52,9 @@
 #define ECUERROR_INJDUTY_LIMIT       22
 #define ECUERROR_EEPROM_LTFT_BROKEN  23
 #define ECUERROR_STEPPERIC_FAULT     24
+#define ECUERROR_APPS                25
 
-const int SECU3_CE_ERRCODES_COUNT   = 25;
+const int SECU3_CE_ERRCODES_COUNT   = 26;
  //<bitnumber, error code>
 #define _SD std::pair<int, int>
  static std::pair<int, int> secu3_ce_error_codes[SECU3_CE_ERRCODES_COUNT] =
@@ -83,6 +84,7 @@ const int SECU3_CE_ERRCODES_COUNT   = 25;
   _SD(ECUERROR_INJDUTY_LIMIT,       34), //injector's duty reached limit
   _SD(ECUERROR_EEPROM_LTFT_BROKEN,  16), //LTFT map corrupted
   _SD(ECUERROR_STEPPERIC_FAULT,     35), //stepper IC fault
+  _SD(ECUERROR_APPS,                29), //APPS fault
  };
 #undef _SD
 

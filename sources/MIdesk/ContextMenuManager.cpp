@@ -96,6 +96,7 @@ void CMetContextMenuManager::CreateContent(void)
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_DIFFAFR2, MLL::LoadString(IDS_MI_DIFFAFR2_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_GPS, MLL::LoadString(IDS_MI_GPS_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_FPS, MLL::LoadString(IDS_MI_FPS_TITLE));
+ m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_APPS, MLL::LoadString(IDS_MI_APPS_TITLE));
 
  //"Add graph" submenu
  m_addGraphMenu.CreatePopupMenu();
@@ -142,6 +143,7 @@ void CMetContextMenuManager::CreateContent(void)
  m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_DIFFAFR2, MLL::LoadString(IDS_MI_DIFFAFR2_TITLE));
  m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_GPS, MLL::LoadString(IDS_MI_GPS_TITLE));
  m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_FPS, MLL::LoadString(IDS_MI_FPS_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_APPS, MLL::LoadString(IDS_MI_APPS_TITLE));
 
  //"Number of rows" submenu
  m_rowsMenu.CreatePopupMenu();

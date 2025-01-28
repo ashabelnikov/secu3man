@@ -1867,6 +1867,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   }
   if (iov >= FWDM::IOV_V44) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_TPS2, _T("TPS2"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_APPS1, _T("APPS1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_APPS2, _T("APPS2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I5, FWDM::IOP3I_ADD_I5, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I5, m_enable_spiadc); 
@@ -1913,6 +1915,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   }
   if (iov >= FWDM::IOV_V44) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_TPS2, _T("TPS2"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_APPS1, _T("APPS1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_APPS2, _T("APPS2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I6, FWDM::IOP3I_ADD_I6, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I6, m_enable_spiadc); 
@@ -1957,6 +1961,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   }
   if (iov >= FWDM::IOV_V44) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_TPS2, _T("TPS2"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_APPS1, _T("APPS1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_APPS2, _T("APPS2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I7, FWDM::IOP3I_ADD_I7, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I7, m_enable_spiadc); 
@@ -2001,6 +2007,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   }
   if (iov >= FWDM::IOV_V44) {
    mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_TPS2, _T("TPS2"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_APPS1, _T("APPS1"));
+   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_APPS2, _T("APPS2"));
   }
   mp_view->AddItem(FWDM::IOS3I_ADD_I8, FWDM::IOP3I_ADD_I8, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_I8, m_enable_spiadc); 
@@ -2240,7 +2248,8 @@ bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
           iopId == FWDM::IOP3I_AUTO_I || iopId == FWDM::IOP3I_ADD_I6 || iopId == FWDM::IOP3I_ADD_I7 || iopId == FWDM::IOP3I_ADD_I8 || iopId == FWDM::IOP3I_GRTEMP ||
           iopId == FWDM::IOP3I_FTLS_I || iopId == FWDM::IOP3I_EGTS_I || iopId == FWDM::IOP3I_OPS_I || iopId == FWDM::IOP3I_INJPWC_I || iopId == FWDM::IOP3I_INPUT1 ||
           iopId == FWDM::IOP3I_INPUT2 || iopId == FWDM::IOP3I_REFPRS_I || iopId == FWDM::IOP3I_MAP_I || iopId == FWDM::IOP3I_MAF || iopId == FWDM::IOP3I_FTS_I || 
-          iopId == FWDM::IOP3I_LAMBDA2 || iopId == FWDM::IOP3I_GPA4_I || iopId == FWDM::IOP3I_GPS || iopId == FWDM::IOP3I_ALTRN_I);
+          iopId == FWDM::IOP3I_LAMBDA2 || iopId == FWDM::IOP3I_GPA4_I || iopId == FWDM::IOP3I_GPS || iopId == FWDM::IOP3I_ALTRN_I || iopId == FWDM::IOP3I_FPS ||
+          iopId == FWDM::IOP3I_TPS2 || iopId == FWDM::IOP3I_APPS1 || iopId == FWDM::IOP3I_APPS2);
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const

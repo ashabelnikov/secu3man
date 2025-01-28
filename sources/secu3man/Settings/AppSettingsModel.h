@@ -331,6 +331,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optFtsAverage;
   OptField_t<int>  m_optTargAFRAverage;
   OptField_t<int>  m_optFPSAverage;
+  OptField_t<int>  m_optAPPSAverage;
 
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
@@ -749,6 +750,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetDiffAFR[2][2];
   OptField_t<int> m_optMetDiffAFR2[2][2];
   OptField_t<int> m_optMetFPS[2][2];
+  OptField_t<int> m_optMetAPPS[2][2];
 
   //meters scales' options
   OptField_t<SclCfg> m_optMetScRPM[2];
@@ -796,6 +798,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<SclCfg> m_optMetScDiffAFR[2];
   OptField_t<SclCfg> m_optMetScDiffAFR2[2];
   OptField_t<SclCfg> m_optMetScFPS[2];
+  OptField_t<SclCfg> m_optMetScAPPS[2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
@@ -1033,6 +1036,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldTchrg;
   OptField_t<_TSTRING> m_optLogFieldGPS;
   OptField_t<_TSTRING> m_optLogFieldFPS;
+  OptField_t<_TSTRING> m_optLogFieldAPPS;
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

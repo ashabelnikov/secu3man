@@ -336,16 +336,15 @@ void ScaleEditorDlg::OnLButtonDown(UINT nFlags, CPoint point)
  {
   if (m_az_list.GetSelectedCount()==1)
   {
-   CColorDialogEx dlg; 
-   if (dlg.DoModal() == IDOK) 
+   POSITION pos = m_az_list.GetFirstSelectedItemPosition();
+   if (pos)
    { 
-    COLORREF color = dlg.GetColor(); 
-    m_az_color.SetItemColor(0, color);
-
-    POSITION pos = m_az_list.GetFirstSelectedItemPosition();
-    if (pos)
+    int sel = m_az_list.GetNextSelectedItem(pos);    
+    CColorDialogEx dlg(m_cfg.alezn[sel].color); 
+    if (dlg.DoModal() == IDOK) 
     { 
-     int sel = m_az_list.GetNextSelectedItem(pos);
+     COLORREF color = dlg.GetColor(); 
+     m_az_color.SetItemColor(0, color);
      m_cfg.alezn[sel].color = color;   
      m_az_list.SetItemData(sel, color);
      m_az_list.SetItemText(sel, 2, FormatColor(color).c_str());

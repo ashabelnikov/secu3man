@@ -43,10 +43,10 @@ using namespace SECU3IO;
 #define MAX_REC_BUF 4096
 
 //number of variables in the data field
-#define CSV_COUNT_DATA_VAL 82
+#define CSV_COUNT_DATA_VAL 83
 
 //offset of the marks value in record
-#define CSV_MARKS_OFFSET 496
+#define CSV_MARKS_OFFSET 503
 
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
@@ -342,6 +342,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   o_data.tchrg = s3l.tchrg;
   o_data.gps = s3l.gps;
   o_data.fps = s3l.fps;
+  o_data.apps1 = s3l.apps1;
   uniout_flags = s3l.uniout_flags;
   service_flags = s3l.service_flags;
  }
@@ -370,7 +371,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
   float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
   float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
-  float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel, lambda_corr2, afr2, afrmap, tchrg, gps, fps;
+  float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel, lambda_corr2, afr2, afrmap, tchrg, gps, fps, apps1;
   DWORD ce_bits = 0;
 
   char* p = mp_recBuff; 
@@ -466,9 +467,10 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
      case 76: result = CNumericConv::secu3_atof_32<5>(b, size, tchrg); break;
      case 77: result = CNumericConv::secu3_atof_32<6>(b, size, gps); break;
      case 78: result = CNumericConv::secu3_atof_32<7>(b, size, fps); break;
-     case 79: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
-     case 80: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
-     case 81: result = ParseCE(b, size, ce_bits); break;
+     case 79: result = CNumericConv::secu3_atof_32<5>(b, size, apps1); break;
+     case 80: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
+     case 81: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
+     case 82: result = ParseCE(b, size, ce_bits); break;
     }
 
     b+=size+1;
@@ -573,6 +575,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.tchrg = tchrg;
  o_data.gps = gps;
  o_data.fps = fps;
+ o_data.apps1 = apps1;
  }
 
  //universal outputs

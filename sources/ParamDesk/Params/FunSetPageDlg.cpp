@@ -59,10 +59,13 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT3_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET4_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT4_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET5_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MAP_CALC_BUTTON, OnMapCalcButton)
  ON_BN_CLICKED(IDC_PD_MAP_CALC2_BUTTON, OnMap2CalcButton)
  ON_BN_CLICKED(IDC_PD_MAP_CALC3_BUTTON, OnGpsCalcButton)
  ON_BN_CLICKED(IDC_PD_MAP_CALC4_BUTTON, OnFpsCalcButton)
+ ON_BN_CLICKED(IDC_PD_APPS1_CALC_BUTTON, OnApps1CalcButton)
  ON_BN_CLICKED(IDC_PD_FUNSET_USE_LDAX_GRID, OnChangeDataLdaxGrid)
  ON_BN_CLICKED(IDC_PD_TPS_CALC_BUTTON, OnTpsCalcButton)
 
@@ -155,6 +158,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC3_BUTTON, OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC4_BUTTON, OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_TPS_CALC_BUTTON, OnUpdateControlsTPSLearning)
+ ON_UPDATE_COMMAND_UI(IDC_PD_APPS1_CALC_BUTTON, OnUpdateControlsAPPS1Learning)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_VE2MF_CAPTION, OnUpdateControlsFuelInject)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_VE2MF_COMBO, OnUpdateControlsFuelInject)
@@ -163,9 +167,21 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_V_UNI_CAPTION,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_USE_LDAX_GRID, OnUpdateControls)
+
+ //APPS1
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_EDIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_SPIN,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_CAPTION,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_UNIT,OnUpdateControlsSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_SPIN,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_CAPTION,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_UNIT,OnUpdateControlsSECU3i)
+
 END_MESSAGE_MAP()
 
-CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/)
+CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/, bool apps1_learning /*=true*/)
 : m_enabled(false)
 , m_enable_secu3t_features(false)
 , m_map_grad_edit(CEditEx::MODE_FLOAT, true)
@@ -179,12 +195,17 @@ CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/)
 , mp_scr(new CWndScroller)
 , m_fuel_injection(false)
 , m_tps_learning(tps_learning)
+, m_apps1_learning(apps1_learning)
 , m_tpsl_push_value(.0f)
 , m_tpsl_release_value(.0f)
+, m_apps1l_push_value(.0f)
+, m_apps1l_release_value(.0f)
 , m_gps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
 , m_gps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , m_fps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
 , m_fps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
+, m_apps1_curve_offset_edit(CEditEx::MODE_FLOAT, true)
+, m_apps1_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.map_lower_pressure = 4.5f;
  m_params.map_upper_pressure = 10.0f;
@@ -208,6 +229,8 @@ CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/)
  m_params.gps_curve_gradient = 20.9f;
  m_params.fps_curve_offset = 0.5f;
  m_params.fps_curve_gradient = 172.25f;
+ m_params.apps1_curve_offset = 0.720f;
+ m_params.apps1_curve_gradient = 26.45f;
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -254,10 +277,15 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_MAP_CALC3_BUTTON, m_calc_gps_btn);
  DDX_Control(pDX, IDC_PD_MAP_CALC4_BUTTON, m_calc_fps_btn);
  DDX_Control(pDX, IDC_PD_TPS_CALC_BUTTON, m_calc_tps_btn);
+ DDX_Control(pDX, IDC_PD_APPS1_CALC_BUTTON, m_calc_apps1_btn);
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_UNIT, m_lolo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_UNIT, m_hilo_unit);
  DDX_Control(pDX, IDC_PD_FUNSET_USE_LDAX_GRID, m_use_ldax_grid_check);
  DDX_Control(pDX, IDC_PD_FUNSET_GAS_V_UNI_COMBO, m_gas_v_uni_combo);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET5_EDIT, m_apps1_curve_offset_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET5_SPIN, m_apps1_curve_offset_spin);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT, m_apps1_curve_gradient_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT5_SPIN, m_apps1_curve_gradient_spin);
 
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
@@ -271,6 +299,8 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  m_fps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT4_EDIT, m_params.fps_curve_gradient);
  m_tps_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, m_params.tps_curve_offset);
  m_tps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_params.tps_curve_gradient);
+ m_apps1_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET5_EDIT, m_params.apps1_curve_offset);
+ m_apps1_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT, m_params.apps1_curve_gradient);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_params.fn_benzin);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_GAS_MAPS_COMBO, m_params.fn_gas);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_LOAD_SRC_COMBO, m_params.load_src_cfg);
@@ -316,6 +346,11 @@ void CFunSetPageDlg::OnUpdateControlsTPSLearning(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_tps_learning);
 }
 
+void CFunSetPageDlg::OnUpdateControlsAPPS1Learning(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_apps1_learning);
+}
+
 BOOL CFunSetPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
@@ -333,6 +368,9 @@ BOOL CFunSetPageDlg::OnInitDialog()
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
  m_calc_tps_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                            MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
+
+ m_calc_apps1_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
  m_map_grad_spin.SetBuddy(&m_map_grad_edit);
@@ -407,6 +445,18 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_tps_curve_gradient_spin.SetRangeAndDelta(-100.0f, 100.0f, 0.01f);
  m_tps_curve_gradient_edit.SetRange(-100.0f, 100.0f);
 
+ m_apps1_curve_offset_spin.SetBuddy(&m_apps1_curve_offset_edit);
+ m_apps1_curve_offset_edit.SetLimitText(6);
+ m_apps1_curve_offset_edit.SetDecimalPlaces(3);
+ m_apps1_curve_offset_spin.SetRangeAndDelta(-5.0f,5.0f,0.0025f);
+ m_apps1_curve_offset_edit.SetRange(-5.0f,5.0f);
+
+ m_apps1_curve_gradient_spin.SetBuddy(&m_apps1_curve_gradient_edit);
+ m_apps1_curve_gradient_edit.SetLimitText(7);
+ m_apps1_curve_gradient_edit.SetDecimalPlaces(3);
+ m_apps1_curve_gradient_spin.SetRangeAndDelta(-500.0f,500.0f,0.01f);
+ m_apps1_curve_gradient_edit.SetRange(-500.0f,500.0f);
+
  m_gas_uni_combo.AddString(_T("1"));
  m_gas_uni_combo.AddString(_T("2"));
  m_gas_uni_combo.AddString(_T("3"));
@@ -476,8 +526,11 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_calc_map_btn, MLL::GetString(IDS_PD_MAP_CALC_BUTTON_TT)));
- VERIFY(mp_ttc->AddWindow(&m_calc_map2_btn, MLL::GetString(IDC_PD_MAP_CALC2_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_map2_btn, MLL::GetString(IDS_PD_MAP_CALC2_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_gps_btn, MLL::GetString(IDS_PD_MAP_CALC2_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_fps_btn, MLL::GetString(IDS_PD_MAP_CALC2_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_calc_tps_btn, MLL::GetString(IDS_PD_TPS_CALC_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_apps1_btn, MLL::GetString(IDS_PD_APPS_CALC_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gas_maps_combo, MLL::GetString(IDS_PD_FUNSET_GAS_MAPS_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_benzin_maps_combo, MLL::GetString(IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT)));
 
@@ -490,6 +543,11 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_use_ldax_grid_check, MLL::GetString(IDC_PD_FUNSET_USE_LDAX_GRID_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ve2mf_combo, MLL::GetString(IDC_PD_FUNSET_VE2MF_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gas_v_uni_combo, MLL::GetString(IDS_PD_FUNSET_GAS_V_UNI_COMBO_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_apps1_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_APPS_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_apps1_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_APPS_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_apps1_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_APPS_CURVE_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_apps1_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_APPS_CURVE_GRADIENT_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -507,6 +565,7 @@ void CFunSetPageDlg::OnDestroy()
  Super::OnDestroy();
  mp_scr->Close();
  m_tpsl_tmr.KillTimer();
+ m_apps1l_tmr.KillTimer();
 }
 
 void CFunSetPageDlg::OnChangeData()
@@ -616,6 +675,14 @@ void CFunSetPageDlg::OnTpsCalcButton()
  m_tpsl_tmr.SetTimer(this, &CFunSetPageDlg::OnTPsLearningPushTimer, 1000);
 }
 
+void CFunSetPageDlg::OnApps1CalcButton()
+{
+ SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_APPSLEARN_PUSH).c_str(), MB_OK | MB_ICONASTERISK);
+ if (m_OnAPPS1Learning)
+  m_OnAPPS1Learning(1); //start
+ m_apps1l_tmr.SetTimer(this, &CFunSetPageDlg::OnAPPS1LearningPushTimer, 1000);
+}
+
 void CFunSetPageDlg::OnTPsLearningPushTimer(void)
 {
  m_tpsl_push_value = m_params.tps_raw;
@@ -643,6 +710,36 @@ void CFunSetPageDlg::OnTPsLearningReleaseTimer(void)
  else
  {
   SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_TPSLEARN_ERROR).c_str(), MB_OK | MB_ICONERROR);
+ }
+}
+
+void CFunSetPageDlg::OnAPPS1LearningPushTimer(void)
+{
+ m_apps1l_push_value = m_params.apps1_raw;
+ m_apps1l_tmr.KillTimer();
+ SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_APPSLEARN_RELEASE).c_str(), MB_OK | MB_ICONASTERISK);
+ m_apps1l_tmr.SetTimer(this, &CFunSetPageDlg::OnAPPS1LearningReleaseTimer, 1000);
+}
+
+void CFunSetPageDlg::OnAPPS1LearningReleaseTimer(void)
+{
+ m_apps1l_release_value = m_params.apps1_raw;
+ m_apps1l_tmr.KillTimer();
+ if (m_OnAPPS1Learning)
+  m_OnAPPS1Learning(0); //finish
+
+ float d = m_apps1l_push_value - m_apps1l_release_value;
+ if (fabs(d) > 0.1f) //prevent division by zero
+ { 
+  SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_APPSLEARN_FINISH).c_str(), MB_OK | MB_ICONASTERISK);
+  m_params.apps1_curve_gradient = (100.0f / d); //gradient in %/V
+  m_params.apps1_curve_offset = .0f - m_apps1l_release_value;  //offset if V
+  UpdateData(false); //copy data from variables to dialog
+  OnChangeNotify();
+ }
+ else
+ {
+  SECUMessageBox(MLL::GetString(IDS_PD_FUNSET_APPSLEARN_ERROR).c_str(), MB_OK | MB_ICONERROR);
  }
 }
 
@@ -765,5 +862,5 @@ void CFunSetPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(710));
+  mp_scr->SetViewSize(cx, da.ScaleY(780));
 }

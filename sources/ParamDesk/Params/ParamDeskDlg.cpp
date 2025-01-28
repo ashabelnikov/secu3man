@@ -67,7 +67,7 @@ using namespace fastdelegate;
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
 
-CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learning /*= true*/)
+CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learning /*= true*/, bool apps1_learning /*= true*/)
 : m_pImgList(NULL)
 , m_enabled(false)
 , m_fuel_injection(false)
@@ -76,7 +76,6 @@ CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learn
 , m_choke(false)
 , m_choke_ctrls(false)
 , m_show_knock_page(i_show_knock_page)
-, m_tps_learning(tps_learning)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 , mp_reservparsLink(new CLabel())
 {
@@ -97,7 +96,7 @@ CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learn
  m_pIdlRegPageDlg = new CIdlRegPageDlg();
  m_pIdlRegPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
- m_pFunSetPageDlg = new CFunSetPageDlg(m_tps_learning);
+ m_pFunSetPageDlg = new CFunSetPageDlg(tps_learning, apps1_learning);
  m_pFunSetPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
  m_pFunSetPageDlg->setOnTPSLearning(MakeDelegate(this, &CParamDeskDlg::OnTPSLearning));
 

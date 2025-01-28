@@ -643,10 +643,14 @@ BEGIN
     GROUPBOX        "Шаговый двигатель",IDC_CESETT_STEPPERIC_GROUP,5,495,300,32
     CONTROL         "Учитывать ошибку микросхемы ШД",IDC_CESETT_STEPPERIC_FLG_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,50,503,150,20
 
-    GROUPBOX        "Электронный дроссель",IDC_CESETT_DBW_GROUP,5,530,300,32
+    GROUPBOX        "Электронный дроссель",IDC_CESETT_DBW_GROUP,5,530,300,52
     LTEXT           "Макс. разница между TPS1 и TPS2 (В)",IDC_CESETT_TPSDIFF_THRD_CAPTION,10,542,140,15
     EDITTEXT        IDC_CESETT_TPSDIFF_THRD_EDIT,160,540,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_TPSDIFF_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,192,540,12,16
+
+    LTEXT           "Макс. разница между APPS1 и APPS2 (В)",IDC_CESETT_APPSDIFF_THRD_CAPTION,10,562,140,15
+    EDITTEXT        IDC_CESETT_APPSDIFF_THRD_EDIT,160,560,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_CESETT_APPSDIFF_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,192,560,12,16
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -917,6 +921,7 @@ BEGIN
     IDS_TD_VIEW_CYLMULT_MAP_TT "Задает коэффициент коррекции длительности впрыска отдельно для каждого цилиндра. Позволяет компенсировать отличия в прозводительности форсунок, наполнении цилиндров и т.д. По горизонтальной оси номер канала впрыска (выход блока SECU-3)."
     IDS_TD_VIEW_CYLADD_MAP_TT  "Задает добавку к длительности впрыска для каждого цилиндра. Позволяет компенсировать отличия в лаге форсунок и другие отклонения. По горизонтальной оси номер канала впрыска (выход блока SECU-3)."
     IDS_CESETT_TPSDIFF_THRD_EDIT_TT "Установите значение максимально допустимого расхождения показаний датчиков электронного дросселя. Если разница (TPS1 - TPS2) превысит это значение, то будет установлен соответствующий код ошибки и система перейдет в аварийный режим работы."
+    IDS_CESETT_APPSDIFF_THRD_EDIT_TT "Установите значение максимально допустимого расхождения показаний датчиков электронной педали газа. Если разница (APPS1 - APPS2) превысит это значение, то будет установлен соответствующий код ошибки и система перейдет в аварийный режим работы."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1591,6 +1596,10 @@ BEGIN
     LTEXT           "Max. difference between TPS1 and TPS2 (V)",IDC_CESETT_TPSDIFF_THRD_CAPTION,10,542,140,15
     EDITTEXT        IDC_CESETT_TPSDIFF_THRD_EDIT,160,540,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_TPSDIFF_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,192,540,12,16
+
+    LTEXT           "Max. difference between APPS1 and APPS2 (V)",IDC_CESETT_APPSDIFF_THRD_CAPTION,10,562,140,15
+    EDITTEXT        IDC_CESETT_APPSDIFF_THRD_EDIT,160,560,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_CESETT_APPSDIFF_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,192,560,12,16
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -1864,6 +1873,7 @@ BEGIN
     IDS_TD_FTS_CURVE_TT       "Setting temperature in the fuel ramp versus voltage dependance for the FTS. This table is necessary for the correct conversion of the voltage (V) at the sensor to fuel temperature (°C)."
     IDS_TD_FUELDENS_CORR_MAP_TT "Fuel density correction vs temperature of fuel in ramp (FTS or model)"
     IDS_CESETT_TPSDIFF_THRD_EDIT_TT "Set the maximum permissible difference between the electronic throttle's sensors readings. If the difference (TPS1 - TPS2) exceeds this value, the corresponding error code will be set and the system will go into emergency mode."
+    IDS_CESETT_APPSDIFF_THRD_EDIT_TT "Set the maximum permissible difference between the electronic gas pedal's sensors readings. If the difference (APPS1 - APPS2) exceeds this value, the corresponding error code will be set and the system will go into emergency mode."
 END
 
 STRINGTABLE DISCARDABLE 

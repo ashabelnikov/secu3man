@@ -479,6 +479,7 @@ struct MetersCfg
    m_optMetDiffAFR2[i].copyScale(dest.m_optMetDiffAFR2[i]);
    m_optMetGPS[i].copyScale(dest.m_optMetGPS[i]);
    m_optMetFPS[i].copyScale(dest.m_optMetFPS[i]);
+   m_optMetAPPS[i].copyScale(dest.m_optMetAPPS[i]);
   }
  }
 
@@ -528,6 +529,7 @@ struct MetersCfg
  MetCfg m_optMetDiffAFR2[2];
  MetCfg m_optMetGPS[2];
  MetCfg m_optMetFPS[2];
+ MetCfg m_optMetAPPS[2];
 };
 
 struct MapPtMovStep
@@ -620,6 +622,7 @@ struct LogFileFields
  _TSTRING m_fldTchrg;
  _TSTRING m_fldGPS;
  _TSTRING m_fldFPS;
+ _TSTRING m_fldAPPS;
 };
 
 struct MetAverage
@@ -661,6 +664,7 @@ struct MetAverage
  int avrFts;
  int avrTargAFR;
  int avrFPS;
+ int avrAPPS;
 };
 
 //Functionality

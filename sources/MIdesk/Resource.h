@@ -136,6 +136,7 @@
 #define IDS_CED_EEPROM_INJDUTY_LIMIT_TT 2140
 #define IDS_CED_EEPROM_LTFT_BROKEN_TT   2141
 #define IDS_CED_STEPPERIC_FAULT_TT      2142
+#define IDS_CED_APPS_TT                 2143
 #define IDS_MI_MP_H                     2150
 #define IDS_MI_MI                       2151
 #define IDC_RS_ADD_I3_VALUE             2152
@@ -229,6 +230,7 @@
 #define IDM_MI_MET_DIFFAFR2             2310
 #define IDM_MI_MET_GPS                  2311
 #define IDM_MI_MET_FPS                  2312
+#define IDM_MI_MET_APPS                 2313
 #define IDM_MI_MET_ROWS1                2321
 #define IDM_MI_MET_ROWS2                2322
 #define IDM_MI_MET_ROWS3                2323
@@ -397,6 +399,7 @@
 #define IDM_MI_GRH_DIFFAFR2             2486
 #define IDM_MI_GRH_GPS                  2487
 #define IDM_MI_GRH_FPS                  2488
+#define IDM_MI_GRH_APPS                 2489
 #define IDS_MI_GRH_ADD_GAUGE            2497
 #define IDC_MI_KNOCK                    2498
 #define IDS_MI_TACHOMETER_V_UNIT        2499
@@ -593,3 +596,6 @@
 #define IDC_MI_SED_SCALE_TICS_SPIN      2790
 #define IDC_MI_SED_SCALE_TICS_CAPTION   2791
 #define IDS_MI_SED_SCALE_TICS_EDIT_TT   2792
+#define IDC_MI_APPS                     2793
+#define IDS_MI_APPS_TITLE               2794
+#define IDS_MI_APPSGRAPH_V_UNIT         2795

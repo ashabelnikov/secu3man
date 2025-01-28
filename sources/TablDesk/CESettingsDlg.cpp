@@ -170,6 +170,10 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_TPSDIFF_THRD_EDIT, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_TPSDIFF_THRD_SPIN, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_TPSDIFF_THRD_CAPTION, OnUpdateSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_APPSDIFF_THRD_EDIT, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_APPSDIFF_THRD_SPIN, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_APPSDIFF_THRD_CAPTION, OnUpdateSECU3i)
 END_MESSAGE_MAP()
 
 CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
@@ -220,6 +224,7 @@ CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
 , m_oilpress_thrd_edit(CEditEx::MODE_FLOAT)
 , m_oilpress_timer_edit(CEditEx::MODE_INT)
 , m_tpsdiff_thrd_edit(CEditEx::MODE_FLOAT)
+, m_appsdiff_thrd_edit(CEditEx::MODE_FLOAT)
 {
  //empty
 }
@@ -347,6 +352,9 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_TPSDIFF_THRD_EDIT, m_tpsdiff_thrd_edit);
  DDX_Control(pDX, IDC_CESETT_TPSDIFF_THRD_SPIN, m_tpsdiff_thrd_spin);
 
+ DDX_Control(pDX, IDC_CESETT_APPSDIFF_THRD_EDIT, m_appsdiff_thrd_edit);
+ DDX_Control(pDX, IDC_CESETT_APPSDIFF_THRD_SPIN, m_appsdiff_thrd_spin);
+
  //Do data exchange and validation
  m_map_v_min_edit.DDX_Value(pDX, IDC_CESETT_MAP_V_MIN_EDIT, mp_data->map_v_min);
  DDV_MinMaxFloat(pDX, mp_data->map_v_min, 0.0f, 5.5f);
@@ -461,6 +469,9 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
 
  m_tpsdiff_thrd_edit.DDX_Value(pDX, IDC_CESETT_TPSDIFF_THRD_EDIT, mp_data->tpsdiff_thrd);
  DDV_MinMaxFloat(pDX, mp_data->tpsdiff_thrd, 0.0025f, 1.0f);
+
+ m_appsdiff_thrd_edit.DDX_Value(pDX, IDC_CESETT_APPSDIFF_THRD_EDIT, mp_data->appsdiff_thrd);
+ DDV_MinMaxFloat(pDX, mp_data->appsdiff_thrd, 0.0025f, 1.0f);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -745,6 +756,11 @@ BOOL CCESettingsDlg::OnInitDialog()
  m_tpsdiff_thrd_edit.SetLimitText(7);
  m_tpsdiff_thrd_edit.SetDecimalPlaces(4);
 
+ m_appsdiff_thrd_spin.SetBuddy(&m_appsdiff_thrd_edit);
+ m_appsdiff_thrd_spin.SetRangeAndDelta(0.0025, 1.0, 0.0025);
+ m_appsdiff_thrd_edit.SetLimitText(7);
+ m_appsdiff_thrd_edit.SetDecimalPlaces(4);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -863,6 +879,9 @@ BOOL CCESettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tpsdiff_thrd_edit, MLL::GetString(IDS_CESETT_TPSDIFF_THRD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tpsdiff_thrd_spin, MLL::GetString(IDS_CESETT_TPSDIFF_THRD_EDIT_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_appsdiff_thrd_edit, MLL::GetString(IDS_CESETT_APPSDIFF_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_appsdiff_thrd_spin, MLL::GetString(IDS_CESETT_APPSDIFF_THRD_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -906,7 +925,7 @@ void CCESettingsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(950));
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(990));
 }
 
 void CCESettingsDlg::OnSize(UINT nType, int cx, int cy)

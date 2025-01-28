@@ -169,7 +169,8 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    i_data.afrmap,            // value from AFR map
    i_data.tchrg,             // value of corrected MAT
    i_data.gps,               // gas pressure sensor
-   i_data.fps,
+   i_data.fps,               // fuel pressure sensor
+   i_data.apps1,             // Gas pedal sensor
    i_marks,
    service_flags,
    i_data.ce_errors};
@@ -277,6 +278,7 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    secu3_ftoa_32 (i_data.tchrg, 6, 1);            // Tcharge            
    secu3_ftoa_32 (i_data.gps, 7, 2);              // gas pressure sensor
    secu3_ftoa_32 (i_data.fps, 8, 2);              // fuel pressure sensor
+   secu3_ftoa_32 (i_data.apps1, 6, 1);            // APPS1
    secu3_itoa_u1 (i_marks, 2);                    // Log marks
    secu3_itoa_u32(service_flags, 6);              // Service flags
    size = WriteCE(p, i_data.ce_errors);           // CE errors

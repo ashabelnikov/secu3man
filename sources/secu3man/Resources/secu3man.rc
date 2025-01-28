@@ -642,9 +642,10 @@ BEGIN
 76 Температура заряда (°С)
 77 Давление газа (кПа)
 78 Давление топлива (кПа)
-79 Метки лога
-80 Служебные флаги
-81 Ошибки СЕ"
+79 ДППА (%)
+80 Метки лога
+81 Служебные флаги
+82 Ошибки СЕ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -671,6 +672,7 @@ BEGIN
     IDS_ECUERROR_INJDUTY_LIMIT     "Превышение предела производительности форсунки"
     IDS_ECUERROR_EEPROM_LTFT_BROKEN "Данные таблицы обучения в EEPROM повреждены"
     IDS_ECUERROR_STEPPERIC_FAULT   "Отказ шагового двигателя РХХ"
+    IDS_ECUERROR_APPS              "Неисправность электронной педали газа"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1708,6 +1710,7 @@ BEGIN
     IDS_ECUERROR_INJDUTY_LIMIT     "Reaching limit of injector's duty"
     IDS_ECUERROR_EEPROM_LTFT_BROKEN "LTFT map data in EEPROM is corrupted"
     IDS_ECUERROR_STEPPERIC_FAULT   "Stepper IAC fault"
+    IDS_ECUERROR_APPS              "Accelerator pedal position sensors failure"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1748,7 +1751,7 @@ BEGIN
 29 ALTRN_I input (0,1)
 30 Afterstart enrichment (0,1)
 31 IAC closed loop (0,1)
-32 TPS(%)
+32 TPS (%)
 33 ADD_I1 Input(V)
 34 ADD_I2 Input(V)
 35 Choke position(%)
@@ -1795,9 +1798,10 @@ BEGIN
 76 Charge temperature (°С)
 77 Gas pressure (kPa)
 78 Fuel pressure (kPa)
-79 Log marks
-80 Service flags
-81 CE errors"
+79 APPS (%)
+80 Log marks
+81 Service flags
+82 CE errors"
 END
 
 STRINGTABLE DISCARDABLE 

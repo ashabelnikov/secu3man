@@ -68,6 +68,7 @@ namespace SECU3IO
   float knock_retard;                   //корректировка УОЗ при детонации
   DWORD ce_errors;                      //биты ошибок СЕ
   float tps;                            //ДПДЗ (TPS sensor value)
+  float apps1;                          //gas pedal position sensor
   float add_i1;                         //ADD_I1 voltage
   float add_i2;                         //ADD_I2 voltage
   float choke_pos;                      //choke position (%)
@@ -217,10 +218,13 @@ namespace SECU3IO
   float mafload_const;                //precalculated constant for MAF (for calculation of MAF load)
   int uni_gas_v;
   float tps_raw;
+  float apps1_raw;
   float gps_curve_offset;
   float gps_curve_gradient;
   float fps_curve_offset;
   float fps_curve_gradient;
+  float apps1_curve_offset;
+  float apps1_curve_gradient;  
  };
 
  struct IdlRegPar

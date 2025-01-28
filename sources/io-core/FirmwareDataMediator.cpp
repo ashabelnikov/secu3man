@@ -161,7 +161,8 @@ typedef struct
  _uchar stepperic_flg;
 
  _uint tpsdiff_thrd;
- _uchar reserved[29];
+ _uint appsdiff_thrd;
+ _uchar reserved[27];
 }ce_sett_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -3362,6 +3363,7 @@ void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
  o_data.stepperic_flg = p_fd->extabs.cesd.stepperic_flg;
 
  o_data.tpsdiff_thrd = ((float)p_fd->extabs.cesd.tpsdiff_thrd) * ADC_DISCRETE;
+ o_data.appsdiff_thrd = ((float)p_fd->extabs.cesd.appsdiff_thrd) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
@@ -3439,6 +3441,7 @@ void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
  p_fd->extabs.cesd.stepperic_flg = i_data.stepperic_flg;
 
  p_fd->extabs.cesd.tpsdiff_thrd = MathHelpers::Round((i_data.tpsdiff_thrd / ADC_DISCRETE));
+ p_fd->extabs.cesd.appsdiff_thrd = MathHelpers::Round((i_data.appsdiff_thrd / ADC_DISCRETE));
 }
 
 void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const

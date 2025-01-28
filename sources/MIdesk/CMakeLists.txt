@@ -33,6 +33,7 @@ set(HEADERS
   IRSView.h
   LMDeskDlg.h
   MIAirFlow.h
+  MIAPPS.h
   MIDeskDlg.h
   MIDwellAngle.h
   MIEGOCorr.h
@@ -80,6 +81,7 @@ set (SOURCES
   DVDeskDlg.cpp
   LMDeskDlg.cpp
   MIAirFlow.cpp
+  MIAPPS.cpp
   MIDeskDlg.cpp
   MIDesk.cpp
   MIDwellAngle.cpp

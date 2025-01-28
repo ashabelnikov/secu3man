@@ -121,6 +121,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFtsAverage(_T("FtsAverage"))
 , m_optTargAFRAverage(_T("MapAFRAverage"))
 , m_optFPSAverage(_T("FPSAverage"))
+, m_optAPPSAverage(_T("APPSAverage"))
 
 , m_optTitleFontSize(_T("TitleFontSize"))
 , m_optValueFontSize(_T("ValueFontSize"))
@@ -669,6 +670,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldMAP2(_T("MAP2"))
 , m_optLogFieldGPS(_T("GPS"))
 , m_optLogFieldFPS(_T("FPS"))
+, m_optLogFieldAPPS(_T("APPS"))
 , m_optLogFieldTmp2(_T("Tmp2"))
 , m_optLogFieldDiffMAP(_T("DiffMAP"))
 , m_optLogFieldAFR(_T("AFR"))
@@ -837,6 +839,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetScGPS[1].name = m_optMetGPS[i][1].name = _T("GrhGPS");
   m_optMetScFPS[0].name = m_optMetFPS[i][0].name = _T("MetFPS");
   m_optMetScFPS[1].name = m_optMetFPS[i][1].name = _T("GrhFPS");
+  m_optMetScAPPS[0].name = m_optMetAPPS[i][0].name = _T("MetAPPS");
+  m_optMetScAPPS[1].name = m_optMetAPPS[i][1].name = _T("GrhAPPS");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -961,43 +965,44 @@ bool CAppSettingsModel::ReadSettings(void)
 
  fs.ReadInt(m_optShowExFixtures, _T("0"), 0, 1);
  fs.ReadInt(m_optShowSpeedAndDist, _T("1"), 0, 1);
- fs.ReadInt(m_optRPMAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optVoltAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optMAPAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optAddI1Average, _T("4"), 0, 16);
- fs.ReadInt(m_optTPSAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optKnockAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optIgnTimAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optCLTAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optAddI2Average, _T("4"), 0, 16);
- fs.ReadInt(m_optInjPWAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optIATAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optEGOCorrAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optAirFlowAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optVehicleSpeedAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optTPSDotAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optMAPDotAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optMAP2Average, _T("4"), 0, 16);
- fs.ReadInt(m_optGPSAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optMAPDAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optTmp2Average, _T("4"), 0, 16);
- fs.ReadInt(m_optFuelConsumAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optKnockRetardAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optSensAFRAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optChokePosAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optGDPosAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optSynLoadAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optInjTimBAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optInjTimEAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optFuelConsumFAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optGrtsAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optFtlsAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optEgtsAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optOpsAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optMAFAverage, _T("0"), 0, 16);
- fs.ReadInt(m_optFtsAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optTargAFRAverage, _T("4"), 0, 16);
- fs.ReadInt(m_optFPSAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optRPMAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optVoltAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optMAPAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optAddI1Average, _T("4"), 0, 32);
+ fs.ReadInt(m_optTPSAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optKnockAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optIgnTimAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optCLTAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optAddI2Average, _T("4"), 0, 32);
+ fs.ReadInt(m_optInjPWAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optIATAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optEGOCorrAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optAirFlowAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optVehicleSpeedAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optTPSDotAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optMAPDotAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optMAP2Average, _T("4"), 0, 32);
+ fs.ReadInt(m_optGPSAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optMAPDAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optTmp2Average, _T("4"), 0, 32);
+ fs.ReadInt(m_optFuelConsumAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optKnockRetardAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optSensAFRAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optChokePosAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optGDPosAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optSynLoadAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optInjTimBAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optInjTimEAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optFuelConsumFAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optGrtsAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optFtlsAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optEgtsAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optOpsAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optMAFAverage, _T("0"), 0, 32);
+ fs.ReadInt(m_optFtsAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optTargAFRAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optFPSAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optAPPSAverage, _T("4"), 0, 32);
 
  fs.ReadEnum(m_optSpeedUnit, 0, m_AllowableSpeedUnits);
  fs.ReadInt(m_optTitleFontSize, _T("100"), 10, 200);
@@ -1416,8 +1421,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColAltrn_i,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][43*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][44*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -1468,10 +1473,11 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetDiffAFR2[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetGPS[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetFPS[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetAPPS[i][g],metDef[i][d++], 0, vmax, true);
   }
  }
 
- const TCHAR* metScDef[2][45] = {
+ const TCHAR* metScDef[2][46] = {
                              {_T("16, 0, 8000, 0,4000,64FF64, 4000,6000,FFFF64, 6000,8000,FF6464"),  //RPM
                               _T("20, 10, 110, 10,30,B48282, 30,90,78C878, 90,110,B48282"),          //MAP
                               _T("16, 2,  18, 2.0,10.0,FF8080, 10.0,15.0,80FF80, 15.0,18.0,FF0000"), //Vbat
@@ -1516,7 +1522,8 @@ bool CAppSettingsModel::ReadSettings(void)
                               _T("18,-10, 10, -9,-2,8282FF, -2,-1,F0F082, -1,1,82FF82, 1,2,F0F082, 2,9,FF8282"),  //DiffAFR
                               _T("18,-10, 10, -9,-2,8282FF, -2,-1,F0F082, -1,1,82FF82, 1,2,F0F082, 2,9,FF8282"),  //DiffAFR2
                               _T("20, 0,  400, 0,100,B48282, 100,400,78C878"), //GPS
-                              _T("20, 0,  700, 0,300,B48282, 300,700,78C878")},//FPS
+                              _T("20, 0,  700, 0,300,B48282, 300,700,78C878"),//FPS
+                              _T("16, 0,  100, 0,10,B6B6D3,10,90,93EA79,90,100,FB5537")}, //APPS
                              //graphs
                              {_T("8, 0,  8000"), //RPM
                               _T("10, 10, 110"), //MAP
@@ -1562,7 +1569,8 @@ bool CAppSettingsModel::ReadSettings(void)
                               _T("10,-10, 10"),  //DiffAFR
                               _T("18,-10, 10"),  //DiffAFR2
                               _T("10, 0, 400"),  //GPS
-                              _T("10, 0, 700")}  //FPS
+                              _T("10, 0, 700"),  //FPS
+                              _T("10, 0,  100")} //APPS
                              };
 
  IniIO sc(IniFileName, m_Name_MetersSc_Section);
@@ -1614,6 +1622,7 @@ bool CAppSettingsModel::ReadSettings(void)
   sc.ReadScale(m_optMetScDiffAFR2[g],metScDef[g][d++], -10.0f, 10.0f, 100);
   sc.ReadScale(m_optMetScGPS[g],     metScDef[g][d++], 0.0f, 500.0f, 100);
   sc.ReadScale(m_optMetScFPS[g],     metScDef[g][d++], 0.0f, 1000.0f, 100);
+  sc.ReadScale(m_optMetScAPPS[g],    metScDef[g][d++], 0.0f, 100.0f, 100);
  }
 
  //Auto tune
@@ -1826,6 +1835,7 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldTchrg, _T("Tchrg"));
  lf.ReadString(m_optLogFieldGPS, _T("GPS"));
  lf.ReadString(m_optLogFieldFPS, _T("FPS"));
+ lf.ReadString(m_optLogFieldAPPS, _T("APPS"));
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -1885,6 +1895,7 @@ bool CAppSettingsModel::WriteSettings(void)
  const TCHAR* strMetDiffAFR = en ? _T("AFR difference") : _T("Разность Воздух/топливо");
  const TCHAR* strMetDiffAFR2 = en ? _T("AFR difference2") : _T("Разность Воздух/топливо2");
  const TCHAR* strMetFPS = en ? _T("Fuel pressure sensor") : _T("Датчик давления топлива");
+ const TCHAR* strMetAPPS = en ? _T("Gas pedal position sensor") : _T("Датчик положения педали газа");
 
  IniIO &os = writer; 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2308,6 +2319,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДДТ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optFPSAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for APPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДППА. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optAPPSAverage); 
 
  //---------------------------
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -4433,6 +4450,7 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetDiffAFR[i][g], strMetDiffAFR);
    mm.WriteInt(m_optMetDiffAFR2[i][g], strMetDiffAFR2);
    mm.WriteInt(m_optMetFPS[i][g], strMetFPS);
+   mm.WriteInt(m_optMetAPPS[i][g], strMetAPPS);
   }
  }
 
@@ -4492,6 +4510,7 @@ bool CAppSettingsModel::WriteSettings(void)
   sc.WriteScale(m_optMetScDiffAFR[g], 1, strMetDiffAFR);
   sc.WriteScale(m_optMetScDiffAFR2[g], 1, strMetDiffAFR2);
   sc.WriteScale(m_optMetScFPS[g], 1, strMetFPS);
+  sc.WriteScale(m_optMetScAPPS[g], 1, strMetAPPS);
  }
 
  IniIO &at = writer;
@@ -5206,6 +5225,7 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldCECodes);
  lf.WriteString(m_optLogFieldGPS);
  lf.WriteString(m_optLogFieldFPS);
+ lf.WriteString(m_optLogFieldAPPS);
  //Functionality
  IniIO &fn = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -6818,6 +6838,7 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0], &m_optMetScDiffAFR[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0], &m_optMetScDiffAFR2[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetFPS, &m_optMetFPS[i][0], &m_optMetScFPS[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetAPPS, &m_optMetAPPS[i][0], &m_optMetScAPPS[0]);
  }
 }
 
@@ -6871,6 +6892,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR, &m_optMetDiffAFR[i][0], &m_optMetScDiffAFR[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetDiffAFR2, &m_optMetDiffAFR2[i][0], &m_optMetScDiffAFR2[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetFPS, &m_optMetFPS[i][0], &m_optMetScFPS[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetAPPS, &m_optMetAPPS[i][0], &m_optMetScAPPS[0]);
  }
 }
 
@@ -7417,6 +7439,7 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldTchrg.value = i_flds.m_fldTchrg;
  m_optLogFieldGPS.value = i_flds.m_fldGPS;
  m_optLogFieldFPS.value = i_flds.m_fldFPS;
+ m_optLogFieldAPPS.value = i_flds.m_fldAPPS;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -7503,6 +7526,7 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldTchrg = m_optLogFieldTchrg.value;
  o_flds.m_fldGPS = m_optLogFieldGPS.value;
  o_flds.m_fldFPS = m_optLogFieldFPS.value;
+ o_flds.m_fldAPPS = m_optLogFieldAPPS.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const
@@ -7595,6 +7619,7 @@ void CAppSettingsModel::GetMetAverage(MetAverage& ma)
  ma.avrOps = m_optOpsAverage.value;
  ma.avrFts = m_optFtsAverage.value;
  ma.avrFPS = m_optFPSAverage.value;
+ ma.avrAPPS = m_optAPPSAverage.value;
 }
 
 bool CAppSettingsModel::GetSpotMarkers(void) const

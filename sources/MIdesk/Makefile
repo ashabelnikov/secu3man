@@ -24,7 +24,7 @@ SOURCES = StdAfx.cpp CEDeskDlg.cpp DVDeskDlg.cpp MIAirFlow.cpp MIDeskDlg.cpp MID
   MITemp2.cpp MIFuelConsum.cpp MIKnockRetard.cpp MIKnockGraph.cpp MISensAFR.cpp MIChokePos.cpp \
   MISynLoad.cpp ContextMenuManager.cpp MIInjTim.cpp MIFuelConsumF.cpp MIGrts.cpp MIFtls.cpp \
   MIEgts.cpp MIOps.cpp MIInjDuty.cpp MIMaf.cpp MIVentDuty.cpp MIMAPDot.cpp MIFts.cpp MITargAFR.cpp \
-  MIDiffAFR.cpp ScaleEditorDlg.cpp
+  MIDiffAFR.cpp ScaleEditorDlg.cpp MIAPPS.cpp
 
 # DLL building
 all: midesk

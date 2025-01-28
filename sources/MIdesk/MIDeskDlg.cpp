@@ -40,6 +40,7 @@
 #include "ui-core/ColorDialogEx.h"
 
 #include "MIAirFlow.h"
+#include "MIAPPS.h"
 #include "MIDwellAngle.h"
 #include "MIEGOCorr.h"
 #include "MIIAT.h"
@@ -92,10 +93,10 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
  ON_COMMAND(IDM_MI_MET_DEL_GAUGE, OnMetDeleteGauge)
  ON_UPDATE_COMMAND_UI(IDM_MI_MET_DEL_GAUGE, OnUpdateMetDelete)
- ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_FPS, OnMetAddGauge)
- ON_COMMAND_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_FPS, OnMetAddGauge)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_FPS, OnUpdateMetAddGauge)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_FPS, OnUpdateMetAddGauge)
+ ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_APPS, OnMetAddGauge)
+ ON_COMMAND_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_APPS, OnMetAddGauge)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_APPS, OnUpdateMetAddGauge)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_GRH_RPM, IDM_MI_GRH_APPS, OnUpdateMetAddGauge)
  ON_COMMAND_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnMetNumOfRows)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnUpdateMetNumOfRows)
  ON_COMMAND_RANGE(IDM_MI_MET_TITLE_FONT050, IDM_MI_MET_TITLE_FONT150, OnMetTitleFont)
@@ -447,6 +448,7 @@ void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int Value
  m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR, cfg->m_optMetDiffAFR[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_DIFFAFR2, cfg->m_optMetDiffAFR2[0]));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_FPS, cfg->m_optMetFPS[0]));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_APPS, cfg->m_optMetAPPS[0]));
 
  //graphs
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_RPM, cfg->m_optMetRPM[1]));
@@ -494,6 +496,7 @@ void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int Value
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR, cfg->m_optMetDiffAFR[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_DIFFAFR2, cfg->m_optMetDiffAFR2[1]));
  m_metCfg.insert(std::make_pair(IDM_MI_GRH_FPS, cfg->m_optMetFPS[1]));
+ m_metCfg.insert(std::make_pair(IDM_MI_GRH_APPS, cfg->m_optMetAPPS[1]));
 
  m_metRows = cfg->m_optMetRows;
  m_TitleFontSize = TitleFontSize;
@@ -772,6 +775,7 @@ void CMIDeskDlg::GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFont
  cfg->m_optMetDiffAFR[0] = m_metCfg[IDM_MI_MET_DIFFAFR];
  cfg->m_optMetDiffAFR2[0] = m_metCfg[IDM_MI_MET_DIFFAFR2];
  cfg->m_optMetFPS[0] = m_metCfg[IDM_MI_MET_FPS];
+ cfg->m_optMetAPPS[0] = m_metCfg[IDM_MI_MET_APPS];
 
  cfg->m_optMetRPM[1] = m_metCfg[IDM_MI_GRH_RPM];
  cfg->m_optMetMAP[1] = m_metCfg[IDM_MI_GRH_MAP];
@@ -818,6 +822,7 @@ void CMIDeskDlg::GetMetersCfg(MetersCfg* cfg, int &TitleFontSize, int &ValueFont
  cfg->m_optMetDiffAFR[1] = m_metCfg[IDM_MI_GRH_DIFFAFR];
  cfg->m_optMetDiffAFR2[1] = m_metCfg[IDM_MI_GRH_DIFFAFR2];
  cfg->m_optMetFPS[1] = m_metCfg[IDM_MI_GRH_FPS];
+ cfg->m_optMetAPPS[1] = m_metCfg[IDM_MI_GRH_APPS];
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
@@ -1404,7 +1409,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    CMIThrottleGate* widget = new CMIThrottleGate();
    widget->m_uiID = uiID;
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
-   widget->BindAverageNum(&m_avrNum.avrMAP, &m_avrNum.avrAirFlow, NULL);
+   widget->BindAverageNum(&m_avrNum.avrTPS, &m_avrNum.avrAirFlow, NULL);
    widget->Create(this);
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetAlertZones(m_metCfg[uiID].alezn);
@@ -2529,6 +2534,40 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    new_widget = widget;
    break;
   }
+  case IDM_MI_MET_APPS:
+  {
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
+    break;
+   CMIAPPS* widget = new CMIAPPS();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->BindAverageNum(&m_avrNum.avrAPPS, NULL, NULL);
+   widget->Create(this);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetAlertZones(m_metCfg[uiID].alezn);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
+   new_widget = widget;
+   break;
+  }
+  case IDM_MI_GRH_APPS:
+  {
+   if (m_metCfg[uiID].position == std::numeric_limits<int>::max())
+    break;
+   CMIAPPSGraph* widget = new CMIAPPSGraph();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->ShowCursor(m_show_graph_cursor);
+   widget->ShowValue(m_graphShowValue);
+   widget->SetValueHeight(m_graphValueHeight);
+   widget->Create(this);
+   widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
+   widget->SetTickNumber(m_metCfg[uiID].ticksNum);
+   widget->SetShtPixels(m_graphShtPixels);
+   m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
+   new_widget = widget;
+   break;
+  }
  }
  return new_widget;
 }
@@ -2898,7 +2937,7 @@ void CMIDeskDlg::_IndFactory(UINT uiID)
 
 void CMIDeskDlg::OnIndSetColor()
 {
- CColorDialogEx dlg; 
+ CColorDialogEx dlg(m_dragItemInd->second.color); 
  if (dlg.DoModal() == IDOK) 
  { 
   COLORREF color = dlg.GetColor(); 
