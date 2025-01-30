@@ -435,10 +435,11 @@ typedef struct
 
  _uint aircond_idlrpm_delay;
 
- //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
- //новых версий прошивок с более старыми версиями. При добавлении новых данных
- //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1520];
+ _uint iac_clen_coeff;     //!< Enter threshold coefficient, value * 256
+ _uint iac_clon_coeff;     //!< On threshold coefficient, value * 256
+
+ //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
+ _uchar reserved[1516];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3578,6 +3579,9 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.use_vss_thrd_for_igntim_reg = exd.use_vss_thrd_for_igntim_reg;
 
  o_data.aircond_idlrpm_delay = ((float)exd.aircond_idlrpm_delay) / 100.0f; //convert to seconds
+
+ o_data.iac_clen_coeff = ((float)exd.iac_clen_coeff) / 256.0f;
+ o_data.iac_clon_coeff = ((float)exd.iac_clon_coeff) / 256.0f;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3708,6 +3712,9 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.use_vss_thrd_for_igntim_reg = i_data.use_vss_thrd_for_igntim_reg;
 
  exd.aircond_idlrpm_delay = MathHelpers::Round(i_data.aircond_idlrpm_delay * 100.0f); //convert to 1/100 second units
+
+ exd.iac_clen_coeff = MathHelpers::Round(i_data.iac_clen_coeff * 256.0f);
+ exd.iac_clon_coeff = MathHelpers::Round(i_data.iac_clon_coeff * 256.0f);
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

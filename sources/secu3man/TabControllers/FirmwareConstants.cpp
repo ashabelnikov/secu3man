@@ -210,6 +210,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Turn off Ign.tim.idling regul. on running"), &d.use_vss_thrd_for_igntim_reg, _T("If the checkbox is checked, Ign.timing idling regulator will be turned off when vehicle speed is above 'Start of running threshold for IAC' value."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Коэфф.1 порога запуска регулятора оборотов"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clen_coeff, _T("Если после пуска двигателя обороты превысят порог = целевые обороты * коэффициент1 и затем упадут ниже порога = целевые обороты * коэффициент2, тогда запустится регулятор оборотов ХХ (если он разрешен)."));
+ else
+  dfd.AppendItem(_T("Coeff.1 of threshold for starting CL"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clen_coeff, _T("If after start of engine RPM exceed threshold = target RPM * coeff.1 and after that RPM fall below threshold = target RPM * coeff.2, then closed loop idling regulator will be activated."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Коэфф.2 порога запуска регулятора оборотов"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clon_coeff, _T("Если после пуска двигателя обороты превысят порог = целевые обороты * коэффициент1 и затем упадут ниже порога = целевые обороты * коэффициент2, тогда запустится регулятор оборотов ХХ (если он разрешен)."));
+ else
+  dfd.AppendItem(_T("Coeff.2 of threshold for starting CL"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clon_coeff, _T("If after start of engine RPM exceed threshold = target RPM * coeff.1 and after that RPM fall below threshold = target RPM * coeff.2, then closed loop idling regulator will be activated."));
+
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));
