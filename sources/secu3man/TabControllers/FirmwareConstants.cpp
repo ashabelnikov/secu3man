@@ -220,6 +220,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Coeff.2 of threshold for starting CL"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clon_coeff, _T("If after start of engine RPM exceed threshold = target RPM * coeff.1 and after that RPM fall below threshold = target RPM * coeff.2, then closed loop idling regulator will be activated."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Коэфф. увеличения положения РДВ после пуска"), _T(""), 0.5f, 1.5f, 0.005, 3, &d.iac_wrkadd_coeff, _T("После запуска двигателя положение РДВ будет умножаться на этот коэффициент на протяжении времени 'Длительность увеличенного положения РДВ после пуска'."));
+ else
+  dfd.AppendItem(_T("Coeff. of IAC position growth after engine start"), _T(""), 0.5f, 1.5f, 0.005, 3, &d.iac_wrkadd_coeff, _T("After engine start, the IAC position will be multiplied by this factor for the duration of 'Duration of grown IAC position after start'."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длительность увеличенного положения РДВ после пуска"), _T(""), 0.0f, 30.0f, 0.01, 2, &d.iac_wrkadd_time, _T("После запуска двигателя положение РДВ будет умножаться на коэффициент 'Коэфф. увеличения положения РДВ после пуска' на протяжении этого времени."));
+ else
+  dfd.AppendItem(_T("Duration of grown IAC position after start"), _T(""), 0.0f, 30.0f, 0.01, 2, &d.iac_wrkadd_time, _T("After engine start, the IAC position will be multiplied by 'Coeff. of IAC position growth after engine start' factor during this time."));
+
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));

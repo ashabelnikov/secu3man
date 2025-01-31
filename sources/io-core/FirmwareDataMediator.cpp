@@ -438,8 +438,11 @@ typedef struct
  _uint iac_clen_coeff;     //!< Enter threshold coefficient, value * 256
  _uint iac_clon_coeff;     //!< On threshold coefficient, value * 256
 
+ _uint iac_wrkadd_coeff;   //!< value * 256
+ _uint iac_wrkadd_time;    //!< 0.01sec units
+
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1516];
+ _uchar reserved[1512];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3582,6 +3585,9 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.iac_clen_coeff = ((float)exd.iac_clen_coeff) / 256.0f;
  o_data.iac_clon_coeff = ((float)exd.iac_clon_coeff) / 256.0f;
+
+ o_data.iac_wrkadd_coeff = ((float)exd.iac_wrkadd_coeff) / 256.0f;
+ o_data.iac_wrkadd_time = ((float)exd.iac_wrkadd_time) / 100.0f; //convert to sec
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3715,6 +3721,9 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.iac_clen_coeff = MathHelpers::Round(i_data.iac_clen_coeff * 256.0f);
  exd.iac_clon_coeff = MathHelpers::Round(i_data.iac_clon_coeff * 256.0f);
+
+ exd.iac_wrkadd_coeff = MathHelpers::Round(i_data.iac_wrkadd_coeff * 256.0f);
+ exd.iac_wrkadd_time = MathHelpers::Round(i_data.iac_wrkadd_time * 100.0f); //convert from sec
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
