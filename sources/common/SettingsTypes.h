@@ -673,3 +673,17 @@ struct Functionality
  bool SM_CONTROL;
  bool GD_CONTROL;
 };
+
+//settings for debug variable
+struct DbgVar
+{
+ bool hex;
+ bool sign;
+ int  decplaces;
+ float mult;
+};
+
+struct DbgVarsCfg
+{
+ DbgVar var[4];
+};

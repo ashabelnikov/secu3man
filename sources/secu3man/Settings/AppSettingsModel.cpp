@@ -699,6 +699,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldAFR2(_T("AFR2"))
 , m_optLogFieldAFRMap(_T("AFRMap"))
 , m_optLogFieldTchrg(_T("Tchrg"))
+
+,m_Name_DbgVars_Section(_T("DebugVars"))
 //Functionality section
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
@@ -841,6 +843,19 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetScFPS[1].name = m_optMetFPS[i][1].name = _T("GrhFPS");
   m_optMetScAPPS[0].name = m_optMetAPPS[i][0].name = _T("MetAPPS");
   m_optMetScAPPS[1].name = m_optMetAPPS[i][1].name = _T("GrhAPPS");
+ }
+
+ for(int i = 0; i < 4; ++i)
+ {
+  CString str;
+  str.Format("Hex%d", i+1);
+  m_optDbgVar[i].hex.name = str;
+  str.Format("Signed%d", i+1);
+  m_optDbgVar[i].sign.name = str;
+  str.Format("DecPlaces%d", i+1);
+  m_optDbgVar[i].decplaces.name = str;
+  str.Format("Divider%d", i+1);
+  m_optDbgVar[i].mult.name = str;
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -1836,6 +1851,16 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldGPS, _T("GPS"));
  lf.ReadString(m_optLogFieldFPS, _T("FPS"));
  lf.ReadString(m_optLogFieldAPPS, _T("APPS"));
+
+ //Debug variables
+ IniIO dv(IniFileName, m_Name_DbgVars_Section);
+ for(int i = 0; i < 4; ++i)
+ {
+  dv.ReadInt(m_optDbgVar[i].hex, _T("1"), 0, 1);
+  dv.ReadInt(m_optDbgVar[i].sign, _T("0"), 0, 1);
+  dv.ReadInt(m_optDbgVar[i].decplaces, _T("0"), 0, 4);
+  dv.ReadFlt(m_optDbgVar[i].mult, _T("1.0"), -65536.0f, 65536.0f);
+ }
 
  //Functionality
  IniIO fn(IniFileName, m_Name_Functionality_Section);
@@ -5226,6 +5251,22 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldGPS);
  lf.WriteString(m_optLogFieldFPS);
  lf.WriteString(m_optLogFieldAPPS);
+
+ //Debug variables
+ IniIO &dv = writer;
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dv.WriteComment(_T("*** Debug variables window (for devs )***"), true);
+ else
+  dv.WriteComment(_T("*** Окно отладочных переменных (для разработчиков) ***"), true);
+ dv.CreateSection(m_Name_DbgVars_Section);
+ for(int i = 0; i < 4; ++i)
+ {
+  dv.WriteInt(m_optDbgVar[i].hex);
+  dv.WriteInt(m_optDbgVar[i].sign);
+  dv.WriteInt(m_optDbgVar[i].decplaces);
+  dv.WriteFlt(m_optDbgVar[i].mult, 3);
+ }
+
  //Functionality
  IniIO &fn = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -7670,4 +7711,26 @@ bool CAppSettingsModel::GetClassic2DKeys(void) const
 bool CAppSettingsModel::GetUseMarkers(void) const
 {
  return m_optUseMarkers.value;
+}
+
+void CAppSettingsModel::GetDbgVarsConfig(DbgVarsCfg* o_cfg) const
+{
+ for(int i = 0; i < 4; ++i)
+ {
+  o_cfg->var[i].hex = m_optDbgVar[i].hex.value;
+  o_cfg->var[i].sign = m_optDbgVar[i].sign.value;
+  o_cfg->var[i].decplaces = m_optDbgVar[i].decplaces.value;
+  o_cfg->var[i].mult = m_optDbgVar[i].mult.value;
+ }
+}
+
+void CAppSettingsModel::SetDbgVarsConfig(const DbgVarsCfg* i_cfg)
+{
+ for(int i = 0; i < 4; ++i)
+ {
+  m_optDbgVar[i].hex.value = i_cfg->var[i].hex;
+  m_optDbgVar[i].sign.value = i_cfg->var[i].sign;
+  m_optDbgVar[i].decplaces.value = i_cfg->var[i].decplaces;
+  m_optDbgVar[i].mult.value = i_cfg->var[i].mult;
+ }
 }

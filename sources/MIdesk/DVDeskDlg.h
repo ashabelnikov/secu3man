@@ -25,9 +25,12 @@
 
 #pragma once
 
+#include "common/fastdelegate.h"
 #include "common/ObjectTimer.h"
 #include "IDVView.h"
 #include "ui-core/DialogWithAccelerators.h"
+
+struct DbgVarsCfg;
 
 /////////////////////////////////////////////////////////////////////////////
 // CDVDeskDlg dialog
@@ -35,6 +38,7 @@
 class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
 {
   typedef CModelessDialog Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
   CDVDeskDlg(CWnd* pParent = NULL);   // standard constructor
@@ -49,6 +53,9 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   virtual void GetValues(SECU3IO::DbgvarDat* o_values);
   virtual void SetUpdatePeriod(unsigned int i_period);
   virtual void SetWriteToFile(bool write);
+  virtual void SetConfig(const DbgVarsCfg* i_cfg);
+  virtual void GetConfig(DbgVarsCfg* o_cfg) const;
+  virtual void setOnConfigChanged(EventHandler OnFunction) {m_OnConfigChanged = OnFunction;}
   //-----------------------------------------------
 
   // Implementation
@@ -58,9 +65,15 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   afx_msg void OnDestroy();    //deactivate
   afx_msg void OnBaseCheck(UINT nID);
   afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+  afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+  afx_msg void OnReset();
+  afx_msg void OnSigned();
+  afx_msg void OnFormula();
+  afx_msg void OnDecPlaces(UINT nID);
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
+  void UpdateStrFmt(size_t index);
 
  private:
   CFont m_fieldFont;
@@ -79,10 +92,16 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
    CButton base_check;
    bool hex;
    bool sign;
+   float mult;
+   size_t index;
+   int decplaces;
   }m_vu[VU_SIZE];
+  VarUnit* mp_puvu;
 
   FILE* m_fh;
   bool m_wrtofile;
+
+  EventHandler m_OnConfigChanged;
 };
 
 /////////////////////////////////////////////////////////////////////////////

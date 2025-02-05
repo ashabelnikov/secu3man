@@ -33,6 +33,14 @@
 
 class CAppSettingsController;
 
+struct DbgVarOpt
+{
+ OptField_t<bool> hex;
+ OptField_t<bool> sign;
+ OptField_t<int> decplaces;
+ OptField_t<float> mult;
+};
+
 //хранит и сохраняет/загружает данные
 class CAppSettingsModel : public ISettingsData
 {
@@ -230,6 +238,9 @@ class CAppSettingsModel : public ISettingsData
 
   virtual bool GetUseMarkers(void) const;
 
+  virtual void GetDbgVarsConfig(DbgVarsCfg* o_cfg) const;
+  virtual void SetDbgVarsConfig(const DbgVarsCfg* i_cfg);
+
  private:
   //data which stored in the INI-file:
   //Section names
@@ -250,6 +261,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_InjDrv_Section;
   const CString m_Name_MapPtMovStep_Section;
   const CString m_Name_LogFileFields_Section;
+  const CString m_Name_DbgVars_Section;
   const CString m_Name_Functionality_Section;
 
   //Options
@@ -1037,6 +1049,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldGPS;
   OptField_t<_TSTRING> m_optLogFieldFPS;
   OptField_t<_TSTRING> m_optLogFieldAPPS;
+
+  DbgVarOpt  m_optDbgVar[4];
 
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;

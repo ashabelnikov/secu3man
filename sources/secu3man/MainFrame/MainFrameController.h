@@ -81,6 +81,7 @@ class MainFrameController : public IAPPEventHandler
   void OnEditSettings();
   void OnHelp();
   void OnAppConvertLogFile();
+  void OnDVDeskConfigChanged(); //from DV Desk window
 
   //called by VIEW at the startup for get desired window position
   void OnGetInitialPos(CPoint& o_point);

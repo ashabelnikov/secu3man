@@ -29,8 +29,10 @@
 
 #include "io-core/SECU3IO.h"
 #include "common/GDIHelpers.h"
+#include "common/SettingsTypes.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/DynFieldsDialog.h"
 #include <shlwapi.h>
 
 static int ApplySign(int value, bool sign)
@@ -39,9 +41,14 @@ static int ApplySign(int value, bool sign)
 }
 
 BEGIN_MESSAGE_MAP(CDVDeskDlg, Super)
+ ON_WM_CONTEXTMENU()
  ON_WM_DESTROY()
  ON_COMMAND_RANGE(IDC_DV_BASE1_CHECK, IDC_DV_BASE4_CHECK, OnBaseCheck)
+ ON_COMMAND_RANGE(ID_DVDESK_POPUP_DECPLACES0, ID_DVDESK_POPUP_DECPLACES4, OnDecPlaces)
  ON_WM_LBUTTONDBLCLK()
+ ON_COMMAND(ID_DVDESK_POPUP_RESET, OnReset)
+ ON_COMMAND(ID_DVDESK_POPUP_SIGNED, OnSigned)
+ ON_COMMAND(ID_DVDESK_POPUP_FORMULA, OnFormula)
 END_MESSAGE_MAP()
 
 const UINT CDVDeskDlg::IDD = IDD_DBGVAR_DESK;
@@ -56,6 +63,7 @@ CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(-1)
 , m_fh(NULL)
 , m_wrtofile(false)
+, mp_puvu(NULL)
 {
  for(size_t i = 0; i < VU_SIZE; ++i)
  {
@@ -63,6 +71,9 @@ CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
   m_vu[i].hex = true;   //hex is default
   m_vu[i].base_fmt = _T("0x%04X");
   m_vu[i].sign = false; //unsigned is default
+  m_vu[i].mult = 1.0f;
+  m_vu[i].index = i;
+  m_vu[i].decplaces = 0;
  }
 }
 
@@ -83,8 +94,24 @@ void CDVDeskDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_DV_BASE1_CHECK + i, m_vu[i].base_check);
   //When hex mode than always show value as unsigned, when dec mode than show value as signed or unsigned
   //depending on m_vu[i].sign
-  int value = (m_vu[i].hex ? m_vu[i].var_value : ApplySign(m_vu[i].var_value, m_vu[i].sign));
-  DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());
+  if (!m_vu[i].hex)
+  {
+   if (0==m_vu[i].decplaces)
+   { //integer
+    int value = MathHelpers::Round(ApplySign(m_vu[i].var_value, m_vu[i].sign) / m_vu[i].mult);
+    DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());  
+   }
+   else
+   {//float
+    float value = ((float)ApplySign(m_vu[i].var_value, m_vu[i].sign)) / m_vu[i].mult;
+    DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());
+   }
+  }
+  else
+  { //hex
+   int value = m_vu[i].var_value;
+   DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());
+  }
  }
 }
 
@@ -120,9 +147,11 @@ void CDVDeskDlg::OnBaseCheck(UINT nID)
 {
  size_t index = nID - IDC_DV_BASE1_CHECK;
  bool checked = m_vu[index].base_check.GetCheck() == BST_CHECKED;
- m_vu[index].base_fmt = checked ? _T("%05d") : _T("0x%04X");
  m_vu[index].hex = !checked;
+ UpdateStrFmt(index);
  UpdateData(FALSE);
+ if (m_OnConfigChanged)
+  m_OnConfigChanged();
 }
 
 void CDVDeskDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
@@ -136,6 +165,8 @@ void CDVDeskDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
   { //change signed/unsigned
    m_vu[i].sign = m_vu[i].sign ? false : true; //toggle sign flag each double click
    UpdateData(FALSE);
+   if (m_OnConfigChanged)
+    m_OnConfigChanged();
   }
  }
 }
@@ -245,5 +276,128 @@ void CDVDeskDlg::SetWriteToFile(bool write)
    fclose(m_fh);
    m_fh = NULL;
   }
+ }
+}
+
+void CDVDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+ mp_puvu = NULL;
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  CRect rc = GDIHelpers::GetChildWndRect(&m_vu[i].var_field);
+  CPoint pt = point;
+  this->ScreenToClient(&pt);
+  if (PtInRect(&rc, pt))
+  {
+   mp_puvu = &m_vu[i];
+   break;
+  }
+ }
+
+ if (mp_puvu)
+ {
+  CMenu menu;
+  VERIFY(menu.LoadMenu(IDR_DVDESK_POPUP_MENU));
+  CMenu *pSub = menu.GetSubMenu(0);
+  UINT check_flag = mp_puvu->sign ? MF_CHECKED : MF_UNCHECKED;
+  pSub->CheckMenuItem(ID_DVDESK_POPUP_SIGNED, check_flag | MF_BYCOMMAND);
+  pSub->CheckMenuItem(ID_DVDESK_POPUP_DECPLACES0 + mp_puvu->decplaces, MF_CHECKED | MF_BYCOMMAND);
+  pSub->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
+ }
+}
+
+void CDVDeskDlg::OnReset()
+{
+ if (mp_puvu)
+ {
+  mp_puvu->var_value = 0; //reset
+  UpdateData(FALSE);
+ }
+}
+
+void CDVDeskDlg::OnSigned()
+{
+ if (mp_puvu)
+ {
+  mp_puvu->sign = mp_puvu->sign ? false : true; //toggle sign flag
+  UpdateData(FALSE);
+  if (m_OnConfigChanged)
+   m_OnConfigChanged();
+ }
+}
+
+void CDVDeskDlg::OnFormula()
+{
+ if (mp_puvu)
+ {
+  CString str;
+  str.Format(MLL::LoadString(IDS_DVDESK_FORMDLG_CAPTION), mp_puvu->index);
+  CDynFieldsContainer dfd(this, _TSTRING(str), 200, true);
+  float mult_value = mp_puvu->mult;
+  dfd.AppendItem(MLL::GetString(IDS_DVDESK_FORMDLG_MULT_CAPTION), _T(""), -65536.0f, 65536.0f, 1, 3, &mult_value, MLL::GetString(IDS_DVDESK_FORMDLG_MULT_TT));
+  if (dfd.DoModal()==IDOK)
+  {
+   mp_puvu->mult = mult_value;
+   UpdateData(FALSE);
+   if (m_OnConfigChanged)
+    m_OnConfigChanged();
+  }
+ }
+}
+
+void CDVDeskDlg::OnDecPlaces(UINT nID)
+{
+ if (mp_puvu)
+ {
+  mp_puvu->decplaces = nID - ID_DVDESK_POPUP_DECPLACES0;
+  UpdateStrFmt(mp_puvu->index);
+  UpdateData(FALSE);
+  if (m_OnConfigChanged)
+   m_OnConfigChanged();
+ } 
+}
+
+void CDVDeskDlg::UpdateStrFmt(size_t index)
+{
+ if (!m_vu[index].hex)
+ { //dec
+  switch(m_vu[index].decplaces)
+  {
+  case 0: m_vu[index].base_fmt = _T("%05d"); break;
+  case 1: m_vu[index].base_fmt = _T("%.01f"); break;
+  case 2: m_vu[index].base_fmt = _T("%.02f"); break;
+  case 3: m_vu[index].base_fmt = _T("%.03f"); break;
+  case 4: m_vu[index].base_fmt = _T("%.04f"); break;
+  default: ASSERT(0);
+  }
+ }
+ else
+ { //hex
+  m_vu[index].base_fmt = _T("0x%04X"); 
+ }
+}
+
+void CDVDeskDlg::SetConfig(const DbgVarsCfg* i_cfg)
+{
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  m_vu[i].hex = i_cfg->var[i].hex;
+  m_vu[i].sign = i_cfg->var[i].sign;
+  m_vu[i].decplaces = i_cfg->var[i].decplaces;
+  m_vu[i].mult = i_cfg->var[i].mult;
+  UpdateStrFmt(i);
+  m_vu[i].base_check.SetCheck(m_vu[i].hex ? BST_UNCHECKED : BST_CHECKED);
+ }
+ UpdateData(FALSE);
+}
+
+void CDVDeskDlg::GetConfig(DbgVarsCfg* o_cfg) const
+{
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  o_cfg->var[i].hex = m_vu[i].hex;
+  o_cfg->var[i].sign = m_vu[i].sign;
+  o_cfg->var[i].decplaces = m_vu[i].decplaces;
+  o_cfg->var[i].mult = m_vu[i].mult;
  }
 }

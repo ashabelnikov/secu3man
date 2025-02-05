@@ -174,6 +174,10 @@ void MainFrameController::OnAppSettings()
    VERIFY(mp_view->CreateDVDesk(settings->GetUseDVFeatures()));
   if (mp_view->GetDVDesk())
   {
+   mp_view->GetDVDesk()->setOnConfigChanged(MakeDelegate(this, &MainFrameController::OnDVDeskConfigChanged));
+   DbgVarsCfg cfg;
+   settings->GetDbgVarsConfig(&cfg);
+   mp_view->GetDVDesk()->SetConfig(&cfg);
    mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
    mp_view->GetDVDesk()->SetUpdatePeriod(settings->GetDVDeskUpdatePeriod());
   }
@@ -352,6 +356,10 @@ void MainFrameController::OnCreate(void)
  VERIFY(mp_view->CreateDVDesk(settings->GetUseDVFeatures()));
  if (mp_view->GetDVDesk())
  {
+  mp_view->GetDVDesk()->setOnConfigChanged(MakeDelegate(this, &MainFrameController::OnDVDeskConfigChanged));
+  DbgVarsCfg cfg;
+  settings->GetDbgVarsConfig(&cfg);
+  mp_view->GetDVDesk()->SetConfig(&cfg);
   mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
   mp_view->GetDVDesk()->SetWriteToFile(settings->GetDbgVarsToFile());
  }
@@ -668,3 +676,11 @@ void MainFrameController::OnAppConvertLogFile()
  dlg.SetCSVSepSymbol(settings->GetCSVSepSymbol());
  dlg.DoModal();
 }
+
+void MainFrameController::OnDVDeskConfigChanged()
+{
+ DbgVarsCfg cfg;
+ mp_view->GetDVDesk()->GetConfig(&cfg);
+ m_pAppSettingsManager->GetSettings()->SetDbgVarsConfig(&cfg);
+}
+

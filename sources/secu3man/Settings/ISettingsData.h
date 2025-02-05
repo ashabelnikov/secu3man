@@ -185,4 +185,7 @@ class ISettingsData
   virtual bool GetDbgVarsToFile(void) const = 0;
 
   virtual bool GetUseMarkers(void) const = 0;
+
+  virtual void GetDbgVarsConfig(DbgVarsCfg* o_cfg) const = 0;
+  virtual void SetDbgVarsConfig(const DbgVarsCfg* i_cfg) = 0;
 };

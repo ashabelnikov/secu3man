@@ -30,8 +30,11 @@ namespace SECU3IO
  struct DbgvarDat;
 }
 
+struct DbgVarsCfg;
+
 class IDVView
 {
+  typedef fastdelegate::FastDelegate0<> EventHandler;
  public:
   virtual void Show(bool show) = 0;                                //show/hide view content
   virtual void Enable(bool enable) = 0;                            //eneble/disable view
@@ -40,4 +43,7 @@ class IDVView
   virtual void GetValues(SECU3IO::DbgvarDat* o_values) = 0;        //get values from the view
   virtual void SetUpdatePeriod(unsigned int i_period) = 0;         //update period for internal controls
   virtual void SetWriteToFile(bool write) = 0;                     //write values to file
+  virtual void SetConfig(const DbgVarsCfg* i_cfg) = 0;             //Set configuration
+  virtual void GetConfig(DbgVarsCfg* o_cfg) const = 0;             //Get configuration         
+  virtual void setOnConfigChanged(EventHandler OnFunction) = 0;    //Delegate
 };

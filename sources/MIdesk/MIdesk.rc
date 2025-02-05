@@ -11,6 +11,24 @@
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 #pragma code_page(1251)
 
+IDR_DVDESK_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "Знаковое",  ID_DVDESK_POPUP_SIGNED
+        MENUITEM "Сбросить",  ID_DVDESK_POPUP_RESET
+        MENUITEM "Формула...",  ID_DVDESK_POPUP_FORMULA
+        POPUP "Число знаков"
+        BEGIN
+            MENUITEM "0", ID_DVDESK_POPUP_DECPLACES0
+            MENUITEM "1", ID_DVDESK_POPUP_DECPLACES1
+            MENUITEM "2", ID_DVDESK_POPUP_DECPLACES2
+            MENUITEM "3", ID_DVDESK_POPUP_DECPLACES3
+            MENUITEM "4", ID_DVDESK_POPUP_DECPLACES4
+        END
+    END
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -421,11 +439,36 @@ BEGIN
     IDS_MI_SED_SCALE_TICS_EDIT_TT "Число делений на шкале"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_DVDESK_FORMDLG_CAPTION      "Формула переменной %d"
+    IDS_DVDESK_FORMDLG_MULT_CAPTION "Разделить переменную на"
+    IDS_DVDESK_FORMDLG_MULT_TT      "Разделить переменную на это число"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
+
+IDR_DVDESK_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "Signed",  ID_DVDESK_POPUP_SIGNED
+        MENUITEM "Reset",  ID_DVDESK_POPUP_RESET
+        MENUITEM "Formula...",  ID_DVDESK_POPUP_FORMULA
+        POPUP "Decimal places"
+        BEGIN
+            MENUITEM "0", ID_DVDESK_POPUP_DECPLACES0
+            MENUITEM "1", ID_DVDESK_POPUP_DECPLACES1
+            MENUITEM "2", ID_DVDESK_POPUP_DECPLACES2
+            MENUITEM "3", ID_DVDESK_POPUP_DECPLACES3
+            MENUITEM "4", ID_DVDESK_POPUP_DECPLACES4
+        END
+    END
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -834,6 +877,13 @@ BEGIN
     IDS_MI_SED_AZLH_END    "End"
     IDS_MI_SED_AZLH_COLOR  "Color"
     IDS_MI_SED_SCALE_TICS_EDIT_TT "Number of tics on the scale"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_DVDESK_FORMDLG_CAPTION      "Variable %d formula"
+    IDS_DVDESK_FORMDLG_MULT_CAPTION "Divide variable by"
+    IDS_DVDESK_FORMDLG_MULT_TT      "Divide variable by this value"
 END
 
 /////////////////////////////////////////////////////////////////////////////
