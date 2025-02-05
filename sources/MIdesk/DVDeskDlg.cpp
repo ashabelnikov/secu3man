@@ -47,6 +47,7 @@ BEGIN_MESSAGE_MAP(CDVDeskDlg, Super)
  ON_COMMAND_RANGE(ID_DVDESK_POPUP_DECPLACES0, ID_DVDESK_POPUP_DECPLACES4, OnDecPlaces)
  ON_WM_LBUTTONDBLCLK()
  ON_COMMAND(ID_DVDESK_POPUP_RESET, OnReset)
+ ON_COMMAND(ID_DVDESK_POPUP_RESETCFG, OnResetCfg)
  ON_COMMAND(ID_DVDESK_POPUP_SIGNED, OnSigned)
  ON_COMMAND(ID_DVDESK_POPUP_FORMULA, OnFormula)
 END_MESSAGE_MAP()
@@ -284,7 +285,9 @@ void CDVDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)
  mp_puvu = NULL;
  for(size_t i = 0; i < VU_SIZE; ++i)
  {
-  CRect rc = GDIHelpers::GetChildWndRect(&m_vu[i].var_field);
+  CRect rc0 = GDIHelpers::GetChildWndRect(&m_vu[i].var_field);
+  CRect rc1 = GDIHelpers::GetChildWndRect(&m_vu[i].base_check);
+  CRect rc(rc0.left, rc1.top, rc0.right, rc0.bottom); //combine two rects
   CPoint pt = point;
   this->ScreenToClient(&pt);
   if (PtInRect(&rc, pt))
@@ -315,6 +318,22 @@ void CDVDeskDlg::OnReset()
  }
 }
 
+void CDVDeskDlg::OnResetCfg()
+{
+ if (mp_puvu)
+ {
+  mp_puvu->hex = true;
+  mp_puvu->decplaces = 0;
+  mp_puvu->mult = 1.0f;
+  mp_puvu->sign = false;
+  UpdateStrFmt(mp_puvu->index);
+  mp_puvu->base_check.SetCheck(mp_puvu->hex ? BST_UNCHECKED : BST_CHECKED);
+  UpdateData(FALSE);
+  if (m_OnConfigChanged)
+   m_OnConfigChanged();
+ }
+}
+
 void CDVDeskDlg::OnSigned()
 {
  if (mp_puvu)
@@ -331,7 +350,7 @@ void CDVDeskDlg::OnFormula()
  if (mp_puvu)
  {
   CString str;
-  str.Format(MLL::LoadString(IDS_DVDESK_FORMDLG_CAPTION), mp_puvu->index);
+  str.Format(MLL::LoadString(IDS_DVDESK_FORMDLG_CAPTION), mp_puvu->index + 1);
   CDynFieldsContainer dfd(this, _TSTRING(str), 200, true);
   float mult_value = mp_puvu->mult;
   dfd.AppendItem(MLL::GetString(IDS_DVDESK_FORMDLG_MULT_CAPTION), _T(""), -65536.0f, 65536.0f, 1, 3, &mult_value, MLL::GetString(IDS_DVDESK_FORMDLG_MULT_TT));

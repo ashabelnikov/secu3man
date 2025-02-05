@@ -67,6 +67,7 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
   afx_msg void OnReset();
+  afx_msg void OnResetCfg();
   afx_msg void OnSigned();
   afx_msg void OnFormula();
   afx_msg void OnDecPlaces(UINT nID);
