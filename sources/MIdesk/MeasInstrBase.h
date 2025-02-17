@@ -248,12 +248,6 @@ class MeasInstrBase
     m_scope.SetRange(loLimit, upLimit);
   }
 
-  //Set number of tics on the scale
-  virtual void SetTicks(int number)
-  {
-   m_meter.SetTickNumber(number);
-  }
-
   virtual void ShowTLP(bool i_show, bool redraw = false)
   {
    if (i_show)
@@ -373,6 +367,22 @@ class MeasInstrBase
     m_meter.SetTickNumber(tn);
    else if (m_scope.GetSafeHwnd())
     m_scope.SetGridNumberY(tn);     
+  }
+
+  void SetLineWidth(int lw)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetGridLineWidth(lw);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.SetPlotWidth(lw);     
+  }
+
+  void SetLineColor(COLORREF color)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetColor(meter_grid, color);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.SetPlotColor(color);     
   }
 
   UINT m_uiID;

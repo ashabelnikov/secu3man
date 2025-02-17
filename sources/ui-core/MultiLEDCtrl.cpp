@@ -29,7 +29,7 @@
 #include "MsgBox.h"
 
 //if you create control via resource editor, you must specify this class name in the control's properties
-#define MAPEDITORCTRL_CLASSNAME  _T("MultiLEDCtrl")  // Window class name
+#define MULTILEDCTRL_CLASSNAME  _T("MultiLEDCtrl")  // Window class name
 
 
 CMultiLEDCtrl::CMultiLEDCtrl(HMODULE hMod /*= NULL*/)
@@ -73,7 +73,7 @@ bool CMultiLEDCtrl::_RegisterWindowClass(HMODULE hMod /*= NULL*/)
  WNDCLASS wndcls;
  HINSTANCE hInst = hMod ? hMod : AfxGetInstanceHandle();
 
- if (!(::GetClassInfo(hInst, MAPEDITORCTRL_CLASSNAME, &wndcls)))
+ if (!(::GetClassInfo(hInst, MULTILEDCTRL_CLASSNAME, &wndcls)))
  {
   wndcls.style         = CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW;
   wndcls.lpfnWndProc   = ::DefWindowProc;
@@ -83,7 +83,7 @@ bool CMultiLEDCtrl::_RegisterWindowClass(HMODULE hMod /*= NULL*/)
   wndcls.hCursor       = AfxGetApp()->LoadStandardCursor(IDC_ARROW);
   wndcls.hbrBackground = (HBRUSH) (COLOR_3DFACE + 1);
   wndcls.lpszMenuName  = NULL;
-  wndcls.lpszClassName = MAPEDITORCTRL_CLASSNAME;
+  wndcls.lpszClassName = MULTILEDCTRL_CLASSNAME;
 
   if (!AfxRegisterClass(&wndcls))
   {

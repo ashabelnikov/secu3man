@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(ScaleEditorDlg, Super)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_BEGIN_EDIT, OnChangeDataSc)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_END_EDIT, OnChangeDataSc)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_TICS_EDIT, OnChangeDataSc)
+ ON_EN_CHANGE(IDC_MI_SED_SCALE_WIDTH_EDIT, OnChangeDataSc)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_LIST, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_ADD, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_DEL, OnUpdateAZDel)
@@ -68,7 +69,9 @@ ScaleEditorDlg::ScaleEditorDlg(CWnd* pParent /*=NULL*/)
 , m_scale_tics_edit(CEditEx::MODE_INT, true)
 , m_az_begin_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_az_end_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_scale_width_edit(CEditEx::MODE_INT, true)
 , m_az_color(DLL::GetModuleHandle())
+, m_scale_color(DLL::GetModuleHandle())
 {
  //empty
 }
@@ -96,10 +99,14 @@ void ScaleEditorDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MI_SED_AZ_BEGIN_SPIN, m_az_begin_spin);
  DDX_Control(pDX, IDC_MI_SED_AZ_END_EDIT, m_az_end_edit);
  DDX_Control(pDX, IDC_MI_SED_AZ_END_SPIN, m_az_end_spin);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_WIDTH_EDIT, m_scale_width_edit);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_WIDTH_SPIN, m_scale_width_spin);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_COLOR, m_scale_color);
 
  m_scale_begin_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_BEGIN_EDIT, m_cfg.scaleMin);
  m_scale_end_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_END_EDIT, m_cfg.scaleMax);
  m_scale_tics_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_TICS_EDIT, m_cfg.ticksNum);
+ m_scale_width_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_WIDTH_EDIT, m_cfg.scaleWidth);
 
  if (m_az_list.GetSelectedCount()==1)
  {
@@ -137,6 +144,11 @@ BOOL ScaleEditorDlg::OnInitDialog()
  m_az_color.AddItem(_T(""), RGB(127,127,127));
  m_az_color.SetItemState(0, false);
  m_az_color.SetFont(&m_font);
+
+ m_scale_color.SetNumRows(1);
+ m_scale_color.AddItem(_T(""), RGB(127,127,127));
+ m_scale_color.SetItemState(0, false);
+ m_scale_color.SetFont(&m_font);
 
  DPIAware dpia;
  m_az_list.InsertColumn(0, MLL::LoadString(IDS_MI_SED_AZLH_START), LVCFMT_LEFT, dpia.ScaleX(80));
@@ -178,6 +190,12 @@ BOOL ScaleEditorDlg::OnInitDialog()
  m_scale_tics_spin.SetRangeAndDelta(0, 100, 1);
  m_scale_tics_edit.SetRange(0, 100);
 
+ m_scale_width_edit.SetLimitText(10);
+ m_scale_width_spin.SetBuddy(&m_scale_width_edit);
+ m_scale_width_edit.SetDecimalPlaces(1);
+ m_scale_width_spin.SetRangeAndDelta(0, 5, 1);
+ m_scale_width_edit.SetRange(0, 5);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -189,8 +207,19 @@ BOOL ScaleEditorDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_az_del, MLL::GetString(IDS_MI_SED_AZ_DEL_TT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_tics_edit, MLL::GetString(IDS_MI_SED_SCALE_TICS_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_tics_spin, MLL::GetString(IDS_MI_SED_SCALE_TICS_EDIT_TT)));
+ UINT scaleWidthTT = m_meter ? IDS_MI_SED_SCALE_WIDTH_EDIT_TT : IDS_MI_SED_SCALE_WIDTH_EDIT_TT1;
+ VERIFY(mp_ttc->AddWindow(&m_scale_width_edit, MLL::GetString(scaleWidthTT)));
+ VERIFY(mp_ttc->AddWindow(&m_scale_width_spin, MLL::GetString(scaleWidthTT)));
+ CRect rcScaleColor = GDIHelpers::GetChildWndRect(&m_scale_color);
+ mp_ttc->AddRectangle(this, MLL::GetString(m_meter ? IDS_MI_SED_SCALE_COLOR_TT : IDS_MI_SED_SCALE_COLOR_TT1), &rcScaleColor,0);
+ CRect rcZoneColor = GDIHelpers::GetChildWndRect(&m_az_color);
+ mp_ttc->AddRectangle(this, MLL::GetString(IDS_MI_SED_AZ_COLOR_TT), &rcZoneColor,0);
+
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ m_scale_color.SetItemColor(0, m_cfg.scaleColor);
+ m_scale_color.SetItemState(0, true);
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -327,7 +356,6 @@ void ScaleEditorDlg::OnChangeAZList(NMHDR* pNMHDR, LRESULT* pResult)
 
 void ScaleEditorDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
- //indicators
  CPoint ptscr = point;
  ClientToScreen(&ptscr);
  CRect rc = m_az_color.GetItemRect(0);
@@ -350,6 +378,19 @@ void ScaleEditorDlg::OnLButtonDown(UINT nFlags, CPoint point)
      m_az_list.SetItemText(sel, 2, FormatColor(color).c_str());
     }
    }
+  }
+ }
+
+ rc = m_az_color.GetItemRect(0);
+ m_scale_color.ClientToScreen(&rc);
+ if (rc.PtInRect(ptscr))
+ {
+  CColorDialogEx dlg(m_cfg.scaleColor); 
+  if (dlg.DoModal() == IDOK) 
+  { 
+   COLORREF color = dlg.GetColor(); 
+   m_scale_color.SetItemColor(0, color);
+   m_cfg.scaleColor = color;   
   }
  }
 

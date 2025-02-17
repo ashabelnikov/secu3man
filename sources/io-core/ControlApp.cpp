@@ -1100,7 +1100,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& idlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != 36)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 40)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Idling regulator flags
@@ -1237,6 +1237,16 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_d))
   return false;
  idlRegPar.idl_reg_d = ((float)idl_reg_d) / 256.0f;
+
+ int irr_k_load = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &irr_k_load))
+  return false;
+ idlRegPar.irr_k_load = ((float)irr_k_load) / 32.0f;
+
+ int irr_k_rpm = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &irr_k_rpm))
+  return false;
+ idlRegPar.irr_k_rpm = ((float)irr_k_rpm) / 32.0f;
 
  return true;
 }
@@ -4185,6 +4195,12 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 
  int idl_reg_d = MathHelpers::Round(packet_data->idl_reg_d * 256.0f);
  mp_pdp->Bin16ToHex(idl_reg_d, m_outgoing_packet);
+
+ int irr_k_load = MathHelpers::Round(packet_data->irr_k_load * 32.0f);  //-
+ mp_pdp->Bin16ToHex(irr_k_load, m_outgoing_packet);
+
+ int irr_k_rpm = MathHelpers::Round(packet_data->irr_k_rpm * 32.0f);  //-
+ mp_pdp->Bin16ToHex(irr_k_rpm, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

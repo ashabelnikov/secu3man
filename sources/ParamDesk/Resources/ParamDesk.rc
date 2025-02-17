@@ -393,6 +393,16 @@ BEGIN
     CONTROL         "",IDC_PD_IDLREG_DIFFERENTIAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,522,13,17
     LTEXT           "Дифференциальный",IDC_PD_IDLREG_DIFFERENTIAL_CAPTION,0,523,94,10
     LTEXT           "коэф.",IDC_PD_IDLREG_DIFFERENTIAL_UNIT,140,523,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IRRKLOAD_EDIT,95,542,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IRRKLOAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,542,13,17
+    LTEXT           "Коэфф. нагрузки в аргум. таблицы жесткости РХХ",IDC_PD_IDLREG_IRRKLOAD_CAPTION,0,541,94,18
+    LTEXT           "коэф.",IDC_PD_IDLREG_IRRKLOAD_UNIT,140,543,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IRRKRPM_EDIT,95,562,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IRRKRPM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,562,13,17
+    LTEXT           "Коэфф. оборотов в аргум. таблицы жесткости РХХ",IDC_PD_IDLREG_IRRKRPM_CAPTION,0,561,94,18
+    LTEXT           "коэф.",IDC_PD_IDLREG_IRRKRPM_UNIT,140,563,30,10
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -2257,6 +2267,12 @@ BEGIN
  IDS_PD_DBW_UPDHOMEPOS_BUTTON_TT "Запросить чтение значения домашнего положения."
 END
 
+STRINGTABLE
+BEGIN
+ IDS_PD_IDLREG_IRRKLOAD_EDIT_TT "Коэффициент доли нагрузки в аргументе по горизонтальной оси в таблице жесткости РХХ. Чем выше значение, тем сильнее жесткость РХХ будет зависеть от нагрузки на двигатель."
+ IDS_PD_IDLREG_IRRKRPM_EDIT_TT  "Коэффициент доли оборотов в аргументе по горизонтальной оси в таблице жесткости РХХ. Чем выше значение, тем сильнее жесткость РХХ будет зависеть от оборотов двигателя."
+END
+
 IDR_IOREMAPPING_DESC     TEXT    DISCARDABLE     "res\\ioremap-ru.txt"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2648,6 +2664,16 @@ BEGIN
     CONTROL         "",IDC_PD_IDLREG_DIFFERENTIAL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,522,13,17
     LTEXT           "Differential",IDC_PD_IDLREG_DIFFERENTIAL_CAPTION,0,523,94,10
     LTEXT           "coef.",IDC_PD_IDLREG_DIFFERENTIAL_UNIT,140,523,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IRRKLOAD_EDIT,95,542,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IRRKLOAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,542,13,17
+    LTEXT           "Coeff. of load in the argument of idl. rigidity map",IDC_PD_IDLREG_IRRKLOAD_CAPTION,0,541,94,18
+    LTEXT           "coef.",IDC_PD_IDLREG_IRRKLOAD_UNIT,140,543,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IRRKRPM_EDIT,95,562,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IRRKRPM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,562,13,17
+    LTEXT           "Coeff. of rpm in the argument of idl. rigidity map",IDC_PD_IDLREG_IRRKRPM_CAPTION,0,561,94,18
+    LTEXT           "coef.",IDC_PD_IDLREG_IRRKRPM_UNIT,140,563,30,10
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -4538,6 +4564,12 @@ BEGIN
  IDS_PD_DBW_MAXIACADD_EDIT_TT "Maximum value of addition to the target throttle position from the idling regulator."
  IDS_PD_DBW_HOMEPOS_EDIT_TT "Home position of the throttle. Read after switching on of ignition."
  IDS_PD_DBW_UPDHOMEPOS_BUTTON_TT "Request reading of home position"
+END
+
+STRINGTABLE
+BEGIN
+ IDS_PD_IDLREG_IRRKLOAD_EDIT_TT "The coefficient of the load share in the argument along the horizontal axis in the idling rigidity map. The higher the value, the more the idlign rigidity will depend on the engine load."
+ IDS_PD_IDLREG_IRRKRPM_EDIT_TT  "The coefficient of the rpm share in the argument along the horizontal axis in the idling rigidity map. The higher the value, the more the idlign rigidity will depend on the engine's rpm."
 END
 
 IDR_IOREMAPPING_DESC     TEXT    DISCARDABLE     "res\\ioremap-en.txt"

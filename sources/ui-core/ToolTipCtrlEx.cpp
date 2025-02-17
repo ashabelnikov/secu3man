@@ -51,7 +51,7 @@ BOOL CToolTipCtrlEx::Create(CWnd* pParentWnd, DWORD dwStyle /*= 0*/)
 
 bool CToolTipCtrlEx::AddWindow(CWnd* pWnd, const _TSTRING& text)
 {
- TOOLINFO ti;
+ TOOLINFO ti = {0};
  ti.cbSize = sizeof (TOOLINFO);
  ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
  ti.hwnd = pWnd->GetParent()->GetSafeHwnd();
@@ -64,7 +64,7 @@ bool CToolTipCtrlEx::AddWindow(CWnd* pWnd, const _TSTRING& text)
 
 bool CToolTipCtrlEx::AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRect, UINT nIDTool)
 {
- TOOLINFO ti;
+ TOOLINFO ti = {0};
  ti.cbSize = sizeof (TOOLINFO);
  ti.uFlags = TTF_SUBCLASS;
  ti.hwnd = pWnd->GetSafeHwnd();
@@ -78,7 +78,7 @@ bool CToolTipCtrlEx::AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRec
 
 bool CToolTipCtrlEx::UpdateText(CWnd* pWnd, const _TSTRING& text)
 {
- TOOLINFO ti;
+ TOOLINFO ti = {0};
  ti.cbSize = sizeof (TOOLINFO);
  ti.uFlags = TTF_IDISHWND;
  ti.hwnd = pWnd->GetParent()->GetSafeHwnd();

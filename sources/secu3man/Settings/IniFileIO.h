@@ -35,9 +35,11 @@
 
 struct SclCfg
 {
- int ticksNum; //number of ticks
- float scaleMin; //scale minimum
- float scaleMax; //scale maximum
+ int scaleWidth;      //scale's line width
+ COLORREF scaleColor; //scale's color
+ int ticksNum;        //number of ticks
+ float scaleMin;      //scale minimum
+ float scaleMax;      //scale maximum
  std::vector<AlertZone> alezn; //colored zones
 };
 
@@ -436,22 +438,31 @@ class IniIO
    GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 2047, m_fileName.c_str());
    std::vector<AlertZone> vect;      
    std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(read_str, _T(','));
-   if (tokens.size() < 3)
-    goto usedef; //number of ticks, scale min and scale max must be present   
+   if (tokens.size() < 5)
+    goto usedef; //scale width, scale color, number of ticks, scale min and scale max must be present   
+   int scaleWidth = 0;
+   int result = _stscanf(tokens[0].c_str(), _T("%d"), &scaleWidth);
+   if (result != 1 || (scaleWidth < 0) || (scaleWidth > 5))
+    goto usedef;
+   COLORREF scaleColor;    
+   result = _stscanf(tokens[1].c_str(), _T("%x"), &scaleColor);
+   if (result != 1 || (scaleColor > 0xFFFFFF))
+    goto usedef;
+   scaleColor = GDIHelpers::swapRB(scaleColor);
    int ticksNum = 0;
-   int result = _stscanf(tokens[0].c_str(), _T("%d"), &ticksNum);
+   result = _stscanf(tokens[2].c_str(), _T("%d"), &ticksNum);
    if (result != 1 || (ticksNum < 0) || (ticksNum > MaxTicks))
     goto usedef;
    float scaleMin = 0;
-   result = _stscanf(tokens[1].c_str(), _T("%f"), &scaleMin);
+   result = _stscanf(tokens[3].c_str(), _T("%f"), &scaleMin);
    if (result != 1 || (scaleMin < minVal) || (scaleMin > maxVal))
     goto usedef;
    float scaleMax = 0;
-   result = _stscanf(tokens[2].c_str(), _T("%f"), &scaleMax);
+   result = _stscanf(tokens[4].c_str(), _T("%f"), &scaleMax);
    if (result != 1 || (scaleMax < minVal) || (scaleMax > maxVal) || (scaleMax <= scaleMin))
     goto usedef;
    
-   for (size_t i = 3; i < tokens.size(); ++i)
+   for (size_t i = 5; i < tokens.size(); ++i)
    {
     float start, end;
     COLORREF color;    
@@ -468,6 +479,8 @@ class IniIO
     vect.push_back(az);
    }
  
+   field.value.scaleWidth = scaleWidth;
+   field.value.scaleColor = scaleColor;
    field.value.ticksNum = ticksNum;
    field.value.scaleMin = scaleMin;
    field.value.scaleMax = scaleMax;
@@ -476,11 +489,14 @@ class IniIO
 
   usedef:
    std::vector<_TSTRING> tokensdef = StrUtils::TokenizeStr(defVal.c_str(), _T(','));
-   _stscanf(tokensdef[0].c_str(), _T("%d"), &field.value.ticksNum);
-   _stscanf(tokensdef[1].c_str(), _T("%f"), &field.value.scaleMin);
-   _stscanf(tokensdef[2].c_str(), _T("%f"), &field.value.scaleMax);
+   _stscanf(tokensdef[0].c_str(), _T("%d"), &field.value.scaleWidth);
+   _stscanf(tokensdef[1].c_str(), _T("%x"), &field.value.scaleColor);
+   _stscanf(tokensdef[2].c_str(), _T("%d"), &field.value.ticksNum);
+   _stscanf(tokensdef[3].c_str(), _T("%f"), &field.value.scaleMin);
+   _stscanf(tokensdef[4].c_str(), _T("%f"), &field.value.scaleMax);
+   field.value.scaleColor = GDIHelpers::swapRB(field.value.scaleColor);
    field.value.alezn.clear(); 
-   for (size_t i = 3; i < tokensdef.size(); ++i)
+   for (size_t i = 5; i < tokensdef.size(); ++i)
    {
     float start, end;
     COLORREF color;
@@ -498,7 +514,11 @@ class IniIO
   bool WriteScale(const OptField_t<SclCfg>& field, int decPlaces, const _TSTRING& comment = _T(""))
   {
    CString str, s;
-   str.Format(_T("%d"), field.value.ticksNum);
+   str.Format(_T("%d"), field.value.scaleWidth);
+   s.Format(_T(",%06X"), GDIHelpers::swapRB(field.value.scaleColor));
+   str+=s;
+   s.Format(_T(",%d"), field.value.ticksNum);
+   str+=s;
    s.Format(_T(",%.*f"), decPlaces, field.value.scaleMin);
    str+=s;
    s.Format(_T(",%.*f"), decPlaces, field.value.scaleMax);

@@ -49,6 +49,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void SetRange(double low, double upp);
   void SetDecPlaces(int decimalPlaces = 1, int decimalPlacesV = 1);
   void SetPlotColor(COLORREF color);
+  void SetPlotWidth(int width);
   void SetGridColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);
   void SetUnitX(const _TSTRING& str);
@@ -114,6 +115,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   int m_decimalPlacesV;        //number of decimal places for digital value
   int m_gridNumY;
   int m_gridSizeX;
+  int m_plotWidth;
 
   std::deque<double> m_points; //stores values of all points
   size_t m_point_position;     //stores point position, used for correct scrolling

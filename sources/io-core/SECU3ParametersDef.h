@@ -360,10 +360,13 @@ typedef struct params_t
 
  _int etc_idleadd_max;                //!< Max. addition to the target position of throttle from idling regulator subsystem
 
+ _uint irr_k_load;
+ _uint irr_k_rpm;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[73];
+ _uchar reserved[69];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

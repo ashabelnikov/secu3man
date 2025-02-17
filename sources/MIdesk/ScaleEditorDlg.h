@@ -87,6 +87,9 @@ class ScaleEditorDlg : public CDialog
   CEditEx m_az_begin_edit;
   CSpinButtonCtrlEx m_az_end_spin;
   CEditEx m_az_end_edit;
+  CSpinButtonCtrlEx m_scale_width_spin;
+  CEditEx m_scale_width_edit;
+  CMultiLEDCtrl m_scale_color;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   MetCfg m_cfg;

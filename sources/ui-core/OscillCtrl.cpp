@@ -89,6 +89,7 @@ COscillCtrl::COscillCtrl()
 , m_show_value(false)                   //don't show value
 , m_value_height(100)                   //100%
 , mp_valBits(NULL)
+, m_plotWidth(0)                        //graph's line width
 {
  m_COLOR_3DFACE = GetSysColor(COLOR_3DFACE);
 }
@@ -525,7 +526,7 @@ void COscillCtrl::_SetStateColors(bool state)
  m_brushBack.DeleteObject();
  m_brushBack.CreateSolidBrush(m_crBackColor);
  m_penPlot.DeleteObject();
- m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
+ m_penPlot.CreatePen(PS_SOLID, m_plotWidth, m_crPlotColor);
 }
 
 int COscillCtrl::_MapYValue(double value)
@@ -587,6 +588,13 @@ void COscillCtrl::SetGridColor(COLORREF color)
 void COscillCtrl::SetPlotColor(COLORREF color)
 {
  m_normalPlotColor = color;
+ _SetStateColors(IsWindowEnabled());
+ InvalidateCtrl();
+}
+
+void COscillCtrl::SetPlotWidth(int width)
+{
+ m_plotWidth = width;
  _SetStateColors(IsWindowEnabled());
  InvalidateCtrl();
 }

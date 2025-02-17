@@ -256,6 +256,8 @@ namespace SECU3IO
   int iac_reg_db;
   bool use_thrassmap;                   //use throttle assist map
   bool with_iacreg;
+  float irr_k_load;
+  float irr_k_rpm;
  };
 
  struct CarburPar
@@ -904,8 +906,6 @@ const int INPAVNUM = 14;
   int maninjpw_idl;
   int oilpress_cut;
   float tpsdot_mindt;
-  float irr_k_load;
-  float irr_k_rpm;
   int cold_eng_int;
   float iacreg_period;
   float iacreg_turn_on_temp;
