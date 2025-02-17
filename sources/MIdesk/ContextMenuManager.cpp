@@ -234,6 +234,13 @@ CMenu& CMetContextMenuManager::GetParentMenu(void)
  return m_parentMenu;
 }
 
+void CMetContextMenuManager::GetAddMenuItemString(UINT id, CString &str, bool graph)
+{
+ if (graph)
+  m_addGraphMenu.GetMenuString(id, str, MF_BYCOMMAND);
+ else //meter
+  m_addMenu.GetMenuString(id, str, MF_BYCOMMAND);
+}
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

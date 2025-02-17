@@ -945,6 +945,9 @@ void CMIDeskDlg::OnMetEditScale()
  MetCfg* p_mcfg = NULL;
  UINT uiId = m_dragItemMet->second->m_uiID;
 
+ CString gaugeName;
+ mp_ctxMenuMgrMet->GetAddMenuItemString(uiId, gaugeName, m_dragItemMet->second->isGraph());
+
  if (m_it_mode < 2)
  { //0...720
   p_mcfg = &m_metCfg[uiId];
@@ -963,6 +966,7 @@ void CMIDeskDlg::OnMetEditScale()
    p_mcfg = &m_metCfg[uiId]; //other gauges
  }
 
+ dlg.SetName(gaugeName);
  dlg.SetData(*p_mcfg, !m_dragItemMet->second->isGraph());
  if (dlg.DoModal()==IDOK)
  {

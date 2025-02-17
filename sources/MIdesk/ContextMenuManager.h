@@ -37,6 +37,8 @@ class CMetContextMenuManager
 
   CMenu& GetParentMenu(void);
 
+  void GetAddMenuItemString(UINT id, CString &str, bool graph);
+
  private:
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu
   CMenu m_parentMenu;  //Top level menu

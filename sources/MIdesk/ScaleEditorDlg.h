@@ -44,6 +44,7 @@ class ScaleEditorDlg : public CDialog
  ~ScaleEditorDlg();
   static const UINT IDD;
 
+  void SetName(const CString& str);
   void SetData(const MetCfg& cfg, bool meter);
   void GetData(MetCfg& cfg) const;
   virtual INT_PTR DoModal();
@@ -72,6 +73,7 @@ class ScaleEditorDlg : public CDialog
   _TSTRING FormatColor(COLORREF val);
 
  private:
+  CString m_name;
   CFont m_font;
   CButton m_az_add;
   CButton m_az_del;

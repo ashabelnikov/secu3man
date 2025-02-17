@@ -138,6 +138,11 @@ BOOL ScaleEditorDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ CString title;
+ GetWindowText(title);
+ title = title + _T(" - ") + m_name;
+ SetWindowText(title);
+
  CloneWndFont(this, &m_font, -1, false);  
 
  m_az_color.SetNumRows(1);
@@ -465,7 +470,7 @@ void ScaleEditorDlg::OnAZDelete()
 _TSTRING ScaleEditorDlg::FormatValue(float val)
 {
  CString str;
- str.Format(_T("%03f"), val);
+ str.Format(_T("%.03f"), val);
  return _TSTRING(str);
 }
 
@@ -474,4 +479,9 @@ _TSTRING ScaleEditorDlg::FormatColor(COLORREF val)
  CString str;
  str.Format(_T("%06X"), GDIHelpers::swapRB(val));
  return _TSTRING(str);
+}
+
+void ScaleEditorDlg::SetName(const CString& str)
+{
+ m_name = str;
 }
