@@ -687,6 +687,21 @@ namespace SECU3IO
   float ltft_dead_band[2];
  };
 
+ struct DBWPar
+ {
+  float etc_p;                //!< P
+  float etc_i;                //!< I
+  float etc_d;                //!< D
+  float etc_nmax_duty;        //!< Max. negative output duty
+  float etc_pmax_duty;        //!< Max. positive output duty
+  float etc_pid_period;       //!< PID period
+  float etc_frictorq_op;      //!< value for frictional torque compensation, used when TPS > home position
+  float etc_frictorq_cl;      //!< value for frictional torque compensation, used when TPS < home position
+  float etc_frictorq_thrd;    //!< TPSdot threshold for frictional torque compensation
+  float etc_idleadd_max;      //!< Max. addition to the target position of throttle from idling regulator subsystem
+  float etc_homepos;          //!< Home position (read only)
+ };
+
  //Size of all look up tables
  static const int LUTABSIZE = 16;
  static const int PWCORSIZE = 5;
@@ -844,6 +859,7 @@ namespace SECU3IO
   SECU3IO::InjDrvPar    m_InjDrvPar;  //SECU-LZID
   SECU3IO::LzidBLHS     m_LzidBLHS;   //SECU-LZID  
   SECU3IO::LtftPar      m_LtftPar;
+  SECU3IO::DBWPar       m_DBWPar;
  };
 
 const int INPAVNUM = 14;
@@ -960,6 +976,8 @@ const int INPAVNUM = 14;
   float iac_clon_coeff;
   float iac_wrkadd_coeff;
   float iac_wrkadd_time;
+
+  bool use_dbgvar;
  };
 
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};

@@ -232,10 +232,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_TPS2       =  102,    // TPS2      (input)
    IOP3I_APPS1      =  103,    // APPS1     (input)
    IOP3I_APPS2      =  104,    // APPS2     (input)
-// IOP3I_RESERVED58 =  105,    // reserved  ()
-// IOP3I_RESERVED59 =  106,    // reserved  ()
+   IOP3I_ETC_PWM1   =  105,    // ETC_PWM1  (output)
+   IOP3I_ETC_PWM2   =  106,    // ETC_PWM2  (output)
 // IOP3I_RESERVED60 =  107,    // reserved  ()
-   IOP3I_COUNT      =  105,    //DON'T forget to update this value
+   IOP3I_COUNT      =  107,    //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -486,7 +486,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V41 = 0x41,           //v4.1  Array with I/O information added, GPS input
    IOV_V42 = 0x42,           //V4.2  New reserved plugs were added, ALTRN_I input added
    IOV_V43 = 0x43,           //V4.3  FPS input has been added
-   IOV_V44 = 0x44,           //V4.4  TPS2, APPS1, APPS2 inputs have been added (DBW)
+   IOV_V44 = 0x44,           //V4.4  TPS2, APPS1, APPS2 inputs have been added (DBW), outputs: ETC_PWM1, ETC_PWM2
    IOV_CUR = IOV_V44
   };
 
@@ -661,6 +661,12 @@ protected:
   void SetWUAFR0Map(const float* i_values);
   void GetWUAFR1Map(float* op_values, bool i_original = false);
   void SetWUAFR1Map(const float* i_values);
+  void GetETCSprPrelMap(float* op_values, bool i_original = false);
+  void SetETCSprPrelMap(const float* i_values);
+  void GetETCAcceptErrMap(float* op_values, bool i_original = false);
+  void SetETCAcceptErrMap(const float* i_values);
+  void GetETCThrottlePosMap(float* op_values, bool i_original = false);
+  void SetETCThrottlePosMap(const float* i_values);
 
   virtual SECU3IO::params_t* GetParamsPtr(void);
   virtual EECUPlatform GetPlatformId(void);

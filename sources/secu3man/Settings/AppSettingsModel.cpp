@@ -214,6 +214,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optEGODelayMapWnd(_T("EGODelayMapWnd"))
 , m_optWUAFR0MapWnd(_T("WUAFR0MapWnd"))
 , m_optWUAFR1MapWnd(_T("WUAFR1MapWnd"))
+, m_optETCSprPrelMapWnd(_T("ETCSprPrelMapWnd"))
+, m_optETCAcceptErrMapWnd(_T("ETCAcceptErrMapWnd"))
+, m_optETCThrottlePosMapWnd(_T("ETCThrottlePosMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -295,6 +298,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optEGODelayMapWnd1(_T("EGODelayMapWnd"))
 , m_optWUAFR0MapWnd1(_T("WUAFR0MapWnd"))
 , m_optWUAFR1MapWnd1(_T("WUAFR1MapWnd"))
+, m_optETCSprPrelMapWnd1(_T("ETCSprPrelMapWnd"))
+, m_optETCAcceptErrMapWnd1(_T("ETCAcceptErrMapWnd"))
+, m_optETCThrottlePosMapWnd1(_T("ETCThrottlePosMapWnd"))
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
@@ -377,6 +383,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optEGODelayMapWndSize(_T("EGODelayMapWnd"))
 , m_optWUAFR0MapWndSize(_T("WUAFR0MapWnd"))
 , m_optWUAFR1MapWndSize(_T("WUAFR1MapWnd"))
+, m_optETCSprPrelMapWndSize(_T("ETCSprPrelMapWnd"))
+, m_optETCAcceptErrMapWndSize(_T("ETCAcceptErrMapWnd"))
+, m_optETCThrottlePosMapWndSize(_T("ETCThrottlePosMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -458,6 +467,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optEGODelayMapWndSize1(_T("EGODelayMapWnd"))
 , m_optWUAFR0MapWndSize1(_T("WUAFR0MapWnd"))
 , m_optWUAFR1MapWndSize1(_T("WUAFR1MapWnd"))
+, m_optETCSprPrelMapWndSize1(_T("ETCSprPrelMapWnd"))
+, m_optETCAcceptErrMapWndSize1(_T("ETCAcceptErrMapWnd"))
+, m_optETCThrottlePosMapWndSize1(_T("ETCThrottlePosMapWnd"))
 //state of windows (minimized, normal, maximized)
 , m_Name_WndState_Section(_T("WndState"))
 , m_optMainFrmWndState(_T("MainFrmWnd"))
@@ -613,6 +625,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepEGODelayMap(_T("EGODelayMapWnd"))
 , m_optPtMovStepWUAFR0Map(_T("WUAFR0MapWnd"))
 , m_optPtMovStepWUAFR1Map(_T("WUAFR1MapWnd"))
+, m_optPtMovStepETCSprPrelMap(_T("ETCSprPrelMapWnd"))
+, m_optPtMovStepETCAcceptErrMap(_T("ETCAcceptErrMapWnd"))
+, m_optPtMovStepETCThrottlePosMap(_T("ETCThrottlePosMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -1115,7 +1130,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optEGODelayMapWnd);
  ws.ReadWndPos(m_optWUAFR0MapWnd);
  ws.ReadWndPos(m_optWUAFR1MapWnd);
-
+ ws.ReadWndPos(m_optETCSprPrelMapWnd);
+ ws.ReadWndPos(m_optETCAcceptErrMapWnd);
+ ws.ReadWndPos(m_optETCThrottlePosMapWnd);
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  ws1.ReadWndPos(m_optStrtMapWnd1);
@@ -1197,7 +1214,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optEGODelayMapWnd1);
  ws1.ReadWndPos(m_optWUAFR0MapWnd1);
  ws1.ReadWndPos(m_optWUAFR1MapWnd1);
-
+ ws1.ReadWndPos(m_optETCSprPrelMapWnd1);
+ ws1.ReadWndPos(m_optETCAcceptErrMapWnd1);
+ ws1.ReadWndPos(m_optETCThrottlePosMapWnd1);
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
  sz.ReadWndPos(m_optMainFrmWndSize, 0, 10000); //Main frame window
@@ -1280,6 +1299,9 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optEGODelayMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optWUAFR0MapWndSize, 0, 10000);
  sz.ReadWndPos(m_optWUAFR1MapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optETCSprPrelMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optETCAcceptErrMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optETCThrottlePosMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1362,6 +1384,9 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optEGODelayMapWndSize1, 0, 10000);
  sz1.ReadWndPos(m_optWUAFR0MapWndSize1, 0, 10000);
  sz1.ReadWndPos(m_optWUAFR1MapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optETCSprPrelMapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optETCAcceptErrMapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optETCThrottlePosMapWndSize1, 0, 10000);
 
  //State of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -1764,6 +1789,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepEGODelayMap, _T("10"), 1.0f, 100.0f);
  ms.ReadFlt(m_optPtMovStepWUAFR0Map, _T("0.1"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepWUAFR1Map, _T("0.1"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepETCSprPrelMap, _T("0.1"), 0.01f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepETCAcceptErrMap, _T("0.1"), 0.01f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepETCThrottlePosMap, _T("0.5"), 0.5f, 10.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1921,6 +1949,50 @@ bool CAppSettingsModel::WriteSettings(void)
  const TCHAR* strMetDiffAFR2 = en ? _T("AFR difference2") : _T("Разность Воздух/топливо2");
  const TCHAR* strMetFPS = en ? _T("Fuel pressure sensor") : _T("Датчик давления топлива");
  const TCHAR* strMetAPPS = en ? _T("Gas pedal position sensor") : _T("Датчик положения педали газа");
+ //group of separate maps
+ const TCHAR* strAttenuatorMapWnd = en ? _T("Attenuator's curve of amplification") : _T("Таблица функции аттенюатора");
+ const TCHAR* strDwellCntrlMapWnd = en ? _T("Dwell time map") : _T("Время накопления");
+ const TCHAR* strCTSCurveMapWnd = en ? _T("Coolant temperature sensor table") : _T("Кривая датчика температуры охлажд.житкости");
+ const TCHAR* strATSCurvMapWnd = en ? _T("MAT sensor table") : _T("Кривая датчика температуры воздуха");
+ const TCHAR* strATSCorrMapWnd = en ? _T("Ign.timing correction vs MAT map") : _T("Коррекция УОЗ по температуре воздуха");
+ const TCHAR* strGasdoseMapWnd = en ? _T("Gas valve position vs RPM,TPS map") : _T("Положение дозатора газа от оборотов и ДПДЗ");
+ const TCHAR* strBarocorrMapWnd = en ? _T("Barometric correction map") : _T("Барометрическая коррекция");
+ const TCHAR* strManIgntimMapWnd = en ? _T("Manual ignition timing corr. map") : _T("Ручная октан-коррекция");
+ const TCHAR* strCESettingsWnd = en ? _T("CE settings window") : _T("Настройки СЕ");
+ const TCHAR* strTmp2CurveMapWnd = en ? _T("TMP2 sensor table") : _T("Кривая датчика температуры на входе TMP2");
+ const TCHAR* strCrkTempMapWnd = en ? _T("Ign.timing vs CLT correction on cranking") : _T("Коррекция УОЗ по ДТОЖ на пуске");
+ const TCHAR* strEHPauseMapWnd = en ? _T("EGO heater's pause map (for PWM)") : _T("Время паузы подогрева ДК (для ШИМ)");
+ const TCHAR* strCrankingThrdMapWnd = en ? _T("Starter's blocking RPM") : _T("Обороты блокировки стартера");
+ const TCHAR* strCrankingTimeMapWnd = en ? _T("Starter's blocking delay (strokes)") : _T("Время до блокировки стартера после превышения порога оборотов (такты)");
+ const TCHAR* strSmapabanThrdMapWnd = en ? _T("RPM threshold for abandon from start map") : _T("Обороты перехода с пусковой карты");
+ const TCHAR* strKnockZoneMapWnd = en ? _T("Knock zones vs RPM,TPS map") : _T("Зоны детонации в зависимости от оборотов и ДПДЗ");
+ const TCHAR* strGrtsCurveMapWnd = en ? _T("Gas reducer's temperature sensor table") : _T("Кривая датчика температуры на входе GRTEMP");
+ const TCHAR* strGrHeatDutyMapWnd = en ? _T("PWM duty map for controlling of gas reducer's heater") : _T("Скважность ШИМ для управления нагревателем газового редуктора");
+ const TCHAR* strPwmIacUCoefMapWnd = en ? _T("PWM IAC duty coefficient vs voltage") : _T("Коэффициент скважности ШИМ РДВ от напряжения");
+ const TCHAR* strAftstrStrk0MapWnd = en ? _T("After start enrichment strokes vs coolant temperature (petrol)") : _T("Число тактов обогащения после пуска от температуры двигателя (бензин)");
+ const TCHAR* strAftstrStrk1MapWnd = en ? _T("After start enrichment strokes vs coolant temperature (gas)") : _T("Число тактов обогащения после пуска от температуры двигателя (gas)");
+ const TCHAR* strGrValDelMapWnd = en ? _T("Gas valve opening delay vs gas reducer's temperature map") : _T("Задержка включения газового клапана от температуры газового редуктора");
+ const TCHAR* strFtlsCurveMapWnd = en ? _T("Fuel tank level sensor's table") : _T("Кривая датчика уровня топлива (ДУТ)");
+ const TCHAR* strEgtsCurveMapWnd = en ? _T("Exhaust gas temperature sensor's table") : _T("Кривая датчика температуры выхлопных газов (ДТВГ)");
+ const TCHAR* strOpsCurveMapWnd = en ? _T("Oil pressure sensor's table") : _T("Кривая датчика давления масла (ДДМ)");
+ const TCHAR* strManInjPwcMapWnd = en ? _T("Map for manual correction of injection PW") : _T("Таблица для ручной коррекции длительности впрыска");
+ const TCHAR* strMAFCurveMapWnd = en ? _T("MAF flow curve") : _T("Кривая расхода ДМРВ");
+ const TCHAR* strFtlsCorMapWnd = en ? _T("Fuel tank level sensor's correction vs board voltage table") : _T("Таблица коррекции датчика уровня топлива (ДУТ) от напряжения бортовой сети");
+ const TCHAR* strLambdaZoneMapWnd = en ? _T("EGO correction zones vs RPM,load map") : _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки");
+ const TCHAR* strFtsCurveMapWnd = en ? _T("Fuel temperature sensor's table") : _T("Кривая датчика температуры топлива (ДТТ)");
+ const TCHAR* strFuelDensCorrMapWnd = en ? _T("Fuel density correction map") : _T("Таблица коррекции плотности топлива");
+ const TCHAR* strXtauXfAccMapWnd = en ? _T("Coefficient of injected fuel which goes into port wall's film (acceleration)") : _T("Коэффициент топлива выпадающего в пленку для режима ускорения");
+ const TCHAR* strXtauXfDecMapWnd = en ? _T("Coefficient of injected fuel which goes into port wall's film (deceleration)") : _T("Коэффициент топлива выпадающего в пленку для режима замедления");
+ const TCHAR* strXtauTfAccMapWnd = en ? _T("Constant of fuel's film dissipation time (accelaration)") : _T("Постоянная времени испарения плeнки для режима ускорения");
+ const TCHAR* strXtauTfDecMapWnd = en ? _T("Constant of fuel's film dissipation time (decelaration)") : _T("Постоянная времени испарения плeнки для режима замедления");
+ const TCHAR* strInjNonLinPMapWnd = en ? _T("Injector's non-linearity correction map used on small inj. PWs (petrol)") : _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)");
+ const TCHAR* strInjNonLinGMapWnd = en ? _T("Injector's non-linearity correction map used on small inj. PWs (gas)") : _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)");
+ const TCHAR* strEGODelayMapWnd = en ? _T("Number of strokes of EGO delay vs engine load") : _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель");
+ const TCHAR* strWUAFR0MapWnd = en ? _T("AFR vs coolant temperature (petrol)") : _T("Соотношение Воздух/топливо от температуры двигателя (бензин)");
+ const TCHAR* strWUAFR1MapWnd = en ? _T("AFR vs coolant temperature (gas)") : _T("Соотношение Воздух/топливо от температуры двигателя (gas)");
+ const TCHAR* strETCSprPrelMapWnd = en ? _T("PWM duty for compensation of spring preload") : _T("Скважность на компенсацию преднатяга пужин заслонки");
+ const TCHAR* strETCAcceptErrMapWnd = en ? _T("Accepted positioning error") : _T("Допустимая ошибка позиционирования заслонки");
+ const TCHAR* strETCThrottlePosMapWnd = en ? _T("Throttle position vs gas pedal and RPM") : _T("Положение заслонки в зависимости от ДППА и оборотов");
 
  IniIO &os = writer; 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2664,205 +2736,49 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optCylAddMapWnd, _T("Поцилиндровая добавка к длительности впрыска"));
 
  //group of separate maps
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optAttenuatorMapWnd, _T("Attenuator's curve of amplification"));
- else
-  ws.WriteWndPos(m_optAttenuatorMapWnd, _T("Таблица функции аттенюатора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optDwellCntrlMapWnd, _T("Dwell time map"));
- else
-  ws.WriteWndPos(m_optDwellCntrlMapWnd, _T("Время накопления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optCTSCurveMapWnd, _T("Coolant temperature sensor table"));
- else
-  ws.WriteWndPos(m_optCTSCurveMapWnd, _T("Кривая датчика температуры охлажд.житкости"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optATSCurvMapWnd, _T("MAT sensor table"));
- else
-  ws.WriteWndPos(m_optATSCurvMapWnd, _T("Кривая датчика температуры воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optATSCorrMapWnd, _T("Ign.timing correction vs MAT map"));
- else
-  ws.WriteWndPos(m_optATSCorrMapWnd, _T("Коррекция УОЗ по температуре воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optGasdoseMapWnd, _T("Gas valve position vs RPM,TPS map"));
- else
-  ws.WriteWndPos(m_optGasdoseMapWnd, _T("Положение дозатора газа от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optBarocorrMapWnd, _T("Barometric correction map"));
- else
-  ws.WriteWndPos(m_optBarocorrMapWnd, _T("Барометрическая коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optManIgntimMapWnd, _T("Manual ignition timing corr. map"));
- else
-  ws.WriteWndPos(m_optManIgntimMapWnd, _T("Ручная октан-коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optCESettingsWnd, _T("CE settings window"));
- else
-  ws.WriteWndPos(m_optCESettingsWnd, _T("Настройки СЕ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optTmp2CurveMapWnd, _T("TMP2 sensor table"));
- else
-  ws.WriteWndPos(m_optTmp2CurveMapWnd, _T("Кривая датчика температуры на входе TMP2"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optCrkTempMapWnd, _T("Ign.timing vs CLT correction on cranking"));
- else
-  ws.WriteWndPos(m_optCrkTempMapWnd, _T("Коррекция УОЗ по ДТОЖ на пуске"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optEHPauseMapWnd, _T("EGO heater's pause map (for PWM)"));
- else
-  ws.WriteWndPos(m_optEHPauseMapWnd, _T("Время паузы подогрева ДК (для ШИМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optCrankingThrdMapWnd, _T("Starter's blocking RPM"));
- else
-  ws.WriteWndPos(m_optCrankingThrdMapWnd, _T("Обороты блокировки стартера"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optCrankingTimeMapWnd, _T("Starter's blocking delay (strokes)"));
- else
-  ws.WriteWndPos(m_optCrankingTimeMapWnd, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optSmapabanThrdMapWnd, _T("RPM threshold for abandon from start map"));
- else
-  ws.WriteWndPos(m_optSmapabanThrdMapWnd, _T("Обороты перехода с пусковой карты"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optKnockZoneMapWnd, _T("Knock zones vs RPM,TPS map"));
- else
-  ws.WriteWndPos(m_optKnockZoneMapWnd, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optGrtsCurveMapWnd, _T("Gas reducer's temperature sensor table"));
- else
-  ws.WriteWndPos(m_optGrtsCurveMapWnd, _T("Кривая датчика температуры на входе GRTEMP"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optGrHeatDutyMapWnd, _T("PWM duty map for controlling of gas reducer's heater"));
- else
-  ws.WriteWndPos(m_optGrHeatDutyMapWnd, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optPwmIacUCoefMapWnd, _T("PWM IAC duty coefficient vs voltage"));
- else
-  ws.WriteWndPos(m_optPwmIacUCoefMapWnd, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optAftstrStrk0MapWnd, _T("After start enrichment strokes vs coolant temperature (petrol)"));
- else
-  ws.WriteWndPos(m_optAftstrStrk0MapWnd, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optAftstrStrk1MapWnd, _T("After start enrichment strokes vs coolant temperature (gas)"));
- else
-  ws.WriteWndPos(m_optAftstrStrk1MapWnd, _T("Число тактов обогащения после пуска от температуры двигателя (gas)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optGrValDelMapWnd, _T("Gas valve opening delay vs gas reducer's temperature map"));
- else
-  ws.WriteWndPos(m_optGrValDelMapWnd, _T("Задержка включения газового клапана от температуры газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optFtlsCurveMapWnd, _T("Fuel tank level sensor's table"));
- else
-  ws.WriteWndPos(m_optFtlsCurveMapWnd, _T("Кривая датчика уровня топлива (ДУТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optEgtsCurveMapWnd, _T("Exhaust gas temperature sensor's table"));
- else
-  ws.WriteWndPos(m_optEgtsCurveMapWnd, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optOpsCurveMapWnd, _T("Oil pressure sensor's table"));
- else
-  ws.WriteWndPos(m_optOpsCurveMapWnd, _T("Кривая датчика давления масла (ДДМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optManInjPwcMapWnd, _T("Map for manual correction of injection PW"));
- else
-  ws.WriteWndPos(m_optManInjPwcMapWnd, _T("Таблица для ручной коррекции длительности впрыска"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optMAFCurveMapWnd, _T("MAF flow curve"));
- else
-  ws.WriteWndPos(m_optMAFCurveMapWnd, _T("Кривая расхода ДМРВ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optFtlsCorMapWnd, _T("Fuel tank level sensor's correction vs board voltage table"));
- else
-  ws.WriteWndPos(m_optFtlsCorMapWnd, _T("Таблица коррекции датчика уровня топлива (ДУТ) от напряжения бортовой сети"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optLambdaZoneMapWnd, _T("EGO correction zones vs RPM,load map"));
- else
-  ws.WriteWndPos(m_optLambdaZoneMapWnd, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optFtsCurveMapWnd, _T("Fuel temperature sensor's table"));
- else
-  ws.WriteWndPos(m_optFtsCurveMapWnd, _T("Кривая датчика температуры топлива (ДТТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optFuelDensCorrMapWnd, _T("Fuel density correction map"));
- else
-  ws.WriteWndPos(m_optFuelDensCorrMapWnd, _T("Таблица коррекции плотности топлива"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optXtauXfAccMapWnd, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
- else
-  ws.WriteWndPos(m_optXtauXfAccMapWnd, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optXtauXfDecMapWnd, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
- else
-  ws.WriteWndPos(m_optXtauXfDecMapWnd, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optXtauTfAccMapWnd, _T("Constant of fuel's film dissipation time (accelaration)"));
- else
-  ws.WriteWndPos(m_optXtauTfAccMapWnd, _T("Постоянная времени испарения плeнки для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optXtauTfDecMapWnd, _T("Constant of fuel's film dissipation time (decelaration)"));
- else
-  ws.WriteWndPos(m_optXtauTfDecMapWnd, _T("Постоянная времени испарения плeнки для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optInjNonLinPMapWnd, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
- else
-  ws.WriteWndPos(m_optInjNonLinPMapWnd, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optInjNonLinGMapWnd, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
- else
-  ws.WriteWndPos(m_optInjNonLinGMapWnd, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optEGODelayMapWnd, _T("Number of strokes of EGO delay vs engine load"));
- else
-  ws.WriteWndPos(m_optEGODelayMapWnd, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optWUAFR0MapWnd, _T("AFR vs coolant temperature (petrol)"));
- else
-  ws.WriteWndPos(m_optWUAFR0MapWnd, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws.WriteWndPos(m_optWUAFR1MapWnd, _T("AFR vs coolant temperature (gas)"));
- else
-  ws.WriteWndPos(m_optWUAFR1MapWnd, _T("Соотношение Воздух/топливо от температуры двигателя (gas)"));
+ ws.WriteWndPos(m_optAttenuatorMapWnd, strAttenuatorMapWnd);
+ ws.WriteWndPos(m_optDwellCntrlMapWnd, strDwellCntrlMapWnd);
+ ws.WriteWndPos(m_optCTSCurveMapWnd, strCTSCurveMapWnd);
+ ws.WriteWndPos(m_optATSCurvMapWnd, strATSCurvMapWnd);
+ ws.WriteWndPos(m_optATSCorrMapWnd, strATSCorrMapWnd);
+ ws.WriteWndPos(m_optGasdoseMapWnd, strGasdoseMapWnd);
+ ws.WriteWndPos(m_optBarocorrMapWnd, strBarocorrMapWnd);
+ ws.WriteWndPos(m_optManIgntimMapWnd, strManIgntimMapWnd);
+ ws.WriteWndPos(m_optCESettingsWnd, strCESettingsWnd);
+ ws.WriteWndPos(m_optTmp2CurveMapWnd, strTmp2CurveMapWnd);
+ ws.WriteWndPos(m_optCrkTempMapWnd, strCrkTempMapWnd);
+ ws.WriteWndPos(m_optEHPauseMapWnd, strEHPauseMapWnd);
+ ws.WriteWndPos(m_optCrankingThrdMapWnd, strCrankingThrdMapWnd);
+ ws.WriteWndPos(m_optCrankingTimeMapWnd, strCrankingTimeMapWnd);
+ ws.WriteWndPos(m_optSmapabanThrdMapWnd, strSmapabanThrdMapWnd);
+ ws.WriteWndPos(m_optKnockZoneMapWnd, strKnockZoneMapWnd);
+ ws.WriteWndPos(m_optGrtsCurveMapWnd, strGrtsCurveMapWnd);
+ ws.WriteWndPos(m_optGrHeatDutyMapWnd, strGrHeatDutyMapWnd);
+ ws.WriteWndPos(m_optPwmIacUCoefMapWnd, strPwmIacUCoefMapWnd);
+ ws.WriteWndPos(m_optAftstrStrk0MapWnd, strAftstrStrk0MapWnd);
+ ws.WriteWndPos(m_optAftstrStrk1MapWnd, strAftstrStrk1MapWnd);
+ ws.WriteWndPos(m_optGrValDelMapWnd, strGrValDelMapWnd);
+ ws.WriteWndPos(m_optFtlsCurveMapWnd, strFtlsCurveMapWnd);
+ ws.WriteWndPos(m_optEgtsCurveMapWnd, strEgtsCurveMapWnd);
+ ws.WriteWndPos(m_optOpsCurveMapWnd, strOpsCurveMapWnd);
+ ws.WriteWndPos(m_optManInjPwcMapWnd, strManInjPwcMapWnd);
+ ws.WriteWndPos(m_optMAFCurveMapWnd, strMAFCurveMapWnd);
+ ws.WriteWndPos(m_optFtlsCorMapWnd, strFtlsCorMapWnd);
+ ws.WriteWndPos(m_optLambdaZoneMapWnd, strLambdaZoneMapWnd);
+ ws.WriteWndPos(m_optFtsCurveMapWnd, strFtsCurveMapWnd);
+ ws.WriteWndPos(m_optFuelDensCorrMapWnd, strFuelDensCorrMapWnd);
+ ws.WriteWndPos(m_optXtauXfAccMapWnd, strXtauXfAccMapWnd);
+ ws.WriteWndPos(m_optXtauXfDecMapWnd, strXtauXfDecMapWnd);
+ ws.WriteWndPos(m_optXtauTfAccMapWnd, strXtauTfAccMapWnd);
+ ws.WriteWndPos(m_optXtauTfDecMapWnd, strXtauTfDecMapWnd);
+ ws.WriteWndPos(m_optInjNonLinPMapWnd, strInjNonLinPMapWnd);
+ ws.WriteWndPos(m_optInjNonLinGMapWnd, strInjNonLinGMapWnd);
+ ws.WriteWndPos(m_optEGODelayMapWnd, strEGODelayMapWnd);
+ ws.WriteWndPos(m_optWUAFR0MapWnd, strWUAFR0MapWnd);
+ ws.WriteWndPos(m_optWUAFR1MapWnd, strWUAFR1MapWnd);
+ ws.WriteWndPos(m_optETCSprPrelMapWnd, strETCSprPrelMapWnd);
+ ws.WriteWndPos(m_optETCAcceptErrMapWnd, strETCAcceptErrMapWnd);
+ ws.WriteWndPos(m_optETCThrottlePosMapWnd, strETCThrottlePosMapWnd);
 
  //Positions of windows
  IniIO &ws1 = writer;
@@ -3063,205 +2979,49 @@ bool CAppSettingsModel::WriteSettings(void)
   ws1.WriteWndPos(m_optCylAddMapWnd1, _T("Поцилиндровая добавка к длительности впрыска"));
 
  //group of separate maps
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optAttenuatorMapWnd1, _T("Attenuator's curve of amplification"));
- else
-  ws1.WriteWndPos(m_optAttenuatorMapWnd1, _T("Таблица функции аттенюатора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optDwellCntrlMapWnd1, _T("Dwell time map"));
- else
-  ws1.WriteWndPos(m_optDwellCntrlMapWnd1, _T("Время накопления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optCTSCurveMapWnd1, _T("Coolant temperature sensor table"));
- else
-  ws1.WriteWndPos(m_optCTSCurveMapWnd1, _T("Кривая датчика температуры охлажд.житкости"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optATSCurvMapWnd1, _T("MAT sensor table"));
- else
-  ws1.WriteWndPos(m_optATSCurvMapWnd1, _T("Кривая датчика температуры воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optATSCorrMapWnd1, _T("Ign.timing correction vs MAT map"));
- else
-  ws1.WriteWndPos(m_optATSCorrMapWnd1, _T("Коррекция УОЗ по температуре воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optGasdoseMapWnd1, _T("Gas valve position vs RPM,TPS map"));
- else
-  ws1.WriteWndPos(m_optGasdoseMapWnd1, _T("Положение дозатора газа от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optBarocorrMapWnd1, _T("Barometric correction map"));
- else
-  ws1.WriteWndPos(m_optBarocorrMapWnd1, _T("Барометрическая коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optManIgntimMapWnd1, _T("Manual ignition timing corr. map"));
- else
-  ws1.WriteWndPos(m_optManIgntimMapWnd1, _T("Ручная октан-коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optCESettingsWnd1, _T("CE settings window"));
- else
-  ws1.WriteWndPos(m_optCESettingsWnd1, _T("Настройки СЕ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optTmp2CurveMapWnd1, _T("TMP2 sensor table"));
- else
-  ws1.WriteWndPos(m_optTmp2CurveMapWnd1, _T("Кривая датчика температуры на входе TMP2"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optCrkTempMapWnd1, _T("Ign.timing vs CLT correction on cranking"));
- else
-  ws1.WriteWndPos(m_optCrkTempMapWnd1, _T("Коррекция УОЗ по ДТОЖ на пуске"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optEHPauseMapWnd1, _T("EGO heater's pause map (for PWM)"));
- else
-  ws1.WriteWndPos(m_optEHPauseMapWnd1, _T("Время паузы подогрева ДК (для ШИМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optCrankingThrdMapWnd1, _T("Starter's blocking RPM"));
- else
-  ws1.WriteWndPos(m_optCrankingThrdMapWnd1, _T("Обороты блокировки стартера"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optCrankingTimeMapWnd1, _T("Starter's blocking delay (strokes)"));
- else
-  ws1.WriteWndPos(m_optCrankingTimeMapWnd1, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optSmapabanThrdMapWnd1, _T("RPM threshold for abandon from start map"));
- else
-  ws1.WriteWndPos(m_optSmapabanThrdMapWnd1, _T("Обороты перехода с пусковой карты"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optKnockZoneMapWnd1, _T("Knock zones vs RPM,TPS map"));
- else
-  ws1.WriteWndPos(m_optKnockZoneMapWnd1, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optGrtsCurveMapWnd1, _T("Gas reducer's temperature sensor table"));
- else
-  ws1.WriteWndPos(m_optGrtsCurveMapWnd1, _T("Кривая датчика температуры на входе GRTEMP"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optGrHeatDutyMapWnd1, _T("PWM duty map for controlling of gas reducer's heater"));
- else
-  ws1.WriteWndPos(m_optGrHeatDutyMapWnd1, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optPwmIacUCoefMapWnd1, _T("PWM IAC duty coefficient vs voltage"));
- else
-  ws1.WriteWndPos(m_optPwmIacUCoefMapWnd1, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optAftstrStrk0MapWnd1, _T("After start enrichment strokes vs coolant temperature (petrol)"));
- else
-  ws1.WriteWndPos(m_optAftstrStrk0MapWnd1, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optAftstrStrk1MapWnd1, _T("After start enrichment strokes vs coolant temperature (gas)"));
- else
-  ws1.WriteWndPos(m_optAftstrStrk1MapWnd1, _T("Число тактов обогащения после пуска от температуры двигателя (gas)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optGrValDelMapWnd1, _T("Gas valve opening delay vs gas reducer's temperature map"));
- else
-  ws1.WriteWndPos(m_optGrValDelMapWnd1, _T("Задержка включения газового клапана от температуры газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optFtlsCurveMapWnd1, _T("Fuel tank level sensor's table"));
- else
-  ws1.WriteWndPos(m_optFtlsCurveMapWnd1, _T("Кривая датчика уровня топлива (ДУТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optEgtsCurveMapWnd1, _T("Exhaust gas temperature sensor's table"));
- else
-  ws1.WriteWndPos(m_optEgtsCurveMapWnd1, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optOpsCurveMapWnd1, _T("Oil pressure sensor's table"));
- else
-  ws1.WriteWndPos(m_optOpsCurveMapWnd1, _T("Кривая датчика давления масла (ДДМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optManInjPwcMapWnd1, _T("Map for manual correction of injection PW"));
- else
-  ws1.WriteWndPos(m_optManInjPwcMapWnd1, _T("Таблица для ручной коррекции длительности впрыска"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optMAFCurveMapWnd1, _T("MAF flow curve"));
- else
-  ws1.WriteWndPos(m_optMAFCurveMapWnd1, _T("Кривая расхода ДМРВ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optFtlsCorMapWnd1, _T("Fuel tank level sensor's correction vs board voltage table"));
- else
-  ws1.WriteWndPos(m_optFtlsCorMapWnd1, _T("Таблица коррекции датчика уровня топлива (ДУТ) от напряжения бортовой сети"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optLambdaZoneMapWnd1, _T("EGO correction zones vs RPM,load map"));
- else
-  ws1.WriteWndPos(m_optLambdaZoneMapWnd1, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optFtsCurveMapWnd1, _T("Fuel temperature sensor's table"));
- else
-  ws1.WriteWndPos(m_optFtsCurveMapWnd1, _T("Кривая датчика температуры топлива (ДТТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optFuelDensCorrMapWnd1, _T("Fuel density correction map"));
- else
-  ws1.WriteWndPos(m_optFuelDensCorrMapWnd1, _T("Таблица коррекции плотности топлива"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optXtauXfAccMapWnd1, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
- else
-  ws1.WriteWndPos(m_optXtauXfAccMapWnd1, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optXtauXfDecMapWnd1, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
- else
-  ws1.WriteWndPos(m_optXtauXfDecMapWnd1, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optXtauTfAccMapWnd1, _T("Constant of fuel's film dissipation time (accelaration)"));
- else
-  ws1.WriteWndPos(m_optXtauTfAccMapWnd1, _T("Постоянная времени испарения плeнки для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optXtauTfDecMapWnd1, _T("Constant of fuel's film dissipation time (decelaration)"));
- else
-  ws1.WriteWndPos(m_optXtauTfDecMapWnd1, _T("Постоянная времени испарения плeнки для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optInjNonLinPMapWnd1, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
- else
-  ws1.WriteWndPos(m_optInjNonLinPMapWnd1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optInjNonLinGMapWnd1, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
- else
-  ws1.WriteWndPos(m_optInjNonLinGMapWnd1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optEGODelayMapWnd1, _T("Number of strokes of EGO delay vs engine load"));
- else
-  ws1.WriteWndPos(m_optEGODelayMapWnd1, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optWUAFR0MapWnd1, _T("AFR vs coolant temperature (petrol)"));
- else
-  ws1.WriteWndPos(m_optWUAFR0MapWnd1, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ws1.WriteWndPos(m_optWUAFR1MapWnd1, _T("AFR vs coolant temperature (gas)"));
- else
-  ws1.WriteWndPos(m_optWUAFR1MapWnd1, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
+ ws1.WriteWndPos(m_optAttenuatorMapWnd1, strAttenuatorMapWnd);
+ ws1.WriteWndPos(m_optDwellCntrlMapWnd1, strDwellCntrlMapWnd);
+ ws1.WriteWndPos(m_optCTSCurveMapWnd1, strCTSCurveMapWnd);
+ ws1.WriteWndPos(m_optATSCurvMapWnd1, strATSCurvMapWnd);
+ ws1.WriteWndPos(m_optATSCorrMapWnd1, strATSCorrMapWnd);
+ ws1.WriteWndPos(m_optGasdoseMapWnd1, strGasdoseMapWnd);
+ ws1.WriteWndPos(m_optBarocorrMapWnd1, strBarocorrMapWnd);
+ ws1.WriteWndPos(m_optManIgntimMapWnd1, strManIgntimMapWnd);
+ ws1.WriteWndPos(m_optCESettingsWnd1, strCESettingsWnd);
+ ws1.WriteWndPos(m_optTmp2CurveMapWnd1, strTmp2CurveMapWnd);
+ ws1.WriteWndPos(m_optCrkTempMapWnd1, strCrkTempMapWnd);
+ ws1.WriteWndPos(m_optEHPauseMapWnd1, strEHPauseMapWnd);
+ ws1.WriteWndPos(m_optCrankingThrdMapWnd1, strCrankingThrdMapWnd);
+ ws1.WriteWndPos(m_optCrankingTimeMapWnd1, strCrankingTimeMapWnd);
+ ws1.WriteWndPos(m_optSmapabanThrdMapWnd1, strSmapabanThrdMapWnd);
+ ws1.WriteWndPos(m_optKnockZoneMapWnd1, strKnockZoneMapWnd);
+ ws1.WriteWndPos(m_optGrtsCurveMapWnd1, strGrtsCurveMapWnd);
+ ws1.WriteWndPos(m_optGrHeatDutyMapWnd1, strGrHeatDutyMapWnd);
+ ws1.WriteWndPos(m_optPwmIacUCoefMapWnd1, strPwmIacUCoefMapWnd);
+ ws1.WriteWndPos(m_optAftstrStrk0MapWnd1, strAftstrStrk0MapWnd);
+ ws1.WriteWndPos(m_optAftstrStrk1MapWnd1, strAftstrStrk1MapWnd);
+ ws1.WriteWndPos(m_optGrValDelMapWnd1, strGrValDelMapWnd);
+ ws1.WriteWndPos(m_optFtlsCurveMapWnd1, strFtlsCurveMapWnd);
+ ws1.WriteWndPos(m_optEgtsCurveMapWnd1, strEgtsCurveMapWnd);
+ ws1.WriteWndPos(m_optOpsCurveMapWnd1, strOpsCurveMapWnd);
+ ws1.WriteWndPos(m_optManInjPwcMapWnd1, strManInjPwcMapWnd);
+ ws1.WriteWndPos(m_optMAFCurveMapWnd1, strMAFCurveMapWnd);
+ ws1.WriteWndPos(m_optFtlsCorMapWnd1, strFtlsCorMapWnd);
+ ws1.WriteWndPos(m_optLambdaZoneMapWnd1, strLambdaZoneMapWnd);
+ ws1.WriteWndPos(m_optFtsCurveMapWnd1, strFtsCurveMapWnd);
+ ws1.WriteWndPos(m_optFuelDensCorrMapWnd1, strFuelDensCorrMapWnd);
+ ws1.WriteWndPos(m_optXtauXfAccMapWnd1, strXtauXfAccMapWnd);
+ ws1.WriteWndPos(m_optXtauXfDecMapWnd1, strXtauXfDecMapWnd);
+ ws1.WriteWndPos(m_optXtauTfAccMapWnd1, strXtauTfAccMapWnd);
+ ws1.WriteWndPos(m_optXtauTfDecMapWnd1, strXtauTfDecMapWnd);
+ ws1.WriteWndPos(m_optInjNonLinPMapWnd1, strInjNonLinPMapWnd);
+ ws1.WriteWndPos(m_optInjNonLinGMapWnd1, strInjNonLinGMapWnd);
+ ws1.WriteWndPos(m_optEGODelayMapWnd1, strEGODelayMapWnd);
+ ws1.WriteWndPos(m_optWUAFR0MapWnd1, strWUAFR0MapWnd);
+ ws1.WriteWndPos(m_optWUAFR1MapWnd1, strWUAFR1MapWnd);
+ ws1.WriteWndPos(m_optETCSprPrelMapWnd1, strETCSprPrelMapWnd);
+ ws1.WriteWndPos(m_optETCAcceptErrMapWnd1, strETCAcceptErrMapWnd);
+ ws1.WriteWndPos(m_optETCThrottlePosMapWnd1, strETCThrottlePosMapWnd);
 
  //Sizes of windows
  IniIO &sz = writer;
@@ -3467,205 +3227,49 @@ bool CAppSettingsModel::WriteSettings(void)
   sz.WriteWndPos(m_optCylAddMapWndSize, _T("Поцилиндровая добавка к длительности впрыска"));
 
  //group of separate maps
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optAttenuatorMapWndSize, _T("Attenuator's curve of amplification"));
- else
-  sz.WriteWndPos(m_optAttenuatorMapWndSize, _T("Таблица функции аттенюатора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optDwellCntrlMapWndSize, _T("Dwell time map"));
- else
-  sz.WriteWndPos(m_optDwellCntrlMapWndSize, _T("Время накопления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optCTSCurveMapWndSize, _T("Coolant temperature sensor table"));
- else
-  sz.WriteWndPos(m_optCTSCurveMapWndSize, _T("Кривая датчика температуры охлажд.житкости"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optATSCurvMapWndSize, _T("MAT sensor table"));
- else
-  sz.WriteWndPos(m_optATSCurvMapWndSize, _T("Кривая датчика температуры воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optATSCorrMapWndSize, _T("Ign.timing correction vs MAT map"));
- else
-  sz.WriteWndPos(m_optATSCorrMapWndSize, _T("Коррекция УОЗ по температуре воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optGasdoseMapWndSize, _T("Gas valve position vs RPM,TPS map"));
- else
-  sz.WriteWndPos(m_optGasdoseMapWndSize, _T("Положение дозатора газа от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optBarocorrMapWndSize, _T("Barometric correction map"));
- else
-  sz.WriteWndPos(m_optBarocorrMapWndSize, _T("Барометрическая коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optManIgntimMapWndSize, _T("Manual ignition timing corr. map"));
- else
-  sz.WriteWndPos(m_optManIgntimMapWndSize, _T("Ручная октан-коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optCESettingsWndSize, _T("CE settings window"));
- else
-  sz.WriteWndPos(m_optCESettingsWndSize, _T("Настройки СЕ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optTmp2CurveMapWndSize, _T("TMP2 sensor table"));
- else
-  sz.WriteWndPos(m_optTmp2CurveMapWndSize, _T("Кривая датчика температуры на входе TMP2"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optCrkTempMapWndSize, _T("Ign.timing vs CLT correction on cranking"));
- else
-  sz.WriteWndPos(m_optCrkTempMapWndSize, _T("Коррекция УОЗ по ДТОЖ на пуске"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optEHPauseMapWndSize, _T("EGO heater's pause map (for PWM)"));
- else
-  sz.WriteWndPos(m_optEHPauseMapWndSize, _T("Время паузы подогрева ДК (для ШИМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optCrankingThrdMapWndSize, _T("Starter's blocking RPM"));
- else
-  sz.WriteWndPos(m_optCrankingThrdMapWndSize, _T("Обороты блокировки стартера"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optCrankingTimeMapWndSize, _T("Starter's blocking delay (strokes)"));
- else
-  sz.WriteWndPos(m_optCrankingTimeMapWndSize, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optSmapabanThrdMapWndSize, _T("RPM threshold for abandon from start map"));
- else
-  sz.WriteWndPos(m_optSmapabanThrdMapWndSize, _T("Обороты перехода с пусковой карты"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optKnockZoneMapWndSize, _T("Knock zones vs RPM,TPS map"));
- else
-  sz.WriteWndPos(m_optKnockZoneMapWndSize, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optGrtsCurveMapWndSize, _T("GRTEMP sensor table"));
- else
-  sz.WriteWndPos(m_optGrtsCurveMapWndSize, _T("Кривая датчика температуры на входе GRTEMP"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optGrHeatDutyMapWndSize, _T("PWM duty map for controlling of gas reducer's heater"));
- else
-  sz.WriteWndPos(m_optGrHeatDutyMapWndSize, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optPwmIacUCoefMapWndSize, _T("PWM IAC duty coefficient vs voltage"));
- else
-  sz.WriteWndPos(m_optPwmIacUCoefMapWndSize, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optAftstrStrk0MapWndSize, _T("After start enrichment strokes vs coolant temperature (petrol)"));
- else
-  sz.WriteWndPos(m_optAftstrStrk0MapWndSize, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optAftstrStrk1MapWndSize, _T("After start enrichment strokes vs coolant temperature (gas)"));
- else
-  sz.WriteWndPos(m_optAftstrStrk1MapWndSize, _T("Число тактов обогащения после пуска от температуры двигателя (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optGrValDelMapWndSize, _T("Gas valve opening delay vs gas reducer's temperature map"));
- else
-  sz.WriteWndPos(m_optGrValDelMapWndSize, _T("Задержка включения газового клапана от температуры газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optFtlsCurveMapWndSize, _T("Fuel tank level sensor's table"));
- else
-  sz.WriteWndPos(m_optFtlsCurveMapWndSize, _T("Кривая датчика уровня топлива (ДУТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optEgtsCurveMapWndSize, _T("Exhaust gas temperature sensor's table"));
- else
-  sz.WriteWndPos(m_optEgtsCurveMapWndSize, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optOpsCurveMapWndSize, _T("Oil pressure sensor's table"));
- else
-  sz.WriteWndPos(m_optOpsCurveMapWndSize, _T("Кривая датчика давления масла (ДДМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optManInjPwcMapWndSize, _T("Map for manual correction of injection PW"));
- else
-  sz.WriteWndPos(m_optManInjPwcMapWndSize, _T("Таблица для ручной коррекции длительности впрыска"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optMAFCurveMapWndSize, _T("MAF flow curve"));
- else
-  sz.WriteWndPos(m_optMAFCurveMapWndSize, _T("Кривая расхода ДМРВ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optFtlsCorMapWndSize, _T("Fuel tank level sensor's correction vs board voltage table"));
- else
-  sz.WriteWndPos(m_optFtlsCorMapWndSize, _T("Таблица коррекции датчика уровня топлива (ДУТ) от напряжения бортовой сети"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optLambdaZoneMapWndSize, _T("EGO correction zones vs RPM,load map"));
- else
-  sz.WriteWndPos(m_optLambdaZoneMapWndSize, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optFtsCurveMapWndSize, _T("Fuel temperature sensor's table"));
- else
-  sz.WriteWndPos(m_optFtsCurveMapWndSize, _T("Кривая датчика температуры топлива (ДТТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optFuelDensCorrMapWndSize, _T("Fuel density correction map"));
- else
-  sz.WriteWndPos(m_optFuelDensCorrMapWndSize, _T("Таблица коррекции плотности топлива"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optXtauXfAccMapWndSize, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
- else
-  sz.WriteWndPos(m_optXtauXfAccMapWndSize, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optXtauXfDecMapWndSize, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
- else
-  sz.WriteWndPos(m_optXtauXfDecMapWndSize, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optXtauTfAccMapWndSize, _T("Constant of fuel's film dissipation time (accelaration)"));
- else
-  sz.WriteWndPos(m_optXtauTfAccMapWndSize, _T("Постоянная времени испарения плeнки для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optXtauTfDecMapWndSize, _T("Constant of fuel's film dissipation time (decelaration)"));
- else
-  sz.WriteWndPos(m_optXtauTfDecMapWndSize, _T("Постоянная времени испарения плeнки для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optInjNonLinPMapWndSize, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
- else
-  sz.WriteWndPos(m_optInjNonLinPMapWndSize, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optInjNonLinGMapWndSize, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
- else
-  sz.WriteWndPos(m_optInjNonLinGMapWndSize, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optEGODelayMapWndSize, _T("Number of strokes of EGO delay vs engine load"));
- else
-  sz.WriteWndPos(m_optEGODelayMapWndSize, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optWUAFR0MapWndSize, _T("AFR vs coolant temperature (petrol)"));
- else
-  sz.WriteWndPos(m_optWUAFR0MapWndSize, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz.WriteWndPos(m_optWUAFR1MapWndSize, _T("AFR vs coolant temperature (gas)"));
- else
-  sz.WriteWndPos(m_optWUAFR1MapWndSize, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
+ sz.WriteWndPos(m_optAttenuatorMapWndSize, strAttenuatorMapWnd);
+ sz.WriteWndPos(m_optDwellCntrlMapWndSize, strDwellCntrlMapWnd);
+ sz.WriteWndPos(m_optCTSCurveMapWndSize, strCTSCurveMapWnd);
+ sz.WriteWndPos(m_optATSCurvMapWndSize, strATSCurvMapWnd);
+ sz.WriteWndPos(m_optATSCorrMapWndSize, strATSCorrMapWnd);
+ sz.WriteWndPos(m_optGasdoseMapWndSize, strGasdoseMapWnd);
+ sz.WriteWndPos(m_optBarocorrMapWndSize, strBarocorrMapWnd);
+ sz.WriteWndPos(m_optManIgntimMapWndSize, strManIgntimMapWnd);
+ sz.WriteWndPos(m_optCESettingsWndSize, strCESettingsWnd);
+ sz.WriteWndPos(m_optTmp2CurveMapWndSize, strTmp2CurveMapWnd);
+ sz.WriteWndPos(m_optCrkTempMapWndSize, strCrkTempMapWnd);
+ sz.WriteWndPos(m_optEHPauseMapWndSize, strEHPauseMapWnd);
+ sz.WriteWndPos(m_optCrankingThrdMapWndSize, strCrankingThrdMapWnd);
+ sz.WriteWndPos(m_optCrankingTimeMapWndSize, strCrankingTimeMapWnd);
+ sz.WriteWndPos(m_optSmapabanThrdMapWndSize, strSmapabanThrdMapWnd);
+ sz.WriteWndPos(m_optKnockZoneMapWndSize, strKnockZoneMapWnd);
+ sz.WriteWndPos(m_optGrtsCurveMapWndSize, strGrtsCurveMapWnd);
+ sz.WriteWndPos(m_optGrHeatDutyMapWndSize, strGrHeatDutyMapWnd);
+ sz.WriteWndPos(m_optPwmIacUCoefMapWndSize, strPwmIacUCoefMapWnd);
+ sz.WriteWndPos(m_optAftstrStrk0MapWndSize, strAftstrStrk0MapWnd);
+ sz.WriteWndPos(m_optAftstrStrk1MapWndSize, strAftstrStrk1MapWnd);
+ sz.WriteWndPos(m_optGrValDelMapWndSize, strGrValDelMapWnd);
+ sz.WriteWndPos(m_optFtlsCurveMapWndSize, strFtlsCurveMapWnd);
+ sz.WriteWndPos(m_optEgtsCurveMapWndSize, strEgtsCurveMapWnd);
+ sz.WriteWndPos(m_optOpsCurveMapWndSize, strOpsCurveMapWnd);
+ sz.WriteWndPos(m_optManInjPwcMapWndSize, strManInjPwcMapWnd);
+ sz.WriteWndPos(m_optMAFCurveMapWndSize, strMAFCurveMapWnd);
+ sz.WriteWndPos(m_optFtlsCorMapWndSize, strFtlsCorMapWnd);
+ sz.WriteWndPos(m_optLambdaZoneMapWndSize, strLambdaZoneMapWnd);
+ sz.WriteWndPos(m_optFtsCurveMapWndSize, strFtsCurveMapWnd);
+ sz.WriteWndPos(m_optFuelDensCorrMapWndSize, strFuelDensCorrMapWnd);
+ sz.WriteWndPos(m_optXtauXfAccMapWndSize, strXtauXfAccMapWnd);
+ sz.WriteWndPos(m_optXtauXfDecMapWndSize, strXtauXfDecMapWnd);
+ sz.WriteWndPos(m_optXtauTfAccMapWndSize, strXtauTfAccMapWnd);
+ sz.WriteWndPos(m_optXtauTfDecMapWndSize, strXtauTfDecMapWnd);
+ sz.WriteWndPos(m_optInjNonLinPMapWndSize, strInjNonLinPMapWnd);
+ sz.WriteWndPos(m_optInjNonLinGMapWndSize, strInjNonLinGMapWnd);
+ sz.WriteWndPos(m_optEGODelayMapWndSize, strEGODelayMapWnd);
+ sz.WriteWndPos(m_optWUAFR0MapWndSize, strWUAFR0MapWnd);
+ sz.WriteWndPos(m_optWUAFR1MapWndSize, strWUAFR1MapWnd);
+ sz.WriteWndPos(m_optETCSprPrelMapWndSize, strETCSprPrelMapWnd);
+ sz.WriteWndPos(m_optETCAcceptErrMapWndSize, strETCAcceptErrMapWnd);
+ sz.WriteWndPos(m_optETCThrottlePosMapWndSize, strETCThrottlePosMapWnd);
 
  //Sizes of windows (online)
  IniIO &sz1 = writer;
@@ -3866,205 +3470,49 @@ bool CAppSettingsModel::WriteSettings(void)
   sz1.WriteWndPos(m_optCylAddMapWndSize1, _T("Поцилиндровая добавка к длительности впрыска"));
 
  //group of separate maps
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optAttenuatorMapWndSize1, _T("Attenuator's curve of amplification"));
- else
-  sz1.WriteWndPos(m_optAttenuatorMapWndSize1, _T("Таблица функции аттенюатора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optDwellCntrlMapWndSize1, _T("Dwell time map"));
- else
-  sz1.WriteWndPos(m_optDwellCntrlMapWndSize1, _T("Время накопления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optCTSCurveMapWndSize1, _T("Coolant temperature sensor table"));
- else
-  sz1.WriteWndPos(m_optCTSCurveMapWndSize1, _T("Кривая датчика температуры охлажд.житкости"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optATSCurvMapWndSize1, _T("MAT sensor table"));
- else
-  sz1.WriteWndPos(m_optATSCurvMapWndSize1, _T("Кривая датчика температуры воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optATSCorrMapWndSize1, _T("Ign.timing correction vs MAT map"));
- else
-  sz1.WriteWndPos(m_optATSCorrMapWndSize1, _T("Коррекция УОЗ по температуре воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optGasdoseMapWndSize1, _T("Gas valve position vs RPM,TPS map"));
- else
-  sz1.WriteWndPos(m_optGasdoseMapWndSize1, _T("Положение дозатора газа от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optBarocorrMapWndSize1, _T("Barometric correction map"));
- else
-  sz1.WriteWndPos(m_optBarocorrMapWndSize1, _T("Барометрическая коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optManIgntimMapWndSize1, _T("Manual ignition timing corr. map"));
- else
-  sz1.WriteWndPos(m_optManIgntimMapWndSize1, _T("Ручная октан-коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optCESettingsWndSize1, _T("CE settings window"));
- else
-  sz1.WriteWndPos(m_optCESettingsWndSize1, _T("Настройки СЕ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optTmp2CurveMapWndSize1, _T("TMP2 sensor table"));
- else
-  sz1.WriteWndPos(m_optTmp2CurveMapWndSize1, _T("Кривая датчика температуры на входе TMP2"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optCrkTempMapWndSize1, _T("Ign.timing vs CLT correction on cranking"));
- else
-  sz1.WriteWndPos(m_optCrkTempMapWndSize1, _T("Коррекция УОЗ по ДТОЖ на пуске"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optEHPauseMapWndSize1, _T("EGO heater's pause map (for PWM)"));
- else
-  sz1.WriteWndPos(m_optEHPauseMapWndSize1, _T("Время паузы подогрева ДК (для ШИМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optCrankingThrdMapWndSize1, _T("Starter's blocking RPM"));
- else
-  sz1.WriteWndPos(m_optCrankingThrdMapWndSize1, _T("Обороты блокировки стартера"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optCrankingTimeMapWndSize1, _T("Starter's blocking delay (strokes)"));
- else
-  sz1.WriteWndPos(m_optCrankingTimeMapWndSize1, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optSmapabanThrdMapWndSize1, _T("RPM threshold for abandon from start map"));
- else
-  sz1.WriteWndPos(m_optSmapabanThrdMapWndSize1, _T("Обороты перехода с пусковой карты"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optKnockZoneMapWndSize1, _T("Knock zones vs RPM,TPS map"));
- else
-  sz1.WriteWndPos(m_optKnockZoneMapWndSize1, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optGrtsCurveMapWndSize1, _T("GRTEMP sensor table"));
- else
-  sz1.WriteWndPos(m_optGrtsCurveMapWndSize1, _T("Кривая датчика температуры на входе GRTEMP"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optGrHeatDutyMapWndSize1, _T("PWM duty map for controlling of gas reducer's heater"));
- else
-  sz1.WriteWndPos(m_optGrHeatDutyMapWndSize1, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optPwmIacUCoefMapWndSize1, _T("PWM IAC duty coefficient vs voltage"));
- else
-  sz1.WriteWndPos(m_optPwmIacUCoefMapWndSize1, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optAftstrStrk0MapWndSize1, _T("After start enrichment strokes vs coolant temperature (petrol)"));
- else
-  sz1.WriteWndPos(m_optAftstrStrk0MapWndSize1, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optAftstrStrk1MapWndSize1, _T("After start enrichment strokes vs coolant temperature (gas)"));
- else
-  sz1.WriteWndPos(m_optAftstrStrk1MapWndSize1, _T("Число тактов обогащения после пуска от температуры двигателя (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optGrValDelMapWndSize1, _T("Gas valve opening delay vs gas reducer's temperature map"));
- else
-  sz1.WriteWndPos(m_optGrValDelMapWndSize1, _T("Задержка включения газового клапана от температуры газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optFtlsCurveMapWndSize1, _T("Fuel tank level sensor's table"));
- else
-  sz1.WriteWndPos(m_optFtlsCurveMapWndSize1, _T("Кривая датчика уровня топлива (ДУТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optEgtsCurveMapWndSize1, _T("Exhaust gas temperature sensor's table"));
- else
-  sz1.WriteWndPos(m_optEgtsCurveMapWndSize1, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optOpsCurveMapWndSize1, _T("Oil pressure sensor's table"));
- else
-  sz1.WriteWndPos(m_optOpsCurveMapWndSize1, _T("Кривая датчика давления масла (ДДМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optManInjPwcMapWndSize1, _T("Map for manual correction of injection PW"));
- else
-  sz1.WriteWndPos(m_optManInjPwcMapWndSize1, _T("Таблица для ручной коррекции длительности впрыска"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optMAFCurveMapWndSize1, _T("MAF flow curve"));
- else
-  sz1.WriteWndPos(m_optMAFCurveMapWndSize1, _T("Кривая расхода ДМРВ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optFtlsCorMapWndSize1, _T("Fuel tank level sensor's correction vs board voltage table"));
- else
-  sz1.WriteWndPos(m_optFtlsCorMapWndSize1, _T("Таблица коррекции датчика уровня топлива (ДУТ) от напряжения бортовой сети"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optLambdaZoneMapWndSize1, _T("EGO correction zones vs RPM,load map"));
- else
-  sz1.WriteWndPos(m_optLambdaZoneMapWndSize1, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optFtsCurveMapWndSize1, _T("Fuel temperature sensor's table"));
- else
-  sz1.WriteWndPos(m_optFtsCurveMapWndSize1, _T("Кривая датчика температуры топлива (ДТТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optFuelDensCorrMapWndSize1, _T("Fuel density correction map"));
- else
-  sz1.WriteWndPos(m_optFuelDensCorrMapWndSize1, _T("Таблица коррекции плотности топлива"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optXtauXfAccMapWndSize1, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
- else
-  sz1.WriteWndPos(m_optXtauXfAccMapWndSize1, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optXtauXfDecMapWndSize1, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
- else
-  sz1.WriteWndPos(m_optXtauXfDecMapWndSize1, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optXtauTfAccMapWndSize1, _T("Constant of fuel's film dissipation time (accelaration)"));
- else
-  sz1.WriteWndPos(m_optXtauTfAccMapWndSize1, _T("Постоянная времени испарения плeнки для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optXtauTfDecMapWndSize1, _T("Constant of fuel's film dissipation time (decelaration)"));
- else
-  sz1.WriteWndPos(m_optXtauTfDecMapWndSize1, _T("Постоянная времени испарения плeнки для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optInjNonLinPMapWndSize1, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
- else
-  sz1.WriteWndPos(m_optInjNonLinPMapWndSize1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optInjNonLinGMapWndSize1, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
- else
-  sz1.WriteWndPos(m_optInjNonLinGMapWndSize1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optEGODelayMapWndSize1, _T("Number of strokes of EGO delay vs engine load"));
- else
-  sz1.WriteWndPos(m_optEGODelayMapWndSize1, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optWUAFR0MapWndSize1, _T("AFR vs coolant temperature (petrol)"));
- else
-  sz1.WriteWndPos(m_optWUAFR0MapWndSize1, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  sz1.WriteWndPos(m_optWUAFR1MapWndSize1, _T("AFR vs coolant temperature (gas)"));
- else
-  sz1.WriteWndPos(m_optWUAFR1MapWndSize1, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
+ sz1.WriteWndPos(m_optAttenuatorMapWndSize1, strAttenuatorMapWnd);
+ sz1.WriteWndPos(m_optDwellCntrlMapWndSize1, strDwellCntrlMapWnd);
+ sz1.WriteWndPos(m_optCTSCurveMapWndSize1, strCTSCurveMapWnd);
+ sz1.WriteWndPos(m_optATSCurvMapWndSize1, strATSCurvMapWnd);
+ sz1.WriteWndPos(m_optATSCorrMapWndSize1, strATSCorrMapWnd);
+ sz1.WriteWndPos(m_optGasdoseMapWndSize1, strGasdoseMapWnd);
+ sz1.WriteWndPos(m_optBarocorrMapWndSize1, strBarocorrMapWnd);
+ sz1.WriteWndPos(m_optManIgntimMapWndSize1, strManIgntimMapWnd);
+ sz1.WriteWndPos(m_optCESettingsWndSize1, strCESettingsWnd);
+ sz1.WriteWndPos(m_optTmp2CurveMapWndSize1, strTmp2CurveMapWnd);
+ sz1.WriteWndPos(m_optCrkTempMapWndSize1, strCrkTempMapWnd);
+ sz1.WriteWndPos(m_optEHPauseMapWndSize1, strEHPauseMapWnd);
+ sz1.WriteWndPos(m_optCrankingThrdMapWndSize1, strCrankingThrdMapWnd);
+ sz1.WriteWndPos(m_optCrankingTimeMapWndSize1, strCrankingTimeMapWnd);
+ sz1.WriteWndPos(m_optSmapabanThrdMapWndSize1, strSmapabanThrdMapWnd);
+ sz1.WriteWndPos(m_optKnockZoneMapWndSize1, strKnockZoneMapWnd);
+ sz1.WriteWndPos(m_optGrtsCurveMapWndSize1, strGrtsCurveMapWnd);
+ sz1.WriteWndPos(m_optGrHeatDutyMapWndSize1, strGrHeatDutyMapWnd);
+ sz1.WriteWndPos(m_optPwmIacUCoefMapWndSize1, strPwmIacUCoefMapWnd);
+ sz1.WriteWndPos(m_optAftstrStrk0MapWndSize1, strAftstrStrk0MapWnd);
+ sz1.WriteWndPos(m_optAftstrStrk1MapWndSize1, strAftstrStrk1MapWnd);
+ sz1.WriteWndPos(m_optGrValDelMapWndSize1, strGrValDelMapWnd);
+ sz1.WriteWndPos(m_optFtlsCurveMapWndSize1, strFtlsCurveMapWnd);
+ sz1.WriteWndPos(m_optEgtsCurveMapWndSize1, strEgtsCurveMapWnd);
+ sz1.WriteWndPos(m_optOpsCurveMapWndSize1, strOpsCurveMapWnd);
+ sz1.WriteWndPos(m_optManInjPwcMapWndSize1, strManInjPwcMapWnd);
+ sz1.WriteWndPos(m_optMAFCurveMapWndSize1, strMAFCurveMapWnd);
+ sz1.WriteWndPos(m_optFtlsCorMapWndSize1, strFtlsCorMapWnd);
+ sz1.WriteWndPos(m_optLambdaZoneMapWndSize1, strLambdaZoneMapWnd);
+ sz1.WriteWndPos(m_optFtsCurveMapWndSize1, strFtsCurveMapWnd);
+ sz1.WriteWndPos(m_optFuelDensCorrMapWndSize1, strFuelDensCorrMapWnd);
+ sz1.WriteWndPos(m_optXtauXfAccMapWndSize1, strXtauXfAccMapWnd);
+ sz1.WriteWndPos(m_optXtauXfDecMapWndSize1, strXtauXfDecMapWnd);
+ sz1.WriteWndPos(m_optXtauTfAccMapWndSize1, strXtauTfAccMapWnd);
+ sz1.WriteWndPos(m_optXtauTfDecMapWndSize1, strXtauTfDecMapWnd);
+ sz1.WriteWndPos(m_optInjNonLinPMapWndSize1, strInjNonLinPMapWnd);
+ sz1.WriteWndPos(m_optInjNonLinGMapWndSize1, strInjNonLinGMapWnd);
+ sz1.WriteWndPos(m_optEGODelayMapWndSize1, strEGODelayMapWnd);
+ sz1.WriteWndPos(m_optWUAFR0MapWndSize1, strWUAFR0MapWnd);
+ sz1.WriteWndPos(m_optWUAFR1MapWndSize1, strWUAFR1MapWnd);
+ sz1.WriteWndPos(m_optETCSprPrelMapWndSize1, strETCSprPrelMapWnd);
+ sz1.WriteWndPos(m_optETCAcceptErrMapWndSize1, strETCAcceptErrMapWnd);
+ sz1.WriteWndPos(m_optETCThrottlePosMapWndSize1, strETCThrottlePosMapWnd);
 
  //States of windows
  IniIO &sw = writer;
@@ -4960,200 +4408,48 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepCylAddMap, 3, _T("Поцилиндровая добавка к длительности впрыска"));
 
  //separate maps
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, _T("Ign.timing vs CLT correction on cranking"));
- else
-  ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, _T("Коррекция УОЗ по ДТОЖ на пуске"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepEHPauseMap, 3, _T("EGO heater's pause map (for PWM)"));
- else
-  ms.WriteFlt(m_optPtMovStepEHPauseMap, 3, _T("Время паузы подогрева ДК (для ШИМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepAttenuatorMap, 3, _T("Attenuator's curve of amplification"));
- else
-  ms.WriteFlt(m_optPtMovStepAttenuatorMap, 3, _T("Таблица функции аттенюатора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepDwellCntrlMap, 3, _T("Dwell time map"));
- else
-  ms.WriteFlt(m_optPtMovStepDwellCntrlMap, 3, _T("Время накопления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepCTSCurveMap, 3, _T("Coolant temperature sensor table"));
- else
-  ms.WriteFlt(m_optPtMovStepCTSCurveMap, 3, _T("Кривая датчика температуры охлажд.житкости"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepBarocorrMap, 3, _T("Barometric correction map"));
- else
-  ms.WriteFlt(m_optPtMovStepBarocorrMap, 3, _T("Барометрическая коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepManIgntimMap, 3, _T("Manual ignition timing corr. map"));
- else
-  ms.WriteFlt(m_optPtMovStepManIgntimMap, 3, _T("Ручная октан-коррекция"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepATSCurvMap, 3, _T("MAT sensor table"));
- else
-  ms.WriteFlt(m_optPtMovStepATSCurvMap, 3, _T("Кривая датчика температуры воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepATSCorrMap, 3, _T("Ign.timing correction vs MAT map"));
- else
-  ms.WriteFlt(m_optPtMovStepATSCorrMap, 3, _T("Коррекция УОЗ по температуре воздуха"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepGasdoseMap, 3, _T("Gas valve position vs RPM,TPS map"));
- else
-  ms.WriteFlt(m_optPtMovStepGasdoseMap, 3, _T("Положение дозатора газа от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, _T("TMP2 sensor table"));
- else
-  ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, _T("Кривая датчика температуры на входе TMP2"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepCrankingThrdMap, 3, _T("Starter's bloking RPM"));
- else
-  ms.WriteFlt(m_optPtMovStepCrankingThrdMap, 3, _T("Обороты блокировки стартера"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepCrankingTimeMap, 3, _T("Starter's blocking delay (strokes)"));
- else
-  ms.WriteFlt(m_optPtMovStepCrankingTimeMap, 3, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepSmapabanThrdMap, 3, _T("RPM threshold for abandon from start map"));
- else
-  ms.WriteFlt(m_optPtMovStepSmapabanThrdMap, 3, _T("Обороты перехода с пусковой карты"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepKnockZoneMap, 3, _T("Knock zones vs RPM,TPS map"));
- else
-  ms.WriteFlt(m_optPtMovStepKnockZoneMap, 3, _T("Зоны детонации в зависимости от оборотов и ДПДЗ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepGrtsCurveMap, 3, _T("GRTEMP sensor table"));
- else
-  ms.WriteFlt(m_optPtMovStepGrtsCurveMap, 3, _T("Кривая датчика температуры на входе GRTEMP"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepGrHeatDutyMap, 3, _T("PWM duty map for controlling of gas reducer's heater"));
- else
-  ms.WriteFlt(m_optPtMovStepGrHeatDutyMap, 3, _T("Скважность ШИМ для управления нагревателем газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepPwmIacUCoefMap, 3, _T("PWM IAC duty coefficient vs voltage"));
- else
-  ms.WriteFlt(m_optPtMovStepPwmIacUCoefMap, 3, _T("Коэффициент скважности ШИМ РДВ от напряжения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepAftstrStrk0Map, 3, _T("After start enrichment strokes vs coolant temperature (petrol)"));
- else
-  ms.WriteFlt(m_optPtMovStepAftstrStrk0Map, 3, _T("Число тактов обогащения после пуска от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepAftstrStrk1Map, 3, _T("After start enrichment strokes vs coolant temperature (gas)"));
- else
-  ms.WriteFlt(m_optPtMovStepAftstrStrk1Map, 3, _T("Число тактов обогащения после пуска от температуры двигателя (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepGrValDelMap, 2, _T("Gas valve opening delay vs gas reducer's temperature map"));
- else
-  ms.WriteFlt(m_optPtMovStepGrValDelMap, 2, _T("Задержка включения газового клапана от температуры газового редуктора"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepFtlsCurveMap, 2, _T("Fuel tank level sensor's table"));
- else
-  ms.WriteFlt(m_optPtMovStepFtlsCurveMap, 2, _T("Кривая датчика уровня топлива (ДУТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepEgtsCurveMap, 1, _T("Exhaust gas temperature sensor's table"));
- else
-  ms.WriteFlt(m_optPtMovStepEgtsCurveMap, 1, _T("Кривая датчика температуры выхлопных газов (ДТВГ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepOpsCurveMap, 2, _T("Oil pressure sensor's table"));
- else
-  ms.WriteFlt(m_optPtMovStepOpsCurveMap, 2, _T("Кривая датчика давления масла (ДДМ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepManInjPwcMap, 3, _T("Map for manual correction of injection PW"));
- else
-  ms.WriteFlt(m_optPtMovStepManInjPwcMap, 3, _T("Таблица для ручной коррекции длительности впрыска"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepMAFCurveMap, 3, _T("MAF flow curve"));
- else
-  ms.WriteFlt(m_optPtMovStepMAFCurveMap, 3, _T("Кривая расхода ДМРВ"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepFtlsCorMap, 2, _T("Fuel tank level sensor's correction vs board voltge table"));
- else
-  ms.WriteFlt(m_optPtMovStepFtlsCorMap, 2, _T("Таблица коррекции датчика уровня топлива (ДУТ) от напряжения бортовой сети"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepLambdaZoneMap, 3, _T("EGO correction zones vs RPM,load map"));
- else
-  ms.WriteFlt(m_optPtMovStepLambdaZoneMap, 3, _T("Зоны лямбда-коррекции в зависимости от оборотов и нагрузки"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepFtsCurveMap, 1, _T("Fuel temperature sensor's table"));
- else
-  ms.WriteFlt(m_optPtMovStepFtsCurveMap, 1, _T("Кривая датчика температуры топлива (ДТТ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepFuelDensCorrMap, 1, _T("Fuel density correction map"));
- else
-  ms.WriteFlt(m_optPtMovStepFuelDensCorrMap, 1, _T("Таблица коррекции плотности топлива"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepXtauXfAccMap, 1, _T("Coefficient of injected fuel which goes into port wall's film (acceleration)"));
- else
-  ms.WriteFlt(m_optPtMovStepXtauXfAccMap, 1, _T("Коэффициент топлива выпадающего в пленку для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepXtauXfDecMap, 1, _T("Coefficient of injected fuel which goes into port wall's film (deceleration)"));
- else
-  ms.WriteFlt(m_optPtMovStepXtauXfDecMap, 1, _T("Коэффициент топлива выпадающего в пленку для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepXtauTfAccMap, 1, _T("Constant of fuel's film dissipation time (accelaration)"));
- else
-  ms.WriteFlt(m_optPtMovStepXtauTfAccMap, 1, _T("Постоянная времени испарения плeнки для режима ускорения"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepXtauTfDecMap, 1, _T("Constant of fuel's film dissipation time (decelaration)"));
- else
-  ms.WriteFlt(m_optPtMovStepXtauTfDecMap, 1, _T("Постоянная времени испарения плeнки для режима замедления"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepInjNonLinPMap, 1, _T("Injector's non-linearity correction map used on small inj. PWs (petrol)"));
- else
-  ms.WriteFlt(m_optPtMovStepInjNonLinPMap, 1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepInjNonLinGMap, 1, _T("Injector's non-linearity correction map used on small inj. PWs (gas)"));
- else
-  ms.WriteFlt(m_optPtMovStepInjNonLinGMap, 1, _T("Таблица коррекции нелинейности форсунки при малых длительностях впрыска (газ)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepEGODelayMap, 3, _T("Number of strokes of EGO delay vs engine load"));
- else
-  ms.WriteFlt(m_optPtMovStepEGODelayMap, 3, _T("Число тактов задержки ДК в зависимости от нагрузки на двигатель"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepWUAFR0Map, 3, _T("AFR vs coolant temperature (petrol)"));
- else
-  ms.WriteFlt(m_optPtMovStepWUAFR0Map, 3, _T("Соотношение Воздух/топливо от температуры двигателя (бензин)"));
-
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  ms.WriteFlt(m_optPtMovStepWUAFR1Map, 3, _T("AFR vs coolant temperature (gas)"));
- else
-  ms.WriteFlt(m_optPtMovStepWUAFR1Map, 3, _T("Соотношение Воздух/топливо от температуры двигателя (газ)"));
+ ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, strCrkTempMapWnd);
+ ms.WriteFlt(m_optPtMovStepEHPauseMap, 3, strEHPauseMapWnd);
+ ms.WriteFlt(m_optPtMovStepAttenuatorMap, 3, strAttenuatorMapWnd);
+ ms.WriteFlt(m_optPtMovStepDwellCntrlMap, 3, strDwellCntrlMapWnd);
+ ms.WriteFlt(m_optPtMovStepCTSCurveMap, 3, strCTSCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepBarocorrMap, 3, strBarocorrMapWnd);
+ ms.WriteFlt(m_optPtMovStepManIgntimMap, 3, strManIgntimMapWnd);
+ ms.WriteFlt(m_optPtMovStepATSCurvMap, 3, strATSCurvMapWnd);
+ ms.WriteFlt(m_optPtMovStepATSCorrMap, 3, strATSCorrMapWnd);
+ ms.WriteFlt(m_optPtMovStepGasdoseMap, 3, strGasdoseMapWnd);
+ ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, strTmp2CurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepCrankingThrdMap, 3, strCrankingThrdMapWnd);
+ ms.WriteFlt(m_optPtMovStepCrankingTimeMap, 3, strCrankingTimeMapWnd);
+ ms.WriteFlt(m_optPtMovStepSmapabanThrdMap, 3, strSmapabanThrdMapWnd);
+ ms.WriteFlt(m_optPtMovStepKnockZoneMap, 3, strKnockZoneMapWnd);
+ ms.WriteFlt(m_optPtMovStepGrtsCurveMap, 3, strGrtsCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepGrHeatDutyMap, 3, strGrHeatDutyMapWnd);
+ ms.WriteFlt(m_optPtMovStepPwmIacUCoefMap, 3, strPwmIacUCoefMapWnd);
+ ms.WriteFlt(m_optPtMovStepAftstrStrk0Map, 3, strAftstrStrk0MapWnd);
+ ms.WriteFlt(m_optPtMovStepAftstrStrk1Map, 3, strAftstrStrk1MapWnd);
+ ms.WriteFlt(m_optPtMovStepGrValDelMap, 2, strGrValDelMapWnd);
+ ms.WriteFlt(m_optPtMovStepFtlsCurveMap, 2, strFtlsCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepEgtsCurveMap, 1, strEgtsCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepOpsCurveMap, 2, strOpsCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepManInjPwcMap, 3, strManInjPwcMapWnd);
+ ms.WriteFlt(m_optPtMovStepMAFCurveMap, 3, strMAFCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepFtlsCorMap, 2, strFtlsCorMapWnd);
+ ms.WriteFlt(m_optPtMovStepLambdaZoneMap, 3, strLambdaZoneMapWnd);
+ ms.WriteFlt(m_optPtMovStepFtsCurveMap, 1, strFtsCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepFuelDensCorrMap, 1, strFuelDensCorrMapWnd);
+ ms.WriteFlt(m_optPtMovStepXtauXfAccMap, 1, strXtauXfAccMapWnd);
+ ms.WriteFlt(m_optPtMovStepXtauXfDecMap, 1, strXtauXfDecMapWnd);
+ ms.WriteFlt(m_optPtMovStepXtauTfAccMap, 1, strXtauTfAccMapWnd);
+ ms.WriteFlt(m_optPtMovStepXtauTfDecMap, 1, strXtauTfDecMapWnd);
+ ms.WriteFlt(m_optPtMovStepInjNonLinPMap, 1, strInjNonLinPMapWnd);
+ ms.WriteFlt(m_optPtMovStepInjNonLinGMap, 1, strInjNonLinGMapWnd);
+ ms.WriteFlt(m_optPtMovStepEGODelayMap, 3, strEGODelayMapWnd);
+ ms.WriteFlt(m_optPtMovStepWUAFR0Map, 3, strWUAFR0MapWnd);
+ ms.WriteFlt(m_optPtMovStepWUAFR1Map, 3, strWUAFR1MapWnd);
+ ms.WriteFlt(m_optPtMovStepETCSprPrelMap, 2, strETCSprPrelMapWnd);
+ ms.WriteFlt(m_optPtMovStepETCAcceptErrMap, 2, strETCAcceptErrMapWnd);
+ ms.WriteFlt(m_optPtMovStepETCThrottlePosMap, 1, strETCThrottlePosMapWnd);
 
  //Log file's fileds
  IniIO &lf = writer;
@@ -5499,6 +4795,12 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optWUAFR0MapWnd.value.y = i_wndSettings.m_WUAFR0MapWnd_Y;
  m_optWUAFR1MapWnd.value.x = i_wndSettings.m_WUAFR1MapWnd_X;
  m_optWUAFR1MapWnd.value.y = i_wndSettings.m_WUAFR1MapWnd_Y;
+ m_optETCSprPrelMapWnd.value.x = i_wndSettings.m_ETCSprPrelMapWnd_X;
+ m_optETCSprPrelMapWnd.value.y = i_wndSettings.m_ETCSprPrelMapWnd_Y;
+ m_optETCAcceptErrMapWnd.value.x = i_wndSettings.m_ETCAcceptErrMapWnd_X;
+ m_optETCAcceptErrMapWnd.value.y = i_wndSettings.m_ETCAcceptErrMapWnd_Y;
+ m_optETCThrottlePosMapWnd.value.x = i_wndSettings.m_ETCThrottlePosMapWnd_X;
+ m_optETCThrottlePosMapWnd.value.y = i_wndSettings.m_ETCThrottlePosMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -5662,6 +4964,12 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_WUAFR0MapWnd_Y = m_optWUAFR0MapWnd.value.y;
  o_wndSettings.m_WUAFR1MapWnd_X = m_optWUAFR1MapWnd.value.x;
  o_wndSettings.m_WUAFR1MapWnd_Y = m_optWUAFR1MapWnd.value.y;
+ o_wndSettings.m_ETCSprPrelMapWnd_X = m_optETCSprPrelMapWnd.value.x;
+ o_wndSettings.m_ETCSprPrelMapWnd_Y = m_optETCSprPrelMapWnd.value.y;
+ o_wndSettings.m_ETCAcceptErrMapWnd_X = m_optETCAcceptErrMapWnd.value.x;
+ o_wndSettings.m_ETCAcceptErrMapWnd_Y = m_optETCAcceptErrMapWnd.value.y;
+ o_wndSettings.m_ETCThrottlePosMapWnd_X = m_optETCThrottlePosMapWnd.value.x;
+ o_wndSettings.m_ETCThrottlePosMapWnd_Y = m_optETCThrottlePosMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -5823,6 +5131,12 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optWUAFR0MapWnd1.value.y = i_wndSettings.m_WUAFR0MapWnd_Y;
  m_optWUAFR1MapWnd1.value.x = i_wndSettings.m_WUAFR1MapWnd_X;
  m_optWUAFR1MapWnd1.value.y = i_wndSettings.m_WUAFR1MapWnd_Y;
+ m_optETCSprPrelMapWnd1.value.x = i_wndSettings.m_ETCSprPrelMapWnd_X;
+ m_optETCSprPrelMapWnd1.value.y = i_wndSettings.m_ETCSprPrelMapWnd_Y;
+ m_optETCAcceptErrMapWnd1.value.x = i_wndSettings.m_ETCAcceptErrMapWnd_X;
+ m_optETCAcceptErrMapWnd1.value.y = i_wndSettings.m_ETCAcceptErrMapWnd_Y;
+ m_optETCThrottlePosMapWnd1.value.x = i_wndSettings.m_ETCThrottlePosMapWnd_X;
+ m_optETCThrottlePosMapWnd1.value.y = i_wndSettings.m_ETCThrottlePosMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
@@ -5984,6 +5298,12 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_WUAFR0MapWnd_Y = m_optWUAFR0MapWnd1.value.y;
  o_wndSettings.m_WUAFR1MapWnd_X = m_optWUAFR1MapWnd1.value.x;
  o_wndSettings.m_WUAFR1MapWnd_Y = m_optWUAFR1MapWnd1.value.y;
+ o_wndSettings.m_ETCSprPrelMapWnd_X = m_optETCSprPrelMapWnd1.value.x;
+ o_wndSettings.m_ETCSprPrelMapWnd_Y = m_optETCSprPrelMapWnd1.value.y;
+ o_wndSettings.m_ETCAcceptErrMapWnd_X = m_optETCAcceptErrMapWnd1.value.x;
+ o_wndSettings.m_ETCAcceptErrMapWnd_Y = m_optETCAcceptErrMapWnd1.value.y;
+ o_wndSettings.m_ETCThrottlePosMapWnd_X = m_optETCThrottlePosMapWnd1.value.x;
+ o_wndSettings.m_ETCThrottlePosMapWnd_Y = m_optETCThrottlePosMapWnd1.value.y;
 }
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
@@ -6147,6 +5467,12 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optWUAFR0MapWndSize.value.y = i_wndSize.m_WUAFR0MapWnd_H;
  m_optWUAFR1MapWndSize.value.x = i_wndSize.m_WUAFR1MapWnd_W;
  m_optWUAFR1MapWndSize.value.y = i_wndSize.m_WUAFR1MapWnd_H;
+ m_optETCSprPrelMapWndSize.value.x = i_wndSize.m_ETCSprPrelMapWnd_W;
+ m_optETCSprPrelMapWndSize.value.y = i_wndSize.m_ETCSprPrelMapWnd_H;
+ m_optETCAcceptErrMapWndSize.value.x = i_wndSize.m_ETCAcceptErrMapWnd_W;
+ m_optETCAcceptErrMapWndSize.value.y = i_wndSize.m_ETCAcceptErrMapWnd_H;
+ m_optETCThrottlePosMapWndSize.value.x = i_wndSize.m_ETCThrottlePosMapWnd_W;
+ m_optETCThrottlePosMapWndSize.value.y = i_wndSize.m_ETCThrottlePosMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -6310,6 +5636,12 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_WUAFR0MapWnd_H = m_optWUAFR0MapWndSize.value.y;
  o_wndSize.m_WUAFR1MapWnd_W = m_optWUAFR1MapWndSize.value.x;
  o_wndSize.m_WUAFR1MapWnd_H = m_optWUAFR1MapWndSize.value.y;
+ o_wndSize.m_ETCSprPrelMapWnd_W = m_optETCSprPrelMapWndSize.value.x;
+ o_wndSize.m_ETCSprPrelMapWnd_H = m_optETCSprPrelMapWndSize.value.y;
+ o_wndSize.m_ETCAcceptErrMapWnd_W = m_optETCAcceptErrMapWndSize.value.x;
+ o_wndSize.m_ETCAcceptErrMapWnd_H = m_optETCAcceptErrMapWndSize.value.y;
+ o_wndSize.m_ETCThrottlePosMapWnd_W = m_optETCThrottlePosMapWndSize.value.x;
+ o_wndSize.m_ETCThrottlePosMapWnd_H = m_optETCThrottlePosMapWndSize.value.y;
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -6471,6 +5803,12 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optWUAFR0MapWndSize1.value.y = i_wndSize.m_WUAFR0MapWnd_H;
  m_optWUAFR1MapWndSize1.value.x = i_wndSize.m_WUAFR1MapWnd_W;
  m_optWUAFR1MapWndSize1.value.y = i_wndSize.m_WUAFR1MapWnd_H;
+ m_optETCSprPrelMapWndSize1.value.x = i_wndSize.m_ETCSprPrelMapWnd_W;
+ m_optETCSprPrelMapWndSize1.value.y = i_wndSize.m_ETCSprPrelMapWnd_H;
+ m_optETCAcceptErrMapWndSize1.value.x = i_wndSize.m_ETCAcceptErrMapWnd_W;
+ m_optETCAcceptErrMapWndSize1.value.y = i_wndSize.m_ETCAcceptErrMapWnd_H;
+ m_optETCThrottlePosMapWndSize1.value.x = i_wndSize.m_ETCThrottlePosMapWnd_W;
+ m_optETCThrottlePosMapWndSize1.value.y = i_wndSize.m_ETCThrottlePosMapWnd_H;
 }
 
 void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
@@ -6632,6 +5970,12 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_WUAFR0MapWnd_H = m_optWUAFR0MapWndSize1.value.y;
  o_wndSize.m_WUAFR1MapWnd_W = m_optWUAFR1MapWndSize1.value.x;
  o_wndSize.m_WUAFR1MapWnd_H = m_optWUAFR1MapWndSize1.value.y;
+ o_wndSize.m_ETCSprPrelMapWnd_W = m_optETCSprPrelMapWndSize1.value.x;
+ o_wndSize.m_ETCSprPrelMapWnd_H = m_optETCSprPrelMapWndSize1.value.y;
+ o_wndSize.m_ETCAcceptErrMapWnd_W = m_optETCAcceptErrMapWndSize1.value.x;
+ o_wndSize.m_ETCAcceptErrMapWnd_H = m_optETCAcceptErrMapWndSize1.value.y;
+ o_wndSize.m_ETCThrottlePosMapWnd_W = m_optETCThrottlePosMapWndSize1.value.x;
+ o_wndSize.m_ETCThrottlePosMapWnd_H = m_optETCThrottlePosMapWndSize1.value.y;
 }
 
 void CAppSettingsModel::SetWndState(const WndState& i_wndState)
@@ -7313,6 +6657,12 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepEGODelayMap.value = i_ptMovStep.m_value[ETMT_EGO_DELAY];
  m_optPtMovStepWUAFR0Map.value = i_ptMovStep.m_value[ETMT_WU_AFR0];
  m_optPtMovStepWUAFR1Map.value = i_ptMovStep.m_value[ETMT_WU_AFR1];
+ m_optPtMovStepETCSprPrelMap.value = i_ptMovStep.m_value[ETMT_ETC_SPRPREL];
+ m_optPtMovStepETCSprPrelMap.value = i_ptMovStep.m_value[ETMT_ETC_SPRPREL];
+ m_optPtMovStepETCAcceptErrMap.value = i_ptMovStep.m_value[ETMT_ETC_ACCEERR];
+ m_optPtMovStepETCAcceptErrMap.value = i_ptMovStep.m_value[ETMT_ETC_ACCEERR];
+ m_optPtMovStepETCThrottlePosMap.value = i_ptMovStep.m_value[ETMT_ETC_THROPOS];
+ m_optPtMovStepETCThrottlePosMap.value = i_ptMovStep.m_value[ETMT_ETC_THROPOS];
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -7394,6 +6744,12 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_value[ETMT_EGO_DELAY] = m_optPtMovStepEGODelayMap.value;
  o_ptMovStep.m_value[ETMT_WU_AFR0] = m_optPtMovStepWUAFR0Map.value;
  o_ptMovStep.m_value[ETMT_WU_AFR1] = m_optPtMovStepWUAFR1Map.value;
+ o_ptMovStep.m_value[ETMT_ETC_SPRPREL] = m_optPtMovStepETCSprPrelMap.value;
+ o_ptMovStep.m_value[ETMT_ETC_SPRPREL] = m_optPtMovStepETCSprPrelMap.value;
+ o_ptMovStep.m_value[ETMT_ETC_ACCEERR] = m_optPtMovStepETCAcceptErrMap.value;
+ o_ptMovStep.m_value[ETMT_ETC_ACCEERR] = m_optPtMovStepETCAcceptErrMap.value;
+ o_ptMovStep.m_value[ETMT_ETC_THROPOS] = m_optPtMovStepETCThrottlePosMap.value;
+ o_ptMovStep.m_value[ETMT_ETC_THROPOS] = m_optPtMovStepETCThrottlePosMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

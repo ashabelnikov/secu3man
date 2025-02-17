@@ -43,6 +43,7 @@ static const float INJPWCOEF_MULT = 4096.0f;
 static const float MAFS_MULT = 64.0f;
 static const float FTS_MULT = 4.0f;
 static const float APPS_MULT = 64.0f;
+static const float ETCPID_MULT = 4096.0f;
 
 static const float AA_MAPS_M_FACTOR = 2.0f; //scale factor for adv. angle maps (they are stored in integer format)
 static const float VE_MAPS_M_FACTOR = 2048.0f;

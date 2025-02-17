@@ -110,6 +110,9 @@ BEGIN
     CONTROL         "Задержка ДК",IDC_TD_EGO_DELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,686,96,18
     CONTROL         "Смесь прогрев.(бенз.)",IDC_TD_WUAFR0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,705,96,18
     CONTROL         "Смесь прогрев.(газ)",IDC_TD_WUAFR1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,724,96,18
+    CONTROL         "ETC Преднатяг пружин",IDC_TD_ETC_SPRPREL_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,743,96,18
+    CONTROL         "ETC Зона нечувствит.",IDC_TD_ETC_ACCEERR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,762,96,18
+    CONTROL         "ETC Положение ДЗ",IDC_TD_ETC_THROPOS_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,781,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -955,6 +958,22 @@ BEGIN
     IDS_CESETT_STEPPERIC_FLG_CHECK_TT "Установите галочку чтобы ошибка шагового двигателя учитывалась или уберите ее чтобы ошибка игнорировалась."
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TD_ETC_SPRPREL_MAP_TT  "Электронный дроссель. Таблица компенсации преднатяга пружин заслонки для минимизации нелинейности. Значение ДПДЗ по горизонтальной оси относительно 'домашнего' положения."
+    IDS_TD_ETC_ACCEERR_MAP_TT  "Электронный дроссель. Зона нечувствительности ПИД-регулятора, управляющего положением заслонки."
+    IDS_TD_ETC_THROPOS_MAP_TT  "Электронный дроссель. Положение дроссельной заслонки в зависимости от положения педали газа и оборотов."
+    IDS_MAPS_ETC_SPRPRELX_UNIT "Относительный ДПДЗ (%)"
+    IDS_MAPS_ETC_SPRPRELY_UNIT "Скважность ШИМ (%)"
+    IDS_ETC_ETC_SPRPREL_MAP    "Скважность ШИМ для компенсации преднатяга пружин"
+    IDS_MAPS_ETC_ACCEERRX_UNIT "Целевое положение заслонки (%)"
+    IDS_MAPS_ETC_ACCEERRY_UNIT "Зона нечувствительности (%)"
+    IDS_ETC_ETC_ACCEERR_MAP    "Допустимая ошибка позиционирования заслонки"
+    IDS_MAPS_ETC_THROPOSX_UNIT "Обороты (мин-1)"
+    IDS_MAPS_ETC_THROPOSY_UNIT "Положение дросселя (%)"
+    IDS_ETC_THROPOS_MAP        "Положение дросселя в зависимости от ДППА и оборотов"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -1060,6 +1079,9 @@ BEGIN
     CONTROL         "EGO delay",IDC_TD_EGO_DELAY_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,686,96,18
     CONTROL         "Warm up AFR (petrol)",IDC_TD_WUAFR0_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,705,96,18
     CONTROL         "Warm up AFR (gas)",IDC_TD_WUAFR1_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,724,96,18
+    CONTROL         "ETC spring preload",IDC_TD_ETC_SPRPREL_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,743,96,18
+    CONTROL         "ETC dead band",IDC_TD_ETC_ACCEERR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,762,96,18
+    CONTROL         "ETC Throttle position",IDC_TD_ETC_THROPOS_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,781,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -1905,6 +1927,22 @@ BEGIN
     IDS_WUAFR0_MAP             "AFR vs coolant temperature (petrol)"
     IDS_WUAFR1_MAP             "AFR vs coolant temperature (gas)"
     IDS_CESETT_STEPPERIC_FLG_CHECK_TT "Check the box for the stepper motor's error to be taken into account or uncheck it for the error to be ignored."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TD_ETC_SPRPREL_MAP_TT  "ETC. Table for compensation of spring preload to minimize non-linearity. TPS is relative to home position."
+    IDS_TD_ETC_ACCEERR_MAP_TT  "ETC. Dead zone of the PID controller that controls the position of throttle."
+    IDS_TD_ETC_THROPOS_MAP_TT  "ETC. Throttle position vs gas pedal position and RPM."
+    IDS_MAPS_ETC_SPRPRELX_UNIT "Relative TPS (%)"
+    IDS_MAPS_ETC_SPRPRELY_UNIT "PWM duty (%)"
+    IDS_ETC_ETC_SPRPREL_MAP    "ETC Spring preload duty"
+    IDS_MAPS_ETC_ACCEERRX_UNIT "Target TPS (%)"
+    IDS_MAPS_ETC_ACCEERRY_UNIT "Dead band (%)"
+    IDS_ETC_ETC_ACCEERR_MAP    "Acceptable error of throttle positioning"
+    IDS_MAPS_ETC_THROPOSX_UNIT "RPM (min-1)"
+    IDS_MAPS_ETC_THROPOSY_UNIT "Throttle position (%)"
+    IDS_ETC_THROPOS_MAP        "Throttle position vs APPS and RPM"
 END
 
 /////////////////////////////////////////////////////////////////////////////

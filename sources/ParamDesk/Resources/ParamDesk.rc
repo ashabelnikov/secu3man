@@ -432,7 +432,7 @@ BEGIN
 
     EDITTEXT        IDC_PD_CARBUR_TPS_THRESHOLD_EDIT,95,130,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_CARBUR_TPS_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,130,13,17
-    LTEXT           "Порог ДПДЗ",IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,0,131,94,10
+    LTEXT           "Порог ДПДЗ/ДППА",IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,0,131,94,10
     LTEXT           "%",IDC_PD_CARBUR_TPS_THRESHOLD_UNIT,143,131,30,10
 
     CONTROL         "Инверсия концевика карбюратора",IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,150,115,15
@@ -1359,6 +1359,67 @@ BEGIN
     LTEXT           "%",IDC_PD_LTFT_DEAD_BAND1_UNIT,141,291,20,10
 END
 
+IDD_PD_DBW_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_DBW_ETCPIDP_EDIT,98,10,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_ETCPIDP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,10,13,17
+    LTEXT           "П-коэфф. ПИД заслонки",IDC_PD_DBW_ETCPIDP_CAPTION,3,11,94,10
+    LTEXT           "",IDC_PD_DBW_ETCPIDP_UNIT,146,11,30,10
+
+    EDITTEXT        IDC_PD_DBW_ETCPIDI_EDIT,98,30,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_ETCPIDI_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,30,13,17
+    LTEXT           "И-коэфф. ПИД заслонки",IDC_PD_DBW_ETCPIDI_CAPTION,3,31,94,10
+    LTEXT           "",IDC_PD_DBW_ETCPIDI_UNIT,146,31,30,10
+
+    EDITTEXT        IDC_PD_DBW_ETCPIDD_EDIT,98,50,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_ETCPIDD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,50,13,17
+    LTEXT           "Д-коэфф. ПИД заслонки",IDC_PD_DBW_ETCPIDD_CAPTION,3,51,94,10
+    LTEXT           "",IDC_PD_DBW_ETCPIDD_UNIT,146,51,30,10
+
+    EDITTEXT        IDC_PD_DBW_NMAXDUTY_EDIT,98,70,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_NMAXDUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,70,13,17
+    LTEXT           "Макс. скважность на закрытие заслонки",IDC_PD_DBW_NMAXDUTY_CAPTION,3,69,94,18
+    LTEXT           "%",IDC_PD_DBW_NMAXDUTY_UNIT,146,71,30,10
+
+    EDITTEXT        IDC_PD_DBW_PMAXDUTY_EDIT,98,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_PMAXDUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,90,13,17
+    LTEXT           "Макс. скважность на открытие заслонки",IDC_PD_DBW_PMAXDUTY_CAPTION,3,89,94,18
+    LTEXT           "%",IDC_PD_DBW_PMAXDUTY_UNIT,146,91,30,10
+
+    EDITTEXT        IDC_PD_DBW_PIDPERIOD_EDIT,98,110,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_PIDPERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,110,13,17
+    LTEXT           "Период вызова кода ПИД-регулятора",IDC_PD_DBW_PIDPERIOD_CAPTION,3,111,94,18
+    LTEXT           "сек",IDC_PD_DBW_PIDPERIOD_UNIT,146,111,30,10
+
+    EDITTEXT        IDC_PD_DBW_FRICTORQOP_EDIT,98,130,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_FRICTORQOP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,130,13,17
+    LTEXT           "Скважн. компен. момента трения покоя (откр.)",IDC_PD_DBW_FRICTORQOP_CAPTION,3,129,94,18
+    LTEXT           "%",IDC_PD_DBW_FRICTORQOP_UNIT,146,131,30,10
+
+    EDITTEXT        IDC_PD_DBW_FRICTORQCL_EDIT,98,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_FRICTORQCL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,150,13,17
+    LTEXT           "Скважн. компен. момента трения покоя (закр.)",IDC_PD_DBW_FRICTORQCL_CAPTION,3,149,94,18
+    LTEXT           "%",IDC_PD_DBW_FRICTORQCL_UNIT,146,151,30,10
+
+    EDITTEXT        IDC_PD_DBW_FRICTORQTH_EDIT,98,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_FRICTORQTH_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,170,13,17
+    LTEXT           "Порог учета момента трения покоя",IDC_PD_DBW_FRICTORQTH_CAPTION,3,169,94,18
+    LTEXT           "%/c",IDC_PD_DBW_FRICTORQTH_UNIT,146,171,30,10
+
+    EDITTEXT        IDC_PD_DBW_MAXIACADD_EDIT,98,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_MAXIACADD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,190,13,17
+    LTEXT           "Максимальная добавка от РХХ",IDC_PD_DBW_MAXIACADD_CAPTION,3,189,94,18
+    LTEXT           "%",IDC_PD_DBW_MAXIACADD_UNIT,146,191,30,10
+
+    EDITTEXT        IDC_PD_DBW_HOMEPOS_EDIT,98,210,30,16,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Домашнее положение",IDC_PD_DBW_HOMEPOS_CAPTION,3,209,50,18
+    LTEXT           "%",IDC_PD_DBW_HOMEPOS_UNIT,146,211,30,10
+    PUSHBUTTON      "Обновить",IDC_PD_DBW_UPDHOMEPOS_BUTTON,55,210,40,16
+END
+
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_VSCROLL | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
@@ -1685,7 +1746,7 @@ BEGIN
     IDS_TD_IMPORT_FROM_S3F "Импорт из S3F"
     IDS_TD_EXPORT_TO_S3F "Экспорт в S3F"
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Порог включения клапана ЭМР (разряжение относительно т.н. верхнего давления). Клапан включается если давление превышает 'Верхн.знач.давл.' минус этот порог. В прошивке с впрыском этот параметр задает давление отсечки зажигания (если разрешена отсечка зажигания на вкладке 'Прочее')"
-    IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Порог переключения на режим ХХ по ДПДЗ. Положение дроссельной заслонки задается %. Поставьте 0, если используется концевик."
+    IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Порог переключения на режим ХХ по ДПДЗ. Положение дроссельной заслонки задается %. Поставьте 0, если используется концевик. Если задействовано электронное управление заслонкой, тогда вместо ДПДЗ используется педаль газа."
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Задержка выключения клапана ЭПХХ (карб.) или задержка отсечки топлива при ПХХ (впрыск)"
     IDS_PD_CARBUR_FC_MAP_THRD_EDIT_TT "Отсечка топлива при ПХХ включится только если давление опустится ниже этого значения."
     IDS_PD_CARBUR_FC_CTS_THRD_EDIT_TT "Отсечка топлива при ПХХ включится только если температура двигателя превысит это значение."
@@ -2140,78 +2201,7 @@ BEGIN
     IDS_PD_ACCELENR_XTAUSTHRD_EDIT_TT "Порог начала перехода. Таблицы для ускорения используются когда MAPdot больше этого значения (менее отрицателен или положителен). Если значение попадает по середине, тогда используется интерполяция между таблицами ускорения и замедления."
     IDS_PD_ACCELENR_XTAUFTHRD_EDIT_TT "Порог завершения перехода. Таблицы для замедления используются когда MAPdot меньше этого значения (более отрицателен). Если значение попадает по середине, тогда используется интерполяция между таблицами ускорения и замедления."
     IDS_PD_LAMBDA_MIXSEN_CHECK_TT "Выход с 1 датчика будет посчитан как среднее арифметическое датчиков кислорода 1 и 2."
-
-    IDS_IOREMAPPING_DESC   "ВЫХОДЫ:
-IGN_Ox/IGN_OUTx - Выходы зажигания сильноточные и слаботочные (в зависимости от конструкции конкретного блока).\r\n
-INJ_Ox/INJ_OUTx - Выходы впрыска сильноточные и слаботочные (в зависимости от конструкции конкретного блока).\r\n
-ADD_Ox - Выходы дополнительные для разных целей.\r\n
-ECF - Выход управления оборотами вентилятора.\r\n
-IE - Выход управления клапаном ЭПХХ.\r\n
-FE - Выход управления клапаном ЭМР.\r\n
-STBL_O/ST_BLOCK - Выход управления реле стартера (блокировка стартера).\r\n
-FPMP_O/FL_PUMP - Выход управления.\r\n
-PWRR_O/PWRRELAY - Выход управления питанием блока МПСЗ/ЭСУД.\r\n
-CEL_O - Выход для лампы 'Check Engine'.\r\n
-EVAP_O - Выход управления клапаном продувки адсорбера.\r\n
-O2SH_O - Выход управления подогревом ДК.\r\n
-COND_O - Выход Управления муфтой кондиционера.\r\n
-TACH_O - Выход сигнала для тахометра.\r\n
-UNI_OUTx - Выходы универсальные программируемые.\r\n
-SM_DIR - Выход импульсов шага для ШД РДВ ХХ/ВЗ.\r\n
-SM_STP - Выход сигнала направления ШД РДВ ХХ/ВЗ.\r\n
-GD_DIR - Выход импульсов шага для ШД дозатора газа.\r\n
-GD_STP - Выход сигнала направления для ШД дозатора газа.\r\n
-IAC_PWM - Выход ШИМ для РДВ ХХ (клапан моментного типа).\r\n
-GD_PWM - Выход ШИМ для дозатора газа (дозатор управляемый ШИМ).\r\n
-GASVAL_O - Выход управления газовым клапаном.\r\n
-GRHEAT - Выход управления подогревом газового редуктора.\r\n
-VTACHOM - Выход универсальный настраиваемый для тахометра.\r\n
-HALL_OUT - Выход эмуляции сигнала с ДХ трамблера.\r\n
-INTK_HEAT - Выход управления подогревом впускного коллектора.\r\n
-STROBE - Выход для лампы стробоскопа (светодиод).\r\n
-PWM1/PWM2 - Выходы универсальные ШИМ с управлением по таблицам от (нагрузка, обороты).\r\n
-FL_CONS - Выход частоты сигнала мгновенного расхода топлива.\r\n
-KSP_CS - Выход управления микросхемой TPIC8101/HIP9011.\r\n
-CAN_CS - Выход управления микросхемой CAN-шины MCP2515.\r\n\r\n
-ВХОДЫ:
-BL - Вход/Выход для различных целей. Вход запуска загрузчика. Слабо защищенный, низкоточный.\r\n
-DE - Вход/Выход для различных целей. Вход сброса EEPROM. Слабозащищенный, низкоточный.\r\n
-CKPS - Вход дифференциального типа для подключения ДПКВ/ДУИ.\r\n
-PS - Вход для датчика фаз на эффекте Холла и других целей.\r\n
-REF_S - Вход для датчика фаз индукционного (VR) типа и других целей.\r\n
-GAS_V - Вход состояния газового клапана.\r\n
-IGN/IGN_I - Вход состояния замка зажигания.\r\n
-EPAS_I - Вход запроса на включение ЭУР.\r\n
-COND_I - Вход запроса на включение муфты кондиционера.\r\n
-MAP_S/MAP_I - Вход ДАД.\r\n
-ADD_Ix - Входы дополнительные для разных целей.\r\n
-LAMBDA - Вход датчика кислорода 1.\r\n
-LAMBDA2 - Вход датчика кислорода 2.\r\n
-AIR_TEMP - Вход датчика температуры воздуха на впуске.\r\n
-SPD_SENS - Вход датчика скорости.\r\n
-MAP2 - Вход ДАД2 (датчик атмосферного давления).\r\n
-GPS - Вход ДДГ (датчик давления газа ГБО).\r\n
-TEMP2 - Вход датчика температуры газа.\r\n
-MAF - Вход ДМРВ.\r\n
-MAPSEL0 - Вход для реализации переключения между 4 наборами таблиц.\r\n
-BC_INPUT - Вход запуска режима блинк кодов (check Engine).\r\n
-IGNTIM - Вход ручной коррекции УОЗ.\r\n
-INJPWC_I - Вход ручной коррекции длительности впрыска.\r\n
-AUTO_I - Вход изменения УОЗ при переключении передач.\r\n
-INPUTx - Вход для использования в универсальных программируемых выходах.\r\n
-FTLS_I - Вход датчика уровня топлива в баке.\r\n
-EGTS_I - Вход датчика температуры выхлопных газов.\r\n
-OPS_I - Вход датчика давления масла.\r\n
-FTS_I - Вход датчика температуры топлива.\r\n
-REFPRS_I - Вход датчика давления хладагента кондиционера.\r\n
-ALTRN_I - Вход состояния возбуждения генератора.\r\n
-FPS - Вход датчика давления топлива.\r\n
-TPS2 - Вход датчика положения дроссельной заслонки 2 (электронный дроссель).\r\n
-APPS1 - Вход датчика положения педали акселератора 1 (электронная педаль газа).\r\n
-APPS2 - Вход датчика положения педали акселератора 2 (электронная педаль газа).\r\n
-"
 END
-
 
 STRINGTABLE
 BEGIN
@@ -2249,6 +2239,25 @@ BEGIN
   IDS_PD_LTFT_DEAD_BAND0_EDIT_TT  "Процесс адаптации не начнется пока лямбда коррекция выше этого порога. Данный параметр используется только алгоритмом 'Kosh'."
   IDS_PD_LTFT_DEAD_BAND1_EDIT_TT  "Процесс адаптации не начнется пока лямбда коррекция ниже этого порога. Данный параметр используется только алгоритмом 'Kosh'"
 END
+
+STRINGTABLE
+BEGIN
+ IDS_PD_TABNAME_DBW_PAR "Эл.дроссель"
+ IDS_PD_DBW_ETCPIDP_EDIT_TT "Пропорциональный коэффициент ПИД-регулятора положения заслонки."
+ IDS_PD_DBW_ETCPIDI_EDIT_TT "Интегральный коэффициент ПИД-регулятора положения заслонки."
+ IDS_PD_DBW_ETCPIDD_EDIT_TT "Дифференциальный коэффициент ПИД-регулятора положения заслонки."
+ IDS_PD_DBW_NMAXDUTY_EDIT_TT "Максимальное значение скважности ШИМ при работе мотора на закрытие заслонки"
+ IDS_PD_DBW_PMAXDUTY_EDIT_TT "Максимальное значение скважности ШИМ при работе мотора на открытие заслонки"
+ IDS_PD_DBW_PIDPERIOD_EDIT_TT "Период вызова кода ПИД-регулятора. Чем меньше значение, тем чаще вызывается код ПИД-регулятора."
+ IDS_PD_DBW_FRICTORQOP_EDIT_TT "Значение скважности ШИМ используемое для компенсации момента трения покоя заслонки когда ее положение больше 'домашнего' положения."
+ IDS_PD_DBW_FRICTORQCL_EDIT_TT "Значение скважности ШИМ используемое для компенсации момента трения покоя заслонки когда ее положение меньше 'домашнего' положения."
+ IDS_PD_DBW_FRICTORQTH_EDIT_TT "Порог прекращения действия компенсации момента трения покоя заслонки. Компенсация производится только если скорость движения заслонки меньше этого порога."
+ IDS_PD_DBW_MAXIACADD_EDIT_TT "Значение максимальной добавки к целевому положению ДЗ от регулятора ХХ."
+ IDS_PD_DBW_HOMEPOS_EDIT_TT "Домашнее положение дроссельной заслонки. Считывается после включения зажигания."
+ IDS_PD_DBW_UPDHOMEPOS_BUTTON_TT "Запросить чтение значения домашнего положения."
+END
+
+IDR_IOREMAPPING_DESC     TEXT    DISCARDABLE     "res\\ioremap-ru.txt"
 
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
@@ -2678,7 +2687,7 @@ BEGIN
 
     EDITTEXT        IDC_PD_CARBUR_TPS_THRESHOLD_EDIT,96,130,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_CARBUR_TPS_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,130,13,17
-    LTEXT           "TPS threshold",IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,1,131,94,10
+    LTEXT           "TPS/APPS threshold",IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,1,131,94,10
     LTEXT           "%",IDC_PD_CARBUR_TPS_THRESHOLD_UNIT,144,131,30,10
 
     CONTROL         "Inversion of throttle position switch",IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,1,150,115,15
@@ -3608,6 +3617,67 @@ BEGIN
     LTEXT           "%",IDC_PD_LTFT_DEAD_BAND1_UNIT,141,291,20,10
 END
 
+IDD_PD_DBW_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_DBW_ETCPIDP_EDIT,98,10,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_ETCPIDP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,10,13,17
+    LTEXT           "Throttle PID P",IDC_PD_DBW_ETCPIDP_CAPTION,3,11,94,10
+    LTEXT           "",IDC_PD_DBW_ETCPIDP_UNIT,146,11,30,10
+
+    EDITTEXT        IDC_PD_DBW_ETCPIDI_EDIT,98,30,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_ETCPIDI_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,30,13,17
+    LTEXT           "Throttle PID I",IDC_PD_DBW_ETCPIDI_CAPTION,3,31,94,10
+    LTEXT           "",IDC_PD_DBW_ETCPIDI_UNIT,146,31,30,10
+
+    EDITTEXT        IDC_PD_DBW_ETCPIDD_EDIT,98,50,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_ETCPIDD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,50,13,17
+    LTEXT           "Throttle PID D",IDC_PD_DBW_ETCPIDD_CAPTION,3,51,94,10
+    LTEXT           "",IDC_PD_DBW_ETCPIDD_UNIT,146,51,30,10
+
+    EDITTEXT        IDC_PD_DBW_NMAXDUTY_EDIT,98,70,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_NMAXDUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,70,13,17
+    LTEXT           "Max. negative output duty",IDC_PD_DBW_NMAXDUTY_CAPTION,3,71,94,18
+    LTEXT           "%",IDC_PD_DBW_NMAXDUTY_UNIT,146,71,30,10
+
+    EDITTEXT        IDC_PD_DBW_PMAXDUTY_EDIT,98,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_PMAXDUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,90,13,17
+    LTEXT           "Max. positive output duty",IDC_PD_DBW_PMAXDUTY_CAPTION,3,91,94,18
+    LTEXT           "%",IDC_PD_DBW_PMAXDUTY_UNIT,146,91,30,10
+
+    EDITTEXT        IDC_PD_DBW_PIDPERIOD_EDIT,98,110,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_PIDPERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,110,13,17
+    LTEXT           "Period of calling of PID code",IDC_PD_DBW_PIDPERIOD_CAPTION,3,111,94,18
+    LTEXT           "sec",IDC_PD_DBW_PIDPERIOD_UNIT,146,111,30,10
+
+    EDITTEXT        IDC_PD_DBW_FRICTORQOP_EDIT,98,130,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_FRICTORQOP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,130,13,17
+    LTEXT           "PWM duty to compensate static friction torque (opening)",IDC_PD_DBW_FRICTORQOP_CAPTION,3,129,94,18
+    LTEXT           "%",IDC_PD_DBW_FRICTORQOP_UNIT,146,131,30,10
+
+    EDITTEXT        IDC_PD_DBW_FRICTORQCL_EDIT,98,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_FRICTORQCL_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,150,13,17
+    LTEXT           "PWM duty to compensate static friction torque (closing)",IDC_PD_DBW_FRICTORQCL_CAPTION,3,149,94,18
+    LTEXT           "%",IDC_PD_DBW_FRICTORQCL_UNIT,146,151,30,10
+
+    EDITTEXT        IDC_PD_DBW_FRICTORQTH_EDIT,98,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_FRICTORQTH_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,170,13,17
+    LTEXT           "Threshold for applying static friction torque compensation",IDC_PD_DBW_FRICTORQTH_CAPTION,3,169,94,18
+    LTEXT           "%/s",IDC_PD_DBW_FRICTORQTH_UNIT,146,171,30,10
+
+    EDITTEXT        IDC_PD_DBW_MAXIACADD_EDIT,98,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_DBW_MAXIACADD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,190,13,17
+    LTEXT           "Max. addition from idling regulator",IDC_PD_DBW_MAXIACADD_CAPTION,3,189,94,18
+    LTEXT           "%",IDC_PD_DBW_MAXIACADD_UNIT,146,191,30,10
+
+    EDITTEXT        IDC_PD_DBW_HOMEPOS_EDIT,98,210,30,16,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Home position",IDC_PD_DBW_HOMEPOS_CAPTION,3,209,50,18
+    LTEXT           "%",IDC_PD_DBW_HOMEPOS_UNIT,146,211,30,10
+    PUSHBUTTON      "Update",IDC_PD_DBW_UPDHOMEPOS_BUTTON,55,210,40,16
+END
+
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_VSCROLL | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
@@ -3960,7 +4030,7 @@ BEGIN
     IDS_TD_IMPORT_FROM_S3F "Import from S3F"
     IDS_TD_EXPORT_TO_S3F "Export to S3F"
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Power Valve Solenoid (Part-load enrichment) turn on threshold (by vacuum). In firmware with fuel injection support this parameter specifies absolute pressure for ignition cut off (if enabled on the '10:Misc.' tab)"
-    IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Threshold for switching between work and idle modes by TPS. Throttle position is defined in %. Set to zero if limit switch is used."
+    IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Threshold for switching between work and idle modes by TPS. Throttle position is defined in %. Set to zero if limit switch is used. If ETC is engaged, then APPS is used instead of TPS."
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Turn off delay of the Idle cut-off valve solenoid (carb.) or over-run fuel cut off delay (injection)"
     IDS_PD_CARBUR_FC_MAP_THRD_EDIT_TT "Forced idle fuel cut off will be activated only if intake manifold pressure go below this threshold."
     IDS_PD_CARBUR_FC_CTS_THRD_EDIT_TT "Forced idle fuel cut off will be activated only if engine temperature exceed this threshold."
@@ -4414,76 +4484,6 @@ BEGIN
     IDS_PD_ACCELENR_XTAUSTHRD_EDIT_TT "Start transition threshold"
     IDS_PD_ACCELENR_XTAUFTHRD_EDIT_TT "Finish transition threshold"
     IDS_PD_LAMBDA_MIXSEN_CHECK_TT "Output from the 1st sensor will be calculated as arithmetic mean of oxygen sensors 1 and 2."
-
-    IDS_IOREMAPPING_DESC   "OUTPUTS:
-IGN_Ox/IGN_OUTx - Ignition outputs.\r\n
-INJ_Ox/INJ_OUTx - Injection outputs.\r\n
-ADD_Ox - Additional outputs for different purposes.\r\n
-ECF - Electric cooling fan speed control output.\r\n
-IE - Idle cut off valve control output (carburetor).\r\n
-FE - Power valve control output (carburetor).\r\n
-STBL_O/ST_BLOCK - Starter relay control output (starter's blocking).\r\n
-FPMP_O/FL_PUMP - Fuel pump control output.\r\n
-PWRR_O/PWRRELAY - Power management output of ECU.\r\n
-CEL_O - Output for 'Check Engine' lamp.\r\n
-EVAP_O - Canister purge valve control output.\r\n
-O2SH_O - EGO heating control output.\r\n
-COND_O - Air conditioner's clutch control output.\r\n
-TACH_O - Signal output for tachometer.\r\n
-UNI_OUTx - Universal programmable outputs.\r\n
-SM_DIR - Step pulse output for SM IAC/automatic choke.\r\n
-SM_STP - Direction signal output SM IAC/automatic choke.\r\n
-GD_DIR - Step pulse output for gas dispenser's stepper motor.\r\n
-GD_STP - Direction signal output for gas dispenser's stepper motor.\r\n
-IAC_PWM - Output for PWM IAC valve (torque type valve).\r\n
-GD_PWM - PWM output for gas dispenser (PWM controlled dispenser).\r\n
-GASVAL_O - Gas valve control output.\r\n
-GRHEAT - Gas reducer heating control output.\r\n
-VTACHOM - Universal configurable output for tachometer.\r\n
-HALL_OUT - Signal emulation output of Hall-type sensor in distributor. Can be used to cheat other ECU or for tachometer.\r\n
-INTK_HEAT - Intake manifold heating control output.\r\n
-STROBE - Strobe lamp output (LED).\r\n
-PWM1/PWM2 - Universal PWM outputs with table control from (load, rpm).\r\n
-FL_CONS - Instantaneous fuel consumption signal frequency output (Hz).\r\n
-KSP_CS - TPIC8101/HIP9011 chip control output.\r\n
-CAN_CS - MCP2515 CAN bus chip control output.\r\n\r\n
-INPUTS:
-BL - Input/Output for various purposes. Bootloader's start input. Weakly protected, low current.\r\n
-DE - Input/Output for various purposes. EEPROM reset input. Weakly protected, low current.\r\n
-CKPS - Differential type input for connecting CKP sensor.\r\n
-PS - Input for phase sensor on the Hall-effect and other purposes.\r\n
-REF_S - Input for phase sensor of induction (VR) type and other purposes.\r\n
-GAS_V - Gas valve's status input.\r\n
-IGN/IGN_I - Ignition switch status input.\r\n
-EPAS_I - Input request to turn on electric power steering.\r\n
-COND_I - Request input to turn on the air conditioner clutch.\r\n
-MAP_S/MAP_I - MAP input.\r\n
-ADD_Ix - Additional inputs for different purposes.\r\n
-LAMBDA - Exhaust Gas Oxygen sensor input 1.\r\n
-LAMBDA2 - Exhaust Gas Oxygen sensor input 2.\r\n
-AIR_TEMP - Intake air temperature sensor input.\r\n
-SPD_SENS - Vehicle Speed sensor input.\r\n
-MAP2 - MAP input 2 (barometer etc).\r\n
-GPS - GPS input (gas pressure sensor for LPG injection).\r\n
-TEMP2 - Gas temperature sensor input (for LPG injection).\r\n
-MAF - Input for MAF.\r\n
-MAPSEL0 - Input to implement switching between 4 sets of tables.\r\n
-BC_INPUT - Blink code start input (Check Engine).\r\n
-IGNTIM - Input for manual correction of ignition timing.\r\n
-INJPWC_I - Injection PW manual correction input.\r\n
-AUTO_I - Input for changing the ignition timing when shifting gears.\r\n
-INPUTx - Input for use in universal programmable outputs. Stub for real input's functions if it is used only as condition for universal outputs.\r\n
-FTLS_I - Fuel level sensor input in the tank.\r\n
-EGTS_I - Exhaust gas temperature sensor input.\r\n
-OPS_I - Oil pressure sensor input.\r\n
-FTS_I - Fuel temperature sensor input.\r\n
-REFPRS_I - A/C refrigerant's pressure sensor input.\r\n
-ALTRN_I - State of the alternator.\r\n
-FPS - Fuel pressure sensor input.\r\n
-TPS2 - Throttle position sensor 2 input (electronic throttle).\r\n
-APPS1 - Accelerator pedal position sensor 1 input (electronic gas pedal).\r\n
-APPS2 - Accelerator pedal position sensor 2 input  (electronic gas pedal).\r\n
-"
 END
 
 STRINGTABLE
@@ -4522,6 +4522,25 @@ BEGIN
   IDS_PD_LTFT_DEAD_BAND0_EDIT_TT  "LTFT learning will not start while EGO correction is above this threshold. This parameter is used by 'Kosh' algorithm only."
   IDS_PD_LTFT_DEAD_BAND1_EDIT_TT  "LTFT learning will not start while EGO correction is below this threshold. This parameter is used by 'Kosh' algorithm only."
 END
+
+STRINGTABLE
+BEGIN
+ IDS_PD_TABNAME_DBW_PAR "El.throttle"
+ IDS_PD_DBW_ETCPIDP_EDIT_TT "Proportional coefficient of the electronic throttle's PID"
+ IDS_PD_DBW_ETCPIDI_EDIT_TT "Integral coefficient of the electronic throttle's PID"
+ IDS_PD_DBW_ETCPIDD_EDIT_TT "Differential coefficient of the electronic throttle's PID"
+ IDS_PD_DBW_NMAXDUTY_EDIT_TT "Maximum value of PWM duty cycle when the motor is operating to close the throttle"
+ IDS_PD_DBW_PMAXDUTY_EDIT_TT "Maximum value of PWM duty cycle when the motor is operating to open the throttle"
+ IDS_PD_DBW_PIDPERIOD_EDIT_TT "Period of calling the PID controller code. The smaller the value, the more often the PID controller code is called."
+ IDS_PD_DBW_FRICTORQOP_EDIT_TT "The PWM duty cycle value used to compensate for the static friction torque of throttle when its position is greater than the 'home' position."
+ IDS_PD_DBW_FRICTORQCL_EDIT_TT "The PWM duty cycle value used to compensate for the static friction torque of throttle when its position is less than the 'home' position."
+ IDS_PD_DBW_FRICTORQTH_EDIT_TT "Threshold for stopping the compensation of the static friction torque of throttle. Compensation is performed only if throttle speed is less than this threshold."
+ IDS_PD_DBW_MAXIACADD_EDIT_TT "Maximum value of addition to the target throttle position from the idling regulator."
+ IDS_PD_DBW_HOMEPOS_EDIT_TT "Home position of the throttle. Read after switching on of ignition."
+ IDS_PD_DBW_UPDHOMEPOS_BUTTON_TT "Request reading of home position"
+END
+
+IDR_IOREMAPPING_DESC     TEXT    DISCARDABLE     "res\\ioremap-en.txt"
 
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources

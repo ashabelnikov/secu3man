@@ -58,6 +58,7 @@ class AFX_EXT_CLASS CCEDeskDlg : public CModelessDialog
  private:
   int  m_enabled;
   CStatic m_ce_text;
+  DWORD m_timers[SECU3_CE_ERRCODES_COUNT];
   CStatic m_CEErrors[SECU3_CE_ERRCODES_COUNT];
   TCHAR m_cashstr[SECU3_CE_ERRCODES_COUNT][10];
   bool m_cashval[SECU3_CE_ERRCODES_COUNT];

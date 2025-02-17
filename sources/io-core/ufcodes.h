@@ -86,5 +86,6 @@
 #define   TLODGRD_PAR  'N'
 
 #define   LTFT_PAR     'O'
+#define   DBW_PAR      'P'
 
 #endif //_UFCODES_H_

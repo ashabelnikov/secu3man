@@ -32,6 +32,7 @@ set(HEADERS
   Params/AccelEnrPageDlg.h
   Params/ADCCompenPageDlg.h
   Params/AnglesPageDlg.h
+  Params/DBWPageDlg.h
   Params/CarburPageDlg.h
   Params/ChokePageDlg.h
   Params/CKPSPageDlg.h
@@ -70,6 +71,7 @@ set(SOURCES
   Params/CarburPageDlg.cpp
   Params/ChokePageDlg.cpp
   Params/CKPSPageDlg.cpp
+  Params/DBWPageDlg.cpp
   Params/FunSetPageDlg.cpp
   Params/GasdosePageDlg.cpp
   Params/IdlRegPageDlg.cpp

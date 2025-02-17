@@ -311,7 +311,18 @@ typedef struct
  _uchar inj_wu_afr0[WU_AFR_SIZE]; //petrol
  _uchar inj_wu_afr1[WU_AFR_SIZE]; //gas
 
- _uchar reserved[817];
+ /**ETC spring preload duty (duty vs throttle position)*/
+ _int etc_sprprel_duty[ETC_SPRPREL_SIZE]; //!< signed value in % * 64
+ _int etc_sprprel_bins[ETC_SPRPREL_SIZE]; //!< signed value in % * 64
+
+ /**ETC acceptable position error (error vs throttle position)*/
+ _int etc_accept_error[ETC_ACCEPTERR_SIZE]; //!< value in % * 64
+ _int etc_accept_bins[ETC_ACCEPTERR_SIZE];  //!< value in % * 64
+
+ /** ETC throttle position vs (APPS,RPM)*/
+ _uchar etc_throttle_pos[ETC_POS_APPS_SIZE][ETC_POS_RPM_SIZE];
+
+ _uchar reserved[505];
 }fw_ex_tabs_t;
 
 
@@ -441,8 +452,10 @@ typedef struct
  _uint iac_wrkadd_coeff;   //!< value * 256
  _uint iac_wrkadd_time;    //!< 0.01sec units
 
+ _uchar use_dbgvar;
+
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1512];
+ _uchar reserved[1511];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1747,6 +1760,9 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetEGODelayMap(op_fwd->inj_ego_delay);
  GetWUAFR0Map(op_fwd->inj_wu_afr0);
  GetWUAFR1Map(op_fwd->inj_wu_afr1);
+ GetETCSprPrelMap(op_fwd->etc_sprprel_duty);
+ GetETCAcceptErrMap(op_fwd->etc_accept_error);
+ GetETCThrottlePosMap(op_fwd->etc_throttle_pos);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1865,6 +1881,9 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetEGODelayMap(ip_fwd->inj_ego_delay);
  SetWUAFR0Map(ip_fwd->inj_wu_afr0);
  SetWUAFR1Map(ip_fwd->inj_wu_afr1);
+ SetETCSprPrelMap(ip_fwd->etc_sprprel_duty);
+ SetETCAcceptErrMap(ip_fwd->etc_accept_error);
+ SetETCThrottlePosMap(ip_fwd->etc_throttle_pos);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -3120,6 +3139,86 @@ void CFirmwareDataMediator::SetWUAFR1Map(const float* ip_values)
   p_fd->extabs.inj_wu_afr1[i] = MathHelpers::Round((ip_values[i]-8.0) * AFR_MAPS_M_FACTOR);
 }
 
+void CFirmwareDataMediator::GetETCSprPrelMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < ETC_SPRPREL_SIZE; i++ )
+  op_values[i] = ((float)p_fd->extabs.etc_sprprel_duty[i]) / 64.0f; //convert to %
+
+ for (int i = 0; i < ETC_SPRPREL_SIZE; i++ )
+  op_values[i+ETC_SPRPREL_SIZE] = ((float)p_fd->extabs.etc_sprprel_bins[i]) / 64.0f; //convert to %
+}
+
+void CFirmwareDataMediator::SetETCSprPrelMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < ETC_SPRPREL_SIZE; i++ )
+  p_fd->extabs.etc_sprprel_duty[i] = MathHelpers::Round(ip_values[i] * 64.0f);
+ for (int i = 0; i < ETC_SPRPREL_SIZE; i++ )
+  p_fd->extabs.etc_sprprel_bins[i] = MathHelpers::Round(ip_values[i+ETC_SPRPREL_SIZE] * 64.0f);
+}
+
+void CFirmwareDataMediator::GetETCAcceptErrMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < ETC_ACCEPTERR_SIZE; i++ )
+  op_values[i] = ((float)p_fd->extabs.etc_accept_error[i]) / 64.0f; //convert to %
+
+ for (int i = 0; i < ETC_ACCEPTERR_SIZE; i++ )
+  op_values[i+ETC_ACCEPTERR_SIZE] = ((float)p_fd->extabs.etc_accept_bins[i]) / 64.0f; //convert to %
+}
+
+void CFirmwareDataMediator::SetETCAcceptErrMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < ETC_ACCEPTERR_SIZE; i++ )
+  p_fd->extabs.etc_accept_error[i] = MathHelpers::Round(ip_values[i] * 64.0f);
+ for (int i = 0; i < ETC_ACCEPTERR_SIZE; i++ )
+  p_fd->extabs.etc_accept_bins[i] = MathHelpers::Round(ip_values[i+ETC_ACCEPTERR_SIZE] * 64.0f);
+}
+
+void CFirmwareDataMediator::GetETCThrottlePosMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE); i++ )
+ {
+  _uchar *p = &(p_fd->extabs.etc_throttle_pos[0][0]);
+  op_values[i] = ((float) *(p + i)) / 2.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetETCThrottlePosMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE); i++ )
+ {
+  _uchar *p = &(p_fd->extabs.etc_throttle_pos[0][0]);
+  *(p + i) = MathHelpers::Round((ip_values[i] * 2.0f));
+ }
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -3588,6 +3687,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
 
  o_data.iac_wrkadd_coeff = ((float)exd.iac_wrkadd_coeff) / 256.0f;
  o_data.iac_wrkadd_time = ((float)exd.iac_wrkadd_time) / 100.0f; //convert to sec
+
+ o_data.use_dbgvar = exd.use_dbgvar;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3724,6 +3825,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
 
  exd.iac_wrkadd_coeff = MathHelpers::Round(i_data.iac_wrkadd_coeff * 256.0f);
  exd.iac_wrkadd_time = MathHelpers::Round(i_data.iac_wrkadd_time * 100.0f); //convert from sec
+
+ exd.use_dbgvar = i_data.use_dbgvar;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
@@ -3813,6 +3916,9 @@ void CFirmwareDataMediator::GetSepMap(int id, float* op_values, bool i_original 
   case ETMT_EGO_DELAY: GetEGODelayMap(op_values, i_original); break;
   case ETMT_WU_AFR0: GetWUAFR0Map(op_values, i_original); break;
   case ETMT_WU_AFR1: GetWUAFR1Map(op_values, i_original); break;
+  case ETMT_ETC_SPRPREL: GetETCSprPrelMap(op_values, i_original); break;
+  case ETMT_ETC_ACCEERR: GetETCAcceptErrMap(op_values, i_original); break;
+  case ETMT_ETC_THROPOS: GetETCThrottlePosMap(op_values, i_original); break;
   default: ASSERT(0);
  }
 }
@@ -3860,6 +3966,9 @@ void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
   case ETMT_EGO_DELAY: SetEGODelayMap(ip_values); break;
   case ETMT_WU_AFR0: SetWUAFR0Map(ip_values); break;
   case ETMT_WU_AFR1: SetWUAFR1Map(ip_values); break;
+  case ETMT_ETC_SPRPREL: SetETCSprPrelMap(ip_values); break;
+  case ETMT_ETC_ACCEERR: SetETCAcceptErrMap(ip_values); break;
+  case ETMT_ETC_THROPOS: SetETCThrottlePosMap(ip_values); break;
   default: ASSERT(0);
  }
 }

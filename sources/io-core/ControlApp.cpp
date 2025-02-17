@@ -1986,7 +1986,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.tab_id == ETMT_BAROCORR || editTabPar.tab_id == ETMT_AFTSTR_STRK0 || editTabPar.tab_id == ETMT_AFTSTR_STRK1 || editTabPar.tab_id == ETMT_PWMIAC_UCOEF ||
       editTabPar.tab_id == ETMT_GRVDELAY || editTabPar.tab_id == ETMT_MANINJPWC || editTabPar.tab_id == ETMT_FTLSCOR || editTabPar.tab_id == ETMT_FUELDENS_CORR ||
       editTabPar.tab_id == ETMT_XTAU_XFACC || editTabPar.tab_id == ETMT_XTAU_XFDEC || editTabPar.tab_id == ETMT_XTAU_TFACC || editTabPar.tab_id == ETMT_XTAU_TFDEC ||
-      editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING || editTabPar.tab_id == ETMT_EGO_DELAY)
+      editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING || editTabPar.tab_id == ETMT_EGO_DELAY || editTabPar.tab_id == ETMT_ETC_SPRPREL ||
+      editTabPar.tab_id == ETMT_ETC_ACCEERR)
   {
    size_t div = 2;
    if (size % div)
@@ -1996,7 +1997,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    for(size_t i = 0; i < size / div; ++i)
    {
     int value;
-    bool withsign = (editTabPar.tab_id == ETMT_INJ_DEAD || editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE); 
+    bool withsign = (editTabPar.tab_id == ETMT_INJ_DEAD || editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE || editTabPar.tab_id == ETMT_ETC_SPRPREL); 
     if (false == mp_pdp->Hex16ToBin(raw_packet, &value, withsign)) //<--signed for dead map
      return false;
 
@@ -2045,6 +2046,10 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.table_data[i] = (((float)value) * 0.1024f);
     else if (editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING)
      editTabPar.table_data[i] = ((float)value) / 312.5f;
+    else if (editTabPar.tab_id == ETMT_ETC_SPRPREL)
+     editTabPar.table_data[i] = ((float)value) / 64.0f;
+    else if (editTabPar.tab_id == ETMT_ETC_ACCEERR)
+     editTabPar.table_data[i] = ((float)value) / 64.0f;
     else
      editTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
@@ -2172,6 +2177,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.table_data[i] = ((float)value) / 2.0f;
      else if (editTabPar.tab_id == ETMT_WU_AFR0 || editTabPar.tab_id == ETMT_WU_AFR1)
       editTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
+     else if (editTabPar.tab_id == ETMT_ETC_THROPOS)
+      editTabPar.table_data[i] = ((float)value) / 2.0f;
      else
       editTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -3223,6 +3230,71 @@ bool CControlApp::Parse_LTFT_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_DBW_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::DBWPar& dbwPar = m_recepted_packet.m_DBWPar;
+ if (size != 16)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ int etc_p = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &etc_p))
+  return false;
+ dbwPar.etc_p = float(etc_p) / ETCPID_MULT;
+
+ int etc_i = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &etc_i))
+  return false;
+ dbwPar.etc_i = float(etc_i) / ETCPID_MULT;
+
+ int etc_d = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &etc_d))
+  return false;
+ dbwPar.etc_d = float(etc_d) / ETCPID_MULT;
+
+ BYTE etc_nmax_duty = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &etc_nmax_duty))
+  return false;
+ dbwPar.etc_nmax_duty = ((float)etc_nmax_duty) / 2.0f;
+
+ BYTE etc_pmax_duty = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &etc_pmax_duty))
+  return false;
+ dbwPar.etc_pmax_duty = ((float)etc_pmax_duty) / 2.0f;
+
+ BYTE etc_pid_period = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &etc_pid_period))
+  return false;
+ dbwPar.etc_pid_period = ((float)etc_pid_period) / 100.0f;
+
+ BYTE etc_frictorq_op = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &etc_frictorq_op))
+  return false;
+ dbwPar.etc_frictorq_op = ((float)etc_frictorq_op) / 16.0f;
+
+ BYTE etc_frictorq_cl = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &etc_frictorq_cl))
+  return false;
+ dbwPar.etc_frictorq_cl = ((float)etc_frictorq_cl) / 16.0f;
+
+ BYTE etc_frictorq_thrd = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &etc_frictorq_thrd))
+  return false;
+ dbwPar.etc_frictorq_thrd = (float)etc_frictorq_thrd;
+
+ int etc_idleadd_max = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &etc_idleadd_max))
+  return false;
+ dbwPar.etc_idleadd_max = float(etc_idleadd_max) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int homepos = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &homepos))
+  return false;
+ dbwPar.etc_homepos = float(homepos) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjDrvPar& recv = m_recepted_packet.m_InjDrvPar;
@@ -3596,6 +3668,10 @@ bool CControlApp::ParsePackets()
     if (Parse_LTFT_PAR(p_start, p_size))
      break;
     continue;
+   case DBW_PAR:
+    if (Parse_DBW_PAR(p_start, p_size))
+     break;
+    continue;
    case INJDRV_PAR:
     {
     mp_pdp->EnableCRC(true);
@@ -3844,6 +3920,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case LAMBDA_PAR:
   case ACCEL_PAR:
   case LTFT_PAR:
+  case DBW_PAR:
   case INJDRV_PAR:
   case SILENT:
   case LZIDBL_HS:
@@ -3959,6 +4036,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case LTFT_PAR:
    Build_LTFT_PAR((LtftPar*)i_packet_data);
+   break;
+  case DBW_PAR:
+   Build_DBW_PAR((DBWPar*)i_packet_data);
    break;
   case INJDRV_ADR:
    mp_pdp->EnableCRC(true);
@@ -4781,6 +4861,16 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     unsigned char value = MathHelpers::Round((packet_data->table_data[i]-8) * AFR_MAPS_M_FACTOR);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
+   else if (packet_data->tab_id == ETMT_ETC_SPRPREL || packet_data->tab_id == ETMT_ETC_ACCEERR)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * 64.0f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_ETC_THROPOS)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * 2.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
    else
    {  //default case
     signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
@@ -5117,6 +5207,31 @@ void CControlApp::Build_LTFT_PAR(LtftPar* packet_data)
                            MathHelpers::Round((packet_data->ltft_dead_band[1] / 100.f) * 512.0f)};
  mp_pdp->Bin8ToHex(ltft_dead_band[0], m_outgoing_packet);
  mp_pdp->Bin8ToHex(ltft_dead_band[1], m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_DBW_PAR(DBWPar* packet_data)
+{
+ int etc_p = MathHelpers::Round(packet_data->etc_p * ETCPID_MULT);
+ mp_pdp->Bin16ToHex(etc_p, m_outgoing_packet);
+ int etc_i = MathHelpers::Round(packet_data->etc_i * ETCPID_MULT);
+ mp_pdp->Bin16ToHex(etc_i, m_outgoing_packet);
+ int etc_d = MathHelpers::Round(packet_data->etc_d * ETCPID_MULT);
+ mp_pdp->Bin16ToHex(etc_d, m_outgoing_packet);
+ int etc_nmax_duty = MathHelpers::Round(packet_data->etc_nmax_duty * 2.0f);
+ mp_pdp->Bin8ToHex(etc_nmax_duty, m_outgoing_packet);
+ int etc_pmax_duty = MathHelpers::Round(packet_data->etc_pmax_duty * 2.0f);
+ mp_pdp->Bin8ToHex(etc_pmax_duty, m_outgoing_packet);
+ int etc_pid_period = MathHelpers::Round(packet_data->etc_pid_period * 100.0f);
+ mp_pdp->Bin8ToHex(etc_pid_period, m_outgoing_packet);
+ int etc_frictorq_op = MathHelpers::Round(packet_data->etc_frictorq_op * 16.0f);
+ mp_pdp->Bin8ToHex(etc_frictorq_op, m_outgoing_packet);
+ int etc_frictorq_cl = MathHelpers::Round(packet_data->etc_frictorq_cl * 16.0f);
+ mp_pdp->Bin8ToHex(etc_frictorq_cl, m_outgoing_packet);
+ int etc_frictorq_thrd = MathHelpers::Round(packet_data->etc_frictorq_thrd);
+ mp_pdp->Bin8ToHex(etc_frictorq_thrd, m_outgoing_packet);
+ int etc_idleadd_max = MathHelpers::Round(packet_data->etc_idleadd_max * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(etc_idleadd_max, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

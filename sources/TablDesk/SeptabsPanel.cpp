@@ -136,6 +136,9 @@ void CSeptabsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_EGO_DELAY_MAP, *m_md[ETMT_EGO_DELAY].mp_button);
  DDX_Control(pDX, IDC_TD_WUAFR0_MAP, *m_md[ETMT_WU_AFR0].mp_button);
  DDX_Control(pDX, IDC_TD_WUAFR1_MAP, *m_md[ETMT_WU_AFR1].mp_button);
+ DDX_Control(pDX, IDC_TD_ETC_SPRPREL_MAP, *m_md[ETMT_ETC_SPRPREL].mp_button);
+ DDX_Control(pDX, IDC_TD_ETC_ACCEERR_MAP, *m_md[ETMT_ETC_ACCEERR].mp_button);
+ DDX_Control(pDX, IDC_TD_ETC_THROPOS_MAP, *m_md[ETMT_ETC_THROPOS].mp_button);
 
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
@@ -187,6 +190,9 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_BN_CLICKED(IDC_TD_EGO_DELAY_MAP, OnViewEGODelayMap)
  ON_BN_CLICKED(IDC_TD_WUAFR0_MAP, OnViewWUAFR0Map)
  ON_BN_CLICKED(IDC_TD_WUAFR1_MAP, OnViewWUAFR1Map)
+ ON_BN_CLICKED(IDC_TD_ETC_SPRPREL_MAP, OnViewETCSprPrelMap)
+ ON_BN_CLICKED(IDC_TD_ETC_ACCEERR_MAP, OnViewETCAcceptErrMap)
+ ON_BN_CLICKED(IDC_TD_ETC_THROPOS_MAP, OnViewETCThrottlePosMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -233,6 +239,9 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_EGO_DELAY_MAP, OnUpdateViewEGODelayMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_WUAFR0_MAP, OnUpdateViewWUAFR0Map)
  ON_UPDATE_COMMAND_UI(IDC_TD_WUAFR1_MAP, OnUpdateViewWUAFR1Map)
+ ON_UPDATE_COMMAND_UI(IDC_TD_ETC_SPRPREL_MAP, OnUpdateViewETCSprPrelMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_ETC_ACCEERR_MAP, OnUpdateViewETCAcceptErrMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_ETC_THROPOS_MAP, OnUpdateViewETCThrottlePosMap)
  ON_WM_DESTROY()
  ON_WM_SIZE()
  ON_WM_TIMER()
@@ -306,6 +315,9 @@ BOOL CSeptabsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_EGO_DELAY].mp_button, MLL::GetString(IDS_TD_EGO_DELAY_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_WU_AFR0].mp_button, MLL::GetString(IDS_TD_WUAFR0_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_WU_AFR1].mp_button, MLL::GetString(IDS_TD_WUAFR1_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_SPRPREL].mp_button, MLL::GetString(IDS_TD_ETC_SPRPREL_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_ACCEERR].mp_button, MLL::GetString(IDS_TD_ETC_ACCEERR_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_THROPOS].mp_button, MLL::GetString(IDS_TD_ETC_THROPOS_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -336,7 +348,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
 
  if (m_initialized)
  {
-  AlignButtons(this, cx, ETMT_DWELLCNTRL, ETMT_ATTENUATOR, ETMT_EH_PAUSE, ETMT_SEP_START, ETMT_SEP_END);
+  AlignButtons(this, cx, ETMT_DWELLCNTRL, ETMT_ATTENUATOR, ETMT_GRHEAT_DUTY, ETMT_SEP_START, ETMT_SEP_END);
  }
 
  if (mp_scr.get())
@@ -345,7 +357,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
   if (m_disable_vscroll)
    mp_scr->SetViewSize(cx, da.ScaleY(1));
   else
-   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1260 : 700));
+   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1350 : 720));
  }
 
 }
@@ -664,6 +676,27 @@ void CSeptabsPanel::OnUpdateViewWUAFR1Map(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
  pCmdUI->Enable(enable && (m_fuel_injection));
  pCmdUI->SetCheck( (m_md[ETMT_WU_AFR1].state) ? TRUE : FALSE );
+}
+
+void CSeptabsPanel::OnUpdateViewETCSprPrelMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck((m_md[ETMT_ETC_SPRPREL].state) ? TRUE : FALSE);
+}
+
+void CSeptabsPanel::OnUpdateViewETCAcceptErrMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck((m_md[ETMT_ETC_ACCEERR].state) ? TRUE : FALSE);
+}
+
+void CSeptabsPanel::OnUpdateViewETCThrottlePosMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck((m_md[ETMT_ETC_THROPOS].state) ? TRUE : FALSE);
 }
 
 void CSeptabsPanel::UpdateOpenedCharts(void)
@@ -2320,6 +2353,117 @@ void CSeptabsPanel::OnViewWUAFR1Map()
  else
  {
   ::SetFocus(m_md[ETMT_WU_AFR1].handle);
+ }
+}
+
+void CSeptabsPanel::OnViewETCSprPrelMap()
+{
+ MapData &md = m_md[ETMT_ETC_SPRPREL];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  const float bins_lims[5] = {-15.0f, 100.0f, 0.1f, 1.0f, 0.1f}; //min -15%, max 100%, inc 0.1%, 1 dec place, min diff 0.1%
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, -25.0, 25.0, bins_lims, 8,
+    MLL::GetString(IDS_MAPS_ETC_SPRPRELX_UNIT).c_str(), //x unit
+    MLL::GetString(IDS_MAPS_ETC_SPRPRELY_UNIT).c_str(), //y unit
+    MLL::GetString(IDS_ETC_ETC_SPRPREL_MAP).c_str(), CXD_BM_NM);  //use bins on horizontal axis
+  DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.01f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.0"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeETCSprPrelTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseETCSprPrelTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationETCSprPrelTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_ETC_SPRPREL);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CSeptabsPanel::OnViewETCAcceptErrMap()
+{
+ MapData &md = m_md[ETMT_ETC_ACCEERR];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  const float bins_lims[5] = {0.0f, 100.0f, 0.1f, 1.0f, 0.1f}; //min 0%, max 100%, inc 0.1%, 1 dec place, min diff 0.1%
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.0, 10.0, bins_lims, 6,
+    MLL::GetString(IDS_MAPS_ETC_ACCEERRX_UNIT).c_str(), //x unit
+    MLL::GetString(IDS_MAPS_ETC_ACCEERRY_UNIT).c_str(), //y unit
+    MLL::GetString(IDS_ETC_ETC_ACCEERR_MAP).c_str(), CXD_BM_NM);  //use bins on horizontal axis
+  DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.01f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.0"));
+  DLL::Chart2DSetOnChange(md.handle,OnChangeETCAcceptErrTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseETCAcceptErrTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationETCAcceptErrTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_ETC_ACCEERR);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CSeptabsPanel::OnViewETCThrottlePosMap()
+{
+ MapData &md = m_md[ETMT_ETC_THROPOS];
+ //if button has been turned off, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart3DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart3DCreate(_ChartParentHwnd(), md.original, md.active, GetRPMGrid(), 16, 16, 0, 100.0,
+    MLL::GetString(IDS_MAPS_ETC_THROPOSX_UNIT).c_str(), //x unit
+    MLL::GetString(IDS_MAPS_ETC_THROPOSY_UNIT).c_str(), //y unit
+    MLL::GetString(IDS_ETC_THROPOS_MAP).c_str());
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
+  DLL::Chart3DSetOnChange(md.handle,OnChangeETCThrottlePosTable,this);
+  DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(md.handle,OnCloseETCThrottlePosTable,this);
+  DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationETCThrottlePosTable, this);
+  DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_ETC_THROPOS);
+
+  DLL::Chart3DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
  }
 }
 

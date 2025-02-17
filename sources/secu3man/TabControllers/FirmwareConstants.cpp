@@ -211,24 +211,24 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Turn off Ign.tim.idling regul. on running"), &d.use_vss_thrd_for_igntim_reg, _T("If the checkbox is checked, Ign.timing idling regulator will be turned off when vehicle speed is above 'Start of running threshold for IAC' value."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Коэфф.1 порога запуска регулятора оборотов"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clen_coeff, _T("Если после пуска двигателя обороты превысят порог = целевые обороты * коэффициент1 и затем упадут ниже порога = целевые обороты * коэффициент2, тогда запустится регулятор оборотов ХХ (если он разрешен)."));
+  dfd.AppendItem(_T("Коэфф.1 порога запуска регулятора оборотов"), _T(""), 0.5f, 10.0f, 0.01f, 2, &d.iac_clen_coeff, _T("Если после пуска двигателя обороты превысят порог = целевые обороты * коэффициент1 и затем упадут ниже порога = целевые обороты * коэффициент2, тогда запустится регулятор оборотов ХХ (если он разрешен)."));
  else
-  dfd.AppendItem(_T("Coeff.1 of threshold for starting CL"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clen_coeff, _T("If after start of engine RPM exceed threshold = target RPM * coeff.1 and after that RPM fall below threshold = target RPM * coeff.2, then closed loop idling regulator will be activated."));
+  dfd.AppendItem(_T("Coeff.1 of threshold for starting CL"), _T(""), 0.5f, 10.0f, 0.01f, 2, &d.iac_clen_coeff, _T("If after start of engine RPM exceed threshold = target RPM * coeff.1 and after that RPM fall below threshold = target RPM * coeff.2, then closed loop idling regulator will be activated."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Коэфф.2 порога запуска регулятора оборотов"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clon_coeff, _T("Если после пуска двигателя обороты превысят порог = целевые обороты * коэффициент1 и затем упадут ниже порога = целевые обороты * коэффициент2, тогда запустится регулятор оборотов ХХ (если он разрешен)."));
+  dfd.AppendItem(_T("Коэфф.2 порога запуска регулятора оборотов"), _T(""), 0.5f, 10.0f, 0.01f, 2, &d.iac_clon_coeff, _T("Если после пуска двигателя обороты превысят порог = целевые обороты * коэффициент1 и затем упадут ниже порога = целевые обороты * коэффициент2, тогда запустится регулятор оборотов ХХ (если он разрешен)."));
  else
-  dfd.AppendItem(_T("Coeff.2 of threshold for starting CL"), _T(""), 0.5f, 10.0f, 0.01, 2, &d.iac_clon_coeff, _T("If after start of engine RPM exceed threshold = target RPM * coeff.1 and after that RPM fall below threshold = target RPM * coeff.2, then closed loop idling regulator will be activated."));
+  dfd.AppendItem(_T("Coeff.2 of threshold for starting CL"), _T(""), 0.5f, 10.0f, 0.01f, 2, &d.iac_clon_coeff, _T("If after start of engine RPM exceed threshold = target RPM * coeff.1 and after that RPM fall below threshold = target RPM * coeff.2, then closed loop idling regulator will be activated."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Коэфф. увеличения положения РДВ после пуска"), _T(""), 0.5f, 1.5f, 0.005, 3, &d.iac_wrkadd_coeff, _T("После запуска двигателя положение РДВ будет умножаться на этот коэффициент на протяжении времени 'Длительность увеличенного положения РДВ после пуска'."));
+  dfd.AppendItem(_T("Коэфф. увеличения положения РДВ после пуска"), _T(""), 0.5f, 1.5f, 0.005f, 3, &d.iac_wrkadd_coeff, _T("После запуска двигателя положение РДВ будет умножаться на этот коэффициент на протяжении времени 'Длительность увеличенного положения РДВ после пуска'."));
  else
-  dfd.AppendItem(_T("Coeff. of IAC position growth after engine start"), _T(""), 0.5f, 1.5f, 0.005, 3, &d.iac_wrkadd_coeff, _T("After engine start, the IAC position will be multiplied by this factor for the duration of 'Duration of grown IAC position after start'."));
+  dfd.AppendItem(_T("Coeff. of IAC position growth after engine start"), _T(""), 0.5f, 1.5f, 0.005f, 3, &d.iac_wrkadd_coeff, _T("After engine start, the IAC position will be multiplied by this factor for the duration of 'Duration of grown IAC position after start'."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Длительность увеличенного положения РДВ после пуска"), _T(""), 0.0f, 30.0f, 0.01, 2, &d.iac_wrkadd_time, _T("После запуска двигателя положение РДВ будет умножаться на коэффициент 'Коэфф. увеличения положения РДВ после пуска' на протяжении этого времени."));
+  dfd.AppendItem(_T("Длительность увеличенного положения РДВ после пуска"), _T(""), 0.0f, 30.0f, 0.01f, 2, &d.iac_wrkadd_time, _T("После запуска двигателя положение РДВ будет умножаться на коэффициент 'Коэфф. увеличения положения РДВ после пуска' на протяжении этого времени."));
  else
-  dfd.AppendItem(_T("Duration of grown IAC position after start"), _T(""), 0.0f, 30.0f, 0.01, 2, &d.iac_wrkadd_time, _T("After engine start, the IAC position will be multiplied by 'Coeff. of IAC position growth after engine start' factor during this time."));
+  dfd.AppendItem(_T("Duration of grown IAC position after start"), _T(""), 0.0f, 30.0f, 0.01f, 2, &d.iac_wrkadd_time, _T("After engine start, the IAC position will be multiplied by 'Coeff. of IAC position growth after engine start' factor during this time."));
 
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
@@ -688,6 +688,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Использовать порог работы лямбда коррекции по ДТВГ"), &d.lambda_use_egts, _T("Если галочка установлена, то будет использоваться порог работы лямбда коррекции по ДТВГ."));
  else
   dfd.AppendItem(_T("Use EGTS threshold for lambda correction"), &d.lambda_use_egts, _T("If the check is set, then EGTS threshold for lambda correction will be used."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Слать пакеты с отладочными переменными"), &d.use_dbgvar, _T("Если галочка установлена, то прошивка будет отправлять пакеты с отладночными переменными. Прошивка должна быть скомпилирована с опцией DEBUG_VARIABLES"));
+ else
+  dfd.AppendItem(_T("Send packets with debug variables"), &d.use_dbgvar, _T("If the check is set, then firmware will send packets with debug variables. Firmware must be compiled with DEBUG_VARIABLES option."));
 
  if (dfd.DoModal()==IDOK)
  {

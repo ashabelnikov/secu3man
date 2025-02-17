@@ -437,6 +437,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optEGODelayMapWnd;
   OptField_t<POINT> m_optWUAFR0MapWnd;
   OptField_t<POINT> m_optWUAFR1MapWnd;
+  OptField_t<POINT> m_optETCSprPrelMapWnd;
+  OptField_t<POINT> m_optETCAcceptErrMapWnd;
+  OptField_t<POINT> m_optETCThrottlePosMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -518,6 +521,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optEGODelayMapWnd1;
   OptField_t<POINT> m_optWUAFR0MapWnd1;
   OptField_t<POINT> m_optWUAFR1MapWnd1;
+  OptField_t<POINT> m_optETCSprPrelMapWnd1;
+  OptField_t<POINT> m_optETCAcceptErrMapWnd1;
+  OptField_t<POINT> m_optETCThrottlePosMapWnd1;
 
   //window's sizes
   OptField_t<POINT> m_optMainFrmWndSize;
@@ -599,6 +605,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optEGODelayMapWndSize;
   OptField_t<POINT> m_optWUAFR0MapWndSize;
   OptField_t<POINT> m_optWUAFR1MapWndSize;
+  OptField_t<POINT> m_optETCSprPrelMapWndSize;
+  OptField_t<POINT> m_optETCAcceptErrMapWndSize;
+  OptField_t<POINT> m_optETCThrottlePosMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -680,6 +689,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optEGODelayMapWndSize1;
   OptField_t<POINT> m_optWUAFR0MapWndSize1;
   OptField_t<POINT> m_optWUAFR1MapWndSize1;
+  OptField_t<POINT> m_optETCSprPrelMapWndSize1;
+  OptField_t<POINT> m_optETCAcceptErrMapWndSize1;
+  OptField_t<POINT> m_optETCThrottlePosMapWndSize1;
 
   //window state
   OptField_t<int> m_optMainFrmWndState;
@@ -963,6 +975,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepEGODelayMap;
   OptField_t<float> m_optPtMovStepWUAFR0Map;
   OptField_t<float> m_optPtMovStepWUAFR1Map;
+  OptField_t<float> m_optPtMovStepETCSprPrelMap;
+  OptField_t<float> m_optPtMovStepETCAcceptErrMap;
+  OptField_t<float> m_optPtMovStepETCThrottlePosMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;

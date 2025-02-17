@@ -203,6 +203,12 @@ struct WndSettings
  int m_WUAFR0MapWnd_Y;
  int m_WUAFR1MapWnd_X;
  int m_WUAFR1MapWnd_Y;
+ int m_ETCSprPrelMapWnd_X;
+ int m_ETCSprPrelMapWnd_Y;
+ int m_ETCAcceptErrMapWnd_X;
+ int m_ETCAcceptErrMapWnd_Y;
+ int m_ETCThrottlePosMapWnd_X;
+ int m_ETCThrottlePosMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -368,6 +374,12 @@ struct WndSize
  int m_WUAFR0MapWnd_H;
  int m_WUAFR1MapWnd_W;
  int m_WUAFR1MapWnd_H;
+ int m_ETCSprPrelMapWnd_W;
+ int m_ETCSprPrelMapWnd_H;
+ int m_ETCAcceptErrMapWnd_W;
+ int m_ETCAcceptErrMapWnd_H;
+ int m_ETCThrottlePosMapWnd_W;
+ int m_ETCThrottlePosMapWnd_H;
 };
 
 //Holds windows's state data

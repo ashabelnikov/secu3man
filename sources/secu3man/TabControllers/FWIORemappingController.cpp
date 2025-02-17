@@ -1045,6 +1045,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
   }
+  if (iov >= FWDM::IOV_V44) {
+  mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_ETC_PWM2, _T("ETC_PWM2"));
+  }
   mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_IGN_O5, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_IGN_O5, true);
   mp_view->EnableInversion(FWDM::IOS3I_IGN_O5, true);
@@ -1086,6 +1089,10 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_INJ_O6, _T("INJ_O6"));
    mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_INJ_O7, _T("INJ_O7"));
    mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_INJ_O8, _T("INJ_O8"));
+  }
+
+  if (iov >= FWDM::IOV_V44) {
+  mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_ETC_PWM1, _T("ETC_PWM1"));
   }
   mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_ECF, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ECF, true);

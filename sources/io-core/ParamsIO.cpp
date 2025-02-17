@@ -509,6 +509,22 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
    }
    break;
 
+  case DBW_PAR:
+   {
+    DBWPar* p_in = (DBWPar*)ip_values;
+    p_params->etc_p = MathHelpers::Round(p_in->etc_p * ETCPID_MULT);
+    p_params->etc_i = MathHelpers::Round(p_in->etc_i * ETCPID_MULT);
+    p_params->etc_d = MathHelpers::Round(p_in->etc_d * ETCPID_MULT);
+    p_params->etc_nmax_duty = MathHelpers::Round(p_in->etc_nmax_duty * 2.0f);
+    p_params->etc_pmax_duty = MathHelpers::Round(p_in->etc_pmax_duty * 2.0f);
+    p_params->etc_pid_period = MathHelpers::Round(p_in->etc_pid_period * 100.0f);
+    p_params->etc_frictorq_op = MathHelpers::Round(p_in->etc_frictorq_op * 16.0f);
+    p_params->etc_frictorq_cl = MathHelpers::Round(p_in->etc_frictorq_cl * 16.0f);
+    p_params->etc_frictorq_thrd = MathHelpers::Round(p_in->etc_frictorq_thrd);
+    p_params->etc_idleadd_max = MathHelpers::Round(p_in->etc_idleadd_max * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
+   }
+   break;
+
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
  }//switch
@@ -1040,6 +1056,21 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->ltft_learn_load[1] = ((float)p_params->ltft_learn_load[1]) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     p_out->ltft_dead_band[0] = (((float)p_params->ltft_dead_band[0]) / 512.0f) * 100.f; //%
     p_out->ltft_dead_band[1] = (((float)p_params->ltft_dead_band[1]) / 512.0f) * 100.f; //%
+   }
+   break;
+  case DBW_PAR:
+   {
+    DBWPar* p_out = (DBWPar*)op_values;
+    p_out->etc_p = float(p_params->etc_p) / ETCPID_MULT;
+    p_out->etc_i = float(p_params->etc_i) / ETCPID_MULT;
+    p_out->etc_d = float(p_params->etc_d) / ETCPID_MULT;
+    p_out->etc_nmax_duty = float(p_params->etc_nmax_duty) / 2.0f;
+    p_out->etc_pmax_duty = float(p_params->etc_pmax_duty) / 2.0f;
+    p_out->etc_pid_period = float(p_params->etc_pid_period) / 100.0f;
+    p_out->etc_frictorq_op = float(p_params->etc_frictorq_op) / 16.0f;
+    p_out->etc_frictorq_cl = float(p_params->etc_frictorq_cl) / 16.0f;
+    p_out->etc_frictorq_thrd = float(p_params->etc_frictorq_thrd);
+    p_out->etc_idleadd_max = float(p_params->etc_idleadd_max) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
    }
    break;
 

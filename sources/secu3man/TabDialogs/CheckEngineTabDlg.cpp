@@ -664,9 +664,14 @@ void CCheckEngineTabDlg::ShowFuelInjNote(bool show)
 void CCheckEngineTabDlg::OnShow(bool show)
 {
  if (show)
+ {
   SetTimer(TIMER_ID, 250, NULL);
+ }
  else
+ {
+  m_realtime_checkbox.SetCheck(BST_UNCHECKED);
   KillTimer(TIMER_ID);
+ }
 }
 
 void CCheckEngineTabDlg::OnTrimTab1Button()

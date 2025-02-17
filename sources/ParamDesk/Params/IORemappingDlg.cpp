@@ -448,6 +448,28 @@ void CIORemappingDlg::SetRedraw(bool redraw)
 
 void CIORemappingDlg::OnIoremHelpLinkClick()
 {
- CScrlMessageBox msgbox(NULL, AfxGetAppName(), MLL::GetString(IDS_IOREMAPPING_DESC), IDI_INFORMATION, 200, 200);
- msgbox.DoModal();
+ HINSTANCE hInstance = DLL::GetModuleHandle();
+
+ HRSRC hResource = FindResource(hInstance, MAKEINTRESOURCE(IDR_IOREMAPPING_DESC), _T("TEXT"));
+ if (hResource)
+ {   
+  HGLOBAL hLoadedResource = LoadResource(hInstance, hResource);
+  if (hLoadedResource)
+  {
+   LPVOID pLockedResource = LockResource(hLoadedResource);
+
+   if (pLockedResource)
+   {
+    DWORD dwResourceSize = SizeofResource(hInstance, hResource);
+
+    if (0 != dwResourceSize)
+    {
+     // Use pLockedResource and dwResourceSize however you want
+     _TSTRING str((TCHAR*)pLockedResource, dwResourceSize);
+     CScrlMessageBox msgbox(NULL, AfxGetAppName(), str, IDI_INFORMATION, 200, 200);
+     msgbox.DoModal();
+    }
+   }
+  }
+ }
 }

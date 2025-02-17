@@ -139,6 +139,9 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnViewEGODelayMap();
   afx_msg void OnViewWUAFR0Map();
   afx_msg void OnViewWUAFR1Map();
+  afx_msg void OnViewETCSprPrelMap();
+  afx_msg void OnViewETCAcceptErrMap();
+  afx_msg void OnViewETCThrottlePosMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -182,6 +185,9 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsFWC(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsGRD(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewETCSprPrelMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewETCAcceptErrMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewETCThrottlePosMap(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   DECLARE_MESSAGE_MAP()
@@ -348,6 +354,18 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnChangeWUAFR1Map(void* i_param);
   static void __cdecl OnCloseWUAFR1Map(void* i_param);
   static void __cdecl OnWndActivationWUAFR1Map(void* i_param, long cmd);
+
+  static void __cdecl OnChangeETCSprPrelTable(void* i_param);
+  static void __cdecl OnCloseETCSprPrelTable(void* i_param);
+  static void __cdecl OnWndActivationETCSprPrelTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeETCAcceptErrTable(void* i_param);
+  static void __cdecl OnCloseETCAcceptErrTable(void* i_param);
+  static void __cdecl OnWndActivationETCAcceptErrTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeETCThrottlePosTable(void* i_param);
+  static void __cdecl OnCloseETCThrottlePosTable(void* i_param);
+  static void __cdecl OnWndActivationETCThrottlePosTable(void* i_param, long cmd);
 
  private:
   EventHandler m_OnRPMGridEditButton;

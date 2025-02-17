@@ -348,10 +348,22 @@ typedef struct params_t
  _int  apps1_curve_offset;            //!< offset of curve in volts
  _int  apps1_curve_gradient;          //!< gradient of curve in Percentage/V
 
+ _uint etc_p;
+ _uint etc_i;
+ _uint etc_d;
+ _uchar etc_nmax_duty;                //!< Max. negative output duty  % * 2
+ _uchar etc_pmax_duty;                //!< Max. positive output duty, % * 2
+ _uchar etc_pid_period;               //!< PID call preriod
+ _uchar etc_frictorq_op;              //!< value for frictional torque compensation, used when TPS > home position, value * 16
+ _uchar etc_frictorq_cl;              //!< value for frictional torque compensation, used when TPS < home position  value * 16
+ _uchar etc_frictorq_thrd;            //!< TPSdot threshold for frictional torque compensation, value in %/s
+
+ _int etc_idleadd_max;                //!< Max. addition to the target position of throttle from idling regulator subsystem
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[87];
+ _uchar reserved[73];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

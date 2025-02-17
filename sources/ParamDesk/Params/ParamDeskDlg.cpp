@@ -36,6 +36,7 @@
 #include "CarburPageDlg.h"
 #include "ChokePageDlg.h"
 #include "CKPSPageDlg.h"
+#include "DBWPageDlg.h"
 #include "FunSetPageDlg.h"
 #include "GasdosePageDlg.h"
 #include "IdlRegPageDlg.h"
@@ -144,6 +145,10 @@ CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learn
 
  m_pLTFTPageDlg = new CLTFTPageDlg();
  m_pLTFTPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
+
+ m_pDBWPageDlg = new CDBWPageDlg();
+ m_pDBWPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
+ m_pDBWPageDlg->setOnRequestDataCollection(MakeDelegate(this, &CParamDeskDlg::OnTPSLearning));
 }
 
 CParamDeskDlg::~CParamDeskDlg()
@@ -169,6 +174,7 @@ CParamDeskDlg::~CParamDeskDlg()
  delete m_pAccelEnrPageDlg;
  delete m_pGasdosePageDlg;
  delete m_pLTFTPageDlg;
+ delete m_pDBWPageDlg;
 }
 
 BOOL CParamDeskDlg::Create(CWnd* pParentWnd /*= NULL*/)
@@ -261,6 +267,8 @@ BOOL CParamDeskDlg::OnInitDialog()
 
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LTFT_PAR),m_pLTFTPageDlg,17), LTFT_PAR));
  m_ltft_tab_idx = idx;
+
+ m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_DBW_PAR),m_pDBWPageDlg,18), DBW_PAR));
 
  //Warning! SetEventListener must be called before SetCurSel, because SetCurSel
  //already uses event handlers
@@ -392,6 +400,7 @@ void CParamDeskDlg::Enable(bool enable)
  m_pLambdaPageDlg->Enable(enable && m_lambda);
  m_pAccelEnrPageDlg->Enable(enable && (m_fuel_injection || m_gasdose));
  m_pLTFTPageDlg->Enable(enable && m_fuel_injection);
+ m_pDBWPageDlg->Enable(enable);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -500,6 +509,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case LTFT_PAR:
    m_pLTFTPageDlg->SetValues((LtftPar*)i_values);
    break;
+  case DBW_PAR:
+   m_pDBWPageDlg->SetValues((DBWPar*)i_values);
+   break;
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
@@ -570,6 +582,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
    break;
   case LTFT_PAR:
    m_pLTFTPageDlg->GetValues((LtftPar*)o_values);
+   break;
+  case DBW_PAR:
+   m_pDBWPageDlg->GetValues((DBWPar*)o_values);
    break;
   case FNNAME_DAT:
   case SENSOR_DAT:

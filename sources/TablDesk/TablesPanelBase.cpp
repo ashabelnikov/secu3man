@@ -179,7 +179,7 @@ void CTablesPanelBase::EnableEmbedMapWnd(bool embed, const CRect& rc, int begin,
 bool CTablesPanelBase::Is3DMap(int i)
 {
  return (i == ETMT_IGN_WORK || i == ETMT_INJ_VE || i == ETMT_INJ_VE2 || i == ETMT_INJ_IVE || i == ETMT_INJ_AFR || i == ETMT_INJ_IT ||
-         i == ETMT_PWM1 || i == ETMT_PWM2 || i == ETMT_GASDOSE || i == ETMT_KNOCK_ZONE || i == ETMT_LAMBDA_ZONE);
+         i == ETMT_PWM1 || i == ETMT_PWM2 || i == ETMT_GASDOSE || i == ETMT_KNOCK_ZONE || i == ETMT_LAMBDA_ZONE || i == ETMT_ETC_THROPOS);
 }
 
 float CTablesPanelBase::GetPtMovStep(int wndType)

@@ -59,6 +59,7 @@ const BYTE ltftmap_context = LTFT_DAT;
 const BYTE rpmgrid_context = RPMGRD_PAR;
 const BYTE lodgrid_context = LODGRD_PAR;
 const BYTE funset_context = FUNSET_PAR;
+const BYTE errors_context = CE_ERR_CODES;
 
 namespace {
 void UpdateMap(float* map, int* flag, const SepTabPar* data)
@@ -299,7 +300,10 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     break;
   case PPS_READ_MONITOR_DATA:  //получение данных дл€ монитора
    if (i_descriptor!=default_context)
-    m_comm->m_pControlApp->ChangeContext(default_context); //set to default context
+   {
+    if (!m_real_time_errors_mode || m_view->GetTrimtabButtonState())
+     m_comm->m_pControlApp->ChangeContext(default_context); //set to default context
+   }
    else
    {
     SensorDat* sd = (SensorDat*)(ip_packet);    
@@ -315,7 +319,7 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    break;
  }//switch
 
- if (i_descriptor == CE_ERR_CODES && m_real_time_errors_mode)
+ if (i_descriptor == errors_context && m_real_time_errors_mode)
  { //пришел пакет содержащий коды ошибок (в реальном времени)
   CEErrors* errors = reinterpret_cast<CEErrors*>(ip_packet);
   _SetErrorsToList(errors);
@@ -345,7 +349,7 @@ void CCheckEngineTabController::OnConnection(const bool i_online)
  {
   state = CStatusBarManager::STATE_ONLINE;
   //≈сли установлен чекбокс режима реального времени, то мен€ем контекст
-  m_comm->m_pControlApp->ChangeContext(m_real_time_errors_mode ? CE_ERR_CODES : default_context);
+  m_comm->m_pControlApp->ChangeContext(m_real_time_errors_mode ? errors_context : default_context);
   m_view->EnableAll(true);
  }
  else
@@ -401,7 +405,7 @@ void CCheckEngineTabController::OnRealTimeErrors(void)
  if (checked)
  {
   m_sbar->SetInformationText("");
-  m_comm->m_pControlApp->ChangeContext(CE_ERR_CODES);  //change context!
+  m_comm->m_pControlApp->ChangeContext(errors_context);  //change context!
  }
  else
  {
@@ -451,12 +455,12 @@ void CCheckEngineTabController::OnListClearAllErrors(void)
 //ѕерекачивает битики кодов ошибок из структуры данных в чек боксы списка
 void CCheckEngineTabController::_SetErrorsToList(const CEErrors* ip_errors)
 {
- CEErrorIdStr::ErrorsIDContainer errors_ids = mp_errors_ids->Get();
+ CEErrorIdStr::ErrorsIDContainer& errors_ids = mp_errors_ids->Get();
  CEErrorIdStr::ErrorsIDContainer::iterator it = errors_ids.begin();
  for(; it != errors_ids.end(); ++it)
  {
   bool state = CHECKBIT32(ip_errors->flags, ((*it).first));
-
+ 
   if (m_view->GetInertShow() && m_real_time_errors_mode)
   {
    DWORD current = ::GetTickCount();

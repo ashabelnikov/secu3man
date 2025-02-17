@@ -525,6 +525,24 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_WUAFR1MapWnd_W = rc.right - rc.left;
    sz.m_WUAFR1MapWnd_H = rc.bottom - rc.top;
    break;
+  case ETMT_ETC_SPRPREL:
+   ws.m_ETCSprPrelMapWnd_X = rc.left;
+   ws.m_ETCSprPrelMapWnd_Y = rc.top;
+   sz.m_ETCSprPrelMapWnd_W = rc.right - rc.left;
+   sz.m_ETCSprPrelMapWnd_H = rc.bottom - rc.top;
+   break;
+  case ETMT_ETC_ACCEERR:
+   ws.m_ETCAcceptErrMapWnd_X = rc.left;
+   ws.m_ETCAcceptErrMapWnd_Y = rc.top;
+   sz.m_ETCAcceptErrMapWnd_W = rc.right - rc.left;
+   sz.m_ETCAcceptErrMapWnd_H = rc.bottom - rc.top;
+   break;
+  case ETMT_ETC_THROPOS:
+   ws.m_ETCThrottlePosMapWnd_X = rc.left;
+   ws.m_ETCThrottlePosMapWnd_Y = rc.top;
+   sz.m_ETCThrottlePosMapWnd_W = rc.right - rc.left;
+   sz.m_ETCThrottlePosMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -868,6 +886,18 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case ETMT_WU_AFR1:
    X = ws.m_WUAFR1MapWnd_X, Y = ws.m_WUAFR1MapWnd_Y;
    W = sz.m_WUAFR1MapWnd_W, H = sz.m_WUAFR1MapWnd_H;
+   break;
+  case ETMT_ETC_SPRPREL:
+   X = ws.m_ETCSprPrelMapWnd_X, Y = ws.m_ETCSprPrelMapWnd_Y;
+   W = sz.m_ETCSprPrelMapWnd_W, H = sz.m_ETCSprPrelMapWnd_H;
+   break;
+  case ETMT_ETC_ACCEERR:
+   X = ws.m_ETCAcceptErrMapWnd_X, Y = ws.m_ETCAcceptErrMapWnd_Y;
+   W = sz.m_ETCAcceptErrMapWnd_W, H = sz.m_ETCAcceptErrMapWnd_H;
+   break;
+  case ETMT_ETC_THROPOS:
+   X = ws.m_ETCThrottlePosMapWnd_X, Y = ws.m_ETCThrottlePosMapWnd_Y;
+   W = sz.m_ETCThrottlePosMapWnd_W, H = sz.m_ETCThrottlePosMapWnd_H;
    break;
 
   default:

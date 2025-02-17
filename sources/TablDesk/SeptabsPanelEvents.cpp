@@ -1790,3 +1790,135 @@ void __cdecl CSeptabsPanel::OnWndActivationWUAFR1Map(void* i_param, long cmd)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeETCSprPrelTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_ETC_SPRPREL);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseETCSprPrelTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_ETC_SPRPREL].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_ETC_SPRPREL].handle, ETMT_ETC_SPRPREL);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationETCSprPrelTable(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_ETC_SPRPREL].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeETCAcceptErrTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_ETC_ACCEERR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseETCAcceptErrTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_ETC_ACCEERR].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_ETC_ACCEERR].handle, ETMT_ETC_ACCEERR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationETCAcceptErrTable(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_ETC_ACCEERR].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeETCThrottlePosTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_ETC_THROPOS);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseETCThrottlePosTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_ETC_THROPOS].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_ETC_THROPOS].handle, ETMT_ETC_THROPOS);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationETCThrottlePosTable(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_ETC_THROPOS].handle, cmd);
+}
+
+//------------------------------------------------------------------------

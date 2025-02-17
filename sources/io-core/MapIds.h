@@ -107,9 +107,12 @@ enum EMapTypes
  ETMT_EGO_DELAY     = 73, //
  ETMT_WU_AFR0       = 74, //
  ETMT_WU_AFR1       = 75, //
+ ETMT_ETC_SPRPREL   = 76, //
+ ETMT_ETC_ACCEERR   = 77, //
+ ETMT_ETC_THROPOS   = 78, //
 
- ETMT_GME_IGN_WND   = 76, //pseudo map, grid mode editing window for ignition maps
- ETMT_GME_INJ_WND   = 77, //pseudo map, grid mode editing window for injection maps
+ ETMT_GME_IGN_WND   = 79, //pseudo map, grid mode editing window for ignition maps
+ ETMT_GME_INJ_WND   = 80, //pseudo map, grid mode editing window for injection maps
 
  ETMT_IG_START      = 1,  //set ignition
  ETMT_IG_END        = 5,
@@ -118,7 +121,7 @@ enum EMapTypes
  ETMT_SET_START     = 1,  //set  ignition + injection
  ETMT_SET_END       = 36,
  ETMT_SEP_START     = 37, //separate
- ETMT_SEP_END       = 75,
+ ETMT_SEP_END       = 78,
  ETMT_ALL_START     = 1,  //all
- ETMT_ALL_END       = 77
+ ETMT_ALL_END       = 80
 };

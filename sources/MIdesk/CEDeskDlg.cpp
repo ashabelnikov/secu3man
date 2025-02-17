@@ -51,6 +51,7 @@ CCEDeskDlg::CCEDeskDlg(CWnd* pParent /*=NULL*/)
  {
   _stprintf(&m_cashstr[i][0], _T("%d"), secu3_ce_error_codes[i].second);
   m_cashval[i] = false;
+  m_timers[i] = 0;
  }
 }
 
@@ -107,13 +108,25 @@ void CCEDeskDlg::SetValues(DWORD i_errors)
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
  {
   bool status = (CHECKBIT32(i_errors, secu3_ce_error_codes[i].first) != 0);
-  if (m_cashval[i] != status)
+  DWORD current = ::GetTickCount();
+  if (status)
+   m_timers[i] = current;
+
+  if ((current - m_timers[i]) < 500)
   {
-   m_cashval[i] = status;
-   if (status)
+   if (m_cashval[i] != true)
+   {
+    m_cashval[i] = true;
     m_CEErrors[i].SetWindowText(m_cashstr[i]);
-   else
+   }
+  }
+  else
+  {
+   if (m_cashval[i] != false)
+   {
+    m_cashval[i] = false;
     m_CEErrors[i].SetWindowText(_T(""));
+   }
   }
  }
 }

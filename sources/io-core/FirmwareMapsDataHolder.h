@@ -96,6 +96,10 @@
 #define INJ_NONLIN_SIZE        8
 #define EGO_DELAY_SIZE         16
 #define WU_AFR_SIZE            16
+#define ETC_SPRPREL_SIZE       8
+#define ETC_ACCEPTERR_SIZE     6
+#define ETC_POS_APPS_SIZE      16
+#define ETC_POS_RPM_SIZE       16
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -384,6 +388,9 @@ struct FWMapsDataHolder
  float inj_ego_delay[EGO_DELAY_SIZE];
  float inj_wu_afr0[WU_AFR_SIZE];
  float inj_wu_afr1[WU_AFR_SIZE];
+ float etc_sprprel_duty[ETC_SPRPREL_SIZE * 2];
+ float etc_accept_error[ETC_ACCEPTERR_SIZE * 2];
+ float etc_throttle_pos[ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE];
 
  CESettingsData cesd;
 
@@ -447,6 +454,9 @@ struct FWMapsDataHolder
    case ETMT_EGO_DELAY: return inj_ego_delay;
    case ETMT_WU_AFR0: return inj_wu_afr0;
    case ETMT_WU_AFR1: return inj_wu_afr1;
+   case ETMT_ETC_SPRPREL: return etc_sprprel_duty;
+   case ETMT_ETC_ACCEERR: return etc_accept_error;
+   case ETMT_ETC_THROPOS: return etc_throttle_pos;
   }
   return NULL; //undefined type of map
  }
@@ -494,6 +504,9 @@ struct FWMapsDataHolder
    case ETMT_EGO_DELAY: return EGO_DELAY_SIZE;
    case ETMT_WU_AFR0: return WU_AFR_SIZE;
    case ETMT_WU_AFR1: return WU_AFR_SIZE;
+   case ETMT_ETC_SPRPREL: return ETC_SPRPREL_SIZE * 2;
+   case ETMT_ETC_ACCEERR: return ETC_ACCEPTERR_SIZE * 2;
+   case ETMT_ETC_THROPOS: return ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE;
   }
   ASSERT(0);
   return 0; //undefined type of map

@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file LTFTPageDlg.h
+/** \file DBWPageDlg.h
  * \author Alexey A. Shabelnikov
  */
 
@@ -29,6 +29,7 @@
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "common/ParamTabBaseDlg.h"
+#include "common/objecttimer.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
@@ -36,20 +37,23 @@
 class CToolTipCtrlEx;
 class CWndScroller;
 
-class CLTFTPageDlg : public CParamTabBaseDlg, public ParamPageEvents
+class CDBWPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
-  CLTFTPageDlg();
- ~CLTFTPageDlg();
+  CDBWPageDlg();
+ ~CDBWPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
 
   void Enable(bool enable);
   bool IsEnabled(void);
 
-  void GetValues(SECU3IO::LtftPar* o_values);
-  void SetValues(const SECU3IO::LtftPar* i_values);
+  void GetValues(SECU3IO::DBWPar* o_values);
+  void SetValues(const SECU3IO::DBWPar* i_values);
+
+  void setOnRequestDataCollection(EventWithCode OnCB) {m_OnRequestDataCollection = OnCB;}
 
  // Implementation
  protected:
@@ -58,37 +62,42 @@ class CLTFTPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnChangeData();
+  afx_msg void OnUpdHomePos();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
-  SECU3IO::LtftPar m_params;
+ void OnRequestDataCollectionTimer(void);
+
+  SECU3IO::DBWPar m_params;
   bool m_enabled;
 
-  CComboBox m_ltft_mode_combo;
-  CSpinButtonCtrlEx m_ltft_learn_clt_dw_spin;
-  CEditEx m_ltft_learn_clt_dw_edit;
-  CSpinButtonCtrlEx m_ltft_learn_clt_up_spin;
-  CEditEx m_ltft_learn_clt_up_edit;
-  CSpinButtonCtrlEx m_ltft_learn_iat_up_spin;
-  CEditEx m_ltft_learn_iat_up_edit;
-  CSpinButtonCtrlEx m_ltft_learn_grad_spin;
-  CEditEx m_ltft_learn_grad_edit;
-  CSpinButtonCtrlEx m_ltft_learn_gpa_spin;
-  CEditEx m_ltft_learn_gpa_edit;
-  CSpinButtonCtrlEx m_ltft_learn_gpd_spin;
-  CEditEx m_ltft_learn_gpd_edit;
-  CSpinButtonCtrlEx m_ltft_min_spin;
-  CEditEx m_ltft_min_edit;
-  CSpinButtonCtrlEx m_ltft_max_spin;
-  CEditEx m_ltft_max_edit;
-  CSpinButtonCtrlEx m_ltft_learn_rpm_spin[2];
-  CEditEx m_ltft_learn_rpm_edit[2];
-  CSpinButtonCtrlEx m_ltft_learn_load_spin[2];
-  CEditEx m_ltft_learn_load_edit[2];
-  CSpinButtonCtrlEx m_ltft_dead_band_spin[2];
-  CEditEx m_ltft_dead_band_edit[2];
+  CSpinButtonCtrlEx m_etc_p_spin;
+  CEditEx m_etc_p_edit;
+  CSpinButtonCtrlEx m_etc_i_spin;
+  CEditEx m_etc_i_edit;
+  CSpinButtonCtrlEx m_etc_d_spin;
+  CEditEx m_etc_d_edit;
+  CSpinButtonCtrlEx m_etc_nmax_duty_spin;
+  CEditEx m_etc_nmax_duty_edit;
+  CSpinButtonCtrlEx m_etc_pmax_duty_spin;
+  CEditEx m_etc_pmax_duty_edit;
+  CSpinButtonCtrlEx m_etc_pidperiod_spin;
+  CEditEx m_etc_pidperiod_edit;
+  CSpinButtonCtrlEx m_etc_frictorqop_spin;
+  CEditEx m_etc_frictorqop_edit;
+  CSpinButtonCtrlEx m_etc_frictorqcl_spin;
+  CEditEx m_etc_frictorqcl_edit;
+  CSpinButtonCtrlEx m_etc_frictorqth_spin;
+  CEditEx m_etc_frictorqth_edit;
+  CSpinButtonCtrlEx m_etc_maxiacadd_spin;
+  CEditEx m_etc_maxiacadd_edit;
+  CEditEx m_etc_homepos_edit;
+  CButton m_updhomepos_button;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;
+
+  EventWithCode m_OnRequestDataCollection;
+  CObjectTimer<CDBWPageDlg> m_upd_tmr;  
 };

@@ -1,0 +1,135 @@
+OUTPUTS:
+IGN_Ox/IGN_OUTx - Ignition outputs.
+
+INJ_Ox/INJ_OUTx - Injection outputs.
+
+ADD_Ox - Additional outputs for different purposes.
+
+ECF - Electric cooling fan speed control output.
+
+IE - Idle cut off valve control output (carburetor).
+
+FE - Power valve control output (carburetor).
+
+STBL_O/ST_BLOCK - Starter relay control output (starter's blocking).
+
+FPMP_O/FL_PUMP - Fuel pump control output.
+
+PWRR_O/PWRRELAY - Power management output of ECU.
+
+CEL_O - Output for 'Check Engine' lamp.
+
+EVAP_O - Canister purge valve control output.
+
+O2SH_O - EGO heating control output.
+
+COND_O - Air conditioner's clutch control output.
+
+TACH_O - Signal output for tachometer.
+
+UNI_OUTx - Universal programmable outputs.
+
+SM_DIR - Step pulse output for SM IAC/automatic choke.
+
+SM_STP - Direction signal output SM IAC/automatic choke.
+
+GD_DIR - Step pulse output for gas dispenser's stepper motor.
+
+GD_STP - Direction signal output for gas dispenser's stepper motor.
+
+IAC_PWM - Output for PWM IAC valve (torque type valve).
+
+GD_PWM - PWM output for gas dispenser (PWM controlled dispenser).
+
+GASVAL_O - Gas valve control output.
+
+GRHEAT - Gas reducer heating control output.
+
+VTACHOM - Universal configurable output for tachometer.
+
+HALL_OUT - Signal emulation output of Hall-type sensor in distributor. Can be used to cheat other ECU or for tachometer.
+
+INTK_HEAT - Intake manifold heating control output.
+
+STROBE - Strobe lamp output (LED).
+
+PWM1/PWM2 - Universal PWM outputs with table control from (load, rpm).
+
+FL_CONS - Instantaneous fuel consumption signal frequency output (Hz).
+
+KSP_CS - TPIC8101/HIP9011 chip control output.
+
+CAN_CS - MCP2515 CAN bus chip control output.
+
+
+INPUTS:
+BL - Input/Output for various purposes. Bootloader's start input. Weakly protected, low current.
+
+DE - Input/Output for various purposes. EEPROM reset input. Weakly protected, low current.
+
+CKPS - Differential type input for connecting CKP sensor.
+
+PS - Input for phase sensor on the Hall-effect and other purposes.
+
+REF_S - Input for phase sensor of induction (VR) type and other purposes.
+
+GAS_V - Gas valve's status input.
+
+IGN/IGN_I - Ignition switch status input.
+
+EPAS_I - Input request to turn on electric power steering.
+
+COND_I - Request input to turn on the air conditioner clutch.
+
+MAP_S/MAP_I - MAP input.
+
+ADD_Ix - Additional inputs for different purposes.
+
+LAMBDA - Exhaust Gas Oxygen sensor input 1.
+
+LAMBDA2 - Exhaust Gas Oxygen sensor input 2.
+
+AIR_TEMP - Intake air temperature sensor input.
+
+SPD_SENS - Vehicle Speed sensor input.
+
+MAP2 - MAP input 2 (barometer etc).
+
+GPS - GPS input (gas pressure sensor for LPG injection).
+
+TEMP2 - Gas temperature sensor input (for LPG injection).
+
+MAF - Input for MAF.
+
+MAPSEL0 - Input to implement switching between 4 sets of tables.
+
+BC_INPUT - Blink code start input (Check Engine).
+
+IGNTIM - Input for manual correction of ignition timing.
+
+INJPWC_I - Injection PW manual correction input.
+
+AUTO_I - Input for changing the ignition timing when shifting gears.
+
+INPUTx - Input for use in universal programmable outputs. Stub for real input's functions if it is used only as condition for universal outputs.
+
+FTLS_I - Fuel level sensor input in the tank.
+
+EGTS_I - Exhaust gas temperature sensor input.
+
+OPS_I - Oil pressure sensor input.
+
+FTS_I - Fuel temperature sensor input.
+
+REFPRS_I - A/C refrigerant's pressure sensor input.
+
+ALTRN_I - State of the alternator.
+
+FPS - Fuel pressure sensor input.
+
+TPS2 - Throttle position sensor 2 input (electronic throttle). Voltage at this input is falling when throttle is opening.
+
+APPS1 - Accelerator pedal position sensor 1 input (electronic gas pedal). Voltage at this input is 2 times greater than voltage on the APPS2 input.
+
+APPS2 - Accelerator pedal position sensor 2 input  (electronic gas pedal). Voltage at this input is 2 times smaller than voltage on the APPS1 input.
+
