@@ -108,13 +108,18 @@ enum EFWDFlags
  FLAG_XTAU_TFACC_MAP = 71,   //separate
  FLAG_XTAU_TFDEC_MAP = 72,   //separate
  FLAG_EGO_DELAY_MAP  = 73,   //separate
+ FLAG_WU_AFR0        = 74,   //...
+ FLAG_WU_AFR1        = 75,   //
+ FLAG_ETC_SPRPREL    = 76,   //
+ FLAG_ETC_ACCEERR    = 77,   //
+ FLAG_ETC_THROPOS    = 78,   //
 
- FLAG_NR_OF_FLAGS   = 74,    //total number of flags
+ FLAG_NR_OF_FLAGS   = 79,    //total number of flags
 
  FLAG_SET_START     = 0,
  FLAG_SET_END       = 35,
  FLAG_SEP_START     = 36,
- FLAG_SEP_END       = 73,
+ FLAG_SEP_END       = 78,
 };
 
 class CToolTipCtrlEx;

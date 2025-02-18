@@ -222,6 +222,21 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_EGO_DELAY_MAP))
   m_fwdm->GetSepMap(ETMT_EGO_DELAY, mp_fwd->inj_ego_delay);
 
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR0))
+  m_fwdm->GetSepMap(FLAG_WU_AFR0, mp_fwd->inj_wu_afr0);
+
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR1))
+  m_fwdm->GetSepMap(FLAG_WU_AFR1, mp_fwd->inj_wu_afr1);
+
+ if (mp_view->GetFWDFlag(FLAG_ETC_SPRPREL))
+  m_fwdm->GetSepMap(ETMT_ETC_SPRPREL, mp_fwd->etc_sprprel_duty);
+
+ if (mp_view->GetFWDFlag(FLAG_ETC_ACCEERR))
+  m_fwdm->GetSepMap(ETMT_ETC_ACCEERR, mp_fwd->etc_accept_error);
+
+ if (mp_view->GetFWDFlag(FLAG_ETC_THROPOS))
+  m_fwdm->GetSepMap(ETMT_ETC_THROPOS, mp_fwd->etc_throttle_pos);
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 
@@ -470,6 +485,11 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
  mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGO_DELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR0, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR1, false);
+ mp_view->SetFWDFlag(FLAG_ETC_SPRPREL, false);
+ mp_view->SetFWDFlag(FLAG_ETC_ACCEERR, false);
+ mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -670,6 +690,21 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_EGO_DELAY_MAP))
   m_fwdm->SetSepMap(ETMT_EGO_DELAY, mp_fwd->inj_ego_delay);
+
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR0))
+  m_fwdm->SetSepMap(FLAG_WU_AFR0, mp_fwd->inj_wu_afr0);
+
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR1))
+  m_fwdm->SetSepMap(FLAG_WU_AFR1, mp_fwd->inj_wu_afr1);
+
+ if (mp_view->GetFWDFlag(FLAG_ETC_SPRPREL))
+  m_fwdm->SetSepMap(ETMT_ETC_SPRPREL, mp_fwd->etc_sprprel_duty);
+
+ if (mp_view->GetFWDFlag(FLAG_ETC_ACCEERR))
+  m_fwdm->SetSepMap(ETMT_ETC_ACCEERR, mp_fwd->etc_accept_error);
+
+ if (mp_view->GetFWDFlag(FLAG_ETC_THROPOS))
+  m_fwdm->SetSepMap(ETMT_ETC_THROPOS, mp_fwd->etc_throttle_pos);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -928,6 +963,11 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
  mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGO_DELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR0, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR1, false);
+ mp_view->SetFWDFlag(FLAG_ETC_SPRPREL, false);
+ mp_view->SetFWDFlag(FLAG_ETC_ACCEERR, false);
+ mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

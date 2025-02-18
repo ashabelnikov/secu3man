@@ -578,6 +578,11 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_XTAU_TFACC_MAP, sv0127 && sepmap); //since v01.27
  mp_view->EnableFWDFlag(FLAG_XTAU_TFDEC_MAP, sv0127 && sepmap); //since v01.27
  mp_view->EnableFWDFlag(FLAG_EGO_DELAY_MAP, sv0129 && sepmap); //since v01.29
+ mp_view->EnableFWDFlag(FLAG_WU_AFR0, 0 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_WU_AFR1, 0 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_ETC_SPRPREL, 0 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, 0 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, 0 && sepmap); //since v01.30
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -1018,6 +1023,11 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
  mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGO_DELAY_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_WU_AFR0, false);
+ mp_view->EnableFWDFlag(FLAG_WU_AFR1, false);
+ mp_view->EnableFWDFlag(FLAG_ETC_SPRPREL, false);
+ mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, false);
+ mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)
