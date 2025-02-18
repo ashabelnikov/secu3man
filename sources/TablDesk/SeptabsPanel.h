@@ -73,6 +73,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   void EnableLambdaZones(bool enable);
   void EnableFtsCurve(bool enable);
   void EnableXtauMaps(bool enable);
+  void EnableETCMaps(bool enable);
 
   void CloseCharts(void);
   void ShowOpenedCharts(bool i_show);
@@ -399,6 +400,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   bool m_lambdazone_enabled;
   bool m_fts_curve_enabled;
   bool m_xtau_maps_enabled;
+  bool m_etc_maps_enabled;
 
   float m_attenuator_table_slots[128];
 

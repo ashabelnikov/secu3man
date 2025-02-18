@@ -1070,6 +1070,8 @@ class CAppSettingsModel : public ISettingsData
   //Functionality Section
   OptField_t<bool> m_optFuncSM_CONTROL;
   OptField_t<bool> m_optFuncGD_CONTROL;
+  OptField_t<bool> m_optFuncELEC_THROTTLE;
+  OptField_t<bool> m_optFuncXTAU_CORR;
 
   //folder from which application has been started
   TCHAR m_app_directory[MAX_PATH+1];

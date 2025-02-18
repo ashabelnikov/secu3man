@@ -52,6 +52,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   //true - SECU-3T, false - SECU-3i
   void EnableSECU3TItems(bool i_enable);
   void EnableFuelInjection(bool i_enable);
+  void EnableETC(bool i_enable);
 
   void FillCBByFunNames(void);
   std::vector<_TSTRING>& AccessFunNames(void);
@@ -83,6 +84,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControlsLower(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsUpper(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3iETC(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsFuelInject(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsTPSLearning(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAPPS1Learning(CCmdUI* pCmdUI);
@@ -101,6 +103,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_fuel_injection;
   bool m_tps_learning;
   bool m_apps1_learning;
+  bool m_etc;
 
   CComboBox m_gas_maps_combo;
   CComboBox m_benzin_maps_combo;

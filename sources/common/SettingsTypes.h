@@ -690,6 +690,8 @@ struct Functionality
 {
  bool SM_CONTROL;
  bool GD_CONTROL;
+ bool ELEC_THROTTLE;
+ bool XTAU_CORR;
 };
 
 //settings for debug variable

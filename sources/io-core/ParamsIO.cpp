@@ -1075,6 +1075,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->etc_frictorq_cl = float(p_params->etc_frictorq_cl) / 16.0f;
     p_out->etc_frictorq_thrd = float(p_params->etc_frictorq_thrd);
     p_out->etc_idleadd_max = float(p_params->etc_idleadd_max) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    p_out->etc_homepos = 0;
    }
    break;
 

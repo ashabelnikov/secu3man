@@ -76,6 +76,7 @@ CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learn
 , m_gasdose(false)
 , m_choke(false)
 , m_choke_ctrls(false)
+, m_etc(false)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 , mp_reservparsLink(new CLabel())
@@ -269,6 +270,7 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_ltft_tab_idx = idx;
 
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_DBW_PAR),m_pDBWPageDlg,18), DBW_PAR));
+ m_etc_tab_idx = idx;
 
  //Warning! SetEventListener must be called before SetCurSel, because SetCurSel
  //already uses event handlers
@@ -308,6 +310,12 @@ BOOL CParamDeskDlg::OnInitDialog()
  if (false==m_choke)
  {
   m_tab_control.EnableItem(m_choke_tab_idx, false);
+ }
+
+ //disable ETC settings tab if gas dose support is not included
+ if (false==m_etc)
+ {
+  m_tab_control.EnableItem(m_etc_tab_idx, false);
  }
 
  m_hot_keys_supplier->Init(this);
@@ -400,7 +408,7 @@ void CParamDeskDlg::Enable(bool enable)
  m_pLambdaPageDlg->Enable(enable && m_lambda);
  m_pAccelEnrPageDlg->Enable(enable && (m_fuel_injection || m_gasdose));
  m_pLTFTPageDlg->Enable(enable && m_fuel_injection);
- m_pDBWPageDlg->Enable(enable);
+ m_pDBWPageDlg->Enable(enable & m_etc);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -432,6 +440,11 @@ void CParamDeskDlg::Enable(bool enable)
  if (false==m_choke)
  {
   m_tab_control.EnableItem(m_choke_tab_idx, false);
+ }
+
+ if (false==m_etc)
+ {
+  m_tab_control.EnableItem(m_etc_tab_idx, false);
  }
 }
 
@@ -801,6 +814,21 @@ void CParamDeskDlg::EnableLambda(bool i_enable)
  m_lambda = i_enable;
  m_tab_control.EnableItem(m_lambda_tab_idx, i_enable && m_enabled);
  m_pLambdaPageDlg->Enable(i_enable && m_enabled);
+}
+
+void CParamDeskDlg::EnableETCHomePos(bool i_enable)
+{
+ m_pDBWPageDlg->EnableHomePos(i_enable);
+}
+
+void CParamDeskDlg::EnableETC(bool i_enable)
+{
+ if (m_etc == i_enable)
+  return; //already has needed state
+ m_etc = i_enable;
+ m_tab_control.EnableItem(m_etc_tab_idx, i_enable && m_enabled);
+ m_pDBWPageDlg->Enable(i_enable && m_enabled);
+ m_pFunSetPageDlg->EnableETC(i_enable); 
 }
 
 void CParamDeskDlg::OnSaveButton()

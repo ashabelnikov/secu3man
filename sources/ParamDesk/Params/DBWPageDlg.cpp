@@ -98,15 +98,16 @@ BEGIN_MESSAGE_MAP(CDBWPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_DBW_MAXIACADD_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_DBW_MAXIACADD_UNIT,OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_DBW_HOMEPOS_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_DBW_HOMEPOS_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_DBW_HOMEPOS_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_DBW_HOMEPOS_EDIT,OnUpdateControlsHomepos)
+ ON_UPDATE_COMMAND_UI(IDC_PD_DBW_HOMEPOS_CAPTION,OnUpdateControlsHomepos)
+ ON_UPDATE_COMMAND_UI(IDC_PD_DBW_HOMEPOS_UNIT,OnUpdateControlsHomepos)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_DBW_UPDHOMEPOS_BUTTON,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_DBW_UPDHOMEPOS_BUTTON,OnUpdateControlsHomepos)
 END_MESSAGE_MAP()
 
 CDBWPageDlg::CDBWPageDlg()
 : m_enabled(false)
+, m_homepos_enabled(false)
 , mp_scr(new CWndScroller)
 , m_etc_p_edit(CEditEx::MODE_FLOAT, true)
 , m_etc_i_edit(CEditEx::MODE_FLOAT, true)
@@ -186,6 +187,11 @@ void CDBWPageDlg::DoDataExchange(CDataExchange* pDX)
 void CDBWPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CDBWPageDlg::OnUpdateControlsHomepos(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_homepos_enabled);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -364,4 +370,13 @@ void CDBWPageDlg::OnRequestDataCollectionTimer(void)
  m_upd_tmr.KillTimer();
  if (m_OnRequestDataCollection)
   m_OnRequestDataCollection(0);
+}
+
+void CDBWPageDlg::EnableHomePos(bool enable)
+{
+ if (m_homepos_enabled == enable)
+  return; //already has needed state
+ m_homepos_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }

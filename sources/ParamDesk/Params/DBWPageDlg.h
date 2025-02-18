@@ -52,6 +52,7 @@ class CDBWPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void GetValues(SECU3IO::DBWPar* o_values);
   void SetValues(const SECU3IO::DBWPar* i_values);
+  void EnableHomePos(bool enable);
 
   void setOnRequestDataCollection(EventWithCode OnCB) {m_OnRequestDataCollection = OnCB;}
 
@@ -64,6 +65,7 @@ class CDBWPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeData();
   afx_msg void OnUpdHomePos();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsHomepos(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -71,6 +73,7 @@ class CDBWPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   SECU3IO::DBWPar m_params;
   bool m_enabled;
+  bool m_homepos_enabled;
 
   CSpinButtonCtrlEx m_etc_p_spin;
   CEditEx m_etc_p_edit;

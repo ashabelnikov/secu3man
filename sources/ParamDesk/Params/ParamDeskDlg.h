@@ -93,6 +93,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableHallWndWidth(bool enable);
   virtual void EnableUseCamRef(bool enable);
   virtual void EnableCogsBTDC(bool enable);
+  virtual void EnableETC(bool enable);
+  virtual void EnableETCHomePos(bool i_enable);  //ETC
 
   virtual BYTE GetCurrentDescriptor(void);
 
@@ -184,6 +186,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   bool m_gasdose;
   bool m_choke;
   bool m_choke_ctrls;
+  bool m_etc;
 
   const bool m_show_knock_page;
   typedef std::map<int,unsigned> TabDescriptor;
@@ -194,6 +197,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   int m_gasdose_tab_idx;
   int m_choke_tab_idx;
   int m_ltft_tab_idx;
+  int m_etc_tab_idx;
 
   //Event handlers (delegates)
   EventHandler m_OnTabActivate;

@@ -182,6 +182,8 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, COPT_GD_CONTROL)); //GD
  mp_view->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, COPT_SM_CONTROL)); 
  mp_view->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->EnableETC(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, COPT_SECU3T)); //ETC
+ mp_view->EnableETCHomePos(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, COPT_SECU3T)); //ETC
 }
 
 //from view. Очередная вкладка активировалась

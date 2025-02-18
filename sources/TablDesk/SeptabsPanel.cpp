@@ -57,6 +57,7 @@ CSeptabsPanel::CSeptabsPanel(bool disable_vscroll /*= false*/, bool enable_fwcon
 , m_lambdazone_enabled(false)
 , m_fts_curve_enabled(false)
 , m_xtau_maps_enabled(false)
+, m_etc_maps_enabled(false)
 , m_initialized(false)
 , m_disable_vscroll(disable_vscroll)
 , m_enable_fwconsts(enable_fwconsts)
@@ -681,21 +682,21 @@ void CSeptabsPanel::OnUpdateViewWUAFR1Map(CCmdUI* pCmdUI)
 void CSeptabsPanel::OnUpdateViewETCSprPrelMap(CCmdUI* pCmdUI)
 {
  BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_etc_maps_enabled);
  pCmdUI->SetCheck((m_md[ETMT_ETC_SPRPREL].state) ? TRUE : FALSE);
 }
 
 void CSeptabsPanel::OnUpdateViewETCAcceptErrMap(CCmdUI* pCmdUI)
 {
  BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_etc_maps_enabled);
  pCmdUI->SetCheck((m_md[ETMT_ETC_ACCEERR].state) ? TRUE : FALSE);
 }
 
 void CSeptabsPanel::OnUpdateViewETCThrottlePosMap(CCmdUI* pCmdUI)
 {
  BOOL enable = (DLL::Chart3DCreate!=NULL) && IsAllowed();
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_etc_maps_enabled);
  pCmdUI->SetCheck((m_md[ETMT_ETC_THROPOS].state) ? TRUE : FALSE);
 }
 
@@ -892,6 +893,20 @@ void CSeptabsPanel::EnableXtauMaps(bool enable)
   DLL::Chart2DEnable(m_md[ETMT_XTAU_TFACC].handle, enable && IsAllowed());
  if (m_md[ETMT_XTAU_TFDEC].state && ::IsWindow(m_md[ETMT_XTAU_TFDEC].handle))
   DLL::Chart2DEnable(m_md[ETMT_XTAU_TFDEC].handle, enable && IsAllowed());
+}
+
+void CSeptabsPanel::EnableETCMaps(bool enable)
+{
+ m_etc_maps_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+
+ if (m_md[ETMT_ETC_SPRPREL].state && ::IsWindow(m_md[ETMT_ETC_SPRPREL].handle))
+  DLL::Chart2DEnable(m_md[ETMT_ETC_SPRPREL].handle, enable && IsAllowed());
+ if (m_md[ETMT_ETC_ACCEERR].state && ::IsWindow(m_md[ETMT_ETC_ACCEERR].handle))
+  DLL::Chart2DEnable(m_md[ETMT_ETC_ACCEERR].handle, enable && IsAllowed());
+ if (m_md[ETMT_ETC_THROPOS].state && ::IsWindow(m_md[ETMT_ETC_THROPOS].handle))
+  DLL::Chart3DEnable(m_md[ETMT_ETC_THROPOS].handle, enable && IsAllowed());
 }
 
 void CSeptabsPanel::OnViewAttenuatorMap()

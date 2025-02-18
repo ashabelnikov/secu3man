@@ -949,7 +949,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableEgtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableFtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
- mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableXtauMaps(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableXtauMaps(fnc.XTAU_CORR && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
@@ -957,6 +957,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableLambdaZones(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableETCMaps(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
 
  mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
  mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(opt, SECU3IO::COPT_COOLINGFAN_PWM));
@@ -983,6 +984,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_ParamDeskDlg->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)); //GD
  mp_view->mp_ParamDeskDlg->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_ParamDeskDlg->EnableETC(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); //ETC
 
  //I/O remapping
  this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));

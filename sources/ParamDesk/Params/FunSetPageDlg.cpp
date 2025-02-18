@@ -169,21 +169,23 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_USE_LDAX_GRID, OnUpdateControls)
 
  //APPS1
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_EDIT,OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_SPIN,OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_CAPTION,OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_UNIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_EDIT,OnUpdateControlsSECU3iETC)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_SPIN,OnUpdateControlsSECU3iETC)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_CAPTION,OnUpdateControlsSECU3iETC)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET5_UNIT,OnUpdateControlsSECU3iETC)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT,OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_SPIN,OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_CAPTION,OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_UNIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_EDIT,OnUpdateControlsSECU3iETC)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_SPIN,OnUpdateControlsSECU3iETC)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_CAPTION,OnUpdateControlsSECU3iETC)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT5_UNIT,OnUpdateControlsSECU3iETC)
 
 END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/, bool apps1_learning /*=true*/)
 : m_enabled(false)
 , m_enable_secu3t_features(false)
+, m_etc(false)
+, m_fuel_injection(false)
 , m_map_grad_edit(CEditEx::MODE_FLOAT, true)
 , m_press_swing_edit(CEditEx::MODE_FLOAT, true)
 , m_map_curve_offset_edit(CEditEx::MODE_FLOAT, true)
@@ -193,7 +195,6 @@ CFunSetPageDlg::CFunSetPageDlg(bool tps_learning /*=true*/, bool apps1_learning 
 , m_tps_curve_offset_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
-, m_fuel_injection(false)
 , m_tps_learning(tps_learning)
 , m_apps1_learning(apps1_learning)
 , m_tpsl_push_value(.0f)
@@ -341,6 +342,11 @@ void CFunSetPageDlg::OnUpdateControlsFuelInject(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_fuel_injection);
 }
 
+void CFunSetPageDlg::OnUpdateControlsSECU3iETC(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_enable_secu3t_features && m_etc);
+}
+
 void CFunSetPageDlg::OnUpdateControlsTPSLearning(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_tps_learning);
@@ -348,7 +354,7 @@ void CFunSetPageDlg::OnUpdateControlsTPSLearning(CCmdUI* pCmdUI)
 
 void CFunSetPageDlg::OnUpdateControlsAPPS1Learning(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_apps1_learning);
+ pCmdUI->Enable(m_enabled && m_apps1_learning && !m_enable_secu3t_features && m_etc);
 }
 
 BOOL CFunSetPageDlg::OnInitDialog()
@@ -776,6 +782,15 @@ void CFunSetPageDlg::EnableFuelInjection(bool i_enable)
  if (m_fuel_injection == i_enable)
   return; //already has needed state
  m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CFunSetPageDlg::EnableETC(bool i_enable)
+{
+ if (m_etc == i_enable)
+  return; //already has needed state
+ m_etc = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

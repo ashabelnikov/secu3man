@@ -720,6 +720,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_Functionality_Section(_T("Functionality"))
 , m_optFuncSM_CONTROL(_T("SM_CONTROL"))
 , m_optFuncGD_CONTROL(_T("GD_CONTROL"))
+, m_optFuncELEC_THROTTLE(_T("ELEC_THROTTLE"))
+, m_optFuncXTAU_CORR(_T("XTAU_CORR"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -1896,6 +1898,8 @@ bool CAppSettingsModel::ReadSettings(void)
  IniIO fn(IniFileName, m_Name_Functionality_Section);
  fn.ReadInt(m_optFuncSM_CONTROL, _T("1"), 0, 1);
  fn.ReadInt(m_optFuncGD_CONTROL, _T("1"), 0, 1);
+ fn.ReadInt(m_optFuncELEC_THROTTLE, _T("1"), 0, 1);
+ fn.ReadInt(m_optFuncXTAU_CORR, _T("1"), 0, 1);
 
  return status;
 }
@@ -4583,6 +4587,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fn.WriteInt(m_optFuncGD_CONTROL, _T("Разрешение функциональности дозатора газа. Установите в 1 для разрешения (0 для запрещения)."));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fn.WriteInt(m_optFuncELEC_THROTTLE, _T("Enable ETC functionality. Set to 1 to enable (0 - for disabling)"));
+ else
+  fn.WriteInt(m_optFuncELEC_THROTTLE, _T("Разрешение функциональности электронного дросселя. Установите в 1 для разрешения (0 для запрещения)."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fn.WriteInt(m_optFuncXTAU_CORR, _T("Enable X-tau correction functionality. Set to 1 to enable (0 - for disabling)"));
+ else
+  fn.WriteInt(m_optFuncXTAU_CORR, _T("Разрешение функциональности X-tau коррекции. Установите в 1 для разрешения (0 для запрещения)."));
+
  return status;
 }
 
@@ -6946,6 +6960,8 @@ void CAppSettingsModel::GetFunctionality(Functionality& o_fnc) const
 {
  o_fnc.SM_CONTROL = m_optFuncSM_CONTROL.value;
  o_fnc.GD_CONTROL = m_optFuncGD_CONTROL.value;
+ o_fnc.ELEC_THROTTLE = m_optFuncELEC_THROTTLE.value;
+ o_fnc.XTAU_CORR = m_optFuncXTAU_CORR.value;
 }
 
 bool CAppSettingsModel::GetShowGraphLabels(void) const

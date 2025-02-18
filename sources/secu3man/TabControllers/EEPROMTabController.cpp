@@ -528,6 +528,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  mp_view->mp_ParamDeskDlg->EnableGasdose(true);
  mp_view->mp_ParamDeskDlg->EnableChoke(true);
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(true);
+ mp_view->mp_ParamDeskDlg->EnableETC(true);
 
  bool splitAng = mp_eedm->GetSplitAngMode(0);
  mp_view->mp_TablesPanel->SetSplitAngMode(splitAng);
@@ -937,6 +938,7 @@ void CEEPROMTabController::OnLoadGrids(void)
  mp_view->mp_ParamDeskDlg->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
  mp_view->mp_TablesPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
+ mp_view->mp_ParamDeskDlg->EnableETC(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); //ETC
  //-----------------------------------------------------------------------------------------------------
 
  AfxGetMainWnd()->EndWaitCursor();
