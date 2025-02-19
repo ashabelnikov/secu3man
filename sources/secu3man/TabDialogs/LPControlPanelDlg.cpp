@@ -30,6 +30,7 @@
 #include <limits>
 #include "common/FastDelegate.h"
 #include "common/GDIHelpers.h"
+#include "common/dpiaware.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/HatchDispCtrl.h"
 
@@ -45,6 +46,7 @@ CLPControlPanelDlg::CLPControlPanelDlg()
 , m_play_button_state(false)
 , m_slider_state(false)
 , m_all_enabled(false)
+, m_initialized(false)
 , m_marksFrame(new CHatchDispCtrl())
 {
  //empty
@@ -76,6 +78,9 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
+ ON_WM_HSCROLL()
+ ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PREV_BUTTON, OnUpdatePrevButton)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_NEXT_BUTTON, OnUpdateNextButton)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PLAY_BUTTON, OnUpdatePlayButton)
@@ -89,7 +94,6 @@ BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_BN_CLICKED(IDC_LOG_PLAYER_PLAY_BUTTON, OnPlayButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_NEXT_BUTTON, OnNextButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_PREV_BUTTON, OnPrevButton)
- ON_WM_HSCROLL()
  ON_CBN_SELCHANGE(IDC_LOG_PLAYER_TIME_FACTOR_COMBO, OnSelchangeTimeFactorCombo)
  ON_CBN_SELCHANGE(IDC_LOG_PLAYER_MAPSET_COMBO, OnSelchangeMapSetCombo)
  ON_BN_CLICKED(IDC_LOG_PLAYER_GME_INJ_CHECK, OnGmeInjButton)
@@ -122,15 +126,17 @@ BOOL CLPControlPanelDlg::OnInitDialog()
  mp_ttc->ActivateToolTips(true);
 
  //allign marks' frame to slider's channel, so their grids will match
- CRect chrc;
- m_slider.GetChannelRect(&chrc);
- CRect thrc;
- m_slider.GetThumbRect(&thrc);
- CRect mrrc = GDIHelpers::GetChildWndRect(m_marksFrame.get());
- m_marksFrame->MoveWindow(mrrc.left + chrc.left + thrc.Width()/2, mrrc.top, chrc.Width() - thrc.Width(), mrrc.Height());
+ _AllignMarksFrameToSlider();
 
  UpdateDialogControls(this,TRUE);
+ m_initialized = true;
  return TRUE;
+}
+
+void CLPControlPanelDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }
 
 void CLPControlPanelDlg::FillTimeFactorCombo(std::vector<_TSTRING>& i_factor_strings)
@@ -506,4 +512,33 @@ void CLPControlPanelDlg::DrawHatch(unsigned long pos, COLORREF color)
 void CLPControlPanelDlg::InvalidateHatch(void)
 {
  m_marksFrame->DrawBitmap();
+}
+
+void CLPControlPanelDlg::OnSize( UINT nType, int cx, int cy )
+{
+ if (m_initialized)
+ {
+  DPIAware da;
+  CRect rc1 = GDIHelpers::GetChildWndRect(&m_slider);
+  m_slider.SetWindowPos(NULL, 0, 0, cx - (rc1.left + da.ScaleX(3)), rc1.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+  //allign marks' frame to slider's channel, so their grids will match
+  if (m_marksFrame.get())
+  {
+   _AllignMarksFrameToSlider();
+   m_marksFrame->Invalidate();
+  }
+ }
+
+ Super::OnSize(nType, cx, cy);
+}
+
+void CLPControlPanelDlg::_AllignMarksFrameToSlider(void)
+{
+ CRect slrc, chrc, thrc, mrrc;
+ slrc = GDIHelpers::GetChildWndRect(&m_slider);
+ m_slider.GetChannelRect(&chrc);
+ m_slider.GetThumbRect(&thrc);
+ mrrc = GDIHelpers::GetChildWndRect(m_marksFrame.get());
+ m_marksFrame->MoveWindow(slrc.left + chrc.left + thrc.Width()/2, mrrc.top, chrc.Width() - thrc.Width(), mrrc.Height());
 }

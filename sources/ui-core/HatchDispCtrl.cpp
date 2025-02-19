@@ -115,7 +115,15 @@ void CHatchDispCtrl::OnPaint()
  //if window is disabled, then just fill rectangle with background color
  if (IsWindowEnabled())
  {
-  dc.BitBlt(0, 0, rc.Width(), rc.Height(), &m_memDC, 0, 0, SRCCOPY);
+  if (m_width == rc.Width())
+  { //width didn't change
+   dc.BitBlt(0, 0, rc.Width(), rc.Height(), &m_memDC, 0, 0, SRCCOPY);
+  }
+  else
+  { //width has been changed
+   m_memDC.SetStretchBltMode(HALFTONE);
+   dc.StretchBlt(0, 0, rc.Width(), rc.Height(), &m_memDC, 0, 0, m_width, rc.Height(), SRCCOPY);
+  } 
  }
  else
   dc.FillSolidRect(0,0, rc.Width(), rc.Height(), GetSysColor(COLOR_BTNFACE));

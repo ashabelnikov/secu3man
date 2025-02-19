@@ -143,7 +143,7 @@ void CLogPlayerTabDlg::OnDestroy()
 void CLogPlayerTabDlg::setOnDropFile(EventString OnFunction)
 {m_OnDropFile = OnFunction;}
 
-void CLogPlayerTabDlg::OnSize( UINT nType, int cx, int cy )
+void CLogPlayerTabDlg::OnSize(UINT nType, int cx, int cy)
 {
  if (m_initialized)
  {

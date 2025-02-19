@@ -127,9 +127,12 @@ class CLPControlPanelDlg : public CModelessDialog
   afx_msg void OnGmeInjButton();
   afx_msg void OnStopOnMarksCheck();
   afx_msg void OnStopOnErrorsCheck();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
 private:
+  void _AllignMarksFrameToSlider(void);
   CComboBox m_time_factor_combo;
   CButton m_play_button;
   CButton m_next_button;
@@ -145,6 +148,7 @@ private:
   CComboBox m_mapset_combo;
   CStatic m_mapset_caption;
 
+  bool m_initialized;
   bool m_next_button_state;
   bool m_prev_button_state;
   bool m_play_button_state;

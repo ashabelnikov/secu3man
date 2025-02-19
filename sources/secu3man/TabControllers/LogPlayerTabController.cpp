@@ -258,6 +258,7 @@ void CLogPlayerTabController::OnConnection(const bool i_online)
 
 bool CLogPlayerTabController::OnClose(void)
 {
+ mp_settings->SetLogPlayerVert(mp_view->GetSplitterPos());
  return true;
 }
 
