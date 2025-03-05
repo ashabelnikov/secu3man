@@ -1788,7 +1788,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   op_fwd->iload_slots[i] = slots4[i];
 
  //Copy table with TPS load grid
- float slots5[F_TLOAD_SLOTS]; GetTLoadGridMap(slots2);
+ float slots5[F_TLOAD_SLOTS]; GetTLoadGridMap(slots5);
  for(i = 0; i < F_TLOAD_SLOTS; ++i)
   op_fwd->tload_slots[i] = slots5[i];
 }
