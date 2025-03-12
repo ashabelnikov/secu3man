@@ -61,6 +61,10 @@ KSP_CS - TPIC8101/HIP9011 chip control output.
 
 CAN_CS - MCP2515 CAN bus chip control output.
 
+ETC_PWM1 - PWM output for opening of the electronic throttle.
+ 
+ETC_PWM2 - PWM output for closing of the electronic throttle.
+
 
 INPUTS:
 BL - Input/Output for various purposes. Bootloader's start input. Weakly protected, low current.

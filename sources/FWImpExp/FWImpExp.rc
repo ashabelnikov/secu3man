@@ -29,7 +29,7 @@ BEGIN
     CONTROL         "Впрыск топлива",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
     CONTROL         "Поддержка TPIC8101",IDC_FWM_TPIC_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,130,120,10
     CONTROL         "Сплитинг УОЗ (для РПД)",IDC_FWM_SPLIT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,150,120,10
-    CONTROL         "Управ. вентилятором c ШИМ",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,120,10
+    CONTROL         "Управ.вентилятором c ШИМ и др.",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,125,10
     CONTROL         "Двухканальный коммутатор",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
     CONTROL         "Поддержка OBD (мод. MCP2515)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,122,10
     CONTROL         "Управ. сост. смеси на карбюр.",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
@@ -218,7 +218,7 @@ BEGIN
     IDS_FWM_INJ_CHECK_TT    "FUEL_INJECTION. Данная опция не совместима с CARB_AFR"
     IDS_FWM_TPIC_CHECK_TT   "TPIC8101. Только в блоках SECU-3i"
     IDS_FWM_SPLIT_CHECK_TT  "SPLIT_ANGLE. Включить сплитинг УОЗ для двигателей Ванкеля."
-    IDS_FWM_FPWM_CHECK_TT   "COOLINGFAN_PWM. Установите эту галочку, если вам нужно управлять вентилятором охлаждения или моментным РДВ/дозатором газа при помощи ШИМ. Без этой галочки финкции IAC_PWM/GD_PWM работать не будут."
+    IDS_FWM_FPWM_CHECK_TT   "COOLINGFAN_PWM. Установите эту галочку, если вам нужно управлять вентилятором охлаждения, моментным РДВ/дозатором газа или электронной дроссельной заслонкой (ETC) при помощи ШИМ. Без этой галочки финкции IAC_PWM/GD_PWM/ETC_PWMx работать не будут."
     IDS_FWM_2CHIG_CHECK_TT  "CKPS_2CHIGN. Данная опция не совместима с PHASED_IGNITION"
     IDS_FWM_OBD_CHECK_TT    "OBD_SUPPORT"
     IDS_FWM_CAFR_CHECK_TT   "CARB_AFR. Данная опция не совместима с FUEL_INJECTION"
@@ -273,7 +273,7 @@ BEGIN
     CONTROL         "Fuel injection",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
     CONTROL         "Support of TPIC8101",IDC_FWM_TPIC_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,130,120,10
     CONTROL         "Split angle (rotary engines)",IDC_FWM_SPLIT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,150,120,10
-    CONTROL         "PWM for cooling fan",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,120,10
+    CONTROL         "PWM for cooling fan and others",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,125,10
     CONTROL         "Two-channel igniter",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
     CONTROL         "OBD support (MCP2515 required)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,120,10
     CONTROL         "AFR control on the carburetor",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
@@ -460,7 +460,7 @@ BEGIN
     IDS_FWM_INJ_CHECK_TT    "FUEL_INJECTION. This option is not compatible with CARB_AFR"
     IDS_FWM_TPIC_CHECK_TT   "TPIC8101. Only in SECU-3i units"
     IDS_FWM_SPLIT_CHECK_TT  "SPLIT_ANGLE. Turn on split angle for rotary (Wankel) engines"
-    IDS_FWM_FPWM_CHECK_TT   "COOLINGFAN_PWM. Set this check if you need to control cooling fan or IAC/gas dispenser valve using PWM. Without this check mark IAC_PWM/GD_PWM function will not work."
+    IDS_FWM_FPWM_CHECK_TT   "COOLINGFAN_PWM. Set this check if you need to control cooling fan, IAC/gas dispenser or electronic throttle (ETC) valve using PWM. Without this check mark IAC_PWM/GD_PWM/ETC_PWMx function will not work."
     IDS_FWM_2CHIG_CHECK_TT  "CKPS_2CHIGN. This option is not compatible with PHASED_IGNITION"
     IDS_FWM_OBD_CHECK_TT    "OBD_SUPPORT"
     IDS_FWM_CAFR_CHECK_TT   "CARB_AFR. This option is not compatible with FUEL_INJECTION"
