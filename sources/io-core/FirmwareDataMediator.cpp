@@ -453,7 +453,7 @@ typedef struct
  _uchar use_dbgvar;
 
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1515];
+ _uchar reserved[1511];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware

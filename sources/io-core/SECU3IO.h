@@ -398,7 +398,7 @@ namespace SECU3IO
   DWORD flags;
  };
 
- const int FW_SIGNATURE_INFO_SIZE = 48;
+ const int FW_SIGNATURE_INFO_SIZE = 52;
  struct FWInfoDat
  {
   char   info[FW_SIGNATURE_INFO_SIZE+1];//*one more byte for string's termination
