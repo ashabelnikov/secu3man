@@ -504,5 +504,6 @@ void CGridModeEditorInjDlg::OnCancel()
 {
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(this->m_hWnd, ETMT_GME_INJ_WND);
- Super::OnCancel();
+//Don't call OnCancel(), bacause we have already destroyed window in the CButtonsPanel::OnGridMapClosedInj()
+//Super::OnCancel();
 }
