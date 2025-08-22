@@ -485,10 +485,19 @@ void CCheckEngineTabDlg::OnTrimTableButton()
   m_ltft_save_button.ShowWindow(SW_SHOW);
   m_ltft_unit_text.ShowWindow(SW_SHOW);
   m_ltft_export_button.ShowWindow(SW_SHOW);
-  m_ltft_radio.ShowWindow(SW_SHOW);
-  m_ltft2_radio.ShowWindow(SW_SHOW);
   if (m_fuelinj_note)
+  {
    m_ltft_fuelinj_text.ShowWindow(SW_SHOW);
+   m_ltft_radio.ShowWindow(SW_HIDE);
+   m_ltft2_radio.ShowWindow(SW_HIDE);
+  }
+  else
+  {
+   m_ltft_fuelinj_text.ShowWindow(SW_HIDE);
+   m_ltft_radio.ShowWindow(SW_SHOW);
+   m_ltft2_radio.ShowWindow(SW_SHOW);
+  }
+
   if (!m_ltftexp_menu.GetSafeHmenu())
   {
    VERIFY(m_ltftexp_menu.LoadMenu(IDR_LTFTEXP_POPUP_MENU));
