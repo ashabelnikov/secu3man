@@ -452,8 +452,10 @@ typedef struct
 
  _uchar use_dbgvar;
 
+ _int  aircond_clt_ovh;
+
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1511];
+ _uchar reserved[1509];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3553,6 +3555,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.fi_leave_strokes = exd.fi_leave_strokes;
  o_data.iac_cond_add = (exd.iac_cond_add / 2.0f);
  o_data.aircond_clt = ((float)exd.aircond_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.aircond_clt_ovh = ((float)exd.aircond_clt_ovh) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.aircond_tps = ((float)exd.aircond_tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.idl_ve[0] = ((float)exd.idl_ve[0]) / VE_MAPS_M_FACTOR;
  o_data.idl_ve[1] = ((float)exd.idl_ve[1]) / VE_MAPS_M_FACTOR;
@@ -3694,6 +3697,7 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.fi_leave_strokes = i_data.fi_leave_strokes;
  exd.iac_cond_add = MathHelpers::Round(i_data.iac_cond_add * 2.0f);
  exd.aircond_clt = MathHelpers::Round(i_data.aircond_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.aircond_clt_ovh = MathHelpers::Round(i_data.aircond_clt_ovh * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.aircond_tps = MathHelpers::Round(i_data.aircond_tps * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.idl_ve[0] = MathHelpers::Round(i_data.idl_ve[0] * VE_MAPS_M_FACTOR);
  exd.idl_ve[1] = MathHelpers::Round(i_data.idl_ve[1] * VE_MAPS_M_FACTOR);

@@ -341,6 +341,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("CLT threshold for turn on of air cond."), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt, _T("Air conditioner will turn on only if the engine temperature is above this threshold, otherwise requests for switching on will be ignored."));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДТОЖ выкл. кондиционера"), _T("°C"), 0.0f, 250.0f, 0.25f, 2, &d.aircond_clt_ovh, _T("Кондиционер включится или будет оставаться включенным только если температура двигателя ниже этого порога."));
+ else
+  dfd.AppendItem(_T("CLT threshold for turn off of air cond."), _T("°C"), 0.0f, 250.0f, 0.25f, 2, &d.aircond_clt_ovh, _T("Air conditioner will turn on or will remain turned on only if the engine temperature is below this threshold."));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Порог ДПДЗ выкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("Компрессор кондиционера не будет включаться (или будет выключаться) если положение дроссельной заслогки превышает указанное значение."));
  else
   dfd.AppendItem(_T("TPS threshold for turning off air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps, _T("The compressor of air conditioner will not turn on (or it will turn off) if throttle position exceeds specified value."));

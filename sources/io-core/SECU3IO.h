@@ -872,6 +872,7 @@ const int INPAVNUM = 14;
   int fi_leave_strokes;
   float iac_cond_add;
   float aircond_clt;
+  float aircond_clt_ovh;
   float aircond_tps;
   float idl_ve[2];
   float evap_clt;
