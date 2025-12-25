@@ -29,6 +29,8 @@
 
 #include "common/fastdelegate.h"
 #include "ParamDesk/Params/IORemappingDlg.h"
+#include "io-core/BitMask.h"
+#include "io-core/SECU3IO.h"
 
 using namespace fastdelegate;
 typedef CFirmwareDataMediator FWDM;
@@ -147,6 +149,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
 
  mp_view->SetRedraw(false); //lock redraw to speed up adding of strings to combo boxes
+
+ DWORD opt = mp_fwdm->GetFWOptions();
+ bool remap2ckps = CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1);
 
  if (m_enable_secu3t_features)
  { //SECU-3T:
@@ -573,7 +578,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_SPDSENS, _T("SPD_SENS"));
-  if (iov >= FWDM::IOV_V24)
+  if (iov >= FWDM::IOV_V24 && remap2ckps)
    mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_CKPS, _T("CKPS"));        //<--CKPS remapping appeared in v2.4
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_COND_I, _T("COND_I"));
   if (iov >= FWDM::IOV_V31) { 
@@ -746,7 +751,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   //REF_S
   mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_IGN, _T("IGN"));
   mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_PS, _T("PS"));
-  if (iov >= FWDM::IOV_V24)
+  if (iov >= FWDM::IOV_V24 && remap2ckps)
    mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_CKPS, _T("CKPS"));     //<--CKPS remapping appeared in v2.4
   mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
   mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
@@ -1563,7 +1568,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_BC_INPUT, _T("BC_INPUT"));
   mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_MAPSEL0, _T("MAPSEL0"));
   mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_SPDSENS, _T("SPD_SENS"));
-  mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_CKPS, _T("CKPS"));
+  if (remap2ckps)
+   mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_CKPS, _T("CKPS"));
   if (iov >= FWDM::IOV_V31) { 
    mp_view->AddItem(FWDM::IOS3I_PS, FWDM::IOP3I_AUTO_I, _T("AUTO_I"));
   }
@@ -1578,7 +1584,8 @@ void CFWIORemappingController::_PrepareLogic(void)
 
   //REF_S
   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_PS, _T("PS"));
-  mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_CKPS, _T("CKPS"));
+  if (remap2ckps)
+   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_CKPS, _T("CKPS"));
   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_BC_INPUT, _T("BC_INPUT"));
   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_MAPSEL0, _T("MAPSEL0"));
   mp_view->AddItem(FWDM::IOS3I_REF_S, FWDM::IOP3I_SPDSENS, _T("SPD_SENS"));
