@@ -1949,6 +1949,9 @@ BEGIN
     IDS_UNIOUT_COND_MAF    "ƒћ–¬ (г/сек)"
     IDS_UNIOUT_COND_TPSDOT "—корость ƒ« (%/сек)"
     IDS_UNIOUT_COND_GPS    "ƒƒ√ (кѕа)"
+    IDS_UNIOUT_COND_FPS    "ƒƒ“ (кѕа)"
+    IDS_UNIOUT_COND_OPS    "ƒƒћ (кг/см2)"
+    IDS_UNIOUT_COND_EGTS   "ƒ“¬√ (∞C)"
 END
 
 STRINGTABLE
@@ -4249,6 +4252,9 @@ BEGIN
     IDS_UNIOUT_COND_MAF    "MAF (g/sec)"
     IDS_UNIOUT_COND_TPSDOT "TPS dot (%/sec)"
     IDS_UNIOUT_COND_GPS    "GPS (kPa)"
+    IDS_UNIOUT_COND_FPS    "FPS (kPa)"
+    IDS_UNIOUT_COND_OPS    "OPS (kg/cm2)"
+    IDS_UNIOUT_COND_EGTS   "EGTS (∞C)"
 END
 
 STRINGTABLE

@@ -5498,6 +5498,9 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_MAF:  return MathHelpers::Round(val * MAFS_MULT);
   case UNIOUT_COND_TPSDOT: return MathHelpers::Round(val); //%/s
   case UNIOUT_COND_GPS:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_FPS:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_OPS:  return MathHelpers::Round(val * OPS_MULT);
+  case UNIOUT_COND_EGTS: return MathHelpers::Round(val * EGTS_MULT);
  }
  return 0;
 }
@@ -5547,6 +5550,9 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_MAF:  return (((float)val) / MAFS_MULT);
   case UNIOUT_COND_TPSDOT: return (float)val;
   case UNIOUT_COND_GPS:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_FPS:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_OPS:  return (((float)val) / OPS_MULT);
+  case UNIOUT_COND_EGTS: return (((float)val) / EGTS_MULT);
  }
  return .0f;
 }

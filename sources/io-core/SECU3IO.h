@@ -596,6 +596,9 @@ namespace SECU3IO
  const int UNIOUT_COND_MAF = 33;      //MAF
  const int UNIOUT_COND_TPSDOT = 34;   //TPS dot
  const int UNIOUT_COND_GPS = 35;      //GPS
+ const int UNIOUT_COND_FPS = 36;      //FPS
+ const int UNIOUT_COND_OPS = 37;      //OPS
+ const int UNIOUT_COND_EGTS = 38;     //EGTS
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

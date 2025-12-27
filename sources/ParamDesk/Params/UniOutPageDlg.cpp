@@ -171,6 +171,7 @@ CUniOutPageDlg::CUniOutPageDlg()
  m_lf_str.insert(std::make_pair(SECU3IO::UNIOUT_LF_2ND, MLL::GetString(IDS_UNIOUT_LF_2ND)));
  m_lf_str.insert(std::make_pair(SECU3IO::UNIOUT_LF_NONE, MLL::GetString(IDS_UNIOUT_LF_NONE)));
 
+                                 //i_textlim, i_decplaces, i_min, i_max, i_delta, i_defval_on, i_defval_off, i_condstr, i_sign
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CTS,  CondFmt(6, 2, -40.0f, 300.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_CTS), true)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_RPM,  CondFmt(5, 0, 50.0f, 30000.0f, 10.0f, 1500.0f, 1200.0f, MLL::GetString(IDS_UNIOUT_COND_RPM), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_MAP,  CondFmt(5, 2, 0.25f, 500.0f, 0.25f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_MAP), false)));
@@ -207,6 +208,9 @@ CUniOutPageDlg::CUniOutPageDlg()
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_MAF,  CondFmt(6, 2, 0.02f, 650.0f, 0.1f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_MAF), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TPSDOT,  CondFmt(4, 0, -1000.0f, 1000.0f, 1.0f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_TPSDOT), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_GPS,  CondFmt(5, 2, 0.25f, 500.0f, 0.25f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_GPS), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_FPS,  CondFmt(6, 2, 0.0f, 700.0f, 0.25f, 320.0f, 300.0f, MLL::GetString(IDS_UNIOUT_COND_FPS), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_OPS,  CondFmt(6, 3, 0.0f, 25.0f, 0.05f, 4.1f, 4.0f, MLL::GetString(IDS_UNIOUT_COND_OPS), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_EGTS, CondFmt(6, 1, 0.0f, 2000.0f, 0.25f, 1000.0f, 990.0f, MLL::GetString(IDS_UNIOUT_COND_EGTS), false)));
 }
 
 LPCTSTR CUniOutPageDlg::GetDialogID(void) const
