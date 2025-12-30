@@ -85,7 +85,7 @@
 #define EGTS_LOOKUP_TABLE_SIZE 17          // Size of "exhaust gas temperature vs voltage" map
 #define OPS_LOOKUP_TABLE_SIZE  17          // Size of "oil pressure vs voltage" map
 #define INJPWCOEF_LUT_SIZE     17
-#define MAF_FLOW_CURVE_SIZE    64          //Size of MAF flow curve lookup table
+#define MAF_FLOW_CURVE_SIZE    64          // Size of MAF flow curve lookup table
 #define FTLSCOR_UCOEF_SIZE     32
 #define INJ_CYLADD_SIZE        8
 #define INJ_AE_MAP_LOOKUP_TABLE_SIZE 8
@@ -100,6 +100,7 @@
 #define ETC_ACCEPTERR_SIZE     6
 #define ETC_POS_APPS_SIZE      16
 #define ETC_POS_RPM_SIZE       16
+#define OTS_LOOKUP_TABLE_SIZE  17           // oil temperature sensor
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -343,9 +344,9 @@ struct SECU3FWMapsItem
 struct FWMapsDataHolder
 {
  std::vector<SECU3FWMapsItem> maps;
- float rpm_slots[F_RPM_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
- float clt_slots[F_TMP_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
- float load_slots[F_LOAD_SLOTS]; //сетка нагрузки исполузуемая вместе с этими кривыми
+ float rpm_slots[F_RPM_SLOTS];   //RPM grid used with these curves
+ float clt_slots[F_TMP_SLOTS];   //CLT grid used with these curves
+ float load_slots[F_LOAD_SLOTS]; //Load grid used with these curves
  float irpm_slots[F_IRPM_SLOTS]; //RPM grid for idling VE
  float iload_slots[F_ILOAD_SLOTS]; //Load grid for idling VE
  float tload_slots[F_TLOAD_SLOTS]; //Load grid for TPS (VE2)
@@ -391,6 +392,7 @@ struct FWMapsDataHolder
  float etc_sprprel_duty[ETC_SPRPREL_SIZE * 2];
  float etc_accept_error[ETC_ACCEPTERR_SIZE * 2];
  float etc_throttle_pos[ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE];
+ float ots_curve[OTS_LOOKUP_TABLE_SIZE+2]; //OTS curve
 
  CESettingsData cesd;
 
@@ -457,6 +459,7 @@ struct FWMapsDataHolder
    case ETMT_ETC_SPRPREL: return etc_sprprel_duty;
    case ETMT_ETC_ACCEERR: return etc_accept_error;
    case ETMT_ETC_THROPOS: return etc_throttle_pos;
+   case ETMT_OTS_CURVE: return ots_curve;
   }
   return NULL; //undefined type of map
  }
@@ -507,6 +510,7 @@ struct FWMapsDataHolder
    case ETMT_ETC_SPRPREL: return ETC_SPRPREL_SIZE * 2;
    case ETMT_ETC_ACCEERR: return ETC_ACCEPTERR_SIZE * 2;
    case ETMT_ETC_THROPOS: return ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE;
+   case ETMT_OTS_CURVE: return OTS_LOOKUP_TABLE_SIZE+2;
   }
   ASSERT(0);
   return 0; //undefined type of map

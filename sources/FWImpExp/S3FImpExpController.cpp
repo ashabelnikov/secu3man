@@ -231,6 +231,19 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_EGO_DELAY_MAP))
   memcpy(mp_fwd->inj_ego_delay, mp_s3f_io->GetData().inj_ego_delay, sizeof(float) * EGO_DELAY_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR0))
+  memcpy(mp_fwd->inj_wu_afr0, mp_s3f_io->GetData().inj_wu_afr0, sizeof(float) * WU_AFR_SIZE);
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR1))
+  memcpy(mp_fwd->inj_wu_afr1, mp_s3f_io->GetData().inj_wu_afr1, sizeof(float) * WU_AFR_SIZE);
+ if (mp_view->GetFWDFlag(FLAG_ETC_SPRPREL))
+  memcpy(mp_fwd->etc_sprprel_duty, mp_s3f_io->GetData().etc_sprprel_duty, sizeof(float) * ETC_SPRPREL_SIZE * 2);
+ if (mp_view->GetFWDFlag(FLAG_ETC_ACCEERR))
+  memcpy(mp_fwd->etc_accept_error, mp_s3f_io->GetData().etc_accept_error, sizeof(float) * ETC_ACCEPTERR_SIZE * 2);
+ if (mp_view->GetFWDFlag(FLAG_ETC_THROPOS))
+  memcpy(mp_fwd->etc_throttle_pos, mp_s3f_io->GetData().etc_throttle_pos, sizeof(float) * ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE);
+ if (mp_view->GetFWDFlag(FLAG_OTSCURVE_MAP))
+  memcpy(mp_fwd->ots_curve, mp_s3f_io->GetData().ots_curve, sizeof(float) * (OTS_LOOKUP_TABLE_SIZE+2));
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
  //copy CLT grid
@@ -431,6 +444,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0127 = (mp_s3f_io->GetVersion() > 0x0126);
  bool sv0128 = (mp_s3f_io->GetVersion() > 0x0127);
  bool sv0129 = (mp_s3f_io->GetVersion() > 0x0128);
+ bool sv0130 = (mp_s3f_io->GetVersion() > 0x0129);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps() && m_sepmaps;
 
@@ -540,6 +554,12 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
  mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGO_DELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR0,false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR1,false);
+ mp_view->SetFWDFlag(FLAG_ETC_SPRPREL,false);
+ mp_view->SetFWDFlag(FLAG_ETC_ACCEERR,false);
+ mp_view->SetFWDFlag(FLAG_ETC_THROPOS,false);
+ mp_view->SetFWDFlag(FLAG_OTSCURVE_MAP,false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -578,11 +598,12 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_XTAU_TFACC_MAP, sv0127 && sepmap); //since v01.27
  mp_view->EnableFWDFlag(FLAG_XTAU_TFDEC_MAP, sv0127 && sepmap); //since v01.27
  mp_view->EnableFWDFlag(FLAG_EGO_DELAY_MAP, sv0129 && sepmap); //since v01.29
- mp_view->EnableFWDFlag(FLAG_WU_AFR0, 0 && sepmap); //since v01.30
- mp_view->EnableFWDFlag(FLAG_WU_AFR1, 0 && sepmap); //since v01.30
- mp_view->EnableFWDFlag(FLAG_ETC_SPRPREL, 0 && sepmap); //since v01.30
- mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, 0 && sepmap); //since v01.30
- mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, 0 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_WU_AFR0, sv0130 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_WU_AFR1, sv0130 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_ETC_SPRPREL, sv0130 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, sv0130 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, sv0130 && sepmap); //since v01.30
+ mp_view->EnableFWDFlag(FLAG_OTSCURVE_MAP, sv0130 && sepmap); //since v01.30
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -785,6 +806,19 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_EGO_DELAY_MAP))
   memcpy(mp_s3f_io->GetDataLeft().inj_ego_delay, mp_fwd->inj_ego_delay, sizeof(float) * EGO_DELAY_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR0))
+  memcpy(mp_s3f_io->GetDataLeft().inj_wu_afr0, mp_fwd->inj_wu_afr0, sizeof(float) * WU_AFR_SIZE);
+ if (mp_view->GetFWDFlag(FLAG_WU_AFR1))
+  memcpy(mp_s3f_io->GetDataLeft().inj_wu_afr1, mp_fwd->inj_wu_afr1, sizeof(float) * WU_AFR_SIZE);
+ if (mp_view->GetFWDFlag(FLAG_ETC_SPRPREL))
+  memcpy(mp_s3f_io->GetDataLeft().etc_sprprel_duty, mp_fwd->etc_sprprel_duty, sizeof(float) * ETC_SPRPREL_SIZE * 2);
+ if (mp_view->GetFWDFlag(FLAG_ETC_ACCEERR))
+  memcpy(mp_s3f_io->GetDataLeft().etc_accept_error, mp_fwd->etc_accept_error, sizeof(float) * ETC_ACCEPTERR_SIZE * 2);
+ if (mp_view->GetFWDFlag(FLAG_ETC_THROPOS))
+  memcpy(mp_s3f_io->GetDataLeft().etc_throttle_pos, mp_fwd->etc_throttle_pos, sizeof(float) * ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE);
+ if (mp_view->GetFWDFlag(FLAG_OTSCURVE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().ots_curve, mp_fwd->ots_curve, sizeof(float) * (OTS_LOOKUP_TABLE_SIZE+2));
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -1023,11 +1057,12 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_XTAU_TFACC_MAP, false);
  mp_view->SetFWDFlag(FLAG_XTAU_TFDEC_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGO_DELAY_MAP, false);
- mp_view->EnableFWDFlag(FLAG_WU_AFR0, false);
- mp_view->EnableFWDFlag(FLAG_WU_AFR1, false);
- mp_view->EnableFWDFlag(FLAG_ETC_SPRPREL, false);
- mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, false);
- mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR0, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR1, false);
+ mp_view->SetFWDFlag(FLAG_ETC_SPRPREL, false);
+ mp_view->SetFWDFlag(FLAG_ETC_ACCEERR, false);
+ mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->SetFWDFlag(FLAG_OTSCURVE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

@@ -68,6 +68,7 @@ class CMainFrame : public CFrameWnd
   void setOnAppDevForum(EventHandler i_OnFunction);
   void setOnAppVK(EventHandler i_OnFunction);
   void setOnAppFB(EventHandler i_OnFunction);
+  void setOnAppD2(EventHandler i_OnFunction);
   void setOnAppSettings(EventHandler i_OnFunction);
   void setOnAppBeginLog(EventHandler i_OnFunction);
   void setOnAppEndLog(EventHandler i_OnFunction);
@@ -107,6 +108,7 @@ protected:
   afx_msg void OnAppDevForum();
   afx_msg void OnAppVK();
   afx_msg void OnAppFB();
+  afx_msg void OnAppD2();
   afx_msg void OnAppSettings();
   afx_msg void OnAppBeginLog();
   afx_msg void OnAppEndLog();
@@ -147,6 +149,7 @@ private:
   EventHandler m_OnAppDevForum;
   EventHandler m_OnAppVK;
   EventHandler m_OnAppFB;
+  EventHandler m_OnAppD2;
   EventHandler m_OnAppSettings;
   EventHandler m_OnAppBeginLog;
   EventHandler m_OnAppEndLog;

@@ -322,7 +322,10 @@ typedef struct
  /** ETC throttle position vs (APPS,RPM)*/
  _uchar etc_throttle_pos[ETC_POS_APPS_SIZE][ETC_POS_RPM_SIZE];
 
- _uchar reserved[505];
+ //OTS curve LUT's size
+ _int ots_curve[OTS_LOOKUP_TABLE_SIZE+2];
+
+ _uchar reserved[467];
 }fw_ex_tabs_t;
 
 
@@ -621,7 +624,7 @@ void CFirmwareDataMediator::StoreBytes(BYTE* op_bytes)
  if (!op_bytes)
   return;
  IORemUpdateInfo();
- memcpy(op_bytes,mp_bytes_active,m_firmware_size);
+ memcpy(op_bytes, mp_bytes_active, m_firmware_size);
 }
 
 bool CFirmwareDataMediator::IsModified(void)
@@ -1763,6 +1766,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetETCSprPrelMap(op_fwd->etc_sprprel_duty);
  GetETCAcceptErrMap(op_fwd->etc_accept_error);
  GetETCThrottlePosMap(op_fwd->etc_throttle_pos);
+ GetOtsCurveMap(op_fwd->ots_curve);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1884,6 +1888,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetETCSprPrelMap(ip_fwd->etc_sprprel_duty);
  SetETCAcceptErrMap(ip_fwd->etc_accept_error);
  SetETCThrottlePosMap(ip_fwd->etc_throttle_pos);
+ SetOtsCurveMap(ip_fwd->ots_curve);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -3219,6 +3224,35 @@ void CFirmwareDataMediator::SetETCThrottlePosMap(const float* ip_values)
  }
 }
 
+void CFirmwareDataMediator::GetOtsCurveMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < OTS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->extabs.ots_curve[i]) / 4.0f;
+
+ for (; i < OTS_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->extabs.ots_curve[i]) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetOtsCurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < OTS_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->extabs.ots_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+ for (; i < OTS_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->extabs.ots_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -3915,6 +3949,7 @@ void CFirmwareDataMediator::GetSepMap(int id, float* op_values, bool i_original 
   case ETMT_ETC_SPRPREL: GetETCSprPrelMap(op_values, i_original); break;
   case ETMT_ETC_ACCEERR: GetETCAcceptErrMap(op_values, i_original); break;
   case ETMT_ETC_THROPOS: GetETCThrottlePosMap(op_values, i_original); break;
+  case ETMT_OTS_CURVE: GetOtsCurveMap(op_values, i_original); break;
   default: ASSERT(0);
  }
 }
@@ -3965,6 +4000,7 @@ void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
   case ETMT_ETC_SPRPREL: SetETCSprPrelMap(ip_values); break;
   case ETMT_ETC_ACCEERR: SetETCAcceptErrMap(ip_values); break;
   case ETMT_ETC_THROPOS: SetETCThrottlePosMap(ip_values); break;
+  case ETMT_OTS_CURVE: SetOtsCurveMap(ip_values); break;
   default: ASSERT(0);
  }
 }
@@ -4068,7 +4104,7 @@ void CFirmwareDataMediator::IORemUpdateInfo(void)
  //Update I/O information   
  for(size_t s = 0; s < IOREM_SLOTS; ++s)
  {
-  mp_cddata->iorem.io_info[s] = 127;
+  mp_cddata->iorem.io_info[s] = 127; //127 means not mapped to any plug
   if (mp_cddata->iorem.i_slots[s] == 0)
    continue; //skip not implemented slots
 

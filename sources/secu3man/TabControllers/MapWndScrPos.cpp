@@ -543,6 +543,12 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_ETCThrottlePosMapWnd_W = rc.right - rc.left;
    sz.m_ETCThrottlePosMapWnd_H = rc.bottom - rc.top;
    break;
+  case ETMT_OTS_CURVE:
+   ws.m_OtsCurveMapWnd_X = rc.left;
+   ws.m_OtsCurveMapWnd_Y = rc.top;
+   sz.m_OtsCurveMapWnd_W = rc.right - rc.left;
+   sz.m_OtsCurveMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -898,6 +904,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case ETMT_ETC_THROPOS:
    X = ws.m_ETCThrottlePosMapWnd_X, Y = ws.m_ETCThrottlePosMapWnd_Y;
    W = sz.m_ETCThrottlePosMapWnd_W, H = sz.m_ETCThrottlePosMapWnd_H;
+   break;
+  case ETMT_OTS_CURVE:
+   X = ws.m_OtsCurveMapWnd_X, Y = ws.m_OtsCurveMapWnd_Y;
+   W = sz.m_OtsCurveMapWnd_W, H = sz.m_OtsCurveMapWnd_H;
    break;
 
   default:

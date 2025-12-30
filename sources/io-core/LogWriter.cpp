@@ -160,7 +160,7 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    i_data.rxlaf,             // RxL air flow                       
    i_data.maf,               // mass air flow
    i_data.vent_duty,         // cooling fan's duty
-   uniout_flags,                 // states of all universal outputs
+   uniout_flags,             // states of all universal outputs
    i_data.mapdot,            // MAP dot (dP/dt), kPa/s
    i_data.fts,               // FTS                        
    i_data.cons_fuel,         // fuel odometer
@@ -171,6 +171,7 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    i_data.gps,               // gas pressure sensor
    i_data.fps,               // fuel pressure sensor
    i_data.apps1,             // Gas pedal sensor
+   i_data.ops,               // oil temperature sensor
    i_marks,
    service_flags,
    i_data.ce_errors};
@@ -279,6 +280,7 @@ void LogWriter::SetRecord(SYSTEMTIME& i_time, SECU3IO::SensorDat& i_data, int& i
    secu3_ftoa_32 (i_data.gps, 7, 2);              // gas pressure sensor
    secu3_ftoa_32 (i_data.fps, 8, 2);              // fuel pressure sensor
    secu3_ftoa_32 (i_data.apps1, 6, 1);            // APPS1
+   secu3_ftoa_32 (i_data.ots, 6, 1);              // OTS
    secu3_itoa_u1 (i_marks, 2);                    // Log marks
    secu3_itoa_u32(service_flags, 6);              // Service flags
    size = WriteCE(p, i_data.ce_errors);           // CE errors

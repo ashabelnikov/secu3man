@@ -2450,7 +2450,7 @@ void __fastcall TForm3D::OnUndo(TObject *Sender)
  PM_Redo->Enabled = mp_undo->CanRedo();
 
  if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
@@ -2475,7 +2475,7 @@ void __fastcall TForm3D::OnRedo(TObject *Sender)
  PM_Redo->Enabled = mp_undo->CanRedo();
 
  if (m_pOnChange) 
-  m_pOnChange(m_param_on_change);    
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------

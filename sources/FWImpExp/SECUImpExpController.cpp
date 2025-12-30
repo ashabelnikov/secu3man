@@ -29,6 +29,7 @@
 #include <algorithm>
 
 #include "common/FastDelegate.h"
+#include "HexUtils/writehex.h"
 #include "io-core/FirmwareDataMediator.h"
 #include "io-core/FirmwareMapsDataHolder.h"
 #include "io-core/PlatformParamHolder.h"
@@ -236,6 +237,9 @@ void SECU3ImportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_ETC_THROPOS))
   m_fwdm->GetSepMap(ETMT_ETC_THROPOS, mp_fwd->etc_throttle_pos);
+
+ if (mp_view->GetFWDFlag(FLAG_OTSCURVE_MAP))
+  m_fwdm->GetSepMap(ETMT_OTS_CURVE, mp_fwd->ots_curve);
 
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
@@ -490,6 +494,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ETC_SPRPREL, false);
  mp_view->SetFWDFlag(FLAG_ETC_ACCEERR, false);
  mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->SetFWDFlag(FLAG_OTSCURVE_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -706,6 +711,9 @@ void SECU3ExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_ETC_THROPOS))
   m_fwdm->SetSepMap(ETMT_ETC_THROPOS, mp_fwd->etc_throttle_pos);
 
+ if (mp_view->GetFWDFlag(FLAG_OTSCURVE_MAP))
+  m_fwdm->SetSepMap(ETMT_OTS_CURVE, mp_fwd->ots_curve);
+
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
   m_fwdm->SetRPMGridMap(mp_fwd->rpm_slots);
@@ -733,19 +741,32 @@ void SECU3ExportController::OnOkPressed(void)
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);
  m_fwdm->StoreBytes(&buffer[0]);
+ //calculate and place check sum into buffer with firmware
+ m_fwdm->CalculateAndPlaceFirmwareCRC(&buffer[0]);
 
- //save data into a file
- CFile f;
+ CStdioFile f;
  CFileException ex;
  TCHAR szError[1024];
- if(!f.Open(m_secu3_file_path.c_str(),CFile::modeWrite|CFile::modeCreate,&ex))
+ if(!f.Open(m_secu3_file_path.c_str(), CFile::modeWrite | CFile::modeCreate | CFile::typeBinary, &ex))
  {
   ex.GetErrorMessage(szError, 1024);
   SECUMessageBox(szError);
-  return; //ошибка - данные не сохранены
+  return; //error - data has not been saved
  }
 
- f.Write(&buffer[0], m_fwdm->GetPlatformParams().m_total_size);
+ size_t pos = m_secu3_file_path.rfind(_T(".hex"));
+ if (pos!=_TSTRING::npos && pos == m_secu3_file_path.size()-4) //check, if selected file name is hex, then save it as hex  
+ {
+  f.SetLength(0);
+  if (!WriteHexFile(f.m_pStream, buffer))
+  {
+   f.Close();
+   return; //error
+  }
+ }
+ else  //save as binary
+  f.Write(&buffer[0], (UINT)buffer.size());    
+
  f.Close();
 }
 
@@ -968,6 +989,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ETC_SPRPREL, false);
  mp_view->SetFWDFlag(FLAG_ETC_ACCEERR, false);
  mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->SetFWDFlag(FLAG_OTSCURVE_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

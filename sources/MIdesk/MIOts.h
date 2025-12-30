@@ -19,45 +19,34 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file CWelcomeDlg.h
+/** \file MIOts.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-#include <memory>
-#include "common/UnicodeSupport.h"
+#include "MeasInstrBase.h"
 
-class CLabel;
-
-class CWelcomeDlg : public CDialog
+class AFX_EXT_CLASS CMIOts : public MeasInstrBase
 {
-  typedef CDialog Super;
-
  public:
-  CWelcomeDlg(CWnd* pParent = NULL);   // standard constructor
- ~CWelcomeDlg();
-  static const UINT IDD;
+  CMIOts();
+  virtual ~CMIOts();
 
- // Implementation
- protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  virtual void OnOK();
-  virtual BOOL OnInitDialog();
-  DECLARE_MESSAGE_MAP()
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
+  //---------------------------------------
+};
 
-  CStatic m_secu3orgPic;
-  CBitmap m_secu3orgBmp;
-  CStatic m_vkgPic;
-  CBitmap m_vkgBmp;
-  CStatic m_fbgPic;
-  CBitmap m_fbgBmp;
-  CStatic m_d2gPic;
-  CBitmap m_d2gBmp;
+class AFX_EXT_CLASS CMIOtsGraph : public MeasInstrBase
+{
+ public:
+  CMIOtsGraph();
+  virtual ~CMIOtsGraph();
 
- private:
-  std::auto_ptr<CLabel> mp_secu3orgLink;
-  std::auto_ptr<CLabel> mp_vkgLink;
-  std::auto_ptr<CLabel> mp_fbgLink;
-  std::auto_ptr<CLabel> mp_d2gLink;
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  virtual void Append(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
+  //---------------------------------------
 };

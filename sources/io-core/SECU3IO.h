@@ -130,6 +130,7 @@ namespace SECU3IO
   float ftls;                           //level of fuel in the fuel tank
   float egts;                           //exhaust gas temperature
   float ops;                            //oil pressure
+  float ots;                            //oil temperature sensor
  
   bool iac_cl_loop;                     //IAC closed loop flag
 
@@ -599,6 +600,8 @@ namespace SECU3IO
  const int UNIOUT_COND_FPS = 36;      //FPS
  const int UNIOUT_COND_OPS = 37;      //OPS
  const int UNIOUT_COND_EGTS = 38;     //EGTS
+ const int UNIOUT_COND_FTS = 39;      //FTS
+ const int UNIOUT_COND_OTS = 40;      //OTS
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

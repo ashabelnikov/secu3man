@@ -172,6 +172,9 @@
 #define IDC_CESETT_APPSDIFF_THRD_EDIT   5375
 #define IDC_CESETT_APPSDIFF_THRD_SPIN   5376
 #define IDS_CESETT_APPSDIFF_THRD_EDIT_TT 5377
+#define IDC_TD_OTS_CURVE                5378
+#define IDS_OTS_CURVE_MAP               5379
+#define IDS_TD_OTS_CURVE_TT             5380
 #define IDC_GME_IDL_TITLE               5426
 #define IDC_GME_TMP_TITLE               5427
 #define IDC_GME_STR_TITLE               5428

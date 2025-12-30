@@ -64,8 +64,8 @@ CSepTablesDeskDlg::~CSepTablesDeskDlg()
 void CSepTablesDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_TD_SAVE_BUTTON, m_save_button);
- DDX_Control(pDX, IDC_TD_MODIFICATION_FLAG, m_midification_flag);
+ DDX_Control(pDX, IDC_TD_SEP_SAVE_BUTTON, m_save_button);
+ DDX_Control(pDX, IDC_TD_MODIFICATION_FLAG, m_modification_flag);
 }
 
 BEGIN_MESSAGE_MAP(CSepTablesDeskDlg, Super)
@@ -73,8 +73,8 @@ BEGIN_MESSAGE_MAP(CSepTablesDeskDlg, Super)
 /* ON_WM_SYSCOMMAND()*/
  ON_WM_SIZE()
  ON_UPDATE_COMMAND_UI(IDC_TABLES_DESK_TITLE, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_TD_SAVE_BUTTON, OnUpdateControlsSaveButton)
- ON_BN_CLICKED(IDC_TD_SAVE_BUTTON, OnSaveButton)
+ ON_UPDATE_COMMAND_UI(IDC_TD_SEP_SAVE_BUTTON, OnUpdateControlsSaveButton)
+ ON_BN_CLICKED(IDC_TD_SEP_SAVE_BUTTON, OnSaveButton)
 END_MESSAGE_MAP()
 
 
@@ -98,7 +98,7 @@ BOOL CSepTablesDeskDlg::OnInitDialog()
  UpdateDialogControls(this, TRUE);
 
  ///////////////////////////////////////////////
- //TODO: Replace by MIHelpers (see MIHelpers.h) or even more all releted functions to common
+ //TODO: Replace by MIHelpers (see MIHelpers.h) or even more all related functions to common
  //Calculate and remember right and bottom margins of buttons panel control
  CRect wndRectDlg, wndRectBP;
  GetClientRect(&wndRectDlg);
@@ -158,7 +158,7 @@ void CSepTablesDeskDlg::UpdateOpenedCharts(void)
 
 void CSepTablesDeskDlg::SetModificationFlag(bool value)
 {
- m_midification_flag.SetWindowText(value ? _T("*") : _T(" "));
+ m_modification_flag.SetWindowText(value ? _T("*") : _T(" "));
 }
 
 void CSepTablesDeskDlg::MakeChartsChildren(bool children)

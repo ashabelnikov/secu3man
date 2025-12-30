@@ -90,6 +90,7 @@ struct s3lRecord
  float gps;
  float fps;
  float apps1;
+ float ots; //oil temperature sensor
  BYTE  log_marks;
  WORD  service_flags;
  DWORD ce_errors;

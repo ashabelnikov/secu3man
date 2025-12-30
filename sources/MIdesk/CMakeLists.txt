@@ -66,6 +66,7 @@ set(HEADERS
   MIFtls.h
   MIEgts.h
   MIOps.h
+  MIOts.h
   MIVentDuty.h
   MITargAFR.h
   MIDiffAFR.h
@@ -114,6 +115,7 @@ set (SOURCES
   MIFtls.cpp
   MIEgts.cpp
   MIOps.cpp
+  MIOts.cpp
   MISynLoad.cpp
   MIVentDuty.cpp
   MITargAFR.cpp

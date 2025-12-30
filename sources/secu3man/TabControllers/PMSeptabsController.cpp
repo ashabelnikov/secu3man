@@ -364,6 +364,7 @@ void CPMSeptabsController::ApplyFWOptions(DWORD opt)
  mp_view->mp_SeptabsPanel->EnableFtlsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_SeptabsPanel->EnableEgtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_SeptabsPanel->EnableFtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_SeptabsPanel->EnableOtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_SeptabsPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_SeptabsPanel->EnableXtauMaps(fnc.XTAU_CORR && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
   mp_view->mp_SeptabsPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
@@ -433,7 +434,7 @@ void CPMSeptabsController::_SynchronizeMap(int i_mapType)
      i_mapType == ETMT_AFTSTR_STRK1 || i_mapType == ETMT_PWMIAC_UCOEF || i_mapType == ETMT_GRVDELAY || i_mapType == ETMT_MANINJPWC ||
      i_mapType == ETMT_FTLSCOR || i_mapType == ETMT_FUELDENS_CORR || i_mapType == ETMT_XTAU_XFACC || i_mapType == ETMT_XTAU_XFDEC ||
      i_mapType == ETMT_XTAU_TFACC || i_mapType == ETMT_XTAU_TFDEC || i_mapType == ETMT_INJNONLINP || i_mapType == ETMT_INJNONLING ||
-     i_mapType == ETMT_EGO_DELAY || i_mapType == ETMT_ETC_SPRPREL || i_mapType == ETMT_ETC_ACCEERR)
+     i_mapType == ETMT_EGO_DELAY || i_mapType == ETMT_ETC_SPRPREL || i_mapType == ETMT_ETC_ACCEERR || i_mapType == ETMT_OTS_CURVE)
   pieceSize = 8;
  else if (i_mapType == ETMT_KNOCK_ZONE || i_mapType == ETMT_LAMBDA_ZONE)
   pieceSize = F_WRK_POINTS_F*2;

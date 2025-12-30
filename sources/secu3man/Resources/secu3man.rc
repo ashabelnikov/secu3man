@@ -53,7 +53,8 @@ BEGIN
         MENUITEM "Сайт разработчиков", ID_APP_DEV_SITE
         MENUITEM "Поддержка на форуме", ID_APP_DEV_FORUM
         MENUITEM "ВКонтакте", ID_APP_VK
-        MENUITEM "Facebook", ID_APP_FB
+        MENUITEM "X.COM", ID_APP_FB
+        MENUITEM "DRIVE2", ID_APP_D2
         MENUITEM "Описание полей лог файла", ID_APP_LOG_FORMAT
     END
 END
@@ -643,9 +644,10 @@ BEGIN
 77 Давление газа (кПа)
 78 Давление топлива (кПа)
 79 ДППА (%)
-80 Метки лога
-81 Служебные флаги
-82 Ошибки СЕ"
+80 ДТМ (°С)
+81 Метки лога
+82 Служебные флаги
+83 Ошибки СЕ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1146,7 +1148,8 @@ BEGIN
         MENUITEM "Developers' site", ID_APP_DEV_SITE
         MENUITEM "Support forum", ID_APP_DEV_FORUM
         MENUITEM "VK group", ID_APP_VK
-        MENUITEM "Facebook group", ID_APP_FB
+        MENUITEM "X.COM", ID_APP_FB
+        MENUITEM "DRIVE2", ID_APP_D2
         MENUITEM "Description of log file fields", ID_APP_LOG_FORMAT
     END
 END
@@ -1795,13 +1798,14 @@ BEGIN
 73 EGO corr.2
 74 AFR value2 (6-24)
 75 AFR value from map (6-24)
-76 Charge temperature (°С)
+76 Charge temperature (°C)
 77 Gas pressure (kPa)
 78 Fuel pressure (kPa)
 79 APPS (%)
-80 Log marks
-81 Service flags
-82 CE errors"
+80 Oil temperature (°C)
+81 Log marks
+82 Service flags
+83 CE errors"
 END
 
 STRINGTABLE DISCARDABLE 

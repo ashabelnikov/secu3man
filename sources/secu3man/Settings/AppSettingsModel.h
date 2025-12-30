@@ -344,6 +344,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optTargAFRAverage;
   OptField_t<int>  m_optFPSAverage;
   OptField_t<int>  m_optAPPSAverage;
+  OptField_t<int>  m_optOTSAverage;
 
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
@@ -440,6 +441,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optETCSprPrelMapWnd;
   OptField_t<POINT> m_optETCAcceptErrMapWnd;
   OptField_t<POINT> m_optETCThrottlePosMapWnd;
+  OptField_t<POINT> m_optOtsCurveMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -524,6 +526,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optETCSprPrelMapWnd1;
   OptField_t<POINT> m_optETCAcceptErrMapWnd1;
   OptField_t<POINT> m_optETCThrottlePosMapWnd1;
+  OptField_t<POINT> m_optOtsCurveMapWnd1;
 
   //window's sizes
   OptField_t<POINT> m_optMainFrmWndSize;
@@ -608,6 +611,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optETCSprPrelMapWndSize;
   OptField_t<POINT> m_optETCAcceptErrMapWndSize;
   OptField_t<POINT> m_optETCThrottlePosMapWndSize;
+  OptField_t<POINT> m_optOtsCurveMapWndSize;
 
   //windows' sizes (online tables)
   OptField_t<POINT> m_optStrtMapWndSize1;
@@ -692,6 +696,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optETCSprPrelMapWndSize1;
   OptField_t<POINT> m_optETCAcceptErrMapWndSize1;
   OptField_t<POINT> m_optETCThrottlePosMapWndSize1;
+  OptField_t<POINT> m_optOtsCurveMapWndSize1;
 
   //window state
   OptField_t<int> m_optMainFrmWndState;
@@ -775,6 +780,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetDiffAFR2[2][2];
   OptField_t<int> m_optMetFPS[2][2];
   OptField_t<int> m_optMetAPPS[2][2];
+  OptField_t<int> m_optMetOTS[2][2];
 
   //meters scales' options
   OptField_t<SclCfg> m_optMetScRPM[2];
@@ -823,6 +829,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<SclCfg> m_optMetScDiffAFR2[2];
   OptField_t<SclCfg> m_optMetScFPS[2];
   OptField_t<SclCfg> m_optMetScAPPS[2];
+  OptField_t<SclCfg> m_optMetScOTS[2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
@@ -978,6 +985,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepETCSprPrelMap;
   OptField_t<float> m_optPtMovStepETCAcceptErrMap;
   OptField_t<float> m_optPtMovStepETCThrottlePosMap;
+  OptField_t<float> m_optPtMovStepOtsCurveMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;
@@ -1064,6 +1072,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldGPS;
   OptField_t<_TSTRING> m_optLogFieldFPS;
   OptField_t<_TSTRING> m_optLogFieldAPPS;
+  OptField_t<_TSTRING> m_optLogFieldOTS;
 
   DbgVarOpt  m_optDbgVar[4];
 

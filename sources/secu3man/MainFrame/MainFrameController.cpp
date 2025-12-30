@@ -98,6 +98,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppDevForum(MakeDelegate(this, &MainFrameController::OnAppDevForum));
  mp_view->setOnAppVK(MakeDelegate(this, &MainFrameController::OnAppVK));
  mp_view->setOnAppFB(MakeDelegate(this, &MainFrameController::OnAppFB));
+ mp_view->setOnAppD2(MakeDelegate(this, &MainFrameController::OnAppD2));
  mp_view->setOnAppSettings(MakeDelegate(this, &MainFrameController::OnAppSettings));
  mp_view->setOnAppBeginLog(MakeDelegate(this, &MainFrameController::OnAppBeginLog));
  mp_view->setOnAppEndLog(MakeDelegate(this, &MainFrameController::OnAppEndLog));
@@ -135,22 +136,27 @@ void MainFrameController::OnAppAbout()
 
 void MainFrameController::OnAppDevSite()
 {
- ShellExecute(NULL, _T("open"), _T("http://secu-3.org"), NULL, NULL, SW_SHOWNORMAL);
+ ShellExecute(NULL, _T("open"), _T("https://secu-3.org"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void MainFrameController::OnAppDevForum()
 {
- ShellExecute(NULL, _T("open"), _T("http://secu-3.org/forum"), NULL, NULL, SW_SHOWNORMAL);
+ ShellExecute(NULL, _T("open"), _T("https://secu-3.org/forum"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void MainFrameController::OnAppVK()
 {
- ShellExecute(NULL, _T("open"), _T("http://vk.com/secu3club"), NULL, NULL, SW_SHOWNORMAL);
+ ShellExecute(NULL, _T("open"), _T("https://vk.com/secu3club"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void MainFrameController::OnAppFB()
 {
- ShellExecute(NULL, _T("open"), _T("https://www.facebook.com/groups/secu3club/"), NULL, NULL, SW_SHOWNORMAL);
+ ShellExecute(NULL, _T("open"), _T("https://x.com/ashabelnikov"), NULL, NULL, SW_SHOWNORMAL);
+}
+
+void MainFrameController::OnAppD2()
+{
+ ShellExecute(NULL, _T("open"), _T("https://www.drive2.com/users/secu-3/"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void MainFrameController::OnAppSettings()
@@ -459,6 +465,7 @@ void MainFrameController::OnCreate(void)
  m_pLogWriter->SetFieldName(i++, lff.m_fldGPS);
  m_pLogWriter->SetFieldName(i++, lff.m_fldFPS);
  m_pLogWriter->SetFieldName(i++, lff.m_fldAPPS);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldOTS);
  m_pLogWriter->SetFieldName(i++, lff.m_fldLogMarks);
  m_pLogWriter->SetFieldName(i++, lff.m_fldServFlag);
  m_pLogWriter->SetFieldName(i++, lff.m_fldCECodes);

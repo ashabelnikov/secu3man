@@ -1922,3 +1922,47 @@ void __cdecl CSeptabsPanel::OnWndActivationETCThrottlePosTable(void* i_param, lo
 }
 
 //------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeOtsCurveTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_OTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseOtsCurveTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_OTS_CURVE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_OTS_CURVE].handle, ETMT_OTS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationOtsCurveTable(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_OTS_CURVE].handle, cmd);
+}
+
+//------------------------------------------------------------------------

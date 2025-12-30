@@ -113,7 +113,7 @@ int Selection::Size(void)
  int s = 0;
  for(int z = 0; z < m_count_z; ++z)
   for(int x = 0; x < m_count_x; ++x)
-   s+=_selpts(z, x);   
+   s+=_selpts(z, x);
  return s;
 }
 
@@ -173,7 +173,7 @@ void Selection::InvertZ(void)
  for(int z = 0; z < m_count_z; ++z)
   std::copy(&_selpts(z, 0), &_selpts(z, 0) + m_count_x, &sel[z * m_count_x]);
  for(int z = 0; z < m_count_z; ++z)
-  std::copy(&sel[z * m_count_x], &sel[z * m_count_x] + m_count_x, &_selpts(m_count_z-1-z, 0));  
+  std::copy(&sel[z * m_count_x], &sel[z * m_count_x] + m_count_x, &_selpts(m_count_z-1-z, 0));
 }
 
 //---------------------------------------------------------------------------

@@ -113,6 +113,7 @@ BEGIN
     CONTROL         "ETC Преднатяг пружин",IDC_TD_ETC_SPRPREL_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,743,96,18
     CONTROL         "ETC Зона нечувствит.",IDC_TD_ETC_ACCEERR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,762,96,18
     CONTROL         "ETC Положение ДЗ",IDC_TD_ETC_THROPOS_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,781,96,18
+    CONTROL         "Настр. крив. ДТМ",IDC_TD_OTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,800,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -123,7 +124,7 @@ BEGIN
     GROUPBOX        "Наборы таблиц",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,400
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,430
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -827,6 +828,7 @@ BEGIN
     IDS_MAPS_TPSZON_UNIT    "Нагрузка (%)"
     IDS_FTS_CURVE_MAP       "Настройка кривой датчика температуры топлива в рампе (ДТТ)"
     IDS_FUELDENS_CORR_MAP   "Коррекция плотности топлива от его температуры"
+    IDS_OTS_CURVE_MAP       "Настройка кривой датчика температуры масла (ДТМ)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -863,6 +865,7 @@ BEGIN
     IDS_TD_OPS_CURVE_TT        "Настройка зависимости давления масла от напряжения для ДДМ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение давления масла в двигателе (кг/см2)."
     IDS_TD_FTS_CURVE_TT        "Настройка зависимости температуры топлива в рампе от напряжения для ДТТ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение температуры топлива (°С)."
     IDS_TD_FUELDENS_CORR_MAP_TT "Коррекция изменения плотности топлива от его температуры (ДТТ или модель)"
+    IDS_TD_OTS_CURVE_TT        "Настройка зависимости температуры масла от напряжения для ДТМ. Данная таблица необходима для правильного преобразования напряжения на датчике (В) в значение температуры масла (°С)."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1082,6 +1085,7 @@ BEGIN
     CONTROL         "ETC spring preload",IDC_TD_ETC_SPRPREL_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,743,96,18
     CONTROL         "ETC dead band",IDC_TD_ETC_ACCEERR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,762,96,18
     CONTROL         "ETC Throttle position",IDC_TD_ETC_THROPOS_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,781,96,18
+    CONTROL         "Tune OTS curve",IDC_TD_OTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,800,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -1092,7 +1096,7 @@ BEGIN
     GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,400
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,430
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1793,6 +1797,7 @@ BEGIN
     IDS_MAPS_TPSZON_UNIT    "Load (%)"
     IDS_FTS_CURVE_MAP      "Tune fuel sensor's curve (FTS)"
     IDS_FUELDENS_CORR_MAP   "Fuel density correction vs its temperature"
+    IDS_OTS_CURVE_MAP       "Tune oil sensor's curve (OTS)"
 END
 
 
@@ -1896,6 +1901,7 @@ BEGIN
     IDS_TD_FUELDENS_CORR_MAP_TT "Fuel density correction vs temperature of fuel in ramp (FTS or model)"
     IDS_CESETT_TPSDIFF_THRD_EDIT_TT "Set the maximum permissible difference between the electronic throttle's sensors readings. If the difference (TPS1 - TPS2) exceeds this value, the corresponding error code will be set and the system will go into emergency mode."
     IDS_CESETT_APPSDIFF_THRD_EDIT_TT "Set the maximum permissible difference between the electronic gas pedal's sensors readings. If the difference (APPS1 - APPS2) exceeds this value, the corresponding error code will be set and the system will go into emergency mode."
+    IDS_TD_OTS_CURVE_TT       "Setting oil temperature versus voltage dependance for the OTS. This table is necessary for correct conversion of the voltage (V) at the sensor to oil temperature (°C)."
 END
 
 STRINGTABLE DISCARDABLE 

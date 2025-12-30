@@ -57,6 +57,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_DEV_FORUM, OnAppDevForum)
  ON_COMMAND(ID_APP_VK, OnAppVK)
  ON_COMMAND(ID_APP_FB, OnAppFB)
+ ON_COMMAND(ID_APP_D2, OnAppD2)
  ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
  ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
  ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
@@ -285,6 +286,11 @@ void CMainFrame::setOnAppFB(EventHandler i_OnFunction)
  m_OnAppFB = i_OnFunction;
 }
 
+void CMainFrame::setOnAppD2(EventHandler i_OnFunction)
+{
+ m_OnAppD2 = i_OnFunction;
+}
+
 void CMainFrame::setOnAppSettings(EventHandler i_OnFunction)
 {
  m_OnAppSettings = i_OnFunction;
@@ -436,6 +442,12 @@ void CMainFrame::OnAppFB()
 {
  if (m_OnAppFB)
   m_OnAppFB();
+}
+
+void CMainFrame::OnAppD2()
+{
+ if (m_OnAppD2)
+  m_OnAppD2();
 }
 
 void CMainFrame::OnAppSettings()

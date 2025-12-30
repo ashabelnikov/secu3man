@@ -137,3 +137,4 @@ APPS1 - Accelerator pedal position sensor 1 input (electronic gas pedal). Voltag
 
 APPS2 - Accelerator pedal position sensor 2 input  (electronic gas pedal). Voltage at this input is 2 times smaller than voltage on the APPS1 input.
 
+OTS_I - Oil temperature sensor input

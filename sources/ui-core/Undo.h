@@ -45,7 +45,7 @@ class UndoCntr
    for(size_t i = 0; i < m_redo.size(); ++i)
     delete[] m_redo[i];
   }
-  
+
   void Attach(float* p_map, int size)
   {
    mp_map = p_map;
@@ -64,7 +64,7 @@ class UndoCntr
    std::copy(mp_map, mp_map + m_size, p_data);
    m_undo.push_back(p_data);
   }
-  
+
   void DoUndo()
   {
    if (!CanUndo()) return;

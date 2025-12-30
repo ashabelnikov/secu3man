@@ -42,7 +42,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0129 //01.29
+#define CURRENT_VERSION 0x0130 //01.30
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -98,6 +98,8 @@ typedef unsigned char s3f_uint8_t;
 // 01.28 - Added idling VE map and grids for it (load and rpm) (20.03.2024)
 // 01.29 - Added VE2 load grid (22.03.2024)
 //         Added EGO delay map (23.03.2024)
+// 01.30 - Added more items to CE settings, added ETC maps, added OTS map, two WU AFR maps (30.12.2025)
+//
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -248,7 +250,12 @@ typedef struct
  s3f_int32_t oilpress_thrd;
  s3f_int32_t oilpress_timer;
 
- s3f_int32_t reserved[1044];
+ //since v01.30
+ s3f_int32_t stepperic_flg;
+ s3f_int32_t tpsdiff_thrd;
+ s3f_int32_t appsdiff_thrd;
+
+ s3f_int32_t reserved[1041];
 }s3f_ce_sett_t;
 
 
@@ -327,7 +334,15 @@ struct S3FSepMaps
  s3f_int32_t tload_slots[F_TLOAD_SLOTS];                //TPS (VE2) load grid, normal order of values
  s3f_int32_t ego_delay[EGO_DELAY_SIZE];                 //EGO delay map
 
- s3f_int32_t reserved[3488]; //reserved bytes, = 0
+ //since v01.30
+ s3f_int32_t inj_wu_afr0[WU_AFR_SIZE];
+ s3f_int32_t inj_wu_afr1[WU_AFR_SIZE];
+ s3f_int32_t etc_sprprel_duty[ETC_SPRPREL_SIZE * 2];
+ s3f_int32_t etc_accept_error[ETC_ACCEPTERR_SIZE * 2];
+ s3f_int32_t etc_throttle_pos[ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE];
+ s3f_int32_t ots_curve[OTS_LOOKUP_TABLE_SIZE+2]; //OTS curve
+
+ s3f_int32_t reserved[3153]; //reserved bytes, = 0
 };
 
 
@@ -808,6 +823,19 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  for(i = 0; i < EGO_DELAY_SIZE; ++i)
   p_sepMaps->ego_delay[i] = MathHelpers::Round(m_data.inj_ego_delay[i] * INT_MULTIPLIER);
 
+ for(i = 0; i < WU_AFR_SIZE; ++i)
+  p_sepMaps->inj_wu_afr0[i] = MathHelpers::Round(m_data.inj_wu_afr0[i] * INT_MULTIPLIER);
+ for(i = 0; i < WU_AFR_SIZE; ++i)
+  p_sepMaps->inj_wu_afr1[i] = MathHelpers::Round(m_data.inj_wu_afr1[i] * INT_MULTIPLIER);
+ for(i = 0; i < ETC_SPRPREL_SIZE * 2; ++i)
+  p_sepMaps->etc_sprprel_duty[i] = MathHelpers::Round(m_data.etc_sprprel_duty[i] * INT_MULTIPLIER);
+ for(i = 0; i < ETC_ACCEPTERR_SIZE * 2; ++i)
+  p_sepMaps->etc_accept_error[i] = MathHelpers::Round(m_data.etc_accept_error[i] * INT_MULTIPLIER);
+ for(i = 0; i < ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE; ++i)
+  p_sepMaps->etc_throttle_pos[i] = MathHelpers::Round(m_data.etc_throttle_pos[i] * INT_MULTIPLIER);
+ for(i = 0; i < OTS_LOOKUP_TABLE_SIZE+2; ++i)
+  p_sepMaps->ots_curve[i] = MathHelpers::Round(m_data.ots_curve[i] * INT_MULTIPLIER);
+
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
@@ -896,6 +924,10 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_sepMaps->cesd.oilpress_thrd = MathHelpers::Round(m_data.cesd.oilpress_thrd * INT_MULTIPLIER);
  p_sepMaps->cesd.oilpress_timer = MathHelpers::Round(m_data.cesd.oilpress_timer * INT_MULTIPLIER);
 
+ p_sepMaps->cesd.stepperic_flg = m_data.cesd.stepperic_flg; //bool
+ p_sepMaps->cesd.tpsdiff_thrd = MathHelpers::Round(m_data.cesd.tpsdiff_thrd * INT_MULTIPLIER);
+ p_sepMaps->cesd.appsdiff_thrd = MathHelpers::Round(m_data.cesd.appsdiff_thrd * INT_MULTIPLIER);
+
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
  file.Write(&rawdata[0], size);
@@ -933,7 +965,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  //Size of a whole array of map sets
  size_t mapSetArrSize = sizeof(S3FMapSetItem) * p_fileHdr->nofsets;
 
- //resize container to hold all map sets
+ //resize container to hold all map sets and initialize it with default values (zeros)
  m_data = FWMapsDataHolder(p_fileHdr->nofsets);
 
  //convert sets of tables
@@ -1113,6 +1145,19 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  for(i = 0; i < EGO_DELAY_SIZE; ++i)
   m_data.inj_ego_delay[i] = p_sepMaps->ego_delay[i] / INT_MULTIPLIER;
 
+ for(i = 0; i < WU_AFR_SIZE; ++i)
+  m_data.inj_wu_afr0[i] = p_sepMaps->inj_wu_afr0[i] / INT_MULTIPLIER;
+ for(i = 0; i < WU_AFR_SIZE; ++i)
+  m_data.inj_wu_afr1[i] = p_sepMaps->inj_wu_afr1[i] / INT_MULTIPLIER;
+ for(i = 0; i < ETC_SPRPREL_SIZE * 2; ++i)
+  m_data.etc_sprprel_duty[i] = p_sepMaps->etc_sprprel_duty[i] / INT_MULTIPLIER;
+ for(i = 0; i < ETC_ACCEPTERR_SIZE * 2; ++i)
+  m_data.etc_accept_error[i] = p_sepMaps->etc_accept_error[i] / INT_MULTIPLIER;
+ for(i = 0; i < ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE; ++i)
+  m_data.etc_throttle_pos[i] = p_sepMaps->etc_throttle_pos[i] / INT_MULTIPLIER;
+ for(i = 0; i < OTS_LOOKUP_TABLE_SIZE+2; ++i)
+  m_data.ots_curve[i] = p_sepMaps->ots_curve[i] / INT_MULTIPLIER;
+
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
@@ -1245,6 +1290,10 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
 
  m_data.cesd.oilpress_thrd = p_sepMaps->cesd.oilpress_thrd / INT_MULTIPLIER;
  m_data.cesd.oilpress_timer = (int)(p_sepMaps->cesd.oilpress_timer / INT_MULTIPLIER);
+
+ m_data.cesd.stepperic_flg = p_sepMaps->cesd.stepperic_flg;
+ m_data.cesd.tpsdiff_thrd = p_sepMaps->cesd.tpsdiff_thrd / INT_MULTIPLIER;
+ m_data.cesd.appsdiff_thrd = p_sepMaps->cesd.appsdiff_thrd / INT_MULTIPLIER;
 
  return true;
 }

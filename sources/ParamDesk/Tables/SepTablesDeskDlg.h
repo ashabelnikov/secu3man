@@ -112,7 +112,7 @@ class AFX_EXT_CLASS CSepTablesDeskDlg : public CModelessUpdatableDialog, public 
   bool m_enable_save_button;
 
   CButton m_save_button;
-  CStatic m_midification_flag;
+  CStatic m_modification_flag;
   std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
 
   //event handlers (delegates)

@@ -231,6 +231,7 @@
 #define IDM_MI_MET_GPS                  2311
 #define IDM_MI_MET_FPS                  2312
 #define IDM_MI_MET_APPS                 2313
+#define IDM_MI_MET_OTS                  2314
 #define IDM_MI_MET_ROWS1                2321
 #define IDM_MI_MET_ROWS2                2322
 #define IDM_MI_MET_ROWS3                2323
@@ -400,6 +401,7 @@
 #define IDM_MI_GRH_GPS                  2487
 #define IDM_MI_GRH_FPS                  2488
 #define IDM_MI_GRH_APPS                 2489
+#define IDM_MI_GRH_OTS                  2490
 #define IDS_MI_GRH_ADD_GAUGE            2497
 #define IDC_MI_KNOCK                    2498
 #define IDS_MI_TACHOMETER_V_UNIT        2499
@@ -622,3 +624,7 @@
 #define IDS_MI_SED_SCALE_WIDTH_EDIT_TT1 2816
 #define IDS_MI_SED_SCALE_COLOR_TT1      2817
 #define IDS_MI_SED_AZ_COLOR_TT          2818
+#define IDC_MI_OTS                      2819
+#define IDS_MI_OTS_TITLE                2820
+#define IDC_MI_OTSGRAPH                 2821
+#define IDS_MI_OTSGRAPH_V_UNIT          2822

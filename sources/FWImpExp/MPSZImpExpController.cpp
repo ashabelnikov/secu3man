@@ -308,6 +308,8 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, false);
  mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
  mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->SetFWDFlag(FLAG_OTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_OTSCURVE_MAP, false);
 
  mp_view->SetExchangeButtonCaption(_T("<"));
  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_MPSZ_TABLES));
@@ -628,6 +630,8 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, false);
  mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
  mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->SetFWDFlag(FLAG_OTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_OTSCURVE_MAP, false);
 
  mp_view->SetExchangeButtonCaption(_T(">"));
  mp_view->SetWindowText(MLL::LoadString(IDS_EXPORT_MPSZ_TABLES));

@@ -374,6 +374,18 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_INJNONLING_MAP, false);
  mp_view->SetFWDFlag(FLAG_EGO_DELAY_MAP, false);
  mp_view->EnableFWDFlag(FLAG_EGO_DELAY_MAP, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR0, false);
+ mp_view->EnableFWDFlag(FLAG_WU_AFR0, false);
+ mp_view->SetFWDFlag(FLAG_WU_AFR1, false);
+ mp_view->EnableFWDFlag(FLAG_WU_AFR1, false);
+ mp_view->SetFWDFlag(FLAG_ETC_SPRPREL, false);
+ mp_view->EnableFWDFlag(FLAG_ETC_SPRPREL, false);
+ mp_view->SetFWDFlag(FLAG_ETC_ACCEERR, false);
+ mp_view->EnableFWDFlag(FLAG_ETC_ACCEERR, false);
+ mp_view->SetFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->EnableFWDFlag(FLAG_ETC_THROPOS, false);
+ mp_view->SetFWDFlag(FLAG_OTSCURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_OTSCURVE_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)

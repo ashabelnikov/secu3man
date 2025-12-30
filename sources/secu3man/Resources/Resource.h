@@ -801,3 +801,4 @@
 #define IDS_DEV_DIAG_GPA4_I_TT          4934
 #define IDS_DEV_DIAG_GPA6_O_CHECK_TT    4935
 #define IDS_ECUERROR_APPS               4936
+#define ID_APP_D2                       4937

@@ -302,7 +302,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 110)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 112)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -733,6 +733,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &apps1))
   return false;
  sensorDat.apps1 = ((float)apps1) / APPS_MULT;
+
+ //OTS (Oil temparature sensor)
+ int ots = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ots, true))
+  return false;
+ sensorDat.ots = ((float)ots) / FTS_MULT;
 
  return true;
 }
@@ -1997,7 +2003,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.tab_id == ETMT_GRVDELAY || editTabPar.tab_id == ETMT_MANINJPWC || editTabPar.tab_id == ETMT_FTLSCOR || editTabPar.tab_id == ETMT_FUELDENS_CORR ||
       editTabPar.tab_id == ETMT_XTAU_XFACC || editTabPar.tab_id == ETMT_XTAU_XFDEC || editTabPar.tab_id == ETMT_XTAU_TFACC || editTabPar.tab_id == ETMT_XTAU_TFDEC ||
       editTabPar.tab_id == ETMT_INJNONLINP || editTabPar.tab_id == ETMT_INJNONLING || editTabPar.tab_id == ETMT_EGO_DELAY || editTabPar.tab_id == ETMT_ETC_SPRPREL ||
-      editTabPar.tab_id == ETMT_ETC_ACCEERR)
+      editTabPar.tab_id == ETMT_ETC_ACCEERR || editTabPar.tab_id == ETMT_OTS_CURVE)
   {
    size_t div = 2;
    if (size % div)
@@ -2007,7 +2013,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    for(size_t i = 0; i < size / div; ++i)
    {
     int value;
-    bool withsign = (editTabPar.tab_id == ETMT_INJ_DEAD || editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE || editTabPar.tab_id == ETMT_ETC_SPRPREL); 
+    bool withsign = (editTabPar.tab_id == ETMT_INJ_DEAD || editTabPar.tab_id == ETMT_CTS_CURVE || editTabPar.tab_id == ETMT_ATS_CURVE || editTabPar.tab_id == ETMT_TMP2_CURVE || editTabPar.tab_id == ETMT_GRTS_CURVE || editTabPar.tab_id == ETMT_FTS_CURVE || editTabPar.tab_id == ETMT_ETC_SPRPREL || editTabPar.tab_id == ETMT_OTS_CURVE); 
     if (false == mp_pdp->Hex16ToBin(raw_packet, &value, withsign)) //<--signed for dead map
      return false;
 
@@ -2060,6 +2066,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      editTabPar.table_data[i] = ((float)value) / 64.0f;
     else if (editTabPar.tab_id == ETMT_ETC_ACCEERR)
      editTabPar.table_data[i] = ((float)value) / 64.0f;
+    else if (editTabPar.tab_id == ETMT_OTS_CURVE)
+     editTabPar.table_data[i] = ((address+i) > 16) ? (value * ADC_DISCRETE) : (((float)value) / FTS_MULT);
     else
      editTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
@@ -4887,6 +4895,15 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * 2.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
+   else if (packet_data->tab_id == ETMT_OTS_CURVE)
+   {
+    int value;
+    if (packet_data->address >= OTS_LOOKUP_TABLE_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] / ADC_DISCRETE);
+    else
+     value = MathHelpers::Round(packet_data->table_data[i] * FTS_MULT);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
    else
    {  //default case
     signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
@@ -5501,6 +5518,8 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_FPS:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_OPS:  return MathHelpers::Round(val * OPS_MULT);
   case UNIOUT_COND_EGTS: return MathHelpers::Round(val * EGTS_MULT);
+  case UNIOUT_COND_FTS: return MathHelpers::Round(val * FTS_MULT);
+  case UNIOUT_COND_OTS: return MathHelpers::Round(val * FTS_MULT);
  }
  return 0;
 }
@@ -5553,6 +5572,8 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_FPS:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_OPS:  return (((float)val) / OPS_MULT);
   case UNIOUT_COND_EGTS: return (((float)val) / EGTS_MULT);
+  case UNIOUT_COND_FTS: return (((float)val) / FTS_MULT);
+  case UNIOUT_COND_OTS: return (((float)val) / FTS_MULT);
  }
  return .0f;
 }
@@ -5567,6 +5588,8 @@ bool CondEncoder::isSigned(int cond) const
   case UNIOUT_COND_GRTS:
   case UNIOUT_COND_TMP2:
   case UNIOUT_COND_TPSDOT:
+  case UNIOUT_COND_FTS:
+  case UNIOUT_COND_OTS:
    return true;
   default:
    return false;

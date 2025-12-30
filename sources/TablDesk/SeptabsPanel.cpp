@@ -58,6 +58,7 @@ CSeptabsPanel::CSeptabsPanel(bool disable_vscroll /*= false*/, bool enable_fwcon
 , m_fts_curve_enabled(false)
 , m_xtau_maps_enabled(false)
 , m_etc_maps_enabled(false)
+, m_ots_curve_enabled(false)
 , m_initialized(false)
 , m_disable_vscroll(disable_vscroll)
 , m_enable_fwconsts(enable_fwconsts)
@@ -140,6 +141,7 @@ void CSeptabsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_ETC_SPRPREL_MAP, *m_md[ETMT_ETC_SPRPREL].mp_button);
  DDX_Control(pDX, IDC_TD_ETC_ACCEERR_MAP, *m_md[ETMT_ETC_ACCEERR].mp_button);
  DDX_Control(pDX, IDC_TD_ETC_THROPOS_MAP, *m_md[ETMT_ETC_THROPOS].mp_button);
+ DDX_Control(pDX, IDC_TD_OTS_CURVE, *m_md[ETMT_OTS_CURVE].mp_button);
 
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
@@ -194,6 +196,7 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_BN_CLICKED(IDC_TD_ETC_SPRPREL_MAP, OnViewETCSprPrelMap)
  ON_BN_CLICKED(IDC_TD_ETC_ACCEERR_MAP, OnViewETCAcceptErrMap)
  ON_BN_CLICKED(IDC_TD_ETC_THROPOS_MAP, OnViewETCThrottlePosMap)
+ ON_BN_CLICKED(IDC_TD_OTS_CURVE, OnViewOtsCurveMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -243,6 +246,7 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_ETC_SPRPREL_MAP, OnUpdateViewETCSprPrelMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_ETC_ACCEERR_MAP, OnUpdateViewETCAcceptErrMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_ETC_THROPOS_MAP, OnUpdateViewETCThrottlePosMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_OTS_CURVE, OnUpdateViewOtsCurveMap)
  ON_WM_DESTROY()
  ON_WM_SIZE()
  ON_WM_TIMER()
@@ -319,6 +323,7 @@ BOOL CSeptabsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_SPRPREL].mp_button, MLL::GetString(IDS_TD_ETC_SPRPREL_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_ACCEERR].mp_button, MLL::GetString(IDS_TD_ETC_ACCEERR_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_THROPOS].mp_button, MLL::GetString(IDS_TD_ETC_THROPOS_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_OTS_CURVE].mp_button, MLL::GetString(IDS_TD_OTS_CURVE_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -358,7 +363,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
   if (m_disable_vscroll)
    mp_scr->SetViewSize(cx, da.ScaleY(1));
   else
-   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1350 : 720));
+   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1380 : 750));
  }
 
 }
@@ -700,6 +705,13 @@ void CSeptabsPanel::OnUpdateViewETCThrottlePosMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck((m_md[ETMT_ETC_THROPOS].state) ? TRUE : FALSE);
 }
 
+void CSeptabsPanel::OnUpdateViewOtsCurveMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable && m_ots_curve_enabled);
+ pCmdUI->SetCheck( (m_md[ETMT_OTS_CURVE].state) ? TRUE : FALSE );
+}
+
 void CSeptabsPanel::UpdateOpenedCharts(void)
 {
  for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
@@ -907,6 +919,15 @@ void CSeptabsPanel::EnableETCMaps(bool enable)
   DLL::Chart2DEnable(m_md[ETMT_ETC_ACCEERR].handle, enable && IsAllowed());
  if (m_md[ETMT_ETC_THROPOS].state && ::IsWindow(m_md[ETMT_ETC_THROPOS].handle))
   DLL::Chart3DEnable(m_md[ETMT_ETC_THROPOS].handle, enable && IsAllowed());
+}
+
+void CSeptabsPanel::EnableOtsCurve(bool enable)
+{
+ m_ots_curve_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[ETMT_OTS_CURVE].state && ::IsWindow(m_md[ETMT_OTS_CURVE].handle))
+  DLL::Chart2DEnable(m_md[ETMT_OTS_CURVE].handle, enable && IsAllowed());
 }
 
 void CSeptabsPanel::OnViewAttenuatorMap()
@@ -1879,7 +1900,6 @@ void CSeptabsPanel::OnViewFtsCurveMap()
  }
 }
 
-
 void CSeptabsPanel::OnViewOpsCurveMap()
 {
  MapData &md = m_md[ETMT_OPS_CURVE];
@@ -2475,6 +2495,45 @@ void CSeptabsPanel::OnViewETCThrottlePosMap()
   OnOpenMapWnd(md.handle, ETMT_ETC_THROPOS);
 
   DLL::Chart3DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CSeptabsPanel::OnViewOtsCurveMap()
+{
+ MapData &md = m_md[ETMT_OTS_CURVE];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  const float bins_lims[7] = {0.0f, 5.5f, 0.0f, 5.5f, 0.01f, 5.0f, 2.0f}; //min 0, max 5.5, inc 0.01, 5 limit text, 2 dec places
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, -40.0, 140.0, bins_lims, 17,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_OTS_CURVE_MAP).c_str(), CXD_BM_BE);
+  DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0.0"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, NULL, NULL);
+  DLL::Chart2DSetOnChange(md.handle, OnChangeOtsCurveTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseOtsCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationOtsCurveTable, this);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //allow controller to detect closing of this window
+  OnOpenMapWnd(md.handle, ETMT_OTS_CURVE);
+
+  DLL::Chart2DShow(md.handle, true);
  }
  else
  {

@@ -234,8 +234,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_APPS2      =  104,    // APPS2     (input)
    IOP3I_ETC_PWM1   =  105,    // ETC_PWM1  (output)
    IOP3I_ETC_PWM2   =  106,    // ETC_PWM2  (output)
-// IOP3I_RESERVED60 =  107,    // reserved  ()
-   IOP3I_COUNT      =  107,    //DON'T forget to update this value
+   IOP3I_OTS_I      =  107,    // OTS_I     (input)
+   IOP3I_COUNT      =  108,    //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -487,6 +487,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V42 = 0x42,           //V4.2  New reserved plugs were added, ALTRN_I input added
    IOV_V43 = 0x43,           //V4.3  FPS input has been added
    IOV_V44 = 0x44,           //V4.4  TPS2, APPS1, APPS2 inputs have been added (DBW), outputs: ETC_PWM1, ETC_PWM2
+   IOV_V45 = 0x45,           //v4.5  OTS_I input added
    IOV_CUR = IOV_V44
   };
 
@@ -667,6 +668,8 @@ protected:
   void SetETCAcceptErrMap(const float* i_values);
   void GetETCThrottlePosMap(float* op_values, bool i_original = false);
   void SetETCThrottlePosMap(const float* i_values);
+  void GetOtsCurveMap(float* op_values, bool i_original = false);
+  void SetOtsCurveMap(const float* i_values);
 
   virtual SECU3IO::params_t* GetParamsPtr(void);
   virtual EECUPlatform GetPlatformId(void);

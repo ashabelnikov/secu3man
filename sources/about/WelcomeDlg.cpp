@@ -42,6 +42,7 @@ CWelcomeDlg::CWelcomeDlg(CWnd* pParent /*=NULL*/)
 , mp_secu3orgLink(new CLabel)
 , mp_vkgLink(new CLabel)
 , mp_fbgLink(new CLabel)
+, mp_d2gLink(new CLabel)
 {
  //empty
 }
@@ -57,9 +58,11 @@ void CWelcomeDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_W_SECU3ORG_LINK, *mp_secu3orgLink);
  DDX_Control(pDX, IDC_W_VKG_LINK, *mp_vkgLink);
  DDX_Control(pDX, IDC_W_FBG_LINK, *mp_fbgLink);
+ DDX_Control(pDX, IDC_W_D2G_LINK, *mp_d2gLink);
  DDX_Control(pDX, IDC_BITMAP0002, m_secu3orgPic);
  DDX_Control(pDX, IDC_BITMAP0003, m_vkgPic);
  DDX_Control(pDX, IDC_BITMAP0004, m_fbgPic);
+ DDX_Control(pDX, IDC_BITMAP0005, m_d2gPic);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -91,6 +94,11 @@ BOOL CWelcomeDlg::OnInitDialog()
  mp_fbgLink->SetFontUnderline(true);
  mp_fbgLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
+ mp_d2gLink->SetLink(true);
+ mp_d2gLink->SetTextColor(RGB(0, 0, 255));
+ mp_d2gLink->SetFontUnderline(true);
+ mp_d2gLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
+
  m_secu3orgBmp.LoadBitmap(IDB_BITMAP0002);
 
  //set bitmap background
@@ -113,8 +121,10 @@ BOOL CWelcomeDlg::OnInitDialog()
  m_secu3orgPic.SetBitmap(m_secu3orgBmp);
  m_vkgBmp.LoadBitmap(IDB_BITMAP0003);
  m_vkgPic.SetBitmap(m_vkgBmp);
- m_fbgBmp.LoadBitmap(IDB_BITMAP0004);
+ m_fbgBmp.LoadBitmap(IDB_BITMAP0005);
  m_fbgPic.SetBitmap(m_fbgBmp);
+ m_d2gBmp.LoadBitmap(IDB_BITMAP0006);
+ m_d2gPic.SetBitmap(m_d2gBmp);
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control

@@ -50,7 +50,7 @@ class Selection
   int Size(int z);
   void Set(int z, int x, bool value) { _selpts(z, x) = value; }
   bool Get(int z, int x) { return _selpts(z, x); }
-  bool* Get(int z) { return &_selpts(z, 0); }  
+  bool* Get(int z) { return &_selpts(z, 0); }
   bool* Get() { return &_selpts(0, 0); }
   std::vector<int> GetSelIdxs(int z);
   void CopyRow(int zSrc, int zDst);

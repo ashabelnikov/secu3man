@@ -209,6 +209,8 @@ struct WndSettings
  int m_ETCAcceptErrMapWnd_Y;
  int m_ETCThrottlePosMapWnd_X;
  int m_ETCThrottlePosMapWnd_Y;
+ int m_OtsCurveMapWnd_X;
+ int m_OtsCurveMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -380,6 +382,8 @@ struct WndSize
  int m_ETCAcceptErrMapWnd_H;
  int m_ETCThrottlePosMapWnd_W;
  int m_ETCThrottlePosMapWnd_H;
+ int m_OtsCurveMapWnd_W;
+ int m_OtsCurveMapWnd_H;
 };
 
 //Holds windows's state data
@@ -498,6 +502,7 @@ struct MetersCfg
    m_optMetGPS[i].copyScale(dest.m_optMetGPS[i]);
    m_optMetFPS[i].copyScale(dest.m_optMetFPS[i]);
    m_optMetAPPS[i].copyScale(dest.m_optMetAPPS[i]);
+   m_optMetOTS[i].copyScale(dest.m_optMetOTS[i]);
   }
  }
 
@@ -548,6 +553,7 @@ struct MetersCfg
  MetCfg m_optMetGPS[2];
  MetCfg m_optMetFPS[2];
  MetCfg m_optMetAPPS[2];
+ MetCfg m_optMetOTS[2];
 };
 
 struct MapPtMovStep
@@ -641,6 +647,7 @@ struct LogFileFields
  _TSTRING m_fldGPS;
  _TSTRING m_fldFPS;
  _TSTRING m_fldAPPS;
+ _TSTRING m_fldOTS;
 };
 
 struct MetAverage
@@ -683,6 +690,7 @@ struct MetAverage
  int avrTargAFR;
  int avrFPS;
  int avrAPPS;
+ int avrOTS;
 };
 
 //Functionality

@@ -181,6 +181,7 @@
 #define IDC_PD_TEMPER_USE_VENT_PWM      3197
 #define IDD_TABLES_DESK                 3198
 #define IDC_TD_SAVE_BUTTON              3200
+#define IDC_TD_SEP_SAVE_BUTTON          3201
 #define IDC_TABLES_DESK_TITLE           3202
 #define IDC_TD_BUTTONS_PANEL_HOLDER     3209
 #define IDC_TD_TABLESSET_NAME_EDIT      3210
@@ -1763,3 +1764,5 @@
 #define IDS_UNIOUT_COND_FPS            6455
 #define IDS_UNIOUT_COND_OPS            6456
 #define IDS_UNIOUT_COND_EGTS           6457
+#define IDS_UNIOUT_COND_FTS            6458
+#define IDS_UNIOUT_COND_OTS            6459
