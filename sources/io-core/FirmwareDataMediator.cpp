@@ -804,7 +804,7 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  size_t dataSize = p_fd->fw_data_size;
  _uint oldFWCRC  = p_fd->code_crc;
-
+  
  if (ip_fpp)
  {
   LocInfoProvider lip(*ip_fpp);
@@ -847,7 +847,8 @@ void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_by
   return; //некуда загружать...
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  _uint fwd_size = p_fd->fw_data_size; //save
- memcpy(&p_fd->def_param, ip_source_bytes, sizeof(params_t));
+ memcpy(&p_fd->def_param, ip_source_bytes, sizeof(params_t)-sizeof(_uint)); //don't copy 2 bytes of checksum
+ p_fd->def_param.bt_flags|= 0x2; //set BTF_SET_BBR bit, because in the def_param of firmware it is always set, but in the EEPROM it may be not set.
  p_fd->fw_data_size = fwd_size; //restore
  mp_cddata = _FindCodeData(); //find data residing directly in the code
 

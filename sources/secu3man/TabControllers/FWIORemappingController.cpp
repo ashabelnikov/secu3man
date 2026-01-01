@@ -129,7 +129,7 @@ void CFWIORemappingController::OnItemInverted(FWDM::IOSid iosId, bool i_invert)
 {
  _SetInvFlag(iosId, i_invert); //update inversion flags
 
- //Get ID of plug currently connected to slot with identified by iosId
+ //Get ID of plug currently connected to slot which identified by iosId
  FWDM::IOPid iopId = mp_view->GetSelection(iosId);
 
  //reattach corresponding plug 
@@ -1207,10 +1207,10 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_INJ_O3, FWDM::IOP3I_INJ_O6, _T("INJ_O6"));
   mp_view->AddItem(FWDM::IOS3I_INJ_O3, FWDM::IOP3I_INJ_O7, _T("INJ_O7"));
   mp_view->AddItem(FWDM::IOS3I_INJ_O3, FWDM::IOP3I_INJ_O8, _T("INJ_O8"));
-  mp_view->AddItem(FWDM::IOS3I_INJ_O3, FWDM::IOP3I_INJ_O3, _T("NONE"));
   if (iov >= FWDM::IOV_V32) { 
    mp_view->AddItem(FWDM::IOS3I_INJ_O3, FWDM::IOP3I_GRHEAT, _T("GRHEAT"));
   }
+  mp_view->AddItem(FWDM::IOS3I_INJ_O3, FWDM::IOP3I_INJ_O3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_INJ_O3, true);
   mp_view->EnableInversion(FWDM::IOS3I_INJ_O3, true);
 

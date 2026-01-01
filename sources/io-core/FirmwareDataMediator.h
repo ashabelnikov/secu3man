@@ -398,6 +398,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS3I_GPA4_I     =  39,     // GPA4_I      (input)
    IOS3I_GPA6_O     =  40,     // GPA6_O      (output)
    IOS3I_GPA5_I     =  41,     // GPA5_I      (input)  hidden
+   //reserved slots are here
 // IOS_RESERVED5    =  42,     // Reserved    ()
 // IOS_RESERVED6    =  43,     // Reserved    ()
 // IOS_RESERVED7    =  44,     // Reserved    ()
@@ -405,8 +406,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOS_RESERVED9    =  46,     // Reserved    ()
 // IOS_RESERVED10   =  47,     // Reserved    ()
 // IOS_RESERVED11   =  48,     // Reserved    ()
-   //reserved slots are here
-   IOS3I_COUNT      =  41,
+   IOS3I_COUNT      =  41,     // Number of slots used for I/O remapping. note: we exclude hidden IOS3I_GPA5_I
    //SECU-3T:   
    IOS_IGN_OUT1     =   0,     // IGN_OUT1
    IOS_IGN_OUT2     =   1,     // IGN_OUT2

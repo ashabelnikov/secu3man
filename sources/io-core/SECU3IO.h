@@ -410,16 +410,16 @@ namespace SECU3IO
  struct MiscelPar
  {
   int baud_rate;                        //UART baud rate
-  int period_ms;                        //период посылки пакетов мс.
-  unsigned char ign_cutoff;             //признак использования отсечки зажигания
+  int period_ms;                        //packets sending period (ms)
+  unsigned char ign_cutoff;             //ignition cut off flag
   int ign_cutoff_thrd;                  //обороты отсечки зажигания
   float hop_start_ang;                  //Выход ДХ: Начало испульса в градусах относ. ВМТ 
   float hop_durat_ang;                  //Выход ДХ: Длительность импульса в градусах
   bool flpmp_offongas;                  //Flag. Turn off or not fuel pump when fuel type is gas
   bool inj_offongas;                    //Turn off injector(s) on gas
   bool inj_offonpet;                    //Turn off injector(s) on petrol
-  float evap_afbegin;
-  float evap_afslope;
+  float evap_afbegin;                   //EVAP begin air flow
+  float evap_afslope;                   //EVAP slope air flow
   float fp_timeout_strt;                //Fuel pump timeout for cranking (sec.)
   int pwm2_pwmfrq[2];                   //Frequencies for PWM channels
   float vss_pp1km;                      //number of VSS pulses per 1km of passed distance
@@ -524,7 +524,7 @@ namespace SECU3IO
   TCHAR bt_name[10];                    //bluetooth name, this parameter is not stored in EEPROM
   TCHAR bt_pass[10];                    //bluetooth password, this parameter is not stored in EEPROM
   bool use_bt;                          //flag specifying to use or not to use bluetooth
-  bool set_btbr;                        //flag indicating that bluetooth baud rate has to be set
+  bool set_btbr;                        //flag indicating that bluetooth baud rate has to be set. This flag is used in online editing only
   bool use_imm;                         //flag specifying to use or not to use immobilizer
   bool use_respar;                      //use reserve parameters (from FLASH only)
   bool chk_fwcrc;                       //check integrity of firmware
