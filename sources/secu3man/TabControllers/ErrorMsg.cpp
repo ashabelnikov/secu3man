@@ -53,9 +53,4 @@ bool AskUserAboutTabLeaving(void)
  return (IDYES==SECUMessageBox(MLL::LoadString(IDS_FW_LEAVE_TAB_WARNING), MB_YESNO|MB_DEFBUTTON2));
 }
 
-bool AskUserAboutVrefCompensation(void)
-{
- return (IDYES == SECUMessageBox(MLL::GetString(IDS_ASK_USER_ABOUT_VREF_COMP).c_str(), MB_YESNO));
-}
-
 };

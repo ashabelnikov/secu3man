@@ -1031,7 +1031,7 @@ const int INPAVNUM = 14;
  const int COPT_REV9_BOARD = 20;
  const int COPT_STROBOSCOPE = 21;
  const int COPT_SM_CONTROL = 22;
- const int COPT_VREF_5V = 23;
+ const int COPT_VREF_5V = 23;       //obsolete, left for compatibility
  const int COPT_HALL_SYNC = 24;
  const int COPT_UART_BINARY = 25;   //obsolete, left for compatibility
  const int COPT_CKPS_2CHIGN = 26;
@@ -1069,7 +1069,7 @@ const int INPAVNUM = 14;
   _SD(COPT_REV9_BOARD,      _T("REV9_BOARD")),
   _SD(COPT_STROBOSCOPE,     _T("STROBOSCOPE")),
   _SD(COPT_SM_CONTROL,      _T("SM_CONTROL")),
-  _SD(COPT_VREF_5V,         _T("VREF_5V")),
+  _SD(COPT_VREF_5V,         _T("VREF_5V")),      //obsolete, left for compatibility
   _SD(COPT_HALL_SYNC,       _T("HALL_SYNC")),
   _SD(COPT_UART_BINARY,     _T("UART_BINARY")),  //obsolete, left for compatibility
   _SD(COPT_CKPS_2CHIGN,     _T("CKPS_2CHIGN")),

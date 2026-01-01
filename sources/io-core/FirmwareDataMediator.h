@@ -47,7 +47,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   //загрузка байтов прошивки из указанного буфера
   void LoadBytes(const BYTE* ip_bytes);
   void LoadDataBytesFromAnotherFirmware(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp = NULL);
-  void LoadDefParametersFromBuffer(const BYTE* ip_source_bytes, EventHandler onVrefUsrConfirm = NULL);
+  void LoadDefParametersFromBuffer(const BYTE* ip_source_bytes);
 
   //сохранение байтов прошивки в указанный буфер
   void StoreBytes(BYTE* op_bytes);

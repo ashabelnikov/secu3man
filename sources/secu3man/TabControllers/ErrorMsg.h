@@ -32,5 +32,4 @@ namespace ErrorMsg
 {
  CString GenerateErrorStr(CCommunicationManager* p_comm);
  bool AskUserAboutTabLeaving(void);
- bool AskUserAboutVrefCompensation(void);
 };

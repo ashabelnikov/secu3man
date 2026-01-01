@@ -1335,7 +1335,7 @@ void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
    return; //user canceled
  }
 
- mp_fwdm->LoadDefParametersFromBuffer(eeprom + mp_edm->GetParamsStartAddr(), ErrorMsg::AskUserAboutVrefCompensation);
+ mp_fwdm->LoadDefParametersFromBuffer(eeprom + mp_edm->GetParamsStartAddr());
  SetViewFirmwareValues(); //Update!
 }
 

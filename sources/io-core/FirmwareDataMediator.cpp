@@ -480,35 +480,6 @@ typedef struct fw_data_t
  _uint        code_crc;                  // Check sum of the whole firmware (except this check sum and boot loader)
 }fw_data_t;
 
-
-namespace {
-void _CompensateVRef(params_t* iop_data, bool i_dir)
-{
- const float adc_vref_factor = 1.9531f;
- const int _min = 0, _max = SHRT_MAX;
- if (i_dir)
- { //5v <-- 2.56v
-  iop_data->map_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->map_adc_factor * adc_vref_factor),  _min, _max);
-  iop_data->ubat_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ubat_adc_factor * adc_vref_factor), _min, _max); 
-  iop_data->temp_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->temp_adc_factor * adc_vref_factor), _min, _max);
-  //SECU-3T
-  iop_data->tps_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->tps_adc_factor * adc_vref_factor), _min, _max);
-  iop_data->ai1_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai1_adc_factor * adc_vref_factor), _min, _max);
-  iop_data->ai2_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai2_adc_factor * adc_vref_factor), _min, _max);
- }
- else
- { //5v --> 2.56v
-  iop_data->map_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->map_adc_factor / adc_vref_factor),  _min, _max);
-  iop_data->ubat_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ubat_adc_factor / adc_vref_factor), _min, _max);
-  iop_data->temp_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->temp_adc_factor / adc_vref_factor), _min, _max);
-  //SECU-3T
-  iop_data->tps_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->tps_adc_factor / adc_vref_factor), _min, _max);
-  iop_data->ai1_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai1_adc_factor / adc_vref_factor), _min, _max);
-  iop_data->ai2_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai2_adc_factor / adc_vref_factor), _min, _max);
- }
-}
-}
-
 class CFirmwareDataMediator::LocInfoProvider
  {
   public:
@@ -830,18 +801,10 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
 
  mp_cddata = _FindCodeData();
 
- //Compensate ADC correction factors when destination and source firmware use different ADC Vref
- DWORD dst_fwopt = GetFWOptions();
- DWORD src_fwopt = GetFWOptions(ip_source_bytes, ip_fpp ? ip_fpp : m_fpp.get());
- if (CHECKBIT32(dst_fwopt, SECU3IO::COPT_VREF_5V) && !CHECKBIT32(src_fwopt, SECU3IO::COPT_VREF_5V))
-  _CompensateVRef(&p_fd->def_param, true);  //5v <-- 2.56v
- if (!CHECKBIT32(dst_fwopt, SECU3IO::COPT_VREF_5V) && CHECKBIT32(src_fwopt, SECU3IO::COPT_VREF_5V))
-  _CompensateVRef(&p_fd->def_param, false); //5v --> 2.56v
-
  IORemUpdateInfo();
 }
 
-void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_bytes, EventHandler onVrefUsrConfirm /*= NULL*/)
+void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_bytes)
 {
  if (false==IsLoaded())
   return; //некуда загружать...
@@ -851,26 +814,6 @@ void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_by
  p_fd->def_param.bt_flags|= 0x2; //set BTF_SET_BBR bit, because in the def_param of firmware it is always set, but in the EEPROM it may be not set.
  p_fd->fw_data_size = fwd_size; //restore
  mp_cddata = _FindCodeData(); //find data residing directly in the code
-
- //Use heuristic check, ask user and apply ADC factor compensation
- std::vector<float> factors;
- params_t& par = p_fd->def_param;
- factors.push_back(((float)par.map_adc_factor)  / 16384.0f);
- factors.push_back(((float)par.ubat_adc_factor) / 16384.0f);
- factors.push_back(((float)par.temp_adc_factor) / 16384.0f);
- factors.push_back(((float)par.tps_adc_factor)  / 16384.0f);
- factors.push_back(((float)par.ai1_adc_factor)  / 16384.0f);
- factors.push_back(((float)par.ai2_adc_factor)  / 16384.0f);
- bool src_vref_5v = true;
- for(size_t i = 0; i < factors.size(); ++i)
-  if (factors[i] < 1.70f)
-   src_vref_5v = false;
- bool dst_vref_5v = CHECKBIT32(GetFWOptions(), SECU3IO::COPT_VREF_5V);
- if (src_vref_5v != dst_vref_5v) //different ADC voltage reference?
- {//Ask user, before applying compensation
-  if ((onVrefUsrConfirm) ? onVrefUsrConfirm() : true)
-   _CompensateVRef(&par, (!src_vref_5v && dst_vref_5v)); //5v <-- 2.56v or 5v --> 2.56v
- }
 }
 
 void CFirmwareDataMediator::GetWorkMap(int i_index, float* op_values, bool i_original /* = false*/)
