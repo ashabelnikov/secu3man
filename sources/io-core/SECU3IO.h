@@ -521,8 +521,8 @@ namespace SECU3IO
 
  struct SecurPar
  {
-  TCHAR bt_name[10];                    //bluetooth name, this parameter is not stored in EEPROM
-  TCHAR bt_pass[10];                    //bluetooth password, this parameter is not stored in EEPROM
+  TCHAR bt_name[20];                    //bluetooth name, this parameter is not stored in EEPROM
+  TCHAR bt_pass[12];                    //bluetooth password, this parameter is not stored in EEPROM
   bool use_bt;                          //flag specifying to use or not to use bluetooth
   bool set_btbr;                        //flag indicating that bluetooth baud rate has to be set. This flag is used in online editing only
   bool use_imm;                         //flag specifying to use or not to use immobilizer

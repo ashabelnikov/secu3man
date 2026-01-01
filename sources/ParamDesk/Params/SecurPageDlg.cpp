@@ -132,7 +132,7 @@ void CSecurPageDlg::OnUpdateUseResPar(CCmdUI* pCmdUI)
 
 void CSecurPageDlg::OnUpdateApplyButton(CCmdUI* pCmdUI)
 {
- bool namepass_not_empty = (m_bt_name_edit.LineLength() > 0) && (m_bt_pass_edit.LineLength() == 4);
+ bool namepass_not_empty = (m_bt_name_edit.LineLength() > 0) && (m_bt_pass_edit.LineLength() >= 4);
  pCmdUI->Enable(m_enabled && m_namepass_enabled && m_params.use_bt && namepass_not_empty);
 }
 
@@ -143,8 +143,8 @@ BOOL CSecurPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- m_bt_name_edit.SetLimitText(8);
- m_bt_pass_edit.SetLimitText(4);
+ m_bt_name_edit.SetLimitText(16);
+ m_bt_pass_edit.SetLimitText(8);
 
  m_ibtn_key1_edit.SetLimitText(12);
  m_ibtn_key2_edit.SetLimitText(12);
