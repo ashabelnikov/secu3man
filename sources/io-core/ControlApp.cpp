@@ -2877,6 +2877,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  injctrPar.inj_useairden = CHECKBIT8(inj_flags, 3);
  injctrPar.inj_usediffpress = CHECKBIT8(inj_flags, 4);
  injctrPar.inj_secinjrowswt = CHECKBIT8(inj_flags, 5);
+ injctrPar.inj_fsafterstart = CHECKBIT8(inj_flags, 6);
 
  unsigned char inj_config = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
@@ -5064,6 +5065,7 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
  WRITEBIT8(inj_flags, 3, packet_data->inj_useairden); 
  WRITEBIT8(inj_flags, 4, packet_data->inj_usediffpress); 
  WRITEBIT8(inj_flags, 5, packet_data->inj_secinjrowswt); 
+ WRITEBIT8(inj_flags, 6, packet_data->inj_fsafterstart); 
  mp_pdp->Bin8ToHex(inj_flags, m_outgoing_packet);
 
  unsigned char inj_config = MAKEBYTE(packet_data->inj_config[0], packet_data->inj_squirt_num[0]);

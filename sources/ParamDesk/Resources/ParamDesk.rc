@@ -1124,6 +1124,8 @@ BEGIN
     CONTROL         "Дифф.давление для корр.по ДДГ",IDC_PD_INJECTOR_USEDIFFPRESS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,480,138,10
 
     CONTROL         "Переключать ряды форсунок",IDC_PD_INJECTOR_SECINJROWSWT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,495,138,10
+
+    CONTROL         "Распредел. впрыск после пуска",IDC_PD_INJECTOR_FSAFTERSTART_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,510,138,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -2151,6 +2153,7 @@ BEGIN
     IDS_MAP_CALC_GRADIENT_N_COMBO_TT "Введите единицу измерения (единица давления или единица напряжения)"
     IDS_MAP_CALC_GRADIENT_D_COMBO_TT "Введите единицу измерения (единица давления или единица напряжения)"
     IDS_PD_INJECTOR_MAXPW_EDIT_TT "Ограничение максимальной длительности впрыска. Длительность импульсов впрыска не может быть больше этого значения."
+    IDS_PD_INJECTOR_FSAFTERSTART_CHECK_TT "Переход в режим распределенного фазированного впрыска произойдет только после запуска двигателя, а не в момент получения сигнала от датчика фаз при запуске двигателя."
 END
 
 STRINGTABLE
@@ -3403,6 +3406,8 @@ BEGIN
     CONTROL         "Diff.press.for PW corr.from GPS",IDC_PD_INJECTOR_USEDIFFPRESS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,480,138,10
 
     CONTROL         "Switch beetwen injectors' rows",IDC_PD_INJECTOR_SECINJROWSWT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,495,138,10
+
+    CONTROL         "Full sequential after start",IDC_PD_INJECTOR_FSAFTERSTART_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,510,138,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -4456,6 +4461,7 @@ BEGIN
     IDS_MAP_CALC_GRADIENT_N_COMBO_TT "Enter the unit of measure (unit of pressure or unit of voltage)"
     IDS_MAP_CALC_GRADIENT_D_COMBO_TT "Enter the unit of measure (unit of pressure or unit of voltage)"
     IDS_PD_INJECTOR_MAXPW_EDIT_TT "Limitting the maximum injection pulse width. The width of injection pulses can not be above this value."
+    IDS_PD_INJECTOR_FSAFTERSTART_CHECK_TT "The transition to the full sequential injection mode will occur only after the engine is started, and not at the moment of receiving a signal from the phase sensor during cranking."
 END
 
 STRINGTABLE

@@ -62,6 +62,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USEAIRDEN_CHECK,OnChangeData) 
  ON_BN_CLICKED(IDC_PD_INJECTOR_USEDIFFPRESS_CHECK,OnChangeData) 
  ON_BN_CLICKED(IDC_PD_INJECTOR_SECINJROWSWT_CHECK,OnChangeData) 
+ ON_BN_CLICKED(IDC_PD_INJECTOR_FSAFTERSTART_CHECK,OnChangeData) 
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_SPIN,OnUpdateControls)
@@ -133,6 +134,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USEAIRDEN_CHECK,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USEDIFFPRESS_CHECK,OnUpdateControlsSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SECINJROWSWT_CHECK,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FSAFTERSTART_CHECK,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_CAPTION,OnUpdateControls)
@@ -191,6 +193,7 @@ CInjectorPageDlg::CInjectorPageDlg()
  m_params.inj_useaddcorrs = false;
  m_params.inj_usediffpress = false;
  m_params.inj_secinjrowswt = false;
+ m_params.inj_fsafterstart = false;
  
  m_params.mafload_const = 0;
 }
@@ -241,6 +244,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_USEAIRDEN_CHECK, m_inj_useairden_check);
  DDX_Control(pDX,IDC_PD_INJECTOR_USEDIFFPRESS_CHECK, m_inj_usediffpress_check);
  DDX_Control(pDX,IDC_PD_INJECTOR_SECINJROWSWT_CHECK, m_inj_secinjrowswt_check);
+ DDX_Control(pDX,IDC_PD_INJECTOR_FSAFTERSTART_CHECK, m_inj_fsafterstart_check);
 
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_EDIT, m_fff_const_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_SPIN, m_fff_const_spin);
@@ -284,6 +288,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USEAIRDEN_CHECK, m_params.inj_useairden);
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USEDIFFPRESS_CHECK, m_params.inj_usediffpress);
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_SECINJROWSWT_CHECK, m_params.inj_secinjrowswt);
+ DDX_Check_bool(pDX, IDC_PD_INJECTOR_FSAFTERSTART_CHECK, m_params.inj_fsafterstart);
 
  m_fff_const_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FFFCONST_EDIT, m_params.fff_const);
 
@@ -380,6 +385,7 @@ BOOL CInjectorPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_inj_usediffpress_check, MLL::GetString(IDS_PD_INJECTOR_USEDIFFPRESS_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fff_const_edit, MLL::GetString(IDS_PD_INJECTOR_FFFCONST_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fff_const_spin, MLL::GetString(IDS_PD_INJECTOR_FFFCONST_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_fsafterstart_check, MLL::GetString(IDS_PD_INJECTOR_FSAFTERSTART_CHECK_TT)));
 
  for(int i = 0; i < 2; ++i)
  {
@@ -913,7 +919,7 @@ void CInjectorPageDlg::OnSize(UINT nType, int cx, int cy)
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(910));
+  mp_scr->SetViewSize(cx, da.ScaleY(930));
 }
 
 void CInjectorPageDlg::SetITEdMode(int mode)
