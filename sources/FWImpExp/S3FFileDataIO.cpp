@@ -99,7 +99,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.29 - Added VE2 load grid (22.03.2024)
 //         Added EGO delay map (23.03.2024)
 // 01.30 - Added more items to CE settings, added ETC maps, added OTS map, two WU AFR maps (30.12.2025)
-//
+//         Added flag for ADDI5/6/7/8 (03.01.2026)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -255,7 +255,9 @@ typedef struct
  s3f_int32_t tpsdiff_thrd;
  s3f_int32_t appsdiff_thrd;
 
- s3f_int32_t reserved[1041];
+ s3f_int32_t addi5678_flg;
+
+ s3f_int32_t reserved[1040];
 }s3f_ce_sett_t;
 
 
@@ -928,6 +930,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_sepMaps->cesd.tpsdiff_thrd = MathHelpers::Round(m_data.cesd.tpsdiff_thrd * INT_MULTIPLIER);
  p_sepMaps->cesd.appsdiff_thrd = MathHelpers::Round(m_data.cesd.appsdiff_thrd * INT_MULTIPLIER);
 
+ p_sepMaps->cesd.addi5678_flg = m_data.cesd.addi5678_flg; //bool
+
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
  file.Write(&rawdata[0], size);
@@ -1294,6 +1298,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  m_data.cesd.stepperic_flg = p_sepMaps->cesd.stepperic_flg;
  m_data.cesd.tpsdiff_thrd = p_sepMaps->cesd.tpsdiff_thrd / INT_MULTIPLIER;
  m_data.cesd.appsdiff_thrd = p_sepMaps->cesd.appsdiff_thrd / INT_MULTIPLIER;
+
+ m_data.cesd.addi5678_flg = p_sepMaps->cesd.addi5678_flg;
 
  return true;
 }

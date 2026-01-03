@@ -154,6 +154,8 @@
 #define IDS_MAPS_ETC_THROPOSX_UNIT      5165
 #define IDS_MAPS_ETC_THROPOSY_UNIT      5166
 #define IDS_ETC_THROPOS_MAP             5167
+#define IDC_CESETT_ADDI5678_FLG_CHECK   5168
+#define IDS_CESETT_ADDI5678_FLG_CHECK_TT 5169
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

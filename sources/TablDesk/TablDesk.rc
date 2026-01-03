@@ -655,6 +655,8 @@ BEGIN
     LTEXT           "Макс. разница между APPS1 и APPS2 (В)",IDC_CESETT_APPSDIFF_THRD_CAPTION,10,562,140,15
     EDITTEXT        IDC_CESETT_APPSDIFF_THRD_EDIT,160,560,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_APPSDIFF_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,192,560,12,16
+
+    CONTROL         "Обрабатывать ошибки входов ADD_I5/6/7/8",IDC_CESETT_ADDI5678_FLG_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,50,585,180,20
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -958,7 +960,8 @@ BEGIN
     IDS_TD_WUAFR1_MAP_TT       "Таблица Воздух/топливо используемая при прогреве двигателя для газа (GAS_V=1)"
     IDS_WUAFR0_MAP             "Соотношение воздух/топливо от температуры двигателя (бензин)"
     IDS_WUAFR1_MAP             "Соотношение воздух/топливо от температуры двигателя (газ)"
-    IDS_CESETT_STEPPERIC_FLG_CHECK_TT "Установите галочку чтобы ошибка шагового двигателя учитывалась или уберите ее чтобы ошибка игнорировалась."
+    IDS_CESETT_STEPPERIC_FLG_CHECK_TT "Установите галочку чтобы ошибка шагового двигателя учитывалась или уберите ее, чтобы ошибка игнорировалась."
+    IDS_CESETT_ADDI5678_FLG_CHECK_TT "Установите галочку чтобы ошибки входов ADD_I5/6/7/8 учитывались или уберите ее, чтобы ошибки игнорировались."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1626,6 +1629,8 @@ BEGIN
     LTEXT           "Max. difference between APPS1 and APPS2 (V)",IDC_CESETT_APPSDIFF_THRD_CAPTION,10,562,140,15
     EDITTEXT        IDC_CESETT_APPSDIFF_THRD_EDIT,160,560,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_CESETT_APPSDIFF_THRD_SPIN,"msctls_updown32",UDS_ARROWKEYS,192,560,12,16
+
+    CONTROL         "Process errors of ADD_I5/6/7/8 inputs",IDC_CESETT_ADDI5678_FLG_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,50,585,180,20
 END
 
 IDD_CESETTINGS_CONTAINER DIALOGEX 0, 0, 320, 273
@@ -1933,6 +1938,7 @@ BEGIN
     IDS_WUAFR0_MAP             "AFR vs coolant temperature (petrol)"
     IDS_WUAFR1_MAP             "AFR vs coolant temperature (gas)"
     IDS_CESETT_STEPPERIC_FLG_CHECK_TT "Check the box for the stepper motor's error to be taken into account or uncheck it for the error to be ignored."
+    IDS_CESETT_ADDI5678_FLG_CHECK_TT "Check the box for the ADD_I5/6/7/8 errors to be taken into account or uncheck it for the errors to be ignored."
 END
 
 STRINGTABLE DISCARDABLE 

@@ -124,7 +124,7 @@ struct CESettingsData
  , add_i7_v_min(.0f), add_i7_v_max(.0f), add_i7_v_em(.0f), add_i7_v_useem(false)
  , add_i8_v_min(.0f), add_i8_v_max(.0f), add_i8_v_em(.0f), add_i8_v_useem(false)
  , oilpress_thrd(.0f), oilpress_timer(0), stepperic_flg(false), tpsdiff_thrd(.0f)
- , appsdiff_thrd(.0f)
+ , appsdiff_thrd(.0f), addi5678_flg(false)
  {}
 
  float map_v_min;
@@ -199,6 +199,8 @@ struct CESettingsData
 
  float tpsdiff_thrd;
  float appsdiff_thrd;
+
+ bool addi5678_flg;
 };
 
 struct SECU3FWMapsItem

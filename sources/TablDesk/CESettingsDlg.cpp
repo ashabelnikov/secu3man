@@ -355,6 +355,8 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_APPSDIFF_THRD_EDIT, m_appsdiff_thrd_edit);
  DDX_Control(pDX, IDC_CESETT_APPSDIFF_THRD_SPIN, m_appsdiff_thrd_spin);
 
+ DDX_Control(pDX, IDC_CESETT_ADDI5678_FLG_CHECK, m_addi5678_flg_check);
+
  //Do data exchange and validation
  m_map_v_min_edit.DDX_Value(pDX, IDC_CESETT_MAP_V_MIN_EDIT, mp_data->map_v_min);
  DDV_MinMaxFloat(pDX, mp_data->map_v_min, 0.0f, 5.5f);
@@ -472,6 +474,8 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
 
  m_appsdiff_thrd_edit.DDX_Value(pDX, IDC_CESETT_APPSDIFF_THRD_EDIT, mp_data->appsdiff_thrd);
  DDV_MinMaxFloat(pDX, mp_data->appsdiff_thrd, 0.0025f, 1.0f);
+
+ DDX_Check_bool(pDX, IDC_CESETT_ADDI5678_FLG_CHECK, mp_data->addi5678_flg);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -881,6 +885,8 @@ BOOL CCESettingsDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_appsdiff_thrd_edit, MLL::GetString(IDS_CESETT_APPSDIFF_THRD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_appsdiff_thrd_spin, MLL::GetString(IDS_CESETT_APPSDIFF_THRD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_addi5678_flg_check, MLL::GetString(IDS_CESETT_ADDI5678_FLG_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
