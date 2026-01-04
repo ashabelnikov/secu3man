@@ -1975,20 +1975,40 @@ IDB_CALC_DOWN           BITMAP     "res\\calc_down.bmp"
 IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
 IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
 
+IDB_CALC_UP150          BITMAP     "res\\calc_up150.bmp"
+IDB_CALC_DOWN150        BITMAP     "res\\calc_down150.bmp"
+IDB_CALC_FOCUSED150     BITMAP     "res\\calc_focused150.bmp"
+IDB_CALC_DISABLED150    BITMAP     "res\\calc_disabled150.bmp"
+
 IDB_GRID_UP             BITMAP     "res\\grid_up.bmp"
 IDB_GRID_DOWN           BITMAP     "res\\grid_down.bmp"
 IDB_GRID_FOCUSED        BITMAP     "res\\grid_focused.bmp"
 IDB_GRID_DISABLED       BITMAP     "res\\grid_disabled.bmp"
+
+IDB_GRID_UP150          BITMAP     "res\\grid_up150.bmp"
+IDB_GRID_DOWN150        BITMAP     "res\\grid_down150.bmp"
+IDB_GRID_FOCUSED150     BITMAP     "res\\grid_focused150.bmp"
+IDB_GRID_DISABLED150    BITMAP     "res\\grid_disabled150.bmp"
 
 IDB_CONST_UP            BITMAP     "res\\const_up.bmp"
 IDB_CONST_DOWN          BITMAP     "res\\const_down.bmp"
 IDB_CONST_FOCUSED       BITMAP     "res\\const_focused.bmp"
 IDB_CONST_DISABLED      BITMAP     "res\\const_disabled.bmp"
 
+IDB_CONST_UP150         BITMAP     "res\\const_up150.bmp"
+IDB_CONST_DOWN150       BITMAP     "res\\const_down150.bmp"
+IDB_CONST_FOCUSED150    BITMAP     "res\\const_focused150.bmp"
+IDB_CONST_DISABLED150   BITMAP     "res\\const_disabled150.bmp"
+
 IDB_CES_UP              BITMAP     "res\\ces_up.bmp"
 IDB_CES_DOWN            BITMAP     "res\\ces_down.bmp"
 IDB_CES_FOCUSED         BITMAP     "res\\ces_focused.bmp"
 IDB_CES_DISABLED        BITMAP     "res\\ces_disabled.bmp"
+
+IDB_CES_UP150           BITMAP     "res\\ces_up150.bmp"
+IDB_CES_DOWN150         BITMAP     "res\\ces_down150.bmp"
+IDB_CES_FOCUSED150      BITMAP     "res\\ces_focused150.bmp"
+IDB_CES_DISABLED150     BITMAP     "res\\ces_disabled150.bmp"
 
 IDI_GRAPH               ICON       "res\\graph.ico"
 
@@ -2002,7 +2022,7 @@ BEGIN
     BLOCK "040904e4"
     BEGIN
       VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007-2024 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2007-2026 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
       VALUE "ProductName", "SECU-3 Manager"
     END
   END

@@ -30,7 +30,6 @@
 
 #include <math.h>
 #include <limits>
-#include "about/secu-3about.h"
 #include "common/DPIAware.h"
 #include "common/FastDelegate.h"
 #include "common/GDIHelpers.h"
@@ -88,11 +87,6 @@ CKnockChannelTabDlg::CKnockChannelTabDlg()
 
  mp_ContextMenuManager->CreateContent();
  mp_knock_frq_calc_dlg->setOnCalculate(MakeDelegate(this, &CKnockChannelTabDlg::OnFrqCalculate));
-
- //=================================================================
- if (!CheckBitmaps() || !CheckAppMenu())
-  delete this;
- //=================================================================
 }
 
 CKnockChannelTabDlg::~CKnockChannelTabDlg()

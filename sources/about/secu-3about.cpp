@@ -34,13 +34,8 @@
 #include "../common/ModuleName.h"
 #include "Version.h"
 #include "WelcomeDlg.h"
-#include "sha256.h"
 
 extern HINSTANCE hInstance;  //DLLs hInstance
-
-#ifdef _DEBUG //in debug mode only
-#define SECU3NOPROTECTION
-#endif
 
 namespace {
  CString BuildSoftwareInfoStr(void)
@@ -52,49 +47,6 @@ namespace {
   GetVersionInfo(NULL, major, minor);
   string.Format(templ, major, minor, A2T(__DATE__)); //compiler uses only ASCII format... 
   return string;
- }
-
- HGLOBAL LoadResourceBits(LPCTSTR moduleName, LPCTSTR resId, LPCTSTR resType, BYTE*& buff, int& size)
- {
-  HINSTANCE hInst = GetModuleHandle(moduleName);
-  HRSRC rc = FindResource(hInst, resId, resType);
-  if (NULL==rc)
-   return NULL;
-
-  HGLOBAL hgl = LoadResource(hInst, rc);
-  if (NULL==hgl)
-   return NULL;
-
-  BYTE* bitmap = (BYTE*)LockResource(hgl);
-  if (NULL==bitmap)
-  {
-   FreeResource(hgl);
-   return NULL;
-  }
-
-  DWORD bmsize = SizeofResource(hInst, rc);
-  if (0==bmsize)
-  {
-   FreeResource(hgl);
-   return NULL;
-  }
-
-  buff = bitmap;
-  size = bmsize;
-  return hgl;
- }
- 
- void app_fail1(void)
- {
-  *((char*)(0x3416)) = 0x7F;  
- }
-
- int app_fail2(int val)
- {
-  if (val < 100)
-   return app_fail2(val / (val - 1));
-  else
-   return 5;
  }
 }
 
@@ -119,236 +71,46 @@ void ABOUT_API DisplayWelcome(void)
 
 bool CheckAppTitle(CWnd* p_wnd)
 {
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- BYTE hash[SHA256_BLOCK_SIZE];
- Sha256 sha;
-
  CString str;
  p_wnd->GetWindowText(str);
- //"SECU-3 Manager v5.0"
- BYTE hash_title[SHA256_BLOCK_SIZE] = {0x69,0x64,0xBF,0x9E,0x5D,0x03,0xE2,0x23,0xE7,0xCB,0xED,0xBD,0x41,0xEA,0xEF,0xFB,0xAB,0xB1,0xBF,0x3B,0x08,0xC0,0x57,0xB1,0x54,0xD6,0x9C,0x05,0x30,0x36,0x20,0x2C};
- sha.init();
- sha.update((BYTE*)((LPCTSTR)str), str.GetLength());
- sha.final(hash);
-
-/*
- FILE* f = fopen("aaa.aaa","wb");
- for (int i = 0; i < 32; ++i)
-  fprintf(f,"0x%02X,", hash[i]); 
- fclose(f);
-*/
-
- if (!std::equal(hash, hash + SHA256_BLOCK_SIZE, hash_title))
+ TCHAR data[] = {'S','E','C','U','-','3',' ','M','a','n','a','g','e','r','\0'};
+ if (str.Find(data) < 0)
  {
-  app_fail1();
+  CheckAppTitle(p_wnd);
   return false;
  }
 
  TCHAR ldstr[100+1];
  LoadString(GetModuleHandle(ModuleName::secu3man), 4152/*IDS_APP_TITLE*/, ldstr, 100);
- //"SECU-3 Manager"
- BYTE hash_title1[32] = {0xc1,0x73,0xe1,0xc0,0xe8,0x01,0x45,0xec,0x04,0xd5,0x79,0xab,0xb7,0x89,0x72,0x68,0xee,0x28,0xa3,0xa6,0x5f,0xb5,0x7a,0xc6,0x61,0x46,0x0b,0x60,0xc5,0x0d,0x18,0x9e};
- sha.init();
- sha.update((BYTE*)ldstr, (_TSTRING(ldstr)).size());
- sha.final(hash);
- if (!std::equal(hash, hash + SHA256_BLOCK_SIZE, hash_title1))
+ if (str.Find(data) < 0)
  {
-  app_fail2(5);
+  CheckAppTitle(p_wnd);
   return false;
  }
 
  return true;
-#endif
 }
 
 bool ABOUT_API CheckAppLogo(void)
 {
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- TCHAR str[100+1];
- LoadString(GetModuleHandle(ModuleName::secu3man), 4153/*IDS_STATUS_BAR_LOGO*/, str, 100);
- //"SECU-3"
- BYTE hash[32] = {0xe8,0x40,0x9b,0x12,0x68,0x85,0xaf,0x0d,0xd5,0x64,0xfd,0x70,0x7d,0xa2,0xba,0xb3,0x42,0xd7,0x75,0xf1,0x84,0xdc,0xa9,0xba,0x8e,0x1b,0xa4,0x49,0x22,0x0b,0x29,0xbf};
- BYTE digest[SHA256_BLOCK_SIZE];
- Sha256 sha;
- sha.init();
- sha.update((BYTE*)str, (_TSTRING(str)).size());
- sha.final(digest);
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash))
+ TCHAR s[8+1];
+ LoadString(GetModuleHandle(ModuleName::secu3man), 4153/*IDS_STATUS_BAR_LOGO*/, s, 8);
+ if (s[0]!='S'||s[1]!='E'||s[2]!='C'||s[3]!='U'||s[4]!='-'||s[5]!='3')
   return false;
 
  return true;
-#endif
 }
 
 bool ABOUT_API CheckAppUrl(const _TSTRING& str)
 {
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- //"http://secu-3.org"
- BYTE hash[32] = {0x9b,0x1a,0x20,0x07,0xaa,0x9c,0xce,0x55,0x2a,0x3e,0xd8,0x17,0x2f,0xd8,0x48,0xe7,0xa8,0xf9,0xfb,0xf8,0xc3,0x2d,0x50,0x0d,0x99,0xd4,0x6c,0x9f,0x9b,0x82,0xd5,0x41};
- BYTE digest[SHA256_BLOCK_SIZE];
- Sha256 sha;
- sha.init();
- sha.update((BYTE*)str.c_str(), str.size());
- sha.final(digest);
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash))
+ if (NULL==_tcsstr(str.c_str(), _T("http://secu-3.org")))
   return false;
 
  return true;
-#endif
-}
-
-bool ABOUT_API CheckAppMenu(void)
-{ 
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- BYTE digest[SHA256_BLOCK_SIZE];
- Sha256 sha;
- BYTE* bytes = NULL;
- int size = 0;
- HGLOBAL hgl = NULL;
-
- hgl = LoadResourceBits(ModuleName::secu3man, MAKEINTRESOURCE(4001/*IDR_MAINFRAME*/), RT_MENU, bytes, size);
- if (NULL==hgl)
-  return false;
-/*
- FILE* f = fopen("idr_mainframe.bin","wb");
- fwrite(bytes,size,1,f);
- fclose(f);
- */
- //hash of main menu resource, size = 758 (RU), 738 (EN)
- BYTE hash1[32] = {0x27,0x66,0xA1,0x81,0x35,0x3C,0xE0,0xB2,0x4C,0xAC,0x8C,0x04,0x2E,0x7D,0xC8,0x0D,0x4D,0xF2,0xE7,0x4F,0x01,0x04,0x7C,0xEC,0x8D,0xB0,0x4B,0x3B,0x98,0xA6,0xAF,0x36}; //ru
- BYTE hash2[32] = {0x2E,0xBC,0xC8,0x4D,0xE2,0xD4,0x68,0x3C,0x3B,0x11,0x2E,0x3A,0x17,0x00,0x26,0x4C,0x73,0xBD,0x4B,0x9E,0x88,0x3C,0x0A,0x2B,0xE0,0xC7,0xB9,0x47,0xDC,0xB8,0xC2,0x10}; //en
-
- sha.init();
- sha.update(bytes, size);
- sha.final(digest);
-/*
- FILE* f = fopen("aaa.aaa","wb");
- for (int i = 0; i < 32; ++i)
-  fprintf(f,"0x%02X,", digest[i]); 
- fclose(f);*/
-
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash1)) //ru
- {
-  if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash2)) //en
-   return false;
- }
-
- FreeResource(hgl);
- return true;
-#endif
-}
-
-bool ABOUT_API CheckBitmaps(void)
-{
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- BYTE digest[SHA256_BLOCK_SIZE];
- Sha256 sha;
- BYTE* bitmap = NULL;
- int size = 0;
- HGLOBAL hgl = NULL;
-
- hgl = LoadResourceBits(ModuleName::about, MAKEINTRESOURCE(IDB_BITMAP0001), RT_BITMAP, bitmap, size);
- if (NULL==hgl)
-  return false;
- //hash of bitmap from resources (differs from the original), size = 99504
- BYTE hash1[32] = {0x86,0x8b,0xd5,0xc2,0xd4,0x4a,0x6c,0x3e,0x77,0x66,0xf8,0x77,0x77,0x1b,0xee,0x8e,0x3c,0x87,0x63,0xf9,0x96,0xea,0x5d,0xa2,0x0f,0x6d,0x7a,0x2c,0x67,0xb1,0xa2,0xfa};
- sha.init();
- sha.update(bitmap, size);
- sha.final(digest);
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash1))
-  return false;
- FreeResource(hgl);
-
- hgl = LoadResourceBits(ModuleName::about, MAKEINTRESOURCE(IDB_BITMAP0002), RT_BITMAP, bitmap, size);
- if (NULL==hgl)
-  return false;
- /*
- FILE* f = fopen("bbb.bbb","wb");
- fwrite(bitmap,size,1,f);
- fclose(f);
- */
- //hash of bitmap from resources (differs from the original), size = 12712
- BYTE hash2[32] = {0x7f,0x80,0xd9,0xb5,0xd6,0x29,0xf8,0x96,0x32,0x54,0xa6,0x0b,0xdb,0xf9,0x1e,0xd4,0xd4,0x83,0x0c,0x8e,0x37,0xb1,0x20,0xbd,0x3d,0x0b,0x31,0x22,0x30,0x90,0xf7,0x8e};
- sha.init();
- sha.update(bitmap, size);
- sha.final(digest);
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash2))
-  return false;
-
- FreeResource(hgl);
- return true;
-#endif
-}
-
-bool ABOUT_API CheckAbout(void)
-{
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- _TSTRING str = MLL::GetString(IDS_AUTHOR_INFO);
- //author info (IDS_AUTHOR_INFO)
- BYTE hash1[32] = {0x18,0x68,0x11,0xBA,0xEF,0x84,0x5F,0x53,0xFA,0x69,0x9F,0xFD,0xA3,0xF2,0x5D,0x51,0xB6,0xB8,0x81,0x4C,0xAA,0x31,0x3F,0x7F,0x44,0x6D,0x2B,0xBD,0xAE,0x45,0x77,0x6D};
- BYTE digest[SHA256_BLOCK_SIZE];
- Sha256 sha;
- sha.init();
- sha.update((BYTE*)str.c_str(), str.size());
- sha.final(digest);
-/*
- FILE* f = fopen("ccc.ccc","wb");
- for (int i = 0; i < 32; ++i)
-  fprintf(f,"0x%02X,", digest[i]); 
- fclose(f);
-*/
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash1))
-  return false;
-
- str = MLL::GetString(IDS_SOFTWARE_INFO);
- //author info (IDS_SOFTWARE_INFO)
- BYTE hash2[32] = {0xca,0x3b,0xee,0x41,0x72,0xe4,0xf2,0xbc,0x27,0xf7,0xe3,0x0d,0x2b,0xaa,0x02,0xb3,0xbb,0x85,0xc3,0x69,0xa4,0xda,0x76,0x52,0x95,0x9b,0x8a,0xae,0x5a,0xcb,0xc5,0x4d};
- sha.init();
- sha.update((BYTE*)str.c_str(), str.size());
- sha.final(digest);
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash2))
-  return false;
-
- return true;
-#endif
 }
 
 bool ABOUT_API CheckVersion(void)
-{//hashes for 5.0 version info
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- BYTE hash1[SHA256_BLOCK_SIZE] = {0x4B,0x12,0xB8,0x9D,0x3E,0x09,0xE5,0xCC,0x58,0x79,0x60,0x24,0xE8,0x09,0x04,0x4C,0x51,0xF1,0x58,0x23,0xBD,0xD4,0xA5,0x66,0x3E,0xCD,0x89,0x4E,0x07,0xE9,0x8E,0xF2};
- BYTE hash2[SHA256_BLOCK_SIZE] = {0x97,0x1B,0x41,0x80,0x8E,0x9C,0xAF,0xFD,0x93,0x75,0x1D,0x39,0xEF,0x9E,0xE6,0x4F,0xE5,0x8C,0x49,0xAE,0x7B,0x61,0x15,0x21,0x04,0xE6,0xD6,0x72,0x63,0x02,0x67,0xF9};
- BYTE hash3[SHA256_BLOCK_SIZE] = {0x76,0x97,0xEE,0xAF,0x0A,0x87,0x6E,0xC9,0x48,0x7D,0xC5,0x18,0x0B,0xD4,0x93,0x43,0x9A,0x34,0x65,0x1E,0x66,0x5C,0x36,0xBD,0x28,0xF7,0x5E,0x99,0x9D,0x54,0x66,0x49};
- BYTE hash4[SHA256_BLOCK_SIZE] = {0x5D,0xAC,0x10,0xD5,0x53,0x00,0xC0,0x5B,0x8F,0x8F,0xA3,0x54,0x63,0xCE,0xA6,0xF3,0x2E,0x49,0xCF,0x7F,0x98,0xE9,0xA6,0xF2,0xE6,0x55,0x8D,0x5F,0xA1,0xB7,0x0C,0xAF};
-
- std::map<size_t, BYTE*> hashdb;
- //note: size include first two bytes
- hashdb.insert(std::make_pair(0x10E, hash1)); //win98
- hashdb.insert(std::make_pair(0x12E, hash2)); //win98, chartxd
- hashdb.insert(std::make_pair(0x1CB, hash3)); //XP, chartxd
- hashdb.insert(std::make_pair(0x1D3, hash4)); //XP
-
+{
  std::vector<_TSTRING> mods;
  mods.push_back(ModuleName::about);
  mods.push_back(ModuleName::chartxd);
@@ -361,95 +123,22 @@ bool ABOUT_API CheckVersion(void)
  mods.push_back(ModuleName::uicore);
  mods.push_back(ModuleName::secu3man);
 
- BYTE digest[SHA256_BLOCK_SIZE];
- Sha256 sha;
  std::vector<BYTE> data;
  for (size_t i = 0; i < mods.size(); ++i)
  {
   if (!GetVersionData(mods[i].c_str(), data))
    return false;
-  int dataSize = *((WORD*)(&data[0])); //from first two bytes (wLength)
-  if (dataSize > (int)data.size())
-   return false;
-  //remove zeros at the end
-  while(dataSize > 0)
-  {
-   if (data[dataSize-1]==0)
-    --dataSize;
-   else
-    break;
-  }
-  sha.init();
-  sha.update(&data[2], dataSize-2);  //skip first two bytes of size
-  sha.final(digest);  
-/*
-  char fname1[64];
-  sprintf(fname1,"hasdata%d.bin", i);
-  FILE* ff = fopen(fname1,"wb");
-  for (int j = 0; j < 32; ++j)
-   fprintf(ff,"0x%02X,", digest[j]); 
-  fclose(ff);  
 
-  char fname[64];
-  sprintf(fname,"verdata%d-%X.bin", i, dataSize);
-  FILE* f = fopen(fname,"wb");
-  fwrite(&data[0],data.size(),1,f);
-  fclose(f);
-*/
-  std::map<size_t, BYTE*>::iterator it = hashdb.find(dataSize);
-  if (it == hashdb.end())
+  BYTE data1[] = {'S',0,'E',0,'C',0,'U',0,'-',0,'3',0,'.',0,'O',0,'R',0,'G',0};
+  std::vector<BYTE>::iterator it = std::search(data.begin(), data.end(), data1, data1+20);
+  if (it==data.end())
    return false;
-  if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, it->second))
+
+  BYTE data2[] = {'S',0,'E',0,'C',0,'U',0,'-',0,'3',0,' ',0,'M',0,'a',0,'n',0,'a',0,'g',0,'e',0,'r',0};
+  it = std::search(data.begin(), data.end(), data2, data2+28);
+  if (it==data.end())
    return false;
  }
 
- return true; //ok
-#endif
-}
-
-bool ABOUT_API CalcFileDigest(LPCTSTR filePath, BYTE hash[])
-{
-#ifdef SECU3NOPROTECTION
  return true;
-#else
-
- Sha256 sha;
- size_t read = 0;
- sha.init();
-
- FILE* fin = _tfopen(filePath, _T("rb"));
- if (!fin)
-  return false;
- BYTE buff[2048+1];
- int blk = 2048;
- do {
-  read = fread(buff, 1, blk, fin);
-  sha.update(buff, read);
- }while(read > 0);
-
- fclose(fin);
- sha.final(hash);
- return true;
-
-#endif
-}
-
-bool ABOUT_API CompBuffDigest(BYTE* buff, int size, BYTE hash[])
-{
-#ifdef SECU3NOPROTECTION
- return true;
-#else
-
- BYTE digest[SHA256_BLOCK_SIZE];
- if (NULL==buff)
-  return false;
- Sha256 sha;
- sha.init();
- sha.update(buff, size);
- sha.final(digest);
- if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash))
-  return false;
- return true;
-
-#endif
 }

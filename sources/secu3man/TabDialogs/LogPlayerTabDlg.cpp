@@ -27,7 +27,6 @@
 #include "Resources/resource.h"
 #include "LogPlayerTabDlg.h"
 
-#include "about/secu-3about.h"
 #include "common/DPIAware.h"
 #include "common/FastDelegate.h"
 #include "common/GDIHelpers.h"
@@ -61,10 +60,7 @@ CLogPlayerTabDlg::CLogPlayerTabDlg()
 , m_splitterPos(243)
 , m_moveSplitter(false)
 {
- //=================================================================
- if (!CheckBitmaps() || !CheckAppMenu())
-  delete this;
- //=================================================================
+ //empty
 }
 
 void CLogPlayerTabDlg::DoDataExchange(CDataExchange* pDX)

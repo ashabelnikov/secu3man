@@ -122,6 +122,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
  else
   m_highContrast = false;
 
+ if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
+  delete this;
+
  return 0;
 }
 
@@ -452,39 +455,18 @@ void CMainFrame::OnAppD2()
 
 void CMainFrame::OnAppSettings()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  return;
- if (!CheckAppLogo())
-  return;
- //=================================================================
-
  if (m_OnAppSettings)
   m_OnAppSettings();
 }
 
 void CMainFrame::OnAppBeginLog()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  return;
- if (!CheckAppLogo())
-  return;
- //=================================================================
-
  if (m_OnAppBeginLog)
   m_OnAppBeginLog();
 }
 
 void CMainFrame::OnAppEndLog()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  return;
- if (!CheckAppLogo())
-  return;
- //=================================================================
-
  if (m_OnAppEndLog)
   m_OnAppEndLog();
 }
@@ -564,13 +546,6 @@ void CMainFrame::OnSysCommand(UINT nID, LPARAM lParam)
  }
  else
   return; //do nothing
-
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  return;
- if (!CheckAppLogo())
-  return;
- //=================================================================
 
  if (m_OnFullScreen)
   m_OnFullScreen(what);  //notify controller

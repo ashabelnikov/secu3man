@@ -26,7 +26,6 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "EEPROMTabDlg.h"
-#include "about/secu-3about.h"
 #include "common/DPIAware.h"
 #include "common/GDIHelpers.h"
 #include "common/unicodesupport.h"
@@ -51,11 +50,6 @@ CEEPROMTabDlg::CEEPROMTabDlg()
 , m_embed_charts(false)
 {
  mp_ContextMenuManager->CreateContent();
-
- //========================================================
- if (!CheckBitmaps() || !CheckAppMenu() || !CheckAppLogo() || !CheckAbout())
-  delete this;
- //========================================================
 }
 
 void CEEPROMTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -136,11 +130,6 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  UpdateDialogControls(this,TRUE);
 
  m_ee_mapset_name.SetLimitText(16);
-
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
- { GetParent()->DestroyWindow(); }
- //=================================================================
 
  //Enable drap & drop functionality
  DragAcceptFiles(true);
@@ -313,24 +302,12 @@ bool CEEPROMTabDlg::IsEEPROMOpened(void)
 
 void CEEPROMTabDlg::OnOpenEEPROMFromFile()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
-  delete this;
- //=================================================================
-
  if (m_OnOpenEEPROMFromFile)
   m_OnOpenEEPROMFromFile();
 }
 
 void CEEPROMTabDlg::OnSaveEEPROMToFile()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
- { DestroyWindow(); return; }
- if (!CheckAppLogo())
-  delete this;
- //=================================================================
-
  if (m_OnSaveEEPROMToFile)
   m_OnSaveEEPROMToFile();
 }
@@ -339,11 +316,6 @@ void CEEPROMTabDlg::OnReadEEPROMFromSECU()
 {
  if (m_OnReadEEPROMFromSECU)
   m_OnReadEEPROMFromSECU();
-
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
- { GetParent()->DestroyWindow(); }
- //=================================================================
 }
 
 void CEEPROMTabDlg::OnWriteEEPROMToSECU()
@@ -484,13 +456,6 @@ void CEEPROMTabDlg::OnEeUsingLinkClick(void)
 
 void CEEPROMTabDlg::OnResetEeprom()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  return;
- if (!CheckAppLogo())
-  return;
- //=================================================================
-
  if (m_OnResetEeprom)
   m_OnResetEeprom();
 }

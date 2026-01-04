@@ -39,7 +39,7 @@ bool IMAGE_UTILS_API SaveScreenshot(CWnd* pWnd, bool selectFile)
  capDC.SelectObject(&capBitmap);
  capDC.BitBlt(0,0,rc.Width(), rc.Height(), pWndDC,0,0, SRCCOPY);
  //put information
- CString str = _T("Copyright (C) 2007-2024 A. Shabelnikov, http://secu3.org");
+ CString str = _T("Copyright (C) 2007-2026 A. Shabelnikov, http://secu3.org");
  capDC.SetTextColor(RGB(50,50,200));
  capDC.SetBkMode(TRANSPARENT);
  CSize size = capDC.GetTextExtent(str);

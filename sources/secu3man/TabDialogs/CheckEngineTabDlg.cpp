@@ -26,7 +26,6 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "CheckEngineTabDlg.h"
-#include "about/secu-3about.h"
 #include "common/DPIAware.h"
 #include "common/GDIHelpers.h"
 #include "common/unicodesupport.h"
@@ -58,10 +57,6 @@ CCheckEngineTabDlg::CCheckEngineTabDlg()
  m_image_list.Create(IDB_CE_LIST_ICONS, 16, 2, RGB(255,255,255));
  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT);
  m_normal_text_color = ::GetSysColor(COLOR_BTNTEXT);
-
- //========================================================
- if (!CheckAbout()) delete this;
- //========================================================
 }
 
 void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -171,11 +166,6 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  m_header_ctrl->SetTextColor(m_gray_text_color);
 
  UpdateDialogControls(this,TRUE);
-
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
- { GetParent()->DestroyWindow(); }
- //=================================================================
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

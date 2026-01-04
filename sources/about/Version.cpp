@@ -82,11 +82,6 @@ bool GetVersionData(LPCTSTR filename, std::vector<BYTE>& o_data)
   //get the version block from the file
   if(TRUE == GetFileVersionInfo(filename, NULL, verBufferSize, &verBuffer[0]))
   {
-   /*
-   FILE* f = fopen("xxx.xxx","wb");
-   fwrite(&verBuffer[0],1,verBufferSize,f);
-   fclose(f);
-   */
     o_data = verBuffer; //store result
     return true;
   }

@@ -27,7 +27,6 @@
 #include "Resources/resource.h"
 #include "DevDiagnostTabDlg.h"
 
-#include "about/secu-3about.h"
 #include "common/FastDelegate.h"
 #include "common/GDIHelpers.h"
 #include "common/DPIAware.h"
@@ -104,11 +103,6 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg()
  mp_ContextMenuManager->CreateContent();
 
  mp_outsDlg->setOnOutputToggle(MakeDelegate(this, &CDevDiagnostTabDlg::OnOutputCheckToggle));
-
- //=================================================================
- if (!CheckBitmaps() || !CheckAbout())
-  delete this;
- //=================================================================
 }
 
 void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -172,11 +166,6 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  mp_ContextMenuManager->Attach(this);
 
  UpdateDialogControls(this,TRUE);
-
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
- { GetParent()->DestroyWindow(); }
- //=================================================================
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

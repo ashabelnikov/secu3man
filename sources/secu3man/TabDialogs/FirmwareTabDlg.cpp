@@ -27,7 +27,6 @@
 #include "Resources/resource.h"
 #include "FirmwareTabDlg.h"
 
-#include "about/secu-3about.h"
 #include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "common/DPIAware.h"
@@ -84,11 +83,6 @@ CFirmwareTabDlg::CFirmwareTabDlg()
  CBitmap bitmap;
  bitmap.LoadBitmap((LPCTSTR)IDB_FWD_TAB_CTRL_BITMAPS);
  m_pImgList->Add(&bitmap, FWD_TAB_CTRL_BITMAPS_COLOR_MASK);
-
- //=================================================================
- if (!CheckBitmaps() || !CheckAppMenu() || !CheckAppLogo() || !CheckAbout())
-  delete this;
- //=================================================================
 }
 
 CFirmwareTabDlg::~CFirmwareTabDlg()
@@ -408,39 +402,18 @@ void CFirmwareTabDlg::OnWriteEepromFromFile()
 
 void CFirmwareTabDlg::OnResetEeprom()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  return;
- if (!CheckAppLogo())
-  return;
- //=================================================================
-
  if (m_OnResetEeprom)
   m_OnResetEeprom();
 }
 
 void CFirmwareTabDlg::OnFirmwareMaster()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  return;
- if (!CheckAppLogo())
-  return;
- //=================================================================
-
  if (m_OnFirmwareMaster)
   m_OnFirmwareMaster();
 }
 
 void CFirmwareTabDlg::OnReadFlashToFile()
 {
-//=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
-  delete this;
- if (!CheckAppLogo())
- { DestroyWindow(); return; }
- //=================================================================
-
  if (m_OnReadFlashToFile)
   m_OnReadFlashToFile();
 }
@@ -495,24 +468,12 @@ void CFirmwareTabDlg::OnFirmwareSupportBlStartedEmergency()
 
 void CFirmwareTabDlg::OnOpenFlashFromFile()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
-  delete this;
- //=================================================================
-
  if (m_OnOpenFlashFromFile)
   m_OnOpenFlashFromFile();
 }
 
 void CFirmwareTabDlg::OnSaveFlashToFile()
 {
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()))
- { DestroyWindow(); return; }
- if (!CheckAppLogo())
-  delete this;
- //=================================================================
-
  if (m_OnSaveFlashToFile)
   m_OnSaveFlashToFile();
 }
@@ -582,11 +543,6 @@ void CFirmwareTabDlg::OnReadFlashFromSECU()
 {
  if (m_OnReadFlashFromSECU)
   m_OnReadFlashFromSECU();
-
- //=================================================================
- if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
- { GetParent()->DestroyWindow(); }
- //=================================================================
 }
 
 void CFirmwareTabDlg::OnWriteFlashToSECU()

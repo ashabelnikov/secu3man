@@ -183,31 +183,6 @@ static volatile BYTE info[infoSize] = {0x53,0x45,0x43,0x55,0x2d,0x33,0x20,0x4d,0
                                        0x33,0x2e,0x6f,0x72,0x67,0x2c,0x20,0x65,0x6d,0x61,0x69,0x6c,0x3a,0x20,0x73,0x68,
                                        0x61,0x62,0x65,0x6c,0x6e,0x69,0x6b,0x6f,0x76,0x40,0x73,0x65,0x63,0x75,0x2d,0x33,
                                        0x2e,0x6f,0x72,0x67};
-
-bool CheckAppIntegrity(void)
-{
- TCHAR szFileName[MAX_PATH];
- GetModuleFileName(GetModuleHandle(ModuleName::about), szFileName, MAX_PATH);
-
- BYTE digest[32];
- BYTE hash1[32] = {0xf0,0x5c,0xec,0x4e,0x04,0xe7,0xa2,0x15,0x87,0x9c,0x71,0x11,0x0d,0xfe,0xee,0x46,0x5a,0x04,0x52,0x89,0xab,0x2a,0x66,0x87,0xda,0xf3,0x0d,0xa4,0x14,0xee,0x82,0x59};
- if (!CalcFileDigest(szFileName, digest))
-  return false;
-
-#ifdef NDEBUG
- if (!std::equal(digest, digest + 32, hash1))
- {
-  CheckAppIntegrity();
-  return false;
- }
-#endif
-
- BYTE hash2[32] = {0x46,0x39,0x53,0x8a,0x35,0x1e,0x8b,0xef,0x22,0xad,0x99,0x5a,0x5f,0x84,0x3f,0x74,0x50,0x67,0x38,0x98,0x91,0xa7,0x83,0x6a,0x91,0x05,0xf5,0x5d,0x92,0x15,0x64,0x71};
- if (!CompBuffDigest((BYTE*)info, infoSize, hash2))
-  delete AfxGetApp();
-
- return true;
-}
 }
 
 BEGIN_MESSAGE_MAP(CSecu3manApp, CWinApp)
@@ -226,10 +201,8 @@ CSecu3manApp::CSecu3manApp()
  m_pLogWriter = new LogWriter();
  m_pMainFrameManager = new CMainFrameManager();
 
- //========================================================
- if (!CheckAppIntegrity() || !CheckVersion())
+ if (!CheckVersion())
   delete this;
- //========================================================
 
  EnableHtmlHelp();
 }
@@ -277,10 +250,6 @@ BOOL CSecu3manApp::InitInstance()
  //sanity check
  CheckDLLCompatibility();
 
-//========================================================
- CheckAppIntegrity();
-//========================================================
-
  //read settings
  m_pAppSettingsManager->ReadSettings();
  ISettingsData* p_settings = m_pAppSettingsManager->GetSettings();
@@ -308,10 +277,8 @@ BOOL CSecu3manApp::InitInstance()
    break;
  }
 
- //========================================================
  if (!CheckVersion())  
   return FALSE;
- //========================================================
 
  //Visual theme on/off
  AllowVisualTheme(p_settings->GetAllowVisualTheme());
@@ -328,11 +295,8 @@ BOOL CSecu3manApp::InitInstance()
  //Initialize content of main window (child controls)
  m_pMainFrameManager->Init(m_pMainWnd);
 
- //========================================================
- if (!CheckAppTitle(m_pMainWnd) || !CheckAppMenu())
+ if (!CheckAppTitle(m_pMainWnd) || !CheckAppLogo())
   m_pMainWnd->DestroyWindow();
- if (!CheckAbout()) delete this;
- //========================================================
 
  return TRUE; //OK
 }

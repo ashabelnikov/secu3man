@@ -67,10 +67,7 @@ CParamMonTabDlg::CParamMonTabDlg()
 , m_enMakeChartsChildren(false)
 , m_splitterPos(279)
 {
- //=================================================================
- if (!CheckBitmaps() || !CheckAppMenu() || !CheckAbout())
-  delete this;
- //=================================================================
+ //empty
 }
 
 void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -144,19 +141,17 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_secu3orgLink->SetFontUnderline(true);
  mp_secu3orgLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
- //=================================================================
- CString str;
- mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl((LPCTSTR)str))
-  DestroyWindow();
- //=================================================================
-
  ///////////////////////////////////////////////
  CRect rcMI, rc;
  mp_MIDeskDlg->GetWindowRect(&rcMI);
  mp_CEDeskDlg->GetWindowRect(&rc);
  m_miMargin = rc.top - rcMI.bottom;
  ///////////////////////////////////////////////
+
+ CString str;
+ mp_secu3orgLink->GetWindowText(str);
+ if (!CheckAppUrl((LPCTSTR)str))
+  DestroyWindow();
 
  m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -170,28 +165,12 @@ void CParamMonTabDlg::OnDestroy()
 
 void CParamMonTabDlg::OnPmShowRawSensors()
 {//делегируем обработку события чекбокса
-
- //=================================================================
- CString str;
- mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl((LPCTSTR)str))
-  return;
- //=================================================================
-
  if (m_OnRawSensorsCheck)
   m_OnRawSensorsCheck();
 }
 
 void CParamMonTabDlg::OnPmEditTables()
 {//делегируем обработку события чекбокса
-
- //=================================================================
- CString str;
- mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl((LPCTSTR)str))
-  return;
- //=================================================================
-
  bool check_state = GetEditTablesCheckState();
  if (check_state)
  {
@@ -216,13 +195,6 @@ void CParamMonTabDlg::OnPmEditTables()
 
 void CParamMonTabDlg::OnPmEditTablesOff()
 {
- //=================================================================
- CString str;
- mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl((LPCTSTR)str))
-  return;
- //=================================================================
-
  bool check_state = GetEditTablesOffCheckState();
  if (check_state)
  {

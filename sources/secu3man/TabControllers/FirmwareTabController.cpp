@@ -30,7 +30,6 @@
 #include "Resources/resource.h"
 #include "FirmwareTabController.h"
 
-#include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
 #include "FirmwareFileUtils.h"
@@ -102,11 +101,6 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  ASSERT(mp_bl_data);
  mp_code_for_merge_with_overhead = new BYTE[m_fpp.m_total_size + 1];
  ASSERT(mp_code_for_merge_with_overhead);
-
- //========================================================
- if (!CheckVersion() || !CheckAbout() || !CheckAppLogo())
-  return;
- //========================================================
 
  //устанавливаем делегаты (обработчики событий от представления)
  mp_view->setOnBootLoaderInfo(MakeDelegate(this, &CFirmwareTabController::OnBootLoaderInfo));

@@ -39,15 +39,5 @@ bool ABOUT_API CheckAppLogo(void);
 
 bool ABOUT_API CheckAppUrl(const _TSTRING& str);
 
-bool ABOUT_API CheckAppMenu(void);
-
-bool ABOUT_API CheckBitmaps(void);
-
-bool ABOUT_API CheckAbout(void);
-
 bool ABOUT_API CheckVersion(void);
-
-bool ABOUT_API CalcFileDigest(LPCTSTR filePath, BYTE hash[]);
-
-bool ABOUT_API CompBuffDigest(BYTE* buff, int size, BYTE hash[]);
 
