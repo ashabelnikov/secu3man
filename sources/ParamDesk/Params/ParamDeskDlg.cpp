@@ -51,6 +51,7 @@
 #include "LTFTPageDlg.h"
 
 #include "common/Dll.h"
+#include "common/DPIaware.h"
 #include "common/FastDelegate.h"
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
@@ -82,10 +83,25 @@ CParamDeskDlg::CParamDeskDlg(bool i_show_knock_page /* = false*/, bool tps_learn
 , mp_reservparsLink(new CLabel())
 {
  //создаем image list для TabCtrl
- m_pImgList = new CImageList();
- m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
+ DPIAware da;
  CBitmap bitmap;
- bitmap.LoadBitmap((LPCTSTR)IDB_TAB_CTRL_BITMAPS);
+ m_pImgList = new CImageList();
+ int dpi = da.GetDPIX();
+ if (dpi >= 192) //192 DPI or more
+ {
+  m_pImgList->Create(32, 32, ILC_COLOR24|ILC_MASK, 0, 0);
+  bitmap.LoadBitmap((LPCTSTR)IDB_TAB_CTRL_BITMAPS200);
+ }
+ else if (dpi >= 144)  //144 to 192 DPI
+ {
+  m_pImgList->Create(24, 24, ILC_COLOR24|ILC_MASK, 0, 0);
+  bitmap.LoadBitmap((LPCTSTR)IDB_TAB_CTRL_BITMAPS150);
+ }
+ else //below 144 DPI
+ {
+  m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
+  bitmap.LoadBitmap((LPCTSTR)IDB_TAB_CTRL_BITMAPS);
+ }
  m_pImgList->Add(&bitmap, TAB_CTRL_BITMAPS_COLOR_MASK);
 
  //их надо создать только один раз

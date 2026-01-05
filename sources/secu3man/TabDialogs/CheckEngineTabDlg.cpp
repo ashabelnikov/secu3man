@@ -31,6 +31,7 @@
 #include "common/unicodesupport.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/HeaderCtrlEx.h"
+#include "ui-core/ImageUtils.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/Label.h"
 #include "ui-core/MsgBox.h"
@@ -137,16 +138,18 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
 
  m_ltft_radio.SetCheck(BST_CHECKED);
 
+ HBITMAP hBitmap = NULL;
  if (m_locale==0)
- {
-  HBITMAP hBitmap = (HBITMAP)LoadImage(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_LTFTTAB_EN), IMAGE_BITMAP, 0, 0, LR_SHARED);
-  m_trimtab_button.SetBitmap(hBitmap);
- }
+  hBitmap = (HBITMAP)LoadImage(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_LTFTTAB_EN), IMAGE_BITMAP, 0, 0, LR_SHARED);
  else if (m_locale==1)
- {
-  HBITMAP hBitmap = (HBITMAP)LoadImage(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_LTFTTAB_RU), IMAGE_BITMAP, 0, 0, LR_SHARED);
-  m_trimtab_button.SetBitmap(hBitmap);
- }
+  hBitmap = (HBITMAP)LoadImage(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_LTFTTAB_RU), IMAGE_BITMAP, 0, 0, LR_SHARED);
+ else
+  ASSERT(0);
+ CRect rc;
+ m_trimtab_button.GetWindowRect(&rc);
+ CBitmap bmp;
+ ResizeBitmap(*CBitmap::FromHandle(hBitmap), bmp, rc.Width(), rc.Height(), HALFTONE);
+ m_trimtab_button.SetBitmap((HBITMAP)bmp.Detach());
 
  m_quick_help_text.SetWindowText(MLL::LoadString(IDS_CEPAGE_QUICK_HELP_TEXT));
 

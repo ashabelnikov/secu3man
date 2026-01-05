@@ -1768,3 +1768,13 @@
 #define IDS_UNIOUT_COND_OTS            6459
 #define IDC_PD_INJECTOR_FSAFTERSTART_CHECK 6460
 #define IDS_PD_INJECTOR_FSAFTERSTART_CHECK_TT 6461
+#define IDB_TAB_CTRL_BITMAPS150        6462
+#define IDB_TAB_CTRL_BITMAPS200        6463
+#define IDB_CALC_UP150                 6464
+#define IDB_CALC_DOWN150               3465
+#define IDB_CALC_FOCUSED150            3466
+#define IDB_CALC_DISABLED150           3467
+#define IDB_CALC_UP200                 6468
+#define IDB_CALC_DOWN200               6469
+#define IDB_CALC_FOCUSED200            6470
+#define IDB_CALC_DISABLED200           6471

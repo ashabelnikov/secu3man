@@ -108,8 +108,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
  if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
   return -1;
 
- m_createSize.cx = lpCreateStruct->cx;
- m_createSize.cy = lpCreateStruct->cy;
+ m_createSize.cx = (lpCreateStruct->cx*2)/3;
+ m_createSize.cy = (lpCreateStruct->cy*2)/3;
 
  if (m_OnCreate)
   m_OnCreate();  //notify controller about creation of this window

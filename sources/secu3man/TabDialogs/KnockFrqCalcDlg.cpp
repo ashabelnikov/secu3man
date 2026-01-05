@@ -28,6 +28,7 @@
 #include "KnockFrqCalcDlg.h"
 
 #include "common/FastDelegate.h"
+#include "common/DPIaware.h"
 #include "ui-core/DDX_helpers.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/ToolTipCtrlEx.h"
@@ -109,9 +110,23 @@ END_MESSAGE_MAP()
 BOOL CKnockFrqCalcDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-
- m_calc_frq_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
-                            MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
+ DPIAware da;
+ int dpi = da.GetDPIX();
+ if (dpi >= 192) //192 DPI or more
+ {
+  m_calc_frq_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP200), MAKEINTRESOURCE(IDB_CALC_DOWN200), 
+                             MAKEINTRESOURCE(IDB_CALC_FOCUSED200), MAKEINTRESOURCE(IDB_CALC_DISABLED200));
+ }
+ else if (dpi >= 144)  //144 to 192 DPI
+ {
+  m_calc_frq_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP150), MAKEINTRESOURCE(IDB_CALC_DOWN150), 
+                             MAKEINTRESOURCE(IDB_CALC_FOCUSED150), MAKEINTRESOURCE(IDB_CALC_DISABLED150));
+ }
+ else //below 144 DPI
+ {
+  m_calc_frq_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
+ }
  mp_cyl_d_edit->SetDecimalPlaces(1);
  mp_cyl_d_edit->SetLimitText(5);
  mp_cyl_d_edit->SetValue(m_cyl_d);

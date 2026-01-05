@@ -39,3 +39,4 @@ bool IMAGE_UTILS_API SaveScreenshot(CWnd* pWnd, bool selectFile);
 
 bool IMAGE_UTILS_API LoadImageFromRes(HINSTANCE hinstance, LPCTSTR lpszResourceName, LPCTSTR resType, CImage* pImage);
 
+void IMAGE_UTILS_API ResizeBitmap(CBitmap &srcBmp, CBitmap& dstBmp, int dstWidth, int dstHeight, int bltMode = HALFTONE);

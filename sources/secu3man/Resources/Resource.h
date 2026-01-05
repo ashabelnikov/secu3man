@@ -801,3 +801,13 @@
 #define IDS_DEV_DIAG_GPA6_O_CHECK_TT    4935
 #define IDS_ECUERROR_APPS               4936
 #define ID_APP_D2                       4937
+#define IDB_MAIN_TAB_CTRL_BITMAPS150    4938
+#define IDB_MAIN_TAB_CTRL_BITMAPS200    4939
+#define IDB_CALC_UP150                  4940
+#define IDB_CALC_DOWN150                4941
+#define IDB_CALC_FOCUSED150             4942
+#define IDB_CALC_DISABLED150            4943
+#define IDB_CALC_UP200                  4944
+#define IDB_CALC_DOWN200                4945
+#define IDB_CALC_FOCUSED200             4946
+#define IDB_CALC_DISABLED200            4947

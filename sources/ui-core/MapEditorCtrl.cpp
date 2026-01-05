@@ -1372,8 +1372,8 @@ const std::vector<std::pair<int, int> >& CMapEditorCtrl::GetSelection(void)
  if (m_sel_changed)
  { //update list of selected cells only if selection actually changed, see also _SelChange() method
   m_sel.clear();
-  int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
-  int ei = std::min(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+  int bi = (std::max)(m_cur_i, m_end_i), bj = (std::min)(m_cur_j, m_end_j);
+  int ei = (std::min)(m_cur_i, m_end_i), ej = (std::max)(m_cur_j, m_end_j);
   for(int i = bi; i >= ei; --i)
    for(int j = bj; j <= ej; ++j)
     m_sel.push_back(std::make_pair(i, j));
@@ -1680,8 +1680,8 @@ void CMapEditorCtrl::OnSmoothing5x5()
 
 void CMapEditorCtrl::OnInterpolate()
 {
- int bi = std::min(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
- int ei = std::max(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+ int bi = (std::min)(m_cur_i, m_end_i), bj = (std::min)(m_cur_j, m_end_j);
+ int ei = (std::max)(m_cur_i, m_end_i), ej = (std::max)(m_cur_j, m_end_j);
 
  float func[2][2] =  {{_GetItemTr(bi, bj), _GetItemTr(bi, ej)},
                       {_GetItemTr(ei, bj), _GetItemTr(ei, ej)}};
@@ -1870,15 +1870,15 @@ bool CMapEditorCtrl::_CellByPoint(CPoint point, int& oi, int& oj)
 
 bool CMapEditorCtrl::_isCellInSelRect(int i, int j)
 {
- int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
- int ei = std::min(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+ int bi = (std::max)(m_cur_i, m_end_i), bj = (std::min)(m_cur_j, m_end_j);
+ int ei = (std::min)(m_cur_i, m_end_i), ej = (std::max)(m_cur_j, m_end_j);
  return (i <= bi) && (i >= ei) && (j >= bj) && (j <= ej);
 }
 
 void CMapEditorCtrl::_GetSelRect(CRect& o_rc)
 {
- CRect rc_lt = _GetItemRect(&m_dcGrid, std::max(m_cur_i, m_end_i), std::min(m_cur_j, m_end_j));
- CRect rc_rb = _GetItemRect(&m_dcGrid, std::min(m_cur_i, m_end_i), std::max(m_cur_j, m_end_j));
+ CRect rc_lt = _GetItemRect(&m_dcGrid, (std::max)(m_cur_i, m_end_i), (std::min)(m_cur_j, m_end_j));
+ CRect rc_rb = _GetItemRect(&m_dcGrid, (std::min)(m_cur_i, m_end_i), (std::max)(m_cur_j, m_end_j));
  o_rc.left = rc_lt.left, o_rc.top =  rc_lt.top;
  o_rc.right = rc_rb.right, o_rc.bottom = rc_rb.bottom;
 }
@@ -2322,8 +2322,8 @@ float CMapEditorCtrl::_GetItemTrO(int i, int j)
 
 void CMapEditorCtrl::_ClipboardCopy(void)
 {
- int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
- int ei = std::min(m_cur_i, m_end_i), ej = std::max(m_cur_j, m_end_j);
+ int bi = (std::max)(m_cur_i, m_end_i), bj = (std::min)(m_cur_j, m_end_j);
+ int ei = (std::min)(m_cur_i, m_end_i), ej = (std::max)(m_cur_j, m_end_j);
  CString str;
  for(int i = bi; i >= ei; --i)
  {
@@ -2403,7 +2403,7 @@ void CMapEditorCtrl::_ClipboardPaste(void)
 
     TCHAR decPt = _TDECIMAL_POINT(localeconv())[0]; //symbol of the decimal point used by current locale
 
-    int bi = std::max(m_cur_i, m_end_i), bj = std::min(m_cur_j, m_end_j);
+    int bi = (std::max)(m_cur_i, m_end_i), bj = (std::min)(m_cur_j, m_end_j);
     for(size_t i = 0; i < csv.size(); ++i)
     {
      for(size_t j = 0; j < csv[i].size(); ++j)

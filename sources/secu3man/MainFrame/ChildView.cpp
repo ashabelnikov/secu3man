@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "ChildView.h"
 #include "ui-core/TabDialog.h"
+#include "common/DPIaware.h"
 
 #define MAIN_TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
@@ -137,10 +138,25 @@ bool CChildView::Create(CWnd* ip_parent)
  GlobalFree(hgbl);
 
  //Init image list
- m_pImgList = new CImageList();
- m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
  CBitmap bitmap;
- bitmap.LoadBitmap((LPCTSTR)IDB_MAIN_TAB_CTRL_BITMAPS);
+ DPIAware da;
+ m_pImgList = new CImageList();
+ int dpi = da.GetDPIX();
+ if (dpi >= 192) //192 DPI or more
+ {
+  m_pImgList->Create(32, 32, ILC_COLOR24|ILC_MASK, 0, 0);
+  bitmap.LoadBitmap((LPCTSTR)IDB_MAIN_TAB_CTRL_BITMAPS200);
+ }
+ else if (dpi >= 144)  //144 to 192 DPI
+ {
+  m_pImgList->Create(24, 24, ILC_COLOR24|ILC_MASK, 0, 0);
+  bitmap.LoadBitmap((LPCTSTR)IDB_MAIN_TAB_CTRL_BITMAPS150);
+ }
+ else //below 144 DPI
+ {
+  m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
+  bitmap.LoadBitmap((LPCTSTR)IDB_MAIN_TAB_CTRL_BITMAPS);
+ }
  m_pImgList->Add(&bitmap, MAIN_TAB_CTRL_BITMAPS_COLOR_MASK);
 
  //Tune a tab control

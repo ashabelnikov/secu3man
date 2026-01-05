@@ -31,7 +31,6 @@ set(HEADERS
   StdAfx.h
   Version.h
   WelcomeDlg.h
-  sha256.h
   )
 
 set(SOURCES
@@ -42,7 +41,6 @@ set(SOURCES
   about.rc
   Version.cpp
   WelcomeDlg.cpp
-  sha256.cpp
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

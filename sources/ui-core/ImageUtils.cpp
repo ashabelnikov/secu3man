@@ -106,3 +106,20 @@ bool LoadImageFromRes(HINSTANCE hinstance, LPCTSTR lpszResourceName, LPCTSTR res
  FreeResource(hGlobal);
  return false;
 }
+
+void ResizeBitmap(CBitmap &srcBmp, CBitmap& dstBmp, int dstWidth, int dstHeight, int bltMode /*= HALFTONE*/)
+{
+ BITMAP bm = {0};
+ srcBmp.GetBitmap(&bm);
+ CSize size = CSize(bm.bmWidth, bm.bmHeight);
+ CWindowDC wndDC(NULL);
+ CDC srcDC;
+ srcDC.CreateCompatibleDC(&wndDC);
+ srcDC.SelectObject(&srcBmp);
+ CDC destDC;
+ destDC.CreateCompatibleDC(&wndDC);
+ dstBmp.CreateCompatibleBitmap(&wndDC, dstWidth, dstHeight);
+ destDC.SelectObject(&dstBmp);
+ destDC.SetStretchBltMode(bltMode);
+ destDC.StretchBlt(0, 0, dstWidth, dstHeight, &srcDC, 0, 0, size.cx, size.cy, SRCCOPY);
+}
