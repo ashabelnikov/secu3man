@@ -98,6 +98,7 @@ CAnalogMeter::CAnalogMeter()
 , m_dRadiansPerValue(0.0)  // will be modified on first drawing
 , m_tickLength(0.92)
 , m_needleWidth(1.0)
+, m_pieRadius(0.2)
 {
  m_AlertZones.reserve(16);
  // set pen/brush colors
@@ -396,7 +397,7 @@ void CAnalogMeter::DrawChord(const CRect& Bounds)
  chord_brush.CreateSolidBrush(GDIHelpers::InvColor(m_colorBGround));
  chord_pen.CreatePen(PS_NULL,0,GDIHelpers::InvColor(m_colorBGround));
 
- int r = m_nRadiusPix / 5;
+ int r = m_nRadiusPix * m_pieRadius;
 
  Circle.DeflateRect(r,r,r,r);
 

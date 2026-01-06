@@ -83,6 +83,8 @@ class AFX_EXT_CLASS CAnalogMeter
 
   void SetTickLength(double length) { m_tickLength = 1.0 / length;}
   void SetNeedleWidth(double width) { m_needleWidth = width; }
+
+  void SetPieRadius(double rad) { m_pieRadius = rad; };
  
  protected:
   bool m_boolForceRedraw;
@@ -162,6 +164,7 @@ class AFX_EXT_CLASS CAnalogMeter
   double m_dMaxScale;
   double m_tickLength;
   double m_needleWidth;
+  double m_pieRadius;
 
   CString m_strTitle;
   CString m_strUnit;

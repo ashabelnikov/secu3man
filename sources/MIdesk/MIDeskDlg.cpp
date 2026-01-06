@@ -984,6 +984,7 @@ void CMIDeskDlg::OnMetEditScale()
    widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimB1[0].ticksNum);
    widget->SetLineWidth(p_mcfg->scaleWidth);
    widget->SetLineColor(p_mcfg->scaleColor);
+   widget->SetPieRadius(p_mcfg->pieRadius);
    widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
   }
   else if (uiId == IDM_MI_MET_INJTIME)
@@ -994,6 +995,7 @@ void CMIDeskDlg::OnMetEditScale()
    widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimE1[0].ticksNum);
    widget->SetLineWidth(p_mcfg->scaleWidth);
    widget->SetLineColor(p_mcfg->scaleColor);
+   widget->SetPieRadius(p_mcfg->pieRadius);
    widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
   }
   else if (uiId == IDM_MI_GRH_INJTIMB)
@@ -1021,6 +1023,7 @@ void CMIDeskDlg::OnMetEditScale()
    widget->SetLimits(p_mcfg->scaleMin, p_mcfg->scaleMax);
    if (!widget->isGraph())
    {
+    widget->SetPieRadius(p_mcfg->pieRadius);
     widget->SetAlertZones(p_mcfg->alezn);
    }
    widget->SetTickNumber(p_mcfg->ticksNum);
@@ -1089,6 +1092,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1127,6 +1131,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1165,6 +1170,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1203,6 +1209,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1246,6 +1253,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    mp_miTemperat = widget;
    new_widget = widget;
@@ -1285,6 +1293,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1323,6 +1332,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1361,6 +1371,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1399,6 +1410,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1437,6 +1449,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1475,6 +1488,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
 // widget->ShowTLP(true);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1514,6 +1528,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1552,6 +1567,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetMeterUnit(m_speedUnit);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1592,6 +1608,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1630,6 +1647,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1668,6 +1686,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1706,6 +1725,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1744,6 +1764,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1782,6 +1803,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1820,6 +1842,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1861,6 +1884,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1899,6 +1923,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1937,6 +1962,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1975,6 +2001,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2013,6 +2040,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2051,6 +2079,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2089,6 +2118,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2127,6 +2157,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimB1[0].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2167,6 +2198,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimE1[0].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetITMode(m_it_mode); //<---sets limits, alert zones and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2207,6 +2239,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2245,6 +2278,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2283,6 +2317,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2321,6 +2356,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2359,6 +2395,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2397,6 +2434,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2435,6 +2473,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2473,6 +2512,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2511,6 +2551,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2549,6 +2590,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2587,6 +2629,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2625,6 +2668,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2663,6 +2707,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2701,6 +2746,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2739,6 +2785,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2777,6 +2824,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
    widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;

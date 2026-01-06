@@ -41,6 +41,7 @@ struct SclCfg
  float scaleMin;      //scale minimum
  float scaleMax;      //scale maximum
  std::vector<AlertZone> alezn; //colored zones
+ float pieRadius;
 };
 
 template <class T> struct OptField_t
@@ -439,7 +440,7 @@ class IniIO
    std::vector<AlertZone> vect;      
    std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(read_str, _T(','));
    if (tokens.size() < 5)
-    goto usedef; //scale width, scale color, number of ticks, scale min and scale max must be present   
+    goto usedef; //scale width, scale color, number of ticks, scale min and scale max must be present 
    int scaleWidth = 0;
    int result = _stscanf(tokens[0].c_str(), _T("%d"), &scaleWidth);
    if (result != 1 || (scaleWidth < 0) || (scaleWidth > 5))
@@ -461,8 +462,15 @@ class IniIO
    result = _stscanf(tokens[4].c_str(), _T("%f"), &scaleMax);
    if (result != 1 || (scaleMax < minVal) || (scaleMax > maxVal) || (scaleMax <= scaleMin))
     goto usedef;
+   float pieRadius = 0;
+   if (tokens.size() > 5)
+   {
+    result = _stscanf(tokens[5].c_str(), _T("%f"), &pieRadius);
+    if (result != 1 || (pieRadius < .0f) || (pieRadius > 100.0f))
+     goto usedef;
+   }
    
-   for (size_t i = 5; i < tokens.size(); ++i)
+   for (size_t i = 6; i < tokens.size(); ++i)
    {
     float start, end;
     COLORREF color;    
@@ -485,6 +493,7 @@ class IniIO
    field.value.scaleMin = scaleMin;
    field.value.scaleMax = scaleMax;
    field.value.alezn = vect;
+   field.value.pieRadius = pieRadius / 100.0f; //convert from % to 0...1 range
    return true;  //OK
 
   usedef:
@@ -495,8 +504,14 @@ class IniIO
    _stscanf(tokensdef[3].c_str(), _T("%f"), &field.value.scaleMin);
    _stscanf(tokensdef[4].c_str(), _T("%f"), &field.value.scaleMax);
    field.value.scaleColor = GDIHelpers::swapRB(field.value.scaleColor);
+   field.value.pieRadius = .0f;
+   if (tokensdef.size() > 5)
+   {
+    _stscanf(tokensdef[5].c_str(), _T("%f"), &field.value.pieRadius);
+    field.value.pieRadius/=100.0f; //convert from % to 0...1 range
+   }
    field.value.alezn.clear(); 
-   for (size_t i = 5; i < tokensdef.size(); ++i)
+   for (size_t i = 6; i < tokensdef.size(); ++i)
    {
     float start, end;
     COLORREF color;
@@ -522,6 +537,8 @@ class IniIO
    s.Format(_T(",%.*f"), decPlaces, field.value.scaleMin);
    str+=s;
    s.Format(_T(",%.*f"), decPlaces, field.value.scaleMax);
+   str+=s;
+   s.Format(_T(",%.*f"), 1, field.value.pieRadius * 100.0f); //convert from 0...1 range to %
    str+=s;
 
    for(size_t i = 0; i < field.value.alezn.size(); ++i)

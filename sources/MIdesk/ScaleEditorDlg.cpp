@@ -53,12 +53,15 @@ BEGIN_MESSAGE_MAP(ScaleEditorDlg, Super)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_END_EDIT, OnChangeDataSc)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_TICS_EDIT, OnChangeDataSc)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_WIDTH_EDIT, OnChangeDataSc)
+ ON_EN_CHANGE(IDC_MI_SED_SCALE_PIERAD_EDIT, OnChangeDataSc)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_LIST, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_ADD, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_DEL, OnUpdateAZDel)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_BEGIN_EDIT, OnUpdateAZEdit)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_BEGIN_SPIN, OnUpdateAZEdit)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_END_EDIT, OnUpdateAZEdit)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_PIERAD_EDIT, OnUpdateMetCtrls)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_PIERAD_SPIN, OnUpdateMetCtrls)
 END_MESSAGE_MAP()
 
 ScaleEditorDlg::ScaleEditorDlg(CWnd* pParent /*=NULL*/)
@@ -70,6 +73,7 @@ ScaleEditorDlg::ScaleEditorDlg(CWnd* pParent /*=NULL*/)
 , m_az_begin_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_az_end_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_scale_width_edit(CEditEx::MODE_INT, true)
+, m_scale_pierad_edit(CEditEx::MODE_FLOAT, true)
 , m_az_color(DLL::GetModuleHandle())
 , m_scale_color(DLL::GetModuleHandle())
 {
@@ -102,11 +106,16 @@ void ScaleEditorDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MI_SED_SCALE_WIDTH_EDIT, m_scale_width_edit);
  DDX_Control(pDX, IDC_MI_SED_SCALE_WIDTH_SPIN, m_scale_width_spin);
  DDX_Control(pDX, IDC_MI_SED_SCALE_COLOR, m_scale_color);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_PIERAD_EDIT, m_scale_pierad_edit);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_PIERAD_SPIN, m_scale_pierad_spin);
 
  m_scale_begin_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_BEGIN_EDIT, m_cfg.scaleMin);
  m_scale_end_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_END_EDIT, m_cfg.scaleMax);
  m_scale_tics_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_TICS_EDIT, m_cfg.ticksNum);
  m_scale_width_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_WIDTH_EDIT, m_cfg.scaleWidth);
+ float pieRadius = m_cfg.pieRadius * 100.0f; //convert to %
+ m_scale_pierad_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_PIERAD_EDIT, pieRadius);
+ m_cfg.pieRadius = pieRadius / 100.0f; //convert from %
 
  if (m_az_list.GetSelectedCount()==1)
  {
@@ -201,6 +210,12 @@ BOOL ScaleEditorDlg::OnInitDialog()
  m_scale_width_spin.SetRangeAndDelta(0, 5, 1);
  m_scale_width_edit.SetRange(0, 5);
 
+ m_scale_pierad_edit.SetLimitText(6);
+ m_scale_pierad_spin.SetBuddy(&m_scale_pierad_edit);
+ m_scale_pierad_edit.SetDecimalPlaces(1);
+ m_scale_pierad_spin.SetRangeAndDelta(0, 100, 1);
+ m_scale_pierad_edit.SetRange(0, 100);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -212,6 +227,8 @@ BOOL ScaleEditorDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_az_del, MLL::GetString(IDS_MI_SED_AZ_DEL_TT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_tics_edit, MLL::GetString(IDS_MI_SED_SCALE_TICS_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_tics_spin, MLL::GetString(IDS_MI_SED_SCALE_TICS_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_scale_pierad_edit, MLL::GetString(IDS_MI_SED_SCALE_PIERAD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_scale_pierad_spin, MLL::GetString(IDS_MI_SED_SCALE_PIERAD_EDIT_TT)));
  UINT scaleWidthTT = m_meter ? IDS_MI_SED_SCALE_WIDTH_EDIT_TT : IDS_MI_SED_SCALE_WIDTH_EDIT_TT1;
  VERIFY(mp_ttc->AddWindow(&m_scale_width_edit, MLL::GetString(scaleWidthTT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_width_spin, MLL::GetString(scaleWidthTT)));

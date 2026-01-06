@@ -385,6 +385,12 @@ class MeasInstrBase
     m_scope.SetPlotColor(color);     
   }
 
+  void SetPieRadius(float radius)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetPieRadius(radius);
+  }
+
   UINT m_uiID;
 
 protected:

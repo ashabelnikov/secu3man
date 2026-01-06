@@ -201,6 +201,10 @@ BEGIN
     CONTROL         "",IDC_MI_SED_SCALE_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,90,25,45,18, 
     LTEXT           "Цвет линий",IDC_MI_SED_SCALE_COLOR_CAPTION,137,25,30,18
 
+    EDITTEXT        IDC_MI_SED_SCALE_PIERAD_EDIT,170,25,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_PIERAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,25,13,17
+    LTEXT           "Ширина дуг (%)",IDC_MI_SED_SCALE_PIERAD_CAPTION,217,25,30,18
+
     CONTROL         "",IDC_MI_SED_AZ_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,5,50,154,85
 
     PUSHBUTTON      "Добавить",IDC_MI_SED_AZ_ADD,168,70,45,20
@@ -452,6 +456,7 @@ BEGIN
     IDS_MI_SED_SCALE_WIDTH_EDIT_TT1 "Толщина линии графика в пикселях"
     IDS_MI_SED_SCALE_COLOR_TT1 "Цвет линии графика"
     IDS_MI_SED_AZ_COLOR_TT "Цвет выбранной зоны на шкале"
+    IDS_MI_SED_SCALE_PIERAD_EDIT_TT "Ширина цветовой дуги в % от радиуса шкалы."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -656,6 +661,10 @@ BEGIN
 
     CONTROL         "",IDC_MI_SED_SCALE_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,90,25,45,18,
     LTEXT           "Line color",IDC_MI_SED_SCALE_COLOR_CAPTION,137,25,25,18
+
+    EDITTEXT        IDC_MI_SED_SCALE_PIERAD_EDIT,170,25,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MI_SED_SCALE_PIERAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,25,13,17
+    LTEXT           "Arch width (%)",IDC_MI_SED_SCALE_PIERAD_CAPTION,217,25,30,18
 
     CONTROL         "",IDC_MI_SED_AZ_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,5,50,154,85
 
@@ -907,6 +916,7 @@ BEGIN
     IDS_MI_SED_SCALE_WIDTH_EDIT_TT1 "Width of the graph's line"
     IDS_MI_SED_SCALE_COLOR_TT1 "Color of the graph's line"
     IDS_MI_SED_AZ_COLOR_TT "Color of the selected zone on the scale"
+    IDS_MI_SED_SCALE_PIERAD_EDIT_TT "Width of the colored arch in % of the radius of scale."
 END
 
 STRINGTABLE DISCARDABLE 

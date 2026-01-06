@@ -443,11 +443,13 @@ struct MetCfg
  float scaleMin;
  float scaleMax;
  std::vector<AlertZone> alezn; //colored zones
+ float pieRadius;
  void copyScale(MetCfg& dest)
  {
-   dest.scaleMin = scaleMin; dest.scaleMax = scaleMax; dest.ticksNum = ticksNum; 
-   dest.alezn = alezn; dest.scaleWidth = scaleWidth; dest.scaleColor = scaleColor;
-  }
+  dest.scaleMin = scaleMin; dest.scaleMax = scaleMax; dest.ticksNum = ticksNum; 
+  dest.alezn = alezn; dest.scaleWidth = scaleWidth; dest.scaleColor = scaleColor;
+  dest.pieRadius = pieRadius;
+ }
 };
 
 struct MetersCfg
