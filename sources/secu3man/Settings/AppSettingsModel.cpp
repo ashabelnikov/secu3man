@@ -3969,9 +3969,9 @@ bool CAppSettingsModel::WriteSettings(void)
  //Meters' scales
  IniIO &sc = writer;
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  sc.WriteComment(_T("*** Ranges of scales of virtual gauges ***\r\n; Two values per line - first for minimum, second for maximum"), true);
+  sc.WriteComment(_T("*** Scale settings of virtual gauges ***\r\n; Format for arrow gauge: Line width, Grid color, Ticks num, Min, Max, (Start, End, Color)...\r\n; Format for graph gauge: Plot line width, Plot line color, Ticks num, Min, Max."), true);
  else
-  sc.WriteComment(_T("*** Диапазоны шкал виртуальных приборов ***\r\n; По два значения в каждой строке - первое для минимума, второе для максимума"), true);
+  sc.WriteComment(_T("*** Настройки шкалы виртуальных приборов ***\r\n; Формат для стрелочных приборов: Толщина линий, Цвет шкалы, Число делений, Минимум, Максимум, (Начало, Конец, Цвет)...\r\n; Формат для графиков: Толщина линии графика, Цвет линии графика, Число делений, Минимум, Максимум"), true);
 
  sc.CreateSection(m_Name_MetersSc_Section);
 
