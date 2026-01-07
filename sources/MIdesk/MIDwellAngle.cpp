@@ -61,6 +61,7 @@ void CMIDwellAngle::Create(CWnd* pParent)
  m_meter.SetNeedleValue(-15.0);
  m_meter.Update();
  m_meter.SetMeterSize(145);
+ m_meter.SetTickLength(0.15);
 }
 
 void CMIDwellAngle::Append(const SECU3IO::SensorDat* i_values, bool i_revdir /*= false*/)

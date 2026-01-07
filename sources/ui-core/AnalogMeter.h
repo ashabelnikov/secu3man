@@ -72,8 +72,8 @@ class AFX_EXT_CLASS CAnalogMeter
    ActuateColors();
   }
 
-  void SetMeterSize(double half_angle) {m_dLimitAngleDeg = half_angle;}
-  void SetTickNumber(int number) { m_nTickNumber = number;};
+  void SetMeterSize(double half_angle) { m_dLimitAngleDeg = half_angle; }
+  void SetTickNumber(int number) { m_nTickNumber = number; };
 
   void AddAlertZone(double start,double end, COLORREF color);
   void ResetAlertZones(void);
@@ -81,7 +81,7 @@ class AFX_EXT_CLASS CAnalogMeter
   void GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const;
   void GetState(enum MeterMemberEnum meter_member, bool* pState) const;
 
-  void SetTickLength(double length) { m_tickLength = 1.0 / length;}
+  void SetTickLength(double length) { m_tickLength = 1.0 - length; m_tickLengthS = 1.0 - (length * 0.600); }
   void SetNeedleWidth(double width) { m_needleWidth = width; }
 
   void SetPieRadius(double rad) { m_pieRadius = rad; };
@@ -162,7 +162,8 @@ class AFX_EXT_CLASS CAnalogMeter
   double m_dNeedlePos_n;
   double m_dMinScale;
   double m_dMaxScale;
-  double m_tickLength;
+  double m_tickLength;  //normal
+  double m_tickLengthS; //short
   double m_needleWidth;
   double m_pieRadius;
 

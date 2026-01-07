@@ -94,6 +94,10 @@ class ScaleEditorDlg : public CDialog
   CMultiLEDCtrl m_scale_color;
   CSpinButtonCtrlEx m_scale_pierad_spin;
   CEditEx m_scale_pierad_edit;
+  CSpinButtonCtrlEx m_scale_anglen_spin;
+  CEditEx m_scale_anglen_edit;
+  CSpinButtonCtrlEx m_scale_ticlen_spin;
+  CEditEx m_scale_ticlen_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   MetCfg m_cfg;

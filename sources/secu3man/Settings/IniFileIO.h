@@ -41,7 +41,9 @@ struct SclCfg
  float scaleMin;      //scale minimum
  float scaleMax;      //scale maximum
  std::vector<AlertZone> alezn; //colored zones
- float pieRadius;
+ float pieRadius;     //pie width in % of radius
+ int scaleLength;     //angular length of scale
+ float tickLength;    //length of ticks
 };
 
 template <class T> struct OptField_t
@@ -469,8 +471,22 @@ class IniIO
     if (result != 1 || (pieRadius < .0f) || (pieRadius > 100.0f))
      goto usedef;
    }
-   
-   for (size_t i = 6; i < tokens.size(); ++i)
+   int scaleLength = 0;
+   if (tokens.size() > 6)
+   {
+    result = _stscanf(tokens[6].c_str(), _T("%d"), &scaleLength);
+    if (result != 1 || (scaleLength < 90) || (scaleLength > 180))
+     goto usedef;
+   }
+   float tickLength = 0;
+   if (tokens.size() > 7)
+   {
+    result = _stscanf(tokens[7].c_str(), _T("%f"), &tickLength);
+    if (result != 1 || (tickLength < -20.0f) || (tickLength > 100.0f))
+     goto usedef;
+   }
+ 
+   for (size_t i = 8; i < tokens.size(); ++i)
    {
     float start, end;
     COLORREF color;    
@@ -494,6 +510,8 @@ class IniIO
    field.value.scaleMax = scaleMax;
    field.value.alezn = vect;
    field.value.pieRadius = pieRadius / 100.0f; //convert from % to 0...1 range
+   field.value.scaleLength = scaleLength;
+   field.value.tickLength = tickLength / 100.0f; //convert from %
    return true;  //OK
 
   usedef:
@@ -509,6 +527,15 @@ class IniIO
    {
     _stscanf(tokensdef[5].c_str(), _T("%f"), &field.value.pieRadius);
     field.value.pieRadius/=100.0f; //convert from % to 0...1 range
+   }
+   if (tokensdef.size() > 6)
+   {
+    _stscanf(tokensdef[6].c_str(), _T("%d"), &field.value.scaleLength);
+   }
+   if (tokensdef.size() > 7)
+   {
+    _stscanf(tokensdef[7].c_str(), _T("%f"), &field.value.tickLength);
+    field.value.tickLength/=100.0f; //convert from %
    }
    field.value.alezn.clear(); 
    for (size_t i = 6; i < tokensdef.size(); ++i)
@@ -539,6 +566,10 @@ class IniIO
    s.Format(_T(",%.*f"), decPlaces, field.value.scaleMax);
    str+=s;
    s.Format(_T(",%.*f"), 1, field.value.pieRadius * 100.0f); //convert from 0...1 range to %
+   str+=s;
+   s.Format(_T(",%d"), field.value.scaleLength);
+   str+=s;
+   s.Format(_T(",%.*f"), 1, field.value.tickLength * 100.0f); //convert to %
    str+=s;
 
    for(size_t i = 0; i < field.value.alezn.size(); ++i)

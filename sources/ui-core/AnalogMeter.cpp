@@ -96,7 +96,8 @@ CAnalogMeter::CAnalogMeter()
  // draw the whole thing the first time
 , m_boolForceRedraw(true)
 , m_dRadiansPerValue(0.0)  // will be modified on first drawing
-, m_tickLength(0.92)
+, m_tickLength(0.900)
+, m_tickLengthS(0.940)
 , m_needleWidth(1.0)
 , m_pieRadius(0.2)
 {
@@ -397,7 +398,7 @@ void CAnalogMeter::DrawChord(const CRect& Bounds)
  chord_brush.CreateSolidBrush(GDIHelpers::InvColor(m_colorBGround));
  chord_pen.CreatePen(PS_NULL,0,GDIHelpers::InvColor(m_colorBGround));
 
- int r = m_nRadiusPix * m_pieRadius;
+ int r = (int)(m_nRadiusPix * m_pieRadius);
 
  Circle.DeflateRect(r,r,r,r);
 
@@ -464,15 +465,15 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
  for (tick = step_min; tick <= step_max; tick++)
  {
   //-------draw ticks ---------------
-  dX = m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
-  dY = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
+  dX = m_nCXPix + m_nRadiusPix * sin(m_dLimitAngleRad*tick*rad_per_tick);
+  dY = m_nCYPix - m_nRadiusPix * cos(m_dLimitAngleRad*tick*rad_per_tick);
   if(m_swGrid) m_dcGrid.MoveTo(MathHelpers::Round(dX), MathHelpers::Round(dY));
   if (tick % 2)
-   len = 1.0;    //short tick
+   len = m_tickLengthS;  //short tick
   else
-   len = 0.95;   //long tick
-  dX = m_nCXPix + m_tickLength*len*m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
-  dY = m_nCYPix - m_tickLength*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
+   len = m_tickLength;   //long tick
+  dX = m_nCXPix + len * m_nRadiusPix * sin(m_dLimitAngleRad*tick*rad_per_tick);
+  dY = m_nCYPix - len * m_nRadiusPix * cos(m_dLimitAngleRad*tick*rad_per_tick);
   if(m_swGrid) m_dcGrid.LineTo(MathHelpers::Round(dX), MathHelpers::Round(dY));
 
   if (!m_swLabels) //нужно ли рисовать подписи?
@@ -491,20 +492,20 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
    double tw = (double)(TM.tmAveCharWidth * cs.GetLength());
    double th = (double)TM.tmHeight;
 
-   double r = 0.92*len*m_nRadiusPix*0.8;
+   double r = len * m_nRadiusPix * 0.8;
 
-   double fX = m_nCXPix + r*sin(m_dLimitAngleRad*tick*rad_per_tick);
-   double fY = m_nCYPix - r*cos(m_dLimitAngleRad*tick*rad_per_tick);
+   double fX = m_nCXPix + r * sin(m_dLimitAngleRad*tick*rad_per_tick);
+   double fY = m_nCYPix - r * cos(m_dLimitAngleRad*tick*rad_per_tick);
 
-   double tx = fX - tw/2;
-   double ty = fY - th/2;
+   double tx = fX - tw / 2;
+   double ty = fY - th / 2;
 
    m_dcGrid.SetTextColor(GDIHelpers::InvColor(m_colorLabels));
    m_dcGrid.SetBkColor(GDIHelpers::InvColor(m_colorBGround));
    m_dcGrid.SetBkMode(TRANSPARENT);
 
    if (tick==0)
-    ty=m_nCYPix - 0.92*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
+    ty = m_nCYPix - len * m_nRadiusPix * cos(m_dLimitAngleRad*tick*rad_per_tick);
 
    m_dcGrid.TextOut((int)tx,(int)ty,cs);
    m_dcGrid.SelectObject(pFontOld);

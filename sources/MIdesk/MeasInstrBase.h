@@ -391,6 +391,18 @@ class MeasInstrBase
     m_meter.SetPieRadius(radius);
   }
 
+  void SetScaleLength(int scLen)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetMeterSize(scLen);
+  }
+
+  void SetTickLength(float tkLen)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetTickLength(tkLen);
+  }
+
   UINT m_uiID;
 
 protected:

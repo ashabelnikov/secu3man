@@ -54,6 +54,8 @@ BEGIN_MESSAGE_MAP(ScaleEditorDlg, Super)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_TICS_EDIT, OnChangeDataSc)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_WIDTH_EDIT, OnChangeDataSc)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_PIERAD_EDIT, OnChangeDataSc)
+ ON_EN_CHANGE(IDC_MI_SED_SCALE_ANGLEN_EDIT, OnChangeDataSc)
+ ON_EN_CHANGE(IDC_MI_SED_SCALE_TICLEN_EDIT, OnChangeDataSc)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_LIST, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_ADD, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_DEL, OnUpdateAZDel)
@@ -62,6 +64,10 @@ BEGIN_MESSAGE_MAP(ScaleEditorDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_AZ_END_EDIT, OnUpdateAZEdit)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_PIERAD_EDIT, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_PIERAD_SPIN, OnUpdateMetCtrls)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_ANGLEN_EDIT, OnUpdateMetCtrls)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_ANGLEN_SPIN, OnUpdateMetCtrls)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_TICLEN_EDIT, OnUpdateMetCtrls)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_TICLEN_SPIN, OnUpdateMetCtrls)
 END_MESSAGE_MAP()
 
 ScaleEditorDlg::ScaleEditorDlg(CWnd* pParent /*=NULL*/)
@@ -74,6 +80,8 @@ ScaleEditorDlg::ScaleEditorDlg(CWnd* pParent /*=NULL*/)
 , m_az_end_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_scale_width_edit(CEditEx::MODE_INT, true)
 , m_scale_pierad_edit(CEditEx::MODE_FLOAT, true)
+, m_scale_anglen_edit(CEditEx::MODE_INT, true)
+, m_scale_ticlen_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_az_color(DLL::GetModuleHandle())
 , m_scale_color(DLL::GetModuleHandle())
 {
@@ -108,6 +116,10 @@ void ScaleEditorDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MI_SED_SCALE_COLOR, m_scale_color);
  DDX_Control(pDX, IDC_MI_SED_SCALE_PIERAD_EDIT, m_scale_pierad_edit);
  DDX_Control(pDX, IDC_MI_SED_SCALE_PIERAD_SPIN, m_scale_pierad_spin);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_ANGLEN_EDIT, m_scale_anglen_edit);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_ANGLEN_SPIN, m_scale_anglen_spin);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_TICLEN_EDIT, m_scale_ticlen_edit);
+ DDX_Control(pDX, IDC_MI_SED_SCALE_TICLEN_SPIN, m_scale_ticlen_spin);
 
  m_scale_begin_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_BEGIN_EDIT, m_cfg.scaleMin);
  m_scale_end_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_END_EDIT, m_cfg.scaleMax);
@@ -116,6 +128,10 @@ void ScaleEditorDlg::DoDataExchange(CDataExchange* pDX)
  float pieRadius = m_cfg.pieRadius * 100.0f; //convert to %
  m_scale_pierad_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_PIERAD_EDIT, pieRadius);
  m_cfg.pieRadius = pieRadius / 100.0f; //convert from %
+ float tickLength = m_cfg.tickLength * 100.0f; //convert to %
+ m_scale_ticlen_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_TICLEN_EDIT, tickLength);
+ m_cfg.tickLength = tickLength / 100.0f; //convert from %
+ m_scale_anglen_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_ANGLEN_EDIT, m_cfg.scaleLength);
 
  if (m_az_list.GetSelectedCount()==1)
  {
@@ -216,6 +232,18 @@ BOOL ScaleEditorDlg::OnInitDialog()
  m_scale_pierad_spin.SetRangeAndDelta(0, 100, 1);
  m_scale_pierad_edit.SetRange(0, 100);
 
+ m_scale_anglen_edit.SetLimitText(3);
+ m_scale_anglen_spin.SetBuddy(&m_scale_anglen_edit);
+ m_scale_anglen_edit.SetDecimalPlaces(0);
+ m_scale_anglen_spin.SetRangeAndDelta(90, 180, 1);
+ m_scale_anglen_edit.SetRange(90, 180);
+
+ m_scale_ticlen_edit.SetLimitText(6);
+ m_scale_ticlen_spin.SetBuddy(&m_scale_ticlen_edit);
+ m_scale_ticlen_edit.SetDecimalPlaces(1);
+ m_scale_ticlen_spin.SetRangeAndDelta(-20.0f, 100.0f, 1);
+ m_scale_ticlen_edit.SetRange(-20, 100);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -229,6 +257,10 @@ BOOL ScaleEditorDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_scale_tics_spin, MLL::GetString(IDS_MI_SED_SCALE_TICS_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_pierad_edit, MLL::GetString(IDS_MI_SED_SCALE_PIERAD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_pierad_spin, MLL::GetString(IDS_MI_SED_SCALE_PIERAD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_scale_anglen_edit, MLL::GetString(IDS_MI_SED_SCALE_ANGLEN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_scale_anglen_spin, MLL::GetString(IDS_MI_SED_SCALE_ANGLEN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_scale_ticlen_edit, MLL::GetString(IDS_MI_SED_SCALE_TICLEN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_scale_ticlen_spin, MLL::GetString(IDS_MI_SED_SCALE_TICLEN_EDIT_TT)));
  UINT scaleWidthTT = m_meter ? IDS_MI_SED_SCALE_WIDTH_EDIT_TT : IDS_MI_SED_SCALE_WIDTH_EDIT_TT1;
  VERIFY(mp_ttc->AddWindow(&m_scale_width_edit, MLL::GetString(scaleWidthTT)));
  VERIFY(mp_ttc->AddWindow(&m_scale_width_spin, MLL::GetString(scaleWidthTT)));
@@ -356,7 +388,7 @@ void ScaleEditorDlg::OnChangeAZList(NMHDR* pNMHDR, LRESULT* pResult)
  if (pnmv->uChanged == LVIF_STATE && (pnmv->uNewState & LVIS_SELECTED || pnmv->uOldState & LVIS_SELECTED))
  {
   int sel_idx = m_az_list.GetNextItem(-1, LVNI_SELECTED);
-  if (sel_idx != -1)
+  if (sel_idx != -1 && m_cfg.alezn.size())
   {
    UpdateData(FALSE);
    m_az_color.SetItemState(0, true);
