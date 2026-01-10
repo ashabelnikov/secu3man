@@ -36,7 +36,7 @@
 
 static const int InpFldNum = 4;
 
-CRSDeskDlg::Input::Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRange /*= 5.0f*/, int ticsNum /*= 5*/)
+CRSDeskDlg::Input::Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRange /*= 5.0f*/, int ticsNum /*= 6*/)
 : value(.0f)
 {
  ctrl[0] = new CStatic();
@@ -51,7 +51,8 @@ CRSDeskDlg::Input::Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRang
  meter->SetState(meter_labels, false);
  meter->SetState(meter_value, false);
  meter->SetNeedleWidth(1.5);
- meter->SetTickLength(1.35);
+ meter->SetTickLength(0.3); //30% of the radius
+ meter->SetShortTicks(false); //all ticks are long
  ctrl[3] = meter;
 
  resid[0] = id0;
@@ -155,7 +156,7 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 , m_was_initialized(false)
 , mp_scr(new CWndScroller)
 , m_map_inp(IDC_RS_MAP_VALUE, IDC_RS_MAP_CAPTION, IDC_RS_MAP_UNIT, IDC_RS_MAP_METER)
-, m_ubat_inp(IDC_RS_UBAT_VALUE, IDC_RS_UBAT_CAPTION, IDC_RS_UBAT_UNIT, IDC_RS_UBAT_METER, 20.0f, 10)
+, m_ubat_inp(IDC_RS_UBAT_VALUE, IDC_RS_UBAT_CAPTION, IDC_RS_UBAT_UNIT, IDC_RS_UBAT_METER, 20.0f, 11)
 , m_temp_inp(IDC_RS_TEMP_VALUE, IDC_RS_TEMP_CAPTION, IDC_RS_TEMP_UNIT, IDC_RS_TEMP_METER)
 , m_knock_inp(IDC_RS_KNOCK_VALUE, IDC_RS_KNOCK_CAPTION, IDC_RS_KNOCK_UNIT, IDC_RS_KNOCK_METER)
 , m_tps_inp(IDC_RS_TPS_VALUE, IDC_RS_TPS_CAPTION, IDC_RS_TPS_UNIT, IDC_RS_TPS_METER)

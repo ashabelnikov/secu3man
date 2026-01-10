@@ -247,11 +247,14 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
  GDIHelpers::DrawEmptyRectangle(m_dcGrid, m_rcPlot);
  m_dcGrid.SelectObject(oldPen);
 
- //draw grid
- for (i = m_rcPlot.left; i < m_rcPlot.right; i+=m_gridSizeX)
+ if (0!=m_gridNumY)
  {
-  for (int j = 0; j < m_gridNumY; ++j)
-   m_dcGrid.SetPixel (i, m_rcPlot.top + MathHelpers::Round(((float)(m_rcPlot.Height() * j)) / m_gridNumY), m_crGridColor);
+  //draw grid
+  for (i = m_rcPlot.left; i < m_rcPlot.right; i+=m_gridSizeX)
+  {
+   for (int j = 0; j < m_gridNumY; ++j)
+    m_dcGrid.SetPixel (i, m_rcPlot.top + MathHelpers::Round(((float)(m_rcPlot.Height() * j)) / m_gridNumY), m_crGridColor);
+  }
  }
 
  axisFont.CreateFont (14, 0, 0, 0, 300, FALSE, FALSE, 0, RUSSIAN_CHARSET,OUT_DEFAULT_PRECIS,
@@ -581,7 +584,7 @@ void COscillCtrl::SetUnitY(const _TSTRING& str)
 
 void COscillCtrl::SetGridNumberY(int ny)
 {
- m_gridNumY = ny;
+ m_gridNumY = ny - 1;
 }
 
 void COscillCtrl::SetGridSizeX(int sx)

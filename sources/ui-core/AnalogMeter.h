@@ -84,7 +84,9 @@ class AFX_EXT_CLASS CAnalogMeter
   void SetTickLength(double length) { m_tickLength = 1.0 - length; m_tickLengthS = 1.0 - (length * 0.600); }
   void SetNeedleWidth(double width) { m_needleWidth = width; }
 
-  void SetPieRadius(double rad) { m_pieRadius = rad; };
+  void SetPieRadius(double rad) { m_pieRadius = rad; }
+
+  void SetShortTicks(bool shortTicks) { m_short_tics = shortTicks; }
  
  protected:
   bool m_boolForceRedraw;
@@ -120,6 +122,7 @@ class AFX_EXT_CLASS CAnalogMeter
   bool m_swUnit;
   bool m_swNeedle;
   bool m_sw3DRect;
+  bool m_short_tics;
 
   COLORREF m_colorTitle;
   COLORREF m_colorTLPane;

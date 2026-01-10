@@ -80,6 +80,7 @@ CAnalogMeter::CAnalogMeter()
 , m_swUnit(true)
 , m_swNeedle(true)
 , m_sw3DRect(true)
+, m_short_tics(true)
  // colors
 , m_colorTitle(RGB(128, 128, 128)) // title color
 , m_colorTLPane(RGB(0, 0, 255))    //top-left pane color
@@ -430,10 +431,9 @@ void  CAnalogMeter::DrawAlertZones(const CRect& Bounds)
 void CAnalogMeter::DrawGrid(const CRect& Bounds)
 {
  double dX,dY,len;
- int tick;
  CPen*    pPenOld;
  CBrush*  pBrushOld;
- CFont*   pFontOld ;
+ CFont*   pFontOld;
 
  // new pen / brush
  pPenOld   = NULL;
@@ -450,37 +450,36 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
   m_dcGrid.Arc(Bounds.left,Bounds.top,Bounds.right+1,Bounds.bottom+1,
      MathHelpers::Round(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)),
      MathHelpers::Round(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)),
-     m_nLeftLimitXPix, m_nLeftLimitYPix) ;
+     m_nLeftLimitXPix, m_nLeftLimitYPix);
  }
 
- if (m_nTickNumber%2)
-  m_nTickNumber--;
-
  double tick_value = m_dMinScale;
- double rad_per_tick = ((double)m_nTickNumber * 2.0) / (m_nTickNumber*m_nTickNumber);
 
- int step_min = -(m_nTickNumber/2);
- int step_max = m_nTickNumber - (m_nTickNumber/2);
+ //Calculate radians per tick and value per tick, additionally prevent division by zero
+ double rad_per_tick = (m_nTickNumber > 2) ? ((2*m_dLimitAngleRad) / (m_nTickNumber-1)) : (2*m_dLimitAngleRad);
+ double val_per_tick = (m_nTickNumber > 2) ? ((double)(m_dMaxScale - m_dMinScale)) / ((double)(m_nTickNumber-1)) : ((double)(m_dMaxScale - m_dMinScale));
 
- for (tick = step_min; tick <= step_max; tick++)
+ double offset = -m_dLimitAngleRad;
+ for (int tick = 0; tick < m_nTickNumber; ++tick)
  {
+  double aa = offset + (tick * rad_per_tick);
   //-------draw ticks ---------------
-  dX = m_nCXPix + m_nRadiusPix * sin(m_dLimitAngleRad*tick*rad_per_tick);
-  dY = m_nCYPix - m_nRadiusPix * cos(m_dLimitAngleRad*tick*rad_per_tick);
+  dX = m_nCXPix + m_nRadiusPix * sin(aa);
+  dY = m_nCYPix - m_nRadiusPix * cos(aa);
   if(m_swGrid) m_dcGrid.MoveTo(MathHelpers::Round(dX), MathHelpers::Round(dY));
-  if (tick % 2)
+  if (m_short_tics && tick % 2 && m_nTickNumber > 2)
    len = m_tickLengthS;  //short tick
   else
    len = m_tickLength;   //long tick
-  dX = m_nCXPix + len * m_nRadiusPix * sin(m_dLimitAngleRad*tick*rad_per_tick);
-  dY = m_nCYPix - len * m_nRadiusPix * cos(m_dLimitAngleRad*tick*rad_per_tick);
+  dX = m_nCXPix + len * m_nRadiusPix * sin(aa);
+  dY = m_nCYPix - len * m_nRadiusPix * cos(aa);
   if(m_swGrid) m_dcGrid.LineTo(MathHelpers::Round(dX), MathHelpers::Round(dY));
 
   if (!m_swLabels) //нужно ли рисовать подписи?
    continue;
 
   //-------draw text labels for long ticks --------
-  if(!(tick % 2))
+  if(!(tick % 2) || m_nTickNumber < 3)
   {
    CString cs;
    cs.Format(_T("%.*f"),m_nLabelsDecimals,tick_value);
@@ -494,8 +493,8 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
 
    double r = len * m_nRadiusPix * 0.8;
 
-   double fX = m_nCXPix + r * sin(m_dLimitAngleRad*tick*rad_per_tick);
-   double fY = m_nCYPix - r * cos(m_dLimitAngleRad*tick*rad_per_tick);
+   double fX = m_nCXPix + r * sin(aa);
+   double fY = m_nCYPix - r * cos(aa);
 
    double tx = fX - tw / 2;
    double ty = fY - th / 2;
@@ -504,16 +503,11 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
    m_dcGrid.SetBkColor(GDIHelpers::InvColor(m_colorBGround));
    m_dcGrid.SetBkMode(TRANSPARENT);
 
-   if (tick==0)
-    ty = m_nCYPix - len * m_nRadiusPix * cos(m_dLimitAngleRad*tick*rad_per_tick);
-
    m_dcGrid.TextOut((int)tx,(int)ty,cs);
    m_dcGrid.SelectObject(pFontOld);
   }
   //------------------------------------------------
-
-  double step = ((double)(m_dMaxScale - m_dMinScale)) / ((double)m_nTickNumber);
-  tick_value+= step;
+  tick_value+= val_per_tick;
  }
 
  // old pen / brush

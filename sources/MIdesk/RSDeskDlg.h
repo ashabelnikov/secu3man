@@ -78,7 +78,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
 
   struct Input
   {
-   Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRange = 6.0f, int ticsNum = 6);
+   Input(UINT id0, UINT id1, UINT id2, UINT id3, float valueRange = 5.0f, int ticsNum = 6);
   ~Input();
    void StoreRects(void);
    void Scale(float Xf, float Yf, Input* p_other = NULL);
