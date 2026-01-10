@@ -230,10 +230,10 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
  m_dcGrid.FillRect(m_rcClient, &m_brushBack);
 
  //correct rectangle depending on the number of characters,
- //avoid overflow range error (crash), when m_dLowerLimit is zero.
- nCharacters = abs((int)log10(fabs(m_uppLimit)));
- double log10ll = (m_lowLimit!=.0) ? log10(fabs(m_lowLimit)) : log10ll = .0;
- nCharacters = std::max(nCharacters, abs((int)log10ll));
+ //avoid overflow range error (crash), when m_uppLimit or m_lowLimit is zero. 
+ double log10ul = (m_uppLimit!=.0) ? log10(fabs(m_uppLimit)) : .0;
+ double log10ll = (m_lowLimit!=.0) ? log10(fabs(m_lowLimit)) : .0;
+ nCharacters = std::max(abs((int)log10ul), abs((int)log10ll));
  nCharacters = nCharacters + 4 + m_decimalPlaces;
  if (m_num_y_chars > 0)
   nCharacters = m_num_y_chars;
@@ -544,6 +544,17 @@ void COscillCtrl::SetRange(double low, double upp)
  ASSERT(upp > low);
  m_lowLimit = low;
  m_uppLimit = upp;
+
+ //prevent diision by zero
+ m_range = m_uppLimit - m_lowLimit;
+ if (abs(m_range) < 0.00001)
+ {
+  if (m_uppLimit >= m_lowLimit)
+   m_uppLimit = m_lowLimit + 0.00001;
+  else
+   m_uppLimit = m_lowLimit - 0.00001;
+ }
+
  m_range = m_uppLimit - m_lowLimit;
  m_vertFactor = (double)m_rcPlot.Height() / m_range;
  InvalidateCtrl();

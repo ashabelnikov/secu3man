@@ -868,6 +868,17 @@ void CAnalogMeter::SetRange(double dMin, double dMax, bool updateAlertZones /*= 
 
  m_dMinScale   = dMin;
  m_dMaxScale   = dMax;
+
+ //prevent diision by zero
+ double range = m_dMaxScale - m_dMinScale;
+ if (abs(range) < 0.00001)
+ {
+  if (m_dMaxScale >= m_dMinScale)
+   m_dMaxScale = m_dMinScale + 0.00001;
+  else
+   m_dMaxScale = m_dMinScale - 0.00001;
+ }
+
  m_boolForceRedraw = true;
 }
 

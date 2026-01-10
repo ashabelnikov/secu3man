@@ -38,7 +38,7 @@
 #pragma pack( push, enter_S3FFileMap )
 #pragma pack(1) //<--SECU3
 
-#define INT_MULTIPLIER 10000.0f
+#define INT_MULTIPLIER 10000.0
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER  //legacy, used for versions <= 01.06
 #define MAX_NOFSETS 64
@@ -979,83 +979,83 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   size_t i;
   //ignition
   for(i = 0; i < F_STR_POINTS; ++i)
-   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_str[i] = (float)(p_setItem[s].f_str[i] / INT_MULTIPLIER);
   for(i = 0; i < F_IDL_POINTS; ++i)
-   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_idl[i] = (float)(p_setItem[s].f_idl[i] / INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = _RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER;
+   m_data.maps[s].f_wrk[i] = (float)(_RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_tmp[i] = (float)(p_setItem[s].f_tmp[i] / INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp_idl[i] = p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_tmp_idl[i] = (float)(p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER);
   //fuel injection
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_ve[i] = _RLG(p_setItem[s].inj_ve, i) / INT_MULTIPLIER;
+   m_data.maps[s].inj_ve[i] = (float)(_RLG(p_setItem[s].inj_ve, i) / INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_ve2[i] = _RLG(p_setItem[s].inj_ve2, i) / INT_MULTIPLIER;
+   m_data.maps[s].inj_ve2[i] = (float)(_RLG(p_setItem[s].inj_ve2, i) / INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_afr[i] = _RLG(p_setItem[s].inj_afr, i) / INT_MULTIPLIER;
+   m_data.maps[s].inj_afr[i] = (float)(_RLG(p_setItem[s].inj_afr, i) / INT_MULTIPLIER);
   for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_cranking[i] = p_setItem[s].inj_cranking[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_cranking[i] = (float)(p_setItem[s].inj_cranking[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_warmup[i] = p_setItem[s].inj_warmup[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_warmup[i] = (float)(p_setItem[s].inj_warmup[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_dead_time[i] = p_setItem[s].inj_dead_time[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_dead_time[i] = (float)(p_setItem[s].inj_dead_time[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_iac_run_pos[i] = p_setItem[s].inj_iac_run_pos[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_run_pos[i] = (float)(p_setItem[s].inj_iac_run_pos[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_iac_crank_pos[i] = p_setItem[s].inj_iac_crank_pos[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_crank_pos[i] = (float)(p_setItem[s].inj_iac_crank_pos[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
-   m_data.maps[s].inj_ae_tps[i] = p_setItem[s].inj_ae_tps[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ae_tps[i] = (float)(p_setItem[s].inj_ae_tps[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; ++i)
-   m_data.maps[s].inj_ae_rpm[i] = p_setItem[s].inj_ae_rpm[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ae_rpm[i] = (float)(p_setItem[s].inj_ae_rpm[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_aftstr[i] = p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_aftstr[i] = (float)(p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_timing[i] = _RLG(p_setItem[s].inj_timing, i) / INT_MULTIPLIER;
+   m_data.maps[s].inj_timing[i] = (float)(_RLG(p_setItem[s].inj_timing, i) / INT_MULTIPLIER);
   for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
-   m_data.maps[s].inj_ego_curve[i] = p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ego_curve[i] = (float)(p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_target_rpm[i] = p_setItem[s].inj_target_rpm[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_target_rpm[i] = (float)(p_setItem[s].inj_target_rpm[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_idl_rigidity[i] = p_setItem[s].inj_idl_rigidity[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_idl_rigidity[i] = (float)(p_setItem[s].inj_idl_rigidity[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_CORR_W_SIZE+2; ++i)
-   m_data.maps[s].inj_iac_corr_w[i] = p_setItem[s].inj_iac_corr_w[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_corr_w[i] = (float)(p_setItem[s].inj_iac_corr_w[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_CORR_SIZE+2; ++i)
-   m_data.maps[s].inj_iac_corr[i] = p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_corr[i] = (float)(p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
   {
    if (i < INJ_IATCLT_CORR_SIZE)
-    m_data.maps[s].inj_iatclt_corr[i] = p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER;
+    m_data.maps[s].inj_iatclt_corr[i] = (float)(p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER);
    else
     m_data.maps[s].inj_iatclt_corr[i] = (float)p_setItem[s].inj_iatclt_corr[i]; //do not use INT_MULTIPLIER
   }
   for(i = 0; i < INJ_TPSSWT_SIZE; ++i)
-   m_data.maps[s].inj_tpsswt[i] = p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_tpsswt[i] = (float)(p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
-   m_data.maps[s].inj_gts_corr[i] = p_setItem[s].inj_gts_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_gts_corr[i] = (float)(p_setItem[s].inj_gts_corr[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_GPS_CORR_SIZE+2; ++i)
-   m_data.maps[s].inj_gps_corr[i] = p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_gps_corr[i] = (float)(p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
-   m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ats_corr[i] = (float)(p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty1[i] = _RLG(p_setItem[s].pwm_duty1, i) / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty1[i] = (float)(_RLG(p_setItem[s].pwm_duty1, i) / INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty2[i] = _RLG(p_setItem[s].pwm_duty2, i) / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty2[i] = (float)(_RLG(p_setItem[s].pwm_duty2, i) / INT_MULTIPLIER);
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
-   m_data.maps[s].iac_mat_corr[i] = p_setItem[s].iac_mat_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].iac_mat_corr[i] = (float)(p_setItem[s].iac_mat_corr[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_TPSZON_SIZE; ++i)
-   m_data.maps[s].inj_tpszon[i] = p_setItem[s].inj_tpszon[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_tpszon[i] = (float)(p_setItem[s].inj_tpszon[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_CYLADD_SIZE; ++i)
-   m_data.maps[s].inj_cylmult[i] = p_setItem[s].inj_cylmult[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_cylmult[i] = (float)(p_setItem[s].inj_cylmult[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_CYLADD_SIZE; ++i)
-   m_data.maps[s].inj_cyladd[i] = p_setItem[s].inj_cyladd[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_cyladd[i] = (float)(p_setItem[s].inj_cyladd[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_AE_MAP_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
-   m_data.maps[s].inj_ae_map[i] = p_setItem[s].inj_ae_map[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ae_map[i] = (float)(p_setItem[s].inj_ae_map[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_THRASS_SIZE; ++i)
-   m_data.maps[s].inj_thrass[i] = p_setItem[s].inj_thrass[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_thrass[i] = (float)(p_setItem[s].inj_thrass[i] / INT_MULTIPLIER);
   for(i = 0; i < (INJ_IVE_POINTS_L * INJ_IVE_POINTS_F); ++i)
-   m_data.maps[s].inj_ive[i] = p_setItem[s].inj_ive[i] / INT_MULTIPLIER; //normal order of rows
+   m_data.maps[s].inj_ive[i] = (float)(p_setItem[s].inj_ive[i] / INT_MULTIPLIER); //normal order of rows
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];
@@ -1070,101 +1070,101 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  const S3FSepMaps* p_sepMaps = (S3FSepMaps*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
+  m_data.attenuator_table[i] = (float)(p_sepMaps->attenuator_table[i] / INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
+  m_data.dwellcntrl_table[i] = (float)(p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
+  m_data.ctscurve_table[i] = (float)(p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.atscurve_table[i] = p_sepMaps->atscurve_table[i] / INT_MULTIPLIER;
+  m_data.atscurve_table[i] = (float)(p_sepMaps->atscurve_table[i] / INT_MULTIPLIER);
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
+  m_data.ats_corr_table[i] = (float)(p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER);
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
-  m_data.gasdose_pos_table[i] = _RLG(p_sepMaps->gasdose_pos_table, i) / INT_MULTIPLIER;
+  m_data.gasdose_pos_table[i] = (float)(_RLG(p_sepMaps->gasdose_pos_table, i) / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.tmp2_curve[i] = p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER;
+  m_data.tmp2_curve[i] = (float)(p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < BAROCORR_SIZE+2; ++i)
-  m_data.barocorr_table[i] = p_sepMaps->barocorr_table[i] / INT_MULTIPLIER;
+  m_data.barocorr_table[i] = (float)(p_sepMaps->barocorr_table[i] / INT_MULTIPLIER);
  for(i = 0; i < PA4_LOOKUP_TABLE_SIZE; ++i)
-  m_data.pa4_igntim_corr[i] = p_sepMaps->pa4_igntim_corr[i] / INT_MULTIPLIER;
+  m_data.pa4_igntim_corr[i] = (float)(p_sepMaps->pa4_igntim_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < CTS_CRKCORR_SIZE; ++i)
-  m_data.ctscrk_corr[i] = p_sepMaps->ctscrk_corr[i] / INT_MULTIPLIER;
+  m_data.ctscrk_corr[i] = (float)(p_sepMaps->ctscrk_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.eh_pause_table[i] = p_sepMaps->eh_pause_table[i] / INT_MULTIPLIER;
+  m_data.eh_pause_table[i] = (float)(p_sepMaps->eh_pause_table[i] / INT_MULTIPLIER);
  for(i = 0; i < CRANK_THRD_SIZE; ++i)
-  m_data.cranking_thrd[i] = p_sepMaps->cranking_thrd[i] / INT_MULTIPLIER;
+  m_data.cranking_thrd[i] = (float)(p_sepMaps->cranking_thrd[i] / INT_MULTIPLIER);
  for(i = 0; i < CRANK_TIME_SIZE; ++i)
-  m_data.cranking_time[i] = p_sepMaps->cranking_time[i] / INT_MULTIPLIER;
+  m_data.cranking_time[i] = (float)(p_sepMaps->cranking_time[i] / INT_MULTIPLIER);
  for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
-  m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
+  m_data.smapaban_thrd[i] = (float)(p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER);
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  m_data.knock_zone[i] = _RLG(p_sepMaps->knock_zone, i) / INT_MULTIPLIER;
+  m_data.knock_zone[i] = (float)(_RLG(p_sepMaps->knock_zone, i) / INT_MULTIPLIER);
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  m_data.lambda_zone[i] = _RLG(p_sepMaps->lambda_zone, i) / INT_MULTIPLIER;
+  m_data.lambda_zone[i] = (float)(_RLG(p_sepMaps->lambda_zone, i) / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
+  m_data.grts_curve[i] = (float)(p_sepMaps->grts_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
-  m_data.grheat_duty[i] = p_sepMaps->grheat_duty[i] / INT_MULTIPLIER;
+  m_data.grheat_duty[i] = (float)(p_sepMaps->grheat_duty[i] / INT_MULTIPLIER);
  for(i = 0; i < PWMIAC_UCOEF_SIZE; ++i)
-  m_data.pwmiac_ucoef[i] = p_sepMaps->pwmiac_ucoef[i] / INT_MULTIPLIER;
+  m_data.pwmiac_ucoef[i] = (float)(p_sepMaps->pwmiac_ucoef[i] / INT_MULTIPLIER);
  for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
-  m_data.aftstr_strk0[i] = p_sepMaps->aftstr_strk0[i] / INT_MULTIPLIER;
+  m_data.aftstr_strk0[i] = (float)(p_sepMaps->aftstr_strk0[i] / INT_MULTIPLIER);
  for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
-  m_data.aftstr_strk1[i] = p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER;
+  m_data.aftstr_strk1[i] = (float)(p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
-  m_data.grv_delay[i] = p_sepMaps->grv_delay[i] / INT_MULTIPLIER;
+  m_data.grv_delay[i] = (float)(p_sepMaps->grv_delay[i] / INT_MULTIPLIER);
  for(i = 0; i < FTLS_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.ftls_curve[i] = p_sepMaps->ftls_curve[i] / INT_MULTIPLIER;
+  m_data.ftls_curve[i] = (float)(p_sepMaps->ftls_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < EGTS_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.egts_curve[i] = p_sepMaps->egts_curve[i] / INT_MULTIPLIER;
+  m_data.egts_curve[i] = (float)(p_sepMaps->egts_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < OPS_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.ops_curve[i] = p_sepMaps->ops_curve[i] / INT_MULTIPLIER;
+  m_data.ops_curve[i] = (float)(p_sepMaps->ops_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < INJPWCOEF_LUT_SIZE; ++i)
-  m_data.injpw_coef[i] = p_sepMaps->injpw_coef[i] / INT_MULTIPLIER;
+  m_data.injpw_coef[i] = (float)(p_sepMaps->injpw_coef[i] / INT_MULTIPLIER);
 
  for(i = 0; i < MAF_FLOW_CURVE_SIZE; ++i)
-  m_data.maf_curve[i] = p_sepMaps->maf_curve[i] / INT_MULTIPLIER;
- m_data.maf_curve[i++] = p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+1] / INT_MULTIPLIER;
- m_data.maf_curve[i++] = p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+2] / INT_MULTIPLIER;
- m_data.maf_curve[i] = p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+0] / INT_MULTIPLIER;
+  m_data.maf_curve[i] = (float)(p_sepMaps->maf_curve[i] / INT_MULTIPLIER);
+ m_data.maf_curve[i++] = (float)(p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+1] / INT_MULTIPLIER);
+ m_data.maf_curve[i++] = (float)(p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+2] / INT_MULTIPLIER);
+ m_data.maf_curve[i] = (float)(p_sepMaps->maf_curve[MAF_FLOW_CURVE_SIZE+0] / INT_MULTIPLIER);
 
  for(i = 0; i < FTLSCOR_UCOEF_SIZE; ++i)
-  m_data.ftls_corr[i] = p_sepMaps->ftls_corr[i] / INT_MULTIPLIER;
+  m_data.ftls_corr[i] = (float)(p_sepMaps->ftls_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < FTS_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.fts_curve[i] = p_sepMaps->fts_curve[i] / INT_MULTIPLIER;
+  m_data.fts_curve[i] = (float)(p_sepMaps->fts_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < FUELDENS_CORR_SIZE; ++i)
-  m_data.fueldens_corr[i] = p_sepMaps->fueldens_corr[i] / INT_MULTIPLIER;
+  m_data.fueldens_corr[i] = (float)(p_sepMaps->fueldens_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < INJ_NONLIN_SIZE * 2; ++i)
-  m_data.inj_nonlinp_corr[i] = p_sepMaps->inj_nonlinp_corr[i] / INT_MULTIPLIER;
+  m_data.inj_nonlinp_corr[i] = (float)(p_sepMaps->inj_nonlinp_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < INJ_NONLIN_SIZE * 2; ++i)
-  m_data.inj_nonling_corr[i] = p_sepMaps->inj_nonling_corr[i] / INT_MULTIPLIER;
+  m_data.inj_nonling_corr[i] = (float)(p_sepMaps->inj_nonling_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < XTAU_FACT_SIZE; ++i)
-  m_data.xtau_xfacc[i] = p_sepMaps->xtau_xfacc[i] / INT_MULTIPLIER;
+  m_data.xtau_xfacc[i] = (float)(p_sepMaps->xtau_xfacc[i] / INT_MULTIPLIER);
  for(i = 0; i < XTAU_FACT_SIZE; ++i)
-  m_data.xtau_xfdec[i] = p_sepMaps->xtau_xfdec[i] / INT_MULTIPLIER;
+  m_data.xtau_xfdec[i] = (float)(p_sepMaps->xtau_xfdec[i] / INT_MULTIPLIER);
  for(i = 0; i < XTAU_FACT_SIZE; ++i)
-  m_data.xtau_tfacc[i] = p_sepMaps->xtau_tfacc[i] / INT_MULTIPLIER;
+  m_data.xtau_tfacc[i] = (float)(p_sepMaps->xtau_tfacc[i] / INT_MULTIPLIER);
  for(i = 0; i < XTAU_FACT_SIZE; ++i)
-  m_data.xtau_tfdec[i] = p_sepMaps->xtau_tfdec[i] / INT_MULTIPLIER;
+  m_data.xtau_tfdec[i] = (float)(p_sepMaps->xtau_tfdec[i] / INT_MULTIPLIER);
  for(i = 0; i < EGO_DELAY_SIZE; ++i)
-  m_data.inj_ego_delay[i] = p_sepMaps->ego_delay[i] / INT_MULTIPLIER;
+  m_data.inj_ego_delay[i] = (float)(p_sepMaps->ego_delay[i] / INT_MULTIPLIER);
 
  for(i = 0; i < WU_AFR_SIZE; ++i)
-  m_data.inj_wu_afr0[i] = p_sepMaps->inj_wu_afr0[i] / INT_MULTIPLIER;
+  m_data.inj_wu_afr0[i] = (float)(p_sepMaps->inj_wu_afr0[i] / INT_MULTIPLIER);
  for(i = 0; i < WU_AFR_SIZE; ++i)
-  m_data.inj_wu_afr1[i] = p_sepMaps->inj_wu_afr1[i] / INT_MULTIPLIER;
+  m_data.inj_wu_afr1[i] = (float)(p_sepMaps->inj_wu_afr1[i] / INT_MULTIPLIER);
  for(i = 0; i < ETC_SPRPREL_SIZE * 2; ++i)
-  m_data.etc_sprprel_duty[i] = p_sepMaps->etc_sprprel_duty[i] / INT_MULTIPLIER;
+  m_data.etc_sprprel_duty[i] = (float)(p_sepMaps->etc_sprprel_duty[i] / INT_MULTIPLIER);
  for(i = 0; i < ETC_ACCEPTERR_SIZE * 2; ++i)
-  m_data.etc_accept_error[i] = p_sepMaps->etc_accept_error[i] / INT_MULTIPLIER;
+  m_data.etc_accept_error[i] = (float)(p_sepMaps->etc_accept_error[i] / INT_MULTIPLIER);
  for(i = 0; i < ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE; ++i)
-  m_data.etc_throttle_pos[i] = p_sepMaps->etc_throttle_pos[i] / INT_MULTIPLIER;
+  m_data.etc_throttle_pos[i] = (float)(p_sepMaps->etc_throttle_pos[i] / INT_MULTIPLIER);
  for(i = 0; i < OTS_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.ots_curve[i] = p_sepMaps->ots_curve[i] / INT_MULTIPLIER;
+  m_data.ots_curve[i] = (float)(p_sepMaps->ots_curve[i] / INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
-  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
+  m_data.rpm_slots[i] = (float)(p_sepMaps->rpm_slots[i] / INT_MULTIPLIER);
 
  //convert CLT grid
  bool empty = true;
@@ -1172,7 +1172,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  {
   if (0 != p_sepMaps->clt_slots[i])
    empty = false;
-  m_data.clt_slots[i] = p_sepMaps->clt_slots[i] / INT_MULTIPLIER;
+  m_data.clt_slots[i] = (float)(p_sepMaps->clt_slots[i] / INT_MULTIPLIER);
  }
 
  if (empty) //copy standard CLT grid if source is empty
@@ -1184,7 +1184,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  {
   if (0 != p_sepMaps->load_slots[i])
    empty = false;
-  m_data.load_slots[i] = _RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER;
+  m_data.load_slots[i] = (float)(_RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER);
  }
 
  if (empty) //copy standard load grid if source is empty
@@ -1196,7 +1196,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  {
   if (0 != p_sepMaps->irpm_slots[i])
    empty = false;
-  m_data.irpm_slots[i] = p_sepMaps->irpm_slots[i] / INT_MULTIPLIER;
+  m_data.irpm_slots[i] = (float)(p_sepMaps->irpm_slots[i] / INT_MULTIPLIER);
  }
 
  if (empty || (p_fileHdr->version < 0x0128)) //copy standard idling VE rpm grid if source is empty
@@ -1208,7 +1208,7 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  {
   if (0 != p_sepMaps->iload_slots[i])
    empty = false;
-  m_data.iload_slots[i] = p_sepMaps->iload_slots[i] / INT_MULTIPLIER;
+  m_data.iload_slots[i] = (float)(p_sepMaps->iload_slots[i] / INT_MULTIPLIER);
  }
 
  if (empty || (p_fileHdr->version < 0x0128)) //copy standard load grid if source is empty
@@ -1220,84 +1220,84 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  {
   if (0 != p_sepMaps->tload_slots[i])
    empty = false;
-  m_data.tload_slots[i] = p_sepMaps->tload_slots[i] / INT_MULTIPLIER;
+  m_data.tload_slots[i] = (float)(p_sepMaps->tload_slots[i] / INT_MULTIPLIER);
  }
 
  if (empty || (p_fileHdr->version < 0x0129)) //copy standard load grid if source is empty
   std::copy(SECU3IO::ve2_map_lod_slots, SECU3IO::ve2_map_lod_slots + F_TLOAD_SLOTS, m_data.tload_slots);
 
   //CE settings
- m_data.cesd.map_v_min = p_sepMaps->cesd.map_v_min / INT_MULTIPLIER;
- m_data.cesd.map_v_max = p_sepMaps->cesd.map_v_max / INT_MULTIPLIER;
- m_data.cesd.map_v_em = p_sepMaps->cesd.map_v_em / INT_MULTIPLIER;
+ m_data.cesd.map_v_min = (float)(p_sepMaps->cesd.map_v_min / INT_MULTIPLIER);
+ m_data.cesd.map_v_max = (float)(p_sepMaps->cesd.map_v_max / INT_MULTIPLIER);
+ m_data.cesd.map_v_em = (float)(p_sepMaps->cesd.map_v_em / INT_MULTIPLIER);
  m_data.cesd.map_v_useem = CHECKBIT8(p_sepMaps->cesd.map_v_flg, 0);
 
- m_data.cesd.vbat_v_min = p_sepMaps->cesd.vbat_v_min / INT_MULTIPLIER;
- m_data.cesd.vbat_v_max = p_sepMaps->cesd.vbat_v_max / INT_MULTIPLIER;
- m_data.cesd.vbat_v_em = p_sepMaps->cesd.vbat_v_em / INT_MULTIPLIER;
+ m_data.cesd.vbat_v_min = (float)(p_sepMaps->cesd.vbat_v_min / INT_MULTIPLIER);
+ m_data.cesd.vbat_v_max = (float)(p_sepMaps->cesd.vbat_v_max / INT_MULTIPLIER);
+ m_data.cesd.vbat_v_em = (float)(p_sepMaps->cesd.vbat_v_em / INT_MULTIPLIER);
  m_data.cesd.vbat_v_useem = CHECKBIT8(p_sepMaps->cesd.vbat_v_flg, 0);
 
- m_data.cesd.cts_v_min = p_sepMaps->cesd.cts_v_min / INT_MULTIPLIER;
- m_data.cesd.cts_v_max = p_sepMaps->cesd.cts_v_max / INT_MULTIPLIER;
- m_data.cesd.cts_v_em = p_sepMaps->cesd.cts_v_em / INT_MULTIPLIER;
+ m_data.cesd.cts_v_min = (float)(p_sepMaps->cesd.cts_v_min / INT_MULTIPLIER);
+ m_data.cesd.cts_v_max = (float)(p_sepMaps->cesd.cts_v_max / INT_MULTIPLIER);
+ m_data.cesd.cts_v_em = (float)(p_sepMaps->cesd.cts_v_em / INT_MULTIPLIER);
  m_data.cesd.cts_v_useem = CHECKBIT8(p_sepMaps->cesd.cts_v_flg, 0);
 
- m_data.cesd.ks_v_min = p_sepMaps->cesd.ks_v_min / INT_MULTIPLIER;
- m_data.cesd.ks_v_max = p_sepMaps->cesd.ks_v_max / INT_MULTIPLIER;
- m_data.cesd.ks_v_em = p_sepMaps->cesd.ks_v_em / INT_MULTIPLIER;
+ m_data.cesd.ks_v_min = (float)(p_sepMaps->cesd.ks_v_min / INT_MULTIPLIER);
+ m_data.cesd.ks_v_max = (float)(p_sepMaps->cesd.ks_v_max / INT_MULTIPLIER);
+ m_data.cesd.ks_v_em = (float)(p_sepMaps->cesd.ks_v_em / INT_MULTIPLIER);
  m_data.cesd.ks_v_useem = CHECKBIT8(p_sepMaps->cesd.ks_v_flg, 0);
 
- m_data.cesd.tps_v_min = p_sepMaps->cesd.tps_v_min / INT_MULTIPLIER;
- m_data.cesd.tps_v_max = p_sepMaps->cesd.tps_v_max / INT_MULTIPLIER;
- m_data.cesd.tps_v_em = p_sepMaps->cesd.tps_v_em / INT_MULTIPLIER;
+ m_data.cesd.tps_v_min = (float)(p_sepMaps->cesd.tps_v_min / INT_MULTIPLIER);
+ m_data.cesd.tps_v_max = (float)(p_sepMaps->cesd.tps_v_max / INT_MULTIPLIER);
+ m_data.cesd.tps_v_em = (float)(p_sepMaps->cesd.tps_v_em / INT_MULTIPLIER);
  m_data.cesd.tps_v_useem = CHECKBIT8(p_sepMaps->cesd.tps_v_flg, 0);
 
- m_data.cesd.add_i1_v_min = p_sepMaps->cesd.add_i1_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i1_v_max = p_sepMaps->cesd.add_i1_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i1_v_em = p_sepMaps->cesd.add_i1_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i1_v_min = (float)(p_sepMaps->cesd.add_i1_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i1_v_max = (float)(p_sepMaps->cesd.add_i1_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i1_v_em = (float)(p_sepMaps->cesd.add_i1_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i1_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i1_v_flg, 0);
 
- m_data.cesd.add_i2_v_min = p_sepMaps->cesd.add_i2_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i2_v_max = p_sepMaps->cesd.add_i2_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i2_v_em = p_sepMaps->cesd.add_i2_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i2_v_min = (float)(p_sepMaps->cesd.add_i2_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i2_v_max = (float)(p_sepMaps->cesd.add_i2_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i2_v_em = (float)(p_sepMaps->cesd.add_i2_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i2_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i2_v_flg, 0);
 
- m_data.cesd.add_i3_v_min = p_sepMaps->cesd.add_i3_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i3_v_max = p_sepMaps->cesd.add_i3_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i3_v_em = p_sepMaps->cesd.add_i3_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i3_v_min = (float)(p_sepMaps->cesd.add_i3_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i3_v_max = (float)(p_sepMaps->cesd.add_i3_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i3_v_em = (float)(p_sepMaps->cesd.add_i3_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i3_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i3_v_flg, 0);
 
- m_data.cesd.add_i4_v_min = p_sepMaps->cesd.add_i4_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i4_v_max = p_sepMaps->cesd.add_i4_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i4_v_em = p_sepMaps->cesd.add_i4_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i4_v_min = (float)(p_sepMaps->cesd.add_i4_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i4_v_max = (float)(p_sepMaps->cesd.add_i4_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i4_v_em = (float)(p_sepMaps->cesd.add_i4_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i4_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i4_v_flg, 0);
 
- m_data.cesd.add_i5_v_min = p_sepMaps->cesd.add_i5_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i5_v_max = p_sepMaps->cesd.add_i5_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i5_v_em = p_sepMaps->cesd.add_i5_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i5_v_min = (float)(p_sepMaps->cesd.add_i5_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i5_v_max = (float)(p_sepMaps->cesd.add_i5_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i5_v_em = (float)(p_sepMaps->cesd.add_i5_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i5_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i5_v_flg, 0);
 
- m_data.cesd.add_i6_v_min = p_sepMaps->cesd.add_i6_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i6_v_max = p_sepMaps->cesd.add_i6_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i6_v_em = p_sepMaps->cesd.add_i6_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i6_v_min = (float)(p_sepMaps->cesd.add_i6_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i6_v_max = (float)(p_sepMaps->cesd.add_i6_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i6_v_em = (float)(p_sepMaps->cesd.add_i6_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i6_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i6_v_flg, 0);
 
- m_data.cesd.add_i7_v_min = p_sepMaps->cesd.add_i7_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i7_v_max = p_sepMaps->cesd.add_i7_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i7_v_em = p_sepMaps->cesd.add_i7_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i7_v_min = (float)(p_sepMaps->cesd.add_i7_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i7_v_max = (float)(p_sepMaps->cesd.add_i7_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i7_v_em = (float)(p_sepMaps->cesd.add_i7_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i7_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i7_v_flg, 0);
 
- m_data.cesd.add_i8_v_min = p_sepMaps->cesd.add_i8_v_min / INT_MULTIPLIER;
- m_data.cesd.add_i8_v_max = p_sepMaps->cesd.add_i8_v_max / INT_MULTIPLIER;
- m_data.cesd.add_i8_v_em = p_sepMaps->cesd.add_i8_v_em / INT_MULTIPLIER;
+ m_data.cesd.add_i8_v_min = (float)(p_sepMaps->cesd.add_i8_v_min / INT_MULTIPLIER);
+ m_data.cesd.add_i8_v_max = (float)(p_sepMaps->cesd.add_i8_v_max / INT_MULTIPLIER);
+ m_data.cesd.add_i8_v_em = (float)(p_sepMaps->cesd.add_i8_v_em / INT_MULTIPLIER);
  m_data.cesd.add_i8_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i8_v_flg, 0);
 
- m_data.cesd.oilpress_thrd = p_sepMaps->cesd.oilpress_thrd / INT_MULTIPLIER;
+ m_data.cesd.oilpress_thrd = (float)(p_sepMaps->cesd.oilpress_thrd / INT_MULTIPLIER);
  m_data.cesd.oilpress_timer = (int)(p_sepMaps->cesd.oilpress_timer / INT_MULTIPLIER);
 
  m_data.cesd.stepperic_flg = p_sepMaps->cesd.stepperic_flg;
- m_data.cesd.tpsdiff_thrd = p_sepMaps->cesd.tpsdiff_thrd / INT_MULTIPLIER;
- m_data.cesd.appsdiff_thrd = p_sepMaps->cesd.appsdiff_thrd / INT_MULTIPLIER;
+ m_data.cesd.tpsdiff_thrd = (float)(p_sepMaps->cesd.tpsdiff_thrd / INT_MULTIPLIER);
+ m_data.cesd.appsdiff_thrd = (float)(p_sepMaps->cesd.appsdiff_thrd / INT_MULTIPLIER);
 
  m_data.cesd.addi5678_flg = p_sepMaps->cesd.addi5678_flg;
 
@@ -1322,52 +1322,52 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   size_t i;
   //ignition
   for(i = 0; i < F_STR_POINTS; ++i)
-   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_str[i] = (float)(p_setItem[s].f_str[i] / INT_MULTIPLIER);
   for(i = 0; i < F_IDL_POINTS; ++i)
-   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_idl[i] = (float)(p_setItem[s].f_idl[i] / INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = _RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER;
+   m_data.maps[s].f_wrk[i] = (float)(_RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_tmp[i] = (float)(p_setItem[s].f_tmp[i] / INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp_idl[i] = p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_tmp_idl[i] = (float)(p_setItem[s].f_tmp_idl[i] / INT_MULTIPLIER);
   //fuel injection
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_ve[i] = _RLG(p_setItem[s].inj_ve, i) / INT_MULTIPLIER;
+   m_data.maps[s].inj_ve[i] = (float)(_RLG(p_setItem[s].inj_ve, i) / INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_afr[i] = _RLG(p_setItem[s].inj_afr, i) / INT_MULTIPLIER;
+   m_data.maps[s].inj_afr[i] = (float)(_RLG(p_setItem[s].inj_afr, i) / INT_MULTIPLIER);
   for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_cranking[i] = p_setItem[s].inj_cranking[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_cranking[i] = (float)(p_setItem[s].inj_cranking[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_warmup[i] = p_setItem[s].inj_warmup[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_warmup[i] = (float)(p_setItem[s].inj_warmup[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_dead_time[i] = p_setItem[s].inj_dead_time[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_dead_time[i] = (float)(p_setItem[s].inj_dead_time[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_iac_run_pos[i] = p_setItem[s].inj_iac_run_pos[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_run_pos[i] = (float)(p_setItem[s].inj_iac_run_pos[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_iac_crank_pos[i] = p_setItem[s].inj_iac_crank_pos[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_crank_pos[i] = (float)(p_setItem[s].inj_iac_crank_pos[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
-   m_data.maps[s].inj_ae_tps[i] = p_setItem[s].inj_ae_tps[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ae_tps[i] = (float)(p_setItem[s].inj_ae_tps[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; ++i)
-   m_data.maps[s].inj_ae_rpm[i] = p_setItem[s].inj_ae_rpm[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ae_rpm[i] = (float)(p_setItem[s].inj_ae_rpm[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_aftstr[i] = p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_aftstr[i] = (float)(p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER);
   for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
-   m_data.maps[s].inj_timing[i] = _RLG(p_setItem[s].inj_timing, i) / INT_MULTIPLIER;
+   m_data.maps[s].inj_timing[i] = (float)(_RLG(p_setItem[s].inj_timing, i) / INT_MULTIPLIER);
   for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
-   m_data.maps[s].inj_ego_curve[i] = p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ego_curve[i] = (float)(p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_target_rpm[i] = p_setItem[s].inj_target_rpm[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_target_rpm[i] = (float)(p_setItem[s].inj_target_rpm[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; ++i)
-   m_data.maps[s].inj_idl_rigidity[i] = p_setItem[s].inj_idl_rigidity[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_idl_rigidity[i] = (float)(p_setItem[s].inj_idl_rigidity[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_CORR_W_SIZE+2; ++i)
-   m_data.maps[s].inj_iac_corr_w[i] = p_setItem[s].inj_iac_corr_w[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_corr_w[i] = (float)(p_setItem[s].inj_iac_corr_w[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_CORR_SIZE+2; ++i)
-   m_data.maps[s].inj_iac_corr[i] = p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_iac_corr[i] = (float)(p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
   {
    if (i < INJ_IATCLT_CORR_SIZE)
-    m_data.maps[s].inj_iatclt_corr[i] = p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER;
+    m_data.maps[s].inj_iatclt_corr[i] = (float)(p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER);
    else if (!wrong_iatclt_corr_x_grid)
     m_data.maps[s].inj_iatclt_corr[i] = (float)p_setItem[s].inj_iatclt_corr[i]; //do not use INT_MULTIPLIER
   }
@@ -1377,23 +1377,23 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
    m_data.maps[s].inj_iatclt_corr[INJ_IATCLT_CORR_SIZE+1] = 960000;
   }
   for(i = 0; i < INJ_TPSSWT_SIZE; ++i)
-   m_data.maps[s].inj_tpsswt[i] = p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_tpsswt[i] = (float)(p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER);
   for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
-   m_data.maps[s].inj_gts_corr[i] = p_setItem[s].inj_gts_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_gts_corr[i] = (float)(p_setItem[s].inj_gts_corr[i] / INT_MULTIPLIER);
 
   //--------------------------------------------------------------------
   //Fill array of destination function using interpolation because GPS map has different size in 
   //new version of software (size increased from 9 to 17)
   //copy values of min. and max. bins:
-  float xmin = m_data.maps[s].inj_gps_corr[INJ_GPS_CORR_SIZE] = p_setItem[s].inj_gps_corr[9] / INT_MULTIPLIER; 
-  float xmax = m_data.maps[s].inj_gps_corr[INJ_GPS_CORR_SIZE+1] = p_setItem[s].inj_gps_corr[10] / INT_MULTIPLIER; 
+  float xmin = m_data.maps[s].inj_gps_corr[INJ_GPS_CORR_SIZE] = (float)(p_setItem[s].inj_gps_corr[9] / INT_MULTIPLIER); 
+  float xmax = m_data.maps[s].inj_gps_corr[INJ_GPS_CORR_SIZE+1] = (float)(p_setItem[s].inj_gps_corr[10] / INT_MULTIPLIER); 
   const int srcSize = 9;
   //prepare arrays source function's points:
   float srcY[srcSize], srcX[srcSize]; 
   for(i = 0; i < srcSize; ++i)
   {
    srcX[i] = ((xmax - xmin) * i) / (srcSize-1);
-   srcY[i] = p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER;
+   srcY[i] = (float)(p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER);
   }
   //Build destination function:
   if ((xmin != 0 && xmax != 0) && (xmin != xmax))
@@ -1412,11 +1412,11 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
   //--------------------------------------------------------------------
 
   for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
-   m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
+   m_data.maps[s].inj_ats_corr[i] = (float)(p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty1[i] = _RLG(p_setItem[s].pwm_duty1, i) / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty1[i] = (float)(_RLG(p_setItem[s].pwm_duty1, i) / INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].pwm_duty2[i] = _RLG(p_setItem[s].pwm_duty2, i) / INT_MULTIPLIER;
+   m_data.maps[s].pwm_duty2[i] = (float)(_RLG(p_setItem[s].pwm_duty2, i) / INT_MULTIPLIER);
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];
@@ -1431,51 +1431,51 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  const S3FSepMaps_v0115* p_sepMaps = (S3FSepMaps_v0115*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
+  m_data.attenuator_table[i] = (float)(p_sepMaps->attenuator_table[i] / INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
+  m_data.dwellcntrl_table[i] = (float)(p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
+  m_data.ctscurve_table[i] = (float)(p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.atscurve_table[i] = p_sepMaps->atscurve_table[i] / INT_MULTIPLIER;
+  m_data.atscurve_table[i] = (float)(p_sepMaps->atscurve_table[i] / INT_MULTIPLIER);
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
+  m_data.ats_corr_table[i] = (float)(p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER);
  for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
-  m_data.gasdose_pos_table[i] = _RLG(p_sepMaps->gasdose_pos_table, i) / INT_MULTIPLIER;
+  m_data.gasdose_pos_table[i] = (float)(_RLG(p_sepMaps->gasdose_pos_table, i) / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.tmp2_curve[i] = p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER;
+  m_data.tmp2_curve[i] = (float)(p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < BAROCORR_SIZE+2; ++i)
-  m_data.barocorr_table[i] = p_sepMaps->barocorr_table[i] / INT_MULTIPLIER;
+  m_data.barocorr_table[i] = (float)(p_sepMaps->barocorr_table[i] / INT_MULTIPLIER);
  for(i = 0; i < PA4_LOOKUP_TABLE_SIZE; ++i)
-  m_data.pa4_igntim_corr[i] = p_sepMaps->pa4_igntim_corr[i] / INT_MULTIPLIER;
+  m_data.pa4_igntim_corr[i] = (float)(p_sepMaps->pa4_igntim_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < CTS_CRKCORR_SIZE; ++i)
-  m_data.ctscrk_corr[i] = p_sepMaps->ctscrk_corr[i] / INT_MULTIPLIER;
+  m_data.ctscrk_corr[i] = (float)(p_sepMaps->ctscrk_corr[i] / INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.eh_pause_table[i] = p_sepMaps->eh_pause_table[i] / INT_MULTIPLIER;
+  m_data.eh_pause_table[i] = (float)(p_sepMaps->eh_pause_table[i] / INT_MULTIPLIER);
  for(i = 0; i < CRANK_THRD_SIZE; ++i)
-  m_data.cranking_thrd[i] = p_sepMaps->cranking_thrd[i] / INT_MULTIPLIER;
+  m_data.cranking_thrd[i] = (float)(p_sepMaps->cranking_thrd[i] / INT_MULTIPLIER);
  for(i = 0; i < CRANK_TIME_SIZE; ++i)
-  m_data.cranking_time[i] = p_sepMaps->cranking_time[i] / INT_MULTIPLIER;
+  m_data.cranking_time[i] = (float)(p_sepMaps->cranking_time[i] / INT_MULTIPLIER);
  for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
-  m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
+  m_data.smapaban_thrd[i] = (float)(p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER);
  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-  m_data.knock_zone[i] = _RLG(p_sepMaps->knock_zone, i) / INT_MULTIPLIER;
+  m_data.knock_zone[i] = (float)(_RLG(p_sepMaps->knock_zone, i) / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.grts_curve[i] = p_sepMaps->grts_curve[i] / INT_MULTIPLIER;
+  m_data.grts_curve[i] = (float)(p_sepMaps->grts_curve[i] / INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
-  m_data.grheat_duty[i] = p_sepMaps->grheat_duty[i] / INT_MULTIPLIER;
+  m_data.grheat_duty[i] = (float)(p_sepMaps->grheat_duty[i] / INT_MULTIPLIER);
  for(i = 0; i < PWMIAC_UCOEF_SIZE; ++i)
-  m_data.pwmiac_ucoef[i] = p_sepMaps->pwmiac_ucoef[i] / INT_MULTIPLIER;
+  m_data.pwmiac_ucoef[i] = (float)(p_sepMaps->pwmiac_ucoef[i] / INT_MULTIPLIER);
  for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
-  m_data.aftstr_strk0[i] = p_sepMaps->aftstr_strk0[i] / INT_MULTIPLIER;
+  m_data.aftstr_strk0[i] = (float)(p_sepMaps->aftstr_strk0[i] / INT_MULTIPLIER);
  for(i = 0; i < AFTSTR_STRK_SIZE; ++i)
-  m_data.aftstr_strk1[i] = p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER;
+  m_data.aftstr_strk1[i] = (float)(p_sepMaps->aftstr_strk1[i] / INT_MULTIPLIER);
  for(i = 0; i < F_TMP_POINTS; ++i)
-  m_data.grv_delay[i] = p_sepMaps->grv_delay[i] / INT_MULTIPLIER;
+  m_data.grv_delay[i] = (float)(p_sepMaps->grv_delay[i] / INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
-  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
+  m_data.rpm_slots[i] = (float)(p_sepMaps->rpm_slots[i] / INT_MULTIPLIER);
 
  //convert CLT grid
  bool empty = true;
@@ -1483,7 +1483,7 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  {
   if (0 != p_sepMaps->clt_slots[i])
    empty = false;
-  m_data.clt_slots[i] = p_sepMaps->clt_slots[i] / INT_MULTIPLIER;
+  m_data.clt_slots[i] = (float)(p_sepMaps->clt_slots[i] / INT_MULTIPLIER);
  }
 
  if (empty || (p_fileHdr->version < 0x0111)) //copy standard CLT grid if old version of S3F is being loaded
@@ -1495,7 +1495,7 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  {
   if (0 != p_sepMaps->load_slots[i])
    empty = false;
-  m_data.load_slots[i] = _RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER;
+  m_data.load_slots[i] = (float)(_RIG(p_sepMaps->load_slots, i) / INT_MULTIPLIER);
  }
 
  if (empty || (p_fileHdr->version < 0x0114)) //copy standard load grid if old version of S3F is being loaded
@@ -1511,69 +1511,69 @@ bool S3FFileDataIO::_ReadData_v0115(const BYTE* rawdata, const S3FFileHdr* p_fil
  if (p_fileHdr->version >= 0x0111) //CE settings appeared since v01.11
  {
   //CE settings
-  m_data.cesd.map_v_min = p_sepMaps->cesd.map_v_min / INT_MULTIPLIER;
-  m_data.cesd.map_v_max = p_sepMaps->cesd.map_v_max / INT_MULTIPLIER;
-  m_data.cesd.map_v_em = p_sepMaps->cesd.map_v_em / INT_MULTIPLIER;
+  m_data.cesd.map_v_min = (float)(p_sepMaps->cesd.map_v_min / INT_MULTIPLIER);
+  m_data.cesd.map_v_max = (float)(p_sepMaps->cesd.map_v_max / INT_MULTIPLIER);
+  m_data.cesd.map_v_em = (float)(p_sepMaps->cesd.map_v_em / INT_MULTIPLIER);
   m_data.cesd.map_v_useem = CHECKBIT8(p_sepMaps->cesd.map_v_flg, 0);
 
-  m_data.cesd.vbat_v_min = p_sepMaps->cesd.vbat_v_min / INT_MULTIPLIER;
-  m_data.cesd.vbat_v_max = p_sepMaps->cesd.vbat_v_max / INT_MULTIPLIER;
-  m_data.cesd.vbat_v_em = p_sepMaps->cesd.vbat_v_em / INT_MULTIPLIER;
+  m_data.cesd.vbat_v_min = (float)(p_sepMaps->cesd.vbat_v_min / INT_MULTIPLIER);
+  m_data.cesd.vbat_v_max = (float)(p_sepMaps->cesd.vbat_v_max / INT_MULTIPLIER);
+  m_data.cesd.vbat_v_em = (float)(p_sepMaps->cesd.vbat_v_em / INT_MULTIPLIER);
   m_data.cesd.vbat_v_useem = CHECKBIT8(p_sepMaps->cesd.vbat_v_flg, 0);
 
-  m_data.cesd.cts_v_min = p_sepMaps->cesd.cts_v_min / INT_MULTIPLIER;
-  m_data.cesd.cts_v_max = p_sepMaps->cesd.cts_v_max / INT_MULTIPLIER;
-  m_data.cesd.cts_v_em = p_sepMaps->cesd.cts_v_em / INT_MULTIPLIER;
+  m_data.cesd.cts_v_min = (float)(p_sepMaps->cesd.cts_v_min / INT_MULTIPLIER);
+  m_data.cesd.cts_v_max = (float)(p_sepMaps->cesd.cts_v_max / INT_MULTIPLIER);
+  m_data.cesd.cts_v_em = (float)(p_sepMaps->cesd.cts_v_em / INT_MULTIPLIER);
   m_data.cesd.cts_v_useem = CHECKBIT8(p_sepMaps->cesd.cts_v_flg, 0);
 
-  m_data.cesd.ks_v_min = p_sepMaps->cesd.ks_v_min / INT_MULTIPLIER;
-  m_data.cesd.ks_v_max = p_sepMaps->cesd.ks_v_max / INT_MULTIPLIER;
-  m_data.cesd.ks_v_em = p_sepMaps->cesd.ks_v_em / INT_MULTIPLIER;
+  m_data.cesd.ks_v_min = (float)(p_sepMaps->cesd.ks_v_min / INT_MULTIPLIER);
+  m_data.cesd.ks_v_max = (float)(p_sepMaps->cesd.ks_v_max / INT_MULTIPLIER);
+  m_data.cesd.ks_v_em = (float)(p_sepMaps->cesd.ks_v_em / INT_MULTIPLIER);
   m_data.cesd.ks_v_useem = CHECKBIT8(p_sepMaps->cesd.ks_v_flg, 0);
 
-  m_data.cesd.tps_v_min = p_sepMaps->cesd.tps_v_min / INT_MULTIPLIER;
-  m_data.cesd.tps_v_max = p_sepMaps->cesd.tps_v_max / INT_MULTIPLIER;
-  m_data.cesd.tps_v_em = p_sepMaps->cesd.tps_v_em / INT_MULTIPLIER;
+  m_data.cesd.tps_v_min = (float)(p_sepMaps->cesd.tps_v_min / INT_MULTIPLIER);
+  m_data.cesd.tps_v_max = (float)(p_sepMaps->cesd.tps_v_max / INT_MULTIPLIER);
+  m_data.cesd.tps_v_em = (float)(p_sepMaps->cesd.tps_v_em / INT_MULTIPLIER);
   m_data.cesd.tps_v_useem = CHECKBIT8(p_sepMaps->cesd.tps_v_flg, 0);
 
-  m_data.cesd.add_i1_v_min = p_sepMaps->cesd.add_i1_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i1_v_max = p_sepMaps->cesd.add_i1_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i1_v_em = p_sepMaps->cesd.add_i1_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i1_v_min = (float)(p_sepMaps->cesd.add_i1_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i1_v_max = (float)(p_sepMaps->cesd.add_i1_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i1_v_em = (float)(p_sepMaps->cesd.add_i1_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i1_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i1_v_flg, 0);
 
-  m_data.cesd.add_i2_v_min = p_sepMaps->cesd.add_i2_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i2_v_max = p_sepMaps->cesd.add_i2_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i2_v_em = p_sepMaps->cesd.add_i2_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i2_v_min = (float)(p_sepMaps->cesd.add_i2_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i2_v_max = (float)(p_sepMaps->cesd.add_i2_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i2_v_em = (float)(p_sepMaps->cesd.add_i2_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i2_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i2_v_flg, 0);
 
-  m_data.cesd.add_i3_v_min = p_sepMaps->cesd.add_i3_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i3_v_max = p_sepMaps->cesd.add_i3_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i3_v_em = p_sepMaps->cesd.add_i3_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i3_v_min = (float)(p_sepMaps->cesd.add_i3_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i3_v_max = (float)(p_sepMaps->cesd.add_i3_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i3_v_em = (float)(p_sepMaps->cesd.add_i3_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i3_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i3_v_flg, 0);
 
-  m_data.cesd.add_i4_v_min = p_sepMaps->cesd.add_i4_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i4_v_max = p_sepMaps->cesd.add_i4_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i4_v_em = p_sepMaps->cesd.add_i4_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i4_v_min = (float)(p_sepMaps->cesd.add_i4_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i4_v_max = (float)(p_sepMaps->cesd.add_i4_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i4_v_em = (float)(p_sepMaps->cesd.add_i4_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i4_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i4_v_flg, 0);
 
-  m_data.cesd.add_i5_v_min = p_sepMaps->cesd.add_i5_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i5_v_max = p_sepMaps->cesd.add_i5_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i5_v_em = p_sepMaps->cesd.add_i5_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i5_v_min = (float)(p_sepMaps->cesd.add_i5_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i5_v_max = (float)(p_sepMaps->cesd.add_i5_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i5_v_em = (float)(p_sepMaps->cesd.add_i5_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i5_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i5_v_flg, 0);
 
-  m_data.cesd.add_i6_v_min = p_sepMaps->cesd.add_i6_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i6_v_max = p_sepMaps->cesd.add_i6_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i6_v_em = p_sepMaps->cesd.add_i6_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i6_v_min = (float)(p_sepMaps->cesd.add_i6_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i6_v_max = (float)(p_sepMaps->cesd.add_i6_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i6_v_em = (float)(p_sepMaps->cesd.add_i6_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i6_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i6_v_flg, 0);
 
-  m_data.cesd.add_i7_v_min = p_sepMaps->cesd.add_i7_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i7_v_max = p_sepMaps->cesd.add_i7_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i7_v_em = p_sepMaps->cesd.add_i7_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i7_v_min = (float)(p_sepMaps->cesd.add_i7_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i7_v_max = (float)(p_sepMaps->cesd.add_i7_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i7_v_em = (float)(p_sepMaps->cesd.add_i7_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i7_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i7_v_flg, 0);
 
-  m_data.cesd.add_i8_v_min = p_sepMaps->cesd.add_i8_v_min / INT_MULTIPLIER;
-  m_data.cesd.add_i8_v_max = p_sepMaps->cesd.add_i8_v_max / INT_MULTIPLIER;
-  m_data.cesd.add_i8_v_em = p_sepMaps->cesd.add_i8_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i8_v_min = (float)(p_sepMaps->cesd.add_i8_v_min / INT_MULTIPLIER);
+  m_data.cesd.add_i8_v_max = (float)(p_sepMaps->cesd.add_i8_v_max / INT_MULTIPLIER);
+  m_data.cesd.add_i8_v_em = (float)(p_sepMaps->cesd.add_i8_v_em / INT_MULTIPLIER);
   m_data.cesd.add_i8_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i8_v_flg, 0);
  }
 
@@ -1595,13 +1595,13 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
  {
   size_t i;
   for(i = 0; i < F_STR_POINTS; ++i)
-   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_str[i] = (float)(p_setItem[s].f_str[i] / INT_MULTIPLIER);
   for(i = 0; i < F_IDL_POINTS; ++i)
-   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_idl[i] = (float)(p_setItem[s].f_idl[i] / INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = _RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER;
+   m_data.maps[s].f_wrk[i] = (float)(_RLG(p_setItem[s].f_wrk, i) / INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_tmp[i] = (float)(p_setItem[s].f_tmp[i] / INT_MULTIPLIER);
   //convert name
   char raw_string[F_NAME_SIZE + 1];
   memset(raw_string, 0, F_NAME_SIZE + 1);
@@ -1615,11 +1615,11 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
  const S3FSepMaps_v0102* p_sepMaps = (S3FSepMaps_v0102*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
+  m_data.attenuator_table[i] = (float)(p_sepMaps->attenuator_table[i] / INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
+  m_data.dwellcntrl_table[i] = (float)(p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
-  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
+  m_data.ctscurve_table[i] = (float)(p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER);
 
  //convert RPM grid
  bool empty = true;
@@ -1627,7 +1627,7 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
  {
   if (0 != p_sepMaps->rpm_slots[i])
    empty = false;
-  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
+  m_data.rpm_slots[i] = (float)(p_sepMaps->rpm_slots[i] / INT_MULTIPLIER);
  }
 
  if (empty || (p_fileHdr->version < 0x0102)) //copy standard RPM grid if old version of S3F is being loaded
