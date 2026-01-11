@@ -553,7 +553,7 @@ class IniIO
    return false;
   }
 
-  bool WriteScale(const OptField_t<SclCfg>& field, int decPlaces, const _TSTRING& comment = _T(""))
+  bool WriteScale(const OptField_t<SclCfg>& field, int decPlaces, const _TSTRING& comment = _T(""), bool grh = false)
   {
    CString str, s;
    str.Format(_T("%d"), field.value.scaleWidth);
@@ -565,12 +565,15 @@ class IniIO
    str+=s;
    s.Format(_T(",%.*f"), decPlaces, field.value.scaleMax);
    str+=s;
-   s.Format(_T(",%.*f"), 1, field.value.pieRadius * 100.0f); //convert from 0...1 range to %
-   str+=s;
-   s.Format(_T(",%d"), field.value.scaleLength);
-   str+=s;
-   s.Format(_T(",%.*f"), 1, field.value.tickLength * 100.0f); //convert to %
-   str+=s;
+   if (!grh)
+   {
+    s.Format(_T(",%.*f"), 1, field.value.pieRadius * 100.0f); //convert from 0...1 range to %
+    str+=s;
+    s.Format(_T(",%d"), field.value.scaleLength);
+    str+=s;
+    s.Format(_T(",%.*f"), 1, field.value.tickLength * 100.0f); //convert to %
+    str+=s;
+   }
 
    for(size_t i = 0; i < field.value.alezn.size(); ++i)
    {

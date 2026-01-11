@@ -3977,53 +3977,53 @@ bool CAppSettingsModel::WriteSettings(void)
 
  for(int g = 0; g < 2; ++g)
  {
-  sc.WriteScale(m_optMetScRPM[g], 0, strMetRPM);
-  sc.WriteScale(m_optMetScMAP[g], 0, strMetMAP);
-  sc.WriteScale(m_optMetScVBat[g], 1, strMetVBat);
-  sc.WriteScale(m_optMetScIgnTim[g], 1, strMetIgnTim);
-  sc.WriteScale(m_optMetScTPS[g], 1, strMetTPS);
-  sc.WriteScale(m_optMetScCLT[g], 1, strMetCLT);
-  sc.WriteScale(m_optMetScAddI1[g], 1, strMetAddI1);
-  sc.WriteScale(m_optMetScAddI2[g], 1, strMetAddI2);
-  sc.WriteScale(m_optMetScInjPW[g], 1, strMetInjPW);
-  sc.WriteScale(m_optMetScIAT[g], 1, strMetIAT);
-  sc.WriteScale(m_optMetScEGOCorr[g], 1, strMetEGOCorr);
-  sc.WriteScale(m_optMetScAirFlow[g], 0, strMetAirFlow);
-  sc.WriteScale(m_optMetScVehicleSpeed[g], 1, strMetVehicleSpeed);
-  sc.WriteScale(m_optMetScTPSDot[g], 0, strMetTPSDot);
-  sc.WriteScale(m_optMetScMAPDot[g], 0, strMetMAPDot);
-  sc.WriteScale(m_optMetScMAP2[g], 1, strMetMAP2);
-  sc.WriteScale(m_optMetScGPS[g], 1, strMetGPS);
-  sc.WriteScale(m_optMetScMAPD[g], 1, strMetMAPD);
-  sc.WriteScale(m_optMetScTmp2[g], 1, strMetTmp2);
-  sc.WriteScale(m_optMetScFuelConsum[g], 1, strMetFuelConsum);
-  sc.WriteScale(m_optMetScKnockRetard[g], 1, strMetKnockRetard);
-  sc.WriteScale(m_optMetScKnockGraph[g], 1, strMetKnockGraph);
-  sc.WriteScale(m_optMetScSensAFR[g], 1, strMetSensAFR);
-  sc.WriteScale(m_optMetScChokePos[g], 1, strMetChokePos);
-  sc.WriteScale(m_optMetScGDPos[g], 1, strMetGDPos);
-  sc.WriteScale(m_optMetScSynLoad[g], 1, strMetSynLoad);
-  sc.WriteScale(m_optMetScInjTimB[g], 1, strMetInjTimB);  //0...720
-  sc.WriteScale(m_optMetScInjTimE[g], 1, strMetInjTimE);  //0...720
-  sc.WriteScale(m_optMetScInjTimB1[g], 1, strMetInjTimB); //-360...360
-  sc.WriteScale(m_optMetScInjTimE1[g], 1, strMetInjTimE); //-360...360
-  sc.WriteScale(m_optMetScFuelConsumF[g], 1, strMetFuelConsumF);
-  sc.WriteScale(m_optMetScGrts[g], 1, strMetGrts);
-  sc.WriteScale(m_optMetScFtls[g], 1, strMetFtls);
-  sc.WriteScale(m_optMetScEgts[g], 1, strMetEgts);
-  sc.WriteScale(m_optMetScOps[g], 1, strMetOps);
-  sc.WriteScale(m_optMetScInjDuty[g], 1, strMetInjDuty);
-  sc.WriteScale(m_optMetScMAF[g], 1, strMetMAF);
-  sc.WriteScale(m_optMetScVentDuty[g], 1, strMetVentDuty);
-  sc.WriteScale(m_optMetScFts[g], 1, strMetFts);
-  sc.WriteScale(m_optMetScEGOCorr2[g], 1, strMetEGOCorr2);
-  sc.WriteScale(m_optMetScSensAFR2[g], 1, strMetSensAFR2);
-  sc.WriteScale(m_optMetScTargAFR[g], 1, strMetTargAFR);
-  sc.WriteScale(m_optMetScDiffAFR[g], 1, strMetDiffAFR);
-  sc.WriteScale(m_optMetScDiffAFR2[g], 1, strMetDiffAFR2);
-  sc.WriteScale(m_optMetScFPS[g], 1, strMetFPS);
-  sc.WriteScale(m_optMetScAPPS[g], 1, strMetAPPS);
-  sc.WriteScale(m_optMetScOTS[g], 1, strMetOTS);
+  sc.WriteScale(m_optMetScRPM[g], 0, strMetRPM, g);
+  sc.WriteScale(m_optMetScMAP[g], 0, strMetMAP, g);
+  sc.WriteScale(m_optMetScVBat[g], 1, strMetVBat, g);
+  sc.WriteScale(m_optMetScIgnTim[g], 1, strMetIgnTim, g);
+  sc.WriteScale(m_optMetScTPS[g], 1, strMetTPS, g);
+  sc.WriteScale(m_optMetScCLT[g], 1, strMetCLT, g);
+  sc.WriteScale(m_optMetScAddI1[g], 1, strMetAddI1, g);
+  sc.WriteScale(m_optMetScAddI2[g], 1, strMetAddI2, g);
+  sc.WriteScale(m_optMetScInjPW[g], 1, strMetInjPW, g);
+  sc.WriteScale(m_optMetScIAT[g], 1, strMetIAT, g);
+  sc.WriteScale(m_optMetScEGOCorr[g], 1, strMetEGOCorr, g);
+  sc.WriteScale(m_optMetScAirFlow[g], 0, strMetAirFlow, g);
+  sc.WriteScale(m_optMetScVehicleSpeed[g], 1, strMetVehicleSpeed, g);
+  sc.WriteScale(m_optMetScTPSDot[g], 0, strMetTPSDot, g);
+  sc.WriteScale(m_optMetScMAPDot[g], 0, strMetMAPDot, g);
+  sc.WriteScale(m_optMetScMAP2[g], 1, strMetMAP2, g);
+  sc.WriteScale(m_optMetScGPS[g], 1, strMetGPS, g);
+  sc.WriteScale(m_optMetScMAPD[g], 1, strMetMAPD, g);
+  sc.WriteScale(m_optMetScTmp2[g], 1, strMetTmp2, g);
+  sc.WriteScale(m_optMetScFuelConsum[g], 1, strMetFuelConsum, g);
+  sc.WriteScale(m_optMetScKnockRetard[g], 1, strMetKnockRetard, g);
+  sc.WriteScale(m_optMetScKnockGraph[g], 1, strMetKnockGraph, g);
+  sc.WriteScale(m_optMetScSensAFR[g], 1, strMetSensAFR, g);
+  sc.WriteScale(m_optMetScChokePos[g], 1, strMetChokePos, g);
+  sc.WriteScale(m_optMetScGDPos[g], 1, strMetGDPos, g);
+  sc.WriteScale(m_optMetScSynLoad[g], 1, strMetSynLoad, g);
+  sc.WriteScale(m_optMetScInjTimB[g], 1, strMetInjTimB, g);  //0...720
+  sc.WriteScale(m_optMetScInjTimE[g], 1, strMetInjTimE, g);  //0...720
+  sc.WriteScale(m_optMetScInjTimB1[g], 1, strMetInjTimB, g); //-360...360
+  sc.WriteScale(m_optMetScInjTimE1[g], 1, strMetInjTimE, g); //-360...360
+  sc.WriteScale(m_optMetScFuelConsumF[g], 1, strMetFuelConsumF, g);
+  sc.WriteScale(m_optMetScGrts[g], 1, strMetGrts, g);
+  sc.WriteScale(m_optMetScFtls[g], 1, strMetFtls, g);
+  sc.WriteScale(m_optMetScEgts[g], 1, strMetEgts, g);
+  sc.WriteScale(m_optMetScOps[g], 1, strMetOps, g);
+  sc.WriteScale(m_optMetScInjDuty[g], 1, strMetInjDuty, g);
+  sc.WriteScale(m_optMetScMAF[g], 1, strMetMAF, g);
+  sc.WriteScale(m_optMetScVentDuty[g], 1, strMetVentDuty, g);
+  sc.WriteScale(m_optMetScFts[g], 1, strMetFts, g);
+  sc.WriteScale(m_optMetScEGOCorr2[g], 1, strMetEGOCorr2, g);
+  sc.WriteScale(m_optMetScSensAFR2[g], 1, strMetSensAFR2, g);
+  sc.WriteScale(m_optMetScTargAFR[g], 1, strMetTargAFR, g);
+  sc.WriteScale(m_optMetScDiffAFR[g], 1, strMetDiffAFR, g);
+  sc.WriteScale(m_optMetScDiffAFR2[g], 1, strMetDiffAFR2, g);
+  sc.WriteScale(m_optMetScFPS[g], 1, strMetFPS, g);
+  sc.WriteScale(m_optMetScAPPS[g], 1, strMetAPPS, g);
+  sc.WriteScale(m_optMetScOTS[g], 1, strMetOTS, g);
  }
 
  IniIO &at = writer;
