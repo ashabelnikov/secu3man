@@ -174,6 +174,8 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_APPSDIFF_THRD_EDIT, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_APPSDIFF_THRD_SPIN, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_APPSDIFF_THRD_CAPTION, OnUpdateSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADDI5678_FLG_CHECK, OnUpdateSECU3i)
 END_MESSAGE_MAP()
 
 CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
@@ -415,65 +417,87 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I2_V_USEEM_CHECK, mp_data->add_i2_v_useem);
 
  m_add_i3_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I3_V_MIN_EDIT, mp_data->add_i3_v_min);
- DDV_MinMaxFloat(pDX, mp_data->add_i3_v_min, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i3_v_min, 0.0f, 5.5f);
  m_add_i3_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I3_V_MAX_EDIT, mp_data->add_i3_v_max);
- DDV_MinMaxFloat(pDX, mp_data->add_i3_v_max, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i3_v_max, 0.0f, 5.5f);
  m_add_i3_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I3_V_EM_EDIT, mp_data->add_i3_v_em);
- DDV_MinMaxFloat(pDX, mp_data->add_i3_v_em, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i3_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I3_V_USEEM_CHECK, mp_data->add_i3_v_useem);
 
  m_add_i4_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I4_V_MIN_EDIT, mp_data->add_i4_v_min);
- DDV_MinMaxFloat(pDX, mp_data->add_i4_v_min, 0.0f, 5.5f);
+ if (m_enable_extraio)
+  DDV_MinMaxFloat(pDX, mp_data->add_i4_v_min, 0.0f, 5.5f);
  m_add_i4_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I4_V_MAX_EDIT, mp_data->add_i4_v_max);
- DDV_MinMaxFloat(pDX, mp_data->add_i4_v_max, 0.0f, 5.5f);
+ if (m_enable_extraio)
+  DDV_MinMaxFloat(pDX, mp_data->add_i4_v_max, 0.0f, 5.5f);
  m_add_i4_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I4_V_EM_EDIT, mp_data->add_i4_v_em);
- DDV_MinMaxFloat(pDX, mp_data->add_i4_v_em, 0.0f, 5.5f);
+ if (m_enable_extraio)
+  DDV_MinMaxFloat(pDX, mp_data->add_i4_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I4_V_USEEM_CHECK, mp_data->add_i4_v_useem);
 
  m_add_i5_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I5_V_MIN_EDIT, mp_data->add_i5_v_min);
- DDV_MinMaxFloat(pDX, mp_data->add_i5_v_min, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i5_v_min, 0.0f, 5.5f);
  m_add_i5_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I5_V_MAX_EDIT, mp_data->add_i5_v_max);
- DDV_MinMaxFloat(pDX, mp_data->add_i5_v_max, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i5_v_max, 0.0f, 5.5f);
  m_add_i5_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I5_V_EM_EDIT, mp_data->add_i5_v_em);
- DDV_MinMaxFloat(pDX, mp_data->add_i5_v_em, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i5_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I5_V_USEEM_CHECK, mp_data->add_i5_v_useem);
 
  m_add_i6_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I6_V_MIN_EDIT, mp_data->add_i6_v_min);
- DDV_MinMaxFloat(pDX, mp_data->add_i6_v_min, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i6_v_min, 0.0f, 5.5f);
  m_add_i6_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I6_V_MAX_EDIT, mp_data->add_i6_v_max);
- DDV_MinMaxFloat(pDX, mp_data->add_i6_v_max, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i6_v_max, 0.0f, 5.5f);
  m_add_i6_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I6_V_EM_EDIT, mp_data->add_i6_v_em);
- DDV_MinMaxFloat(pDX, mp_data->add_i6_v_em, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i6_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I6_V_USEEM_CHECK, mp_data->add_i6_v_useem);
 
  m_add_i7_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I7_V_MIN_EDIT, mp_data->add_i7_v_min);
- DDV_MinMaxFloat(pDX, mp_data->add_i7_v_min, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i7_v_min, 0.0f, 5.5f);
  m_add_i7_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I7_V_MAX_EDIT, mp_data->add_i7_v_max);
- DDV_MinMaxFloat(pDX, mp_data->add_i7_v_max, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i7_v_max, 0.0f, 5.5f);
  m_add_i7_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I7_V_EM_EDIT, mp_data->add_i7_v_em);
- DDV_MinMaxFloat(pDX, mp_data->add_i7_v_em, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i7_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I7_V_USEEM_CHECK, mp_data->add_i7_v_useem);
 
  m_add_i8_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I8_V_MIN_EDIT, mp_data->add_i8_v_min);
- DDV_MinMaxFloat(pDX, mp_data->add_i8_v_min, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i8_v_min, 0.0f, 5.5f);
  m_add_i8_v_max_edit.DDX_Value(pDX, IDC_CESETT_ADD_I8_V_MAX_EDIT, mp_data->add_i8_v_max);
- DDV_MinMaxFloat(pDX, mp_data->add_i8_v_max, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i8_v_max, 0.0f, 5.5f);
  m_add_i8_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I8_V_EM_EDIT, mp_data->add_i8_v_em);
- DDV_MinMaxFloat(pDX, mp_data->add_i8_v_em, 0.0f, 5.5f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->add_i8_v_em, 0.0f, 5.5f);
  DDX_Check_bool(pDX, IDC_CESETT_ADD_I8_V_USEEM_CHECK, mp_data->add_i8_v_useem);
 
  m_oilpress_thrd_edit.DDX_Value(pDX, IDC_CESETT_OILPRESS_THRD_EDIT, mp_data->oilpress_thrd);
- DDV_MinMaxFloat(pDX, mp_data->oilpress_thrd, 0.0f, 8.0f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->oilpress_thrd, 0.0f, 8.0f);
  m_oilpress_timer_edit.DDX_Value(pDX, IDC_CESETT_OILPRESS_TIMER_EDIT, mp_data->oilpress_timer);
- DDV_MinMaxInt(pDX, mp_data->oilpress_timer, 0, 4000);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxInt(pDX, mp_data->oilpress_timer, 0, 4000);
 
  DDX_Check_bool(pDX, IDC_CESETT_STEPPERIC_FLG_CHECK, mp_data->stepperic_flg);
 
  m_tpsdiff_thrd_edit.DDX_Value(pDX, IDC_CESETT_TPSDIFF_THRD_EDIT, mp_data->tpsdiff_thrd);
- DDV_MinMaxFloat(pDX, mp_data->tpsdiff_thrd, 0.0025f, 1.0f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->tpsdiff_thrd, 0.0025f, 1.0f);
 
  m_appsdiff_thrd_edit.DDX_Value(pDX, IDC_CESETT_APPSDIFF_THRD_EDIT, mp_data->appsdiff_thrd);
- DDV_MinMaxFloat(pDX, mp_data->appsdiff_thrd, 0.0025f, 1.0f);
+ if (!m_enable_secu3t_features)
+  DDV_MinMaxFloat(pDX, mp_data->appsdiff_thrd, 0.0025f, 1.0f);
 
  DDX_Check_bool(pDX, IDC_CESETT_ADDI5678_FLG_CHECK, mp_data->addi5678_flg);
 }
