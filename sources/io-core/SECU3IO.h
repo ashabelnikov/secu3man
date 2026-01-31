@@ -259,6 +259,7 @@ namespace SECU3IO
   bool with_iacreg;
   float irr_k_load;
   float irr_k_rpm;
+  float load_idl_thrd;
  };
 
  struct CarburPar
@@ -602,6 +603,7 @@ namespace SECU3IO
  const int UNIOUT_COND_EGTS = 38;     //EGTS
  const int UNIOUT_COND_FTS = 39;      //FTS
  const int UNIOUT_COND_OTS = 40;      //OTS
+ const int UNIOUT_COND_LOAD = 41;     //Load
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

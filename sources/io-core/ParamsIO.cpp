@@ -126,6 +126,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->idl_reg_d = MathHelpers::Round(p_in->idl_reg_d * 256.0f);
     p_params->irr_k_load = MathHelpers::Round(p_in->irr_k_load * 32.0f);
     p_params->irr_k_rpm = MathHelpers::Round(p_in->irr_k_rpm * 32.0f);
+    p_params->load_idl_thrd = MathHelpers::Round(p_in->load_idl_thrd * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
   case ANGLES_PAR:
@@ -618,6 +619,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->idl_reg_d = ((float)p_params->idl_reg_d) / 256.0f;
      p_out->irr_k_load = ((float)p_params->irr_k_load) / 32.0f;
      p_out->irr_k_rpm = ((float)p_params->irr_k_rpm) / 32.0f;
+     p_out->load_idl_thrd = ((float)p_params->load_idl_thrd) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
     break;
    case ANGLES_PAR:

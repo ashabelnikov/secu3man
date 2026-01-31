@@ -23,7 +23,7 @@ BEGIN
     RTEXT           "Ваш блок SECU3:",IDC_FWM_SECU3_UNIT_CAPTION,17,19,60,10
     COMBOBOX        IDC_FWM_SECU3_UNIT_COMBO,85,17,80,37,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Синхронизация:",IDC_FWM_SYNCHRO_CAPTION,17,42,60,10
-    COMBOBOX        IDC_FWM_SYNCHRO_COMBO,85,40,182,36,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FWM_SYNCHRO_COMBO,85,40,182,36,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP | CBS_DROPDOWNLIST
     CONTROL         "Управление накоплением КЗ",IDC_FWM_DWELL_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
     CONTROL         "Фазированное зажигание",IDC_FWM_PHIGN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     CONTROL         "Впрыск топлива",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
@@ -217,7 +217,7 @@ BEGIN
     IDS_FWM_DWELL_CHECK_TT  "DWELL_CONTROL"
     IDS_FWM_PHIGN_CHECK_TT  "PHASED_IGNITION. Данная опция не совместима с CKPS_2CHIGN"       
     IDS_FWM_INJ_CHECK_TT    "FUEL_INJECTION. Данная опция не совместима с CARB_AFR"
-    IDS_FWM_TPIC_CHECK_TT   "TPIC8101. Только в блоках SECU-3i"
+    IDS_FWM_TPIC_CHECK_TT   "TPIC8101. Вход ADD_I4 доступен только с этой опцией."
     IDS_FWM_SPLIT_CHECK_TT  "SPLIT_ANGLE. Включить сплитинг УОЗ для двигателей Ванкеля."
     IDS_FWM_FPWM_CHECK_TT   "COOLINGFAN_PWM. Установите эту галочку, если вам нужно управлять вентилятором охлаждения, моментным РДВ/дозатором газа или электронной дроссельной заслонкой (ETC) при помощи ШИМ. Без этой галочки финкции IAC_PWM/GD_PWM/ETC_PWMx работать не будут."
     IDS_FWM_2CHIG_CHECK_TT  "CKPS_2CHIGN. Данная опция не совместима с PHASED_IGNITION"
@@ -268,7 +268,7 @@ BEGIN
     RTEXT           "Your SECU3 unit:",IDC_FWM_SECU3_UNIT_CAPTION,17,19,60,10
     COMBOBOX        IDC_FWM_SECU3_UNIT_COMBO,85,17,80,37,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Synchronization:",IDC_FWM_SYNCHRO_CAPTION,17,42,60,10
-    COMBOBOX        IDC_FWM_SYNCHRO_COMBO,85,40,182,36,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FWM_SYNCHRO_COMBO,85,40,182,36,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP | CBS_DROPDOWNLIST
     CONTROL         "Dwell control",IDC_FWM_DWELL_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
     CONTROL         "Phased ignition",IDC_FWM_PHIGN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
     CONTROL         "Fuel injection",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
@@ -460,7 +460,7 @@ BEGIN
     IDS_FWM_DWELL_CHECK_TT  "DWELL_CONTROL"
     IDS_FWM_PHIGN_CHECK_TT  "PHASED_IGNITION. This option is not compatible with CKPS_2CHIGN"       
     IDS_FWM_INJ_CHECK_TT    "FUEL_INJECTION. This option is not compatible with CARB_AFR"
-    IDS_FWM_TPIC_CHECK_TT   "TPIC8101. Only in SECU-3i units"
+    IDS_FWM_TPIC_CHECK_TT   "TPIC8101. ADD_I4 input available only with this option."
     IDS_FWM_SPLIT_CHECK_TT  "SPLIT_ANGLE. Turn on split angle for rotary (Wankel) engines"
     IDS_FWM_FPWM_CHECK_TT   "COOLINGFAN_PWM. Set this check if you need to control cooling fan, IAC/gas dispenser or electronic throttle (ETC) valve using PWM. Without this check mark IAC_PWM/GD_PWM/ETC_PWMx function will not work."
     IDS_FWM_2CHIG_CHECK_TT  "CKPS_2CHIGN. This option is not compatible with PHASED_IGNITION"

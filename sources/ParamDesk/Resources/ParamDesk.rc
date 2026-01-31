@@ -403,6 +403,11 @@ BEGIN
     CONTROL         "",IDC_PD_IDLREG_IRRKRPM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,562,13,17
     LTEXT           "Коэфф. оборотов в аргум. таблицы жесткости РХХ",IDC_PD_IDLREG_IRRKRPM_CAPTION,0,561,94,18
     LTEXT           "коэф.",IDC_PD_IDLREG_IRRKRPM_UNIT,140,563,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_LOADTHRD_EDIT,95,582,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_LOADTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,582,13,17
+    LTEXT           "Порог нагрузки для входа в CL",IDC_PD_IDLREG_LOADTHRD_CAPTION,0,582,94,18
+    LTEXT           "%",IDC_PD_IDLREG_LOADTHRD_UNIT,140,583,30,10
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -1877,6 +1882,7 @@ BEGIN
     IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите галочку инверсии так, чтобы при отпущенной педали газа индикатор 'Дроссель' на вкладке 'Параметры и монитор' не был активен, а при нажатии на педаль индикатор активировался."
     IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Ограничение максимального численного значения ошибки (ошибка определяется как разность между целевыми оборотами ХХ и текущими)."
     IDS_PD_TEMPER_VENTTIMER_EDIT_TT                 "Определяет сколько времени вентилятор будет работать при остановленном двигателе. Поставьте 0, если хотите чтобы вентилятор работал пока температура не упадет без ограничения по времени."
+    IDS_PD_IDLREG_LOADTHRD_EDIT_TT                  "Вход в режим Closed loop произойдет только если нагрузка выше этого порога. Значение нагрузки может быть как в %, так и в кПа (в зависимости от выбранного источника нагрузки)."
 END
 
 STRINGTABLE
@@ -1956,6 +1962,7 @@ BEGIN
     IDS_UNIOUT_COND_EGTS   "ДТВГ (°C)"
     IDS_UNIOUT_COND_FTS    "ДТТ (°C)"
     IDS_UNIOUT_COND_OTS    "ДТМ (°C)"
+    IDS_UNIOUT_COND_LOAD   "Нагрузка"
 END
 
 STRINGTABLE
@@ -2069,7 +2076,7 @@ STRINGTABLE
 BEGIN
     IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера начинает включаться (коэфф.заполнения ШИМ = 0%). Если расход воздуха меньше или равен этому значению, то клапан полностью выключен. Расход воздуха определяется как Обороты * Нагрузка."
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера полностью включен (коэфф.заполнения ШИМ = 100%). Если расход воздуха больше или равен этому значению, то клапан полностью включен. Расход воздуха определяется как Обороты * Нагрузка."
-    IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Назрузка на ХХ, которая вместе с оборотами определяет режимную точку. Если в качестве нагрузки выбран ДАД, то значение в кПа, иначе значение в %. Если вы используете в качестве нагрузки ДПДЗ или хотите чтобы режимная точка определялась только оборотами, то поставьте 0."
+    IDS_PD_IDLREG_MAPVALUE_EDIT_TT "Назрузка на ХХ, которая вместе с оборотами определяет режимную точку. Если в качестве нагрузки выбран ДАД, то значение в кПа, иначе значение в %. Если вы используете в качестве нагрузки ДПДЗ или хотите чтобы режимная точка определялась только оборотами, то поставьте 0."
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Время, на которое включится бензонасос после включения зажигания"
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "Если разрешено, то когда GAS_V=0 будут работать выходы впрыска 1-4, а когда GAS_V=1 будут работать выходы впрыска 5-8"
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Коэффициент коррекции обогащения при ускорении по температуре двигателя. Полное значение при температуре -30°С, плавно убывает до температуры 70°С. 100% соответствует коэффициенту 1.0."
@@ -2682,6 +2689,11 @@ BEGIN
     CONTROL         "",IDC_PD_IDLREG_IRRKRPM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,562,13,17
     LTEXT           "Coeff. of rpm in the argument of idl. rigidity map",IDC_PD_IDLREG_IRRKRPM_CAPTION,0,561,94,18
     LTEXT           "coef.",IDC_PD_IDLREG_IRRKRPM_UNIT,140,563,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_LOADTHRD_EDIT,95,582,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_LOADTHRD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,582,13,17
+    LTEXT           "Load threshold for entering CL",IDC_PD_IDLREG_LOADTHRD_CAPTION,0,582,94,18
+    LTEXT           "%",IDC_PD_IDLREG_LOADTHRD_UNIT,140,583,30,10
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -4194,6 +4206,7 @@ BEGIN
     IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed"
     IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Limitation of RPM error (error calculated as difference between target and current RPMs)."
     IDS_PD_TEMPER_VENTTIMER_EDIT_TT                 "Determines how long cooling fan will work on stopped engine. Set to 0, if you want cooling fan to work while temperature is not fall (no time restrictions)."
+    IDS_PD_IDLREG_LOADTHRD_EDIT_TT                  "Entering to Closed loop mode will happen only if load is above this threshold. Value of load can be either in % or kPa (depending on the selected source of load)."
 END
 
 STRINGTABLE
@@ -4274,6 +4287,7 @@ BEGIN
     IDS_UNIOUT_COND_EGTS   "EGTS (°C)"
     IDS_UNIOUT_COND_FTS    "FTS (°C)"
     IDS_UNIOUT_COND_OTS    "OTS (°C)"
+    IDS_UNIOUT_COND_LOAD   "Load"
 END
 
 STRINGTABLE
@@ -4387,7 +4401,7 @@ STRINGTABLE
 BEGIN
     IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT "Air flow at which canister purge valve start to open (PWM duty = 0%). If air flow is less or equal to this value, than valve will be fully closed. Air flow is determined as RPM * Load"
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Air flow at which canister purge valve is fully opened (PWM duty = 100%). If air flow is above or equal to this value, than valve will be fully opened. Air flow is determined as RPM * Load"
-    IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Value of load on idling, which together with rpm defines target operation conditions. If MAP is selected as load source, then this value is in kPa, otherwise, this value is in %. If you selected TPS as load source or you want target oparation contions to be defined with rpm only, then set this value to zero."
+    IDS_PD_IDLREG_MAPVALUE_EDIT_TT "Value of load on idling, which together with rpm defines target operation conditions. If MAP is selected as load source, then this value is in kPa, otherwise, this value is in %. If you selected TPS as load source or you want target oparation contions to be defined with rpm only, then set this value to zero."
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Fuel pump will work during this time after turning on of ignition"
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "If enabled, when GAS_V=0 inj.outputs 1-4 will work, and when GAS_V=1 inj.outputs 5-8 will work."
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Correction coefficient of acceleration enrichment vs coolant temperature. Full value at -30°C, smoothly decreases till 70°C. 100% corresponds to coefficient = 1.0."

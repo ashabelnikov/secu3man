@@ -1106,7 +1106,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& idlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != 40)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 42)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Idling regulator flags
@@ -1253,6 +1253,12 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &irr_k_rpm))
   return false;
  idlRegPar.irr_k_rpm = ((float)irr_k_rpm) / 32.0f;
+
+ //load threshold for entering CL
+ int load_idl_thrd = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &load_idl_thrd))
+  return false;
+ idlRegPar.load_idl_thrd = ((float)load_idl_thrd) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }
@@ -4210,6 +4216,9 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 
  int irr_k_rpm = MathHelpers::Round(packet_data->irr_k_rpm * 32.0f);  //-
  mp_pdp->Bin16ToHex(irr_k_rpm, m_outgoing_packet);
+
+ int load_idl_thrd = MathHelpers::Round(packet_data->load_idl_thrd * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(load_idl_thrd, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -5522,6 +5531,7 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_EGTS: return MathHelpers::Round(val * EGTS_MULT);
   case UNIOUT_COND_FTS: return MathHelpers::Round(val * FTS_MULT);
   case UNIOUT_COND_OTS: return MathHelpers::Round(val * FTS_MULT);
+  case UNIOUT_COND_LOAD: return MathHelpers::Round(val * LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
  }
  return 0;
 }
@@ -5576,6 +5586,7 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_EGTS: return (((float)val) / EGTS_MULT);
   case UNIOUT_COND_FTS: return (((float)val) / FTS_MULT);
   case UNIOUT_COND_OTS: return (((float)val) / FTS_MULT);
+  case UNIOUT_COND_LOAD:  return (((float)val) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER);
  }
  return .0f;
 }

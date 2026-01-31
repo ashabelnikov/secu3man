@@ -127,4 +127,6 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_irrkload_edit;
   CSpinButtonCtrlEx m_irrkrpm_spin;
   CEditEx m_irrkrpm_edit;
+  CSpinButtonCtrlEx m_loadthrd_spin;
+  CEditEx m_loadthrd_edit;
 };

@@ -363,10 +363,10 @@ typedef struct params_t
  _uint irr_k_load;
  _uint irr_k_rpm;
 
- //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
- //новых версий прошивок с более старыми версиями. При добавлении новых данных
- //в структуру, необходимо расходовать эти байты.
- _uchar reserved[69];
+ _uint load_idl_thrd;
+
+ //These reserved bytes are necessary for keeping binary compatibility between versions
+ _uchar reserved[67];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
