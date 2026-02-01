@@ -439,7 +439,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
      case 47: result = CNumericConv::secu3_atof_32<5>(b, size, idlreg_aac); break;
      case 48: result = CNumericConv::secu3_atof_32<5>(b, size, octan_aac); break;
      case 49: result = CNumericConv::secu3_atof_32<5>(b, size, lambda_corr); break;
-     case 50: result = CNumericConv::secu3_atof_32<5>(b, size, inj_pw); break;
+     case 50: result = CNumericConv::secu3_atof_32<6>(b, size, inj_pw); break;
      case 51: result = CNumericConv::secu3_atoi_32<5>(b, size, tpsdot); break;
      case 52: result = CNumericConv::secu3_atof_32<6>(b, size, map2); break;
      case 53: result = CNumericConv::secu3_atof_32<6>(b, size, tmp2); break;
