@@ -1131,6 +1131,16 @@ BEGIN
     CONTROL         "ѕереключать р€ды форсунок",IDC_PD_INJECTOR_SECINJROWSWT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,495,138,10
 
     CONTROL         "–аспредел. впрыск после пуска",IDC_PD_INJECTOR_FSAFTERSTART_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,510,138,10
+
+    EDITTEXT        IDC_PD_INJECTOR_IPWLROC_D_EDIT,95,525,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_INJECTOR_IPWLROC_D_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,525,13,17
+    LTEXT           "—корость уеньшени€ длит. впрыска",IDC_PD_INJECTOR_IPWLROC_D_CAPTION,0,526,94,18
+    LTEXT           "мс/т",IDC_PD_INJECTOR_IPWLROC_D_UNIT,144,526,30,10
+
+    EDITTEXT        IDC_PD_INJECTOR_IPWLROC_I_EDIT,95,545,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_INJECTOR_IPWLROC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,545,13,17
+    LTEXT           "—корость увеличени€ длит. впрыска",IDC_PD_INJECTOR_IPWLROC_I_CAPTION,0,546,94,18
+    LTEXT           "мс/т",IDC_PD_INJECTOR_IPWLROC_I_UNIT,144,546,30,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -2161,6 +2171,12 @@ BEGIN
     IDS_MAP_CALC_GRADIENT_D_COMBO_TT "¬ведите единицу измерени€ (единица давлени€ или единица напр€жени€)"
     IDS_PD_INJECTOR_MAXPW_EDIT_TT "ќграничение максимальной длительности впрыска. ƒлительность импульсов впрыска не может быть больше этого значени€."
     IDS_PD_INJECTOR_FSAFTERSTART_CHECK_TT "ѕереход в режим распределенного фазированного впрыска произойдет только после запуска двигател€, а не в момент получени€ сигнала от датчика фаз при запуске двигател€."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_INJECTOR_IPWLROC_D_EDIT_TT "ќграничение скорости уменьшени€ длительности впрыска (мс/такт). ѕозвол€ет сделать отклик двигател€ на сброс газа более плавным."
+    IDS_PD_INJECTOR_IPWLROC_I_EDIT_TT "ќграничение скорости увеличени€ длительности впрыска (мс/такт). ѕозвол€ет сделать отклик двигател€ на нажатие газа более плавным."
 END
 
 STRINGTABLE
@@ -3420,6 +3436,16 @@ BEGIN
     CONTROL         "Switch beetwen injectors' rows",IDC_PD_INJECTOR_SECINJROWSWT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,495,138,10
 
     CONTROL         "Full sequential after start",IDC_PD_INJECTOR_FSAFTERSTART_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,510,138,10
+
+    EDITTEXT        IDC_PD_INJECTOR_IPWLROC_D_EDIT,95,525,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_INJECTOR_IPWLROC_D_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,525,13,17
+    LTEXT           "Rate of change limit for decreasing inj.PW",IDC_PD_INJECTOR_IPWLROC_D_CAPTION,0,526,94,18
+    LTEXT           "ms/s",IDC_PD_INJECTOR_IPWLROC_D_UNIT,144,526,30,10
+
+    EDITTEXT        IDC_PD_INJECTOR_IPWLROC_I_EDIT,95,545,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_INJECTOR_IPWLROC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,545,13,17
+    LTEXT           "Rate of change limit for increasing inj.PW",IDC_PD_INJECTOR_IPWLROC_I_CAPTION,0,546,94,18
+    LTEXT           "ms/s",IDC_PD_INJECTOR_IPWLROC_I_UNIT,144,546,30,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -4486,6 +4512,12 @@ BEGIN
     IDS_MAP_CALC_GRADIENT_D_COMBO_TT "Enter the unit of measure (unit of pressure or unit of voltage)"
     IDS_PD_INJECTOR_MAXPW_EDIT_TT "Limitting the maximum injection pulse width. The width of injection pulses can not be above this value."
     IDS_PD_INJECTOR_FSAFTERSTART_CHECK_TT "The transition to the full sequential injection mode will occur only after the engine is started, and not at the moment of receiving a signal from the phase sensor during cranking."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_INJECTOR_IPWLROC_D_EDIT_TT "Limit of inj. PW rate of change when decreasing (ms/stroke). Gives possibility to make engine response smoother when decelerating."
+    IDS_PD_INJECTOR_IPWLROC_I_EDIT_TT "Limit of inj. PW rate of change when increasing (ms/stroke). Gives possibility to make engine response smoother when accelerating."
 END
 
 STRINGTABLE

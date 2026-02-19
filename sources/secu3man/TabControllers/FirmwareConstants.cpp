@@ -220,6 +220,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Duration of grown IAC position after start"), _T(""), 0.0f, 30.0f, 0.01f, 2, &d.iac_wrkadd_time, _T("After engine start, the IAC position will be multiplied by 'Coeff. of IAC position growth after engine start' factor during this time."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Шаг перехода в положение из таблицы"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.iac_cltolut_int_stp, _T("Шаг перемещения РДВ из положения Closed loop, в положение из таблицы. Для плавности."));
+ else
+  dfd.AppendItem(_T("Step of transition from CL to LUT"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.iac_cltolut_int_stp, _T("Step of IAC valve's transition from Closed loop to LUT position. For smoothness."));
+
  //injection
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Впрыск топлива:"));

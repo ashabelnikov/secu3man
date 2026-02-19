@@ -95,6 +95,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableCogsBTDC(bool enable);
   virtual void EnableETC(bool enable);
   virtual void EnableETCHomePos(bool i_enable);  //ETC
+  virtual void EnableMTTF(bool i_enable);
 
   virtual BYTE GetCurrentDescriptor(void);
 

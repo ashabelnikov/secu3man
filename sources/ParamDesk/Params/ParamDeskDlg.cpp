@@ -847,6 +847,11 @@ void CParamDeskDlg::EnableETC(bool i_enable)
  m_pFunSetPageDlg->EnableETC(i_enable); 
 }
 
+void CParamDeskDlg::EnableMTTF(bool i_enable)
+{
+ m_pCKPSPageDlg->EnableMTTF(i_enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

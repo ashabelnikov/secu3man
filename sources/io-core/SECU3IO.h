@@ -639,6 +639,8 @@ namespace SECU3IO
   float inj_maf_const[2];             //precalculated constant for MAF (for calculation of inj. PW)
   float mafload_const;                //precalculated constant for MAF (for calculation of MAF load)
   float inj_max_pw[2];                //maximum injection PW in ms
+  float injpw_dec_speed;              //Inj. PW decrease RoC limit
+  float injpw_inc_speed;              //Inj. PW increase RoC limit
  };
 
  struct LambdaPar
@@ -988,6 +990,8 @@ const int INPAVNUM = 14;
   float iac_wrkadd_time;
 
   bool use_dbgvar;
+
+  float iac_cltolut_int_stp;
  };
 
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};

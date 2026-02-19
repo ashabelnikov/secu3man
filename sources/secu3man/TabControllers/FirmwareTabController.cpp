@@ -980,6 +980,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_ParamDeskDlg->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
  mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
  mp_view->mp_ParamDeskDlg->EnableETC(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); //ETC
+ mp_view->mp_ParamDeskDlg->EnableMTTF(!CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC));
 
  //I/O remapping
  this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));

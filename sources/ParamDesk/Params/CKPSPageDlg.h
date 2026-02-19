@@ -60,6 +60,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void EnableRisingSpark(bool enable);
   void EnableUseCamRef(bool enable);
   void EnableCogsBTDC(bool enable);
+  void EnableMTTF(bool enable);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -117,6 +118,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_hallwndwidth_enabled;
   bool m_usecamref_enabled;
   bool m_cogs_btdc_enabled;
+  bool m_mttf_enabled;
   int m_max_cylinders;
 
   CStatic m_ckps_front_groupbox;

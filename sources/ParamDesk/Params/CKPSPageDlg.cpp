@@ -113,6 +113,7 @@ CCKPSPageDlg::CCKPSPageDlg()
 , m_hallwndwidth_enabled(false)
 , m_usecamref_enabled(false)
 , m_cogs_btdc_enabled(false)
+, m_mttf_enabled(false)
 , m_max_cylinders(8)
 , mp_scr(new CWndScroller)
 {
@@ -245,7 +246,7 @@ void CCKPSPageDlg::OnUpdateCogsBTDC(CCmdUI* pCmdUI)
 
 void CCKPSPageDlg::OnUpdateControlsMTTF(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_ckps_enabled && m_params.ckps_miss_num != 0);
+ pCmdUI->Enable(m_enabled && m_mttf_enabled && (!m_ckps_enabled || m_params.ckps_miss_num != 0));
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -577,6 +578,15 @@ void CCKPSPageDlg::EnableCogsBTDC(bool enable)
  if (m_cogs_btdc_enabled == enable)
   return; //already has needed state
  m_cogs_btdc_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CCKPSPageDlg::EnableMTTF(bool enable)
+{
+ if (m_mttf_enabled == enable)
+  return; //already has needed state
+ m_mttf_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

@@ -184,6 +184,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
  mp_view->EnableETC(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, COPT_SECU3T)); //ETC
  mp_view->EnableETCHomePos(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, COPT_SECU3T)); //ETC
+ mp_view->EnableMTTF(!CHECKBIT32(opt, COPT_HALL_SYNC));
 }
 
 //from view. Очередная вкладка активировалась

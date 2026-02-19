@@ -460,8 +460,10 @@ typedef struct
 
  _int  aircond_clt_ovh;
 
+ _uchar iac_cltolut_int_stp;
+
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1509];
+ _uchar reserved[1508];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3672,6 +3674,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.iac_wrkadd_time = ((float)exd.iac_wrkadd_time) / 100.0f; //convert to sec
 
  o_data.use_dbgvar = exd.use_dbgvar;
+
+ o_data.iac_cltolut_int_stp = ((float)exd.iac_cltolut_int_stp) / 32.0f; //convert to %
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3808,6 +3812,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.iac_wrkadd_time = MathHelpers::Round(i_data.iac_wrkadd_time * 100.0f); //convert from sec
 
  exd.use_dbgvar = i_data.use_dbgvar;
+
+ exd.iac_cltolut_int_stp = MathHelpers::Round(i_data.iac_cltolut_int_stp * 32.0f); //convert from %
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

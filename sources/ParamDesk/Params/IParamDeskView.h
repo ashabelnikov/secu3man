@@ -74,6 +74,7 @@ class IParamDeskView : public IDeskView
   virtual void EnableUseCamRef(bool enable) = 0;
   virtual void EnableETC(bool enable) = 0;
   virtual void EnableETCHomePos(bool i_enable) = 0;  //ETC
+  virtual void EnableMTTF(bool i_enable) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //obtains descriptor corresponding to current (displaying) tab
 

@@ -56,6 +56,8 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_INJECTOR_MINPW_G_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_MAXPW_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_MAXPW_G_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_IPWLROC_D_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_IPWLROC_I_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USEADDCORRS_CHECK,OnChangeData) 
@@ -143,6 +145,16 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SECONDFUEL_GROUP,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_GENERAL_GROUP,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_D_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_D_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_D_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_D_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_I_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_I_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_I_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_IPWLROC_I_UNIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CInjectorPageDlg::CInjectorPageDlg()
@@ -150,6 +162,8 @@ CInjectorPageDlg::CInjectorPageDlg()
 , m_enable_secu3t_features(false)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
 , m_fff_const_edit(CEditEx::MODE_FLOAT, true)
+, m_ipwlroc_d_edit(CEditEx::MODE_FLOAT, true)
+, m_ipwlroc_i_edit(CEditEx::MODE_FLOAT, true)
 , m_ovf_msgbox(false)
 , m_maf_ovf_msgbox(false)
 , mp_scr(new CWndScroller)
@@ -196,6 +210,9 @@ CInjectorPageDlg::CInjectorPageDlg()
  m_params.inj_fsafterstart = false;
  
  m_params.mafload_const = 0;
+
+ m_params.injpw_dec_speed = 0.4;
+ m_params.injpw_inc_speed = 0.4;
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
@@ -259,6 +276,11 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_MAXPW_G_EDIT, m_max_pw_edit[1]);
  DDX_Control(pDX,IDC_PD_INJECTOR_MAXPW_G_SPIN, m_max_pw_spin[1]);
 
+ DDX_Control(pDX,IDC_PD_INJECTOR_IPWLROC_D_EDIT, m_ipwlroc_d_edit);
+ DDX_Control(pDX,IDC_PD_INJECTOR_IPWLROC_D_SPIN, m_ipwlroc_d_spin);
+ DDX_Control(pDX,IDC_PD_INJECTOR_IPWLROC_I_EDIT, m_ipwlroc_i_edit);
+ DDX_Control(pDX,IDC_PD_INJECTOR_IPWLROC_I_SPIN, m_ipwlroc_i_spin);
+
  float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
  m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, engdisp);
  m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
@@ -297,6 +319,9 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
 
  m_max_pw_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_MAXPW_EDIT, m_params.inj_max_pw[0]);
  m_max_pw_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_MAXPW_G_EDIT, m_params.inj_max_pw[1]);
+
+ m_ipwlroc_d_edit.DDX_Value(pDX, IDC_PD_INJECTOR_IPWLROC_D_EDIT, m_params.injpw_dec_speed);
+ m_ipwlroc_i_edit.DDX_Value(pDX, IDC_PD_INJECTOR_IPWLROC_I_EDIT, m_params.injpw_inc_speed);
 }
 
 void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -374,6 +399,18 @@ BOOL CInjectorPageDlg::OnInitDialog()
  m_fff_const_spin.SetRangeAndDelta(8000.0f, 32000.0f, 1.0);
  m_fff_const_edit.SetRange(8000.0f, 32000.0f);
 
+ m_ipwlroc_d_spin.SetBuddy(&m_ipwlroc_d_edit);
+ m_ipwlroc_d_edit.SetLimitText(6);
+ m_ipwlroc_d_edit.SetDecimalPlaces(2);
+ m_ipwlroc_d_spin.SetRangeAndDelta(0.01f, 10.0f, 0.01f);
+ m_ipwlroc_d_edit.SetRange(0.01f, 10.0f);
+
+ m_ipwlroc_i_spin.SetBuddy(&m_ipwlroc_i_edit);
+ m_ipwlroc_i_edit.SetLimitText(6);
+ m_ipwlroc_i_edit.SetDecimalPlaces(2);
+ m_ipwlroc_i_spin.SetRangeAndDelta(0.01f, 10.0f, 0.01f);
+ m_ipwlroc_i_edit.SetRange(0.01f, 10.0f);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -405,6 +442,11 @@ BOOL CInjectorPageDlg::OnInitDialog()
   VERIFY(mp_ttc->AddWindow(&m_max_pw_spin[i], MLL::GetString(IDS_PD_INJECTOR_MAXPW_EDIT_TT)));
   VERIFY(mp_ttc->AddWindow(&m_inj_usetimingmap_check[i], MLL::GetString(IDS_PD_INJECTOR_USETIMINGMAP_CHECK_TT)));
  }
+
+ VERIFY(mp_ttc->AddWindow(&m_ipwlroc_d_edit, MLL::GetString(IDS_PD_INJECTOR_IPWLROC_D_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ipwlroc_d_spin, MLL::GetString(IDS_PD_INJECTOR_IPWLROC_D_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ipwlroc_i_edit, MLL::GetString(IDS_PD_INJECTOR_IPWLROC_I_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ipwlroc_i_spin, MLL::GetString(IDS_PD_INJECTOR_IPWLROC_I_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

@@ -365,8 +365,11 @@ typedef struct params_t
 
  _uint load_idl_thrd;
 
+ _int  injpw_dec_speed;               //!< limitation of rate of change of Inj. PW (when decreasing)
+ _int  injpw_inc_speed;               //!< limitation of rate of change of Inj. PW (when increasing)
+
  //These reserved bytes are necessary for keeping binary compatibility between versions
- _uchar reserved[67];
+ _uchar reserved[63];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
