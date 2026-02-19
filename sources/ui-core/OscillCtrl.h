@@ -61,6 +61,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void SetShtPixels(int n); //n >= 2
   void ShowValue(bool show);
   void SetValueHeight(int height); //value in %
+  void Set3DRect(bool disp, bool redraw = false); //display 3D rect around control
 
  //Implementation
  protected:

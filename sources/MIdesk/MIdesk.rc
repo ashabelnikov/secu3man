@@ -447,6 +447,7 @@ BEGIN
     IDS_MI_IND_UNIOUT5  "”нивер.5"
     IDS_MI_IND_UNIOUT6  "”нивер.6"
     IDS_MI_MET_EDITSCALE "–едактирование шкалы..."
+    IDS_MI_MET_DISP3DRECTS "3D рамки"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -917,6 +918,7 @@ BEGIN
     IDS_MI_IND_UNIOUT5       "UnivOut5"
     IDS_MI_IND_UNIOUT6       "UnivOut6"
     IDS_MI_MET_EDITSCALE     "Edit scale..."
+    IDS_MI_MET_DISP3DRECTS   "3D rectangles"
 END
 
 STRINGTABLE DISCARDABLE 

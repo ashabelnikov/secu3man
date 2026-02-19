@@ -687,3 +687,17 @@ void COscillCtrl::SetValueHeight(int height)
 }
 
 //-------------------------------------------------------------
+void COscillCtrl::Set3DRect(bool disp, bool redraw /*= false*/)
+{ 
+ LONG lStyle = ::GetWindowLong(this->m_hWnd, GWL_EXSTYLE);
+ if (disp)
+  lStyle |= WS_EX_CLIENTEDGE | WS_EX_STATICEDGE;
+ else
+  lStyle &= ~(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
+ ::SetWindowLong(this->m_hWnd, GWL_EXSTYLE, lStyle);
+
+ if (redraw)
+  SetWindowPos(NULL,0,0,0,0,SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+}
+
+//-------------------------------------------------------------

@@ -240,7 +240,6 @@ void CAnalogMeter::DrawScale()
   m_dcGrid.SelectObject(pBrushOld);
 
  //  check size
-
  disable_title = false;
  disable_range = false;
  disable_unit  = false;

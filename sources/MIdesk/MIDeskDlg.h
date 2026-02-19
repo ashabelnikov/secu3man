@@ -111,6 +111,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   void SetGraphValueHeight(int height);
 
+  void SetMetersDisp3DRects(bool enable);
+  bool GetMetersDisp3DRects(void) const;
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
@@ -152,6 +155,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   afx_msg void OnIndSetColor();
   afx_msg void OnUpdateIndSetColor(CCmdUI* pCmdUI);
   afx_msg void OnMetEditScale();
+  afx_msg void OnMetDisp3DRects();
+  afx_msg void OnUpdateMetDisp3DRects(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
@@ -229,6 +234,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_graphValueHeight;
 
   MetAverage m_avrNum;
+
+  bool m_metDisp3DRects;
 };
 
 /////////////////////////////////////////////////////////////////////////////

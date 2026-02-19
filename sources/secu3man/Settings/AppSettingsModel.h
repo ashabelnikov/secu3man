@@ -161,6 +161,9 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetIndicatorsDragNDrop(void) const;
   virtual void SetIndicatorsDragNDrop(bool enable);
 
+  virtual bool GetMetersDisp3DRects(void) const;
+  virtual void SetMetersDisp3DRects(bool enable);
+
   virtual int GetFFFConst(void) const;
 
   virtual bool GetShowGraphsCursor(void);
@@ -357,6 +360,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optGraphShtPixels;
   OptField_t<int> m_optGraphShowValue;
   OptField_t<int> m_optGraphValueHeight;
+  OptField_t<bool> m_optMetersDisp3DRects;
 
   //windows' positions
   OptField_t<POINT> m_optMainFrmWnd;

@@ -415,6 +415,7 @@ void CParamMonTabController::ConfigureIndicators(void)
  //meters
  MetersCfg cfg1[2];
  mp_settings->GetMetersConfig(cfg1);
+ mp_view->mp_MIDeskDlg->SetMetersDisp3DRects(mp_settings->GetMetersDisp3DRects()); //must precede SetMetersCfg()
  mp_view->mp_MIDeskDlg->SetMetersCfg(&cfg1[idx], mp_settings->GetTitleFontSize(), mp_settings->GetValueFontSize(), mp_settings->GetPaneFontSize(), mp_settings->GetLabelFontSize());
 
  mp_view->mp_MIDeskDlg->SetMetersDragNDrop(mp_settings->GetMetersDragNDrop());
@@ -448,6 +449,7 @@ void CParamMonTabController::OnMIDeskSettingsChanged(void)
 
  int  TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize;
 
+ mp_settings->SetMetersDisp3DRects(mp_view->mp_MIDeskDlg->GetMetersDisp3DRects());
  mp_view->mp_MIDeskDlg->GetMetersCfg(&cfg1[idx], TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
  cfg1[idx].copyScale(cfg1[idx ? 0 : 1]); //copy scale settings to all other panels of fixtures
 

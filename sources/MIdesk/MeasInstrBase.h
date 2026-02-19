@@ -217,6 +217,18 @@ class MeasInstrBase
     m_scope.EnableWindow(enable);
   }
 
+  virtual void Disp3DRect(bool disp, bool redraw = true)
+  {
+   if (m_meter.GetSafeHwnd())
+   {
+    m_meter.SetState(meter_3drect, disp);
+    if (redraw)
+     m_meter.Redraw();
+   }
+   else if (m_scope.GetSafeHwnd())
+    m_scope.Set3DRect(disp, redraw);
+  }
+
   //is gauge visible?
   virtual bool IsVisible(void)
   {

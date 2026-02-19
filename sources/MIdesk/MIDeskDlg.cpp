@@ -123,6 +123,8 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_COMMAND(IDM_MI_IND_SET_COLOR, OnIndSetColor)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_SET_COLOR, OnUpdateIndSetColor)
  ON_COMMAND(IDM_MI_MET_EDITSCALE, OnMetEditScale)
+ ON_COMMAND(IDM_MI_MET_DISP3DRECTS, OnMetDisp3DRects)
+ ON_UPDATE_COMMAND_UI(IDM_MI_MET_DISP3DRECTS, OnUpdateMetDisp3DRects)
 END_MESSAGE_MAP()
 
 const UINT CMIDeskDlg::IDD = IDD_MEAS_INSTRUMENT_DESK;
@@ -150,6 +152,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , mp_ctxMenuMgrInd(new CIndContextMenuManager())
 , m_metDragNDrop(false)
 , m_indDragNDrop(false)
+, m_metDisp3DRects(false)
 , m_it_mode(0)
 , m_show_graph_cursor(false)
 , m_graphShowValue(false)
@@ -2946,6 +2949,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    break;
   }
  }
+
+ if (new_widget)
+  new_widget->Disp3DRect(m_metDisp3DRects);
+
  return new_widget;
 }
 
@@ -3084,6 +3091,34 @@ void CMIDeskDlg::OnMetEnDragNDrop()
 void CMIDeskDlg::OnUpdateMetEnDragNDrop(CCmdUI* pCmdUI)
 {
  pCmdUI->SetCheck(m_metDragNDrop);
+}
+
+void CMIDeskDlg::SetMetersDisp3DRects(bool enable)
+{
+ m_metDisp3DRects = enable;
+}
+
+bool CMIDeskDlg::GetMetersDisp3DRects(void) const
+{
+ return m_metDisp3DRects;
+}
+
+void CMIDeskDlg::OnMetDisp3DRects()
+{
+ m_metDisp3DRects = !m_metDisp3DRects;
+
+ //update meters and graphs
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  it->second->Disp3DRect(m_metDisp3DRects, true);
+
+ if (m_OnMISettingsChanged)
+  m_OnMISettingsChanged();
+}
+
+void CMIDeskDlg::OnUpdateMetDisp3DRects(CCmdUI* pCmdUI)
+{
+ pCmdUI->SetCheck(m_metDisp3DRects);
 }
 
 void CMIDeskDlg::OnIndNumOfRows(UINT nID)

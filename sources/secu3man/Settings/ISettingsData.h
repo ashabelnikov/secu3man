@@ -92,6 +92,9 @@ class ISettingsData
   virtual bool GetIndicatorsDragNDrop(void) const = 0;
   virtual void SetIndicatorsDragNDrop(bool enable) = 0;
 
+  virtual bool GetMetersDisp3DRects(void) const = 0;
+  virtual void SetMetersDisp3DRects(bool disp) = 0;
+
   virtual int GetFFFConst(void) const = 0;
   virtual bool GetShowGraphsCursor(void) = 0;
   virtual int GetGraphShtPixels(void) = 0;

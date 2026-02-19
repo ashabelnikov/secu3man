@@ -130,6 +130,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLabelFontSize(_T("LabelFontSize"))
 , m_optMetersDragNDrop(_T("MetersDragNDrop"))
 , m_optIndicatorsDragNDrop(_T("IndicatorsDragNDrop"))
+, m_optMetersDisp3DRects(_T("MetersDisp3DRects"))
 , m_optFFFConst(_T("FFFConst"))
 , m_optShowGraphCursor(_T("ShowGraphCursor"))
 
@@ -1058,6 +1059,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optGraphShtPixels, _T("2"), 2, 10);
  fs.ReadInt(m_optGraphShowValue, _T("0"), 0, 1);
  fs.ReadInt(m_optGraphValueHeight, _T("100"), 2, 200);
+ fs.ReadInt(m_optMetersDisp3DRects, _T("1"), 0, 1);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -2565,6 +2567,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДТТ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optFtsAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Display 3D frames around analog gauges and graphs"));
+ else
+  fs.WriteComment(_T("Отображать 3D рамки около приборов и графиков."));
+ fs.WriteInt(m_optMetersDisp3DRects); 
 
  //Positions of windows
  IniIO &ws = writer;
@@ -6587,6 +6595,16 @@ bool CAppSettingsModel::GetIndicatorsDragNDrop(void) const
 void CAppSettingsModel::SetIndicatorsDragNDrop(bool enable)
 {
  m_optIndicatorsDragNDrop.value = enable;
+}
+
+bool CAppSettingsModel::GetMetersDisp3DRects(void) const
+{
+ return m_optMetersDisp3DRects.value;
+}
+
+void CAppSettingsModel::SetMetersDisp3DRects(bool enable)
+{
+ m_optMetersDisp3DRects.value = enable;
 }
 
 int CAppSettingsModel::GetFFFConst(void) const
