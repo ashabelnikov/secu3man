@@ -146,9 +146,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Displacement of IAC on turn on of EPAS"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff, _T("This value will be added to the IAC position when a request to turn on the EPAS is received (EPAS_I input). In closed loop mode, the offset is added once to the IAC position. In open loop mode, the displacement value is added when the EPAS is turned on and subtracted when the EPAS is turned off"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Добавка к РДВ при вкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Мин.положение РДВ' увеличивается на это значение при включении кондиционера"));
+  dfd.AppendItem(_T("Добавка к мин. положению РДВ при вкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Мин.положение РДВ' увеличивается на это значение при включении кондиционера"));
  else
-  dfd.AppendItem(_T("Add. to IAC pos on turn on of air cond. "), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Minimum IAC position' increases by this value when the air conditioner is turned on"));
+  dfd.AppendItem(_T("Add. to min. IAC pos on turn on of air cond. "), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add, _T("'Minimum IAC position' increases by this value when the air conditioner is turned on"));
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Смещение РХХ при включении кондиционера"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.aircond_iacoff, _T("Это значение будет прибавлено к положению РХХ при поступлении запроса на включение кондиционера. В режиме closed loop смещение один раз прибавляется к положению РХХ. В режиме open loop смещение прибавляется при включении кондиционера и вычитается при выключении кондиционера"));
+ else
+  dfd.AppendItem(_T("Displacement of IAC on turn on of air conditioner"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.aircond_iacoff, _T("This value will be added to the IAC position when a request to turn on the air conditioner is received. In closed loop mode, the offset is added once to the IAC position. In open loop mode, the displacement value is added when the air conditioner is turned on and subtracted when the air conditioner is turned off"));
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Шаг уменьшения добавки после выхода РХХ"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_en, _T("Значение добавки после выхода уменьшается на это значение каждые 100мс если дроссель закрыт и обороты двигателя находятся между 1-м и 2-м порогами переходных режимов (пороги пер. режимов задаются соответствующими коэффициентами на вкладке параметров '3:ХХ', там же задается значение добавки после выхода)"));
