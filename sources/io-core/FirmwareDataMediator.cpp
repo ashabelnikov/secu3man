@@ -464,8 +464,10 @@ typedef struct
 
  _uchar aircond_iacoff;
 
+ _int  injpw_crk_speed;    //!< limitation of rate of change of Inj. PW (when decreasing and increasing), used immediately after cranking for a small period of time.
+
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1507];
+ _uchar reserved[1505];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3680,6 +3682,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.iac_cltolut_int_stp = ((float)exd.iac_cltolut_int_stp) / 32.0f; //convert to %
 
  o_data.aircond_iacoff = ((float)exd.aircond_iacoff) / 2.0f; //convert to %
+
+ o_data.injpw_crk_speed = ((float)exd.injpw_crk_speed) * (3.2f / 1000.0f); //from 3.2 us units to ms
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3820,6 +3824,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.iac_cltolut_int_stp = MathHelpers::Round(i_data.iac_cltolut_int_stp * 32.0f); //convert from %
 
  exd.aircond_iacoff = MathHelpers::Round(i_data.aircond_iacoff * 2.0f);
+
+ exd.injpw_crk_speed = MathHelpers::Round(i_data.injpw_crk_speed * (1000.0f / 3.2f)); //from ms units to 3.2us units
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)

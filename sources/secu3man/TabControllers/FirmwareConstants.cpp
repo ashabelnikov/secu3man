@@ -339,6 +339,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Use FPS for correction of injection PW"), &d.ifrvmc_use_fps, _T("If the check is set, then fuel pressure sensor will be used for correction of injection PW. instead of the 'Gauge pressure in the fuel rail' constant"));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Сглаживание длит. впрыска после запуска"), _T("мс/т"), 0.100f, 20.0f, 0.025f, 3, &d.injpw_crk_speed, _T("Ограничение скорости изменения длительности впрыска на короткое время сразу после запуска двигателя (мс/такт). Для плавного перехода длительности впрыска на запуске в рабочий режим."));
+ else
+  dfd.AppendItem(_T("Smoothing inj. PW after cranking"), _T("ms/st"), 0.100f, 20.0f, 0.025f, 3, &d.injpw_crk_speed, _T("Limitation of the inj. PW rate of change for a short period of time immediately after cranking (ms/stroke). For smooth transition from cranking PW to working PW."));
+
  //air conditioner
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Кондиционер:"));
