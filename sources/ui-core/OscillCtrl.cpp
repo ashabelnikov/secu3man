@@ -416,10 +416,16 @@ void COscillCtrl::_DrawPoint(bool i_reverse, int ptidx /*= -1*/)
 
    //fill the cleanup area with the background color
    CRect rcCls = m_rcPlot;
-   if (!i_reverse)                                           
-    rcCls.left  = rcCls.right - m_shtPixels;
+   if (!i_reverse)
+   {                                           
+    rcCls.left = rcCls.right - m_shtPixels;
+    rcCls.right+= m_plotWidth/2; //take into account width of line
+   }
    else
-    rcCls.right  = rcCls.left + m_shtPixels;
+   {
+    rcCls.right = rcCls.left + m_shtPixels;
+    rcCls.left-= m_plotWidth/2; //take into account width of line
+   }
    m_dcPlot.FillRect(rcCls, &m_brushBack);
 
    // Draw a line
@@ -441,9 +447,23 @@ void COscillCtrl::_DrawPoint(bool i_reverse, int ptidx /*= -1*/)
 
   //vertical clipping
   if ((prevY <= m_rcPlot.top) || (currY <= m_rcPlot.top))
-   m_dcPlot.FillRect(CRect(prevX + (i_reverse ? -shtPixelsH : 0), m_rcClient.top, currX + (i_reverse ? 0 : shtPixelsH), m_rcPlot.top), &m_brushBack);
+  {//top
+   int addSht = std::max((m_plotWidth/2) + 1, shtPixelsH); //take into accont width of line
+   int addWdt = m_plotWidth / 2;
+   if (i_reverse)
+    m_dcPlot.FillRect(CRect(prevX + addSht, m_rcClient.top, currX - addWdt, m_rcPlot.top), &m_brushBack);
+   else
+    m_dcPlot.FillRect(CRect(prevX - addWdt, m_rcClient.top, currX + addSht, m_rcPlot.top), &m_brushBack);
+  }
   if ((prevY >= m_rcPlot.bottom) || (currY >= m_rcPlot.bottom))
-   m_dcPlot.FillRect(CRect(prevX + (i_reverse ? -shtPixelsH : 0), m_rcPlot.bottom , currX + (i_reverse ? 0 : shtPixelsH), m_rcClient.bottom), &m_brushBack);
+  {//bottom
+   int addSht = std::max((m_plotWidth/2) + 1, shtPixelsH); //take into accont width of line
+   int addWdt = m_plotWidth / 2;
+   if (i_reverse)
+    m_dcPlot.FillRect(CRect(prevX + addSht, m_rcPlot.bottom, currX - addWdt, m_rcClient.bottom), &m_brushBack);
+   else
+    m_dcPlot.FillRect(CRect(prevX - addWdt, m_rcPlot.bottom, currX + addSht, m_rcClient.bottom), &m_brushBack);
+  }
  }
 }
 
