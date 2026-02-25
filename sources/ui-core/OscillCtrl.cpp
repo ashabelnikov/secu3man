@@ -75,8 +75,8 @@ COscillCtrl::COscillCtrl()
 , m_crGridColor(RGB(0, 255, 255))       // see also SetGridColor
 , m_normalPlotColor(RGB(255, 255, 255)) // see also SetPlotColor
 , m_crPlotColor(RGB(255, 255, 255))     // see also SetPlotColor
-, m_penPlot(PS_SOLID, 0, m_crPlotColor) //pen used for drawing
-, m_brushBack(m_crBackColor)            //background brush
+, m_penPlot(PS_SOLID, 0, m_crPlotColor^m_crBackColor) //pen used for drawing
+, m_brushBack(GDIHelpers::InvColor(m_crBackColor))//background brush
 , m_BlackBrush(RGB(0, 0, 0))            //black color brush
 , m_strUnitX(_T("Samples"))             //See also SetUnitX
 , m_strUnitY(_T("Y units"))             //See also SetUnitY
@@ -152,8 +152,8 @@ void COscillCtrl::OnPaint()
 
  if (memDC.GetSafeHdc() != NULL)
  {
-  memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcGrid, 0, 0, SRCCOPY);
-  memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcPlot, 0, 0, SRCPAINT);
+  memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcGrid, 0, 0, NOTSRCCOPY);
+  memDC.BitBlt(0, 0, m_rcClient.Width(), m_rcClient.Height(), &m_dcPlot, 0, 0, SRCINVERT);
   if (m_show_value)
   { //blend value's bitmap to resulting one
 // BLENDFUNCTION bf = {AC_SRC_OVER, 0, 128, AC_SRC_ALPHA};
@@ -203,7 +203,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
 {
  int i, nCharacters;
  CPen *oldPen;
- CPen solidPen(PS_SOLID, 0, m_crGridColor);
+ CPen solidPen(PS_SOLID, 0, GDIHelpers::InvColor(m_crGridColor));
  CFont axisFont, yUnitFont, *oldFont;
  CString strTemp;
 
@@ -224,7 +224,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
   m_pBmpOldGrid = m_dcGrid.SelectObject(&m_bmpGrid);
  }
 
- m_dcGrid.SetBkColor (m_crBackColor);
+ m_dcGrid.SetBkColor(GDIHelpers::InvColor(m_crBackColor));
 
  //fill the grid with background
  m_dcGrid.FillRect(m_rcClient, &m_brushBack);
@@ -253,7 +253,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
   for (i = m_rcPlot.left; i < m_rcPlot.right; i+=m_gridSizeX)
   {
    for (int j = 0; j < m_gridNumY; ++j)
-    m_dcGrid.SetPixel (i, m_rcPlot.top + MathHelpers::Round(((float)(m_rcPlot.Height() * j)) / m_gridNumY), m_crGridColor);
+    m_dcGrid.SetPixel (i, m_rcPlot.top + MathHelpers::Round(((float)(m_rcPlot.Height() * j)) / m_gridNumY), GDIHelpers::InvColor(m_crGridColor));
   }
  }
 
@@ -265,7 +265,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
  oldFont = m_dcGrid.SelectObject(&axisFont);
 
  //y max
- m_dcGrid.SetTextColor (m_crGridColor);
+ m_dcGrid.SetTextColor(GDIHelpers::InvColor(m_crGridColor));
  m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP);
  strTemp.Format (_T("%.*lf"), m_decimalPlaces, m_uppLimit);
  m_dcGrid.TextOut (m_rcPlot.left - 4, m_rcPlot.top, strTemp);
@@ -402,7 +402,7 @@ void COscillCtrl::_DrawPoint(bool i_reverse, int ptidx /*= -1*/)
    currPos = (ptidx < 0) ? ((!i_reverse) ? m_points.back() : m_points.front()) : m_points.at(ptidx);
    prevX = currX = (!i_reverse) ? m_rcPlot.right - shtPixelsH : m_rcPlot.left - shtPixelsH;
    prevY = currY = _MapYValue(currPos);
-   m_dcPlot.SetPixel(currX, currY, m_crPlotColor);
+   m_dcPlot.SetPixel(currX, currY, m_crPlotColor^m_crBackColor);
   }
   else if ((m_points.size() >= 2 && ptidx == -1) || (ptidx != -1 && ptidx >= 1))
   {
@@ -416,17 +416,17 @@ void COscillCtrl::_DrawPoint(bool i_reverse, int ptidx /*= -1*/)
 
    //fill the cleanup area with the background color
    CRect rcCls = m_rcPlot;
-   if (!i_reverse)
+   if (!i_reverse)                                           
    {                                           
-    rcCls.left = rcCls.right - m_shtPixels;
+    rcCls.left  = rcCls.right - m_shtPixels;
     rcCls.right+= m_plotWidth/2; //take into account width of line
    }
    else
    {
-    rcCls.right = rcCls.left + m_shtPixels;
+    rcCls.right  = rcCls.left + m_shtPixels;
     rcCls.left-= m_plotWidth/2; //take into account width of line
    }
-   m_dcPlot.FillRect(rcCls, &m_brushBack);
+   m_dcPlot.FillRect(rcCls, &m_BlackBrush);
 
    // Draw a line
    CPen *oldPen = m_dcPlot.SelectObject(&m_penPlot);
@@ -451,18 +451,18 @@ void COscillCtrl::_DrawPoint(bool i_reverse, int ptidx /*= -1*/)
    int addSht = std::max((m_plotWidth/2) + 1, shtPixelsH); //take into accont width of line
    int addWdt = m_plotWidth / 2;
    if (i_reverse)
-    m_dcPlot.FillRect(CRect(prevX + addSht, m_rcClient.top, currX - addWdt, m_rcPlot.top), &m_brushBack);
+    m_dcPlot.FillRect(CRect(prevX + addSht, m_rcClient.top, currX - addWdt, m_rcPlot.top), &m_BlackBrush);
    else
-    m_dcPlot.FillRect(CRect(prevX - addWdt, m_rcClient.top, currX + addSht, m_rcPlot.top), &m_brushBack);
+    m_dcPlot.FillRect(CRect(prevX - addWdt, m_rcClient.top, currX + addSht, m_rcPlot.top), &m_BlackBrush);
   }
   if ((prevY >= m_rcPlot.bottom) || (currY >= m_rcPlot.bottom))
   {//bottom
    int addSht = std::max((m_plotWidth/2) + 1, shtPixelsH); //take into accont width of line
    int addWdt = m_plotWidth / 2;
    if (i_reverse)
-    m_dcPlot.FillRect(CRect(prevX + addSht, m_rcPlot.bottom, currX - addWdt, m_rcClient.bottom), &m_brushBack);
+    m_dcPlot.FillRect(CRect(prevX + addSht, m_rcPlot.bottom, currX - addWdt, m_rcClient.bottom), &m_BlackBrush);
    else
-    m_dcPlot.FillRect(CRect(prevX - addWdt, m_rcPlot.bottom, currX + addSht, m_rcClient.bottom), &m_brushBack);
+    m_dcPlot.FillRect(CRect(prevX - addWdt, m_rcPlot.bottom, currX + addSht, m_rcClient.bottom), &m_BlackBrush);
   }
  }
 }
@@ -547,9 +547,9 @@ void COscillCtrl::_SetStateColors(bool state)
   m_crPlotColor = GetSysColor(COLOR_GRAYTEXT);
  }
  m_brushBack.DeleteObject();
- m_brushBack.CreateSolidBrush(m_crBackColor);
+ m_brushBack.CreateSolidBrush(GDIHelpers::InvColor(m_crBackColor));
  m_penPlot.DeleteObject();
- m_penPlot.CreatePen(PS_SOLID, m_plotWidth, m_crPlotColor);
+ m_penPlot.CreatePen(PS_SOLID, m_plotWidth, m_crPlotColor^m_crBackColor);
 }
 
 int COscillCtrl::_MapYValue(double value)
@@ -679,7 +679,8 @@ void COscillCtrl::_DrawValue(void)
  {
   CFont* oldFont = m_dcValue.SelectObject(&m_valueFont);
   m_dcValue.FillRect(m_rcPlot, &m_BlackBrush);
-  m_dcValue.SetTextColor(m_crGridColor);
+  COLORREF color = m_crGridColor ? m_crGridColor : RGB(1,1,1); //replace black color by nearest value, because black color is reserved by our AlphaBlend()
+  m_dcValue.SetTextColor(color);
   m_dcValue.SetTextAlign(TA_RIGHT|TA_TOP);
   CString str;
   str.Format(_T("%.*lf"), m_decimalPlacesV, m_points.at((m_points.size()-1)-m_point_position));
