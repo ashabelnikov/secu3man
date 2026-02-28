@@ -439,7 +439,14 @@ struct MetCfg
  int position;
  int scaleWidth;      //scale's line width
  COLORREF scaleColor; //scale's color
- int ticksNum; //number of ticks
+ bool     scaleSys;   //use system color for scale
+ COLORREF labelColor; //label color
+ bool     labelSys;
+ COLORREF arrowColor; //arrow/plot color
+ COLORREF backColor;  //background color
+ bool     backSys;
+ COLORREF digitColor; //digital values color
+ int ticksNum;        //number of ticks
  float scaleMin;
  float scaleMax;
  std::vector<AlertZone> alezn; //colored zones
@@ -451,6 +458,9 @@ struct MetCfg
   dest.scaleMin = scaleMin; dest.scaleMax = scaleMax; dest.ticksNum = ticksNum; 
   dest.alezn = alezn; dest.scaleWidth = scaleWidth; dest.scaleColor = scaleColor;
   dest.pieRadius = pieRadius; dest.scaleLength = scaleLength; dest.tickLength = tickLength;
+  dest.backColor = backColor; dest.arrowColor = arrowColor; dest.digitColor = digitColor;
+  dest.labelColor = labelColor; dest.labelSys = labelSys; dest.backSys = backSys;
+  dest.scaleSys = scaleSys;
  }
 };
 

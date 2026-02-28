@@ -195,7 +195,7 @@ class MeasInstrBase
   }
 
   //разрешение/запрещение прибора
-  virtual void Enable(bool enable, bool redraw = true)
+  virtual void Enable(bool enable, const MetCfg& cfg, bool redraw = true)
   {
    if (m_meter.GetSafeHwnd())
    {
@@ -206,9 +206,8 @@ class MeasInstrBase
     m_meter.SetState(meter_unit, enable);
     m_meter.SetState(meter_tlpane, enable && m_showTLP);
     m_meter.SetState(meter_trpane, enable && m_showTRP);
-    COLORREF bk_color;
-    m_meter.GetColor(meter_bground, &bk_color);
-    m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
+    COLORREF color = cfg.backSys ? GetSysColor(COLOR_BTNFACE) : cfg.backColor;
+    m_meter.SetColor(meter_bground, enable ? color : ::GetSysColor(COLOR_BTNFACE));
 
     if (redraw)
      m_meter.Redraw();
@@ -293,11 +292,19 @@ class MeasInstrBase
     m_scope.SetUnitY(metUnit.c_str());
   }
 
-  virtual void UpdateColors(void)
+  virtual void UpdateColors(const MetCfg& cfg)
   {
-   m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
-   m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
-   m_meter.Redraw();
+   if (m_meter.GetSafeHwnd())
+   {
+    m_meter.SetColor(meter_bground, cfg.backSys ? GetSysColor(COLOR_BTNFACE) : cfg.backColor);
+    m_meter.SetColor(meter_labels, cfg.labelSys ? GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)) : cfg.labelColor);
+    m_meter.Redraw();
+   }
+   else if (m_scope.GetSafeHwnd())
+   {
+    m_scope.SetBackgroundColor(cfg.backSys ? GetSysColor(COLOR_BTNFACE) : cfg.backColor);     
+    m_scope.SetGridColor(cfg.scaleSys ? GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)) : cfg.scaleColor);     
+   }
   }
 
   virtual CRect GetWindowRect(bool screen = false)
@@ -390,11 +397,11 @@ class MeasInstrBase
   }
 
   void SetLineColor(COLORREF color)
-  {
+  { //scale
    if (m_meter.GetSafeHwnd())
     m_meter.SetColor(meter_grid, color);
    else if (m_scope.GetSafeHwnd())
-    m_scope.SetPlotColor(color);     
+    m_scope.SetGridColor(color);     
   }
 
   void SetPieRadius(float radius)
@@ -413,6 +420,36 @@ class MeasInstrBase
   {
    if (m_meter.GetSafeHwnd())
     m_meter.SetTickLength(tkLen);
+  }
+
+  void SetBackColor(COLORREF color)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetColor(meter_bground, color);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.SetBackgroundColor(color);     
+  }
+
+  void SetArrowColor(COLORREF color)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetColor(meter_needle, color);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.SetPlotColor(color);     
+  }
+
+  void SetDigitColor(COLORREF color)
+  {
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetColor(meter_value, color);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.SetValueColor(color);     
+  }
+
+  void SetLabelColor(COLORREF color)
+  { //meters only, not graphs
+   if (m_meter.GetSafeHwnd())
+    m_meter.SetColor(meter_labels, color);
   }
 
   UINT m_uiID;

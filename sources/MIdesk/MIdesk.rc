@@ -177,7 +177,7 @@ BEGIN
     CTEXT           "",IDC_LOG_MARKS_K3,107,11,35,9,SS_SUNKEN
 END
 
-IDD_MI_SCALE_EDITOR DIALOGEX 0, 0, 250, 195
+IDD_MI_SCALE_EDITOR DIALOGEX 0, 0, 340, 195
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Редактирование шкалы"
 FONT 8, "MS Sans Serif"
@@ -199,7 +199,7 @@ BEGIN
     LTEXT           "Толщина линий",IDC_MI_SED_SCALE_WIDTH_CAPTION,52,25,32,18
 
     CONTROL         "",IDC_MI_SED_SCALE_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,90,25,45,18, 
-    LTEXT           "Цвет линий",IDC_MI_SED_SCALE_COLOR_CAPTION,137,25,30,18
+    LTEXT           "Цвет шкалы",IDC_MI_SED_SCALE_COLOR_CAPTION,137,25,30,18
 
     EDITTEXT        IDC_MI_SED_SCALE_PIERAD_EDIT,170,25,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_MI_SED_SCALE_PIERAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,25,13,17
@@ -212,6 +212,22 @@ BEGIN
     EDITTEXT        IDC_MI_SED_SCALE_TICLEN_EDIT,170,65,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_MI_SED_SCALE_TICLEN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,65,13,17
     LTEXT           "Длина штрихов (%)",IDC_MI_SED_SCALE_TICLEN_CAPTION,217,65,30,25
+
+    CONTROL         "",IDC_MI_SED_LABEL_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,5,45,18, 
+    LTEXT           "Цвет надписей",IDC_MI_SED_LABEL_COLOR_CAPTION,297,5,35,18
+
+    CONTROL         "",IDC_MI_SED_ARROW_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,25,45,18, 
+    LTEXT           "Цвет стрелки",IDC_MI_SED_ARROW_COLOR_CAPTION,297,25,35,18
+
+    CONTROL         "",IDC_MI_SED_BACK_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,45,45,18, 
+    LTEXT           "Цвет фона",IDC_MI_SED_BACK_COLOR_CAPTION,297,45,35,18
+
+    CONTROL         "",IDC_MI_SED_DIGIT_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,65,45,18, 
+    LTEXT           "Цвет чисел",IDC_MI_SED_DIGIT_COLOR_CAPTION,297,65,35,18
+
+    CONTROL         "Системный цвет для надписей",IDC_MI_SED_LABELSYS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,250,90,90,18
+    CONTROL         "Системный цвет для фона",IDC_MI_SED_BACKSYS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,250,110,90,18
+    CONTROL         "Системный цвет для шкалы",IDC_MI_SED_SCALESYS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,250,130,90,18
 
     CONTROL         "",IDC_MI_SED_AZ_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,5,50,154,85
 
@@ -226,8 +242,8 @@ BEGIN
 
     CONTROL         "",IDC_MI_SED_AZ_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,120,145,41,18,
 
-    DEFPUSHBUTTON   "OK",IDOK,59,170,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,125,170,50,14
+    DEFPUSHBUTTON   "OK",IDOK,99,170,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,165,170,50,14
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -448,6 +464,7 @@ BEGIN
     IDS_MI_IND_UNIOUT6  "Универ.6"
     IDS_MI_MET_EDITSCALE "Редактирование шкалы..."
     IDS_MI_MET_DISP3DRECTS "3D рамки"
+    IDS_MI_SED_LABELSYS_CHECK_TT "Означает, что цвет зависит от настроек темы ОС"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -463,11 +480,16 @@ BEGIN
     IDS_MI_SED_SCALE_WIDTH_EDIT_TT "Толщина линий шкалы в пикселях"
     IDS_MI_SED_SCALE_COLOR_TT "Цвет линий шкалы"
     IDS_MI_SED_SCALE_WIDTH_EDIT_TT1 "Толщина линии графика в пикселях"
-    IDS_MI_SED_SCALE_COLOR_TT1 "Цвет линии графика"
+    IDS_MI_SED_SCALE_COLOR_TT1 "Цвет шкалы графика"
     IDS_MI_SED_AZ_COLOR_TT "Цвет выбранной зоны на шкале"
     IDS_MI_SED_SCALE_PIERAD_EDIT_TT "Ширина цветовой дуги в % от радиуса шкалы."
     IDS_MI_SED_SCALE_ANGLEN_EDIT_TT "Угловая длина шкалы (градусы)"
     IDS_MI_SED_SCALE_TICLEN_EDIT_TT "Длина штрихов в % от радиуса щкалы"
+    IDS_MI_SED_LABEL_COLOR_TT "Цвет надписей шкалы"
+    IDS_MI_SED_ARROW_COLOR_TT "Цвет стрелки"
+    IDS_MI_SED_ARROW_COLOR_TT1 "Цвет линии графика"
+    IDS_MI_SED_BACK_COLOR_TT  "Цвет фона"
+    IDS_MI_SED_DIGIT_COLOR_TT "Цвет числовых значений"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -649,7 +671,7 @@ BEGIN
     CTEXT           "",IDC_LOG_MARKS_K3,107,11,35,9,SS_SUNKEN
 END
 
-IDD_MI_SCALE_EDITOR DIALOGEX 0, 0, 250, 195
+IDD_MI_SCALE_EDITOR DIALOGEX 0, 0, 340, 195
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Edit scale"
 FONT 8, "MS Sans Serif"
@@ -671,7 +693,7 @@ BEGIN
     LTEXT           "Line width",IDC_MI_SED_SCALE_WIDTH_CAPTION,52,25,25,18
 
     CONTROL         "",IDC_MI_SED_SCALE_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,90,25,45,18,
-    LTEXT           "Line color",IDC_MI_SED_SCALE_COLOR_CAPTION,137,25,25,18
+    LTEXT           "Scale color",IDC_MI_SED_SCALE_COLOR_CAPTION,137,25,25,18
 
     EDITTEXT        IDC_MI_SED_SCALE_PIERAD_EDIT,170,25,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_MI_SED_SCALE_PIERAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,25,13,17
@@ -684,6 +706,22 @@ BEGIN
     EDITTEXT        IDC_MI_SED_SCALE_TICLEN_EDIT,170,65,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_MI_SED_SCALE_TICLEN_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,203,65,13,17
     LTEXT           "Tick length (%)",IDC_MI_SED_SCALE_TICLEN_CAPTION,217,65,30,25
+
+    CONTROL         "",IDC_MI_SED_LABEL_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,5,45,18, 
+    LTEXT           "Labels color",IDC_MI_SED_LABEL_COLOR_CAPTION,297,5,35,18
+
+    CONTROL         "",IDC_MI_SED_ARROW_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,25,45,18, 
+    LTEXT           "Arrow color",IDC_MI_SED_ARROW_COLOR_CAPTION,297,25,35,18
+
+    CONTROL         "",IDC_MI_SED_BACK_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,45,45,18, 
+    LTEXT           "Back color",IDC_MI_SED_BACK_COLOR_CAPTION,297,45,35,18
+
+    CONTROL         "",IDC_MI_SED_DIGIT_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,250,65,45,18, 
+    LTEXT           "Digitals color",IDC_MI_SED_DIGIT_COLOR_CAPTION,297,65,35,18
+
+    CONTROL         "System color for labels",IDC_MI_SED_LABELSYS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,250,90,90,18
+    CONTROL         "System color for background",IDC_MI_SED_BACKSYS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,250,110,90,18
+    CONTROL         "System color for scale",IDC_MI_SED_SCALESYS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,250,130,90,18
 
     CONTROL         "",IDC_MI_SED_AZ_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,5,50,154,85
 
@@ -698,8 +736,8 @@ BEGIN
 
     CONTROL         "",IDC_MI_SED_AZ_COLOR,"MultiLEDCtrl",WS_VISIBLE | WS_CHILD,120,145,41,18,
 
-    DEFPUSHBUTTON   "OK",IDOK,59,170,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,125,170,50,14
+    DEFPUSHBUTTON   "OK",IDOK,99,170,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,165,170,50,14
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -919,6 +957,7 @@ BEGIN
     IDS_MI_IND_UNIOUT6       "UnivOut6"
     IDS_MI_MET_EDITSCALE     "Edit scale..."
     IDS_MI_MET_DISP3DRECTS   "3D rectangles"
+    IDS_MI_SED_LABELSYS_CHECK_TT "Means that color depends on the OS theme settings"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -934,11 +973,16 @@ BEGIN
     IDS_MI_SED_SCALE_WIDTH_EDIT_TT "Width of the scale's lines in pixels"
     IDS_MI_SED_SCALE_COLOR_TT "Color of the scale's lines"
     IDS_MI_SED_SCALE_WIDTH_EDIT_TT1 "Width of the graph's line"
-    IDS_MI_SED_SCALE_COLOR_TT1 "Color of the graph's line"
+    IDS_MI_SED_SCALE_COLOR_TT1 "Color of the graph's scale"
     IDS_MI_SED_AZ_COLOR_TT "Color of the selected zone on the scale"
     IDS_MI_SED_SCALE_PIERAD_EDIT_TT "Width of the colored arch in % of the radius of scale."
     IDS_MI_SED_SCALE_ANGLEN_EDIT_TT "Angular length of scale (degrees)"
     IDS_MI_SED_SCALE_TICLEN_EDIT_TT "Length of ticks in % of the radius of scale"
+    IDS_MI_SED_LABEL_COLOR_TT "Color of the scale's labels"
+    IDS_MI_SED_ARROW_COLOR_TT "Arrow color"
+    IDS_MI_SED_ARROW_COLOR_TT1 "Plot line color"
+    IDS_MI_SED_BACK_COLOR_TT  "Background color"
+    IDS_MI_SED_DIGIT_COLOR_TT "Digital values color"
 END
 
 STRINGTABLE DISCARDABLE 

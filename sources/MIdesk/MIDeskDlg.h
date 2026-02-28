@@ -173,6 +173,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   float _HeightCoeffFromID(UINT nID);
   void _CreateLEDs(void);
   CRect _GetGaugesRect(bool meters, bool screenCoord = false);
+  COLORREF _GetBackColor(const MetCfg& cfg);
+  COLORREF _GetLabelColor(const MetCfg& cfg);
+  COLORREF _GetScaleColor(const MetCfg& cfg);
 
   struct IndFieldData
   {

@@ -73,6 +73,8 @@ COscillCtrl::COscillCtrl()
 , m_crBackColor(RGB(0, 0, 0))           // see also SetBackgroundColor
 , m_normalGridColor(RGB(0, 255, 255))   // see also SetGridColor
 , m_crGridColor(RGB(0, 255, 255))       // see also SetGridColor
+, m_normalValueColor(RGB(0, 255, 255))  // see also SetValueColor
+, m_crValueColor(RGB(0, 255, 255))      // see also SetValueColor
 , m_normalPlotColor(RGB(255, 255, 255)) // see also SetPlotColor
 , m_crPlotColor(RGB(255, 255, 255))     // see also SetPlotColor
 , m_penPlot(PS_SOLID, 0, m_crPlotColor^m_crBackColor) //pen used for drawing
@@ -539,12 +541,14 @@ void COscillCtrl::_SetStateColors(bool state)
   m_crBackColor = m_normalBackColor;
   m_crGridColor = m_normalGridColor;
   m_crPlotColor = m_normalPlotColor;
+  m_crValueColor = m_normalValueColor;
  }
  else
  { //disabled
   m_crBackColor = GetSysColor(COLOR_3DFACE);
   m_crGridColor = GetSysColor(COLOR_GRAYTEXT);
   m_crPlotColor = GetSysColor(COLOR_GRAYTEXT);
+  m_crValueColor = GetSysColor(COLOR_3DFACE);
  }
  m_brushBack.DeleteObject();
  m_brushBack.CreateSolidBrush(GDIHelpers::InvColor(m_crBackColor));
@@ -619,6 +623,13 @@ void COscillCtrl::SetGridColor(COLORREF color)
  InvalidateCtrl();
 }
 
+void COscillCtrl::SetValueColor(COLORREF color)
+{
+ m_normalValueColor = color;
+ _SetStateColors(IsWindowEnabled());
+ InvalidateCtrl();
+}
+
 void COscillCtrl::SetPlotColor(COLORREF color)
 {
  m_normalPlotColor = color;
@@ -679,7 +690,7 @@ void COscillCtrl::_DrawValue(void)
  {
   CFont* oldFont = m_dcValue.SelectObject(&m_valueFont);
   m_dcValue.FillRect(m_rcPlot, &m_BlackBrush);
-  COLORREF color = m_crGridColor ? m_crGridColor : RGB(1,1,1); //replace black color by nearest value, because black color is reserved by our AlphaBlend()
+  COLORREF color = m_crValueColor ? m_crValueColor : RGB(1,1,1); //replace black color by nearest value, because black color is reserved by our AlphaBlend()
   m_dcValue.SetTextColor(color);
   m_dcValue.SetTextAlign(TA_RIGHT|TA_TOP);
   CString str;

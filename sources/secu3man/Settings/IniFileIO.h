@@ -37,6 +37,13 @@ struct SclCfg
 {
  int scaleWidth;      //scale's line width
  COLORREF scaleColor; //scale's color
+ bool     scaleSys;   //use system defined color as background instead of scaleColor
+ COLORREF labelColor; //label color
+ bool     labelSys;   //use system defined color as background instead of labelColor
+ COLORREF arrowColor; //arrow/plot color
+ COLORREF backColor;  //background color
+ bool     backSys;    //use system defined color as background instead of backColor
+ COLORREF digitColor; //digital values color
  int ticksNum;        //number of ticks
  float scaleMin;      //scale minimum
  float scaleMax;      //scale maximum
@@ -441,52 +448,81 @@ class IniIO
    GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 2047, m_fileName.c_str());
    std::vector<AlertZone> vect;      
    std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(read_str, _T(','));
-   if (tokens.size() < 5)
-    goto usedef; //scale width, scale color, number of ticks, scale min and scale max must be present 
+   if (tokens.size() < 8)
+    goto usedef; //scale width, scale color, number of ticks, scale min, scale max, back color, arrow color, digit color must be present 
+   size_t idx = 0;
    int scaleWidth = 0;
-   int result = _stscanf(tokens[0].c_str(), _T("%d"), &scaleWidth);
+   int result = _stscanf(tokens[idx++].c_str(), _T("%d"), &scaleWidth);
    if (result != 1 || (scaleWidth < 0) || (scaleWidth > 5))
     goto usedef;
    COLORREF scaleColor;    
-   result = _stscanf(tokens[1].c_str(), _T("%x"), &scaleColor);
-   if (result != 1 || (scaleColor > 0xFFFFFF))
+   result = _stscanf(tokens[idx++].c_str(), _T("%x"), &scaleColor);
+   if (result != 1 || (scaleColor > 0x1FFFFFF))
     goto usedef;
-   scaleColor = GDIHelpers::swapRB(scaleColor);
+   bool scaleSys = (scaleColor & 0x01000000) > 0;
+   scaleColor = GDIHelpers::swapRB(scaleColor & 0xFFFFFF);
    int ticksNum = 0;
-   result = _stscanf(tokens[2].c_str(), _T("%d"), &ticksNum);
+   result = _stscanf(tokens[idx++].c_str(), _T("%d"), &ticksNum);
    if (result != 1 || (ticksNum < 0) || (ticksNum > MaxTicks))
     goto usedef;
    float scaleMin = 0;
-   result = _stscanf(tokens[3].c_str(), _T("%f"), &scaleMin);
+   result = _stscanf(tokens[idx++].c_str(), _T("%f"), &scaleMin);
    if (result != 1 || (scaleMin < minVal) || (scaleMin > maxVal))
     goto usedef;
    float scaleMax = 0;
-   result = _stscanf(tokens[4].c_str(), _T("%f"), &scaleMax);
+   result = _stscanf(tokens[idx++].c_str(), _T("%f"), &scaleMax);
    if (result != 1 || (scaleMax < minVal) || (scaleMax > maxVal) || (scaleMax <= scaleMin))
     goto usedef;
-   float pieRadius = 0;
-   if (tokens.size() > 5)
+   COLORREF backColor;    
+   result = _stscanf(tokens[idx++].c_str(), _T("%x"), &backColor);
+   if (result != 1 || (backColor > 0x01FFFFFF))
+    goto usedef;
+   bool backSys = (backColor & 0x01000000) > 0;
+   backColor = GDIHelpers::swapRB(backColor & 0xFFFFFF);
+   COLORREF arrowColor;    
+   result = _stscanf(tokens[idx++].c_str(), _T("%x"), &arrowColor);
+   if (result != 1 || (arrowColor > 0xFFFFFF))
+    goto usedef;
+   arrowColor = GDIHelpers::swapRB(arrowColor);
+   COLORREF digitColor;    
+   result = _stscanf(tokens[idx++].c_str(), _T("%x"), &digitColor);
+   if (result != 1 || (digitColor > 0xFFFFFF))
+    goto usedef;
+   digitColor = GDIHelpers::swapRB(digitColor);
+
+   COLORREF labelColor = 0;
+   bool labelSys = false;
+   if (tokens.size() > idx)
    {
-    result = _stscanf(tokens[5].c_str(), _T("%f"), &pieRadius);
+    result = _stscanf(tokens[idx++].c_str(), _T("%x"), &labelColor);
+    if (result != 1 || (labelColor > 0x01FFFFFF))
+     goto usedef;
+    labelSys = (labelColor & 0x01000000) > 0;
+    labelColor = GDIHelpers::swapRB(labelColor & 0xFFFFFF);
+   }
+   float pieRadius = 0;
+   if (tokens.size() > idx)
+   {
+    result = _stscanf(tokens[idx++].c_str(), _T("%f"), &pieRadius);
     if (result != 1 || (pieRadius < .0f) || (pieRadius > 100.0f))
      goto usedef;
    }
    int scaleLength = 0;
-   if (tokens.size() > 6)
+   if (tokens.size() > idx)
    {
-    result = _stscanf(tokens[6].c_str(), _T("%d"), &scaleLength);
+    result = _stscanf(tokens[idx++].c_str(), _T("%d"), &scaleLength);
     if (result != 1 || (scaleLength < 90) || (scaleLength > 180))
      goto usedef;
    }
    float tickLength = 0;
-   if (tokens.size() > 7)
+   if (tokens.size() > idx)
    {
-    result = _stscanf(tokens[7].c_str(), _T("%f"), &tickLength);
+    result = _stscanf(tokens[idx++].c_str(), _T("%f"), &tickLength);
     if (result != 1 || (tickLength < -20.0f) || (tickLength > 100.0f))
      goto usedef;
    }
  
-   for (size_t i = 8; i < tokens.size(); ++i)
+   for (size_t i = idx; i < tokens.size(); ++i)
    {
     float start, end;
     COLORREF color;    
@@ -505,9 +541,16 @@ class IniIO
  
    field.value.scaleWidth = scaleWidth;
    field.value.scaleColor = scaleColor;
+   field.value.scaleSys = scaleSys;
    field.value.ticksNum = ticksNum;
    field.value.scaleMin = scaleMin;
    field.value.scaleMax = scaleMax;
+   field.value.backColor = backColor;
+   field.value.backSys = backSys;
+   field.value.arrowColor = arrowColor;
+   field.value.digitColor = digitColor;
+   field.value.labelColor = labelColor;
+   field.value.labelSys = labelSys;
    field.value.alezn = vect;
    field.value.pieRadius = pieRadius / 100.0f; //convert from % to 0...1 range
    field.value.scaleLength = scaleLength;
@@ -516,29 +559,47 @@ class IniIO
 
   usedef:
    std::vector<_TSTRING> tokensdef = StrUtils::TokenizeStr(defVal.c_str(), _T(','));
-   _stscanf(tokensdef[0].c_str(), _T("%d"), &field.value.scaleWidth);
-   _stscanf(tokensdef[1].c_str(), _T("%x"), &field.value.scaleColor);
-   _stscanf(tokensdef[2].c_str(), _T("%d"), &field.value.ticksNum);
-   _stscanf(tokensdef[3].c_str(), _T("%f"), &field.value.scaleMin);
-   _stscanf(tokensdef[4].c_str(), _T("%f"), &field.value.scaleMax);
-   field.value.scaleColor = GDIHelpers::swapRB(field.value.scaleColor);
-   field.value.pieRadius = .0f;
-   if (tokensdef.size() > 5)
+   idx = 0;
+   _stscanf(tokensdef[idx++].c_str(), _T("%d"), &field.value.scaleWidth);
+   _stscanf(tokensdef[idx++].c_str(), _T("%x"), &field.value.scaleColor);
+   field.value.scaleSys = (field.value.scaleColor & 0x01000000) > 0;
+   field.value.scaleColor = GDIHelpers::swapRB(field.value.scaleColor & 0xFFFFFF);
+   _stscanf(tokensdef[idx++].c_str(), _T("%d"), &field.value.ticksNum);
+   _stscanf(tokensdef[idx++].c_str(), _T("%f"), &field.value.scaleMin);
+   _stscanf(tokensdef[idx++].c_str(), _T("%f"), &field.value.scaleMax);
+   _stscanf(tokensdef[idx++].c_str(), _T("%x"), &field.value.backColor);
+   field.value.backSys = (field.value.backColor & 0x01000000) > 0;
+   field.value.backColor = GDIHelpers::swapRB(field.value.backColor & 0xFFFFFF);
+   _stscanf(tokensdef[idx++].c_str(), _T("%x"), &field.value.arrowColor);
+   field.value.arrowColor = GDIHelpers::swapRB(field.value.arrowColor);
+   _stscanf(tokensdef[idx++].c_str(), _T("%x"), &field.value.digitColor);
+   field.value.digitColor = GDIHelpers::swapRB(field.value.digitColor);
+
+   field.value.labelColor = 0;
+   if (tokensdef.size() > idx)
    {
-    _stscanf(tokensdef[5].c_str(), _T("%f"), &field.value.pieRadius);
+    _stscanf(tokensdef[idx++].c_str(), _T("%x"), &field.value.labelColor);
+    field.value.labelSys = (field.value.labelColor & 0x01000000) > 0;
+    field.value.labelColor = GDIHelpers::swapRB(field.value.labelColor & 0xFFFFFF);
+   }
+
+   field.value.pieRadius = .0f;
+   if (tokensdef.size() > idx)
+   {
+    _stscanf(tokensdef[idx++].c_str(), _T("%f"), &field.value.pieRadius);
     field.value.pieRadius/=100.0f; //convert from % to 0...1 range
    }
-   if (tokensdef.size() > 6)
+   if (tokensdef.size() > idx)
    {
-    _stscanf(tokensdef[6].c_str(), _T("%d"), &field.value.scaleLength);
+    _stscanf(tokensdef[idx++].c_str(), _T("%d"), &field.value.scaleLength);
    }
-   if (tokensdef.size() > 7)
+   if (tokensdef.size() > idx)
    {
-    _stscanf(tokensdef[7].c_str(), _T("%f"), &field.value.tickLength);
+    _stscanf(tokensdef[idx++].c_str(), _T("%f"), &field.value.tickLength);
     field.value.tickLength/=100.0f; //convert from %
    }
    field.value.alezn.clear(); 
-   for (size_t i = 6; i < tokensdef.size(); ++i)
+   for (size_t i = idx; i < tokensdef.size(); ++i)
    {
     float start, end;
     COLORREF color;
@@ -557,7 +618,7 @@ class IniIO
   {
    CString str, s;
    str.Format(_T("%d"), field.value.scaleWidth);
-   s.Format(_T(",%06X"), GDIHelpers::swapRB(field.value.scaleColor));
+   s.Format(_T(",%06X"), GDIHelpers::swapRB(field.value.scaleColor) | (field.value.scaleSys ? 0x01000000 : 0));
    str+=s;
    s.Format(_T(",%d"), field.value.ticksNum);
    str+=s;
@@ -565,8 +626,17 @@ class IniIO
    str+=s;
    s.Format(_T(",%.*f"), decPlaces, field.value.scaleMax);
    str+=s;
+   s.Format(_T(",%06X"), GDIHelpers::swapRB(field.value.backColor) | (field.value.backSys ? 0x01000000 : 0));
+   str+=s;
+   s.Format(_T(",%06X"), GDIHelpers::swapRB(field.value.arrowColor));
+   str+=s;
+   s.Format(_T(",%06X"), GDIHelpers::swapRB(field.value.digitColor));
+   str+=s;
+
    if (!grh)
    {
+    s.Format(_T(",%06X"), GDIHelpers::swapRB(field.value.labelColor) | (field.value.labelSys ? 0x01000000 : 0));
+    str+=s;
     s.Format(_T(",%.*f"), 1, field.value.pieRadius * 100.0f); //convert from 0...1 range to %
     str+=s;
     s.Format(_T(",%d"), field.value.scaleLength);

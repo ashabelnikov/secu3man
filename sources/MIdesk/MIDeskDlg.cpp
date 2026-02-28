@@ -241,7 +241,7 @@ void CMIDeskDlg::Enable(bool enable)
  //meters
  MetFields_t::iterator it;
  for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
-  it->second->Enable(enable);
+  it->second->Enable(enable, m_metCfg[it->second->m_uiID]);
  //indicators
  m_leds.EnableWindow(enable);
 }
@@ -524,7 +524,7 @@ void CMIDeskDlg::SetMetersCfg(const MetersCfg* cfg, int TitleFontSize, int Value
  //enable/disable
  MetFields_t::iterator it;
  for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
-  it->second->Enable(m_enabled, false);
+  it->second->Enable(m_enabled, m_metCfg[it->second->m_uiID], false);
 
  _Resize();
 }
@@ -585,7 +585,7 @@ void CMIDeskDlg::OnPaint()
  {
   m_COLOR_BTNFACE = newcolor;
   for(MetFields_t::iterator it = m_metFields.begin(); it != m_metFields.end(); ++it)
-   it->second->UpdateColors();
+   it->second->UpdateColors(m_metCfg[it->second->m_uiID]);
  }
 }
 
@@ -946,6 +946,21 @@ void CMIDeskDlg::OnUpdateMetDelete(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_metFields.size() && m_dragItemMet != m_metFields.end());
 }
 
+COLORREF CMIDeskDlg::_GetBackColor(const MetCfg& cfg)
+{
+ return cfg.backSys ? GetSysColor(COLOR_BTNFACE) : cfg.backColor;
+}
+
+COLORREF CMIDeskDlg::_GetLabelColor(const MetCfg& cfg)
+{
+ return cfg.labelSys ? GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)) : cfg.labelColor;
+}
+
+COLORREF CMIDeskDlg::_GetScaleColor(const MetCfg& cfg)
+{
+ return cfg.scaleSys ? GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)) : cfg.scaleColor;
+}
+
 void CMIDeskDlg::OnMetEditScale()
 {
  ScaleEditorDlg dlg;
@@ -986,7 +1001,11 @@ void CMIDeskDlg::OnMetEditScale()
    widget->SetAlertZones(m_metCfg[uiId].alezn, m_optMetInjTimB1[0].alezn);
    widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimB1[0].ticksNum);
    widget->SetLineWidth(p_mcfg->scaleWidth);
-   widget->SetLineColor(p_mcfg->scaleColor);
+   widget->SetLineColor(_GetScaleColor(*p_mcfg));
+   widget->SetLabelColor(_GetLabelColor(*p_mcfg));
+   widget->SetArrowColor(p_mcfg->arrowColor);
+   widget->SetBackColor(_GetBackColor(*p_mcfg));
+   widget->SetDigitColor(p_mcfg->digitColor);
    widget->SetPieRadius(p_mcfg->pieRadius);
    widget->SetScaleLength(p_mcfg->scaleLength);
    widget->SetTickLength(p_mcfg->tickLength);
@@ -999,7 +1018,11 @@ void CMIDeskDlg::OnMetEditScale()
    widget->SetAlertZones(m_metCfg[uiId].alezn, m_optMetInjTimE1[0].alezn);
    widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimE1[0].ticksNum);
    widget->SetLineWidth(p_mcfg->scaleWidth);
-   widget->SetLineColor(p_mcfg->scaleColor);
+   widget->SetLineColor(_GetScaleColor(*p_mcfg));
+   widget->SetLabelColor(_GetLabelColor(*p_mcfg));
+   widget->SetArrowColor(p_mcfg->arrowColor);
+   widget->SetBackColor(_GetBackColor(*p_mcfg));
+   widget->SetDigitColor(p_mcfg->digitColor);
    widget->SetPieRadius(p_mcfg->pieRadius);
    widget->SetScaleLength(p_mcfg->scaleLength);
    widget->SetTickLength(p_mcfg->tickLength);
@@ -1011,7 +1034,10 @@ void CMIDeskDlg::OnMetEditScale()
    widget->SetLimits(m_metCfg[uiId].scaleMin, m_metCfg[uiId].scaleMax, m_optMetInjTimB1[1].scaleMin, m_optMetInjTimB1[1].scaleMax);
    widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimB1[1].ticksNum);
    widget->SetLineWidth(p_mcfg->scaleWidth);
-   widget->SetLineColor(p_mcfg->scaleColor);
+   widget->SetLineColor(_GetScaleColor(*p_mcfg));
+   widget->SetArrowColor(p_mcfg->arrowColor);
+   widget->SetBackColor(_GetBackColor(*p_mcfg));
+   widget->SetDigitColor(p_mcfg->digitColor);
    widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
   }
   else if (uiId == IDM_MI_GRH_INJTIME)
@@ -1020,7 +1046,10 @@ void CMIDeskDlg::OnMetEditScale()
    widget->SetLimits(m_metCfg[uiId].scaleMin, m_metCfg[uiId].scaleMax, m_optMetInjTimE1[1].scaleMin, m_optMetInjTimE1[1].scaleMax);
    widget->SetTickNumber(m_metCfg[uiId].ticksNum, m_optMetInjTimE1[1].ticksNum);
    widget->SetLineWidth(p_mcfg->scaleWidth);
-   widget->SetLineColor(p_mcfg->scaleColor);
+   widget->SetLineColor(_GetScaleColor(*p_mcfg));
+   widget->SetArrowColor(p_mcfg->arrowColor);
+   widget->SetBackColor(_GetBackColor(*p_mcfg));
+   widget->SetDigitColor(p_mcfg->digitColor);
    widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
   }
   else
@@ -1034,10 +1063,14 @@ void CMIDeskDlg::OnMetEditScale()
     widget->SetScaleLength(p_mcfg->scaleLength);
     widget->SetTickLength(p_mcfg->tickLength);
     widget->SetAlertZones(p_mcfg->alezn);
+    widget->SetLabelColor(_GetLabelColor(*p_mcfg));
    }
    widget->SetTickNumber(p_mcfg->ticksNum);
    widget->SetLineWidth(p_mcfg->scaleWidth);
-   widget->SetLineColor(p_mcfg->scaleColor);
+   widget->SetLineColor(_GetScaleColor(*p_mcfg));
+   widget->SetArrowColor(p_mcfg->arrowColor);
+   widget->SetBackColor(_GetBackColor(*p_mcfg));
+   widget->SetDigitColor(p_mcfg->digitColor);
   }
   m_dragItemMet->second->Redraw();
 
@@ -1055,7 +1088,7 @@ void CMIDeskDlg::OnMetAddGauge(UINT nID)
 
  MeasInstrBase *widget = _MetFactory(nID);
  if (widget)
-  widget->Enable(m_enabled);
+  widget->Enable(m_enabled, m_metCfg[nID]);
 
  _MetRearrangeKeys();
 
@@ -1100,7 +1133,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1122,7 +1159,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1141,7 +1181,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1163,7 +1207,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1182,7 +1229,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1204,7 +1255,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1223,7 +1277,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1245,7 +1303,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1269,7 +1330,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1293,7 +1358,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1311,7 +1379,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1333,7 +1405,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1352,7 +1427,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1374,7 +1453,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1393,7 +1475,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1415,7 +1501,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1434,7 +1523,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1457,7 +1550,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1475,7 +1571,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1497,7 +1597,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1516,7 +1619,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1539,7 +1646,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1558,7 +1668,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1580,7 +1694,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1599,7 +1716,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1622,7 +1743,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetMeterUnit(m_speedUnit);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
@@ -1642,7 +1766,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1664,7 +1792,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1683,7 +1814,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1705,7 +1840,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1724,7 +1862,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1746,7 +1888,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1765,7 +1910,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1787,7 +1936,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1806,7 +1958,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1828,7 +1984,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -1847,7 +2006,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1870,7 +2033,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1888,7 +2054,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1911,7 +2081,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1932,7 +2105,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1955,7 +2132,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -1973,7 +2153,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -1995,7 +2179,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2014,7 +2201,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2037,7 +2228,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2055,7 +2249,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2077,7 +2275,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2096,7 +2297,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2118,7 +2323,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2137,7 +2345,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2159,7 +2371,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2178,7 +2393,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2200,7 +2419,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2219,7 +2441,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn, m_optMetInjTimB1[0].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimB1[0].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2243,7 +2469,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax, m_optMetInjTimB1[1].scaleMin, m_optMetInjTimB1[1].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimB1[1].ticksNum); 
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2262,7 +2491,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn, m_optMetInjTimE1[0].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimE1[0].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2286,7 +2519,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax, m_optMetInjTimE1[1].scaleMin, m_optMetInjTimE1[1].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum, m_optMetInjTimE1[1].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetITMode(m_it_mode); //<---sets limits and number of ticks
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2305,7 +2541,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2327,7 +2567,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2346,7 +2589,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2369,7 +2616,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2387,7 +2637,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2410,7 +2664,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2428,7 +2685,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2451,7 +2712,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2469,7 +2733,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2491,7 +2759,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2510,7 +2781,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2532,7 +2807,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2551,7 +2829,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2573,7 +2855,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2592,7 +2877,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2615,7 +2904,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;
@@ -2633,7 +2925,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2655,7 +2951,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2674,7 +2973,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2696,7 +2999,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2715,7 +3021,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2737,7 +3047,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2756,7 +3069,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2778,7 +3095,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2797,7 +3117,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2819,7 +3143,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2838,7 +3165,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2860,7 +3191,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2879,7 +3213,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2901,7 +3239,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
@@ -2920,7 +3261,11 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetAlertZones(m_metCfg[uiID].alezn);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetLabelColor(_GetLabelColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    widget->SetPieRadius(m_metCfg[uiID].pieRadius);
    widget->SetScaleLength(m_metCfg[uiID].scaleLength);
    widget->SetTickLength(m_metCfg[uiID].tickLength);
@@ -2943,7 +3288,10 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetLimits(m_metCfg[uiID].scaleMin, m_metCfg[uiID].scaleMax);
    widget->SetTickNumber(m_metCfg[uiID].ticksNum);
    widget->SetLineWidth(m_metCfg[uiID].scaleWidth);
-   widget->SetLineColor(m_metCfg[uiID].scaleColor);
+   widget->SetLineColor(_GetScaleColor(m_metCfg[uiID]));
+   widget->SetArrowColor(m_metCfg[uiID].arrowColor);
+   widget->SetBackColor(_GetBackColor(m_metCfg[uiID]));
+   widget->SetDigitColor(m_metCfg[uiID].digitColor);
    m_metFields.insert(std::make_pair(m_metCfg[uiID].position, widget));
    new_widget = widget;
    break;

@@ -66,6 +66,13 @@ class ScaleEditorDlg : public CDialog
   afx_msg void OnChangeData();
   afx_msg void OnChangeDataSc();
   afx_msg void OnLButtonDown(UINT, CPoint);
+  afx_msg void OnLabelSys();
+  afx_msg void OnBackSys();
+  afx_msg void OnScaleSys();
+  afx_msg void OnUpdateMetLabelColor(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateMetBackColor(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateMetScaleColor(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateMetLabelSysCheck(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void AppendAZList(int index, const _TSTRING& i_start, const _TSTRING& i_end, COLORREF color);
@@ -77,6 +84,9 @@ class ScaleEditorDlg : public CDialog
   CFont m_font;
   CButton m_az_add;
   CButton m_az_del;
+  CButton m_labelSys_check;
+  CButton m_backSys_check;
+  CButton m_scaleSys_check;
   CSpinButtonCtrlEx m_scale_begin_spin;
   CEditEx m_scale_begin_edit;
   CSpinButtonCtrlEx m_scale_end_spin;
@@ -98,6 +108,11 @@ class ScaleEditorDlg : public CDialog
   CEditEx m_scale_anglen_edit;
   CSpinButtonCtrlEx m_scale_ticlen_spin;
   CEditEx m_scale_ticlen_edit;
+
+  CMultiLEDCtrl m_label_color;
+  CMultiLEDCtrl m_arrow_color;
+  CMultiLEDCtrl m_back_color;
+  CMultiLEDCtrl m_digit_color;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   MetCfg m_cfg;

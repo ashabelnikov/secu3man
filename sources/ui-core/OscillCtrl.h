@@ -51,6 +51,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void SetPlotColor(COLORREF color);
   void SetPlotWidth(int width);
   void SetGridColor(COLORREF color);
+  void SetValueColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);
   void SetUnitX(const _TSTRING& str);
   void SetUnitY(const _TSTRING& str);
@@ -102,9 +103,11 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   COLORREF m_crBackColor;      // background color
   COLORREF m_crGridColor;      // grid color
   COLORREF m_crPlotColor;      // data color
+  COLORREF m_crValueColor;     // value color
   COLORREF m_normalBackColor;
   COLORREF m_normalGridColor;
   COLORREF m_normalPlotColor;
+  COLORREF m_normalValueColor;
 
   CRect  m_rcClient;
   CRect  m_rcPlot;

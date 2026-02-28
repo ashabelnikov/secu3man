@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "ScaleEditorDlg.h"
+#include "ui-core/DDX_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/ColorDialogEx.h"
@@ -47,6 +48,9 @@ BEGIN_MESSAGE_MAP(ScaleEditorDlg, Super)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_MI_SED_AZ_LIST, OnChangeAZList)
  ON_BN_CLICKED(IDC_MI_SED_AZ_DEL, OnAZDelete)
  ON_BN_CLICKED(IDC_MI_SED_AZ_ADD, OnAZAdd)
+ ON_BN_CLICKED(IDC_MI_SED_LABELSYS_CHECK, OnLabelSys)
+ ON_BN_CLICKED(IDC_MI_SED_BACKSYS_CHECK, OnBackSys)
+ ON_BN_CLICKED(IDC_MI_SED_SCALESYS_CHECK, OnScaleSys)
  ON_EN_CHANGE(IDC_MI_SED_AZ_BEGIN_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_MI_SED_AZ_END_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_MI_SED_SCALE_BEGIN_EDIT, OnChangeDataSc)
@@ -71,6 +75,13 @@ BEGIN_MESSAGE_MAP(ScaleEditorDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_PIERAD_CAPTION, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_ANGLEN_CAPTION, OnUpdateMetCtrls)
  ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_TICLEN_CAPTION, OnUpdateMetCtrls)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_LABEL_COLOR, OnUpdateMetLabelColor)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_LABEL_COLOR_CAPTION, OnUpdateMetLabelColor)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_BACK_COLOR, OnUpdateMetBackColor)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_BACK_COLOR_CAPTION, OnUpdateMetBackColor)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_LABELSYS_CHECK, OnUpdateMetLabelSysCheck)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_COLOR, OnUpdateMetScaleColor)
+ ON_UPDATE_COMMAND_UI(IDC_MI_SED_SCALE_COLOR_CAPTION, OnUpdateMetScaleColor)
 END_MESSAGE_MAP()
 
 ScaleEditorDlg::ScaleEditorDlg(CWnd* pParent /*=NULL*/)
@@ -87,6 +98,10 @@ ScaleEditorDlg::ScaleEditorDlg(CWnd* pParent /*=NULL*/)
 , m_scale_ticlen_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_az_color(DLL::GetModuleHandle())
 , m_scale_color(DLL::GetModuleHandle())
+, m_label_color(DLL::GetModuleHandle())
+, m_arrow_color(DLL::GetModuleHandle())
+, m_back_color(DLL::GetModuleHandle())
+, m_digit_color(DLL::GetModuleHandle())
 {
  //empty
 }
@@ -123,6 +138,13 @@ void ScaleEditorDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MI_SED_SCALE_ANGLEN_SPIN, m_scale_anglen_spin);
  DDX_Control(pDX, IDC_MI_SED_SCALE_TICLEN_EDIT, m_scale_ticlen_edit);
  DDX_Control(pDX, IDC_MI_SED_SCALE_TICLEN_SPIN, m_scale_ticlen_spin);
+ DDX_Control(pDX, IDC_MI_SED_LABEL_COLOR, m_label_color);
+ DDX_Control(pDX, IDC_MI_SED_ARROW_COLOR, m_arrow_color);
+ DDX_Control(pDX, IDC_MI_SED_BACK_COLOR, m_back_color);
+ DDX_Control(pDX, IDC_MI_SED_DIGIT_COLOR, m_digit_color);
+ DDX_Control(pDX, IDC_MI_SED_LABELSYS_CHECK, m_labelSys_check);
+ DDX_Control(pDX, IDC_MI_SED_BACKSYS_CHECK, m_backSys_check);
+ DDX_Control(pDX, IDC_MI_SED_SCALESYS_CHECK, m_scaleSys_check);
 
  m_scale_begin_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_BEGIN_EDIT, m_cfg.scaleMin);
  m_scale_end_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_END_EDIT, m_cfg.scaleMax);
@@ -135,6 +157,9 @@ void ScaleEditorDlg::DoDataExchange(CDataExchange* pDX)
  m_scale_ticlen_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_TICLEN_EDIT, tickLength);
  m_cfg.tickLength = tickLength / 100.0f; //convert from %
  m_scale_anglen_edit.DDX_Value(pDX, IDC_MI_SED_SCALE_ANGLEN_EDIT, m_cfg.scaleLength);
+ DDX_Check_bool(pDX, IDC_MI_SED_LABELSYS_CHECK, m_cfg.labelSys);
+ DDX_Check_bool(pDX, IDC_MI_SED_BACKSYS_CHECK, m_cfg.backSys);
+ DDX_Check_bool(pDX, IDC_MI_SED_SCALESYS_CHECK, m_cfg.scaleSys);
 
  if (m_az_list.GetSelectedCount()==1)
  {
@@ -182,6 +207,26 @@ BOOL ScaleEditorDlg::OnInitDialog()
  m_scale_color.AddItem(_T(""), RGB(127,127,127));
  m_scale_color.SetItemState(0, false);
  m_scale_color.SetFont(&m_font);
+
+ m_label_color.SetNumRows(1);
+ m_label_color.AddItem(_T(""), RGB(127,127,127));
+ m_label_color.SetItemState(0, false);
+ m_label_color.SetFont(&m_font);
+
+ m_arrow_color.SetNumRows(1);
+ m_arrow_color.AddItem(_T(""), RGB(127,127,127));
+ m_arrow_color.SetItemState(0, false);
+ m_arrow_color.SetFont(&m_font);
+
+ m_back_color.SetNumRows(1);
+ m_back_color.AddItem(_T(""), RGB(127,127,127));
+ m_back_color.SetItemState(0, false);
+ m_back_color.SetFont(&m_font);
+
+ m_digit_color.SetNumRows(1);
+ m_digit_color.AddItem(_T(""), RGB(127,127,127));
+ m_digit_color.SetItemState(0, false);
+ m_digit_color.SetFont(&m_font);
 
  DPIAware dpia;
  m_az_list.InsertColumn(0, MLL::LoadString(IDS_MI_SED_AZLH_START), LVCFMT_LEFT, dpia.ScaleX(80));
@@ -269,14 +314,33 @@ BOOL ScaleEditorDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_scale_width_spin, MLL::GetString(scaleWidthTT)));
  CRect rcScaleColor = GDIHelpers::GetChildWndRect(&m_scale_color);
  mp_ttc->AddRectangle(this, MLL::GetString(m_meter ? IDS_MI_SED_SCALE_COLOR_TT : IDS_MI_SED_SCALE_COLOR_TT1), &rcScaleColor,0);
+ CRect rcLabelColor = GDIHelpers::GetChildWndRect(&m_label_color);
+ mp_ttc->AddRectangle(this, MLL::GetString(IDS_MI_SED_LABEL_COLOR_TT), &rcLabelColor,0);
  CRect rcZoneColor = GDIHelpers::GetChildWndRect(&m_az_color);
  mp_ttc->AddRectangle(this, MLL::GetString(IDS_MI_SED_AZ_COLOR_TT), &rcZoneColor,0);
+ CRect rcArrowColor = GDIHelpers::GetChildWndRect(&m_arrow_color);
+ mp_ttc->AddRectangle(this, MLL::GetString(m_meter ? IDS_MI_SED_ARROW_COLOR_TT : IDS_MI_SED_ARROW_COLOR_TT1), &rcArrowColor,0);
+ CRect rcBackColor = GDIHelpers::GetChildWndRect(&m_back_color);
+ mp_ttc->AddRectangle(this, MLL::GetString(IDS_MI_SED_BACK_COLOR_TT), &rcBackColor,0);
+ CRect rcDigitColor = GDIHelpers::GetChildWndRect(&m_digit_color);
+ mp_ttc->AddRectangle(this, MLL::GetString(IDS_MI_SED_DIGIT_COLOR_TT), &rcDigitColor,0);
+ VERIFY(mp_ttc->AddWindow(&m_labelSys_check, MLL::GetString(IDS_MI_SED_LABELSYS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_backSys_check, MLL::GetString(IDS_MI_SED_LABELSYS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_scaleSys_check, MLL::GetString(IDS_MI_SED_LABELSYS_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  m_scale_color.SetItemColor(0, m_cfg.scaleColor);
  m_scale_color.SetItemState(0, true);
+ m_label_color.SetItemColor(0, m_cfg.labelColor);
+ m_label_color.SetItemState(0, true);
+ m_arrow_color.SetItemColor(0, m_cfg.arrowColor);
+ m_arrow_color.SetItemState(0, true);
+ m_back_color.SetItemColor(0, m_cfg.backColor);
+ m_back_color.SetItemState(0, true);
+ m_digit_color.SetItemColor(0, m_cfg.digitColor);
+ m_digit_color.SetItemState(0, true);
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -308,6 +372,26 @@ void ScaleEditorDlg::OnUpdateAZDel(CCmdUI* pCmdUI)
 void ScaleEditorDlg::OnUpdateAZEdit(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_meter && m_az_list.GetSelectedCount()==1);
+}
+
+void ScaleEditorDlg::OnUpdateMetLabelColor(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_meter && m_cfg.labelSys == false);
+}
+
+void ScaleEditorDlg::OnUpdateMetBackColor(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_cfg.backSys == false);
+}
+
+void ScaleEditorDlg::OnUpdateMetLabelSysCheck(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_meter);
+}
+
+void ScaleEditorDlg::OnUpdateMetScaleColor(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_cfg.scaleSys == false);
 }
 
 void ScaleEditorDlg::OnChangeData()
@@ -438,7 +522,7 @@ void ScaleEditorDlg::OnLButtonDown(UINT nFlags, CPoint point)
   }
  }
 
- rc = m_az_color.GetItemRect(0);
+ rc = m_scale_color.GetItemRect(0);
  m_scale_color.ClientToScreen(&rc);
  if (rc.PtInRect(ptscr))
  {
@@ -448,6 +532,59 @@ void ScaleEditorDlg::OnLButtonDown(UINT nFlags, CPoint point)
    COLORREF color = dlg.GetColor(); 
    m_scale_color.SetItemColor(0, color);
    m_cfg.scaleColor = color;   
+  }
+ }
+
+ rc = m_label_color.GetItemRect(0);
+ m_label_color.ClientToScreen(&rc);
+ if (rc.PtInRect(ptscr) && m_meter)
+ {
+  CColorDialogEx dlg(m_cfg.labelColor); 
+  if (dlg.DoModal() == IDOK) 
+  { 
+   COLORREF color = dlg.GetColor(); 
+   m_label_color.SetItemColor(0, color);
+   m_cfg.labelColor = color;   
+  }
+ }
+
+ rc = m_arrow_color.GetItemRect(0);
+ m_arrow_color.ClientToScreen(&rc);
+ if (rc.PtInRect(ptscr))
+ {
+  CColorDialogEx dlg(m_cfg.arrowColor); 
+  if (dlg.DoModal() == IDOK) 
+  { 
+   COLORREF color = dlg.GetColor(); 
+   m_arrow_color.SetItemColor(0, color);
+   m_cfg.arrowColor = color;   
+  }
+ }
+
+
+ rc = m_back_color.GetItemRect(0);
+ m_back_color.ClientToScreen(&rc);
+ if (rc.PtInRect(ptscr))
+ {
+  CColorDialogEx dlg(m_cfg.backColor); 
+  if (dlg.DoModal() == IDOK) 
+  { 
+   COLORREF color = dlg.GetColor(); 
+   m_back_color.SetItemColor(0, color);
+   m_cfg.backColor = color;   
+  }
+ }
+
+ rc = m_digit_color.GetItemRect(0);
+ m_digit_color.ClientToScreen(&rc);
+ if (rc.PtInRect(ptscr))
+ {
+  CColorDialogEx dlg(m_cfg.digitColor); 
+  if (dlg.DoModal() == IDOK) 
+  { 
+   COLORREF color = dlg.GetColor(); 
+   m_digit_color.SetItemColor(0, color);
+   m_cfg.digitColor = color;   
   }
  }
 
@@ -536,4 +673,19 @@ _TSTRING ScaleEditorDlg::FormatColor(COLORREF val)
 void ScaleEditorDlg::SetName(const CString& str)
 {
  m_name = str;
+}
+
+void ScaleEditorDlg::OnLabelSys()
+{
+ m_cfg.labelSys = m_labelSys_check.GetCheck()==BST_CHECKED;
+}
+
+void ScaleEditorDlg::OnBackSys()
+{
+ m_cfg.backSys = m_backSys_check.GetCheck()==BST_CHECKED;
+}
+
+void ScaleEditorDlg::OnScaleSys()
+{
+ m_cfg.scaleSys = m_scaleSys_check.GetCheck()==BST_CHECKED;
 }

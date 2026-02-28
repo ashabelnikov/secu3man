@@ -211,8 +211,8 @@ CInjectorPageDlg::CInjectorPageDlg()
  
  m_params.mafload_const = 0;
 
- m_params.injpw_dec_speed = 0.4;
- m_params.injpw_inc_speed = 0.4;
+ m_params.injpw_dec_speed = 0.4f;
+ m_params.injpw_inc_speed = 0.4f;
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
