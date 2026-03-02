@@ -883,6 +883,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optDbgVar[i].decplaces.name = str;
   str.Format("Divider%d", i+1);
   m_optDbgVar[i].mult.name = str;
+  str.Format("SepBytes%d", i+1);
+  m_optDbgVar[i].bytes.name = str;
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -1914,6 +1916,7 @@ bool CAppSettingsModel::ReadSettings(void)
   dv.ReadInt(m_optDbgVar[i].sign, _T("0"), 0, 1);
   dv.ReadInt(m_optDbgVar[i].decplaces, _T("0"), 0, 4);
   dv.ReadFlt(m_optDbgVar[i].mult, _T("1.0"), -65536.0f, 65536.0f);
+  dv.ReadInt(m_optDbgVar[i].bytes, _T("0"), 0, 1);
  }
 
  //Functionality
@@ -4611,6 +4614,7 @@ bool CAppSettingsModel::WriteSettings(void)
   dv.WriteInt(m_optDbgVar[i].sign);
   dv.WriteInt(m_optDbgVar[i].decplaces);
   dv.WriteFlt(m_optDbgVar[i].mult, 3);
+  dv.WriteInt(m_optDbgVar[i].bytes);
  }
 
  //Functionality
@@ -7196,6 +7200,7 @@ void CAppSettingsModel::GetDbgVarsConfig(DbgVarsCfg* o_cfg) const
   o_cfg->var[i].sign = m_optDbgVar[i].sign.value;
   o_cfg->var[i].decplaces = m_optDbgVar[i].decplaces.value;
   o_cfg->var[i].mult = m_optDbgVar[i].mult.value;
+  o_cfg->var[i].bytes = m_optDbgVar[i].bytes.value;
  }
 }
 
@@ -7207,5 +7212,6 @@ void CAppSettingsModel::SetDbgVarsConfig(const DbgVarsCfg* i_cfg)
   m_optDbgVar[i].sign.value = i_cfg->var[i].sign;
   m_optDbgVar[i].decplaces.value = i_cfg->var[i].decplaces;
   m_optDbgVar[i].mult.value = i_cfg->var[i].mult;
+  m_optDbgVar[i].bytes.value = i_cfg->var[i].bytes;
  }
 }

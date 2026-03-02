@@ -721,6 +721,7 @@ struct DbgVar
 {
  bool hex;
  bool sign;
+ bool bytes;
  int  decplaces;
  float mult;
 };

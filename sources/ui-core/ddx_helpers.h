@@ -40,3 +40,4 @@ void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value)
 void DDX_HELPERS_API DDX_Radio_bool(CDataExchange* pDX, int nIDC, bool& value);
 void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, float& value, LPCTSTR OutFmt=_T("%f"), LPCTSTR InFmt=_T("%f"));
 void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, int& value, LPCTSTR OutFmt=_T("%d"), LPCTSTR InFmt=_T("%d"));
+void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, int& value1, int& value2, LPCTSTR OutFmt=_T("%d"), LPCTSTR InFmt=_T("%d"), LPCTSTR separator=_T(" "));

@@ -39,6 +39,7 @@ struct DbgVarOpt
  OptField_t<bool> sign;
  OptField_t<int> decplaces;
  OptField_t<float> mult;
+ OptField_t<bool> bytes;
 };
 
 //хранит и сохраняет/загружает данные

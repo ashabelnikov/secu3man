@@ -154,3 +154,15 @@ void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, int& value, LPCT
  if (pDX->m_bSaveAndValidate)
   _stscanf(temp, InFmt, &value);
 }
+
+void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, int& value1, int& value2, LPCTSTR OutFmt, LPCTSTR InFmt, LPCTSTR separator)
+{
+ CString temp;
+ if (!pDX->m_bSaveAndValidate)
+  temp.Format(CString(OutFmt) + CString(separator) + CString(OutFmt), value1, value2);
+
+ DDX_Text(pDX, nIDC, temp);
+
+ if (pDX->m_bSaveAndValidate)
+  _stscanf(temp, CString(InFmt) + CString(separator) + CString(InFmt), &value1, &value2);
+}

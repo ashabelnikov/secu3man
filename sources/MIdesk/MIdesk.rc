@@ -25,6 +25,7 @@ BEGIN
             MENUITEM "3", ID_DVDESK_POPUP_DECPLACES3
             MENUITEM "4", ID_DVDESK_POPUP_DECPLACES4
         END
+        MENUITEM "ќтдельные байты",  ID_DVDESK_POPUP_SEPBYTES
         MENUITEM "—бросить значение",  ID_DVDESK_POPUP_RESET
         MENUITEM "—бросить настройки",  ID_DVDESK_POPUP_RESETCFG
     END
@@ -519,6 +520,7 @@ BEGIN
             MENUITEM "3", ID_DVDESK_POPUP_DECPLACES3
             MENUITEM "4", ID_DVDESK_POPUP_DECPLACES4
         END
+        MENUITEM "Separate bytes", ID_DVDESK_POPUP_SEPBYTES
         MENUITEM "Reset value",  ID_DVDESK_POPUP_RESET
         MENUITEM "Reset config",  ID_DVDESK_POPUP_RESETCFG
     END

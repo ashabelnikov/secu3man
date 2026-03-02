@@ -50,6 +50,10 @@ BEGIN_MESSAGE_MAP(CDVDeskDlg, Super)
  ON_COMMAND(ID_DVDESK_POPUP_RESETCFG, OnResetCfg)
  ON_COMMAND(ID_DVDESK_POPUP_SIGNED, OnSigned)
  ON_COMMAND(ID_DVDESK_POPUP_FORMULA, OnFormula)
+ ON_COMMAND(ID_DVDESK_POPUP_SEPBYTES, OnSepBytes)
+ ON_UPDATE_COMMAND_UI(ID_DVDESK_POPUP_FORMULA, OnUpdateNonBytes)
+ ON_UPDATE_COMMAND_UI(ID_DVDESK_POPUP_SIGNED, OnUpdateNonBytes)
+ ON_UPDATE_COMMAND_UI_RANGE(ID_DVDESK_POPUP_DECPLACES0, ID_DVDESK_POPUP_DECPLACES4, OnUpdateNonBytes)
 END_MESSAGE_MAP()
 
 const UINT CDVDeskDlg::IDD = IDD_DBGVAR_DESK;
@@ -72,6 +76,7 @@ CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
   m_vu[i].hex = true;   //hex is default
   m_vu[i].base_fmt = _T("0x%04X");
   m_vu[i].sign = false; //unsigned is default
+  m_vu[i].bytes = false; //16-bit word is default
   m_vu[i].mult = 1.0f;
   m_vu[i].index = i;
   m_vu[i].decplaces = 0;
@@ -93,14 +98,25 @@ void CDVDeskDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_DV_VAR1_VALUE + i, m_vu[i].var_field);
   DDX_Control(pDX, IDC_DV_VAR1_CAPTION + i, m_vu[i].var_caption);
   DDX_Control(pDX, IDC_DV_BASE1_CHECK + i, m_vu[i].base_check);
-  //When hex mode than always show value as unsigned, when dec mode than show value as signed or unsigned
+  //When hex mode then always show value as unsigned, when dec mode than show value as signed or unsigned
   //depending on m_vu[i].sign
   if (!m_vu[i].hex)
   {
    if (0==m_vu[i].decplaces)
    { //integer
-    int value = MathHelpers::Round(ApplySign(m_vu[i].var_value, m_vu[i].sign) / m_vu[i].mult);
-    DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());  
+    if (m_vu[i].bytes)
+    { //bytes - ignore sign, formula and decimal places
+     int value = m_vu[i].var_value;
+     int value1 = value >> 8;
+     int value2 = value & 0xFF;
+     DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value1, value2, m_vu[i].base_fmt.c_str(), m_vu[i].base_fmt.c_str(), _T(" "));
+     value = (value1 << 8) | value2;
+    }
+    else
+    {
+     int value = MathHelpers::Round(ApplySign(m_vu[i].var_value, m_vu[i].sign) / m_vu[i].mult);
+     DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());
+    }
    }
    else
    {//float
@@ -111,7 +127,17 @@ void CDVDeskDlg::DoDataExchange(CDataExchange* pDX)
   else
   { //hex
    int value = m_vu[i].var_value;
-   DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());
+   if (m_vu[i].bytes)
+   {
+    int value1 = value >> 8;
+    int value2 = value & 0xFF;
+    DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value1, value2, m_vu[i].base_fmt.c_str(), m_vu[i].base_fmt.c_str(), _T("  "));
+    value = (value1 << 8) | value2;
+   }
+   else
+   {
+    DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());
+   }
   }
  }
 }
@@ -142,6 +168,11 @@ void CDVDeskDlg::OnDestroy()
  m_was_initialized = false;
  Super::OnDestroy();
  m_update_timer.KillTimer();
+}
+
+void CDVDeskDlg::OnUpdateNonBytes(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(mp_puvu ? !mp_puvu->bytes : true);
 }
 
 void CDVDeskDlg::OnBaseCheck(UINT nID)
@@ -304,6 +335,8 @@ void CDVDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)
   CMenu *pSub = menu.GetSubMenu(0);
   UINT check_flag = mp_puvu->sign ? MF_CHECKED : MF_UNCHECKED;
   pSub->CheckMenuItem(ID_DVDESK_POPUP_SIGNED, check_flag | MF_BYCOMMAND);
+  check_flag = mp_puvu->bytes ? MF_CHECKED : MF_UNCHECKED;
+  pSub->CheckMenuItem(ID_DVDESK_POPUP_SEPBYTES, check_flag | MF_BYCOMMAND);
   pSub->CheckMenuItem(ID_DVDESK_POPUP_DECPLACES0 + mp_puvu->decplaces, MF_CHECKED | MF_BYCOMMAND);
   pSub->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
  }
@@ -322,10 +355,11 @@ void CDVDeskDlg::OnResetCfg()
 {
  if (mp_puvu)
  {
-  mp_puvu->hex = true;
+  mp_puvu->hex = true;  //default is hex
   mp_puvu->decplaces = 0;
   mp_puvu->mult = 1.0f;
   mp_puvu->sign = false;
+  mp_puvu->bytes = false;
   UpdateStrFmt(mp_puvu->index);
   mp_puvu->base_check.SetCheck(mp_puvu->hex ? BST_UNCHECKED : BST_CHECKED);
   UpdateData(FALSE);
@@ -339,6 +373,18 @@ void CDVDeskDlg::OnSigned()
  if (mp_puvu)
  {
   mp_puvu->sign = mp_puvu->sign ? false : true; //toggle sign flag
+  UpdateData(FALSE);
+  if (m_OnConfigChanged)
+   m_OnConfigChanged();
+ }
+}
+
+void CDVDeskDlg::OnSepBytes()
+{
+ if (mp_puvu)
+ {
+  mp_puvu->bytes = mp_puvu->bytes ? false : true; //toggle 'bytes' flag
+  UpdateStrFmt(mp_puvu->index);
   UpdateData(FALSE);
   if (m_OnConfigChanged)
    m_OnConfigChanged();
@@ -380,19 +426,29 @@ void CDVDeskDlg::UpdateStrFmt(size_t index)
 {
  if (!m_vu[index].hex)
  { //dec
-  switch(m_vu[index].decplaces)
+  if (m_vu[index].bytes)
   {
-  case 0: m_vu[index].base_fmt = _T("%05d"); break;
-  case 1: m_vu[index].base_fmt = _T("%.01f"); break;
-  case 2: m_vu[index].base_fmt = _T("%.02f"); break;
-  case 3: m_vu[index].base_fmt = _T("%.03f"); break;
-  case 4: m_vu[index].base_fmt = _T("%.04f"); break;
-  default: ASSERT(0);
+   m_vu[index].base_fmt = _T("%03d");
+  }
+  else
+  {
+   switch(m_vu[index].decplaces)
+   {
+   case 0: m_vu[index].base_fmt = _T("%05d"); break;
+   case 1: m_vu[index].base_fmt = _T("%.01f"); break;
+   case 2: m_vu[index].base_fmt = _T("%.02f"); break;
+   case 3: m_vu[index].base_fmt = _T("%.03f"); break;
+   case 4: m_vu[index].base_fmt = _T("%.04f"); break;
+   default: ASSERT(0);
+   }
   }
  }
  else
- { //hex
-  m_vu[index].base_fmt = _T("0x%04X"); 
+ { //hex (default)
+  if (m_vu[index].bytes)
+   m_vu[index].base_fmt = _T("%02X");
+  else
+   m_vu[index].base_fmt = _T("0x%04X");
  }
 }
 
@@ -404,6 +460,7 @@ void CDVDeskDlg::SetConfig(const DbgVarsCfg* i_cfg)
   m_vu[i].sign = i_cfg->var[i].sign;
   m_vu[i].decplaces = i_cfg->var[i].decplaces;
   m_vu[i].mult = i_cfg->var[i].mult;
+  m_vu[i].bytes = i_cfg->var[i].bytes;
   UpdateStrFmt(i);
   m_vu[i].base_check.SetCheck(m_vu[i].hex ? BST_UNCHECKED : BST_CHECKED);
  }
@@ -418,5 +475,6 @@ void CDVDeskDlg::GetConfig(DbgVarsCfg* o_cfg) const
   o_cfg->var[i].sign = m_vu[i].sign;
   o_cfg->var[i].decplaces = m_vu[i].decplaces;
   o_cfg->var[i].mult = m_vu[i].mult;
+  o_cfg->var[i].bytes = m_vu[i].bytes;
  }
 }

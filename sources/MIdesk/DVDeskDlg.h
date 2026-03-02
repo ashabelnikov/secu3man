@@ -69,8 +69,10 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   afx_msg void OnReset();
   afx_msg void OnResetCfg();
   afx_msg void OnSigned();
+  afx_msg void OnSepBytes();
   afx_msg void OnFormula();
   afx_msg void OnDecPlaces(UINT nID);
+  afx_msg void OnUpdateNonBytes(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
@@ -93,6 +95,7 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
    CButton base_check;
    bool hex;
    bool sign;
+   bool bytes;
    float mult;
    size_t index;
    int decplaces;
