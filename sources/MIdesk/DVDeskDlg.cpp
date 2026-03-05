@@ -68,6 +68,8 @@ CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(-1)
 , m_fh(NULL)
 , m_wrtofile(false)
+, m_wrRadix(10)
+, m_wrBytes(false)
 , mp_puvu(NULL)
 {
  for(size_t i = 0; i < VU_SIZE; ++i)
@@ -262,7 +264,34 @@ void CDVDeskDlg::SetValues(const DbgvarDat* i_values)
   }
   if (m_fh)
   {
-   fprintf(m_fh, "%05d, %05d, %05d, %05d\n", i_values->var1, i_values->var2, i_values->var3, i_values->var4);
+   if (m_wrBytes)
+   {
+    int var1 = i_values->var1 & 0xff;
+    int var2 = i_values->var2 & 0xff;
+    int var3 = i_values->var3 & 0xff;
+    int var4 = i_values->var4 & 0xff;
+    if (m_wrRadix==10)
+    {
+     fprintf(m_fh, "%03d, %03d, %03d, %03d, %03d, %03d, %03d, %03d\n", i_values->var1 >> 8, var1, i_values->var2 >> 8, var2, i_values->var3 >> 8, var3, i_values->var4 >> 8, var4);
+    }
+    else if (m_wrRadix==16)
+    {
+     fprintf(m_fh, "%02X, %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", i_values->var1 >> 8, var1, i_values->var2 >> 8, var2, i_values->var3 >> 8, var3, i_values->var4 >> 8, var4);
+    }
+    else { ASSERT(0); }    
+   }
+   else
+   {
+    if (m_wrRadix==10)
+    {
+     fprintf(m_fh, "%05d, %05d, %05d, %05d\n", i_values->var1, i_values->var2, i_values->var3, i_values->var4);
+    }
+    else if (m_wrRadix==16)
+    {
+     fprintf(m_fh, "%04X, %04X, %04X, %04X\n", i_values->var1, i_values->var2, i_values->var3, i_values->var4);
+    }
+    else { ASSERT(0); }    
+   }
   }
  }
 
@@ -309,6 +338,16 @@ void CDVDeskDlg::SetWriteToFile(bool write)
    m_fh = NULL;
   }
  }
+}
+
+void CDVDeskDlg::SetWriteRadix(int radix)
+{
+ m_wrRadix = radix;
+}
+
+void CDVDeskDlg::SetWriteBytes(bool bytes)
+{
+ m_wrBytes = bytes;
 }
 
 void CDVDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)

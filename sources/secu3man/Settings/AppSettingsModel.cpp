@@ -76,6 +76,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogBinaryFmt(_T("LogBinaryFmt"))
 , m_optCreateWindows(_T("CreateWindows"))
 , m_optDbgVarsToFile(_T("DbgVarsToFile"))
+, m_optDbgVarsRadix(_T("DbgVarsRadix"))
+, m_optDbgVarsBytes(_T("DbgVarsBytes"))
 , m_optClassic2DKeys(_T("Classic2DKeys"))
 
 //fixtures
@@ -1002,6 +1004,10 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optLogBinaryFmt, _T("0"), 0, 1);
  os.ReadInt(m_optCreateWindows, _T("1"), 0, 1);
  os.ReadInt(m_optDbgVarsToFile, _T("0"), 0, 1);
+ os.ReadInt(m_optDbgVarsRadix, _T("10"), 10, 16);
+ if (m_optDbgVarsRadix.value!=10 && m_optDbgVarsRadix.value!=16)
+  m_optDbgVarsRadix.value = 10; //use dafault
+ os.ReadInt(m_optDbgVarsBytes, _T("0"), 0, 1);
  os.ReadInt(m_optClassic2DKeys, _T("0"), 0, 1);
 
  //fixtures
@@ -2129,6 +2135,18 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   os.WriteComment(_T("Писать значения отладочных переменных в файл. Файл 'dbgvar.csv' будет находиться в папке с файлами программы."));
  os.WriteInt(m_optDbgVarsToFile); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Write values of debug variables into a file using specified radix (dec or hex). Accepted values: 10 or 16"));
+ else
+  os.WriteComment(_T("Писать значения отладочных переменных в файл в указанной системе счисления. Допустимые значения: 10 или 16"));
+ os.WriteInt(m_optDbgVarsRadix); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Write values of debug variables into a file as separate bytes."));
+ else
+  os.WriteComment(_T("Писать значения отладочных переменных в файл в виде отдельных байтов."));
+ os.WriteInt(m_optDbgVarsBytes); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   os.WriteComment(_T("Specifies how frequently debug floating window will be updated (redraw). Value in the milliseconds"));
@@ -7180,6 +7198,16 @@ bool CAppSettingsModel::GetCreateWindows(void) const
 bool CAppSettingsModel::GetDbgVarsToFile(void) const
 {
  return m_optDbgVarsToFile.value;
+}
+
+int CAppSettingsModel::GetDbgVarsRadix(void) const
+{
+ return m_optDbgVarsRadix.value;
+}
+
+bool CAppSettingsModel::GetDbgVarsBytes(void) const
+{
+ return m_optDbgVarsBytes.value;
 }
 
 bool CAppSettingsModel::GetClassic2DKeys(void) const

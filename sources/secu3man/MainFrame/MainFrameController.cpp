@@ -368,6 +368,8 @@ void MainFrameController::OnCreate(void)
   mp_view->GetDVDesk()->SetConfig(&cfg);
   mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
   mp_view->GetDVDesk()->SetWriteToFile(settings->GetDbgVarsToFile());
+  mp_view->GetDVDesk()->SetWriteRadix(settings->GetDbgVarsRadix());
+  mp_view->GetDVDesk()->SetWriteBytes(settings->GetDbgVarsBytes());
  }
 
  //Restore saved size of the window

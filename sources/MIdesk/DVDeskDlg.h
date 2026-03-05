@@ -53,6 +53,8 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   virtual void GetValues(SECU3IO::DbgvarDat* o_values);
   virtual void SetUpdatePeriod(unsigned int i_period);
   virtual void SetWriteToFile(bool write);
+  virtual void SetWriteRadix(int radix);
+  virtual void SetWriteBytes(bool bytes);
   virtual void SetConfig(const DbgVarsCfg* i_cfg);
   virtual void GetConfig(DbgVarsCfg* o_cfg) const;
   virtual void setOnConfigChanged(EventHandler OnFunction) {m_OnConfigChanged = OnFunction;}
@@ -104,6 +106,8 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
 
   FILE* m_fh;
   bool m_wrtofile;
+  int m_wrRadix;
+  bool m_wrBytes;
 
   EventHandler m_OnConfigChanged;
 };

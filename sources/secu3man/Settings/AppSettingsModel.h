@@ -239,6 +239,8 @@ class CAppSettingsModel : public ISettingsData
 
   virtual bool GetCreateWindows(void) const;
   virtual bool GetDbgVarsToFile(void) const;
+  virtual int GetDbgVarsRadix(void) const;
+  virtual bool GetDbgVarsBytes(void) const;
 
   virtual bool GetUseMarkers(void) const;
 
@@ -301,6 +303,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optLogBinaryFmt;
   OptField_t<bool> m_optCreateWindows;
   OptField_t<bool> m_optDbgVarsToFile;
+  OptField_t<int>  m_optDbgVarsRadix;
+  OptField_t<bool> m_optDbgVarsBytes;
   OptField_t<bool> m_optClassic2DKeys;
 
   //fixtures
