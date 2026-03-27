@@ -119,7 +119,7 @@ void CTablesSetPanel::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(1430));
+  mp_scr->SetViewSize(cx, da.ScaleY(1450));
 }
 
 void CTablesSetPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)

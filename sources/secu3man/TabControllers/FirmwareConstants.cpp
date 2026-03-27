@@ -28,6 +28,7 @@
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/FirmwareTabDlg.h"
 #include "io-core/FirmwareDataMediator.h"
+#include "io-core/BitMask.h"
 #include "ui-core/DynFieldsDialog.h"
 
 void CFirmwareTabController::OnEditFwConsts(void)
@@ -36,6 +37,10 @@ void CFirmwareTabController::OnEditFwConsts(void)
 
  SECU3IO::FwConstsData d;
  mp_fwdm->GetFwConstsData(d);
+
+ DWORD opt = mp_fwdm->GetFWOptions();
+ Functionality fnc;
+ mp_settings->GetFunctionality(fnc);
 
  //Sizes of averaging circular buffers
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
@@ -370,6 +375,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Delay of RPM decreasing to idling RPM"), _T("sec"), 0.0f, 200.0f, 0.01f, 2, &d.aircond_idlrpm_delay, _T("Delay of the start of transition from air conditioning RPM to idling RPM."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Шаг увелич. оборотов при вкл.кондиционера (мин-1/такт)"), _T("мин-1"), 0, 255, 1, 0, &d.aircond_rpmalt_step, _T("При включении кондиционера ообороты будут увеличиваться с этим шагом."));
+ else
+  dfd.AppendItem(_T("RPM increase step when air conditioning is turned on"), _T("min-1"), 0, 255, 1, 0, &d.aircond_rpmalt_step, _T("When air conditioner is turned on, RPM will smoothly increase with this step."));
+
  //canister purge valve
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Управление адсорбером:"));
@@ -680,15 +690,6 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Vehicle speed threshold for fuel cut"), _T("km/h"), 0.0f, 100.0f, 0.1f, 1, &d.fuelcut_vss_thrd, _T("Fuel cut off on run will not be applied if vehicle's speed is less than this threshold"));
 
- std::vector<_TSTRING> dashboards;
- dashboards.push_back(_T("OFF"));
- dashboards.push_back(_T("Lada Granta"));
- dashboards.push_back(_T("Nissan Almera Classic"));
- if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Выбор CAN приборной панели"), dashboards, &d.can_dashboard, _T("Выбор модели приборной панели подключаемой через CAN-шину."));
- else
-  dfd.AppendItem(_T("Select CAN dashboard"), dashboards, &d.can_dashboard, _T("Select model of dashboard connected via CAN-bus"));
-
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Порог работы лямбда коррекции по ДТВГ"), _T("°C"), 0.0f, 1000.0f, 0.25f, 2, &d.lambda_egts_thrd, _T("Коррекция смеси по ДК начнет работу только если температура выхлопных газов превысит этот порог."));
  else
@@ -703,6 +704,61 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Слать пакеты с отладочными переменными"), &d.use_dbgvar, _T("Если галочка установлена, то прошивка будет отправлять пакеты с отладночными переменными. Прошивка должна быть скомпилирована с опцией DEBUG_VARIABLES"));
  else
   dfd.AppendItem(_T("Send packets with debug variables"), &d.use_dbgvar, _T("If the check is set, then firmware will send packets with debug variables. Firmware must be compiled with DEBUG_VARIABLES option."));
+
+ if (CHECKBIT32(opt, SECU3IO::COPT_OBD_SUPPORT))
+ {
+  //CAN bus
+  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+   dfd.AppendItem(_T("Шина CAN:"));
+  else
+   dfd.AppendItem(_T("CAN bus:"));
+
+  std::vector<_TSTRING> dashboards;
+  dashboards.push_back(_T("OFF"));
+  dashboards.push_back(_T("Lada Granta"));
+  dashboards.push_back(_T("Nissan Almera Classic"));
+  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+   dfd.AppendItem(_T("Выбор CAN приборной панели"), dashboards, &d.can_dashboard, _T("Выбор модели приборной панели подключаемой через CAN-шину."));
+  else
+   dfd.AppendItem(_T("Select CAN dashboard"), dashboards, &d.can_dashboard, _T("Select model of dashboard connected via CAN-bus"));
+
+
+  if (fnc.AMT_SUPPORT && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT))
+  { //AMT
+   std::vector<_TSTRING> amts;
+   amts.push_back(_T("OFF"));
+   amts.push_back(_T("Lada Vesta"));
+   if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+    dfd.AppendItem(_T("Выбор CAN КПП"), amts, &d.can_autrm, _T("Выбор модели АКПП/РКПП, подключаемой через CAN-шину."));
+   else
+    dfd.AppendItem(_T("Select CAN КПП"), amts, &d.can_autrm, _T("Select model of AT/AMT connected via CAN-bus"));
+
+   if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+    dfd.AppendItem(_T("Атмосферное давление для КПП"), _T("кПа"), 0.0f, 150.0f, 0.1f, 1, &d.amt_baro_press, _T("Если в этом параметре установлен 0, то берется значение давления из барометрической коррекции (барокоррекция должна быть включена), если значение больше 0, то берется это значение"));
+   else
+    dfd.AppendItem(_T("Atmospheric pressure for AMT"), _T("kPa"), 0.0f, 150.0f, 0.1f, 1, &d.amt_baro_press, _T("If this parameter is set to 0, then the pressure value is taken from the barometric correction (barometric correction must be enabled), if the value is greater than 0, then this value is taken"));
+
+   if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+    dfd.AppendItem(_T("Минимальные обороты в ползущем режиме"), _T("мин-1"), 0, 6000, 10, 0, &d.amt_creeping_minrpm, _T("Минимальные обороты в ползущем режиме"));
+   else
+    dfd.AppendItem(_T("Minimum RPM in creeping mode"), _T("min-1"), 0, 6000, 10, 0, &d.amt_creeping_minrpm, _T("Minimum RPM in creeping mode"));
+
+   if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+    dfd.AppendItem(_T("Шаг изменения оборотов в ползущем режиме"), _T("мин-1"), 0, 255, 1, 0, &d.amt_rpmalt_step, _T("Шаг изменения оборотов в ползущем режиме"));
+   else
+    dfd.AppendItem(_T("RPM alternation step in creeping mode"), _T("min-1"), 0, 255, 1, 0, &d.amt_rpmalt_step, _T("RPM alternation step in creeping mode"));
+
+   if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+    dfd.AppendItem(_T("Задержка оборотов в ползущем режиме"), _T("сек"), .0f, 10.0f, 0.1f, 2, &d.amt_creeping_delay, _T("Задержка оборотов в ползущем режиме"));
+   else
+    dfd.AppendItem(_T("RPM delay in creeping mode"), _T("sec"), .0f, 10.0f, 0.1f, 2, &d.amt_creeping_delay, _T("RPM delay in creeping mode"));
+
+   if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+    dfd.AppendItem(_T("Крутящий момент для кондиционера"), _T("Нм"), .0f, 50.0f, 0.5f, 1, &d.amt_aircond_torque, _T("Поправка на крутящий момент при включении кондиционера"));
+   else
+    dfd.AppendItem(_T("Torque for air conditioner"), _T("Nm"), .0f, 50.0f, 0.5f, 1, &d.amt_aircond_torque, _T("Torque correction when the air conditioner is turned on"));
+  }
+ }
 
  if (dfd.DoModal()==IDOK)
  {

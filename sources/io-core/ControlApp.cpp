@@ -302,7 +302,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& sensorDat = m_recepted_packet.m_SensorDat;
- if (size != 112)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != 116)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения коленвала двигателя
@@ -739,6 +739,18 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &ots, true))
   return false;
  sensorDat.ots = ((float)ots) / FTS_MULT;
+
+ // calculated torque
+ int est_torque = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &est_torque, true))
+  return false;
+ sensorDat.est_torque = ((float)est_torque) / 2.0f;
+
+ // requsted torque
+ int req_torque = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &req_torque, true))
+  return false;
+ sensorDat.req_torque = ((float)req_torque) / 2.0f;
 
  return true;
 }
@@ -1986,7 +1998,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //check for 16-byte packets
- if ((editTabPar.tab_id != ETMT_INJ_GPSC) && (editTabPar.tab_id != ETMT_INJ_VE) && (editTabPar.tab_id != ETMT_INJ_VE2) && (editTabPar.tab_id != ETMT_INJ_IT) && (size < 3 || size > 18)) 
+ if ((editTabPar.tab_id != ETMT_INJ_GPSC) && (editTabPar.tab_id != ETMT_INJ_VE) && (editTabPar.tab_id != ETMT_INJ_VE2) && (editTabPar.tab_id != ETMT_INJ_IT) && (size < 3 || size > 19)) 
   return false;
 
  //address of fragment of data in table (offset in table)
@@ -2203,6 +2215,10 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       editTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
      else if (editTabPar.tab_id == ETMT_ETC_THROPOS)
       editTabPar.table_data[i] = ((float)value) / 2.0f;
+     else if (editTabPar.tab_id == ETMT_ESTIM_TORQUE)
+      editTabPar.table_data[i] = ((float)value) - 50.0f; //AMT
+     else if (editTabPar.tab_id == ETMT_FLCUT_TORQUE)
+      editTabPar.table_data[i] = ((float)value);         //AMT
      else
       editTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -4924,6 +4940,16 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     else
      value = MathHelpers::Round(packet_data->table_data[i] * FTS_MULT);
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_ESTIM_TORQUE)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] + 50.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_FLCUT_TORQUE)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i]);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else
    {  //default case

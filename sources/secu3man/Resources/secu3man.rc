@@ -645,9 +645,11 @@ BEGIN
 78 Давление топлива (кПа)
 79 ДППА (%)
 80 ДТМ (°С)
-81 Метки лога
-82 Служебные флаги
-83 Ошибки СЕ"
+81 Расчетный крутящий момент (Нм)
+82 Запрашиваемый крутящий момент (Нм)
+83 Метки лога
+84 Служебные флаги
+85 Ошибки СЕ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1802,9 +1804,11 @@ BEGIN
 78 Fuel pressure (kPa)
 79 APPS (%)
 80 Oil temperature (°C)
-81 Log marks
-82 Service flags
-83 CE errors"
+81 Estimated torque (Nm)
+82 Requested torque (Nm)
+83 Log marks
+84 Service flags
+85 CE errors"
 END
 
 STRINGTABLE DISCARDABLE 

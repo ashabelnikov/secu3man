@@ -232,6 +232,7 @@
 #define IDM_MI_MET_FPS                  2312
 #define IDM_MI_MET_APPS                 2313
 #define IDM_MI_MET_OTS                  2314
+#define IDM_MI_MET_TORQUE               2315
 #define IDM_MI_MET_ROWS1                2321
 #define IDM_MI_MET_ROWS2                2322
 #define IDM_MI_MET_ROWS3                2323
@@ -402,6 +403,7 @@
 #define IDM_MI_GRH_FPS                  2488
 #define IDM_MI_GRH_APPS                 2489
 #define IDM_MI_GRH_OTS                  2490
+#define IDM_MI_GRH_TORQUE               2491
 #define IDS_MI_GRH_ADD_GAUGE            2497
 #define IDC_MI_KNOCK                    2498
 #define IDS_MI_TACHOMETER_V_UNIT        2499
@@ -660,3 +662,8 @@
 #define IDC_MI_SED_SCALESYS_CHECK       2852
 #define IDS_MI_SED_LABELSYS_CHECK_TT    2853
 #define ID_DVDESK_POPUP_SEPBYTES        2854
+#define IDC_MI_TORQUE                   2855
+#define IDC_MI_TORQUEGRAPH              2856
+#define IDS_MI_TORQUE_TITLE             2857
+#define IDS_MI_TORQUE_UNIT              2858
+#define IDS_MI_TORQUEGRAPH_V_UNIT       2859

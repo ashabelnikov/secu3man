@@ -549,6 +549,24 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    sz.m_OtsCurveMapWnd_W = rc.right - rc.left;
    sz.m_OtsCurveMapWnd_H = rc.bottom - rc.top;
    break;
+  case ETMT_ESTIM_TORQUE:
+   ws.m_EstimTorqueMapWnd_X = rc.left;
+   ws.m_EstimTorqueMapWnd_Y = rc.top;
+   sz.m_EstimTorqueMapWnd_W = rc.right - rc.left;
+   sz.m_EstimTorqueMapWnd_H = rc.bottom - rc.top;
+   break;
+  case ETMT_FLCUT_TORQUE:
+   ws.m_FlcutTorqueMapWnd_X = rc.left;
+   ws.m_FlcutTorqueMapWnd_Y = rc.top;
+   sz.m_FlcutTorqueMapWnd_W = rc.right - rc.left;
+   sz.m_FlcutTorqueMapWnd_H = rc.bottom - rc.top;
+   break;
+  case ETMT_DTORQ_IT_CORR:
+   ws.m_DtorqItCorrMapWnd_X = rc.left;
+   ws.m_DtorqItCorrMapWnd_Y = rc.top;
+   sz.m_DtorqItCorrMapWnd_W = rc.right - rc.left;
+   sz.m_DtorqItCorrMapWnd_H = rc.bottom - rc.top;
+   break;
  };
 
  if (m_online)
@@ -909,7 +927,18 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    X = ws.m_OtsCurveMapWnd_X, Y = ws.m_OtsCurveMapWnd_Y;
    W = sz.m_OtsCurveMapWnd_W, H = sz.m_OtsCurveMapWnd_H;
    break;
-
+  case ETMT_ESTIM_TORQUE:
+   X = ws.m_EstimTorqueMapWnd_X, Y = ws.m_EstimTorqueMapWnd_Y;
+   W = sz.m_EstimTorqueMapWnd_W, H = sz.m_EstimTorqueMapWnd_H;
+   break;
+  case ETMT_FLCUT_TORQUE:
+   X = ws.m_FlcutTorqueMapWnd_X, Y = ws.m_FlcutTorqueMapWnd_Y;
+   W = sz.m_FlcutTorqueMapWnd_W, H = sz.m_FlcutTorqueMapWnd_H;
+   break;
+  case ETMT_DTORQ_IT_CORR:
+   X = ws.m_DtorqItCorrMapWnd_X, Y = ws.m_DtorqItCorrMapWnd_Y;
+   W = sz.m_DtorqItCorrMapWnd_W, H = sz.m_DtorqItCorrMapWnd_H;
+   break;
   default:
    return; //undefined case...
  };

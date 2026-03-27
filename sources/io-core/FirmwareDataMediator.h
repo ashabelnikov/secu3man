@@ -670,6 +670,12 @@ protected:
   void SetETCThrottlePosMap(const float* i_values);
   void GetOtsCurveMap(float* op_values, bool i_original = false);
   void SetOtsCurveMap(const float* i_values);
+  void GetEstimTorque(float* op_values, bool i_original = false);    //AMT
+  void SetEstimTorque(const float* i_values);                        //AMT
+  void GetFuelcutTorque(float* op_values, bool i_original = false);  //AMT
+  void SetFuelcutTorque(const float* i_values);                      //AMT
+  void GetDtorqIgntimCorr(float* op_values, bool i_original = false);//AMT
+  void SetDtorqIgntimCorr(const float* i_values);                    //AMT
 
   virtual SECU3IO::params_t* GetParamsPtr(void);
   virtual EECUPlatform GetPlatformId(void);

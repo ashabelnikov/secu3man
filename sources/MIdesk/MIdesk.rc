@@ -498,6 +498,9 @@ BEGIN
     IDS_DVDESK_FORMDLG_CAPTION      "Формула переменной %d"
     IDS_DVDESK_FORMDLG_MULT_CAPTION "Разделить переменную на"
     IDS_DVDESK_FORMDLG_MULT_TT      "Разделить переменную на это число"
+    IDS_MI_TORQUE_TITLE             "Крутящий момент"
+    IDS_MI_TORQUE_UNIT              "Нм"
+    IDS_MI_TORQUEGRAPH_V_UNIT       "Кр.Мом(Нм)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -992,6 +995,9 @@ BEGIN
     IDS_DVDESK_FORMDLG_CAPTION      "Variable %d formula"
     IDS_DVDESK_FORMDLG_MULT_CAPTION "Divide variable by"
     IDS_DVDESK_FORMDLG_MULT_TT      "Divide variable by this value"
+    IDS_MI_TORQUE_TITLE             "Torque"
+    IDS_MI_TORQUE_UNIT              "Nm"
+    IDS_MI_TORQUEGRAPH_V_UNIT       "Torque(Nm)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

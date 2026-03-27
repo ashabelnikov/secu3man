@@ -70,6 +70,7 @@ set(HEADERS
   MIVentDuty.h
   MITargAFR.h
   MIDiffAFR.h
+  MITorque.h
   Resource.h
   RSDeskDlg.h
   RingBuffer.h
@@ -120,6 +121,7 @@ set (SOURCES
   MIVentDuty.cpp
   MITargAFR.cpp
   MIDiffAFR.cpp
+  MITorque.cpp
   RSDeskDlg.cpp
   StdAfx.cpp
   ScaleEditorDlg.cpp

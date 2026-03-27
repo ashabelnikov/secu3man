@@ -367,12 +367,13 @@ void CPMSeptabsController::ApplyFWOptions(DWORD opt)
  mp_view->mp_SeptabsPanel->EnableOtsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_SeptabsPanel->EnableOpsCurve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_SeptabsPanel->EnableXtauMaps(fnc.XTAU_CORR && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
-  mp_view->mp_SeptabsPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
+ mp_view->mp_SeptabsPanel->EnableManInjPwc(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); 
  mp_view->mp_SeptabsPanel->EnableGrHeatDutyMap(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
  mp_view->mp_SeptabsPanel->EnablePwmIacUCoefMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  mp_view->mp_SeptabsPanel->EnableAftstrStrkMap(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  mp_view->mp_SeptabsPanel->EnableLambdaZones(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL))); 
  mp_view->mp_SeptabsPanel->EnableETCMaps(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ mp_view->mp_SeptabsPanel->EnableAMTMaps(fnc.AMT_SUPPORT && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) && CHECKBIT32(opt, SECU3IO::COPT_OBD_SUPPORT));
 }
 
 //----------------------------------------------------------------

@@ -100,7 +100,9 @@
 #define ETC_ACCEPTERR_SIZE     6
 #define ETC_POS_APPS_SIZE      16
 #define ETC_POS_RPM_SIZE       16
-#define OTS_LOOKUP_TABLE_SIZE  17           // oil temperature sensor
+#define OTS_LOOKUP_TABLE_SIZE  17          // oil temperature sensor
+#define FUELCUT_TORQUE_SIZE    17          // fuel cut torque
+#define DTORQ_IGNTIM_CORR_SIZE 17          // ignition timing correction from torque difference
 
 //Number of set of maps stored in flash (read only memory)
 #define TABLES_NUMBER          4
@@ -395,6 +397,9 @@ struct FWMapsDataHolder
  float etc_accept_error[ETC_ACCEPTERR_SIZE * 2];
  float etc_throttle_pos[ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE];
  float ots_curve[OTS_LOOKUP_TABLE_SIZE+2]; //OTS curve
+ float estim_torque[F_WRK_POINTS_L * F_WRK_POINTS_F]; //AMT
+ float felcut_torque[FUELCUT_TORQUE_SIZE];           //AMT
+ float dtorq_igntim_corr[DTORQ_IGNTIM_CORR_SIZE];    //AMT
 
  CESettingsData cesd;
 
@@ -462,6 +467,9 @@ struct FWMapsDataHolder
    case ETMT_ETC_ACCEERR: return etc_accept_error;
    case ETMT_ETC_THROPOS: return etc_throttle_pos;
    case ETMT_OTS_CURVE: return ots_curve;
+   case ETMT_ESTIM_TORQUE: return estim_torque;           //AMT
+   case ETMT_FLCUT_TORQUE: return felcut_torque;          //AMT
+   case ETMT_DTORQ_IT_CORR: return dtorq_igntim_corr;     //AMT
   }
   return NULL; //undefined type of map
  }
@@ -513,6 +521,9 @@ struct FWMapsDataHolder
    case ETMT_ETC_ACCEERR: return ETC_ACCEPTERR_SIZE * 2;
    case ETMT_ETC_THROPOS: return ETC_POS_APPS_SIZE * ETC_POS_RPM_SIZE;
    case ETMT_OTS_CURVE: return OTS_LOOKUP_TABLE_SIZE+2;
+   case ETMT_ESTIM_TORQUE: return F_WRK_POINTS_L * F_WRK_POINTS_F;//AMT
+   case ETMT_FLCUT_TORQUE: return FUELCUT_TORQUE_SIZE;            //AMT
+   case ETMT_DTORQ_IT_CORR: return DTORQ_IGNTIM_CORR_SIZE;        //AMT
   }
   ASSERT(0);
   return 0; //undefined type of map

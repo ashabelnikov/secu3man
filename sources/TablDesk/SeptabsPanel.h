@@ -75,6 +75,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   void EnableXtauMaps(bool enable);
   void EnableETCMaps(bool enable);
   void EnableOtsCurve(bool enable);
+  void EnableAMTMaps(bool enable);
 
   void CloseCharts(void);
   void ShowOpenedCharts(bool i_show);
@@ -145,6 +146,9 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnViewETCAcceptErrMap();
   afx_msg void OnViewETCThrottlePosMap();
   afx_msg void OnViewOtsCurveMap();
+  afx_msg void OnViewEstimTorqueMap();
+  afx_msg void OnViewFuelcutTorqueMap();
+  afx_msg void OnViewDtorqIgntimCorrMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -192,6 +196,9 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   afx_msg void OnUpdateViewETCAcceptErrMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewETCThrottlePosMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewOtsCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewEstimTorqueMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewFuelcutTorqueMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewDtorqIgntimCorrMap(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   DECLARE_MESSAGE_MAP()
@@ -375,6 +382,18 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   static void __cdecl OnCloseOtsCurveTable(void* i_param);
   static void __cdecl OnWndActivationOtsCurveTable(void* i_param, long cmd);
 
+  static void __cdecl OnChangeEstimTorqueTable(void* i_param);
+  static void __cdecl OnCloseEstimTorqueTable(void* i_param);
+  static void __cdecl OnWndActivationEstimTorqueTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeFuelcutTorqueTable(void* i_param);
+  static void __cdecl OnCloseFuelcutTorqueTable(void* i_param);
+  static void __cdecl OnWndActivationFuelcutTorqueTable(void* i_param, long cmd);
+
+  static void __cdecl OnChangeDtorqIgntimCorrTable(void* i_param);
+  static void __cdecl OnCloseDtorqIgntimCorrTable(void* i_param);
+  static void __cdecl OnWndActivationDtorqIgntimCorrTable(void* i_param, long cmd);
+
  private:
   EventHandler m_OnRPMGridEditButton;
   EventHandler m_OnCESettingsButton;
@@ -409,6 +428,7 @@ class AFX_EXT_CLASS CSeptabsPanel : public CDialog, public CTablesPanelBase
   bool m_xtau_maps_enabled;
   bool m_etc_maps_enabled;
   bool m_ots_curve_enabled;
+  bool m_amt_maps_enabled;
 
   float m_attenuator_table_slots[128];
 

@@ -1966,3 +1966,135 @@ void __cdecl CSeptabsPanel::OnWndActivationOtsCurveTable(void* i_param, long cmd
 }
 
 //------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeEstimTorqueTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_ESTIM_TORQUE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseEstimTorqueTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_ESTIM_TORQUE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_ESTIM_TORQUE].handle, ETMT_ESTIM_TORQUE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationEstimTorqueTable(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_ESTIM_TORQUE].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeFuelcutTorqueTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_FLCUT_TORQUE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseFuelcutTorqueTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_FLCUT_TORQUE].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_FLCUT_TORQUE].handle, ETMT_FLCUT_TORQUE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationFuelcutTorqueTable(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_FLCUT_TORQUE].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnChangeDtorqIgntimCorrTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(ETMT_DTORQ_IT_CORR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnCloseDtorqIgntimCorrTable(void* i_param)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[ETMT_DTORQ_IT_CORR].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[ETMT_DTORQ_IT_CORR].handle, ETMT_DTORQ_IT_CORR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CSeptabsPanel::OnWndActivationDtorqIgntimCorrTable(void* i_param, long cmd)
+{
+ CSeptabsPanel* _this = static_cast<CSeptabsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[ETMT_DTORQ_IT_CORR].handle, cmd);
+}
+
+//------------------------------------------------------------------------

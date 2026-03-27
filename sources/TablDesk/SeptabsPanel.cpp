@@ -59,6 +59,7 @@ CSeptabsPanel::CSeptabsPanel(bool disable_vscroll /*= false*/, bool enable_fwcon
 , m_xtau_maps_enabled(false)
 , m_etc_maps_enabled(false)
 , m_ots_curve_enabled(false)
+, m_amt_maps_enabled(false)
 , m_initialized(false)
 , m_disable_vscroll(disable_vscroll)
 , m_enable_fwconsts(enable_fwconsts)
@@ -142,7 +143,9 @@ void CSeptabsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_ETC_ACCEERR_MAP, *m_md[ETMT_ETC_ACCEERR].mp_button);
  DDX_Control(pDX, IDC_TD_ETC_THROPOS_MAP, *m_md[ETMT_ETC_THROPOS].mp_button);
  DDX_Control(pDX, IDC_TD_OTS_CURVE, *m_md[ETMT_OTS_CURVE].mp_button);
-
+ DDX_Control(pDX, IDC_TD_ESTIM_TORQUE_MAP, *m_md[ETMT_ESTIM_TORQUE].mp_button);
+ DDX_Control(pDX, IDC_TD_FLCUT_TORQUE_MAP, *m_md[ETMT_FLCUT_TORQUE].mp_button);
+ DDX_Control(pDX, IDC_TD_DTORQ_IT_CORR_MAP, *m_md[ETMT_DTORQ_IT_CORR].mp_button);
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
  DDX_Control(pDX, IDC_TD_RPM_GRID_BUTTON, m_rpm_grid_btn);
@@ -197,6 +200,9 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_BN_CLICKED(IDC_TD_ETC_ACCEERR_MAP, OnViewETCAcceptErrMap)
  ON_BN_CLICKED(IDC_TD_ETC_THROPOS_MAP, OnViewETCThrottlePosMap)
  ON_BN_CLICKED(IDC_TD_OTS_CURVE, OnViewOtsCurveMap)
+ ON_BN_CLICKED(IDC_TD_ESTIM_TORQUE_MAP, OnViewEstimTorqueMap)
+ ON_BN_CLICKED(IDC_TD_FLCUT_TORQUE_MAP, OnViewFuelcutTorqueMap)
+ ON_BN_CLICKED(IDC_TD_DTORQ_IT_CORR_MAP, OnViewDtorqIgntimCorrMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
@@ -247,6 +253,9 @@ BEGIN_MESSAGE_MAP(CSeptabsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_ETC_ACCEERR_MAP, OnUpdateViewETCAcceptErrMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_ETC_THROPOS_MAP, OnUpdateViewETCThrottlePosMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_OTS_CURVE, OnUpdateViewOtsCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_ESTIM_TORQUE_MAP, OnUpdateViewEstimTorqueMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_FLCUT_TORQUE_MAP, OnUpdateViewFuelcutTorqueMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_DTORQ_IT_CORR_MAP, OnUpdateViewDtorqIgntimCorrMap)
  ON_WM_DESTROY()
  ON_WM_SIZE()
  ON_WM_TIMER()
@@ -351,6 +360,9 @@ BOOL CSeptabsPanel::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_ACCEERR].mp_button, MLL::GetString(IDS_TD_ETC_ACCEERR_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_ETC_THROPOS].mp_button, MLL::GetString(IDS_TD_ETC_THROPOS_MAP_TT)));
  VERIFY(mp_ttc->AddWindow(m_md[ETMT_OTS_CURVE].mp_button, MLL::GetString(IDS_TD_OTS_CURVE_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_ESTIM_TORQUE].mp_button, MLL::GetString(IDS_TD_ESTIM_TORQUE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_FLCUT_TORQUE].mp_button, MLL::GetString(IDS_TD_FLCUT_TORQUE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(m_md[ETMT_DTORQ_IT_CORR].mp_button, MLL::GetString(IDS_TD_DTORQ_IT_CORR_MAP_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -381,7 +393,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
 
  if (m_initialized)
  {
-  AlignButtons(this, cx, ETMT_DWELLCNTRL, ETMT_ATTENUATOR, ETMT_GRHEAT_DUTY, ETMT_SEP_START, ETMT_SEP_END);
+  AlignButtons(this, cx, ETMT_DWELLCNTRL, ETMT_ATTENUATOR, ETMT_XTAU_XFDEC, ETMT_SEP_START, ETMT_SEP_END);
  }
 
  if (mp_scr.get())
@@ -390,7 +402,7 @@ void CSeptabsPanel::OnSize(UINT nType, int cx, int cy)
   if (m_disable_vscroll)
    mp_scr->SetViewSize(cx, da.ScaleY(1));
   else
-   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1380 : 750));
+   mp_scr->SetViewSize(cx, da.ScaleY(m_btnMovIds.empty() ? 1480 : 755));
  }
 
 }
@@ -739,6 +751,25 @@ void CSeptabsPanel::OnUpdateViewOtsCurveMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[ETMT_OTS_CURVE].state) ? TRUE : FALSE );
 }
 
+void CSeptabsPanel::OnUpdateViewEstimTorqueMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable && m_amt_maps_enabled);
+ pCmdUI->SetCheck( (m_md[ETMT_ESTIM_TORQUE].state) ? TRUE : FALSE );
+}
+void CSeptabsPanel::OnUpdateViewFuelcutTorqueMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable && m_amt_maps_enabled);
+ pCmdUI->SetCheck( (m_md[ETMT_FLCUT_TORQUE].state) ? TRUE : FALSE );
+}
+void CSeptabsPanel::OnUpdateViewDtorqIgntimCorrMap(CCmdUI* pCmdUI)
+{
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && IsAllowed();
+ pCmdUI->Enable(enable && m_amt_maps_enabled);
+ pCmdUI->SetCheck( (m_md[ETMT_DTORQ_IT_CORR].state) ? TRUE : FALSE );
+}
+
 void CSeptabsPanel::UpdateOpenedCharts(void)
 {
  for(int i = ETMT_SEP_START; i <= ETMT_SEP_END; ++i)
@@ -955,6 +986,19 @@ void CSeptabsPanel::EnableOtsCurve(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_md[ETMT_OTS_CURVE].state && ::IsWindow(m_md[ETMT_OTS_CURVE].handle))
   DLL::Chart2DEnable(m_md[ETMT_OTS_CURVE].handle, enable && IsAllowed());
+}
+
+void CSeptabsPanel::EnableAMTMaps(bool enable)
+{
+ m_amt_maps_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_md[ETMT_ESTIM_TORQUE].state && ::IsWindow(m_md[ETMT_ESTIM_TORQUE].handle))
+  DLL::Chart3DEnable(m_md[ETMT_ESTIM_TORQUE].handle, enable && IsAllowed());
+ if (m_md[ETMT_FLCUT_TORQUE].state && ::IsWindow(m_md[ETMT_FLCUT_TORQUE].handle))
+  DLL::Chart2DEnable(m_md[ETMT_FLCUT_TORQUE].handle, enable && IsAllowed());
+ if (m_md[ETMT_DTORQ_IT_CORR].state && ::IsWindow(m_md[ETMT_DTORQ_IT_CORR].handle))
+  DLL::Chart2DEnable(m_md[ETMT_DTORQ_IT_CORR].handle, enable && IsAllowed());
 }
 
 void CSeptabsPanel::OnViewAttenuatorMap()
@@ -2559,6 +2603,114 @@ void CSeptabsPanel::OnViewOtsCurveMap()
 
   //allow controller to detect closing of this window
   OnOpenMapWnd(md.handle, ETMT_OTS_CURVE);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CSeptabsPanel::OnViewEstimTorqueMap()
+{
+ MapData &md = m_md[ETMT_ESTIM_TORQUE];
+ //if button has been turned off, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart3DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart3DCreate(_ChartParentHwnd(), md.original, md.active, GetRPMGrid(), 16, 16, -50.0, 200.0,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(), //RPM
+    MLL::GetString(IDS_MAPS_TRQ_UNIT).c_str(), //TORQUE
+    MLL::GetString(IDS_ESTIM_TORQUE_MAP).c_str());
+  DLL::Chart3DSetOnGetAxisLabel(md.handle, CXD_X_AXIS, OnGetXAxisLabelRPM, static_cast<CTablesPanelBase*>(this));
+  DLL::Chart3DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart3DSetOnChange(md.handle,OnChangeEstimTorqueTable,this);
+  DLL::Chart3DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(md.handle,OnCloseEstimTorqueTable,this);
+  DLL::Chart3DSetOnWndActivation(md.handle, OnWndActivationEstimTorqueTable, this);
+  DLL::Chart3DSetPtMovingStep(md.handle, md.ptMovStep);
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_ESTIM_TORQUE);
+
+  DLL::Chart3DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CSeptabsPanel::OnViewFuelcutTorqueMap()
+{
+ MapData &md = m_md[ETMT_FLCUT_TORQUE];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, 0.0f, 250.0f, SECU3IO::flcut_trq_tps_slots, 17,
+    MLL::GetString(IDS_MAPS_TPSPOS_UNIT).c_str(), //TPS (X)
+    MLL::GetString(IDS_MAPS_TRQ_UNIT).c_str(), //TORQUE (Y)
+    MLL::GetString(IDS_FLCUT_TORQUE_MAP).c_str(), CXD_BM_NO); //MAP TITLE
+  DLL::Chart2DSetAxisValuesFormat(md.handle, CXD_X_AXIS, _T("%.01f"));
+  DLL::Chart2DSetOnChange(md.handle, OnChangeFuelcutTorqueTable, this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle, OnCloseFuelcutTorqueTable, this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationFuelcutTorqueTable, this);
+  DLL::Chart2DSetPtValuesFormat(md.handle, _T("#0"));
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //allow controller to detect closing of this window
+  OnOpenMapWnd(md.handle, ETMT_FLCUT_TORQUE);
+
+  DLL::Chart2DShow(md.handle, true);
+ }
+ else
+ {
+  ::SetFocus(md.handle);
+ }
+}
+
+void CSeptabsPanel::OnViewDtorqIgntimCorrMap()
+{
+ MapData &md = m_md[ETMT_DTORQ_IT_CORR];
+ //If button was released, then close editor's window
+ if (md.mp_button->GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(md.handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!md.state)&&(DLL::Chart2DCreate))
+ {
+  md.state = 1;
+  md.handle = DLL::Chart2DCreate(_ChartParentHwnd(), md.original, md.active, -60.0, 60.0, SECU3IO::dtorq_igntim_corr_slots, 17,
+    MLL::GetString(IDS_MAPS_DTRQ_UNIT).c_str(), //Torque difference (X)
+    MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(), //Ign. timing (Y)
+    MLL::GetString(IDS_DTORQ_IT_CORR_MAP).c_str(), CXD_BM_NO); //MAP TITLE
+  DLL::Chart2DSetOnChange(md.handle,OnChangeDtorqIgntimCorrTable,this);
+  DLL::Chart2DSetOnChangeSettings(md.handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(md.handle,OnCloseDtorqIgntimCorrTable,this);
+  DLL::Chart2DSetOnWndActivation(md.handle, OnWndActivationDtorqIgntimCorrTable, this);
+  DLL::Chart2DSetPtMovingStep(md.handle, md.ptMovStep);
+  DLL::Chart2DUpdate(md.handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(md.handle, ETMT_DTORQ_IT_CORR);
 
   DLL::Chart2DShow(md.handle, true);
  }

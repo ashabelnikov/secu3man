@@ -125,6 +125,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFPSAverage(_T("FPSAverage"))
 , m_optAPPSAverage(_T("APPSAverage"))
 , m_optOTSAverage(_T("OTSAverage"))
+, m_optTorqueAverage(_T("TorqueAverage"))
 
 , m_optTitleFontSize(_T("TitleFontSize"))
 , m_optValueFontSize(_T("ValueFontSize"))
@@ -222,6 +223,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optETCAcceptErrMapWnd(_T("ETCAcceptErrMapWnd"))
 , m_optETCThrottlePosMapWnd(_T("ETCThrottlePosMapWnd"))
 , m_optOtsCurveMapWnd(_T("OtsCurveMapWnd"))
+, m_optEstimTorqueMapWnd(_T("EstimTorqueMapWnd"))
+, m_optFlcutTorqueMapWnd(_T("FlcutTorqueMapWnd"))
+, m_optDtorqItCorrMapWnd(_T("DtorqItCorrMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -307,6 +311,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optETCAcceptErrMapWnd1(_T("ETCAcceptErrMapWnd"))
 , m_optETCThrottlePosMapWnd1(_T("ETCThrottlePosMapWnd"))
 , m_optOtsCurveMapWnd1(_T("OtsCurveMapWnd"))
+, m_optEstimTorqueMapWnd1(_T("EstimTorqueMapWnd"))
+, m_optFlcutTorqueMapWnd1(_T("FlcutTorqueMapWnd"))
+, m_optDtorqItCorrMapWnd1(_T("DtorqItCorrMapWnd"))
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
@@ -393,6 +400,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optETCAcceptErrMapWndSize(_T("ETCAcceptErrMapWnd"))
 , m_optETCThrottlePosMapWndSize(_T("ETCThrottlePosMapWnd"))
 , m_optOtsCurveMapWndSize(_T("OtsCurveMapWnd"))
+, m_optEstimTorqueMapWndSize(_T("EstimTorqueMapWnd"))
+, m_optFlcutTorqueMapWndSize(_T("FlcutTorqueMapWnd"))
+, m_optDtorqItCorrMapWndSize(_T("DtorqItCorrMapWnd"))
 //sizes of windows (online tables)
 , m_Name_WndSize_Section1(_T("WndSizeOnline"))
 , m_optStrtMapWndSize1(_T("StrtMapWnd"))
@@ -478,6 +488,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optETCAcceptErrMapWndSize1(_T("ETCAcceptErrMapWnd"))
 , m_optETCThrottlePosMapWndSize1(_T("ETCThrottlePosMapWnd"))
 , m_optOtsCurveMapWndSize1(_T("OtsCurveMapWnd"))
+, m_optEstimTorqueMapWndSize1(_T("EstimTorqueMapWnd"))
+, m_optFlcutTorqueMapWndSize1(_T("FlcutTorqueMapWnd"))
+, m_optDtorqItCorrMapWndSize1(_T("DtorqItCorrMapWnd"))
 //state of windows (minimized, normal, maximized)
 , m_Name_WndState_Section(_T("WndState"))
 , m_optMainFrmWndState(_T("MainFrmWnd"))
@@ -637,6 +650,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepETCAcceptErrMap(_T("ETCAcceptErrMapWnd"))
 , m_optPtMovStepETCThrottlePosMap(_T("ETCThrottlePosMapWnd"))
 , m_optPtMovStepOtsCurveMap(_T("OtsCurveMapWnd"))
+, m_optPtMovStepEstimTorqueMap(_T("EstimTorqueMapWnd"))
+, m_optPtMovStepFlcutTorqueMap(_T("FlcutTorqueMapWnd"))
+, m_optPtMovStepDtorqItCorrMap(_T("DtorqItCorrMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -724,6 +740,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldAFRMap(_T("AFRMap"))
 , m_optLogFieldTchrg(_T("Tchrg"))
 , m_optLogFieldOTS(_T("OTS"))
+, m_optLogFieldEstTorq(_T("EstTorque"))
+, m_optLogFieldReqTorq(_T("ReqTorque"))
 
 ,m_Name_DbgVars_Section(_T("DebugVars"))
 //Functionality section
@@ -732,6 +750,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optFuncGD_CONTROL(_T("GD_CONTROL"))
 , m_optFuncELEC_THROTTLE(_T("ELEC_THROTTLE"))
 , m_optFuncXTAU_CORR(_T("XTAU_CORR"))
+, m_optFuncAMT_SUPPORT(_T("AMT_SUPPORT"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -872,6 +891,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetScAPPS[1].name = m_optMetAPPS[i][1].name = _T("GrhAPPS");
   m_optMetScOTS[0].name = m_optMetOTS[i][0].name = _T("MetOTS");
   m_optMetScOTS[1].name = m_optMetOTS[i][1].name = _T("GrhOTS");
+  m_optMetScTorque[0].name = m_optMetTorque[i][0].name = _T("MetTorque");
+  m_optMetScTorque[1].name = m_optMetTorque[i][1].name = _T("Grhtorque");
  }
 
  for(int i = 0; i < 4; ++i)
@@ -1054,6 +1075,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optFPSAverage, _T("4"), 0, 32);
  fs.ReadInt(m_optAPPSAverage, _T("4"), 0, 32);
  fs.ReadInt(m_optOTSAverage, _T("4"), 0, 32);
+ fs.ReadInt(m_optTorqueAverage, _T("4"), 0, 32);
 
  fs.ReadEnum(m_optSpeedUnit, 0, m_AllowableSpeedUnits);
  fs.ReadInt(m_optTitleFontSize, _T("100"), 10, 200);
@@ -1156,6 +1178,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optETCAcceptErrMapWnd);
  ws.ReadWndPos(m_optETCThrottlePosMapWnd);
  ws.ReadWndPos(m_optOtsCurveMapWnd);
+ ws.ReadWndPos(m_optEstimTorqueMapWnd);
+ ws.ReadWndPos(m_optFlcutTorqueMapWnd);
+ ws.ReadWndPos(m_optDtorqItCorrMapWnd);
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
  ws1.ReadWndPos(m_optStrtMapWnd1);
@@ -1241,6 +1266,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ws1.ReadWndPos(m_optETCAcceptErrMapWnd1);
  ws1.ReadWndPos(m_optETCThrottlePosMapWnd1);
  ws1.ReadWndPos(m_optOtsCurveMapWnd1);
+ ws1.ReadWndPos(m_optEstimTorqueMapWnd1);
+ ws1.ReadWndPos(m_optFlcutTorqueMapWnd1);
+ ws1.ReadWndPos(m_optDtorqItCorrMapWnd1);
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
  sz.ReadWndPos(m_optMainFrmWndSize, 0, 10000); //Main frame window
@@ -1327,6 +1355,9 @@ bool CAppSettingsModel::ReadSettings(void)
  sz.ReadWndPos(m_optETCAcceptErrMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optETCThrottlePosMapWndSize, 0, 10000);
  sz.ReadWndPos(m_optOtsCurveMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optEstimTorqueMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optFlcutTorqueMapWndSize, 0, 10000);
+ sz.ReadWndPos(m_optDtorqItCorrMapWndSize, 0, 10000);
 
  //Positions of windows (online tables)
  IniIO sz1(IniFileName, m_Name_WndSize_Section1);
@@ -1413,6 +1444,9 @@ bool CAppSettingsModel::ReadSettings(void)
  sz1.ReadWndPos(m_optETCAcceptErrMapWndSize1, 0, 10000);
  sz1.ReadWndPos(m_optETCThrottlePosMapWndSize1, 0, 10000);
  sz1.ReadWndPos(m_optOtsCurveMapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optEstimTorqueMapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optFlcutTorqueMapWndSize1, 0, 10000);
+ sz1.ReadWndPos(m_optDtorqItCorrMapWndSize1, 0, 10000);
 
  //State of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
@@ -1487,8 +1521,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColAltrn_i,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][45*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][46*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -1541,10 +1575,11 @@ bool CAppSettingsModel::ReadSettings(void)
    mm.ReadInt(m_optMetFPS[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetAPPS[i][g],metDef[i][d++], 0, vmax, true);
    mm.ReadInt(m_optMetOTS[i][g],metDef[i][d++], 0, vmax, true);
+   mm.ReadInt(m_optMetTorque[i][g],metDef[i][d++], 0, vmax, true);
   }
  }
 
- const TCHAR* metScDef[2][47] = {
+ const TCHAR* metScDef[2][48] = {
                              //Width, gridColor, ticksNum, Min, Max, backColor, arrowColor, digitColor, labelColor, PieRadius, ScaleLength, TickLength, Start, End, Color...
                              {_T("1, 000000, 17, 0, 8000, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, 0,4000,64FF64, 4000,6000,FFFF64, 6000,8000,FF6464"),  //RPM
                               _T("1, 000000, 21, 10, 110, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, 10,30,B48282, 30,90,78C878, 90,110,B48282"),          //MAP
@@ -1592,7 +1627,8 @@ bool CAppSettingsModel::ReadSettings(void)
                               _T("1, 000000, 21, 0,  400, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, 0,100,B48282, 100,400,78C878"), //GPS
                               _T("1, 000000, 21, 0,  700, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, 0,300,B48282, 300,700,78C878"),//FPS
                               _T("1, 000000, 17, 0,  100, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, 0,10,B6B6D3,10,90,93EA79,90,100,FB5537"), //APPS
-                              _T("1, 000000, 17,-40, 140, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, -40,50,8282B4, 50,100,787878, 100,140,E68282")}, //OTS
+                              _T("1, 000000, 17,-50, 140, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, -40,50,8282B4, 50,100,787878, 100,140,E68282"), //OTS
+                              _T("1, 000000, 21,-50, 200, 1C0C0C0, FF0000, 1F1FFF, 1000000, 20, 145, 10.0, -50,0,8282B4,0,125,78BB78,125,160,CCCE84,160,200,F87070")}, //Torque
                              //graphs:
                              //Width, scaleColor, gridNum, Min, Max, backColor, arrowColor, digitColor
                              {_T("1, 1000000, 8, 0,  8000, 1C0C0C0, FF0000, 1F1FFF"), //RPM
@@ -1641,7 +1677,8 @@ bool CAppSettingsModel::ReadSettings(void)
                               _T("1, 1000000, 10, 0, 400,  1C0C0C0, FF0000, 1F1FFF"),  //GPS
                               _T("1, 1000000, 10, 0, 700,  1C0C0C0, FF0000, 1F1FFF"),  //FPS
                               _T("1, 1000000, 10, 0, 100,  1C0C0C0, FF0000, 1F1FFF"), //APPS
-                              _T("1, 1000000, 8,-40, 140,  1C0C0C0, FF0000, 1F1FFF")}  //OTS
+                              _T("1, 1000000, 8,-40, 140,  1C0C0C0, FF0000, 1F1FFF"),  //OTS
+                              _T("1, 1000000, 8,-50, 200,  1C0C0C0, FF0000, 1F1FFF")}  //Torque
                              };
 
  IniIO sc(IniFileName, m_Name_MetersSc_Section);
@@ -1695,6 +1732,7 @@ bool CAppSettingsModel::ReadSettings(void)
   sc.ReadScale(m_optMetScFPS[g],     metScDef[g][d++], 0.0f, 1000.0f, 100);
   sc.ReadScale(m_optMetScAPPS[g],    metScDef[g][d++], 0.0f, 100.0f, 100);
   sc.ReadScale(m_optMetScOTS[g],    metScDef[g][d++], -60.0f, 300.0f, 100);
+  sc.ReadScale(m_optMetScTorque[g],  metScDef[g][d++], -400.0f, 400.0f, 100);
  }
 
  //Auto tune
@@ -1825,6 +1863,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepETCAcceptErrMap, _T("0.1"), 0.01f, 10.0f);
  ms.ReadFlt(m_optPtMovStepETCThrottlePosMap, _T("0.5"), 0.5f, 10.0f);
  ms.ReadFlt(m_optPtMovStepOtsCurveMap, _T("1.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepEstimTorqueMap, _T("1.0"), 0.0f, 25.0f);
+ ms.ReadFlt(m_optPtMovStepFlcutTorqueMap, _T("1.0"), 0.0f, 25.0f);
+ ms.ReadFlt(m_optPtMovStepDtorqItCorrMap, _T("0.5"), 0.0f, 10.0f);
 
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
@@ -1913,6 +1954,8 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldFPS, _T("FPS"));
  lf.ReadString(m_optLogFieldAPPS, _T("APPS"));
  lf.ReadString(m_optLogFieldOTS, _T("OTS"));
+ lf.ReadString(m_optLogFieldEstTorq, _T("EstTorque"));
+ lf.ReadString(m_optLogFieldReqTorq, _T("ReqTorque"));
 
  //Debug variables
  IniIO dv(IniFileName, m_Name_DbgVars_Section);
@@ -1931,6 +1974,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fn.ReadInt(m_optFuncGD_CONTROL, _T("1"), 0, 1);
  fn.ReadInt(m_optFuncELEC_THROTTLE, _T("1"), 0, 1);
  fn.ReadInt(m_optFuncXTAU_CORR, _T("1"), 0, 1);
+ fn.ReadInt(m_optFuncAMT_SUPPORT, _T("1"), 0, 1);
 
  return status;
 }
@@ -1987,6 +2031,7 @@ bool CAppSettingsModel::WriteSettings(void)
  const TCHAR* strMetFPS = en ? _T("Fuel pressure sensor") : _T("Датчик давления топлива");
  const TCHAR* strMetAPPS = en ? _T("Gas pedal position sensor") : _T("Датчик положения педали газа");
  const TCHAR* strMetOTS = en ? _T("Oil temperature sensor") : _T("Датчик температуры масла");
+ const TCHAR* strMetTorque = en ? _T("Estimated torque") : _T("Расчетный крутящий момент");
  //group of separate maps
  const TCHAR* strAttenuatorMapWnd = en ? _T("Attenuator's curve of amplification") : _T("Таблица функции аттенюатора");
  const TCHAR* strDwellCntrlMapWnd = en ? _T("Dwell time map") : _T("Время накопления");
@@ -2032,6 +2077,9 @@ bool CAppSettingsModel::WriteSettings(void)
  const TCHAR* strETCAcceptErrMapWnd = en ? _T("Accepted positioning error") : _T("Допустимая ошибка позиционирования заслонки");
  const TCHAR* strETCThrottlePosMapWnd = en ? _T("Throttle position vs gas pedal and RPM") : _T("Положение заслонки в зависимости от ДППА и оборотов");
  const TCHAR* strOtsCurveMapWnd = en ? _T("Oil temperature sensor's table") : _T("Кривая датчика температуры масла (ДТМ)");
+ const TCHAR* strEstimTorqueMapWnd = en ? _T("Estimated torque") : _T("Расчетный крутящий момент");
+ const TCHAR* strFlcutTorqueMapWnd = en ? _T("Fuel cut torque threshold") : _T("Моментный порог отключения топливоподачи");
+ const TCHAR* strDtorqItCorrMapWnd = en ? _T("Ign. timing correction vs torque difference") : _T("Коррекция УОЗ от разницы моментов");
 
  IniIO &os = writer; 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2480,6 +2528,12 @@ bool CAppSettingsModel::WriteSettings(void)
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДТМ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optOTSAverage); 
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for torque values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений крутящего момента. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optTorqueAverage); 
+
  //---------------------------
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Defines which unit should be used for displaying of vehicle speed and distance. Supported values are: kmh and mph"));
@@ -2843,6 +2897,9 @@ bool CAppSettingsModel::WriteSettings(void)
  ws.WriteWndPos(m_optETCAcceptErrMapWnd, strETCAcceptErrMapWnd);
  ws.WriteWndPos(m_optETCThrottlePosMapWnd, strETCThrottlePosMapWnd);
  ws.WriteWndPos(m_optOtsCurveMapWnd, strOtsCurveMapWnd);
+ ws.WriteWndPos(m_optEstimTorqueMapWnd, strEstimTorqueMapWnd);
+ ws.WriteWndPos(m_optFlcutTorqueMapWnd, strFlcutTorqueMapWnd);
+ ws.WriteWndPos(m_optDtorqItCorrMapWnd, strDtorqItCorrMapWnd);
 
  //Positions of windows
  IniIO &ws1 = writer;
@@ -3087,6 +3144,9 @@ bool CAppSettingsModel::WriteSettings(void)
  ws1.WriteWndPos(m_optETCAcceptErrMapWnd1, strETCAcceptErrMapWnd);
  ws1.WriteWndPos(m_optETCThrottlePosMapWnd1, strETCThrottlePosMapWnd);
  ws1.WriteWndPos(m_optOtsCurveMapWnd1, strOtsCurveMapWnd);
+ ws1.WriteWndPos(m_optEstimTorqueMapWnd1, strEstimTorqueMapWnd);
+ ws1.WriteWndPos(m_optFlcutTorqueMapWnd1, strFlcutTorqueMapWnd);
+ ws1.WriteWndPos(m_optDtorqItCorrMapWnd1, strDtorqItCorrMapWnd);
 
  //Sizes of windows
  IniIO &sz = writer;
@@ -3336,6 +3396,9 @@ bool CAppSettingsModel::WriteSettings(void)
  sz.WriteWndPos(m_optETCAcceptErrMapWndSize, strETCAcceptErrMapWnd);
  sz.WriteWndPos(m_optETCThrottlePosMapWndSize, strETCThrottlePosMapWnd);
  sz.WriteWndPos(m_optOtsCurveMapWndSize, strOtsCurveMapWnd);
+ sz.WriteWndPos(m_optEstimTorqueMapWndSize, strEstimTorqueMapWnd);
+ sz.WriteWndPos(m_optFlcutTorqueMapWndSize, strFlcutTorqueMapWnd);
+ sz.WriteWndPos(m_optDtorqItCorrMapWndSize, strDtorqItCorrMapWnd);
 
  //Sizes of windows (online)
  IniIO &sz1 = writer;
@@ -3580,6 +3643,9 @@ bool CAppSettingsModel::WriteSettings(void)
  sz1.WriteWndPos(m_optETCAcceptErrMapWndSize1, strETCAcceptErrMapWnd);
  sz1.WriteWndPos(m_optETCThrottlePosMapWndSize1, strETCThrottlePosMapWnd);
  sz1.WriteWndPos(m_optOtsCurveMapWndSize1, strOtsCurveMapWnd);
+ sz1.WriteWndPos(m_optEstimTorqueMapWndSize1, strEstimTorqueMapWnd);
+ sz1.WriteWndPos(m_optFlcutTorqueMapWndSize1, strFlcutTorqueMapWnd);
+ sz1.WriteWndPos(m_optDtorqItCorrMapWndSize1, strDtorqItCorrMapWnd);
 
  //States of windows
  IniIO &sw = writer;
@@ -3992,6 +4058,7 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetFPS[i][g], strMetFPS);
    mm.WriteInt(m_optMetAPPS[i][g], strMetAPPS);
    mm.WriteInt(m_optMetOTS[i][g], strMetOTS);
+   mm.WriteInt(m_optMetTorque[i][g], strMetTorque);
   }
  }
 
@@ -4053,6 +4120,7 @@ bool CAppSettingsModel::WriteSettings(void)
   sc.WriteScale(m_optMetScFPS[g], 1, strMetFPS, g);
   sc.WriteScale(m_optMetScAPPS[g], 1, strMetAPPS, g);
   sc.WriteScale(m_optMetScOTS[g], 1, strMetOTS, g);
+  sc.WriteScale(m_optMetScTorque[g], 1, strMetTorque, g);
  }
 
  IniIO &at = writer;
@@ -4520,6 +4588,9 @@ bool CAppSettingsModel::WriteSettings(void)
  ms.WriteFlt(m_optPtMovStepETCAcceptErrMap, 2, strETCAcceptErrMapWnd);
  ms.WriteFlt(m_optPtMovStepETCThrottlePosMap, 1, strETCThrottlePosMapWnd);
  ms.WriteFlt(m_optPtMovStepOtsCurveMap, 1, strOtsCurveMapWnd);
+ ms.WriteFlt(m_optPtMovStepEstimTorqueMap, 1, strEstimTorqueMapWnd);
+ ms.WriteFlt(m_optPtMovStepFlcutTorqueMap, 1, strFlcutTorqueMapWnd);
+ ms.WriteFlt(m_optPtMovStepDtorqItCorrMap, 1, strDtorqItCorrMapWnd);
 
  //Log file's fileds
  IniIO &lf = writer;
@@ -4618,6 +4689,8 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldFPS);
  lf.WriteString(m_optLogFieldAPPS);
  lf.WriteString(m_optLogFieldOTS);
+ lf.WriteString(m_optLogFieldEstTorq);
+ lf.WriteString(m_optLogFieldReqTorq);
 
  //Debug variables
  IniIO &dv = writer;
@@ -4662,6 +4735,11 @@ bool CAppSettingsModel::WriteSettings(void)
   fn.WriteInt(m_optFuncXTAU_CORR, _T("Enable X-tau correction functionality. Set to 1 to enable (0 - for disabling)"));
  else
   fn.WriteInt(m_optFuncXTAU_CORR, _T("Разрешение функциональности X-tau коррекции. Установите в 1 для разрешения (0 для запрещения)."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fn.WriteInt(m_optFuncAMT_SUPPORT, _T("Enable AT/AMT functionality. Set to 1 to enable (0 - for disabling)"));
+ else
+  fn.WriteInt(m_optFuncAMT_SUPPORT, _T("Разрешение функциональности автоматических коробок передач. Установите в 1 для разрешения (0 для запрещения)."));
 
  return status;
 }
@@ -4885,6 +4963,12 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optETCThrottlePosMapWnd.value.y = i_wndSettings.m_ETCThrottlePosMapWnd_Y;
  m_optOtsCurveMapWnd.value.x = i_wndSettings.m_OtsCurveMapWnd_X;
  m_optOtsCurveMapWnd.value.y = i_wndSettings.m_OtsCurveMapWnd_Y; 
+ m_optEstimTorqueMapWnd.value.x = i_wndSettings.m_EstimTorqueMapWnd_X;
+ m_optEstimTorqueMapWnd.value.y = i_wndSettings.m_EstimTorqueMapWnd_Y; 
+ m_optFlcutTorqueMapWnd.value.x = i_wndSettings.m_FlcutTorqueMapWnd_X;
+ m_optFlcutTorqueMapWnd.value.y = i_wndSettings.m_FlcutTorqueMapWnd_Y; 
+ m_optDtorqItCorrMapWnd.value.x = i_wndSettings.m_DtorqItCorrMapWnd_X;
+ m_optDtorqItCorrMapWnd.value.y = i_wndSettings.m_DtorqItCorrMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -5056,6 +5140,12 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_ETCThrottlePosMapWnd_Y = m_optETCThrottlePosMapWnd.value.y;
  o_wndSettings.m_OtsCurveMapWnd_X = m_optOtsCurveMapWnd.value.x;
  o_wndSettings.m_OtsCurveMapWnd_Y = m_optOtsCurveMapWnd.value.y;
+ o_wndSettings.m_EstimTorqueMapWnd_X = m_optEstimTorqueMapWnd.value.x;
+ o_wndSettings.m_EstimTorqueMapWnd_Y = m_optEstimTorqueMapWnd.value.y;
+ o_wndSettings.m_FlcutTorqueMapWnd_X = m_optFlcutTorqueMapWnd.value.x;
+ o_wndSettings.m_FlcutTorqueMapWnd_Y = m_optFlcutTorqueMapWnd.value.y; 
+ o_wndSettings.m_DtorqItCorrMapWnd_X = m_optDtorqItCorrMapWnd.value.x;
+ o_wndSettings.m_DtorqItCorrMapWnd_Y = m_optDtorqItCorrMapWnd.value.y; 
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -5225,6 +5315,12 @@ void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
  m_optETCThrottlePosMapWnd1.value.y = i_wndSettings.m_ETCThrottlePosMapWnd_Y;
  m_optOtsCurveMapWnd1.value.x = i_wndSettings.m_OtsCurveMapWnd_X;
  m_optOtsCurveMapWnd1.value.y = i_wndSettings.m_OtsCurveMapWnd_Y; 
+ m_optEstimTorqueMapWnd1.value.x = i_wndSettings.m_EstimTorqueMapWnd_X;
+ m_optEstimTorqueMapWnd1.value.y = i_wndSettings.m_EstimTorqueMapWnd_Y; 
+ m_optFlcutTorqueMapWnd1.value.x = i_wndSettings.m_FlcutTorqueMapWnd_X;
+ m_optFlcutTorqueMapWnd1.value.y = i_wndSettings.m_FlcutTorqueMapWnd_Y; 
+ m_optDtorqItCorrMapWnd1.value.x = i_wndSettings.m_DtorqItCorrMapWnd_X;
+ m_optDtorqItCorrMapWnd1.value.y = i_wndSettings.m_DtorqItCorrMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
@@ -5394,6 +5490,12 @@ void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
  o_wndSettings.m_ETCThrottlePosMapWnd_Y = m_optETCThrottlePosMapWnd1.value.y;
  o_wndSettings.m_OtsCurveMapWnd_X = m_optOtsCurveMapWnd1.value.x;
  o_wndSettings.m_OtsCurveMapWnd_Y = m_optOtsCurveMapWnd1.value.y;
+ o_wndSettings.m_EstimTorqueMapWnd_X = m_optEstimTorqueMapWnd1.value.x;
+ o_wndSettings.m_EstimTorqueMapWnd_Y = m_optEstimTorqueMapWnd1.value.y;
+ o_wndSettings.m_FlcutTorqueMapWnd_X = m_optFlcutTorqueMapWnd1.value.x;
+ o_wndSettings.m_FlcutTorqueMapWnd_Y = m_optFlcutTorqueMapWnd1.value.y; 
+ o_wndSettings.m_DtorqItCorrMapWnd_X = m_optDtorqItCorrMapWnd1.value.x;
+ o_wndSettings.m_DtorqItCorrMapWnd_Y = m_optDtorqItCorrMapWnd1.value.y; 
 }
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
@@ -5565,6 +5667,12 @@ void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
  m_optETCThrottlePosMapWndSize.value.y = i_wndSize.m_ETCThrottlePosMapWnd_H;
  m_optOtsCurveMapWndSize.value.x = i_wndSize.m_OtsCurveMapWnd_W;
  m_optOtsCurveMapWndSize.value.y = i_wndSize.m_OtsCurveMapWnd_H; 
+ m_optEstimTorqueMapWndSize.value.x = i_wndSize.m_EstimTorqueMapWnd_W;
+ m_optEstimTorqueMapWndSize.value.y = i_wndSize.m_EstimTorqueMapWnd_H; 
+ m_optFlcutTorqueMapWndSize.value.x = i_wndSize.m_FlcutTorqueMapWnd_W;
+ m_optFlcutTorqueMapWndSize.value.y = i_wndSize.m_FlcutTorqueMapWnd_H; 
+ m_optDtorqItCorrMapWndSize.value.x = i_wndSize.m_DtorqItCorrMapWnd_W;
+ m_optDtorqItCorrMapWndSize.value.y = i_wndSize.m_DtorqItCorrMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
@@ -5736,6 +5844,12 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
  o_wndSize.m_ETCThrottlePosMapWnd_H = m_optETCThrottlePosMapWndSize.value.y;
  o_wndSize.m_OtsCurveMapWnd_W = m_optOtsCurveMapWndSize.value.x;
  o_wndSize.m_OtsCurveMapWnd_H = m_optOtsCurveMapWndSize.value.y;
+ o_wndSize.m_EstimTorqueMapWnd_W = m_optEstimTorqueMapWndSize.value.x;
+ o_wndSize.m_EstimTorqueMapWnd_H = m_optEstimTorqueMapWndSize.value.y;
+ o_wndSize.m_FlcutTorqueMapWnd_W = m_optFlcutTorqueMapWndSize.value.x;
+ o_wndSize.m_FlcutTorqueMapWnd_H = m_optFlcutTorqueMapWndSize.value.y; 
+ o_wndSize.m_DtorqItCorrMapWnd_W = m_optDtorqItCorrMapWndSize.value.x;
+ o_wndSize.m_DtorqItCorrMapWnd_H = m_optDtorqItCorrMapWndSize.value.y; 
 }
 
 void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
@@ -5905,6 +6019,12 @@ void CAppSettingsModel::SetWndSize1(const WndSize& i_wndSize)
  m_optETCThrottlePosMapWndSize1.value.y = i_wndSize.m_ETCThrottlePosMapWnd_H;
  m_optOtsCurveMapWndSize1.value.x = i_wndSize.m_OtsCurveMapWnd_W;
  m_optOtsCurveMapWndSize1.value.y = i_wndSize.m_OtsCurveMapWnd_H; 
+ m_optEstimTorqueMapWndSize1.value.x = i_wndSize.m_EstimTorqueMapWnd_W;
+ m_optEstimTorqueMapWndSize1.value.y = i_wndSize.m_EstimTorqueMapWnd_H; 
+ m_optFlcutTorqueMapWndSize1.value.x = i_wndSize.m_FlcutTorqueMapWnd_W;
+ m_optFlcutTorqueMapWndSize1.value.y = i_wndSize.m_FlcutTorqueMapWnd_H; 
+ m_optDtorqItCorrMapWndSize1.value.x = i_wndSize.m_DtorqItCorrMapWnd_W;
+ m_optDtorqItCorrMapWndSize1.value.y = i_wndSize.m_DtorqItCorrMapWnd_H; 
 }
 
 void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
@@ -6074,6 +6194,12 @@ void CAppSettingsModel::GetWndSize1(WndSize& o_wndSize) const
  o_wndSize.m_ETCThrottlePosMapWnd_H = m_optETCThrottlePosMapWndSize1.value.y;
  o_wndSize.m_OtsCurveMapWnd_W = m_optOtsCurveMapWndSize1.value.x;
  o_wndSize.m_OtsCurveMapWnd_H = m_optOtsCurveMapWndSize1.value.y;
+ o_wndSize.m_EstimTorqueMapWnd_W = m_optEstimTorqueMapWndSize1.value.x;
+ o_wndSize.m_EstimTorqueMapWnd_H = m_optEstimTorqueMapWndSize1.value.y;
+ o_wndSize.m_FlcutTorqueMapWnd_W = m_optFlcutTorqueMapWndSize1.value.x;
+ o_wndSize.m_FlcutTorqueMapWnd_H = m_optFlcutTorqueMapWndSize1.value.y; 
+ o_wndSize.m_DtorqItCorrMapWnd_W = m_optDtorqItCorrMapWndSize1.value.x;
+ o_wndSize.m_DtorqItCorrMapWnd_H = m_optDtorqItCorrMapWndSize1.value.y; 
 }
 
 void CAppSettingsModel::SetWndState(const WndState& i_wndState)
@@ -6347,6 +6473,7 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
   _cpyMetersConfig(o_cfg[i].m_optMetFPS, &m_optMetFPS[i][0], &m_optMetScFPS[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetAPPS, &m_optMetAPPS[i][0], &m_optMetScAPPS[0]);
   _cpyMetersConfig(o_cfg[i].m_optMetOTS, &m_optMetOTS[i][0], &m_optMetScOTS[0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTorque, &m_optMetTorque[i][0], &m_optMetScTorque[0]);
  }
 }
 
@@ -6402,6 +6529,7 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
   _cpyMetersConfig(i_cfg[i].m_optMetFPS, &m_optMetFPS[i][0], &m_optMetScFPS[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetAPPS, &m_optMetAPPS[i][0], &m_optMetScAPPS[0]);
   _cpyMetersConfig(i_cfg[i].m_optMetOTS, &m_optMetOTS[i][0], &m_optMetScOTS[0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTorque, &m_optMetTorque[i][0], &m_optMetScTorque[0]);
  }
 }
 
@@ -6798,6 +6926,9 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepETCThrottlePosMap.value = i_ptMovStep.m_value[ETMT_ETC_THROPOS];
  m_optPtMovStepETCThrottlePosMap.value = i_ptMovStep.m_value[ETMT_ETC_THROPOS];
  m_optPtMovStepOtsCurveMap.value = i_ptMovStep.m_value[ETMT_OTS_CURVE];
+ m_optPtMovStepEstimTorqueMap.value = i_ptMovStep.m_value[ETMT_ESTIM_TORQUE];
+ m_optPtMovStepFlcutTorqueMap.value = i_ptMovStep.m_value[ETMT_FLCUT_TORQUE];
+ m_optPtMovStepDtorqItCorrMap.value = i_ptMovStep.m_value[ETMT_DTORQ_IT_CORR];
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -6886,6 +7017,9 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_value[ETMT_ETC_THROPOS] = m_optPtMovStepETCThrottlePosMap.value;
  o_ptMovStep.m_value[ETMT_ETC_THROPOS] = m_optPtMovStepETCThrottlePosMap.value;
  o_ptMovStep.m_value[ETMT_OTS_CURVE] = m_optPtMovStepOtsCurveMap.value;
+ o_ptMovStep.m_value[ETMT_ESTIM_TORQUE] = m_optPtMovStepEstimTorqueMap.value;
+ o_ptMovStep.m_value[ETMT_FLCUT_TORQUE] = m_optPtMovStepFlcutTorqueMap.value;
+ o_ptMovStep.m_value[ETMT_DTORQ_IT_CORR] = m_optPtMovStepDtorqItCorrMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
@@ -6974,6 +7108,8 @@ void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
  m_optLogFieldFPS.value = i_flds.m_fldFPS;
  m_optLogFieldAPPS.value = i_flds.m_fldAPPS;
  m_optLogFieldOTS.value = i_flds.m_fldOTS;
+ m_optLogFieldEstTorq.value = i_flds.m_fldEstTorq;
+ m_optLogFieldReqTorq.value = i_flds.m_fldReqTorq;
 }
 
 void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
@@ -7062,6 +7198,8 @@ void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
  o_flds.m_fldFPS = m_optLogFieldFPS.value;
  o_flds.m_fldAPPS = m_optLogFieldAPPS.value;
  o_flds.m_fldOTS = m_optLogFieldOTS.value;
+ o_flds.m_fldEstTorq = m_optLogFieldEstTorq.value;
+ o_flds.m_fldReqTorq = m_optLogFieldReqTorq.value;
 }
 
 bool CAppSettingsModel::GetWriteLogFields(void) const
@@ -7080,6 +7218,7 @@ void CAppSettingsModel::GetFunctionality(Functionality& o_fnc) const
  o_fnc.GD_CONTROL = m_optFuncGD_CONTROL.value;
  o_fnc.ELEC_THROTTLE = m_optFuncELEC_THROTTLE.value;
  o_fnc.XTAU_CORR = m_optFuncXTAU_CORR.value;
+ o_fnc.AMT_SUPPORT = m_optFuncAMT_SUPPORT.value;
 }
 
 bool CAppSettingsModel::GetShowGraphLabels(void) const
@@ -7158,6 +7297,7 @@ void CAppSettingsModel::GetMetAverage(MetAverage& ma)
  ma.avrFPS = m_optFPSAverage.value;
  ma.avrAPPS = m_optAPPSAverage.value;
  ma.avrOTS = m_optOTSAverage.value;
+ ma.avrTorque = m_optTorqueAverage.value;
 }
 
 bool CAppSettingsModel::GetSpotMarkers(void) const

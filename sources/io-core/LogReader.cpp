@@ -43,10 +43,10 @@ using namespace SECU3IO;
 #define MAX_REC_BUF 4096
 
 //number of variables in the data field
-#define CSV_COUNT_DATA_VAL 84
+#define CSV_COUNT_DATA_VAL 86
 
 //offset of the marks value in record
-#define CSV_MARKS_OFFSET 510
+#define CSV_MARKS_OFFSET 524
 
 //offset of the CE flag's value in record
 #define CSV_CE_OFFSET 97
@@ -344,6 +344,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   o_data.fps = s3l.fps;
   o_data.apps1 = s3l.apps1;
   o_data.ots = s3l.ots;
+  o_data.est_torque = s3l.est_torque;
+  o_data.req_torque = s3l.req_torque;
   uniout_flags = s3l.uniout_flags;
   service_flags = s3l.service_flags;
  }
@@ -373,6 +375,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
   float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
   float grts, ftls, egts, ops, inj_duty, rigid_arg, maf, vent_duty, fts, cons_fuel, lambda_corr2, afr2, afrmap, tchrg, gps, fps, apps1, ots;
+  float est_torque, req_torque;
   DWORD ce_bits = 0;
 
   char* p = mp_recBuff; 
@@ -470,9 +473,11 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
      case 78: result = CNumericConv::secu3_atof_32<7>(b, size, fps); break;
      case 79: result = CNumericConv::secu3_atof_32<5>(b, size, apps1); break;
      case 80: result = CNumericConv::secu3_atof_32<5>(b, size, ots); break;
-     case 81: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
-     case 82: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
-     case 83: result = ParseCE(b, size, ce_bits); break;
+     case 81: result = CNumericConv::secu3_atof_32<6>(b, size, est_torque); break;
+     case 82: result = CNumericConv::secu3_atof_32<6>(b, size, req_torque); break;
+     case 83: result = CNumericConv::secu3_atoi_u1(b, size, log_mark); break;
+     case 84: result = CNumericConv::secu3_atoi_u32<5>(b, size, service_flags); break;
+     case 85: result = ParseCE(b, size, ce_bits); break;
     }
 
     b+=size+1;
@@ -579,6 +584,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.fps = fps;
  o_data.apps1 = apps1;
  o_data.ots = ots;
+ o_data.est_torque = est_torque;
+ o_data.req_torque = req_torque;
  }
 
  //universal outputs

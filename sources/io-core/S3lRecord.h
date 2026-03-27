@@ -91,6 +91,8 @@ struct s3lRecord
  float fps;
  float apps1;
  float ots; //oil temperature sensor
+ float est_torque;
+ float req_torque;
  BYTE  log_marks;
  WORD  service_flags;
  DWORD ce_errors;

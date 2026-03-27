@@ -953,6 +953,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  mp_view->mp_TablesPanel->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetSplitAngMode(CHECKBIT32(opt, SECU3IO::COPT_SPLIT_ANGLE)); 
  mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableETCMaps(fnc.ELEC_THROTTLE && !CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ mp_view->mp_TablesPanel->mp_SeptabsPanel->EnableAMTMaps(fnc.AMT_SUPPORT && CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) && CHECKBIT32(opt, SECU3IO::COPT_OBD_SUPPORT));
 
  mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
  mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(opt, SECU3IO::COPT_COOLINGFAN_PWM));

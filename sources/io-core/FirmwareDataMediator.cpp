@@ -328,7 +328,18 @@ typedef struct
  //OTS curve LUT's size
  _int ots_curve[OTS_LOOKUP_TABLE_SIZE+2];
 
- _uchar reserved[467];
+ //Estimated torque vs (LOAD,RPM), step 1Nm, value+50, range: -50...200Nm
+ _uchar estim_torque[F_WRK_POINTS_L][F_WRK_POINTS_F];
+
+ //Torque vs TPS used as fuel cut threshold, step 1Nm, range: 0...250
+ _uchar felcut_torque[FUELCUT_TORQUE_SIZE];
+
+ //Ignition timing correction vs torque difference, step 0.5degr, range: -60...60 degr.
+ //torque difference = requested torque - estimated torque, range: -250...250Nm
+ _char dtorq_igntim_corr[DTORQ_IGNTIM_CORR_SIZE];
+ _int dtorq_reserved[2];
+
+ _uchar reserved[173];
 }fw_ex_tabs_t;
 
 
@@ -464,10 +475,19 @@ typedef struct
 
  _uchar aircond_iacoff;
 
- _int  injpw_crk_speed;    //!< limitation of rate of change of Inj. PW (when decreasing and increasing), used immediately after cranking for a small period of time.
+ _int  injpw_crk_speed;    //!< limitation of the rate of change of Inj. PW (when decreasing and increasing), used immediately after cranking for a small period of time.
+
+ _uchar aircond_rpmalt_step; //!< RPM alternation step for air conditioner
+
+ _uchar  can_autrm;          //!< Supported CAN AT/AMT. 0 - disabled, 1 - Lada Vesta
+ _uint amt_baro_press;       //!< barometric pressure 
+ _uint amt_creeping_minrpm;  //!< minimal target RPM
+ _uint amt_creeping_delay;   //!< minimal target RPM delay
+ _int  amt_aircond_torque;   //!< torque for air conditioner
+ _uchar amt_rpmalt_step;     //!< RPM alternation step for AMT
 
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1505];
+ _uchar reserved[1494];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1720,6 +1740,9 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetETCAcceptErrMap(op_fwd->etc_accept_error);
  GetETCThrottlePosMap(op_fwd->etc_throttle_pos);
  GetOtsCurveMap(op_fwd->ots_curve);
+ GetEstimTorque(op_fwd->estim_torque);          //AMT
+ GetFuelcutTorque(op_fwd->felcut_torque);       //AMT
+ GetDtorqIgntimCorr(op_fwd->dtorq_igntim_corr); //AMT
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1842,6 +1865,9 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetETCAcceptErrMap(ip_fwd->etc_accept_error);
  SetETCThrottlePosMap(ip_fwd->etc_throttle_pos);
  SetOtsCurveMap(ip_fwd->ots_curve);
+ SetEstimTorque(ip_fwd->estim_torque);          //AMT
+ SetFuelcutTorque(ip_fwd->felcut_torque);       //AMT
+ SetDtorqIgntimCorr(ip_fwd->dtorq_igntim_corr); //AMT
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -3206,6 +3232,68 @@ void CFirmwareDataMediator::SetOtsCurveMap(const float* ip_values)
   p_fd->extabs.ots_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
+void CFirmwareDataMediator::GetEstimTorque(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->extabs.estim_torque[0][0]);
+  op_values[i] = ((float) *(p + i)) - 50.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetEstimTorque(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_fd->extabs.estim_torque[0][0]);
+  *(p + i) = MathHelpers::Round((ip_values[i] + 50.0f));
+ }
+}
+
+void CFirmwareDataMediator::GetFuelcutTorque(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < FUELCUT_TORQUE_SIZE; i++)
+  op_values[i] =(float)p_fd->extabs.felcut_torque[i]; 
+}
+
+void CFirmwareDataMediator::SetFuelcutTorque(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < FUELCUT_TORQUE_SIZE; i++)
+  p_fd->extabs.felcut_torque[i] = MathHelpers::Round(ip_values[i]);
+}
+
+void CFirmwareDataMediator::GetDtorqIgntimCorr(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < DTORQ_IGNTIM_CORR_SIZE; i++)
+  op_values[i] =((float)p_fd->extabs.dtorq_igntim_corr[i]) / 2.0f; 
+}
+
+void CFirmwareDataMediator::SetDtorqIgntimCorr(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < DTORQ_IGNTIM_CORR_SIZE; i++)
+  p_fd->extabs.dtorq_igntim_corr[i] = MathHelpers::Round(ip_values[i] * 2.0f);
+}
+
 //--------------------------------------------------------------------------------
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
@@ -3684,6 +3772,15 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.aircond_iacoff = ((float)exd.aircond_iacoff) / 2.0f; //convert to %
 
  o_data.injpw_crk_speed = ((float)exd.injpw_crk_speed) * (3.2f / 1000.0f); //from 3.2 us units to ms
+
+ o_data.aircond_rpmalt_step = exd.aircond_rpmalt_step;
+
+ o_data.can_autrm = exd.can_autrm;
+ o_data.amt_baro_press = ((float)exd.amt_baro_press) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.amt_creeping_minrpm = exd.amt_creeping_minrpm;
+ o_data.amt_creeping_delay = ((float)exd.amt_creeping_delay) / 100.0f; //convert to seconds
+ o_data.amt_aircond_torque = ((float)exd.amt_aircond_torque) / 2.0f; //Nm * 2
+ o_data.amt_rpmalt_step = exd.amt_rpmalt_step;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3826,6 +3923,15 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.aircond_iacoff = MathHelpers::Round(i_data.aircond_iacoff * 2.0f);
 
  exd.injpw_crk_speed = MathHelpers::Round(i_data.injpw_crk_speed * (1000.0f / 3.2f)); //from ms units to 3.2us units
+
+ exd.aircond_rpmalt_step = i_data.aircond_rpmalt_step;
+
+ exd.can_autrm = i_data.can_autrm;
+ exd.amt_baro_press = MathHelpers::Round(i_data.amt_baro_press * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER); 
+ exd.amt_creeping_minrpm = i_data.amt_creeping_minrpm;
+ exd.amt_creeping_delay = MathHelpers::Round(i_data.amt_creeping_delay * 100.0f); //convert to 1/100 second units
+ exd.amt_aircond_torque = MathHelpers::Round(i_data.amt_aircond_torque * 2.0f); //Nm * 2
+ exd.amt_rpmalt_step = i_data.amt_rpmalt_step;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
@@ -3919,6 +4025,9 @@ void CFirmwareDataMediator::GetSepMap(int id, float* op_values, bool i_original 
   case ETMT_ETC_ACCEERR: GetETCAcceptErrMap(op_values, i_original); break;
   case ETMT_ETC_THROPOS: GetETCThrottlePosMap(op_values, i_original); break;
   case ETMT_OTS_CURVE: GetOtsCurveMap(op_values, i_original); break;
+  case ETMT_ESTIM_TORQUE: GetEstimTorque(op_values, i_original); break; //AMT
+  case ETMT_FLCUT_TORQUE: GetFuelcutTorque(op_values, i_original); break; //AMT
+  case ETMT_DTORQ_IT_CORR: GetDtorqIgntimCorr(op_values, i_original); break; //AMT
   default: ASSERT(0);
  }
 }
@@ -3970,6 +4079,9 @@ void CFirmwareDataMediator::SetSepMap(int id, const float* ip_values)
   case ETMT_ETC_ACCEERR: SetETCAcceptErrMap(ip_values); break;
   case ETMT_ETC_THROPOS: SetETCThrottlePosMap(ip_values); break;
   case ETMT_OTS_CURVE: SetOtsCurveMap(ip_values); break;
+  case ETMT_ESTIM_TORQUE: SetEstimTorque(ip_values); break;      //AMT
+  case ETMT_FLCUT_TORQUE: SetFuelcutTorque(ip_values); break;    //AMT
+  case ETMT_DTORQ_IT_CORR: SetDtorqIgntimCorr(ip_values); break; //AMT
   default: ASSERT(0);
  }
 }

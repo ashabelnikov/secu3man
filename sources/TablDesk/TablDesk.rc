@@ -114,6 +114,9 @@ BEGIN
     CONTROL         "ETC Зона нечувствит.",IDC_TD_ETC_ACCEERR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,762,96,18
     CONTROL         "ETC Положение ДЗ",IDC_TD_ETC_THROPOS_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,781,96,18
     CONTROL         "Настр. крив. ДТМ",IDC_TD_OTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,800,96,18
+    CONTROL         "Расчетный крут.момент",IDC_TD_ESTIM_TORQUE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,819,96,18
+    CONTROL         "Порог откл. топлива",IDC_TD_FLCUT_TORQUE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,838,96,18
+    CONTROL         "Корр.УОЗ от разн.мом.",IDC_TD_DTORQ_IT_CORR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,857,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -124,7 +127,7 @@ BEGIN
     GROUPBOX        "Наборы таблиц",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,430
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,465
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -980,6 +983,18 @@ BEGIN
     IDS_ETC_THROPOS_MAP        "Положение дросселя в зависимости от ДППА и оборотов"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TD_ESTIM_TORQUE_MAP_TT "Расчетный крутящий момент"
+    IDS_TD_FLCUT_TORQUE_MAP_TT "Порог отключения топливоподачи"
+    IDS_TD_DTORQ_IT_CORR_MAP_TT "Коррекция УОЗ от разницы моментов"
+    IDS_MAPS_TRQ_UNIT          "Крутящий момент (Нм)"
+    IDS_ESTIM_TORQUE_MAP       "Расчетный крутящий момент"
+    IDS_FLCUT_TORQUE_MAP       "Порог отключения топливоподачи"
+    IDS_MAPS_DTRQ_UNIT         "Разница крутящих моментов (Нм)"
+    IDS_DTORQ_IT_CORR_MAP      "Коррекция УОЗ от разницы крутящих моментов"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -1089,6 +1104,9 @@ BEGIN
     CONTROL         "ETC dead band",IDC_TD_ETC_ACCEERR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,762,96,18
     CONTROL         "ETC Throttle position",IDC_TD_ETC_THROPOS_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,781,96,18
     CONTROL         "Tune OTS curve",IDC_TD_OTS_CURVE,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,800,96,18
+    CONTROL         "Estimated torque",IDC_TD_ESTIM_TORQUE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,819,96,18
+    CONTROL         "Fuel cut threshold",IDC_TD_FLCUT_TORQUE_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,838,96,18
+    CONTROL         "Ign.tim.corr.vs dtorq",IDC_TD_DTORQ_IT_CORR_MAP,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,857,96,18
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 243, 158
@@ -1099,7 +1117,7 @@ BEGIN
     GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,225,417
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,15,205,30,WS_EX_LEFTSCROLLBAR
     CONTROL         "",IDC_TD_SETTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,215,370
-    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,430
+    CONTROL         "",IDC_TD_SEPTABS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,425,227,465
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1955,6 +1973,18 @@ BEGIN
     IDS_MAPS_ETC_THROPOSX_UNIT "RPM (min-1)"
     IDS_MAPS_ETC_THROPOSY_UNIT "Throttle position (%)"
     IDS_ETC_THROPOS_MAP        "Throttle position vs APPS and RPM"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TD_ESTIM_TORQUE_MAP_TT "Estimated torque"
+    IDS_TD_FLCUT_TORQUE_MAP_TT "Fuel cut threshold"
+    IDS_TD_DTORQ_IT_CORR_MAP_TT "Ignition timing correction vs torque difference"
+    IDS_MAPS_TRQ_UNIT          "Torque (Nm)"
+    IDS_ESTIM_TORQUE_MAP       "Estimated torque"
+    IDS_FLCUT_TORQUE_MAP       "Fuel cut threshold"
+    IDS_MAPS_DTRQ_UNIT         "Torque difference (Nm)"
+    IDS_DTORQ_IT_CORR_MAP      "Ignition timing correction vs torque difference"
 END
 
 /////////////////////////////////////////////////////////////////////////////

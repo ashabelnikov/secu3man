@@ -148,6 +148,9 @@ namespace SECU3IO
   float tchrg;                          //Corrected MAT value
 
   bool idlve_use;                       //Idling VE use flag
+
+  float est_torque;                     //calculated torque
+  float req_torque;                     //torque required by AT/AMT
  };
 
  struct DbgvarDat
@@ -995,6 +998,15 @@ const int INPAVNUM = 14;
 
   float aircond_iacoff;
   float injpw_crk_speed;
+
+  int aircond_rpmalt_step; //!< RPM alternation step for air conditioner
+
+  int  can_autrm;           //!< Supported CAN AT/AMT. 0 - disabled, 1 - Lada Vesta
+  float amt_baro_press;     //!< barometric pressure 
+  int amt_creeping_minrpm;  //!< minimal target RPM
+  float amt_creeping_delay; //!< minimal target RPM delay
+  float  amt_aircond_torque;//!< torque for air conditioner
+  int amt_rpmalt_step;      //!< RPM alternation step for AMT
  };
 
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
@@ -1017,6 +1029,10 @@ const int INPAVNUM = 14;
  const float voltage_map_slots[16] = {5.4f,6.2f,7.0f,7.8f,8.6f,9.4f,10.2f,11.0f,11.8f,12.6f,13.4f,14.2f,15.0f,15.8f,16.6f,17.4f};
 
  const float inj_cyladd_map_slots[8] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
+
+ const float flcut_trq_tps_slots[17]  = {0, 6.25f, 12.5f, 18.75f, 25.0f, 31.25f, 37.5f, 43.75f, 50.0f, 56.25f, 62.5f, 68.75f, 75.0f, 81.25f, 87.5f, 93.75f, 100.0f};
+
+ const float dtorq_igntim_corr_slots[17] = {-250.0f, -218.75f, -187.5f, -156.25f, -125.0f, -93.75f, -62.5f, -31.25f, 0, 31.25f, 62.5f, 93.75f, 125.0f, 156.25f, 187.5f, 218.75f, 250.0f};
 
  const int COPT_OBD_SUPPORT = 0;
  const int COPT_ATMEGA1284 = 1;

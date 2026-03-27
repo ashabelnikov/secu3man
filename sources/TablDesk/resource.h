@@ -156,6 +156,17 @@
 #define IDS_ETC_THROPOS_MAP             5167
 #define IDC_CESETT_ADDI5678_FLG_CHECK   5168
 #define IDS_CESETT_ADDI5678_FLG_CHECK_TT 5169
+#define IDC_TD_ESTIM_TORQUE_MAP         5170
+#define IDC_TD_FLCUT_TORQUE_MAP         5171
+#define IDC_TD_DTORQ_IT_CORR_MAP        5172
+#define IDS_TD_ESTIM_TORQUE_MAP_TT      5173
+#define IDS_TD_FLCUT_TORQUE_MAP_TT      5174
+#define IDS_TD_DTORQ_IT_CORR_MAP_TT     5175
+#define IDS_MAPS_TRQ_UNIT               5176
+#define IDS_ESTIM_TORQUE_MAP            5177
+#define IDS_FLCUT_TORQUE_MAP            5178
+#define IDS_MAPS_DTRQ_UNIT              5179
+#define IDS_DTORQ_IT_CORR_MAP           5180
 #define IDC_GME_IGN_IDL                 5330
 #define IDC_GME_IGN_TMP                 5346
 #define IDC_GME_IGN_STR                 5362

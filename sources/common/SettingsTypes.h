@@ -211,6 +211,12 @@ struct WndSettings
  int m_ETCThrottlePosMapWnd_Y;
  int m_OtsCurveMapWnd_X;
  int m_OtsCurveMapWnd_Y;
+ int m_EstimTorqueMapWnd_X;
+ int m_EstimTorqueMapWnd_Y;
+ int m_FlcutTorqueMapWnd_X;
+ int m_FlcutTorqueMapWnd_Y;
+ int m_DtorqItCorrMapWnd_X;
+ int m_DtorqItCorrMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -384,6 +390,12 @@ struct WndSize
  int m_ETCThrottlePosMapWnd_H;
  int m_OtsCurveMapWnd_W;
  int m_OtsCurveMapWnd_H;
+ int m_EstimTorqueMapWnd_W;
+ int m_EstimTorqueMapWnd_H;
+ int m_FlcutTorqueMapWnd_W;
+ int m_FlcutTorqueMapWnd_H;
+ int m_DtorqItCorrMapWnd_W;
+ int m_DtorqItCorrMapWnd_H;
 };
 
 //Holds windows's state data
@@ -517,6 +529,7 @@ struct MetersCfg
    m_optMetFPS[i].copyScale(dest.m_optMetFPS[i]);
    m_optMetAPPS[i].copyScale(dest.m_optMetAPPS[i]);
    m_optMetOTS[i].copyScale(dest.m_optMetOTS[i]);
+   m_optMetTorque[i].copyScale(dest.m_optMetTorque[i]);
   }
  }
 
@@ -568,11 +581,12 @@ struct MetersCfg
  MetCfg m_optMetFPS[2];
  MetCfg m_optMetAPPS[2];
  MetCfg m_optMetOTS[2];
+ MetCfg m_optMetTorque[2];
 };
 
 struct MapPtMovStep
 {
- float m_value[80];
+ float m_value[128];
 };
 
 //Log file's fileds
@@ -662,6 +676,8 @@ struct LogFileFields
  _TSTRING m_fldFPS;
  _TSTRING m_fldAPPS;
  _TSTRING m_fldOTS;
+ _TSTRING m_fldEstTorq;
+ _TSTRING m_fldReqTorq;
 };
 
 struct MetAverage
@@ -705,6 +721,7 @@ struct MetAverage
  int avrFPS;
  int avrAPPS;
  int avrOTS;
+ int avrTorque;
 };
 
 //Functionality
@@ -714,6 +731,7 @@ struct Functionality
  bool GD_CONTROL;
  bool ELEC_THROTTLE;
  bool XTAU_CORR;
+ bool AMT_SUPPORT;
 };
 
 //settings for debug variable
