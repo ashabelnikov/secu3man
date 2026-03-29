@@ -142,7 +142,12 @@ void CTablesPanelBase::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   m_OnOpenMapWnd(i_hwnd, i_mapType);
 
  if (m_embed_charts)
-  ::SetWindowPos(i_hwnd, NULL, m_embed_rect.left, m_embed_rect.top, m_embed_rect.Width(), m_embed_rect.Height(), SWP_NOZORDER);  
+  ::SetWindowPos(i_hwnd, NULL, m_embed_rect.left, m_embed_rect.top, m_embed_rect.Width(), m_embed_rect.Height(), SWP_NOZORDER);
+
+ //set window caption using text from corresponding button
+ CString caption;
+ m_md[i_mapType].mp_button->GetWindowText(caption);
+ ::SetWindowText(m_md[i_mapType].handle, (LPCTSTR)caption);
 }
 
 void CTablesPanelBase::OnWndActivation(HWND i_hwnd, long cmd)
