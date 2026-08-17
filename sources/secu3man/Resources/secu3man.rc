@@ -755,7 +755,7 @@ BEGIN
     IDS_WRITE_EEPROM_FROM_FILE         "Записать EEPROM из файла... Ctrl + P"
     IDS_OPEN_FLASH                     "Открыть прошивку из файла...   Ctrl + O"
     IDS_SAVE_FLASH                     "Сохранить прошивку в файл...    Ctrl + S"
-    IDS_READ_BOOTLOADER_SIGNATURE      "Информация о бутлоадере      Ctrl + L"
+    IDS_READ_BOOTLOADER_SIGNATURE      "Информация о загрузчике      Ctrl + L"
     IDS_CONN_CONNECTED                 "connected"
     IDS_CONN_DISCONNECTED              "disconnected"
     IDS_CONN_BOOTLOADER                "boot loader"

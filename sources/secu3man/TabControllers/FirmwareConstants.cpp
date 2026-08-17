@@ -124,6 +124,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Sample MAP synchronously with crankshaft"), &d.map_samp_mode, _T("If the check is set, then MAP will be sampled at certain crankshaft degrees (in each stroke). If the check is not set, then MAP will be sampled regularly (each 3.28ms)."));
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера медианного фильтра скорости. "), _T(""), 1, avnmax, 1, 0, &d.vssmf_size, _T("Этот фильтр применяется перед применением усредняющего фильтра и предназначен для устранения резких помех. Чем больше значение, тем сильнее фильтр подавляет помехи."));
+ else
+  dfd.AppendItem(_T("Size of the VSS median filter buffer."), _T(""), 1, avnmax, 1, 0, &d.vssmf_size, _T("This filter applied before averaging filter and intended to reject spike values. The more value of size, the greater rejection of spikes."));
+
  //idling regulator
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Регулятор холостого хода:"));

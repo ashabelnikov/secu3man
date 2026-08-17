@@ -1007,6 +1007,7 @@ const int INPAVNUM = 14;
   float amt_creeping_delay; //!< minimal target RPM delay
   float  amt_aircond_torque;//!< torque for air conditioner
   int amt_rpmalt_step;      //!< RPM alternation step for AMT
+  int vssmf_size;           //!< VSS median filter size
  };
 
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};

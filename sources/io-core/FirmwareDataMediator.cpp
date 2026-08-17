@@ -486,8 +486,10 @@ typedef struct
  _int  amt_aircond_torque;   //!< torque for air conditioner
  _uchar amt_rpmalt_step;     //!< RPM alternation step for AMT
 
+ _uchar vssmf_size;          //!< Size of the VSS median filter
+
  //These reserved bytes are needed for keeping binary compatibility between old and new versions of firmware
- _uchar reserved[1494];
+ _uchar reserved[1493];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -3781,6 +3783,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.amt_creeping_delay = ((float)exd.amt_creeping_delay) / 100.0f; //convert to seconds
  o_data.amt_aircond_torque = ((float)exd.amt_aircond_torque) / 2.0f; //Nm * 2
  o_data.amt_rpmalt_step = exd.amt_rpmalt_step;
+
+ o_data.vssmf_size = exd.vssmf_size;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -3932,6 +3936,8 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.amt_creeping_delay = MathHelpers::Round(i_data.amt_creeping_delay * 100.0f); //convert to 1/100 second units
  exd.amt_aircond_torque = MathHelpers::Round(i_data.amt_aircond_torque * 2.0f); //Nm * 2
  exd.amt_rpmalt_step = i_data.amt_rpmalt_step;
+
+ exd.vssmf_size = i_data.vssmf_size;
 }
 
 void CFirmwareDataMediator::GetInjCylMultMap(int i_index, float* op_values, bool i_original /*= false*/)
