@@ -811,3 +811,4 @@
 #define IDB_CALC_DOWN200                4945
 #define IDB_CALC_FOCUSED200             4946
 #define IDB_CALC_DISABLED200            4947
+#define IDS_IOREM_NONE                  4948

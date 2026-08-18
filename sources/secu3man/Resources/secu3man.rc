@@ -127,7 +127,7 @@ BEGIN
     EDITTEXT        IDC_FW_FW_INFORMATION,72,29,156,16,ES_AUTOHSCROLL
     PUSHBUTTON      "Опц.",IDC_FW_VIEW_FWOPT,234,29,22,17
     CONTROL         "Прошивать только код (без данных)",IDC_FW_PROG_ONLY_CODE,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,209,86,17
-    CONTROL         "Boot loader запущен аварийно (установлена перемычка)",IDC_FW_BL_STARTED_EMERGENCY,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,106,209,122,21
+    CONTROL         "Загрузчик запущен аварийно (установлена перемычка)",IDC_FW_BL_STARTED_EMERGENCY,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,106,209,122,21
     LTEXT           "нет\nсвязи?",IDC_FW_NOANSWER_LINK,229,225,32,21,WS_CLIPSIBLINGS
     CONTROL         "",IDC_FW_PD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,272,10,185,196
     CTEXT           "Доп. информ.\nо прошивке:",IDC_FW_FW_INFORMATION_CAPTION,14,29,56,18
@@ -948,7 +948,7 @@ BEGIN
     IDS_FW_FW_NAME_TT               "Имя файла прошивки. Если прошивка считана из блока SECU-3, то имя для нее генерируется автоматически."
     IDS_FW_PROG_ONLY_CODE_TT        "Установите эту галочку если обновляетесь в пределах одного релиза и хотите обновить только код с сохранением старых данных прошивки. Рекомендуется использовать только опытным пользователям."
     IDS_FW_PARAM_SEL_TAB_TT         "Переключение между редактированием резервных параметров и переназначением функций входов/выходов."
-    IDS_FW_BL_STARTED_EMERGENCY_TT  "Используйте для восстановления прошивки, если она перестала работать (не отвечает на команды). Последовательность действий: установить галочку, установить перемычку 'Boot loader' (BL_I=0 для SECU-3i), включить питание блока. После завершения манипуляций не забудьте убрать перемычку и перезапустить блок. Для запуска загрузчика в блоке SECU-3i нужно замкнуть вход BL_I на массу. В блоках SECU-3T/Micro/Lite перемычки находятся на плате (нужно вскрывать блок)."
+    IDS_FW_BL_STARTED_EMERGENCY_TT  "Используйте для восстановления прошивки, если она перестала работать (не отвечает на команды). Последовательность действий: установить галочку, установить перемычку запуска загрузчика 'Boot loader' (BL_I=0 для SECU-3i), включить питание блока. После завершения манипуляций не забудьте убрать перемычку и перезапустить блок. Для запуска загрузчика в блоке SECU-3i нужно замкнуть вход BL_I на массу. В блоках SECU-3T/Micro/Lite перемычки находятся на плате (нужно вскрывать блок)."
     IDS_EE_EE_NAME_TT               "Имя файла EEPROM. При чтении EEPROM из блока SECU-3 имя генерируется автоматически."
     IDS_EE_MAPSET_NAME_TT           "Редактирование имени набора таблиц хранимого в EEPROM. В EEPROM хранится один набор таблиц."
     IDS_EE_CE_ERRORS_BTN_TT         "Просмотр кодов ошибок Check Engine, которые были зафиксированы блоком и хранятся в EEPROM. Если в появившемся окне нажать Yes(Да), то ошибки будут сброшены."
@@ -1010,11 +1010,11 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_HOW_TO_RESET_EEPROM "Сбросить EEPROM можно 2 способами: 1. Используя пункт 'Сброс EEPROM' во всплывающем\nменю на вкладке 'Данные прошивки'; 2. Используя соответствующую перемычку \n(DE_I=0 для SECU-3i) и следующую последовательность действий: установить перемычку,\nвключить питание блока, подождать 20 секунд, убрать перемычку. Для сброса EEPROM в\nблоке SECU-3i нужно замкнуть вход DE_I на массу. В блоках SECU-3T/Micro/Lite перемычки\nнаходятся на плате (нужно вскрывать блок).\n\n При сбросе EEPROM в него происходит запись резервных параметров, запись 1-го набора\n таблиц из прошивки и стирание всех сохраненных кодов ошибок CE."
+    IDS_HOW_TO_RESET_EEPROM "Сбросить EEPROM можно 2 способами: 1. Используя пункт 'Сброс EEPROM' во всплывающем\nменю на вкладке 'Данные прошивки'; 2. Используя соответствующую перемычку \n(DE_I=0 для SECU-3i) и следующую последовательность действий: установить перемычку,\nвключить питание блока, подождать 20 секунд, убрать перемычку. Для сброса EEPROM в\nблоке SECU-3i нужно замкнуть вход DE_I на массу. В блоках SECU-3T/Micro/Lite перемычки\nнаходятся на плате (нужно вскрывать блок).\n\n При сбросе EEPROM в него происходит запись резервных параметров, запись 1-го набора\n таблиц из прошивки, стирание всех сохраненных кодов ошибок CE и обнуление двух\n таблиц LTFT. Значения одометра и израсходованного топлива сохраняются."
     IDS_HOW_TO_RESET_CEERRORS "Отдельные ошибки можно установить/сбросить клацнув в соответствующую ячейку\nв столбце 'Состояние' и затем нажать кнопку 'ЗАПИСАТЬ сохраненные ошибки'. Также,\nошибки стираются при сбросе EEPROM (сбросить EEPROM можно на вкладке 'Данные прошивки'\nили перемычкой DE (в SECU-3i вход DE_I нужно замкнуть на массу))."
     IDS_WHAT_STORED_EEPROM "В EEPROM хранятся: параметры, 5-й набор таблиц, коды ошибок СЕ, две таблицы LTFT,\r\nзначение одометра, объем израсходованного топлива .\n\nПараметры и 5-й набор таблиц доступны для редактирования\nв режиме онлайн на вкладке 'Параметры и монитор'.\nКоды ошибок CE доступны для редактирования на вкладке\n'Check Engine', на этой же вкладке доступен просмотр таблиц LTFT.\n\nНа вкладке 'EEPROM' производится редактирование содержимого EEPROM в офлайн\nрежиме (аналогично редактированию прошивки на вкладке\n'Данные прошивки')."
     IDS_WHEN_TO_USE_EEPROM "Использовать данные из EEPROM рекомендуется только во время настройки.\nПосле завершения настройки рекомендуется использовать данные из\nпрошивки. Для этого необходимо импортировать параметры и таблицы\nв прошивку из файла EEPROM\n(Данные прошивки-->Действия над прошивкой-->Импорт данных),\nна вкладке резервных параметров 'Безопасность' установить галочку\n'Всегда загружать параметры из flash'.\n\nПри возможности используйте управление питанием блока, так как оно\nповышает надежность хранения данных в EEPROM."
-    IDS_FW_NOANSWER_LINK   "Для восстановления работы прошивки необходимо выполнить следующую\nпоследовательность действий. Установите галочку\n'Boot loader запущен аварийно', установите перемычку 'Boot loader'\n(для SECU-3i читайте ниже), включите питание блока, откройте нужную вам\nпрошивку при помощи мастера прошивок (или выберите необходимый вам\nфайл вручную), запишите ее в блок SECU-3. После завершения\nманипуляций не забудьте убрать перемычку и галочку и перезапустить\nблок. Для запуска загрузчика в блоке SECU-3i нужно замкнуть вход\nBL_I на массу. В блоках SECU-3T/Micro/Lite перемычки находятся на\nплате (нужно вскрывать блок).\n\nЕсли запись прошивки не помогла, то попробуйте сбросить EEPROM.\nВсегда используйте прошивку и программу-менеджер из одного релиза!\nХраните резервные копии своих прошивки, EEPROM и настроек!"
+    IDS_FW_NOANSWER_LINK   "Для восстановления работы прошивки необходимо выполнить следующую\nпоследовательность действий. Установите галочку\n'Загрузчик запущен аварийно', установите перемычку запуска загрузчика 'Boot loader'\n(для SECU-3i читайте ниже), включите питание блока, откройте нужную вам\nпрошивку при помощи мастера прошивок (или выберите необходимый вам\nфайл вручную), запишите ее в блок SECU-3. После завершения\nманипуляций не забудьте убрать перемычку и галочку и перезапустить\nблок. Для запуска загрузчика в блоке SECU-3i нужно замкнуть вход\nBL_I на массу. В блоках SECU-3T/Micro/Lite перемычки находятся на\nплате (нужно вскрывать блок).\n\nЕсли запись прошивки не помогла, то попробуйте сбросить EEPROM.\nВсегда используйте прошивку и программу-менеджер из одного релиза!\nХраните резервные копии своих прошивки, EEPROM и настроек!"
     IDS_DEVDIAG_TESTCH_COMBO_TT "На выбранном выходе блока SECU-3 будут сгенерированы импульсы заданной частоты и скважности (см. параметры 'Частота тест. сигнала' и 'Скважн. тест. сигнала'). Обратите внимание, что в SECU-3i не все выходы способны корректно работать на высокой частоте."
     IDS_DEVDIAG_TESTCH_FRQ_EDIT_TT "Частота тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
     IDS_DEVDIAG_TESTCH_DUTY_EDIT_TT "Скважность тестового сигнала используемого для тестирования выходов блока SECU-3 (см. выпадающий список, что находится левее)"
@@ -1099,6 +1099,11 @@ BEGIN
  IDS_LOGCONV_DECPT_COMBO_TT     "Символ-разделитель десятичной дроби для значений полей в csv файле. Данный символ должен отличаться от символа, выбранного в качестве разделителя полей в csv файле. В англоязычных странах (кроме ЮАР), в Китае и бывших британских колониях в качестве десятичного разделителя используется точка, в большинстве остальных стран — запятая."
  IDS_LOGCONV_CSVSEP_COMBO_TT    "Символ-разделитель полей в csv файле. Данный символ должен отличаться от символа, выбранного для десятичной дроби."
  IDS_LOGCONV_START_BTN_TT       "Запустить процесс конвертации"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_IOREM_NONE                 "НЕТ"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2102,7 +2107,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_HOW_TO_RESET_EEPROM "You can reset the EEPROM in 2 ways: 1. Using the 'Reset EEPROM' item\nin the pop-up menu on the 'Firmware data' tab; 2. Using the appropriate jumper \n (DE_I = 0 for SECU-3i) and the following sequence of actions: set the jumper,\npower on the unit, wait 20 seconds, remove the jumper. To reset the EEPROM for the\nSECU-3i unit, close the DE_I input to ground. In SECU-3T/Micro/Lite units, jumpers are\n on the board (you need to open the unit).\n\nWhen the EEPROM is reset, reserve parameters are written to it, the 1st set of\n tables is written from the firmware and all stored CE error codes are erased."
+    IDS_HOW_TO_RESET_EEPROM "You can reset the EEPROM in 2 ways: 1. Using the 'Reset EEPROM' item\nin the pop-up menu on the 'Firmware data' tab; 2. Using the appropriate jumper \n (DE_I = 0 for SECU-3i) and the following sequence of actions: set the jumper,\npower on the unit, wait 20 seconds, remove the jumper. To reset the EEPROM for the\nSECU-3i unit, close the DE_I input to ground. In SECU-3T/Micro/Lite units, jumpers are\n on the board (you need to open the unit).\n\nWhen the EEPROM is reset, reserve parameters are written to it, the 1st set of\n tables is written from the firmware, all stored CE error codes are erased and two LTFT\ntables are filled with zeros. Odometer and consumed fuel values are left intact."
     IDS_HOW_TO_RESET_CEERRORS "Individual errors can be set/reset by clicking in the corresponding cell\nin the 'Status' column and then clicking the 'WRITE saved errors' button. Also,\nerrors are erased when the EEPROM is reset (you can reset the EEPROM on\nthe 'Firmware Data' tab or with the DE jumper (in SECU-3i, the DE_I input\nshould be shorted to ground))."    
     IDS_WHAT_STORED_EEPROM "EEPROM stores: parameters, 5th set of tables, CE error codes, two LTFT tables,\r\nodometer value, cunsumed fuel value.\n\nParameters and 5th set of tables are available for editing\nonline on 'Parameters and monitor' tab.\nCE error codes are available for editing on 'Check Engine' tab,\non this tab you can also view LTFT tables.\n\nOn the 'EEPROM' tab, offline editing is performed\n(similar to editing the firmware on the 'Firmware data' tab)."
     IDS_WHEN_TO_USE_EEPROM "It is recommended to use data from EEPROM only during setup/tuning.\nAfter setup is complete, it is recommended to use data from firmware.\nTo do this, you need to import parameters and tables\nto the firmware from the EEPROM file\n(Firmware data->Actions on the firmware->Import data),\non the 'Security' tab of the reserve parameters set the checkbox\n'Always load parameters from flash'.\n\nUse power management for unit's supply when possible, as it\nimproves the reliability of data storage in the EEPROM."
@@ -2192,6 +2197,11 @@ BEGIN
  IDS_LOGCONV_DECPT_COMBO_TT     "Decimal point's separator symbol for values of fields in the csv file. Decimal point's separator and fields' separator symbols must not match."
  IDS_LOGCONV_CSVSEP_COMBO_TT    "Separator symbol between fields in the csv file. Decimal point's separator and fields' separator symbols must not match."
  IDS_LOGCONV_START_BTN_TT       "Start the process of conversion"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_IOREM_NONE                 "NONE"
 END
 
 /////////////////////////////////////////////////////////////////////////////

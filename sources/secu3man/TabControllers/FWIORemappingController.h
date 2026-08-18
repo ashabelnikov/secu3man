@@ -85,4 +85,5 @@ class CFWIORemappingController
   bool m_enable_secu3t_features;
   bool m_enable_extraio;
   bool m_enable_spiadc;
+  _TSTRING m_iorem_none;  
 };
