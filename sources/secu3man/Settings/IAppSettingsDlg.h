@@ -60,6 +60,7 @@ class IAppSettingsDlg
   virtual void SetExistingPorts(bool exp) = 0;
   virtual void SetInjDrvTabActive(bool i_active) = 0;
   virtual void SetLogBinaryFmt(bool exp) = 0;
+  virtual void SetFFFConst(int i_const) = 0;
 
   //Get - obtain data from view
   virtual _TSTRING GetPortName(void) = 0;
@@ -79,6 +80,7 @@ class IAppSettingsDlg
   virtual bool GetExistingPorts(void) const = 0;
   virtual bool GetInjDrvTabActive(void) const = 0;
   virtual bool GetLogBinaryFmt(void) const = 0;
+  virtual int GetFFFConst(void) const = 0;
 
   virtual void SetWriteLogFields(bool i_always) = 0;
   virtual bool GetWriteLogFields(void) const = 0;

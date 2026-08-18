@@ -47,28 +47,32 @@ template<class T> class CObjectTimer
   };
 
   //set all necessary paramaters and runs timer
-  void SetTimer(T* object, msgHandlerType i_function, int interval, bool oneShot = false)
+  bool SetTimer(T* object, msgHandlerType i_function, int interval, bool oneShot = false)
   {
-   SetMsgHandler(i_function);
-   m_pDispatcher = object;
-   SetTimer(interval);
-   m_interval_ms = interval;
-   m_oneShot = oneShot;
+   if (false==isActive())
+   {
+    SetMsgHandler(i_function);
+    m_pDispatcher = object;
+    return SetTimer(interval, oneShot);
+   }
+   else
+    return false; //failed
   };
 
   //запускать таймер этой функцией можно только если предварительно в конструктор был передан
   //указатель на объект и была вызвана функция SetMsgHandler() для установки обработчика
-  void SetTimer(int interval, bool oneShot = false)
+  bool SetTimer(int interval, bool oneShot = false)
   {
    ASSERT(m_timer_id == 0);
    if (m_timer_id != 0)
-    return; //already installed!
+    return false; //already installed!
 
    m_timer_id = ::SetTimer(NULL,0,interval,(TIMERPROC)&TimerProc);
    ASSERT(m_timer_id); //failed to set timer!
    g_object_timer_instance_map[m_timer_id] = this;
    m_interval_ms = interval;
    m_oneShot = oneShot;
+   return true;
   }
 
   //Kill timer using this function
@@ -110,7 +114,7 @@ template<class T> class CObjectTimer
 
   static inline VOID CALLBACK TimerProc(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
   {
-   //welcome to hell :-D ... C++ has no delegates
+   //C++ has no delegates...
    CObjectTimer* p_this = reinterpret_cast<CObjectTimer*>(g_object_timer_instance_map[idEvent]);
    ASSERT(p_this);
    if (!p_this)  return;

@@ -66,6 +66,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optExistingPorts.value = m_pView->GetExistingPorts();
  m_pModel->m_optInjDrvTabActive.value = m_pView->GetInjDrvTabActive();
  m_pModel->m_optLogBinaryFmt.value = m_pView->GetLogBinaryFmt();
+ m_pModel->m_optFFFConst.value = m_pView->GetFFFConst();
 
  size_t index = m_pView->GetCSVSepSymbol();
  m_pModel->m_optCSVSepSymbol.value = m_pModel->m_AllowaleCSVSepSymbols[index].second;
@@ -105,6 +106,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetExistingPorts(m_pModel->m_optExistingPorts.value);
  m_pView->SetInjDrvTabActive(m_pModel->m_optInjDrvTabActive.value);
  m_pView->SetLogBinaryFmt(m_pModel->m_optLogBinaryFmt.value);
+ m_pView->SetFFFConst(m_pModel->m_optFFFConst.value);
 
  size_t count = m_pModel->m_AllowaleCSVSepSymbols.size();
  for(size_t i = 0; i < count; i++)

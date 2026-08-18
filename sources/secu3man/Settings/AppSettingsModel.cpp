@@ -24,6 +24,7 @@
  */
 
 #include "stdafx.h"
+#include "Resources/resource.h"
 #include "AppSettingsModel.h"
 #include "IniFileIO.h"
 #include "common/MathHelpers.h"
@@ -2577,10 +2578,7 @@ bool CAppSettingsModel::WriteSettings(void)
   fs.WriteComment(_T("Разрешить перетаскивание виртуальных индикаторов. По умолчанию разрешено. Установите в 0, если хотите запретить."));
  fs.WriteInt(m_optIndicatorsDragNDrop); 
 
- if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Constant (num. of pulses per 1L of burnt fuel) for calculation of fuel consumption (L/100km) using value send by firmware."));
- else
-  fs.WriteComment(_T("Константа (число импульсов на 1Л сгоревшего топлива), используемая при вычислении расхода топлива (Л/100км) на основе значения, передаваемого прошивкой."));
+ fs.WriteComment(MLL::GetString(IDS_APP_SETTINGS_FFFCONST));
  fs.WriteInt(m_optFFFConst); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)

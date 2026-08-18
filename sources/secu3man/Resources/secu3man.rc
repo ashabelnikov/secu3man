@@ -197,6 +197,10 @@ BEGIN
 
     GROUPBOX        "Приборы",IDC_STATIC,194,115,162,94
 
+    LTEXT           "Число импульсов на 1Л сгоревшего топлива",IDC_STATIC,266,128,87,17
+    EDITTEXT        IDC_APP_SETTINGS_FFFCONST_EDIT,204,128,43,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_FFFCONST_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,128,11,15
+
     LTEXT           "Период обновления панели приборов (мс)",IDC_STATIC,266,153,87,17
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,153,43,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,153,11,15
@@ -1106,6 +1110,11 @@ BEGIN
  IDS_IOREM_NONE                 "НЕТ"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_APP_SETTINGS_FFFCONST      "Константа (число импульсов на 1Л сгоревшего топлива), используемая при вычислении расхода топлива (Л/100км) на основе значения, передаваемого прошивкой."
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -1297,6 +1306,11 @@ BEGIN
     CONTROL         "'Injectors' driver' tab",IDC_APP_SETTINGS_INJDRV_TAB,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,95,140,9
 
     GROUPBOX        "Fixtures",IDC_STATIC,194,115,162,94
+
+    LTEXT           "Number of pulses per 1L of burnt fuel",IDC_STATIC,266,128,87,17
+    EDITTEXT        IDC_APP_SETTINGS_FFFCONST_EDIT,204,128,43,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_FFFCONST_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,128,11,15
+
     LTEXT           "Update period of fixtures's panel (ms)",IDC_STATIC,266,153,87,17
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,153,43,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS,250,153,11,15
@@ -2202,6 +2216,11 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
  IDS_IOREM_NONE                 "NONE"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+ IDS_APP_SETTINGS_FFFCONST      "Constant (num. of pulses per 1L of burnt fuel) for calculation of fuel consumption (L/100km) using value send by firmware."
 END
 
 /////////////////////////////////////////////////////////////////////////////

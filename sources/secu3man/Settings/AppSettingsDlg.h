@@ -62,6 +62,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetShowExFixtures(bool i_show);
   virtual void SetShowSpeedAndDist(bool i_show);
   virtual void SetInjDrvTabActive(bool i_active);
+  virtual void SetFFFConst(int i_const);
 
   //"Get" methods (view => model data transfer)
   virtual _TSTRING GetPortName(void);
@@ -76,6 +77,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual bool GetShowExFixtures(void) const;
   virtual bool GetShowSpeedAndDist(void) const;
   virtual bool GetInjDrvTabActive(void) const;
+  virtual int GetFFFConst(void) const;
 
   //logs
   virtual void SetLogFilesFolder(const _TSTRING& i_folder);
@@ -178,6 +180,11 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_ecu_platform_selection;
   int m_ecu_platform_selection_orig;
   int m_injdrvtab_active;
+
+  //FFF const
+  int m_fffconst;
+  CEditEx   m_fffconst_edit;
+  CSpinButtonCtrlEx m_fffconst_spin;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CEnumPorts::PortDescList_t m_existingList;

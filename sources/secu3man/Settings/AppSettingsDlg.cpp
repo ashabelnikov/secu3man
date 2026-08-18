@@ -97,6 +97,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_OnActivate(NULL)
 , m_midesk_update_period_edit(CEditEx::MODE_INT)
 , m_dv_update_period_edit(CEditEx::MODE_INT)
+, m_fffconst_edit(CEditEx::MODE_INT)
 , mp_port_selection_combo(&m_port_selection1_combo)
 , m_always_write_log(BST_UNCHECKED)
 , m_write_log_fields(BST_UNCHECKED)
@@ -114,6 +115,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_exfixtures = BST_CHECKED;
  m_showvss = BST_CHECKED;
  m_injdrvtab_active = BST_UNCHECKED;
+ m_fffconst = 16000;
 }
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
@@ -173,6 +175,10 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_APP_SETTINGS_SHOWVSS_CHECK, m_showvss_button);
  DDX_Check(pDX, IDC_APP_SETTINGS_SHOWVSS_CHECK, m_showvss);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_FFFCONST_SPIN, m_fffconst_spin);
+ DDX_Control(pDX, IDC_APP_SETTINGS_FFFCONST_EDIT, m_fffconst_edit);
+ m_fffconst_edit.DDX_Value(pDX, IDC_APP_SETTINGS_FFFCONST_EDIT, m_fffconst);
 }
 
 
@@ -247,6 +253,10 @@ BOOL CAppSettingsDlg::OnInitDialog()
  m_dv_update_period_spin.SetBuddy(&m_dv_update_period_edit);
  m_dv_update_period_spin.SetRangeAndDelta(10,1000,10);
 
+ m_fffconst_edit.SetLimitText(6);
+ m_fffconst_spin.SetBuddy(&m_fffconst_edit);
+ m_fffconst_spin.SetRangeAndDelta(1000,32000,10);
+
  if (m_OnActivate)
   m_OnActivate(); //информируем слушателя о том, что мы готовы к приему данных
 
@@ -281,6 +291,9 @@ BOOL CAppSettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_use_dv_features_button, MLL::GetString(IDS_APP_SETTINGS_USEDEBUG_FEATURES_TT)));
  VERIFY(mp_ttc->AddWindow(&m_showvss_button, MLL::GetString(IDS_APP_SETTINGS_SHOWVSS_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_logbinfmt_button, MLL::GetString(IDS_APP_SETTINGS_BINARYFMT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fffconst_edit, MLL::GetString(IDS_APP_SETTINGS_FFFCONST)));
+ VERIFY(mp_ttc->AddWindow(&m_fffconst_spin, MLL::GetString(IDS_APP_SETTINGS_FFFCONST)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -733,4 +746,14 @@ void CAppSettingsDlg::SetLogBinaryFmt(bool i_exp)
 bool CAppSettingsDlg::GetLogBinaryFmt(void) const
 {
  return m_logbinfmt_button.GetCheck() == BST_CHECKED;
+}
+
+void CAppSettingsDlg::SetFFFConst(int i_const)
+{
+ m_fffconst = i_const;
+}
+
+int CAppSettingsDlg::GetFFFConst(void) const
+{
+ return m_fffconst;
 }
