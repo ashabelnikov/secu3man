@@ -3561,7 +3561,7 @@ bool CControlApp::ParsePackets()
 
   if (use_checksum)
   {
-   int checksum1 = FletcherChecksum(*it, 2, it->size() - 5);
+   int checksum1 = FletcherChecksum(*it, 2, it->size() - 5);   
    checksum1 = UpdateFletcherChecksum(checksum1, it->size() - 5); //update checksum with size
    int checksum2 = MAKEWORD((*it)[it->size()-2], (*it)[it->size()-3]);
    if (checksum1 != checksum2)
@@ -3624,7 +3624,7 @@ bool CControlApp::ParsePackets()
     if (Parse_OP_COMP_NC(p_start, p_size))
     {
      if (m_recepted_packet.m_OPCompNc.opcode == OPCODE_BL_MANSTART && m_recepted_packet.m_OPCompNc.opdata == OPDATA_BL_MANSTART)
-      m_blman_packet = true; //special case (this packet shuold not cause online status)
+      m_blman_packet = true; //special case (this packet should not cause online status)
      break;
     }
     continue;
