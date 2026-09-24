@@ -93,6 +93,10 @@ void CLPTablesController::OnSettingsChanged(int action)
   m_toggleMapWnd = mp_settings->GetToggleMapWnd();
   return;
  }
+ 
+ //IT mode
+ if (mp_gridModeEditorInjDlg.get())
+  mp_gridModeEditorInjDlg->SetITMode(mp_settings->GetITEdMode());
 }
 
 //from MainTabController

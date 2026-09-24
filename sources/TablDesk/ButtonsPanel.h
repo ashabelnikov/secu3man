@@ -100,6 +100,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog, public CTablesPanelBase
 
   void SetITEdMode(int mode);
   int GetITEdMode(void) const;
+  static CString GetITEdModeString(int mode);
+  static _TSTRING GetITEdModeStringTT(void);
 
   void SetActiveVEMap(int id);
   int GetActiveVEMap(void) const;

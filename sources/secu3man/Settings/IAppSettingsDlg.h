@@ -61,6 +61,8 @@ class IAppSettingsDlg
   virtual void SetInjDrvTabActive(bool i_active) = 0;
   virtual void SetLogBinaryFmt(bool exp) = 0;
   virtual void SetFFFConst(int i_const) = 0;
+  virtual void SetITEdMode(int mode) = 0;
+  virtual int GetITEdMode(void) const = 0;
 
   //Get - obtain data from view
   virtual _TSTRING GetPortName(void) = 0;

@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "AppSettingsDlg.h"
+#include "TablDesk/ButtonsPanel.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/XBrowseForFolder.h"
 #include "io-core/EnumPorts.h"
@@ -101,6 +102,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , mp_port_selection_combo(&m_port_selection1_combo)
 , m_always_write_log(BST_UNCHECKED)
 , m_write_log_fields(BST_UNCHECKED)
+, m_it_mode_val(0)
 {
  m_app_baudrate = -1;
  m_bl_baudrate = -1;
@@ -179,6 +181,9 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_FFFCONST_SPIN, m_fffconst_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_FFFCONST_EDIT, m_fffconst_edit);
  m_fffconst_edit.DDX_Value(pDX, IDC_APP_SETTINGS_FFFCONST_EDIT, m_fffconst);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_IT_MODE_COMBO, m_it_mode_combo);
+ DDX_CBIndex(pDX, IDC_APP_SETTINGS_IT_MODE_COMBO, m_it_mode_val);
 }
 
 
@@ -243,6 +248,9 @@ BOOL CAppSettingsDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ for(int i = 0; i <= 3; i++)
+  m_it_mode_combo.AddString(CButtonsPanel::GetITEdModeString(i));
+
  m_port_selection1_combo.LimitText(200);
 
  m_midesk_update_period_edit.SetLimitText(4);
@@ -293,6 +301,7 @@ BOOL CAppSettingsDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_logbinfmt_button, MLL::GetString(IDS_APP_SETTINGS_BINARYFMT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fffconst_edit, MLL::GetString(IDS_APP_SETTINGS_FFFCONST)));
  VERIFY(mp_ttc->AddWindow(&m_fffconst_spin, MLL::GetString(IDS_APP_SETTINGS_FFFCONST)));
+ VERIFY(mp_ttc->AddWindow(&m_it_mode_combo, CButtonsPanel::GetITEdModeStringTT()));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -756,4 +765,14 @@ void CAppSettingsDlg::SetFFFConst(int i_const)
 int CAppSettingsDlg::GetFFFConst(void) const
 {
  return m_fffconst;
+}
+
+void CAppSettingsDlg::SetITEdMode(int mode)
+{
+ m_it_mode_val = mode;
+}
+
+int CAppSettingsDlg::GetITEdMode(void) const
+{
+ return m_it_mode_val;
 }

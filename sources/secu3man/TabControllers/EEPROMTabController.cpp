@@ -857,6 +857,7 @@ void CEEPROMTabController::finishOnWriteEepromToSECU(void)
 
 void CEEPROMTabController::OnChangeSettingsMapEd(void)
 {
+ mp_view->mp_ParamDeskDlg->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
  mp_settings->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
  mp_settings->SetActiveVEMap(mp_view->mp_TablesPanel->GetActiveVEMap());
 

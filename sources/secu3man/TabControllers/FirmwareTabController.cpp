@@ -192,8 +192,10 @@ void CFirmwareTabController::OnSettingsChanged(int action)
  mp_fwdm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  mp_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
-
+ //IT mode
+ mp_view->mp_ParamDeskDlg->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
+
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetActiveVEMap(mp_settings->GetActiveVEMap());
 
  mp_view->mp_TablesPanel->mp_ButtonsPanel->SetCSVSepSymbol(mp_settings->GetMapCSVSepSymbol());

@@ -2423,6 +2423,25 @@ int CButtonsPanel::GetITEdMode(void) const
  return m_it_mode;
 }
 
+CString CButtonsPanel::GetITEdModeString(int mode)
+{
+ switch(mode)
+ {
+  case 0: return MLL::LoadString(IDS_GME_IT_MODE_720BTDC);
+  case 1: return MLL::LoadString(IDS_GME_IT_MODE_720ATDC);
+  case 2: return MLL::LoadString(IDS_GME_IT_MODE_M360360);
+  case 3: return MLL::LoadString(IDS_GME_IT_MODE_M360360A);
+  default: 
+   ASSERT(0);
+   return _T(""); 
+ }
+}
+
+_TSTRING CButtonsPanel::GetITEdModeStringTT(void)
+{
+ return MLL::GetString(IDS_GME_IT_MODE_COMBO_TT);
+}
+
 void CButtonsPanel::SetActiveVEMap(int id)
 {
  m_active_ve = id;

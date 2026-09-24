@@ -63,6 +63,8 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetShowSpeedAndDist(bool i_show);
   virtual void SetInjDrvTabActive(bool i_active);
   virtual void SetFFFConst(int i_const);
+  virtual void SetITEdMode(int mode);
+  virtual int  GetITEdMode(void) const;
 
   //"Get" methods (view => model data transfer)
   virtual _TSTRING GetPortName(void);
@@ -185,6 +187,10 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_fffconst;
   CEditEx   m_fffconst_edit;
   CSpinButtonCtrlEx m_fffconst_spin;
+
+  //IT mode
+  int m_it_mode_val;
+  CComboBox m_it_mode_combo;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CEnumPorts::PortDescList_t m_existingList;

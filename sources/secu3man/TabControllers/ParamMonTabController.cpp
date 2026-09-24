@@ -142,6 +142,10 @@ void CParamMonTabController::OnSettingsChanged(int action)
   mp_moncntr->OnSettingsChanged();
  }
 
+ //IT mode
+ mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
+ mp_view->mp_ParamDeskDlg->SetITEdMode(mp_settings->GetITEdMode());
+
  mp_tabcntr->OnSettingsChanged();
  mp_sepcntr->OnSettingsChanged();
 
