@@ -188,7 +188,7 @@ CUniOutPageDlg::CUniOutPageDlg()
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TPS, CondFmt(5, 1, .0f, 100.0f, 0.5f, 30.0f, 29.0f, MLL::GetString(IDS_UNIOUT_COND_TPS), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_ATS, CondFmt(5, 2, -40.0f, 300.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_ATS), true)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI1, CondFmt(4, 2, .0f, 5.00f, 0.01f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI1), false)));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI2, CondFmt(4, 2, .0f, 600.0f, 0.1f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI2), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI2, CondFmt(4, 2, .0f, 5.00f, 0.01f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI2), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI3, CondFmt(4, 2, .0f, 5.0f, 0.01f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI3), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI4, CondFmt(4, 2, .0f, 5.0f, 0.01f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI4), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI5, CondFmt(4, 2, .0f, 5.0f, 0.01f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI5), false)));
